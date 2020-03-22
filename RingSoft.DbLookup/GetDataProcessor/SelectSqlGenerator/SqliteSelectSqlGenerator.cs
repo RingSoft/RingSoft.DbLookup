@@ -1,7 +1,7 @@
 ﻿using System;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor.SelectSqlGenerator
+namespace RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator
 {
     /// <summary>
     /// Generates a SELECT SQL statement for the Sqlite database platform.

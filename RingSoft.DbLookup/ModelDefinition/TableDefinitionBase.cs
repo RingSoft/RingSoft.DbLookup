@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using RingSoft.DbLookupCore.Lookup;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.ModelDefinition
+namespace RingSoft.DbLookup.ModelDefinition
 {
     /// <summary>
     /// A database table definition.

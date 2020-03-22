@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using RingSoft.DbLookupCore.GetDataProcessor.SelectSqlGenerator;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor
+namespace RingSoft.DbLookup.GetDataProcessor
 {
     /// <summary>
     /// Base class for retrieving data from a database.

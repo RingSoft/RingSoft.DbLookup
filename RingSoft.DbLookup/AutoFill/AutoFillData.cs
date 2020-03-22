@@ -1,11 +1,11 @@
-﻿using RingSoft.DbLookupCore.GetDataProcessor;
-using RingSoft.DbLookupCore.Lookup;
-using RingSoft.DbLookupCore.QueryBuilder;
-using System;
+﻿using System;
 using System.Data;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.AutoFill
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// Argument sent in the AutoFillChanged event.

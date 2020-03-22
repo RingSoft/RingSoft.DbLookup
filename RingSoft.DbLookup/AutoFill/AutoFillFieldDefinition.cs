@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.AutoFill
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// An AutoFill field.

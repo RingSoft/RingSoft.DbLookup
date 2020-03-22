@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace RingSoft.DbLookupCore
+namespace RingSoft.DbLookup
 {
     /// <summary>
     /// A list of enum numeric values and their corresponding description values.

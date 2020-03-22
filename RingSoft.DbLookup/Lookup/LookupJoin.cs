@@ -1,8 +1,8 @@
 ﻿using System;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookupCore.TableProcessing;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// A lookup table join definition.

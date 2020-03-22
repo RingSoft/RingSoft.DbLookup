@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore
+namespace RingSoft.DbLookup
 {
     /// <summary>
     /// A primary key field definition/value pair.

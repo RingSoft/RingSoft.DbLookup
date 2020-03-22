@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// The arguments sent to the LookupDataChanged event.

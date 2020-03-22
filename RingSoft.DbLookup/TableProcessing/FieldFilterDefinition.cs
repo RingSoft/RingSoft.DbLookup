@@ -1,7 +1,7 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookupCore.QueryBuilder;
+﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     public class FieldFilterDefinition
     {

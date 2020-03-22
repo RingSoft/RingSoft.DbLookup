@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     /// <summary>
     /// A table filter joined by a related entity.

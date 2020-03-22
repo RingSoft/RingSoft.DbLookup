@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// Used by the forms launched by the Add and View lookup buttons to refresh the lookup data when the form changes the lookup database.

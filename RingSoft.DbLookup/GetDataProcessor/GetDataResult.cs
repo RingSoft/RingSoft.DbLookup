@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor
+namespace RingSoft.DbLookup.GetDataProcessor
 {
     public enum GetDataResultCodes
     {

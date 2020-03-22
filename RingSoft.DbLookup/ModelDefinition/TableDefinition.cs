@@ -1,11 +1,11 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.ModelDefinition
+namespace RingSoft.DbLookup.ModelDefinition
 {
     /// <summary>
     /// An table definition used in the Entity Framework.

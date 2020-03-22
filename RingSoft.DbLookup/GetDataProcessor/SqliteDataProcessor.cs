@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
-using RingSoft.DbLookupCore.GetDataProcessor.SelectSqlGenerator;
+using RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor
+namespace RingSoft.DbLookup.GetDataProcessor
 {
     /// <summary>
     /// Retrieves data from a Sqlite database file.

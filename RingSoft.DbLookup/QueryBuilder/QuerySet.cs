@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RingSoft.DbLookupCore.QueryBuilder
+namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A list of Query objects.

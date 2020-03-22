@@ -1,7 +1,7 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+﻿using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     /// <summary>
     /// A related table filter not based on an entity.

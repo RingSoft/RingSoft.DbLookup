@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions
+﻿namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// A generic field definition type class.

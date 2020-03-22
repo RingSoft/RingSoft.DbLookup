@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.QueryBuilder
+﻿namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// An Order By segment for the text value of an enumerator.

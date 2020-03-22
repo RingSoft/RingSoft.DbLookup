@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.Lookup
+﻿namespace RingSoft.DbLookup.Lookup
 {
     public class LookupDataSourceChanged
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// A lookup column based on a formula.

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     /// <summary>
     /// A filter definition based on an entity.

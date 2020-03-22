@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.QueryBuilder
+﻿namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A Where Item that searches the results of a formula.

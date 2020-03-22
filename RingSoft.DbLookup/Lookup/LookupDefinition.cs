@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.TableProcessing;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.TableProcessing;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// Contains all the data necessary for a lookup.

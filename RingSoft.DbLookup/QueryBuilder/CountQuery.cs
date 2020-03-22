@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.QueryBuilder
+﻿namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A query that generates a count of records.

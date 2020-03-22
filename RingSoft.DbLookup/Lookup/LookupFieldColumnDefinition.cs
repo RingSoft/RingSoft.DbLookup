@@ -1,9 +1,9 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// A lookup column based on a field definition.

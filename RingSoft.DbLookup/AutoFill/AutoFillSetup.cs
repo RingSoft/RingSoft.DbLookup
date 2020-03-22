@@ -1,8 +1,8 @@
 ﻿using System;
-using RingSoft.DbLookupCore.Lookup;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.AutoFill
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// All the AutoFill setup properties.

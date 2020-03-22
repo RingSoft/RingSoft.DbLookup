@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor
+namespace RingSoft.DbLookup.GetDataProcessor
 {
     /// <summary>
     /// Implement this interface to display an error to the user.

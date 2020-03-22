@@ -3,9 +3,9 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore
+namespace RingSoft.DbLookup
 {
     public enum FieldDataTypes
     {

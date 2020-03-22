@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using RingSoft.DbLookupCore.GetDataProcessor;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookupCore.QueryBuilder;
-using RingSoft.DbLookupCore.TableProcessing;
+using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     public enum LookupScrollPositions
     {

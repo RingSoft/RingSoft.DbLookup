@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using RingSoft.DbLookupCore.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// A join to an entity definition.

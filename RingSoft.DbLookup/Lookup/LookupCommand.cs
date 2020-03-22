@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     public enum LookupCommands
     {

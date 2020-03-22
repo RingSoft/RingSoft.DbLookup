@@ -1,8 +1,8 @@
 ﻿using System;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.TableProcessing;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.TableProcessing;
 
-namespace RingSoft.DbLookupCore.AutoFill
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// The AutoFill types.

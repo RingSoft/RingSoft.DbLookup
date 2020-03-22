@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using MySql.Data.MySqlClient;
-using RingSoft.DbLookupCore.GetDataProcessor.SelectSqlGenerator;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.GetDataProcessor
+namespace RingSoft.DbLookup.GetDataProcessor
 {
     /// <summary>
     /// Retrieves data from a MySql database.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace RingSoft.DbLookupCore.QueryBuilder
+namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>This class encapsulates a SQL statement.</summary>
     public class SelectQuery : QueryBase

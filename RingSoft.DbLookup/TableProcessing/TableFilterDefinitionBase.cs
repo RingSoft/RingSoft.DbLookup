@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     /// <summary>
     /// Arguments sent with the FilterCopied event.

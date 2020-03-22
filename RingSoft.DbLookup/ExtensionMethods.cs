@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace RingSoft.DbLookupCore
+namespace RingSoft.DbLookup
 {
     public static class ExtensionMethods
     {

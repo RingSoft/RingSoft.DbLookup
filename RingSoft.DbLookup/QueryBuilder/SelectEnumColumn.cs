@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.QueryBuilder
+﻿namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A column that has a numeric database value translated into a text value.

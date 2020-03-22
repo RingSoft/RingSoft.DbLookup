@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.ModelDefinition
+namespace RingSoft.DbLookup.ModelDefinition
 {
     /// <summary>
     /// Joins two tables together.

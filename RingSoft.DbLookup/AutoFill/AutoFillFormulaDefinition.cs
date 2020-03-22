@@ -1,6 +1,6 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition;
+﻿using RingSoft.DbLookup.ModelDefinition;
 
-namespace RingSoft.DbLookupCore.AutoFill
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// An AutoFill formula.

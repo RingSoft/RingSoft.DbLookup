@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RingSoft.DbLookupCore.ModelDefinition;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookupCore.QueryBuilder;
-using RingSoft.DbLookupCore.TableProcessing;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// Contains all the data necessary for a lookup.

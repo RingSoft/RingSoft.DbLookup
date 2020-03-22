@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
-using RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RingSoft.DbLookupCore.Lookup
+namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
     /// A lookup entity join  definition to a foreign table definition.

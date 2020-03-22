@@ -1,6 +1,6 @@
-﻿using RingSoft.DbLookupCore.ModelDefinition;
+﻿using RingSoft.DbLookup.ModelDefinition;
 
-namespace RingSoft.DbLookupCore.TableProcessing
+namespace RingSoft.DbLookup.TableProcessing
 {
     /// <summary>
     /// Defines how 2 fields are linked in a lookup definition.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using RingSoft.DbLookupCore.QueryBuilder;
+using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookupCore.ModelDefinition.FieldDefinitions
+namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// A database field definition.

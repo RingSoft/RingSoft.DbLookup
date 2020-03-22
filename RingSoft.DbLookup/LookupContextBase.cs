@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using RingSoft.DbLookupCore.GetDataProcessor;
-using RingSoft.DbLookupCore.Lookup;
-using RingSoft.DbLookupCore.ModelDefinition;
+using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition;
 
-namespace RingSoft.DbLookupCore
+namespace RingSoft.DbLookup
 {
     /// <summary>
     /// Arguments passed in by the TableProcessing event to show which table is being processed by the Entity Framework.

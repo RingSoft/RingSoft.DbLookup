@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookupCore.AutoFill
+﻿namespace RingSoft.DbLookup.AutoFill
 {
     public class AutoFillContainsItem
     {

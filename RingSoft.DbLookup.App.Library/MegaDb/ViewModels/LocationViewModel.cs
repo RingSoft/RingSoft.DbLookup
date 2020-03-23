@@ -1,12 +1,12 @@
-﻿using RingSoft.DbLookup.AutoFill;
+﻿using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
-using RSDbLookupApp.Library.MegaDb.LookupModel;
-using RSDbLookupApp.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.MegaDb.ViewModels
+namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class LocationViewModel : DbMaintenanceViewModel<Location>
     {

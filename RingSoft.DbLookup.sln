@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup", "RingSoft.DbLookup\RingSoft.DbLookup.csproj", "{F5EA8CC1-689C-4254-954E-916D7B225DAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup", "RingSoft.DbLookup\RingSoft.DbLookup.csproj", "{F5EA8CC1-689C-4254-954E-916D7B225DAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbMaintenance", "RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj", "{4F1B5F60-1F33-49A4-B903-9B0AD53D8752}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbMaintenance", "RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj", "{4F1B5F60-1F33-49A4-B903-9B0AD53D8752}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.EfCore", "RingSoft.DbLookup.EfCore\RingSoft.DbLookup.EfCore.csproj", "{AE802915-82D2-486F-838C-3ACF7E1C71D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.EfCore", "RingSoft.DbLookup.EfCore\RingSoft.DbLookup.EfCore.csproj", "{AE802915-82D2-486F-838C-3ACF7E1C71D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.Ef6", "RingSoft.DbLookup.Ef6\RingSoft.DbLookup.Ef6.csproj", "{9EF40F55-777C-4D8E-BA9C-4DFEEC8FE00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Ef6", "RingSoft.DbLookup.Ef6\RingSoft.DbLookup.Ef6.csproj", "{9EF40F55-777C-4D8E-BA9C-4DFEEC8FE00F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.Library", "RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj", "{8729393B-0585-491F-A169-E06B13C3C977}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.Library", "RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj", "{8729393B-0585-491F-A169-E06B13C3C977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.Library.EfCore", "RingSoft.DbLookup.App.Library.EfCore\RingSoft.DbLookup.App.Library.EfCore.csproj", "{09EF842B-511C-4851-A147-11749F229842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.Library.Ef6", "RingSoft.DbLookup.App.Library.Ef6\RingSoft.DbLookup.App.Library.Ef6.csproj", "{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{8729393B-0585-491F-A169-E06B13C3C977}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8729393B-0585-491F-A169-E06B13C3C977}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8729393B-0585-491F-A169-E06B13C3C977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09EF842B-511C-4851-A147-11749F229842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09EF842B-511C-4851-A147-11749F229842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09EF842B-511C-4851-A147-11749F229842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09EF842B-511C-4851-A147-11749F229842}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

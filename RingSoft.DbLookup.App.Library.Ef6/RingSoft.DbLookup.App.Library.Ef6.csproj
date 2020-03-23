@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup.Ef6\RingSoft.DbLookup.Ef6.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
+  </ItemGroup>
+
+</Project>

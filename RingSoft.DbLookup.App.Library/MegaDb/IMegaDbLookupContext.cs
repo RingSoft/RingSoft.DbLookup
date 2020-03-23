@@ -1,7 +1,8 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
-using RSDbLookupApp.Library.MegaDb.Model;
+﻿using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.ModelDefinition;
 
-namespace RSDbLookupApp.Library.MegaDb
+namespace RingSoft.DbLookup.App.Library.MegaDb
 {
     public interface IMegaDbLookupContext : IAppLookupContext
     {

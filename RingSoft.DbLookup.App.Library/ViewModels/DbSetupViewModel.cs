@@ -1,15 +1,14 @@
-﻿using RSDbLookupApp.Library.LookupContext;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
-using RingSoft.DbLookup;
+using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbMaintenance;
 
-namespace RSDbLookupApp.Library.ViewModels
+namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public class DbSetupViewModel : INotifyPropertyChanged
     {

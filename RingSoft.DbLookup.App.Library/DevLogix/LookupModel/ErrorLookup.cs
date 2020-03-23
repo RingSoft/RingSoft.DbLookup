@@ -1,7 +1,7 @@
 ﻿using System;
-using RSDbLookupApp.Library.DevLogix.Model;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
 
-namespace RSDbLookupApp.Library.DevLogix.LookupModel
+namespace RingSoft.DbLookup.App.Library.DevLogix.LookupModel
 {
     public class ErrorLookup
     {

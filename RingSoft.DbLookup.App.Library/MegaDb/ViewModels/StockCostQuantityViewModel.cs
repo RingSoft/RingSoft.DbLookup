@@ -1,9 +1,9 @@
-﻿using RSDbLookupApp.Library.MegaDb.Model;
-using System;
+﻿using System;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
 
-namespace RSDbLookupApp.Library.MegaDb.ViewModels
+namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class StockCostQuantityViewModel : DbMaintenanceViewModel<StockCostQuantity>
     {

@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbMaintenance;
 
-namespace RSDbLookupApp.Library.ViewModels
+namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public class MegaDbSeedViewModel : INotifyPropertyChanged
     {
@@ -131,7 +132,7 @@ namespace RSDbLookupApp.Library.ViewModels
             }
         }
 
-        private void MegaDbEfDataProcessor_ItemsTableSeederProgress(object sender, MegaDb.ItemsTableSeederProgressArgs e)
+        private void MegaDbEfDataProcessor_ItemsTableSeederProgress(object sender, ItemsTableSeederProgressArgs e)
         {
             _view.ItemsTableSeederProgress(e);
         }

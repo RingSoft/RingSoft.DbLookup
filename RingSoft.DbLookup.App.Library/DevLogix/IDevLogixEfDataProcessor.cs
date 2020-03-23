@@ -1,7 +1,6 @@
-﻿using RSDbLookupApp.Library.DevLogix.Model;
-using RSDbLookupApp.Library.MegaDb.Model;
+﻿using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.DevLogix
+namespace RingSoft.DbLookup.App.Library.DevLogix
 {
     public interface IDevLogixEfDataProcessor
     {

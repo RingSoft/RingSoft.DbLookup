@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.Lookup;
 
-namespace RSDbLookupApp.Library
+namespace RingSoft.DbLookup.App.Library
 {
     public class LookupDataUserInterface : ILookupUserInterface
     {

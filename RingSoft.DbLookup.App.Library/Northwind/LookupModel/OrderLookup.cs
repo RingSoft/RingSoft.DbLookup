@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSDbLookupApp.Library.Northwind.LookupModel
+namespace RingSoft.DbLookup.App.Library.Northwind.LookupModel
 {
     public class OrderLookup
     {

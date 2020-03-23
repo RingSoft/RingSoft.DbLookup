@@ -1,13 +1,13 @@
-﻿using RSDbLookupApp.Library.LookupContext;
-using RSDbLookupApp.Library.Northwind.LookupModel;
-using RSDbLookupApp.Library.Northwind.Model;
-using System;
+﻿using System;
 using System.IO;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
+using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RSDbLookupApp.Library.Northwind
+namespace RingSoft.DbLookup.App.Library.Northwind
 {
     public class NorthwindLookupContextConfiguration : AppLookupContextConfiguration, ILookupUserInterface
     {

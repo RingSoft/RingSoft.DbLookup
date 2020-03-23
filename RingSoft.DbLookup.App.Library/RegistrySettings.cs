@@ -1,7 +1,6 @@
-﻿using RingSoft.DbLookup;
-using RingSoft.DbLookup.GetDataProcessor;
+﻿using RingSoft.DbLookup.GetDataProcessor;
 
-namespace RSDbLookupApp.Library
+namespace RingSoft.DbLookup.App.Library
 {
     public enum NorthwindDbPlatforms
     {

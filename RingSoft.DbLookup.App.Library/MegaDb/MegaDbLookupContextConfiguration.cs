@@ -1,12 +1,12 @@
-﻿using RSDbLookupApp.Library.LookupContext;
-using RSDbLookupApp.Library.MegaDb.LookupModel;
-using RSDbLookupApp.Library.MegaDb.Model;
-using System;
+﻿using System;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
-namespace RSDbLookupApp.Library.MegaDb
+namespace RingSoft.DbLookup.App.Library.MegaDb
 {
     public class MegaDbLookupContextConfiguration : AppLookupContextConfiguration, ILookupUserInterface
     {

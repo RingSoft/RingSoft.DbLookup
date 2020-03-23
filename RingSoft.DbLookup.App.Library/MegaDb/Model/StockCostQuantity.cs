@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RSDbLookupApp.Library.MegaDb.Model
+namespace RingSoft.DbLookup.App.Library.MegaDb.Model
 {
     [Table("StockCostQuantity")]
     public class StockCostQuantity

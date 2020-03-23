@@ -1,12 +1,12 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
+﻿using RingSoft.DbLookup.App.Library.DevLogix.Model;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
-using RSDbLookupApp.Library.DevLogix.Model;
-using RSDbLookupApp.Library.LookupContext;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace RSDbLookupApp.Library.DevLogix
+namespace RingSoft.DbLookup.App.Library.DevLogix
 {
     public class DevLogixLookupContext : AppLookupContext, IDevLogixLookupContext
     {

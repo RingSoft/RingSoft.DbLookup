@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using RSDbLookupApp.Library.MegaDb.Model;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.MegaDb
+namespace RingSoft.DbLookup.App.Library.MegaDb
 {
     public interface IMegaDbDbContext
     {

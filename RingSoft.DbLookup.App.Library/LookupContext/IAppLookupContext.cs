@@ -1,10 +1,8 @@
 ﻿using System;
-using RingSoft.DbLookup;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
-using RSDbLookupApp.Library.LookupContext;
 
-namespace RSDbLookupApp.Library
+namespace RingSoft.DbLookup.App.Library.LookupContext
 {
     public interface IAppLookupContext
     {

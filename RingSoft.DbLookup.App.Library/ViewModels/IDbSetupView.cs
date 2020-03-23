@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.GetDataProcessor;
 
-namespace RSDbLookupApp.Library.ViewModels
+namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public interface IDbSetupView
     {

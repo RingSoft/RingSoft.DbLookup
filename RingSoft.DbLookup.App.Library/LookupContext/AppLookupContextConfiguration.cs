@@ -1,7 +1,7 @@
 ﻿using System;
 using RingSoft.DbLookup.GetDataProcessor;
 
-namespace RSDbLookupApp.Library.LookupContext
+namespace RingSoft.DbLookup.App.Library.LookupContext
 {
     public enum DataProcessorTypes
     {

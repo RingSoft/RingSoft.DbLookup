@@ -1,7 +1,8 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
-using RSDbLookupApp.Library.Northwind.Model;
+﻿using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.Northwind.Model;
+using RingSoft.DbLookup.ModelDefinition;
 
-namespace RSDbLookupApp.Library.Northwind
+namespace RingSoft.DbLookup.App.Library.Northwind
 {
     public interface INorthwindLookupContext : IAppLookupContext
     {

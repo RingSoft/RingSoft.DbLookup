@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RSDbLookupApp.Library.DevLogix.Model
+namespace RingSoft.DbLookup.App.Library.DevLogix.Model
 {
     [Table("TB_Issues")]
     public class Issue

@@ -1,10 +1,9 @@
-﻿using RingSoft.DbLookup;
+﻿using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
-using RSDbLookupApp.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.MegaDb.ViewModels
+namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class ItemViewModel : DbMaintenanceViewModel<Item>
     {

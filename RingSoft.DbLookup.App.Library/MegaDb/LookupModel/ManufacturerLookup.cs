@@ -1,4 +1,4 @@
-﻿namespace RSDbLookupApp.Library.MegaDb.LookupModel
+﻿namespace RingSoft.DbLookup.App.Library.MegaDb.LookupModel
 {
     public class ManufacturerLookup
     {

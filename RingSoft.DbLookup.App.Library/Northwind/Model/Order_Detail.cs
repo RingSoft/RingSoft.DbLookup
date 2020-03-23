@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RSDbLookupApp.Library.Northwind.Model
+namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {
     [Table("Order Details")]
     public class Order_Detail

@@ -1,10 +1,9 @@
 ﻿using System;
-using RSDbLookupApp.Library.MegaDb.Model;
 using System.Threading;
 using System.Threading.Tasks;
-using RingSoft.DbLookup;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.MegaDb
+namespace RingSoft.DbLookup.App.Library.MegaDb
 {
     public class MegaDbMethods
     {

@@ -1,4 +1,4 @@
-﻿namespace RSDbLookupApp.Library.DevLogix.LookupModel
+﻿namespace RingSoft.DbLookup.App.Library.DevLogix.LookupModel
 {
     public class IssueLookup
     {

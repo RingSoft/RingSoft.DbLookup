@@ -1,8 +1,8 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
-using RSDbLookupApp.Library.DevLogix.Model;
-using RSDbLookupApp.Library.Northwind.Model;
+﻿using RingSoft.DbLookup.App.Library.DevLogix.Model;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.ModelDefinition;
 
-namespace RSDbLookupApp.Library.DevLogix
+namespace RingSoft.DbLookup.App.Library.DevLogix
 {
     public interface IDevLogixLookupContext : IAppLookupContext
     {

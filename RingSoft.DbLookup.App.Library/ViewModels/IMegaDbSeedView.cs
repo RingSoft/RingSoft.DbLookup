@@ -1,4 +1,6 @@
-﻿namespace RSDbLookupApp.Library.ViewModels
+﻿using RingSoft.DbLookup.App.Library.MegaDb;
+
+namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public interface IMegaDbSeedView
     {
@@ -6,7 +8,7 @@
 
         void ShowValidationMessage(string message, string title);
 
-        void ItemsTableSeederProgress(MegaDb.ItemsTableSeederProgressArgs e);
+        void ItemsTableSeederProgress(ItemsTableSeederProgressArgs e);
 
         void CloseWindow();
     }

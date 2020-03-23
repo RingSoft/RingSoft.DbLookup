@@ -1,9 +1,9 @@
-﻿using RingSoft.DbLookup.Lookup;
-using RSDbLookupApp.Library.DevLogix.LookupModel;
-using RSDbLookupApp.Library.DevLogix.Model;
-using RSDbLookupApp.Library.LookupContext;
+﻿using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.Lookup;
 
-namespace RSDbLookupApp.Library.DevLogix
+namespace RingSoft.DbLookup.App.Library.DevLogix
 {
     public class DevLogixLookupContextConfiguration : AppLookupContextConfiguration
     {

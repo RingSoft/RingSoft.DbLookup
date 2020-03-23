@@ -1,7 +1,7 @@
-﻿using RSDbLookupApp.Library.MegaDb;
-using RSDbLookupApp.Library.Northwind;
+﻿using RingSoft.DbLookup.App.Library.MegaDb;
+using RingSoft.DbLookup.App.Library.Northwind;
 
-namespace RSDbLookupApp.Library
+namespace RingSoft.DbLookup.App.Library
 {
 
     public enum EntityFrameworkVersions

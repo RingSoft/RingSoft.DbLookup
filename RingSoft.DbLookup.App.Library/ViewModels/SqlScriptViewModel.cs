@@ -2,11 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using RingSoft.DbLookup;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbMaintenance;
 
-namespace RSDbLookupApp.Library.ViewModels
+namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public interface ISqlScriptView
     {

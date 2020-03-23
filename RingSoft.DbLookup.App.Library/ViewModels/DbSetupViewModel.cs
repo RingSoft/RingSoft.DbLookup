@@ -1,13 +1,13 @@
-﻿using RSDbLookup;
-using RSDbLookup.GetDataProcessor;
-using RSDbLookupApp.Library.Annotations;
-using RSDbLookupApp.Library.LookupContext;
+﻿using RSDbLookupApp.Library.LookupContext;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup;
+using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbMaintenance;
 
 namespace RSDbLookupApp.Library.ViewModels
 {

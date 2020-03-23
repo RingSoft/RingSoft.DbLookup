@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using RSDbLookup;
-using RSDbLookup.GetDataProcessor;
-using RSDbLookupApp.Library.Annotations;
+using RingSoft.DbLookup;
+using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbMaintenance;
 
 namespace RSDbLookupApp.Library.ViewModels
 {

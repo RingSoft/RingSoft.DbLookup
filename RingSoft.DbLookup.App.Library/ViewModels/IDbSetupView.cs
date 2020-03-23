@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using RSDbLookup.GetDataProcessor;
+﻿using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RSDbLookupApp.Library.ViewModels
 {

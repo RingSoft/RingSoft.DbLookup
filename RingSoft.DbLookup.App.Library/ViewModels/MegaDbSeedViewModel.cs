@@ -1,8 +1,7 @@
-﻿using RSDbLookupApp.Library.Annotations;
-using System.ComponentModel;
-using System.Media;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using RingSoft.DbMaintenance;
 
 namespace RSDbLookupApp.Library.ViewModels
 {
@@ -121,7 +120,6 @@ namespace RSDbLookupApp.Library.ViewModels
                 FinishProcess(result <= 0);
                 if (result > 0)
                 {
-                    SystemSounds.Asterisk.Play();
                     var message = "Operation Complete!";
                     _view.ShowInformationMessage(message, @"Items Table Seeding Operation");
                     _view.CloseWindow();

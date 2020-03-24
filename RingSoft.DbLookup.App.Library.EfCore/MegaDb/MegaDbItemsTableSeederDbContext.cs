@@ -1,10 +1,10 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb;
-using RingSoft.DbLookup.App.Library.MegaDb.Model;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RingSoft.DbLookup.App.Library.MegaDb;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.EfCore.MegaDb
+namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {
     public class MegaDbItemsTableSeederDbContext : IMegaDbDbContext
     {

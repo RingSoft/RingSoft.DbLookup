@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 
-namespace RSDbLookupApp.Library.EfCore.Northwind.Configurations
+namespace RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations
 {
     public class CustomerCustomerDemoConfiguration :  IEntityTypeConfiguration<CustomerCustomerDemo>
     {

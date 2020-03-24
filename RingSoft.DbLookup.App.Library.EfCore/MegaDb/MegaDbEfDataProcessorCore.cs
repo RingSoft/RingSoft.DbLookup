@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.App.Library.MegaDb;
-using RingSoft.DbLookup.App.Library.MegaDb.Model;
-using RingSoft.DbLookup.GetDataProcessor;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.App.Library.MegaDb;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.EfCore;
+using RingSoft.DbLookup.GetDataProcessor;
 
-namespace RSDbLookupApp.Library.EfCore.MegaDb
+namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {
     public class MegaDbEfDataProcessorCore : IMegaDbEfDataProcessor
     {

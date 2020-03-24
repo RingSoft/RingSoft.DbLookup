@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 
-namespace RSDbLookupApp.Library.EfCore.DevLogix.Configurations
+namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix.Configurations
 {
     public class IssueConfiguration : IEntityTypeConfiguration<Issue>
     {

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
-using RSDbLookupApp.Library.EfCore.Northwind.Configurations;
-using System;
 
-namespace RSDbLookupApp.Library.EfCore.Northwind
+namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindDbContextEfCore : DbContext
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.EfCore.MegaDb.Configurations
+namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations
 {
     public class StockConfiguration : IEntityTypeConfiguration<StockMaster>
     {

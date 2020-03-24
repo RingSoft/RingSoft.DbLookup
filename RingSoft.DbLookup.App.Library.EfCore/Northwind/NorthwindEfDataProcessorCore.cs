@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
-using System.Collections.Generic;
-using System.Linq;
 using RingSoft.DbLookup.EfCore;
 
-namespace RSDbLookupApp.Library.EfCore.Northwind
+namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindEfDataProcessorCore : INorthwindEfDataProcessor
     {

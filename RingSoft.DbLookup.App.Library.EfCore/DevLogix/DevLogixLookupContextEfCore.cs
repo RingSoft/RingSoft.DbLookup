@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.DevLogix;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.ModelDefinition;
 
-namespace RSDbLookupApp.Library.EfCore.DevLogix
+namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
 {
     public class DevLogixLookupContextEfCore : AppLookupContextEfCore, IDevLogixLookupContext
     {

@@ -1,7 +1,7 @@
 ﻿using RingSoft.DbLookup.App.Library.DevLogix;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
-namespace RSDbLookupApp.Library.EfCore.DevLogix
+namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
 {
     class DevLogixDataProcessorCore : IDevLogixEfDataProcessor
     {

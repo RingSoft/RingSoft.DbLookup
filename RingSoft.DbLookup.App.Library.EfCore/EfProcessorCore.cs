@@ -1,10 +1,9 @@
-﻿using RingSoft.DbLookup.App.Library;
+﻿using RingSoft.DbLookup.App.Library.EfCore.MegaDb;
+using RingSoft.DbLookup.App.Library.EfCore.Northwind;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.Northwind;
-using RSDbLookupApp.Library.EfCore.MegaDb;
-using RSDbLookupApp.Library.EfCore.Northwind;
 
-namespace RSDbLookupApp.Library.EfCore
+namespace RingSoft.DbLookup.App.Library.EfCore
 {
     public class EfProcessorCore : IEfProcessor
     {

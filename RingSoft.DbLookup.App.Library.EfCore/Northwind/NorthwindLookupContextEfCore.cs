@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.ModelDefinition;
 
-namespace RSDbLookupApp.Library.EfCore.Northwind
+namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindLookupContextEfCore : AppLookupContextEfCore, INorthwindLookupContext
     {

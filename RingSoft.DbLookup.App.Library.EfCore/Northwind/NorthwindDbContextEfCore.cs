@@ -1,0 +1,74 @@
+﻿using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.Northwind.Model;
+using RSDbLookupApp.Library.EfCore.Northwind.Configurations;
+using System;
+
+namespace RSDbLookupApp.Library.EfCore.Northwind
+{
+    public class NorthwindDbContextEfCore : DbContext
+    {
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Order_Detail> OrderDetails { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<Shipper> Shippers { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Territory> Territories { get; set; }
+
+        private static NorthwindLookupContextEfCore _lookupContext;
+
+        public NorthwindDbContextEfCore(NorthwindLookupContextEfCore lookupContext)
+        {
+            _lookupContext = lookupContext;
+        }
+
+        public NorthwindDbContextEfCore()
+        {
+            
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            switch (_lookupContext.DataProcessorType)
+            {
+                case DataProcessorTypes.Sqlite:
+                    optionsBuilder.UseSqlite(_lookupContext.NorthwindContextConfiguration.SqliteDataProcessor.ConnectionString);
+                    break;
+                case DataProcessorTypes.SqlServer:
+                    optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                    break;
+                case DataProcessorTypes.MySql:
+                    optionsBuilder.UseMySql(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new Order_DetailConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeTerritoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerCustomerDemoConfiguration());
+
+            modelBuilder.Entity<Territory>().HasOne(p => p.Region)
+                .WithMany(p => p.Territories)
+                .HasForeignKey(p => p.RegionID);
+
+            modelBuilder.Entity<Employee>().HasOne(p => p.Employee1)
+                .WithMany(p => p.Employees1)
+                .HasForeignKey(p => p.ReportsTo);
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

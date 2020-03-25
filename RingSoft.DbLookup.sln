@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Ef6", "Ri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.Library", "RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj", "{8729393B-0585-491F-A169-E06B13C3C977}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.Library.EfCore", "RingSoft.DbLookup.App.Library.EfCore\RingSoft.DbLookup.App.Library.EfCore.csproj", "{09EF842B-511C-4851-A147-11749F229842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.Library.EfCore", "RingSoft.DbLookup.App.Library.EfCore\RingSoft.DbLookup.App.Library.EfCore.csproj", "{09EF842B-511C-4851-A147-11749F229842}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.Library.Ef6", "RingSoft.DbLookup.App.Library.Ef6\RingSoft.DbLookup.App.Library.Ef6.csproj", "{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.Library.Ef6", "RingSoft.DbLookup.App.Library.Ef6\RingSoft.DbLookup.App.Library.Ef6.csproj", "{62AEBC36-D67C-4EBE-9212-918D5E3C43B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

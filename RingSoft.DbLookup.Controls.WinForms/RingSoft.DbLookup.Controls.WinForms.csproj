@@ -42,13 +42,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserControl1.cs">
+    <Compile Include="AutoFillContainsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoFillContainsForm.Designer.cs">
+      <DependentUpon>AutoFillContainsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoFillControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControl1.Designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
+    <Compile Include="AutoFillControl.Designer.cs">
+      <DependentUpon>AutoFillControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GblMethods.cs" />
+    <Compile Include="LookupControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LookupControl.Designer.cs">
+      <DependentUpon>LookupControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LookupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LookupForm.Designer.cs">
+      <DependentUpon>LookupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LookupListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +84,27 @@
       <Project>{f5ea8cc1-689c-4254-954e-916d7b225dab}</Project>
       <Name>RingSoft.DbLookup</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AutoFillContainsForm.resx">
+      <DependentUpon>AutoFillContainsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoFillControl.resx">
+      <DependentUpon>AutoFillControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LookupControl.resx">
+      <DependentUpon>LookupControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LookupForm.resx">
+      <DependentUpon>LookupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Search16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

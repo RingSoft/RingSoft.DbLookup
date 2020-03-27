@@ -1,4 +1,7 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace RingSoft.DbLookup.App.Library
 {
@@ -36,6 +39,30 @@ namespace RingSoft.DbLookup.App.Library
             }
 
             element.Value = value;
+        }
+
+        public void LoadFromXml(string xml)
+        {
+            try
+            {
+                RootElement = XElement.Parse(xml);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public string OutputXml()
+        {
+            string xml;
+            var stringBuilder = new StringBuilder();
+            var stringWriter = new System.IO.StringWriter(stringBuilder);
+            var xmlTextWriter = new XmlTextWriter(stringWriter) {Formatting = Formatting.Indented};
+            RootElement.WriteTo(xmlTextWriter);
+            xml = stringWriter.ToString();
+
+            return xml;
         }
     }
 }

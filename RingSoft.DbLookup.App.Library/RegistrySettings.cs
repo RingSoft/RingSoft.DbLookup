@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
+﻿using System.IO;
+using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.Library
 {
@@ -37,7 +38,9 @@ namespace RingSoft.DbLookup.App.Library
         public const string SqlServerMegaDbDatabaseNameConst = "MegaDb";
         public const string MySqlNorthwindDatabaseNameConst = "northwind";
         public const string MySqlMegaDbDatabaseNameConst = "megadb";
-        
+
+        public const string RegistryRoot = "Registry";
+
         public EntityFrameworkVersions EntityFrameworkVersion { get; set; }
 
         public string SqlServerServerName { get; set; }
@@ -68,11 +71,20 @@ namespace RingSoft.DbLookup.App.Library
 
         public MegaDbPlatforms MegaDbPlatformType { get; set; }
 
-        private static XmlProcessor _registryXml = new XmlProcessor("Registry");
+        private static XmlProcessor _registryXml = new XmlProcessor(RegistryRoot);
 
         public RegistrySettings()
         {
             LoadFromRegistry();
+        }
+
+        internal static void LoadFromRegistryFile()
+        {
+            if (File.Exists(RsDbLookupAppGlobals.RegistryFileName))
+            {
+                var xml = RsDbLookupAppGlobals.OpenTextFile(RsDbLookupAppGlobals.RegistryFileName);
+                _registryXml.LoadFromXml(xml);
+            }
         }
 
         public static EntityFrameworkVersions GetEntityFrameworkVersion()
@@ -135,6 +147,9 @@ namespace RingSoft.DbLookup.App.Library
             _registryXml.SetElementValue(NorthwindPlatformTypeKey, ((int)NorthwindPlatformType).ToString());
             _registryXml.SetElementValue(NorthwindSqliteFileNameKey, NorthwindSqliteFileName);
             _registryXml.SetElementValue(MegaDbPlatformTypeKey, ((int)MegaDbPlatformType).ToString());
+
+            var xml = _registryXml.OutputXml();
+            RsDbLookupAppGlobals.WriteTextFile(RsDbLookupAppGlobals.RegistryFileName, xml);
         }
     }
 }

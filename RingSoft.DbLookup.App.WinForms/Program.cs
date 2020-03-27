@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup.App.WinForms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            RsDbLookupAppGlobals.Initialize();
+
             if (args.Contains("-devLogix"))
                 ShowDevLogix = true;
 

@@ -26,6 +26,8 @@ namespace RingSoft.DbLookup.App.Library
     {
         public static IEfProcessor EfProcessor { get; set; }
 
+        public static string RegistryFileName { get; private set; }
+
         public static string SqlServerNorthwindScript =>
             $"{AssemblyDirectory}\\Northwind\\Northwind_SqlServerScript.sql";
         public static string MySqlNorthwindScript =>
@@ -34,6 +36,7 @@ namespace RingSoft.DbLookup.App.Library
             $"{AssemblyDirectory}\\MegaDb\\MegaDb_SqlServerScript.sql";
         public static string MySqlMegaDbScript =>
             $"{AssemblyDirectory}\\MegaDb\\MegaDb_MySqlScript.sql";
+
 
         public static event EventHandler<AppStartProgressArgs> AppStartProgress;
 
@@ -48,10 +51,36 @@ namespace RingSoft.DbLookup.App.Library
             }
         }
 
+        public static void Initialize()
+        {
+            var registryElementName = "RegistryFileName";
+            var appSettingsFile = $"{AssemblyDirectory}\\AppSettings.xml";
+            var xmlProcessor = new XmlProcessor("AppSettings");
+            if (File.Exists(appSettingsFile))
+            {
+                var xml = OpenTextFile(appSettingsFile);
+                xmlProcessor.LoadFromXml(xml);
+            }
+            else
+            {
+                xmlProcessor.SetElementValue(registryElementName, $"{AssemblyDirectory}\\Registry.xml");
+                var xml = xmlProcessor.OutputXml();
+                WriteTextFile(appSettingsFile, xml);
+            }
+
+            RegistryFileName = xmlProcessor.GetElementValue(registryElementName, string.Empty);
+            RegistrySettings.LoadFromRegistryFile();
+        }
+
         public static string OpenTextFile(string fileName)
         {
             var openFile = new System.IO.StreamReader(fileName);
             return openFile.ReadToEnd();
+        }
+
+        public static void WriteTextFile(string fileName, string text)
+        {
+            File.WriteAllText(fileName, text);
         }
 
         public static List<string> SplitSqlServerStatements(string sqlScript)

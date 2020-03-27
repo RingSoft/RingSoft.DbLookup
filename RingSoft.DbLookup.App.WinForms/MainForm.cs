@@ -48,8 +48,8 @@ namespace RingSoft.DbLookup.App.WinForms
 
         private void DatabaseSettingsButton_Click(object sender, EventArgs e)
         {
-            //var dbSetupForm = new DbSetupForm();
-            //dbSetupForm.ShowDialog();
+            var dbSetupForm = new DbSetupForm();
+            dbSetupForm.ShowDialog();
         }
 
         public void ShowGetDataError(GetDataResult getDataResult)

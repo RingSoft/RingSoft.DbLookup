@@ -61,11 +61,29 @@
     <Compile Include="BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DbSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DbSetupForm.Designer.cs">
+      <DependentUpon>DbSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MegaDbSeedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MegaDbSeedForm.Designer.cs">
+      <DependentUpon>MegaDbSeedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlScriptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlScriptForm.Designer.cs">
+      <DependentUpon>SqlScriptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SQLViewerForm.cs">
       <SubType>Form</SubType>
@@ -78,8 +96,17 @@
     <EmbeddedResource Include="AppSplashForm.resx">
       <DependentUpon>AppSplashForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DbSetupForm.resx">
+      <DependentUpon>DbSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MegaDbSeedForm.resx">
+      <DependentUpon>MegaDbSeedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlScriptForm.resx">
+      <DependentUpon>SqlScriptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SQLViewerForm.resx">
       <DependentUpon>SQLViewerForm.cs</DependentUpon>

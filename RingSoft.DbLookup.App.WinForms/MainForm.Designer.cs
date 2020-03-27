@@ -92,6 +92,7 @@
             this.Controls.Add(this.DatabaseSettingsButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DB Lookup Demo";
             this.ResumeLayout(false);
 

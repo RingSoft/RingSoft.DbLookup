@@ -37,40 +37,6 @@ namespace RingSoft.DbLookup.App.Library
 
         public static event EventHandler<AppStartProgressArgs> AppStartProgress;
 
-        public const string AppRegKeyName = "RSDbLookupApp";
-        public static void SaveSetting(string valueName, string value)
-        {
-            SaveSetting(AppRegKeyName, valueName, value);
-        }
-        public static void SaveSetting(string appName, string valueName, string value)
-        {
-            var keyName = GetRegistryKeyName(appName);
-
-            Registry.SetValue(keyName, valueName, value);
-        }
-        public static string GetSetting(string valueName)
-        {
-            return GetSetting(valueName, "");
-        }
-        public static string GetSetting(string valueName, string defaultValue)
-        {
-            return GetSetting(AppRegKeyName, valueName, defaultValue);
-        }
-        public static string GetSetting(string appName, string valueName, string defaultValue)
-        {
-            var keyName = GetRegistryKeyName(appName);
-
-            var result = (string)Registry.GetValue(keyName, valueName, defaultValue);
-            if (string.IsNullOrEmpty(result))
-                result = defaultValue;
-
-            return result;
-        }
-        public static string GetRegistryKeyName(string appName)
-        {
-            return $"HKEY_CURRENT_USER\\{appName}";
-        }
-
         public static string AssemblyDirectory
         {
             get

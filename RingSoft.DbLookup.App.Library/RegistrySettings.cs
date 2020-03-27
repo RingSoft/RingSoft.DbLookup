@@ -17,21 +17,21 @@ namespace RingSoft.DbLookup.App.Library
 
     public class RegistrySettings
     {
-        private const string EntityFrameworkVersionKey = "EFVERSION";
-        private const string SqlServerServerNameKey = "SQLSERVER_SERVERNAME";
-        private const string SqlServerAuthTypeKey = "SQLSERVER_AUTHTYPE";
-        private const string SqlServerUserNameKey = "SQLSERVER_USERNAME";
-        private const string SqlServerPasswordKey = "SQLSERVER_PASSWORD";
-        private const string SqlServerNorthwindDbNameKey = "SQLSERVER_NORTHWIND";
-        private const string SqlServerMegaDbNameKey = "SQLSERVER_MEGADB";
-        private const string MySqlServerNameKey = "MYSQL_SERVERNAME";
-        private const string MySqlUserNameKey = "MYSQL_USERNAME";
-        private const string MySqlPasswordKey = "MYSQL_PASSWORD";
-        private const string MySqlNorthwindDbNameKey = "MYSQL_NORTHWIND";
-        private const string MySqlMegaDbNameKey = "MYSQL_MEGADB";
-        private const string NorthwindPlatformTypeKey = "NORTHWIND_PLATFORMTYPE";
-        private const string NorthwindSqliteFileNameKey = "NORTHWIND_SQLITE_FILENAME";
-        private const string MegaDbPlatformTypeKey = "MEGADB_PLATFORMTYPE";
+        private const string EntityFrameworkVersionKey = "EfVersion";
+        private const string SqlServerServerNameKey = "SqlServerServerName";
+        private const string SqlServerAuthTypeKey = "SqlServerAuthType";
+        private const string SqlServerUserNameKey = "SqlServerUserName";
+        private const string SqlServerPasswordKey = "SqlServerPassword";
+        private const string SqlServerNorthwindDbNameKey = "SqlServerNorthwindDbName";
+        private const string SqlServerMegaDbNameKey = "SqlServerMegaDbName";
+        private const string MySqlServerNameKey = "MySqlServerName";
+        private const string MySqlUserNameKey = "MySqlUserName";
+        private const string MySqlPasswordKey = "MySqlPassword";
+        private const string MySqlNorthwindDbNameKey = "MySqlNorthwindDbName";
+        private const string MySqlMegaDbNameKey = "MySqlMegaDbName";
+        private const string NorthwindPlatformTypeKey = "NorthwindPlatformType";
+        private const string NorthwindSqliteFileNameKey = "NorthwindSqliteFileName";
+        private const string MegaDbPlatformTypeKey = "MegaDbPlatformType";
 
         public const string SqlServerNorthwindDatabaseNameConst = "Northwind";
         public const string SqlServerMegaDbDatabaseNameConst = "MegaDb";
@@ -39,6 +39,7 @@ namespace RingSoft.DbLookup.App.Library
         public const string MySqlMegaDbDatabaseNameConst = "megadb";
         
         public EntityFrameworkVersions EntityFrameworkVersion { get; set; }
+
         public string SqlServerServerName { get; set; }
 
         public SecurityTypes SqlServerSecurityType { get; set; }
@@ -67,6 +68,8 @@ namespace RingSoft.DbLookup.App.Library
 
         public MegaDbPlatforms MegaDbPlatformType { get; set; }
 
+        private static XmlProcessor _registryXml = new XmlProcessor("Registry");
+
         public RegistrySettings()
         {
             LoadFromRegistry();
@@ -74,7 +77,7 @@ namespace RingSoft.DbLookup.App.Library
 
         public static EntityFrameworkVersions GetEntityFrameworkVersion()
         {
-            var efVersion = RsDbLookupAppGlobals.GetSetting(EntityFrameworkVersionKey,
+            var efVersion = _registryXml.GetElementValue(EntityFrameworkVersionKey,
                 ((int)EntityFrameworkVersions.EntityFrameworkCore3).ToString());
             return (EntityFrameworkVersions)efVersion.ToInt();
         }
@@ -83,55 +86,55 @@ namespace RingSoft.DbLookup.App.Library
         {
             EntityFrameworkVersion = GetEntityFrameworkVersion();
 
-            SqlServerServerName = RsDbLookupAppGlobals.GetSetting(SqlServerServerNameKey, "localhost\\SQLEXPRESS");
-            var authType = RsDbLookupAppGlobals.GetSetting(SqlServerAuthTypeKey,
+            SqlServerServerName = _registryXml.GetElementValue(SqlServerServerNameKey, "localhost\\SQLEXPRESS");
+            var authType = _registryXml.GetElementValue(SqlServerAuthTypeKey,
                 ((int)SecurityTypes.WindowsAuthentication).ToString());
             SqlServerSecurityType = (SecurityTypes)authType.ToInt();
-            SqlServerUserName = RsDbLookupAppGlobals.GetSetting(SqlServerUserNameKey, "sa");
-            SqlServerPassword = RsDbLookupAppGlobals.GetSetting(SqlServerPasswordKey, "");
+            SqlServerUserName = _registryXml.GetElementValue(SqlServerUserNameKey, "sa");
+            SqlServerPassword = _registryXml.GetElementValue(SqlServerPasswordKey, "");
             SqlServerNorthwindDbName =
-                RsDbLookupAppGlobals.GetSetting(SqlServerNorthwindDbNameKey, SqlServerNorthwindDatabaseNameConst);
+                _registryXml.GetElementValue(SqlServerNorthwindDbNameKey, SqlServerNorthwindDatabaseNameConst);
             SqlServerMegaDbName =
-                RsDbLookupAppGlobals.GetSetting(SqlServerMegaDbNameKey, SqlServerMegaDbDatabaseNameConst);
+                _registryXml.GetElementValue(SqlServerMegaDbNameKey, SqlServerMegaDbDatabaseNameConst);
 
-            MySqlServerName = RsDbLookupAppGlobals.GetSetting(MySqlServerNameKey, "localhost");
-            MySqlUserName = RsDbLookupAppGlobals.GetSetting(MySqlUserNameKey, "root");
-            MySqlPassword = RsDbLookupAppGlobals.GetSetting(MySqlPasswordKey, "");
+            MySqlServerName = _registryXml.GetElementValue(MySqlServerNameKey, "localhost");
+            MySqlUserName = _registryXml.GetElementValue(MySqlUserNameKey, "root");
+            MySqlPassword = _registryXml.GetElementValue(MySqlPasswordKey, "");
             MySqlNorthwindDbName =
-                RsDbLookupAppGlobals.GetSetting(MySqlNorthwindDbNameKey, MySqlNorthwindDatabaseNameConst);
-            MySqlMegaDbName = RsDbLookupAppGlobals.GetSetting(MySqlMegaDbNameKey, MySqlMegaDbDatabaseNameConst);
+                _registryXml.GetElementValue(MySqlNorthwindDbNameKey, MySqlNorthwindDatabaseNameConst);
+            MySqlMegaDbName = _registryXml.GetElementValue(MySqlMegaDbNameKey, MySqlMegaDbDatabaseNameConst);
 
-            var northwindPlatformType = RsDbLookupAppGlobals.GetSetting(NorthwindPlatformTypeKey,
+            var northwindPlatformType = _registryXml.GetElementValue(NorthwindPlatformTypeKey,
                 ((int)NorthwindDbPlatforms.Sqlite).ToString());
             NorthwindPlatformType = (NorthwindDbPlatforms) northwindPlatformType.ToInt();
-            NorthwindSqliteFileName = RsDbLookupAppGlobals.GetSetting(NorthwindSqliteFileNameKey,
+            NorthwindSqliteFileName = _registryXml.GetElementValue(NorthwindSqliteFileNameKey,
                 $@"{RsDbLookupAppGlobals.AssemblyDirectory}\Northwind\Northwind.sqlite");
 
-            var megaDbPlatformType = RsDbLookupAppGlobals.GetSetting(MegaDbPlatformTypeKey,
+            var megaDbPlatformType = _registryXml.GetElementValue(MegaDbPlatformTypeKey,
                 ((int)MegaDbPlatforms.SqlServer).ToString());
             MegaDbPlatformType = (MegaDbPlatforms) megaDbPlatformType.ToInt();
         }
 
         public void SaveToRegistry()
         {
-            RsDbLookupAppGlobals.SaveSetting(EntityFrameworkVersionKey, ((int)EntityFrameworkVersion).ToString());
+            _registryXml.SetElementValue(EntityFrameworkVersionKey, ((int)EntityFrameworkVersion).ToString());
 
-            RsDbLookupAppGlobals.SaveSetting(SqlServerServerNameKey, SqlServerServerName);
-            RsDbLookupAppGlobals.SaveSetting(SqlServerAuthTypeKey, ((int)SqlServerSecurityType).ToString());
-            RsDbLookupAppGlobals.SaveSetting(SqlServerUserNameKey, SqlServerUserName);
-            RsDbLookupAppGlobals.SaveSetting(SqlServerPasswordKey, SqlServerPassword);
-            RsDbLookupAppGlobals.SaveSetting(SqlServerNorthwindDbNameKey, SqlServerNorthwindDbName);
-            RsDbLookupAppGlobals.SaveSetting(SqlServerMegaDbNameKey, SqlServerMegaDbName);
+            _registryXml.SetElementValue(SqlServerServerNameKey, SqlServerServerName);
+            _registryXml.SetElementValue(SqlServerAuthTypeKey, ((int)SqlServerSecurityType).ToString());
+            _registryXml.SetElementValue(SqlServerUserNameKey, SqlServerUserName);
+            _registryXml.SetElementValue(SqlServerPasswordKey, SqlServerPassword);
+            _registryXml.SetElementValue(SqlServerNorthwindDbNameKey, SqlServerNorthwindDbName);
+            _registryXml.SetElementValue(SqlServerMegaDbNameKey, SqlServerMegaDbName);
 
-            RsDbLookupAppGlobals.SaveSetting(MySqlServerNameKey, MySqlServerName);
-            RsDbLookupAppGlobals.SaveSetting(MySqlUserNameKey, MySqlUserName);
-            RsDbLookupAppGlobals.SaveSetting(MySqlPasswordKey, MySqlPassword);
-            RsDbLookupAppGlobals.SaveSetting(MySqlNorthwindDbNameKey, MySqlNorthwindDbName);
-            RsDbLookupAppGlobals.SaveSetting(MySqlMegaDbNameKey, MySqlMegaDbName);
+            _registryXml.SetElementValue(MySqlServerNameKey, MySqlServerName);
+            _registryXml.SetElementValue(MySqlUserNameKey, MySqlUserName);
+            _registryXml.SetElementValue(MySqlPasswordKey, MySqlPassword);
+            _registryXml.SetElementValue(MySqlNorthwindDbNameKey, MySqlNorthwindDbName);
+            _registryXml.SetElementValue(MySqlMegaDbNameKey, MySqlMegaDbName);
 
-            RsDbLookupAppGlobals.SaveSetting(NorthwindPlatformTypeKey, ((int)NorthwindPlatformType).ToString());
-            RsDbLookupAppGlobals.SaveSetting(NorthwindSqliteFileNameKey, NorthwindSqliteFileName);
-            RsDbLookupAppGlobals.SaveSetting(MegaDbPlatformTypeKey, ((int)MegaDbPlatformType).ToString());
+            _registryXml.SetElementValue(NorthwindPlatformTypeKey, ((int)NorthwindPlatformType).ToString());
+            _registryXml.SetElementValue(NorthwindSqliteFileNameKey, NorthwindSqliteFileName);
+            _registryXml.SetElementValue(MegaDbPlatformTypeKey, ((int)MegaDbPlatformType).ToString());
         }
     }
 }

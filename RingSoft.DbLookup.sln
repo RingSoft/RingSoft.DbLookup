@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.Controls.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WinForms", "RingSoft.DbLookup.App.WinForms\RingSoft.DbLookup.App.WinForms.csproj", "{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Tests", "RingSoft.DbLookup.Tests\RingSoft.DbLookup.Tests.csproj", "{5FD3BE1A-AF9A-46CC-9B35-BD28DD25A08E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Tests.Core", "RingSoft.DbLookup.Tests.Core\RingSoft.DbLookup.Tests.Core.csproj", "{9E331D85-2F7F-430E-972F-BAFEF4B8B2B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,10 +71,10 @@ Global
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5FD3BE1A-AF9A-46CC-9B35-BD28DD25A08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5FD3BE1A-AF9A-46CC-9B35-BD28DD25A08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5FD3BE1A-AF9A-46CC-9B35-BD28DD25A08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5FD3BE1A-AF9A-46CC-9B35-BD28DD25A08E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E331D85-2F7F-430E-972F-BAFEF4B8B2B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E331D85-2F7F-430E-972F-BAFEF4B8B2B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E331D85-2F7F-430E-972F-BAFEF4B8B2B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E331D85-2F7F-430E-972F-BAFEF4B8B2B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

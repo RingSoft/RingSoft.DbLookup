@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RingSoft.DbLookup.Tests": {
+      "commandName": "Project",
+      "commandLineArgs": "1"
+    }
+  }
+}

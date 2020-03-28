@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.Controls.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WinForms", "RingSoft.DbLookup.App.WinForms\RingSoft.DbLookup.App.WinForms.csproj", "{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.Tests", "RingSoft.DbLookup.Tests\RingSoft.DbLookup.Tests.csproj", "{D5259E9D-44F6-44F4-A196-D12B99DF0AD7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,10 +69,6 @@ Global
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5259E9D-44F6-44F4-A196-D12B99DF0AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5259E9D-44F6-44F4-A196-D12B99DF0AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5259E9D-44F6-44F4-A196-D12B99DF0AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5259E9D-44F6-44F4-A196-D12B99DF0AD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

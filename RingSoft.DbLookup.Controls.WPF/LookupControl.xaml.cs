@@ -7,10 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.Lookup;
-using RSDbLookup.Controls.Wpf;
 
-namespace RingSoft.DbLookup.Controls.WPFCore
+namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
     /// Interaction logic for LookupControl.xaml

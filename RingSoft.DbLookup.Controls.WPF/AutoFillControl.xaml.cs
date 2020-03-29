@@ -6,7 +6,7 @@ using System.Windows.Input;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 
-namespace RingSoft.DbLookup.Controls.WPFCore
+namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
     /// Interaction logic for AutoFillControl.xaml

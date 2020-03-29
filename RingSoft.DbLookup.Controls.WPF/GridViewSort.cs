@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace RSDbLookup.Controls.Wpf
+namespace RingSoft.DbLookup.Controls.WPF
 {
     public class GridViewSort
     {

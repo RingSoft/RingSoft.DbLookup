@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace RingSoft.DbLookup.Controls.WPFCore
+namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
     /// Interaction logic for LookupWindow.xaml

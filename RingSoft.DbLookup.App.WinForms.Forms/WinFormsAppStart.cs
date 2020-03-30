@@ -29,11 +29,9 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
             _mainForm.Load += (sender, eventArgs) =>
             {
-                if (_splashForm != null && !_splashForm.Disposing && !_splashForm.IsDisposed)
-                    _splashForm.Invoke(new Action(() => _splashForm.Close()));
-                _mainForm.TopMost = true;
+                OnMainWindowLoad();
+                _splashForm = null;
                 _mainForm.Activate();
-                _mainForm.TopMost = false;
             };
         }
 

@@ -6,13 +6,20 @@ namespace RingSoft.DbLookup.App.Library
     public interface IAppSplashWindow
     {
         void SetProgress(string progressText);
+
+        void CloseSplash();
+
+        bool IsDisposed { get; }
+
+        bool Disposing { get; }
     }
 
     public abstract class AppStart
     {
         public abstract IAppSplashWindow AppSplashWindow { get; }
 
-        public Thread SplashThread { get; private set; }
+        private Thread _splashThread;
+        private object _lockCloseWindow = new object();
 
         public virtual void StartApp(string[] args)
         {
@@ -26,10 +33,10 @@ namespace RingSoft.DbLookup.App.Library
             {
                 InitializeSplash();
 
-                SplashThread = new Thread(ShowSplash);
-                SplashThread.SetApartmentState(ApartmentState.STA);
-                SplashThread.IsBackground = true;
-                SplashThread.Start();
+                _splashThread = new Thread(ShowSplash);
+                _splashThread.SetApartmentState(ApartmentState.STA);
+                _splashThread.IsBackground = true;
+                _splashThread.Start();
 
                 RsDbLookupAppGlobals.AppStartProgress += (sender, progressArgs) =>
                 {
@@ -39,7 +46,30 @@ namespace RingSoft.DbLookup.App.Library
                 FinishStartup();
             }
         }
-        
+
+        protected void OnMainWindowLoad()
+        {
+            if (AppSplashWindow != null && !AppSplashWindow.Disposing && !AppSplashWindow.IsDisposed)
+            {
+                Monitor.Enter(_lockCloseWindow);
+                try
+                {
+                    //Calling Close method is cleaner than setting the flag.  Otherwise startup decryption is screwing up the splash thread and making it hang on shut down.
+                    //m_frmSplash.m_bCloseForm = true;
+                    AppSplashWindow.CloseSplash();
+                }
+                finally
+                {
+                    Monitor.Exit(_lockCloseWindow);
+                }
+                while (_splashThread.IsAlive)
+                    Thread.Sleep(500);
+
+                _splashThread = null;	// we don't need it any more.
+            }
+
+        }
+
         protected abstract void InitializeSplash();
 
         protected abstract void ShowSplash();

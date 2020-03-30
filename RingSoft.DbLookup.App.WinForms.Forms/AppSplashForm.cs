@@ -23,5 +23,10 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
                 ProgressLabel.Text = progressText;
             }
         }
+
+        public void CloseSplash()
+        {
+            Invoke(new Action(() => Close()));
+        }
     }
 }

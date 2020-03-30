@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using RingSoft.DbLookup.App.Library;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
-    public partial class AppSplashForm : Form
+    public partial class AppSplashForm : Form, IAppSplashWindow
     {
         public AppSplashForm()
         {

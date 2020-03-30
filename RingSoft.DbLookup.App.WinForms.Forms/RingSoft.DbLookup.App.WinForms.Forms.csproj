@@ -81,7 +81,7 @@
     <Compile Include="AppSplashForm.Designer.cs">
       <DependentUpon>AppSplashForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppStart.cs" />
+    <Compile Include="WinFormsAppStart.cs" />
     <Compile Include="BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -49,68 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSplashForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AppSplashForm.Designer.cs">
-      <DependentUpon>AppSplashForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BaseForm.Designer.cs">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DbSetupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DbSetupForm.Designer.cs">
-      <DependentUpon>DbSetupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MegaDbSeedForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MegaDbSeedForm.Designer.cs">
-      <DependentUpon>MegaDbSeedForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SqlScriptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SqlScriptForm.Designer.cs">
-      <DependentUpon>SqlScriptForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SQLViewerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SQLViewerForm.Designer.cs">
-      <DependentUpon>SQLViewerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AppSplashForm.resx">
-      <DependentUpon>AppSplashForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DbSetupForm.resx">
-      <DependentUpon>DbSetupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MegaDbSeedForm.resx">
-      <DependentUpon>MegaDbSeedForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SqlScriptForm.resx">
-      <DependentUpon>SqlScriptForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SQLViewerForm.resx">
-      <DependentUpon>SQLViewerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -134,32 +74,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RingSoft.DbLookup.App.Library.Ef6\RingSoft.DbLookup.App.Library.Ef6.csproj">
-      <Project>{62aebc36-d67c-4ebe-9212-918d5e3c43b9}</Project>
-      <Name>RingSoft.DbLookup.App.Library.Ef6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RingSoft.DbLookup.App.Library.EfCore\RingSoft.DbLookup.App.Library.EfCore.csproj">
-      <Project>{09ef842b-511c-4851-a147-11749f229842}</Project>
-      <Name>RingSoft.DbLookup.App.Library.EfCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj">
-      <Project>{8729393b-0585-491f-a169-e06b13c3c977}</Project>
-      <Name>RingSoft.DbLookup.App.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RingSoft.DbLookup.Controls.WinForms\RingSoft.DbLookup.Controls.WinForms.csproj">
-      <Project>{c544a6f5-3dfa-4399-8aac-9cbb36ccb598}</Project>
-      <Name>RingSoft.DbLookup.Controls.WinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj">
-      <Project>{f5ea8cc1-689c-4254-954e-916d7b225dab}</Project>
-      <Name>RingSoft.DbLookup</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj">
-      <Project>{4f1b5f60-1f33-49a4-b903-9b0ad53d8752}</Project>
-      <Name>RingSoft.DbMaintenance</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient.SNI">
       <Version>1.1.1</Version>
     </PackageReference>
@@ -169,6 +83,16 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.112</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj">
+      <Project>{8729393b-0585-491f-a169-e06b13c3c977}</Project>
+      <Name>RingSoft.DbLookup.App.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RingSoft.DbLookup.App.WinForms.Forms\RingSoft.DbLookup.App.WinForms.Forms.csproj">
+      <Project>{56bf278e-1da6-4eb1-8406-63d35a446f38}</Project>
+      <Name>RingSoft.DbLookup.App.WinForms.Forms</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

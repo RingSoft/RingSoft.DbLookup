@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
-            DbDataProcessor.SqlErrorViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
             RsDbLookupAppGlobals.Initialize();
             RsDbLookupAppGlobals.EfProcessor = new EfProcessor6();
             SetupConfigurations();

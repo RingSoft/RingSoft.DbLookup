@@ -1,11 +1,12 @@
-﻿using System;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.GetDataProcessor;
+﻿using RingSoft.DbLookup.App.Library;
+using System;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
-    public partial class MainForm : BaseForm, IGetDataResultErrorViewer
+    public partial class MainForm : BaseForm
     {
+        public event EventHandler Done;
+
         public MainForm()
         {
             InitializeComponent();
@@ -14,6 +15,19 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             MegaDbButton.Click += MegaDbButton_Click;
             StockTrackerButton.Click += StockTrackerButton_Click;
             ExitButton.Click += (sender, args) => { Close(); };
+            timer1.Tick += (sender, args) =>
+            {
+                timer1.Enabled = false;
+                Done?.Invoke(this, EventArgs.Empty);
+            };
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            Activate();
+            timer1.Enabled = true;
         }
 
         private void StockTrackerButton_Click(object sender, EventArgs e)
@@ -50,12 +64,6 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         {
             var dbSetupForm = new DbSetupForm();
             dbSetupForm.ShowDialog();
-        }
-
-        public void ShowGetDataError(GetDataResult getDataResult)
-        {
-            var errorViewerForm = new SQLViewerForm(getDataResult);
-            errorViewerForm.ShowDialog();
         }
     }
 }

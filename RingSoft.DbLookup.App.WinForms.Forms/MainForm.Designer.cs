@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ExitButton = new System.Windows.Forms.Button();
             this.StockTrackerButton = new System.Windows.Forms.Button();
             this.MegaDbButton = new System.Windows.Forms.Button();
             this.NorthwindButton = new System.Windows.Forms.Button();
             this.DatabaseSettingsButton = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // ExitButton
@@ -80,6 +82,10 @@
             this.DatabaseSettingsButton.Text = "&Database Setup";
             this.DatabaseSettingsButton.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 10;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,5 +111,6 @@
         private System.Windows.Forms.Button MegaDbButton;
         private System.Windows.Forms.Button NorthwindButton;
         private System.Windows.Forms.Button DatabaseSettingsButton;
+        private System.Windows.Forms.Timer timer1;
     }
 }

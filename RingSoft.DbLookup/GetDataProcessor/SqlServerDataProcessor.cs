@@ -96,7 +96,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
             return command;
         }
 
-        public override GetDataResult GetListOfDatabases()
+        public override DataProcessResult GetListOfDatabases()
         {
             var originalDatabase = Database;
             Database = "master";

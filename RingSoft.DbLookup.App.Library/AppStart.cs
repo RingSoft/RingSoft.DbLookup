@@ -47,15 +47,13 @@ namespace RingSoft.DbLookup.App.Library
             }
         }
 
-        protected void OnMainWindowLoad()
+        protected void OnMainWindowShown()
         {
             if (AppSplashWindow != null && !AppSplashWindow.Disposing && !AppSplashWindow.IsDisposed)
             {
                 Monitor.Enter(_lockCloseWindow);
                 try
                 {
-                    //Calling Close method is cleaner than setting the flag.  Otherwise startup decryption is screwing up the splash thread and making it hang on shut down.
-                    //m_frmSplash.m_bCloseForm = true;
                     AppSplashWindow.CloseSplash();
                 }
                 finally

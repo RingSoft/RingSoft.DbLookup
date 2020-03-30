@@ -119,11 +119,11 @@
     <Compile Include="SqlScriptForm.Designer.cs">
       <DependentUpon>SqlScriptForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SQLViewerForm.cs">
+    <Compile Include="DataProcessResultForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SQLViewerForm.Designer.cs">
-      <DependentUpon>SQLViewerForm.cs</DependentUpon>
+    <Compile Include="DataProcessResultForm.Designer.cs">
+      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
     </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
@@ -179,8 +179,8 @@
     <EmbeddedResource Include="SqlScriptForm.resx">
       <DependentUpon>SqlScriptForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SQLViewerForm.resx">
-      <DependentUpon>SQLViewerForm.cs</DependentUpon>
+    <EmbeddedResource Include="DataProcessResultForm.resx">
+      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

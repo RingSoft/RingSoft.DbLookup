@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Tests
         public static void Setup(TestContext testContext)
         {
             RsDbLookupAppGlobals.Initialize();
-            DbDataProcessor.SqlErrorViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
             _context = new DevLogixLookupContextEfCore()
             {
                 DataProcessorType = DataProcessorTypes.Sqlite

@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
-            DbDataProcessor.SqlErrorViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
             RsDbLookupAppGlobals.Initialize();
             _context = new DevLogixLookupContextEfCore()
             {

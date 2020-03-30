@@ -38,12 +38,12 @@ namespace RingSoft.DbLookup.GetDataProcessor
         protected abstract DbSelectSqlGenerator SqlGenerator { get; }
 
         /// <summary>
-        /// Gets the error viewer.
+        /// Gets the data process result viewer.
         /// </summary>
         /// <value>
-        /// The error viewer.
+        /// Gets the data process result viewer.
         /// </value>
-        public static IGetDataResultErrorViewer SqlErrorViewer { get; set; }
+        public static IDataProcessResultViewer DataProcessResultViewer { get; set; }
 
         /// <summary>
         /// Gets or sets the window cursor.
@@ -59,8 +59,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
         private static bool _showSqlWindow;
         public DbDataProcessor()
         {
-            if (SqlErrorViewer == null)
-                SqlErrorViewer = new DefaultGetDataResultErrorViewer();
+            if (DataProcessResultViewer == null)
+                DataProcessResultViewer = new DefaultDataProcessResultViewer();
 
             if (WindowCursor == null)
                 WindowCursor = new DefaultWindowCursor();
@@ -117,9 +117,9 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// Gets the list of databases.
         /// </summary>
         /// <returns>A GetDataResult object containing a list of databases or an error.</returns>
-        public virtual GetDataResult GetListOfDatabases()
+        public virtual DataProcessResult GetListOfDatabases()
         {
-            return  new GetDataResult("");
+            return  new DataProcessResult("");
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// </summary>
         /// <param name="query">The query.</param>
         /// <returns></returns>
-        public GetDataResult GetData(QueryBase query)
+        public DataProcessResult GetData(QueryBase query)
         {
             var querySet = new QuerySet();
             querySet.AddQuery(query, "TABLE");
@@ -140,11 +140,11 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// </summary>
         /// <param name="querySet">The query set.</param>
         /// <returns></returns>
-        public GetDataResult GetData(QuerySet querySet)
+        public DataProcessResult GetData(QuerySet querySet)
         {
             WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
             
-            var result = new GetDataResult(querySet.DebugMessage);
+            var result = new DataProcessResult(querySet.DebugMessage);
 
             if (!querySet.Queries.Any())
             {
@@ -163,7 +163,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 if (result.ResultCode == GetDataResultCodes.SqlError)
                 {
                     WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
-                    SqlErrorViewer.ShowGetDataError(result);
+                    DataProcessResultViewer.ShowDataProcessResult(result);
                     return result;
                 }
                 else if (ShowSqlWindow)
@@ -171,8 +171,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                     result.ResultCode = GetDataResultCodes.Success;
                     result.DebugMessage += $"{Environment.NewLine}{Environment.NewLine}Result Row Count = ";
                     result.DebugMessage += $"{result.DataSet.Tables[0].Rows.Count}";
-                    result.FailedSqlStatement = result.Sqls[result.Sqls.Count - 1].SqlText;
-                    SqlErrorViewer.ShowGetDataError(result);
+                    result.ProcessedSqlStatement = result.Sqls[result.Sqls.Count - 1].SqlText;
+                    DataProcessResultViewer.ShowDataProcessResult(result);
                 }
             }
 
@@ -184,7 +184,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
             return result;
         }
 
-        private IDbConnection TryOpenConnection(GetDataResult result, bool clearConnectionPools)
+        private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools)
         {
             IDbConnection connection = null;
             try
@@ -197,17 +197,17 @@ namespace RingSoft.DbLookup.GetDataProcessor
             }
             catch (Exception e)
             {
-                result.ErrorMessage = $"Database Connection Error!\r\n\r\n{e.Message}";
+                result.Message = $"Database Connection Error!\r\n\r\n{e.Message}";
                 result.ResultCode = GetDataResultCodes.DbConnectError;
-                result.FailedSqlStatement = ConnectionString;
-                SqlErrorViewer.ShowGetDataError(result);
+                result.ProcessedSqlStatement = ConnectionString;
+                DataProcessResultViewer.ShowDataProcessResult(result);
                 CloseConnection(connection);
             }
 
             return connection;
         }
 
-        private void ProcessQuery(IDbConnection connection, QueryBase query, GetDataResult queryResult)
+        private void ProcessQuery(IDbConnection connection, QueryBase query, DataProcessResult queryResult)
         {
             var sql = query.RawSql;
             if (sql.IsNullOrEmpty())
@@ -223,9 +223,9 @@ namespace RingSoft.DbLookup.GetDataProcessor
             catch (Exception e)
             {
                 queryResult.ResultCode = GetDataResultCodes.SqlError;
-                queryResult.ErrorMessage = $"SQL Execution Error!\r\n\r\n{e.Message}";
-                queryResult.FailedQuery = query;
-                queryResult.FailedSqlStatement = sql;
+                queryResult.Message = $"SQL Execution Error!\r\n\r\n{e.Message}";
+                queryResult.ProcessedQuery = query;
+                queryResult.ProcessedSqlStatement = sql;
                 CloseConnection(connection);
                 return;
             }
@@ -241,18 +241,18 @@ namespace RingSoft.DbLookup.GetDataProcessor
             }
         }
 
-        public GetDataResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false)
+        public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false)
         {
             var sqlList = new List<string>();
             sqlList.Add(sqlStatement);
             return ExecuteSqls(sqlList);
         }
 
-        public GetDataResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false)
+        public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false)
         {
             WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
 
-            var result = new GetDataResult(string.Empty);
+            var result = new DataProcessResult(string.Empty);
 
             if (!sqlsList.Any())
             {
@@ -281,7 +281,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 {
                     CloseConnection(connection);
                     WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
-                    SqlErrorViewer.ShowGetDataError(result);
+                    DataProcessResultViewer.ShowDataProcessResult(result);
                     return result;
                 }
             }
@@ -299,7 +299,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
             WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
             if (ShowSqlWindow)
             {
-                SqlErrorViewer.ShowGetDataError(result);
+                DataProcessResultViewer.ShowDataProcessResult(result);
             }
 
             return result;
@@ -310,7 +310,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
 
         }
 
-        private int ExecuteSql(IDbConnection connection, string sql, GetDataResult queryResult)
+        private int ExecuteSql(IDbConnection connection, string sql, DataProcessResult queryResult)
         {
             var command = GetDbCommand(connection, sql);
             var result = 0;
@@ -321,8 +321,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
             catch (Exception e)
             {
                 queryResult.ResultCode = GetDataResultCodes.SqlError;
-                queryResult.ErrorMessage = $"SQL Execution Error!\r\n\r\n{e.Message}";
-                queryResult.FailedSqlStatement = sql;
+                queryResult.Message = $"SQL Execution Error!\r\n\r\n{e.Message}";
+                queryResult.ProcessedSqlStatement = sql;
                 CloseConnection(connection);
             }
 
@@ -336,12 +336,12 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// <param name="debugMessage">The debug message.</param>
         public static void DisplayDataException(Exception exception, string debugMessage)
         {
-            var getDataResult = new GetDataResult(debugMessage)
+            var getDataResult = new DataProcessResult(debugMessage)
             {
-                ErrorMessage = exception.Message,
+                Message = exception.Message,
                 ResultCode = GetDataResultCodes.SqlError
             };
-            SqlErrorViewer.ShowGetDataError(getDataResult);
+            DataProcessResultViewer.ShowDataProcessResult(getDataResult);
         }
     }
 }

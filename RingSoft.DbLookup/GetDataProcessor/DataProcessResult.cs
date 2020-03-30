@@ -18,7 +18,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
     /// Result after executing the DbDataProcessor GetData method.
     /// </summary>
     [Serializable]
-    public class GetDataResult
+    public class DataProcessResult
     {
         /// <summary>
         /// Gets the result code.
@@ -37,30 +37,30 @@ namespace RingSoft.DbLookup.GetDataProcessor
         public DataSet DataSet { get; internal set; }
 
         /// <summary>
-        /// Gets the error message.
+        /// Gets the message.
         /// </summary>
         /// <value>
-        /// The error message.
+        /// The message.
         /// </value>
-        public string ErrorMessage { get; internal set; }
+        public string Message { get; internal set; }
 
         /// <summary>
-        /// Gets the failed SQL statement.
+        /// Gets the processed SQL statement.
         /// </summary>
         /// <value>
-        /// The failed SQL statement.
+        /// The processed SQL statement.
         /// </value>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public string FailedSqlStatement { get; internal set; }
+        public string ProcessedSqlStatement { get; internal set; }
 
         /// <summary>
-        /// Gets the failed query.
+        /// Gets the processed query.
         /// </summary>
         /// <value>
-        /// The failed query.
+        /// The processed query.
         /// </value>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public QueryBase FailedQuery { get; internal set; }
+        public QueryBase ProcessedQuery { get; internal set; }
 
         /// <summary>
         /// Gets the connection string.
@@ -88,15 +88,15 @@ namespace RingSoft.DbLookup.GetDataProcessor
 
         private readonly List<QueryResultSql> _queryResultSqls = new List<QueryResultSql>();
 
-        public GetDataResult(string debugMessage)
+        public DataProcessResult(string debugMessage)
         {
             DebugMessage = debugMessage;
         }
 
         public override string ToString()
         {
-            if (!ErrorMessage.IsNullOrEmpty())
-                return ErrorMessage;
+            if (!Message.IsNullOrEmpty())
+                return Message;
 
             if (ResultCode == GetDataResultCodes.PendingProcess)
                 return "Pending Process.";

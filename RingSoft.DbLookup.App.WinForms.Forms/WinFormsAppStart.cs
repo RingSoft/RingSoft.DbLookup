@@ -8,7 +8,7 @@ using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
-    public class WinFormsAppStart : AppStart
+    public class WinFormsAppStart : AppStart, IDataProcessResultViewer
     {
         public override IAppSplashWindow AppSplashWindow => _splashForm;
 
@@ -18,7 +18,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         public override void StartApp(string[] args)
         {
             _mainForm = new MainForm();
-            DbDataProcessor.SqlErrorViewer = _mainForm;
+            DbDataProcessor.DataProcessResultViewer = this;
 
             base.StartApp(args);
         }
@@ -27,11 +27,10 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         {
             _splashForm = new AppSplashForm();
 
-            _mainForm.Load += (sender, eventArgs) =>
+            _mainForm.Done += (sender, eventArgs) =>
             {
-                OnMainWindowLoad();
+                OnMainWindowShown();
                 _splashForm = null;
-                _mainForm.Activate();
             };
         }
 
@@ -132,6 +131,12 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             //    orderDetailsForm.InitializeFromLookupData(e);
             //    orderDetailsForm.ShowDialog();
             //}
+        }
+
+        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
+        {
+            var dataProcessResultViewer = new DataProcessResultForm(dataProcessResult);
+            dataProcessResultViewer.ShowDialog();
         }
     }
 }

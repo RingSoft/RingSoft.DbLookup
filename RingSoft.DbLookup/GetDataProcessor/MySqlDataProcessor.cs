@@ -89,7 +89,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// Gets the list of databases.
         /// </summary>
         /// <returns>A GetDataResult object containing a list of databases or an error.</returns>
-        public override GetDataResult GetListOfDatabases()
+        public override DataProcessResult GetListOfDatabases()
         {
             var originalDatabase = Database;
             Database = "mysql";

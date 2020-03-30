@@ -3,11 +3,11 @@ using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.Tests
 {
-    public class TestGetDataErrorViewer : IGetDataResultErrorViewer
+    public class TestGetDataErrorViewer : IDataProcessResultViewer
     {
-        public void ShowGetDataError(GetDataResult getDataResult)
+        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
-            Debug.WriteLine($"GetDataError!  {getDataResult.ErrorMessage}");
+            Debug.WriteLine($"GetDataError!  {dataProcessResult.Message}");
         }
     }
 }

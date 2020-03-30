@@ -74,7 +74,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
             return command;
         }
 
-        public override GetDataResult GetListOfDatabases()
+        public override DataProcessResult GetListOfDatabases()
         {
             throw new NotImplementedException("Not relevant for Sqlite.");
         }

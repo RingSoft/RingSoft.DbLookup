@@ -49,7 +49,7 @@ namespace RingSoft.DbLookup.Tests
 
         private static void SetupDataProcessors()
         {
-            DbDataProcessor.SqlErrorViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
             _sqlServerDataProcessor = new SqlServerDataProcessor()
             {
                 Server = "localhost\\SQLEXPRESS",
@@ -189,7 +189,7 @@ namespace RingSoft.DbLookup.Tests
 
         private const string ValidCaseSensitiveResult = "CPTRGrid";
 
-        private static string GetCaseSensitiveTopRowValue(GetDataResult result)
+        private static string GetCaseSensitiveTopRowValue(DataProcessResult result)
         {
             return result.DataSet.Tables[0].Rows[0].GetRowValue("strTaskDesc");
         }
@@ -446,7 +446,7 @@ namespace RingSoft.DbLookup.Tests
             CheckResult(result, context);
         }
 
-        private static void CheckResult(GetDataResult result, DevLogixLookupContextEfCore context)
+        private static void CheckResult(DataProcessResult result, DevLogixLookupContextEfCore context)
         {
             if (result.ResultCode == GetDataResultCodes.Success)
             {

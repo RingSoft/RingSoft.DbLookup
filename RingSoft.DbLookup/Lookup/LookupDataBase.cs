@@ -214,7 +214,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="resetSelectedRowIndex">if set to <c>true</c> then reset the selected row index after fetching data.</param>
         /// <param name="resetRecordCount">if set to <c>true</c> then reset record count after fetching data.</param>
         /// <returns></returns>
-        public GetDataResult GetInitData(bool resetSelectedRowIndex, bool resetRecordCount = true)
+        public DataProcessResult GetInitData(bool resetSelectedRowIndex, bool resetRecordCount = true)
         {
             if (resetRecordCount)
                 RecordCount = 0;
@@ -244,7 +244,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="primaryKey">The primary key.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">Primary key value Table Definition '{PrimaryKeyValue.TableDefinition.TableName}' does not match this Lookup Definition's Table Definition '{LookupDefinition.TableDefinition.TableName}'</exception>
-        public GetDataResult SelectPrimaryKey(PrimaryKeyValue primaryKey)
+        public DataProcessResult SelectPrimaryKey(PrimaryKeyValue primaryKey)
         {
             if (primaryKey.TableDefinition != LookupDefinition.TableDefinition)
                 throw new ArgumentException(
@@ -1301,7 +1301,7 @@ namespace RingSoft.DbLookup.Lookup
             AddSortColumnToQueryWhere(selectQuery);
 
             var countQuery = new CountQuery(selectQuery, "Count");
-            GetDataResult result = null;
+            DataProcessResult result = null;
             await Task.Run(() =>
             {
                 result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery);

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.3" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup.App.WPF.Views\RingSoft.DbLookup.App.WPF.Views.csproj" />
+  </ItemGroup>
+
+</Project>

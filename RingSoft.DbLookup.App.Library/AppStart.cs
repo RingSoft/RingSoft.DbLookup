@@ -5,20 +5,21 @@ namespace RingSoft.DbLookup.App.Library
 {
     public interface IAppSplashWindow
     {
-        void SetProgress(string progressText);
-
-        void CloseSplash();
-
         bool IsDisposed { get; }
 
         bool Disposing { get; }
+
+        void SetProgress(string progressText);
+
+        void CloseSplash();
     }
 
     public abstract class AppStart
     {
         public abstract IAppSplashWindow AppSplashWindow { get; }
 
-        private Thread _splashThread;
+        protected Thread SplashThread { get; private set; }
+
         private object _lockCloseWindow = new object();
 
         public virtual void StartApp(string[] args)
@@ -33,11 +34,15 @@ namespace RingSoft.DbLookup.App.Library
             {
                 InitializeSplash();
 
-                _splashThread = new Thread(ShowSplash);
-                _splashThread.SetApartmentState(ApartmentState.STA);
-                _splashThread.IsBackground = true;
-                _splashThread.Start();
+                SplashThread = new Thread(ShowSplash);
+                SplashThread.SetApartmentState(ApartmentState.STA);
+                SplashThread.IsBackground = true;
+                SplashThread.Start();
 
+                while (AppSplashWindow == null)
+                {
+                    Thread.Sleep(100);
+                }
                 RsDbLookupAppGlobals.AppStartProgress += (sender, progressArgs) =>
                 {
                     AppSplashWindow.SetProgress(progressArgs.ProgressText);
@@ -60,10 +65,10 @@ namespace RingSoft.DbLookup.App.Library
                 {
                     Monitor.Exit(_lockCloseWindow);
                 }
-                while (_splashThread.IsAlive)
+                while (SplashThread.IsAlive)
                     Thread.Sleep(500);
 
-                _splashThread = null;	// we don't need it any more.
+                SplashThread = null;	// we don't need it any more.
             }
 
         }

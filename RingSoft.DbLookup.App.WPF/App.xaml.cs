@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using RingSoft.DbLookup.App.WPF.Views;
 using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPF
@@ -13,5 +8,12 @@ namespace RingSoft.DbLookup.App.WPF
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var wpfAppStart = new WpfAppStart(this);
+            wpfAppStart.StartApp(e.Args);
+
+            base.OnStartup(e);
+        }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RingSoft.DbLookup.App.WPF.Properties {
+namespace RingSoft.DbLookup.App.WPFCore.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.App.WPF.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RingSoft.DbLookup.App.WPF.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RingSoft.DbLookup.App.WPFCore.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace RingSoft.DbLookup.App.WPF.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon magnify {
-            get {
-                object obj = ResourceManager.GetObject("magnify", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
     }

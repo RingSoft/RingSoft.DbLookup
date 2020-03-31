@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
+using RingSoft.DbLookup.App.WPF.Views.MegaDb;
 
 namespace RingSoft.DbLookup.App.WPF.Views
 {
@@ -30,6 +31,12 @@ namespace RingSoft.DbLookup.App.WPF.Views
             {
                 Activate();
                 timer.Start();
+            };
+
+            MegaDbButton.Click += (sender, args) =>
+            {
+                var itemsWindow = new ItemsWindow();
+                itemsWindow.ShowDialog();
             };
         }
     }

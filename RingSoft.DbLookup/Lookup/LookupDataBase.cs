@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -147,6 +148,22 @@ namespace RingSoft.DbLookup.Lookup
         /// The parent window's primary key value.
         /// </value>
         public PrimaryKeyValue ParentWindowPrimaryKeyValue { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether search for is changing.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if search for is changing; otherwise, <c>false</c>.
+        /// </value>
+        public bool SearchForChanging { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether records are being counted.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if counting records; otherwise, <c>false</c>.
+        /// </value>
+        public bool CountingRecords { get; private set; }
 
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
@@ -1022,10 +1039,17 @@ namespace RingSoft.DbLookup.Lookup
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void OnSearchForChange(string searchText)
         {
+            SearchForChanging = true;
             if (searchText.IsNullOrEmpty())
             {
                 if (LookupResultsDataTable != null && LookupResultsDataTable.Rows.Count > 0)
+                {
+                    if (UserInterface.SearchType == LookupSearchTypes.Contains)
+                        ResetRecordCount();
                     GotoTop();
+                }
+
+                SearchForChanging = false;
                 return;
             }
             switch (UserInterface.SearchType)
@@ -1039,6 +1063,8 @@ namespace RingSoft.DbLookup.Lookup
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            SearchForChanging = false;
         }
 
         private void GetSearchEqualsData(string searchText)
@@ -1269,6 +1295,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns></returns>
         public async Task<bool> GetRecordCount()
         {
+            CountingRecords = true;
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
 
             if (UserInterface.SearchType == LookupSearchTypes.Contains &&
@@ -1304,8 +1331,11 @@ namespace RingSoft.DbLookup.Lookup
             DataProcessResult result = null;
             await Task.Run(() =>
             {
-                result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery);
+                result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
+                Thread.Sleep(5000);
             });
+
+            CountingRecords = false;
             if (result.ResultCode == GetDataResultCodes.Success)
             {
                 RecordCount = result.DataSet.Tables[0].Rows[0].GetRowValue("Count").ToInt();

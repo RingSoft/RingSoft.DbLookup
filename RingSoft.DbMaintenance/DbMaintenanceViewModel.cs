@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -172,7 +173,9 @@ namespace RingSoft.DbMaintenance
                     TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.PrimaryKeyValue);
 
                 ChangingEntity = true;
+                DbDataProcessor.WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
                 LoadFromEntity(newEntity);
+                DbDataProcessor.WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
                 DeleteButtonEnabled = true;

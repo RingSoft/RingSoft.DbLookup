@@ -358,10 +358,27 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException();
             }
             ListView.SelectedIndex = LookupData.SelectedRowIndex;
-            SetupRecordCount();
+
+            var setupRecordCount = true;
+            switch (SearchType)
+            {
+                case LookupSearchTypes.Equals:
+                    if (LookupData.CountingRecords)
+                        setupRecordCount = false;
+                    break;
+                case LookupSearchTypes.Contains:
+                    if (!LookupData.SearchForChanging)
+                        setupRecordCount = false;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            if (setupRecordCount)
+                SetupRecordCount();
         }
 
-        public void RefreshData(bool resetSearchFor, string initialSearchFor = "", PrimaryKeyValue parentWindowPrimaryKeyValue = null)
+        public void RefreshData(bool resetSearchFor, string initialSearchFor = "",
+            PrimaryKeyValue parentWindowPrimaryKeyValue = null)
         {
             if (LookupData == null)
             {

@@ -126,23 +126,26 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// Gets the resulting data or error after executing the query.
         /// </summary>
         /// <param name="query">The query.</param>
+        /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult GetData(QueryBase query)
+        public DataProcessResult GetData(QueryBase query, bool setWaitCursor = true)
         {
             var querySet = new QuerySet();
             querySet.AddQuery(query, "TABLE");
             querySet.DebugMessage = query.DebugMessage;
-            return GetData(querySet);
+            return GetData(querySet, setWaitCursor);
         }
 
         /// <summary>
         /// Gets the resulting DataSet or error after executing the query set.
         /// </summary>
         /// <param name="querySet">The query set.</param>
+        /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult GetData(QuerySet querySet)
+        public DataProcessResult GetData(QuerySet querySet, bool setWaitCursor = true)
         {
-            WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
+            if (setWaitCursor)
+                WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
             
             var result = new DataProcessResult(querySet.DebugMessage);
 
@@ -162,7 +165,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 ProcessQuery(connection, query, result);
                 if (result.ResultCode == GetDataResultCodes.SqlError)
                 {
-                    WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+                    if (setWaitCursor)
+                        WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
                     DataProcessResultViewer.ShowDataProcessResult(result);
                     return result;
                 }
@@ -180,7 +184,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 CloseConnection(connection);
 
             result.ResultCode = GetDataResultCodes.Success;
-            WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+            if (setWaitCursor)
+                WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
             return result;
         }
 
@@ -241,16 +246,31 @@ namespace RingSoft.DbLookup.GetDataProcessor
             }
         }
 
-        public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false)
+        /// <summary>
+        /// Executes the SQL.
+        /// </summary>
+        /// <param name="sqlStatement">The SQL statement.</param>
+        /// <param name="clearConnectionPools">if set to <c>true</c> clear connection pools.</param>
+        /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
+        /// <returns></returns>
+        public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false, bool setWaitCursor = true)
         {
             var sqlList = new List<string>();
             sqlList.Add(sqlStatement);
-            return ExecuteSqls(sqlList);
+            return ExecuteSqls(sqlList, setWaitCursor);
         }
 
-        public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false)
+        /// <summary>
+        /// Executes the SQLS.
+        /// </summary>
+        /// <param name="sqlsList">The SQLS list.</param>
+        /// <param name="clearConnectionPools">if set to <c>true</c> [clear connection pools].</param>
+        /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
+        /// <returns></returns>
+        public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false, bool setWaitCursor = true)
         {
-            WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
+            if (setWaitCursor)
+                WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
 
             var result = new DataProcessResult(string.Empty);
 
@@ -280,7 +300,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 if (result.ResultCode == GetDataResultCodes.SqlError)
                 {
                     CloseConnection(connection);
-                    WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+                    if (setWaitCursor)
+                        WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
                     DataProcessResultViewer.ShowDataProcessResult(result);
                     return result;
                 }
@@ -296,7 +317,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 CloseConnection(connection);
 
             result.ResultCode = GetDataResultCodes.Success;
-            WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+            if (setWaitCursor)
+                WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
             if (ShowSqlWindow)
             {
                 DataProcessResultViewer.ShowDataProcessResult(result);

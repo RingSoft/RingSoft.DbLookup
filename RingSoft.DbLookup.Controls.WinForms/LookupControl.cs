@@ -372,7 +372,23 @@ namespace RingSoft.DbLookup.Controls.WinForms
                     throw new ArgumentOutOfRangeException();
             }
             LookupListView.SelectItem(LookupData.SelectedRowIndex);
-            SetupRecordCount();
+
+            var setupRecordCount = true;
+            switch (SearchType)
+            {
+                case LookupSearchTypes.Equals:
+                    if (LookupData.CountingRecords)
+                        setupRecordCount = false;
+                    break;
+                case LookupSearchTypes.Contains:
+                    if (!LookupData.SearchForChanging)
+                        setupRecordCount = false;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            if (setupRecordCount)
+                SetupRecordCount();
         }
 
         private void LookupData_DataSourceChanged(object sender, EventArgs e)

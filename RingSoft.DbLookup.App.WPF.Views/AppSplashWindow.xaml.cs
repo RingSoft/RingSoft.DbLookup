@@ -11,9 +11,11 @@ namespace RingSoft.DbLookup.App.WPF.Views
         public bool IsDisposed => false;
         public bool Disposing => false;
 
-        public AppSplashWindow()
+        public AppSplashWindow(string netVersion)
         {
             InitializeComponent();
+
+            NetVersionTextBlock.Text = netVersion;
         }
 
         public void SetProgress(string progressText)

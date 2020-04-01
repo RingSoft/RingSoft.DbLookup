@@ -5,10 +5,11 @@ using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace RingSoft.DbLookup.App.WPF.Views
 {
-    public class WpfAppStart : AppStart, IDataProcessResultViewer
+    public class WpfAppStart : AppStart, IDataProcessResultViewer, IWindowCursor
     {
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
@@ -16,16 +17,19 @@ namespace RingSoft.DbLookup.App.WPF.Views
         private Application _application;
         private MainWindow _mainWindow;
         private AppSplashWindow _splashWindow;
+        private string _netVersion;
 
-        public WpfAppStart(Application application)
+        public WpfAppStart(Application application, string netVersion)
         {
             _application = application;
+            _netVersion = netVersion;
         }
 
         public override void StartApp(string[] args)
         {
             _mainWindow = new MainWindow();
             DbDataProcessor.DataProcessResultViewer = this;
+            DbDataProcessor.WindowCursor = this;
 
             base.StartApp(args);
         }
@@ -40,7 +44,7 @@ namespace RingSoft.DbLookup.App.WPF.Views
 
         protected override void ShowSplash()
         {
-            _splashWindow = new AppSplashWindow();
+            _splashWindow = new AppSplashWindow(_netVersion);
             _splashWindow.ShowDialog();
         }
 
@@ -144,6 +148,21 @@ namespace RingSoft.DbLookup.App.WPF.Views
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             MessageBox.Show($"SQL Error\r\n\r\n{dataProcessResult.Message}");
+        }
+
+        public void SetWindowCursor(WindowCursorTypes cursor)
+        {
+            switch (cursor)
+            {
+                case WindowCursorTypes.Default:
+                    Mouse.OverrideCursor = null;
+                    break;
+                case WindowCursorTypes.Wait:
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cursor), cursor, null);
+            }
         }
     }
 }

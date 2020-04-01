@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 using RingSoft.DbLookup.App.WPF.Views.MegaDb;
+using RingSoft.DbLookup.App.WPF.Views.Northwind;
 
 namespace RingSoft.DbLookup.App.WPF.Views
 {
@@ -37,6 +38,12 @@ namespace RingSoft.DbLookup.App.WPF.Views
             {
                 var itemsWindow = new ItemsWindow();
                 itemsWindow.ShowDialog();
+            };
+
+            NorthwindButton.Click += (sender, args) =>
+            {
+                var ordersWindow = new OrdersWindow();
+                ordersWindow.ShowDialog();
             };
         }
     }

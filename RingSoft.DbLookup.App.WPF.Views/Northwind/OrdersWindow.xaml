@@ -1,0 +1,127 @@
+﻿<views:DbMaintenanceWindow x:Class="RingSoft.DbLookup.App.WPF.Views.Northwind.OrdersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:RingSoft.DbLookup.App.WPF.Views"
+        xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        mc:Ignorable="d"
+        Title="OrdersWindow" Height="575" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <lib:OrderViewModel x:Name="OrdersViewModel"/>
+    </Window.DataContext>
+    <DockPanel>
+        <views:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2.4*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Style="{StaticResource ReadOnlyBorder}">
+                    <TextBlock Width="70" Text="{Binding OrderId}" Style="{StaticResource ReadOnlyTextBlock}"/>
+                </Border>
+                <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
+                <controls:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100"/>
+                <Border Style="{StaticResource ReadOnlyBorder}">
+                    <TextBlock Width="200" Text="{Binding CompanyName}" Style="{StaticResource ReadOnlyTextBlock}"/>
+                </Border>
+            </StackPanel>
+            <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <controls:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay}" Width="150"/>
+                <Label Content="Ship Via" Style="{StaticResource ControlLabel}"/>
+                <controls:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay}" Width="150"/>
+            </StackPanel>
+            <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <DatePicker SelectedDate="{Binding Path=OrderDate, Mode=TwoWay}"/>
+                <Label Content="Required Date" Style="{StaticResource ControlLabel}"/>
+                <DatePicker SelectedDate="{Binding Path=RequiredDate, Mode=TwoWay}"/>
+                <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>
+                <DatePicker SelectedDate="{Binding Path=ShippedDate, Mode=TwoWay}"/>
+            </StackPanel>
+            <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
+                <TabItem Header="Details">
+                    <DockPanel>
+                        <Button Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
+                        <controls:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}"/>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Shipping Data">
+                    <Grid Width="350" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Name" Style="{StaticResource ControlLabel}"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=ShipName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left"/>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Address" Style="{StaticResource ControlLabel}"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
+                        <Label Grid.Column="0" Grid.Row="2" Content="City" Style="{StaticResource ControlLabel}"/>
+                        <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
+                            <Label Content="Region" Style="{StaticResource ControlLabel}"/>
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
+                        </DockPanel>
+                        <Label Grid.Column="0" Grid.Row="3" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
+                        <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
+                            <Label Content="Country" Style="{StaticResource ControlLabel}"/>
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
+                        </DockPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <Grid Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Sub Total" Style="{StaticResource ControlLabel}"/>
+                <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource ReadOnlyBorder}">
+                    <TextBlock Text="{Binding Path=SubTotal, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
+                </Border>
+                <Label Grid.Column="0" Grid.Row="1" Content="Total Discount" Style="{StaticResource ControlLabel}"/>
+                <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ReadOnlyBorder}">
+                    <TextBlock Text="{Binding Path=TotalDiscount, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
+                </Border>
+                <Label Grid.Column="0" Grid.Row="2" Content="Freight" Style="{StaticResource ControlLabel}"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Freight, Mode=TwoWay, StringFormat='c'}" Height="20" HorizontalContentAlignment="Right" Margin="2.5,0,2.5,0"/>
+                <Label Grid.Column="0" Grid.Row="3" Content="Total" Style="{StaticResource ControlLabel}"/>
+                <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource ReadOnlyBorder}">
+                    <TextBlock Text="{Binding Path=Total, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</views:DbMaintenanceWindow>

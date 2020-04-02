@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace RingSoft.DbLookup.App.WPF.Views
+namespace RingSoft.DbLookup.App.WPFCore
 {
     public class BaseWindow : Window
     {

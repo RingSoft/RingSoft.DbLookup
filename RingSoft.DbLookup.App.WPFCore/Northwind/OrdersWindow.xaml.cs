@@ -2,7 +2,7 @@
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
-namespace RingSoft.DbLookup.App.WPF.Views.Northwind
+namespace RingSoft.DbLookup.App.WPFCore.Northwind
 {
     /// <summary>
     /// Interaction logic for OrdersWindow.xaml

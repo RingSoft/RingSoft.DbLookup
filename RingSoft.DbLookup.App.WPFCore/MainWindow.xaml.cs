@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Threading;
-using RingSoft.DbLookup.App.WPF.Views.MegaDb;
-using RingSoft.DbLookup.App.WPF.Views.Northwind;
+using RingSoft.DbLookup.App.WPFCore.MegaDb;
+using RingSoft.DbLookup.App.WPFCore.Northwind;
 
-namespace RingSoft.DbLookup.App.WPF.Views
+namespace RingSoft.DbLookup.App.WPFCore
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

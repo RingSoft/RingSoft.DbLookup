@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using RingSoft.DbLookup.App.Library;
+﻿using RingSoft.DbLookup.App.Library;
 
-namespace RingSoft.DbLookup.App.WPF.Views
+namespace RingSoft.DbLookup.App.WPFCore
 {
     /// <summary>
     /// Interaction logic for AppSplashWindow.xaml
@@ -11,11 +10,9 @@ namespace RingSoft.DbLookup.App.WPF.Views
         public bool IsDisposed => false;
         public bool Disposing => false;
 
-        public AppSplashWindow(string netVersion)
+        public AppSplashWindow()
         {
             InitializeComponent();
-
-            NetVersionTextBlock.Text = netVersion;
         }
 
         public void SetProgress(string progressText)

@@ -13,11 +13,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup.App.Library.Ef6\RingSoft.DbLookup.App.Library.Ef6.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup.App.Library.EfCore\RingSoft.DbLookup.App.Library.EfCore.csproj" />
     <ProjectReference Include="..\RingSoft.DbLookup.App.Library\RingSoft.DbLookup.App.Library.csproj" />
-    <ProjectReference Include="..\RingSoft.DbLookup.App.WPF.Views\RingSoft.DbLookup.App.WPF.Views.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup.Controls.WPF\RingSoft.DbLookup.Controls.WPF.csproj" />
+    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
+    <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AppSplashWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="DbMaintenanceButtonsControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MainWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MegaDb\ItemsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Northwind\OrdersWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -30,6 +49,24 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="AppSplashWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DbMaintenanceButtonsControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MegaDb\ItemsWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Northwind\OrdersWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

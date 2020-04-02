@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using RingSoft.DbMaintenance;
+﻿using RingSoft.DbMaintenance;
 
-namespace RingSoft.DbLookup.App.WPF.Views.MegaDb
+namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 {
     /// <summary>
     /// Interaction logic for ItemsWindow.xaml

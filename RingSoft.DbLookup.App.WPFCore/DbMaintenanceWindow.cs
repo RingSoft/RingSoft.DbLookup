@@ -8,13 +8,13 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
-namespace RingSoft.DbLookup.App.WPF.Views
+namespace RingSoft.DbLookup.App.WPFCore
 {
     public abstract class DbMaintenanceWindow : BaseWindow, IDbMaintenanceView
     {
         public abstract DbMaintenanceViewModelBase ViewModel { get; }
 
-        public abstract DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
+        public abstract WPFCore.DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
 
         protected void Initialize()
         {

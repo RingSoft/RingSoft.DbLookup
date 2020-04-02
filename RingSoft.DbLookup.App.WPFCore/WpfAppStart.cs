@@ -1,13 +1,13 @@
-﻿using RingSoft.DbLookup.App.Library;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
+using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
-using System;
-using System.Windows;
-using System.Windows.Input;
 
-namespace RingSoft.DbLookup.App.WPF.Views
+namespace RingSoft.DbLookup.App.WPFCore
 {
     public class WpfAppStart : AppStart, IDataProcessResultViewer, IWindowCursor
     {
@@ -17,12 +17,10 @@ namespace RingSoft.DbLookup.App.WPF.Views
         private Application _application;
         private MainWindow _mainWindow;
         private AppSplashWindow _splashWindow;
-        private string _netVersion;
 
-        public WpfAppStart(Application application, string netVersion)
+        public WpfAppStart(Application application)
         {
             _application = application;
-            _netVersion = netVersion;
         }
 
         public override void StartApp(string[] args)
@@ -44,7 +42,7 @@ namespace RingSoft.DbLookup.App.WPF.Views
 
         protected override void ShowSplash()
         {
-            _splashWindow = new AppSplashWindow(_netVersion);
+            _splashWindow = new AppSplashWindow();
             _splashWindow.ShowDialog();
         }
 

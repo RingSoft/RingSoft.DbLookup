@@ -27,11 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Controls.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WinForms.Forms", "RingSoft.DbLookup.App.WinForms.Forms\RingSoft.DbLookup.App.WinForms.Forms.csproj", "{56BF278E-1DA6-4EB1-8406-63D35A446F38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WPF.Views", "RingSoft.DbLookup.App.WPF.Views\RingSoft.DbLookup.App.WPF.Views.csproj", "{3EC84F92-ABE1-476A-8AFB-9F63E31B6A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.WPF.Views", "RingSoft.DbLookup.App.WPF.Views\RingSoft.DbLookup.App.WPF.Views.csproj", "{3EC84F92-ABE1-476A-8AFB-9F63E31B6A79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WPFCore", "RingSoft.DbLookup.App.WPFCore\RingSoft.DbLookup.App.WPFCore.csproj", "{451974A0-8FD2-494E-9EED-669C468206DF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WPF", "RingSoft.DbLookup.App.WPF\RingSoft.DbLookup.App.WPF.csproj", "{AB26BB78-9006-48EA-AF0D-6814888B577F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.WPFCore", "RingSoft.DbLookup.App.WPFCore\RingSoft.DbLookup.App.WPFCore.csproj", "{451974A0-8FD2-494E-9EED-669C468206DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,10 +93,6 @@ Global
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB26BB78-9006-48EA-AF0D-6814888B577F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB26BB78-9006-48EA-AF0D-6814888B577F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB26BB78-9006-48EA-AF0D-6814888B577F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB26BB78-9006-48EA-AF0D-6814888B577F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1332,7 +1332,6 @@ namespace RingSoft.DbLookup.Lookup
             await Task.Run(() =>
             {
                 result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
-                Thread.Sleep(5000);
             });
 
             CountingRecords = false;

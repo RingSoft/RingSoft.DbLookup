@@ -1,5 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library;
 using System;
+using RingSoft.DbLookup.App.WinForms.Forms.Northwind;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
@@ -56,8 +57,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             {
                 DatabaseSettingsButton.PerformClick();
             }
-            //var ordersForm = new OrdersForm();
-            //ordersForm.ShowDialog();
+            var ordersForm = new OrdersForm();
+            ordersForm.ShowDialog();
         }
 
         private void DatabaseSettingsButton_Click(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
+using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 
@@ -116,18 +117,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private void NorthwindLookupContext_LookupView(object sender, LookupAddViewArgs e)
         {
-            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
-            //{
-            //    var customerForm = new CustomerForm();
-            //    customerForm.InitializeFromLookupData(e);
-            //    customerForm.ShowDialog();
-            //}
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
-            //{
-            //    var orderForm = new OrdersForm();
-            //    orderForm.InitializeFromLookupData(e);
-            //    orderForm.ShowDialog();
-            //}
+            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
+            {
+                var customersWindow = new CustomersWindow();
+                customersWindow.InitializeFromLookupData(e);
+                customersWindow.ShowDialog();
+            }
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
+            {
+                var ordersWindow = new OrdersWindow();
+                ordersWindow.InitializeFromLookupData(e);
+                ordersWindow.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
             //{
             //    var employeeForm = new EmployeeForm();

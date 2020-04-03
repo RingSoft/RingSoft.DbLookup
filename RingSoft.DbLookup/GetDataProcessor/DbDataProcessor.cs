@@ -69,8 +69,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// <summary>
         /// Shows the SQL window.
         /// </summary>
-        /// <param name="value">if set to <c>true</c> then the Sql viewwer will show every time a Sql statement is executed.</param>
-        public static void ShowSQLWindow(bool value = true)
+        /// <param name="value">if set to <c>true</c> then the data process result viewer will show every time a Sql statement is executed.</param>
+        public static void ShowDataProcessResultWindow(bool value = true)
         {
             _showSqlWindow = value;
         }
@@ -155,7 +155,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 return result;
             }
 
-            IDbConnection connection = TryOpenConnection(result, false);
+            IDbConnection connection = TryOpenConnection(result, false, setWaitCursor);
             if (result.ResultCode == GetDataResultCodes.DbConnectError)
                 return result;
 
@@ -172,6 +172,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 }
                 else if (ShowSqlWindow)
                 {
+                    if (setWaitCursor)
+                        WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
                     result.ResultCode = GetDataResultCodes.Success;
                     result.DebugMessage += $"{Environment.NewLine}{Environment.NewLine}Result Row Count = ";
                     result.DebugMessage += $"{result.DataSet.Tables[0].Rows.Count}";
@@ -189,7 +191,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
             return result;
         }
 
-        private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools)
+        private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools, bool setCursor)
         {
             IDbConnection connection = null;
             try
@@ -202,6 +204,9 @@ namespace RingSoft.DbLookup.GetDataProcessor
             }
             catch (Exception e)
             {
+                if (setCursor)
+                    WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+
                 result.Message = $"Database Connection Error!\r\n\r\n{e.Message}";
                 result.ResultCode = GetDataResultCodes.DbConnectError;
                 result.ProcessedSqlStatement = ConnectionString;
@@ -280,7 +285,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 return result;
             }
 
-            var connection = TryOpenConnection(result, clearConnectionPools);
+            var connection = TryOpenConnection(result, clearConnectionPools, setWaitCursor);
             if (result.ResultCode == GetDataResultCodes.DbConnectError)
                 return result;
 
@@ -321,6 +326,9 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
             if (ShowSqlWindow)
             {
+                if (setWaitCursor)
+                    WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+
                 DataProcessResultViewer.ShowDataProcessResult(result);
             }
 
@@ -363,6 +371,9 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 Message = exception.Message,
                 ResultCode = GetDataResultCodes.SqlError
             };
+
+            WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+
             DataProcessResultViewer.ShowDataProcessResult(getDataResult);
         }
     }

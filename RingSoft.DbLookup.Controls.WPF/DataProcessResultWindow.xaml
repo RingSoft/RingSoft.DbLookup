@@ -1,0 +1,27 @@
+﻿<local:BaseWindow x:Class="RingSoft.DbLookup.Controls.WPF.DataProcessResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
+        mc:Ignorable="d"
+        Title="Data Process Result" Height="450" Width="600">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="TitleLabel" Content="Data Process Error!" FontSize="12" FontWeight="Bold"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
+            <TextBox x:Name="ResultTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+        </ScrollViewer>
+        <Label Grid.Row="2" x:Name="SqlStatementLabel" Content="Failed SQL Statement"/>
+        <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Visible">
+            <TextBox x:Name="SqlStatementTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+        </ScrollViewer>
+        <Button Grid.Row="4" x:Name="CloseButton" Content="_Close" Height="25" Width="75" HorizontalAlignment="Right"/>
+    </Grid>
+</local:BaseWindow>

@@ -56,17 +56,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             AddButton.Click += (sender, args) => AddButtonClick();
             ViewButton.Click += (sender, args) => ViewButtonClick();
             CloseButton.Click += (sender, args) => { Close(); };
-
-            PreviewKeyDown += (sender, args) =>
-            {
-                switch (args.Key)
-                {
-                    case Key.Escape:
-                        Close();
-                        args.Handled = true;
-                        break;
-                }
-            };
         }
 
         private void LookupData_SelectedIndexChanged(object sender, SelectedIndexChangedEventArgs e)

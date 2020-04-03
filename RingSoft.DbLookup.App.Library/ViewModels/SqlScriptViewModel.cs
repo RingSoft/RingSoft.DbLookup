@@ -81,7 +81,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         public void ExecuteButton_Click()
         {
-            DbDataProcessor.ShowSQLWindow();
+            DbDataProcessor.ShowDataProcessResultWindow();
             if (_splitGo)
             {
                 var sqls = RsDbLookupAppGlobals.SplitSqlServerStatements(SqlText);
@@ -92,7 +92,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 _dataProcessor.ExecuteSql(SqlText, true);
             }
 
-            DbDataProcessor.ShowSQLWindow(false);
+            DbDataProcessor.ShowDataProcessResultWindow(false);
             _view.CloseWindow();
         }
 

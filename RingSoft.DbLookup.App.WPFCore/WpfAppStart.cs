@@ -5,12 +5,13 @@ using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
+using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
-    public class WpfAppStart : AppStart, IDataProcessResultViewer, IWindowCursor
+    public class WpfAppStart : AppStart
     {
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
@@ -26,10 +27,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void StartApp(string[] args)
         {
+            ControlsGlobals.InitUi();
             _mainWindow = new MainWindow();
-            DbDataProcessor.DataProcessResultViewer = this;
-            DbDataProcessor.WindowCursor = this;
-
             base.StartApp(args);
         }
 
@@ -142,26 +141,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             //    orderDetailsForm.InitializeFromLookupData(e);
             //    orderDetailsForm.ShowDialog();
             //}
-        }
-
-        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
-        {
-            MessageBox.Show($"SQL Error\r\n\r\n{dataProcessResult.Message}");
-        }
-
-        public void SetWindowCursor(WindowCursorTypes cursor)
-        {
-            switch (cursor)
-            {
-                case WindowCursorTypes.Default:
-                    Mouse.OverrideCursor = null;
-                    break;
-                case WindowCursorTypes.Wait:
-                    Mouse.OverrideCursor = Cursors.Wait;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(cursor), cursor, null);
-            }
         }
     }
 }

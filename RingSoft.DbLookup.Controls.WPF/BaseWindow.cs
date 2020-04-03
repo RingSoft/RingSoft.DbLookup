@@ -1,10 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace RingSoft.DbLookup.App.WPFCore
+namespace RingSoft.DbLookup.Controls.WPF
 {
     public class BaseWindow : Window
     {
+        protected virtual bool SetFocusToFirstControl { get; } = true;
+
         public BaseWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -21,7 +23,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             Loaded += (sender, args) =>
             {
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                if (SetFocusToFirstControl)
+                    MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
             };
         }
     }

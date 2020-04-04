@@ -119,12 +119,12 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
                 orderForm.InitializeFromLookupData(e);
                 orderForm.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
-            //{
-            //    var employeeForm = new EmployeeForm();
-            //    employeeForm.InitializeFromLookupData(e);
-            //    employeeForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
+            {
+                var employeeForm = new EmployeeForm();
+                employeeForm.InitializeFromLookupData(e);
+                employeeForm.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition ==
             //         RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
             //{

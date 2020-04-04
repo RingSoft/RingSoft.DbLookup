@@ -1,5 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library;
 using System;
+using RingSoft.DbLookup.App.WinForms.Forms.MegaDb;
 using RingSoft.DbLookup.App.WinForms.Forms.Northwind;
 using RingSoft.DbLookup.Controls.WinForms;
 
@@ -48,8 +49,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             {
                 DatabaseSettingsButton.PerformClick();
             }
-            //var itemsForm = new ItemForm();
-            //itemsForm.ShowDialog();
+            var itemsForm = new ItemForm();
+            itemsForm.ShowDialog();
         }
 
         private void NorthwindButton_Click(object sender, EventArgs e)

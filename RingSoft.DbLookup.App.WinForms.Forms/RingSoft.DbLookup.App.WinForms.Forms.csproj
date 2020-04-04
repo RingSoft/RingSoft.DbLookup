@@ -173,6 +173,9 @@
     <EmbeddedResource Include="Northwind\EmployeeForm.resx">
       <DependentUpon>EmployeeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Northwind\OrderDetailsForm.resx">
+      <DependentUpon>OrderDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Northwind\OrdersForm.resx">
       <DependentUpon>OrdersForm.cs</DependentUpon>
     </EmbeddedResource>

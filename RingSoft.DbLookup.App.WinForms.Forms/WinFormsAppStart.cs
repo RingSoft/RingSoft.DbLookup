@@ -5,6 +5,7 @@ using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Windows.Forms;
+using RingSoft.DbLookup.App.WinForms.Forms.MegaDb;
 using RingSoft.DbLookup.App.WinForms.Forms.Northwind;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
@@ -71,18 +72,18 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
         private void MegaDbLookupContextOnLookupView(object sender, LookupAddViewArgs e)
         {
-            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
-            //{
-            //    var itemForm = new ItemForm();
-            //    itemForm.InitializeFromLookupData(e);
-            //    itemForm.ShowDialog();
-            //}
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
-            //{
-            //    var locationsForm = new LocationForm();
-            //    locationsForm.InitializeFromLookupData(e);
-            //    locationsForm.ShowDialog();
-            //}
+            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
+            {
+                var itemForm = new ItemForm();
+                itemForm.InitializeFromLookupData(e);
+                itemForm.ShowDialog();
+            }
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
+            {
+                var locationsForm = new LocationForm();
+                locationsForm.InitializeFromLookupData(e);
+                locationsForm.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
             //{
             //    var manufacturersForm = new ManufacturerForm();

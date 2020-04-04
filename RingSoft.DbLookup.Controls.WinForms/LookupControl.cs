@@ -470,7 +470,6 @@ namespace RingSoft.DbLookup.Controls.WinForms
             {
                 LookupData.OnChangePageSize();
             }
-            SearchForTextBox.Width = ScrollBar.Right - SearchForTextBox.Left;
         }
 
         protected void OnDownArrow()

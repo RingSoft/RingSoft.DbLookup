@@ -63,6 +63,18 @@
     <Compile Include="DbMaintenanceForm.Designer.cs">
       <DependentUpon>DbMaintenanceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Northwind\CustomerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Northwind\CustomerForm.Designer.cs">
+      <DependentUpon>CustomerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Northwind\OrderDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Northwind\OrderDetailsForm.Designer.cs">
+      <DependentUpon>OrderDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Northwind\OrdersForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MegaDbSeedForm.resx">
       <DependentUpon>MegaDbSeedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Northwind\CustomerForm.resx">
+      <DependentUpon>CustomerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Northwind\OrdersForm.resx">
       <DependentUpon>OrdersForm.cs</DependentUpon>

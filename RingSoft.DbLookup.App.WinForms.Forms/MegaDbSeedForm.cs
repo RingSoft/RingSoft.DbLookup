@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.ViewModels;
+using RingSoft.DbLookup.Controls.WinForms;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {

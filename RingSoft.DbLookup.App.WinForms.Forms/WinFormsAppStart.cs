@@ -1,14 +1,14 @@
-﻿using System;
-using System.Windows.Forms;
-using RingSoft.DbLookup.App.Library;
+﻿using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.Lookup;
+using System;
+using System.Windows.Forms;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
-    public class WinFormsAppStart : AppStart, IDataProcessResultViewer
+    public class WinFormsAppStart : AppStart
     {
         public override IAppSplashWindow AppSplashWindow => _splashForm;
 
@@ -17,8 +17,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
         public override void StartApp(string[] args)
         {
+            ControlsGlobals.InitUi();
             _mainForm = new MainForm();
-            DbDataProcessor.DataProcessResultViewer = this;
 
             base.StartApp(args);
         }
@@ -131,12 +131,6 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             //    orderDetailsForm.InitializeFromLookupData(e);
             //    orderDetailsForm.ShowDialog();
             //}
-        }
-
-        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
-        {
-            var dataProcessResultViewer = new DataProcessResultForm(dataProcessResult);
-            dataProcessResultViewer.ShowDialog();
         }
     }
 }

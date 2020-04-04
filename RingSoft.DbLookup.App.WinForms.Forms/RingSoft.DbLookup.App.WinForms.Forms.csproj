@@ -64,12 +64,6 @@
       <DependentUpon>OrdersForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WinFormsAppStart.cs" />
-    <Compile Include="BaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BaseForm.Designer.cs">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="DbSetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,12 +94,6 @@
     </Compile>
     <Compile Include="SqlScriptForm.Designer.cs">
       <DependentUpon>SqlScriptForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataProcessResultForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DataProcessResultForm.Designer.cs">
-      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
     </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
@@ -139,9 +127,6 @@
     <EmbeddedResource Include="AppSplashForm.resx">
       <DependentUpon>AppSplashForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BaseForm.resx">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="DbMaintenanceForm.resx">
       <DependentUpon>DbMaintenanceForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,9 +145,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SqlScriptForm.resx">
       <DependentUpon>SqlScriptForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataProcessResultForm.resx">
-      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

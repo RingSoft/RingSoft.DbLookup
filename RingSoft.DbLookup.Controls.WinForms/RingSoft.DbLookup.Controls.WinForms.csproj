@@ -54,6 +54,19 @@
     <Compile Include="AutoFillControl.Designer.cs">
       <DependentUpon>AutoFillControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseForm.Designer.cs">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlsGlobals.cs" />
+    <Compile Include="DataProcessResultForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessResultForm.Designer.cs">
+      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GblMethods.cs" />
     <Compile Include="LookupControl.cs">
       <SubType>UserControl</SubType>
@@ -91,6 +104,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AutoFillControl.resx">
       <DependentUpon>AutoFillControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessResultForm.resx">
+      <DependentUpon>DataProcessResultForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LookupControl.resx">
       <DependentUpon>LookupControl.cs</DependentUpon>

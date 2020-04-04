@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+﻿using System.Windows.Forms;
 
-namespace RingSoft.DbLookup.App.WinForms.Forms
+namespace RingSoft.DbLookup.Controls.WinForms
 {
     public partial class BaseForm : Form
     {

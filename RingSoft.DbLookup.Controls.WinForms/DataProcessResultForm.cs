@@ -1,8 +1,9 @@
 ﻿using RingSoft.DbLookup.GetDataProcessor;
 using System;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 
-namespace RingSoft.DbLookup.App.WinForms.Forms
+namespace RingSoft.DbLookup.Controls.WinForms
 {
     public partial class DataProcessResultForm : BaseForm
     {

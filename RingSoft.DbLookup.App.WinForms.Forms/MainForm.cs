@@ -1,6 +1,7 @@
 ﻿using RingSoft.DbLookup.App.Library;
 using System;
 using RingSoft.DbLookup.App.WinForms.Forms.Northwind;
+using RingSoft.DbLookup.Controls.WinForms;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {

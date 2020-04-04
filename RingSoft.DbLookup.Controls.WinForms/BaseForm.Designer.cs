@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookup.App.WinForms.Forms
+﻿namespace RingSoft.DbLookup.Controls.WinForms
 {
     partial class BaseForm
     {

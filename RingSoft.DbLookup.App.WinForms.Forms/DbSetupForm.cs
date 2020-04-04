@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.ViewModels;
+using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms

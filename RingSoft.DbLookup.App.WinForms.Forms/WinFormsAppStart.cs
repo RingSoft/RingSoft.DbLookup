@@ -97,13 +97,13 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
                 stockMasterForm.InitializeFromLookupData(e);
                 stockMasterForm.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
-            //{
-            //    var stockCostQuantityForm = new StockCostQuantityForm();
-            //    stockCostQuantityForm.InitializeFromLookupData(e);
-            //    stockCostQuantityForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
+            {
+                var stockCostQuantityForm = new StockCostQuantityForm();
+                stockCostQuantityForm.InitializeFromLookupData(e);
+                stockCostQuantityForm.ShowDialog();
+            }
         }
 
         private void NorthwindLookupContext_LookupView(object sender, LookupAddViewArgs e)

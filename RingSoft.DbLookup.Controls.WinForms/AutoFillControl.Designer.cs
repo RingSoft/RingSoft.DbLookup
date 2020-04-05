@@ -36,7 +36,7 @@
             // 
             this.LookupButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LookupButton.Image = global::RingSoft.DbLookup.Controls.WinForms.Properties.Resources.Search16;
-            this.LookupButton.Location = new System.Drawing.Point(178, -2);
+            this.LookupButton.Location = new System.Drawing.Point(177, -3);
             this.LookupButton.Margin = new System.Windows.Forms.Padding(0);
             this.LookupButton.Name = "LookupButton";
             this.LookupButton.Size = new System.Drawing.Size(23, 25);
@@ -48,7 +48,7 @@
             // 
             this.AutoFillText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AutoFillText.Location = new System.Drawing.Point(1, 1);
+            this.AutoFillText.Location = new System.Drawing.Point(0, 0);
             this.AutoFillText.Margin = new System.Windows.Forms.Padding(0);
             this.AutoFillText.Name = "AutoFillText";
             this.AutoFillText.Size = new System.Drawing.Size(177, 20);

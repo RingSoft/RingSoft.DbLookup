@@ -75,6 +75,12 @@
     <Compile Include="MegaDb\LocationForm.Designer.cs">
       <DependentUpon>LocationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MegaDb\ManufacturerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MegaDb\ManufacturerForm.Designer.cs">
+      <DependentUpon>ManufacturerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Northwind\CustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MegaDb\LocationForm.resx">
       <DependentUpon>LocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MegaDb\ManufacturerForm.resx">
+      <DependentUpon>ManufacturerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Northwind\CustomerForm.resx">
       <DependentUpon>CustomerForm.cs</DependentUpon>

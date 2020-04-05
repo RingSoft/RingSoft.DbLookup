@@ -84,12 +84,12 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
                 locationsForm.InitializeFromLookupData(e);
                 locationsForm.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
-            //{
-            //    var manufacturersForm = new ManufacturerForm();
-            //    manufacturersForm.InitializeFromLookupData(e);
-            //    manufacturersForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
+            {
+                var manufacturersForm = new ManufacturerForm();
+                manufacturersForm.InitializeFromLookupData(e);
+                manufacturersForm.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition ==
             //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
             //{

@@ -5,6 +5,8 @@ using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Windows.Forms;
+using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
+using RingSoft.DbLookup.App.WinForms.Forms.DevLogix;
 using RingSoft.DbLookup.App.WinForms.Forms.MegaDb;
 using RingSoft.DbLookup.App.WinForms.Forms.Northwind;
 
@@ -12,6 +14,10 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 {
     public class WinFormsAppStart : AppStart
     {
+        public static DevLogixLookupContextEfCore DevLogixLookupContext => _devLogixLookupContext;
+
+        private static DevLogixLookupContextEfCore _devLogixLookupContext;
+
         public override IAppSplashWindow AppSplashWindow => _splashForm;
 
         private MainForm _mainForm;
@@ -43,7 +49,10 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
         protected override void ShowDevLogix()
         {
-            //throw new System.NotImplementedException();
+            _devLogixLookupContext = new DevLogixLookupContextEfCore();
+            //_devLogixLookupContext.DataProcessorType = DataProcessorTypes.MySql;
+            //_devLogixLookupContext.DevLogixConfiguration.ConfigureLookups();
+            Application.Run(new DevLogixTestForm());
         }
 
         protected override void FinishStartup()

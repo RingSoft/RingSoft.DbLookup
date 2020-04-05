@@ -63,6 +63,18 @@
     <Compile Include="DbMaintenanceForm.Designer.cs">
       <DependentUpon>DbMaintenanceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DevLogix\DevLogixTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DevLogix\DevLogixTestForm.Designer.cs">
+      <DependentUpon>DevLogixTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DevLogix\IssuesLookupTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DevLogix\IssuesLookupTestForm.Designer.cs">
+      <DependentUpon>IssuesLookupTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MegaDb\ItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +202,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DbSetupForm.resx">
       <DependentUpon>DbSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DevLogix\DevLogixTestForm.resx">
+      <DependentUpon>DevLogixTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DevLogix\IssuesLookupTestForm.resx">
+      <DependentUpon>IssuesLookupTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

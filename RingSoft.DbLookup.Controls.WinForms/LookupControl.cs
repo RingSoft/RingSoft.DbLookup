@@ -122,6 +122,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         private int _timerInterval;
         private bool _refreshPending;
         private string _refreshPendingSearchFor;
+        private PrimaryKeyValue _refreshPendingParentWindowPrimaryKeyValue;
         private bool _resettingSearchFor;
 
         /// <summary>
@@ -292,9 +293,11 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
             if (_refreshPending)
             {
+                LookupData.ParentWindowPrimaryKeyValue = _refreshPendingParentWindowPrimaryKeyValue;
                 RefreshData(true, _refreshPendingSearchFor);
                 _refreshPending = false;
                 _refreshPendingSearchFor = string.Empty;
+                _refreshPendingParentWindowPrimaryKeyValue = null;
             }
         }
 
@@ -624,7 +627,10 @@ namespace RingSoft.DbLookup.Controls.WinForms
                         ClearLookupControl();
                         break;
                     case LookupCommands.Refresh:
-                        LookupData.ParentWindowPrimaryKeyValue = command.ParentWindowPrimaryKeyValue;
+                        if (LookupData == null)
+                            _refreshPendingParentWindowPrimaryKeyValue = command.ParentWindowPrimaryKeyValue;
+                        else
+                            LookupData.ParentWindowPrimaryKeyValue = command.ParentWindowPrimaryKeyValue;
                         RefreshData(command.ResetSearchFor);
                         break;
                     case LookupCommands.AddModify:

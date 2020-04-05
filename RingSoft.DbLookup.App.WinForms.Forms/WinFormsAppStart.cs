@@ -90,13 +90,13 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
                 manufacturersForm.InitializeFromLookupData(e);
                 manufacturersForm.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
-            //{
-            //    var stockMasterForm = new StockMasterForm();
-            //    stockMasterForm.InitializeFromLookupData(e);
-            //    stockMasterForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
+            {
+                var stockMasterForm = new StockMasterForm();
+                stockMasterForm.InitializeFromLookupData(e);
+                stockMasterForm.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition ==
             //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
             //{

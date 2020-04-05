@@ -81,6 +81,12 @@
     <Compile Include="MegaDb\ManufacturerForm.Designer.cs">
       <DependentUpon>ManufacturerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MegaDb\StockMasterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MegaDb\StockMasterForm.Designer.cs">
+      <DependentUpon>StockMasterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Northwind\CustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MegaDb\ManufacturerForm.resx">
       <DependentUpon>ManufacturerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MegaDb\StockMasterForm.resx">
+      <DependentUpon>StockMasterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Northwind\CustomerForm.resx">
       <DependentUpon>CustomerForm.cs</DependentUpon>

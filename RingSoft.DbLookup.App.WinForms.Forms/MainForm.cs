@@ -39,8 +39,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             {
                 DatabaseSettingsButton.PerformClick();
             }
-            //var stockMasterForm = new StockMasterForm();
-            //stockMasterForm.ShowDialog();
+            var stockMasterForm = new StockMasterForm();
+            stockMasterForm.ShowDialog();
         }
 
         private void MegaDbButton_Click(object sender, EventArgs e)

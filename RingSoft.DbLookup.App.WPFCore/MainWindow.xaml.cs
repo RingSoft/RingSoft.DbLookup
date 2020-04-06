@@ -35,16 +35,22 @@ namespace RingSoft.DbLookup.App.WPFCore
                 timer.Start();
             };
 
-            MegaDbButton.Click += (sender, args) =>
+            DatabaseSetupButton.Click += (sender, args) =>
             {
-                var itemsWindow = new ItemsWindow();
-                itemsWindow.ShowDialog();
+                var dbSetupWindow = new DbSetupWindow();
+                dbSetupWindow.ShowDialog();
             };
 
             NorthwindButton.Click += (sender, args) =>
             {
                 var ordersWindow = new OrdersWindow();
                 ordersWindow.ShowDialog();
+            };
+
+            MegaDbButton.Click += (sender, args) =>
+            {
+                var itemsWindow = new ItemsWindow();
+                itemsWindow.ShowDialog();
             };
         }
     }

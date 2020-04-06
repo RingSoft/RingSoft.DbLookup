@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-        xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="DbSetupWindow" Height="450" Width="800">
     <Window.DataContext>
-        <lib:DbSetupViewModel x:Name="DbSetupViewModel"/>
+        <vmlib:DbSetupViewModel x:Name="DbSetupViewModel"/>
     </Window.DataContext>
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -19,15 +20,45 @@
         <TabControl>
             <TabItem Header="General">
                 <StackPanel>
-                    <GroupBox Content="Entity Framework Version">
-
+                    <GroupBox Header="Entity Framework Version">
+                        <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
+                            <RadioButton Content="Entity Framework Core" Margin="0,0,5,0" IsChecked="{Binding Path=EntityFrameworkVersion, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:EntityFrameworkVersions.EntityFrameworkCore3}}"/>
+                            <RadioButton Content="Entity Framework 6" IsChecked="{Binding Path=EntityFrameworkVersion, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:EntityFrameworkVersions.EntityFramework6}}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Northwind Database Platform">
+                        <StackPanel Margin="0,10,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.SqlServer}}" IsEnabled="{Binding Path=NorthwindSqlServerRadioEnabled}"/>
+                                <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.MySql}}" IsEnabled="{Binding Path=NorthwindMySqlRadioEnabled}"/>
+                                <RadioButton Content="SQLite" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.Sqlite}}" IsEnabled="{Binding Path=NorthwindSqliteRadioEnabled}"/>
+                            </StackPanel>
+                            <Grid Margin="0,5,0,0" IsEnabled="{Binding Path=NorthwindSqliteControlsEnabled}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="25"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="SQLite File Name"/>
+                                <TextBox Grid.Column="1" VerticalContentAlignment="Center" Text="{Binding Path=NorthwindSqliteFileName, Mode=TwoWay}"/>
+                                <Button x:Name="NorthwindSqliteFileNameButton" Grid.Column="2" Content="..."/>
+                            </Grid>
+                            <Button x:Name="SqliteNorthwindTestConButton" Content="_Test Connection" Width="100" HorizontalAlignment="Right" Margin="0,5,0,0" IsEnabled="{Binding Path=NorthwindSqliteControlsEnabled}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Mega Database Platform">
+                        <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
+                            <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.SqlServer}}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbSqlServerRadioEnabled}"/>
+                            <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.MySql}}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbMySqlRadioEnabled}"/>
+                            <Button Content="Seed Items Table"/>
+                        </StackPanel>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
-            <Button Content="_OK" Width="75"/>
-            <Button Content="_Cancel" Width="75" Margin="5,0,0,0"/>
+            <Button x:Name="OkButton" Content="_OK" Width="75"/>
+            <Button x:Name="CancelButton" Content="_Cancel" Width="75" Margin="5,0,0,0"/>
         </StackPanel>
     </Grid>
 </controls:BaseWindow>

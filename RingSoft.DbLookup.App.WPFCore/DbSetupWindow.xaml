@@ -55,6 +55,21 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="SQL Server Settings">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Server"/>
+                        <TextBox Grid.Column="1" Style="{StaticResource StandardTextBox}" VerticalAlignment="Center" Text="{Binding Path=SqlServerServerName, Mode=TwoWay}"/>
+                    </Grid>
+                    <GroupBox>
+
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
             <Button x:Name="OkButton" Content="_OK" Width="75"/>

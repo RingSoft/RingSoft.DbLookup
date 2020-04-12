@@ -25,6 +25,7 @@
         </Style>
         <Style TargetType="TextBox" x:Key="StandardTextBox">
             <Setter Property="Height" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <lib:ComparisonConverter x:Key="ComparisonConverter"/>
     </Application.Resources>

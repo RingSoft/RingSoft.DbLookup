@@ -150,9 +150,14 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         private void FillDatabaseCombo(ComboBox comboBox, List<string> list)
         {
             comboBox.Items.Clear();
+            var itemIndex = 0;
             foreach (var databaseName in list)
             {
                 comboBox.Items.Add(databaseName);
+                if (databaseName == comboBox.Text)
+                    comboBox.SelectedIndex = itemIndex;
+
+                itemIndex++;
             }
         }
 

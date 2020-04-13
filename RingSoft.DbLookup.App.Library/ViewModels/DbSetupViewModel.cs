@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.GetDataProcessor;
@@ -368,12 +369,12 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         public void OnSqlServerDatabaseComboFocus()
         {
-            FillListWithDatabaseNames(_sqlServerDatabaseNames, GetSqlServerDataProcessor());
+            FillListWithDatabaseNames(ref _sqlServerDatabaseNames, GetSqlServerDataProcessor());
         }
 
         public void OnMySqlDatabaseComboFocus()
         {
-            FillListWithDatabaseNames(_mySqlDatabaseNames, GetMySqlDataProcessor());
+            FillListWithDatabaseNames(ref _mySqlDatabaseNames, GetMySqlDataProcessor());
         }
 
         public SqlServerDataProcessor GetSqlServerDataProcessor()
@@ -402,9 +403,10 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         }
 
 
-        private void FillListWithDatabaseNames(List<string> list, DbDataProcessor dataProcessor)
+        private void FillListWithDatabaseNames(ref List<string> list, DbDataProcessor dataProcessor)
         {
             list.Clear();
+            var dbList = new List<string>();
             var result = dataProcessor.GetListOfDatabases();
             if (result.ResultCode == GetDataResultCodes.Success)
             {
@@ -412,8 +414,10 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 foreach (DataRow dataRow in dataTable.Rows)
                 {
                     var text = dataRow.GetRowValue(dataTable.Columns[0].ColumnName);
-                    list.Add(text);
+                    dbList.Add(text);
                 }
+
+                list = dbList.OrderBy(o => o).ToList();
             }
         }
 

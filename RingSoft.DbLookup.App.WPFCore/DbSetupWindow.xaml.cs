@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.ViewModels;
@@ -15,13 +17,50 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             InitializeComponent();
 
-            Loaded += (sender, args) => DbSetupViewModel.OnViewLoaded(this);
+            Loaded += (sender, args) =>
+            {
+                DbSetupViewModel.OnViewLoaded(this);
+                SqlServerPasswordBox.Password = DbSetupViewModel.SqlServerPassword;
+            };
             OkButton.Click += (sender, args) => DbSetupViewModel.OkButton_Click();
             CancelButton.Click += (sender, args) => CloseWindow();
 
             NorthwindSqliteFileNameButton.Click += (sender, args) => DbSetupViewModel.GetNorthwindFileName();
             SqliteNorthwindTestConButton.Click +=
                 (sender, args) => DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.Sqlite);
+
+            SqlServerNorthwindComboBox.GotFocus += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.OnSqlServerDatabaseComboFocus();
+                FillDatabaseCombo(SqlServerNorthwindComboBox, DbSetupViewModel.SqlServerDatabaseNames);
+            };
+
+            SqlServerMegaDbComboBox.GotFocus += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.OnSqlServerDatabaseComboFocus();
+                FillDatabaseCombo(SqlServerMegaDbComboBox, DbSetupViewModel.SqlServerDatabaseNames);
+            };
+        }
+
+        private void SavePasswords()
+        {
+            DbSetupViewModel.SqlServerPassword = SqlServerPasswordBox.Password;
+        }
+
+        private void FillDatabaseCombo(ComboBox comboBox, List<string> list)
+        {
+            comboBox.Items.Clear();
+            var itemIndex = 0;
+            foreach (var databaseName in list)
+            {
+                comboBox.Items.Add(databaseName);
+                if (databaseName == comboBox.Text)
+                    comboBox.SelectedIndex = itemIndex;
+
+                itemIndex++;
+            }
         }
 
         public void ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,

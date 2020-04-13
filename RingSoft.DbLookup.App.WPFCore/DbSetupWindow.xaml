@@ -72,8 +72,34 @@
                                 <RadioButton Content="Windows Authentication" Margin="0,0,5,0" IsChecked="{Binding Path=SqlServerSecurityType, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static dp:SecurityTypes.WindowsAuthentication}, Mode=TwoWay}"/>
                                 <RadioButton Content="SQL Login" IsChecked="{Binding Path=SqlServerSecurityType, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static dp:SecurityTypes.SqlLogin}, Mode=TwoWay}"/>
                             </StackPanel>
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="User Name" Style="{StaticResource ControlLabel}" IsEnabled="{Binding Path=SqlServerSecurityControlsEnabled}"/>
+                                <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=SqlServerUserName, Mode=TwoWay}" IsEnabled="{Binding Path=SqlServerSecurityControlsEnabled}"/>
+                                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Password" IsEnabled="{Binding SqlServerSecurityControlsEnabled}"/>
+                                <PasswordBox x:Name="PasswordBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardPasswordBox}" IsEnabled="{Binding SqlServerSecurityControlsEnabled}"/>
+                            </Grid>
                         </StackPanel>
                     </GroupBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Northwind Database" Style="{StaticResource ControlLabel}"/>
+                        <ComboBox />
+                    </Grid>
                 </StackPanel>
             </TabItem>
         </TabControl>

@@ -32,8 +32,9 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="ComboBox" x:Key="DatabaseComboBox">
-            <Setter Property="Height" Value="20"/>
+            <Setter Property="Height" Value="23"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="IsEditable" Value="True"/>
         </Style>
         <lib:ComparisonConverter x:Key="ComparisonConverter"/>

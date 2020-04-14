@@ -21,13 +21,25 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 DbSetupViewModel.OnViewLoaded(this);
                 SqlServerPasswordBox.Password = DbSetupViewModel.SqlServerPassword;
+                MySqlPasswordBox.Password = DbSetupViewModel.MySqlPassword;
             };
-            OkButton.Click += (sender, args) => DbSetupViewModel.OkButton_Click();
+            OkButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.OkButton_Click();
+            };
+
             CancelButton.Click += (sender, args) => CloseWindow();
 
             NorthwindSqliteFileNameButton.Click += (sender, args) => DbSetupViewModel.GetNorthwindFileName();
             SqliteNorthwindTestConButton.Click +=
                 (sender, args) => DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.Sqlite);
+
+            MegaDbSeedItemsTableButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.MegaDbSeedDatabaseButton_Click();
+            };
 
             SqlServerNorthwindComboBox.GotFocus += (sender, args) =>
             {
@@ -36,22 +48,87 @@ namespace RingSoft.DbLookup.App.WPFCore
                 FillDatabaseCombo(SqlServerNorthwindComboBox, DbSetupViewModel.SqlServerDatabaseNames);
             };
 
+            SqlServerNorthwindTestConnectionButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.SqlServer);
+            };
+
+            SqlServerNorthwindCreateButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ShowSqlServerNorthwindScript();
+            };
+
             SqlServerMegaDbComboBox.GotFocus += (sender, args) =>
             {
                 SavePasswords();
                 DbSetupViewModel.OnSqlServerDatabaseComboFocus();
                 FillDatabaseCombo(SqlServerMegaDbComboBox, DbSetupViewModel.SqlServerDatabaseNames);
             };
+
+            SqlServerMegaDbTestConnectionButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ValidateMegaDbConnection(MegaDbPlatforms.SqlServer);
+            };
+
+            SqlServerMegaDbCreateButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ShowSqlServerMegaDbScript();
+            };
+
+            MySqlNorthwindComboBox.GotFocus += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.OnMySqlDatabaseComboFocus();
+                FillDatabaseCombo(MySqlNorthwindComboBox, DbSetupViewModel.MySqlDatabaseNames);
+            };
+
+            MySqlNorthwindTestConnectionButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.MySql);
+            };
+
+            MySqlNorthwindCreateButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ShowMySqlNorthwindScript();
+            };
+
+            MySqlMegaDbComboBox.GotFocus += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.OnMySqlDatabaseComboFocus();
+                FillDatabaseCombo(MySqlMegaDbComboBox, DbSetupViewModel.MySqlDatabaseNames);
+            };
+
+            MySqlMegaDbTestConnectionButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ValidateMegaDbConnection(MegaDbPlatforms.MySql);
+            };
+
+            MySqlMegaDbCreateButton.Click += (sender, args) =>
+            {
+                SavePasswords();
+                DbSetupViewModel.ShowMySqlMegaDbScript();
+            };
         }
 
         private void SavePasswords()
         {
             DbSetupViewModel.SqlServerPassword = SqlServerPasswordBox.Password;
+            DbSetupViewModel.MySqlPassword = MySqlPasswordBox.Password;
         }
 
         private void FillDatabaseCombo(ComboBox comboBox, List<string> list)
         {
+            var text = comboBox.Text;
             comboBox.Items.Clear();
+            comboBox.Text = text;
             var itemIndex = 0;
             foreach (var databaseName in list)
             {

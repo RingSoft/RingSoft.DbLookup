@@ -17,7 +17,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TabControl>
+        <TabControl x:Name="TabControl">
             <TabItem Header="General">
                 <StackPanel>
                     <GroupBox Header="Entity Framework Version">
@@ -40,7 +40,7 @@
                                     <ColumnDefinition Width="25"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="SQLite File Name"/>
-                                <TextBox Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=NorthwindSqliteFileName, Mode=TwoWay}"/>
+                                <TextBox x:Name="NorthwindSqliteFileNameTextBox" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=NorthwindSqliteFileName, Mode=TwoWay}"/>
                                 <Button x:Name="NorthwindSqliteFileNameButton" Grid.Column="2" Content="..."/>
                             </Grid>
                             <Button x:Name="SqliteNorthwindTestConButton" Content="_Test Connection" Width="100" HorizontalAlignment="Right" Margin="0,5,0,0" IsEnabled="{Binding Path=NorthwindSqliteControlsEnabled}"/>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -192,12 +193,40 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public void ValidationFailSetFocus_Northwind(NorthwindDbPlatforms platform)
         {
-            throw new System.NotImplementedException();
+            switch (platform)
+            {
+                case NorthwindDbPlatforms.SqlServer:
+                    TabControl.SelectedIndex = 1;
+                    SqlServerNorthwindComboBox.Focus();
+                    break;
+                case NorthwindDbPlatforms.MySql:
+                    TabControl.SelectedIndex = 2;
+                    MySqlNorthwindComboBox.Focus();
+                    break;
+                case NorthwindDbPlatforms.Sqlite:
+                    TabControl.SelectedIndex = 0;
+                    NorthwindSqliteFileNameTextBox.Focus();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
+            }
         }
 
         public void ValidationFailSetFocus_MegaDb(MegaDbPlatforms platform)
         {
-            throw new System.NotImplementedException();
+            switch (platform)
+            {
+                case MegaDbPlatforms.SqlServer:
+                    TabControl.SelectedIndex = 1;
+                    SqlServerMegaDbComboBox.Focus();
+                    break;
+                case MegaDbPlatforms.MySql:
+                    TabControl.SelectedIndex = 2;
+                    MySqlMegaDbComboBox.Focus();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
+            }
         }
 
         public void ExitApplication()

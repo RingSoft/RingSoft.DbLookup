@@ -32,8 +32,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             SqlScriptTextBox.DataBindings.Add(nameof(SqlScriptTextBox.Text), _viewModel, nameof(_viewModel.SqlText),
                 false, DataSourceUpdateMode.OnPropertyChanged);
 
-            EditMenu.DropDownOpening += EditMenu_DropDownOpening;
-            CopyMenu.Click += CopyMenu_Click;
+            EditMenu.DropDownOpening += (sender, args) => CopyMenu.Enabled = SqlScriptTextBox.SelectionLength > 0;
+            CopyMenu.Click += (sender, args) => Clipboard.SetText(SqlScriptTextBox.SelectedText);
             SaveAsMenu.Click += (sender, args) => _viewModel.SaveAs();
             CloseButton.Click += CloseButton_Click;
             ExitMenu.Click += (sender, args) => CloseButton.PerformClick();
@@ -72,16 +72,6 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         public void CloseWindow()
         {
             Close();
-        }
-
-        private void CopyMenu_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(SqlScriptTextBox.SelectedText);
-        }
-
-        private void EditMenu_DropDownOpening(object sender, EventArgs e)
-        {
-            CopyMenu.Enabled = SqlScriptTextBox.SelectionLength > 0;
         }
     }
 }

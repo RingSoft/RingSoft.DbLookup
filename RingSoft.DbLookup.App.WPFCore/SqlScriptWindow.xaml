@@ -7,16 +7,32 @@
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
-        Title="SqlScriptWindow" Height="450" Width="800">
+        Title="Create Database SQL Script" Height="450" Width="800">
     <Window.DataContext>
         <vmlib:SqlScriptViewModel x:Name="SqlScriptViewModel"/>
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save As..."/>
-                <MenuItem Header="E_xit"/>
+                <MenuItem x:Name="SaveAsMenu" Header="_Save As..."/>
+                <MenuItem x:Name="ExitMenu" Header="E_xit"/>
+            </MenuItem>
+            <MenuItem x:Name="EditMenu" Header="_Edit">
+                <MenuItem x:Name="CopyMenu" Header="_Copy"/>
             </MenuItem>
         </Menu>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                <TextBox x:Name="SqlScriptTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True" FontFamily="Courier New" Text="{Binding Path=SqlText}"/>
+            </ScrollViewer>
+            <StackPanel Grid.Row="1" Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="ExecuteButton" Content="_Execute" IsDefault="True" Margin="0,0,5,0" Width="50"/>
+                <Button x:Name="CloseButton" Content="_Close" Width="50"/>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 </controls:BaseWindow>

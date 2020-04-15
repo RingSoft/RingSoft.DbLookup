@@ -144,7 +144,8 @@ namespace RingSoft.DbLookup.App.WPFCore
         public void ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,
             string defaultDbName, string dbName)
         {
-            throw new System.NotImplementedException();
+            var sqlScriptWindow = new SqlScriptWindow(dataProcessor, scriptFileName, sql, splitGo, defaultDbName, dbName);
+            sqlScriptWindow.ShowDialog();
         }
 
         public string ShowOpenFileDialog(string initialDirectory, string fileName, string defaultExt, string filter)

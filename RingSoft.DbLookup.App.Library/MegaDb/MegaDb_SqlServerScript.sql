@@ -2,14 +2,14 @@ USE [master]
 GO
 
 if exists (select * from sysdatabases where name='MegaDb')
-		drop database MegaDb
+		drop database [MegaDb]
 GO
 
 DECLARE @device_directory NVARCHAR(520)
 SELECT @device_directory = SUBSTRING(filename, 1, CHARINDEX(N'master.mdf', LOWER(filename)) - 1)
 FROM master.dbo.sysaltfiles WHERE dbid = 1 AND fileid = 1
 
-EXECUTE (N'CREATE DATABASE MegaDb
+EXECUTE (N'CREATE DATABASE [MegaDb]
   ON PRIMARY (NAME = N''MegaDb'', FILENAME = N''' + @device_directory + N'megadb.mdf'')
   LOG ON (NAME = N''MegaDb_log'',  FILENAME = N''' + @device_directory + N'megadb.ldf'')')
 GO

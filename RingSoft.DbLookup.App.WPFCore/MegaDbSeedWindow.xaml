@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Style="{StaticResource ControlLabel}" Content="Items Table Maximum Records"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=MaxRecords, StringFormat=N0, Mode=TwoWay}" Width="100" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=MaxRecords, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ReadOnlyBorder}">
             <TextBlock x:Name="ProgressTextBlock" Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ProgressLabelText}" HorizontalAlignment="Center"/>
         </Border>

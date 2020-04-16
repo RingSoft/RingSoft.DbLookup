@@ -45,8 +45,6 @@ namespace RingSoft.DbLookup.Lookup
         public LookupCommand(LookupCommands command)
         {
             Command = command;
-            if (command == LookupCommands.Refresh)
-                throw new ArgumentException("The Refresh command must pass in the parent window's primary key value.");
         }
 
         /// <summary>

@@ -105,8 +105,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms.DevLogix
             {
                 AutoFillSetup = new AutoFillSetup(WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.IssuesLookup);
                 ReusableLookupDefinition = WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.IssuesLookup;
-                ReusableCommand = new LookupCommand(LookupCommands.Refresh,
-                    new PrimaryKeyValue(WinFormsAppStart.DevLogixLookupContext.Issues), true);
+                ReusableCommand = new LookupCommand(LookupCommands.Refresh);
             };
         }
 
@@ -114,8 +113,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms.DevLogix
         {
             AutoFillSetup = new AutoFillSetup(WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.ErrorsLookup);
             ReusableLookupDefinition = WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.ErrorsLookup;
-            ReusableCommand = new LookupCommand(LookupCommands.Refresh,
-                new PrimaryKeyValue(WinFormsAppStart.DevLogixLookupContext.Errors), true);
+            ReusableCommand = new LookupCommand(LookupCommands.Refresh);
 
             var error = new Library.DevLogix.Model.Error();
             error.Id = 124;

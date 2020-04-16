@@ -58,7 +58,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         }
 
         private AutoFillSetup _productAutoFillSetup;
-        public AutoFillSetup ProductAutoFillSetup => _productAutoFillSetup;
+        public AutoFillSetup ProductAutoFillSetup
+        {
+            get => _productAutoFillSetup;
+            set
+            {
+                if (_productAutoFillSetup == value)
+                    return;
+
+                _productAutoFillSetup = value;
+                OnPropertyChanged(nameof(ProductAutoFillSetup));
+            }
+        }
 
         private AutoFillValue _productAutoFillValue;
         public AutoFillValue ProductAutoFillValue
@@ -138,12 +149,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         private INorthwindLookupContext _lookupContext;
         private bool _productDirty;
 
+        public OrderDetailsViewModel()
+        {
+            _orderDate = new DateTime(1980,1,1);
+            
+        }
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
             FindButtonLookupDefinition = _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
-            _productAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID));
+            ProductAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID));
 
             if (ViewLookupDefinition is LookupDefinition<OrderDetailLookup, Order_Detail> orderDetailLookup)
             {

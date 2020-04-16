@@ -134,13 +134,13 @@ namespace RingSoft.DbLookup.App.WPFCore
                 employeesWindow.InitializeFromLookupData(e);
                 employeesWindow.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
-            //{
-            //    var orderDetailsForm = new OrderDetailsForm();
-            //    orderDetailsForm.InitializeFromLookupData(e);
-            //    orderDetailsForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
+            {
+                var orderDetailsWindow = new OrderDetailsWindow();
+                orderDetailsWindow.InitializeFromLookupData(e);
+                orderDetailsWindow.ShowDialog();
+            }
         }
     }
 }

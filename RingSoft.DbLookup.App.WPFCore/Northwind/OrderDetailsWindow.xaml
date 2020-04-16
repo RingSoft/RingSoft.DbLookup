@@ -1,0 +1,58 @@
+﻿<app:DbMaintenanceWindow x:Class="RingSoft.DbLookup.App.WPFCore.Northwind.OrderDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
+        mc:Ignorable="d"
+        Title="Order Details" Height="300" Width="400">
+    <Window.DataContext>
+        <vmlib:OrderDetailsViewModel x:Name="OrderDetailsViewModel"/>
+    </Window.DataContext>
+    <DockPanel>
+        <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Style="{StaticResource ControlLabel}" Content="Order ID"/>
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=OrderId}"/>
+            </Border>
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Customer"/>
+            <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource ReadOnlyBorder}">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=Customer}"/>
+            </Border>
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Order Date"/>
+            <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=OrderDate, StringFormat=MM/dd/yyyy}"/>
+            </Border>
+            <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Product"/>
+            <controls:AutoFillControl x:Name="ProductControl" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Setup="{Binding Path=ProductAutoFillSetup}" Value="{Binding Path=ProductAutoFillValue, Mode=TwoWay}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
+            <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Quantity"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Quantity, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="4" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Price"/>
+            <TextBox Grid.Row="4" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Price, Mode=TwoWay, StringFormat=c, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Ext. Price"/>
+            <Border Grid.Row="5" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ExtPrice, StringFormat=c}"/>
+            </Border>
+            <Label Grid.Row="5" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Discount"/>
+            <TextBox Grid.Row="5" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Discount, Mode=TwoWay, StringFormat=c, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+    </DockPanel>
+</app:DbMaintenanceWindow>

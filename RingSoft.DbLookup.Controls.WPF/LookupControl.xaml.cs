@@ -88,6 +88,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupControl.ExecuteCommand();
         }
 
+        public static readonly DependencyProperty DataSourceChangedProperty =
+            DependencyProperty.Register("DataSourceChanged", typeof(LookupDataSourceChanged), typeof(LookupControl));
+
+        public LookupDataSourceChanged DataSourceChanged
+        {
+            get { return (LookupDataSourceChanged)GetValue(DataSourceChangedProperty); }
+            set { SetValue(DataSourceChangedProperty, value); }
+        }
+
         public LookupDataBase LookupData { get; private set; }
 
         private bool _controlLoaded;
@@ -125,6 +134,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             LookupData = new LookupDataBase(LookupDefinition, this);
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;
+            LookupData.DataSourceChanged += LookupData_DataSourceChanged;
 
             if (!_controlLoaded)
             {
@@ -203,6 +213,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
                 _refreshPendingData = null;
             }
+        }
+
+        private void LookupData_DataSourceChanged(object sender, EventArgs e)
+        {
+            DataSourceChanged = new LookupDataSourceChanged();
         }
 
         private static DataTemplate GetCellDataTemplate(LookupColumnBase column)

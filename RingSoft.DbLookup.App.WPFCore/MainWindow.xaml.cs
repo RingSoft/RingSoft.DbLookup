@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Threading;
-using RingSoft.DbLookup.App.WPFCore.MegaDb;
+﻿using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
+using System;
+using System.Windows.Threading;
 using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
@@ -52,6 +52,8 @@ namespace RingSoft.DbLookup.App.WPFCore
                 var itemsWindow = new ItemsWindow();
                 itemsWindow.ShowDialog();
             };
+
+            CloseButton.Click += (sender, args) => Close();
         }
     }
 }

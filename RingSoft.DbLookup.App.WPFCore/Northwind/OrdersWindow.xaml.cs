@@ -18,6 +18,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
             Initialize();
 
             CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
+            AddModifyButton.Click += (sender, args) => OrdersViewModel.OnAddModify();
         }
 
         public override void ResetViewForNewRecord()

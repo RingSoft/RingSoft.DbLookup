@@ -13,7 +13,7 @@
     </Window.DataContext>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
-        <Grid>
+        <Grid Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -108,7 +108,7 @@
                     <TextBlock Text="{Binding Path=TotalDiscount, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
                 </Border>
                 <Label Grid.Column="0" Grid.Row="2" Content="Freight" Style="{StaticResource ControlLabel}"/>
-                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Freight, Mode=TwoWay, StringFormat='c'}" Height="20" HorizontalContentAlignment="Right" Margin="2.5,0,2.5,0"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Freight, Mode=TwoWay, StringFormat='c', UpdateSourceTrigger=PropertyChanged}" Height="20" HorizontalContentAlignment="Right" Margin="2.5,0,2.5,0"/>
                 <Label Grid.Column="0" Grid.Row="3" Content="Total" Style="{StaticResource ControlLabel}"/>
                 <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Text="{Binding Path=Total, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>

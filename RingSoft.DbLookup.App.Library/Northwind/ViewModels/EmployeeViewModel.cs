@@ -239,7 +239,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         }
 
         private AutoFillSetup _reportsToAutoFillSetup;
-        public AutoFillSetup ReportsToAutoFillSetup => _reportsToAutoFillSetup;
+        public AutoFillSetup ReportsToAutoFillSetup
+        {
+            get => _reportsToAutoFillSetup;
+            set
+            {
+                if (_reportsToAutoFillSetup == value)
+                    return;
+
+                _reportsToAutoFillSetup = value;
+                OnPropertyChanged(nameof(ReportsToAutoFillSetup));
+            }
+        }
 
         private AutoFillValue _reportsTo;
         public AutoFillValue ReportsTo
@@ -273,7 +284,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override string FindButtonInitialSearchFor => $"{_firstName} {_lastName}";
 
         private LookupDefinition<OrderLookup, Order> _ordersLookup;
-        public LookupDefinitionBase OrdersLookupDefinition => _ordersLookup;
+
+        public LookupDefinition<OrderLookup, Order> OrdersLookupDefinition
+        {
+            get => _ordersLookup;
+            set
+            {
+                if (_ordersLookup == value)
+                    return;
+
+                _ordersLookup = value;
+                OnPropertyChanged(nameof(OrdersLookupDefinition));
+            }
+        }
 
         private LookupCommand _ordersLookupCommand;
         public LookupCommand OrdersLookupCommand
@@ -296,11 +319,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
-            _reportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo));
-            _ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            _ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 30);
-            _ordersLookup.Include(p => p.Customer)
+            ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo));
+
+            var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
+            ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 30);
+            ordersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, "Company Name", p => p.CompanyName, 70);
+
+            OrdersLookupDefinition = ordersLookup;
 
             base.Initialize();
         }
@@ -313,7 +339,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             FirstName = employee.FirstName;
             LastName = employee.LastName;
             Title = employee.Title;
-            _titleOfCourtesy = employee.TitleOfCourtesy;
+            TitleOfCourtesy = employee.TitleOfCourtesy;
 
             if (employee.BirthDate != null)
                 BirthDate = employee.BirthDate;

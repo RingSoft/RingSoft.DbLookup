@@ -52,6 +52,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             base.OnClosing(e);
         }
 
+        public string HotKeyPrefix => "&";
+
         public void ShowInformationMessage(string message, string title)
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);

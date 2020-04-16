@@ -242,7 +242,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public void ShowMegaDbItemsTableSeederForm(MegaDbPlatforms megaDbPlatform)
         {
-            throw new System.NotImplementedException();
+            var seederWindow = new MegaDbSeedWindow(megaDbPlatform);
+            seederWindow.ShowDialog();
         }
     }
 }

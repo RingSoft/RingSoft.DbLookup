@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         public bool Processing { get; private set; }
 
-        private const string StartButtonDefaultText = "&Start Process";
+        private const string StartButtonDefaultText = "Start Process";
         private const string ProgressLabelDefaultText = "Progress";
 
         private int _maxRecords = 1000000;
@@ -95,6 +95,15 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         {
             _view = view;
             _platformType = platformType;
+            SetStartButtonText(StartButtonDefaultText);
+        }
+
+        private void SetStartButtonText(string text)
+        {
+            if (_view != null)
+            {
+                StartButtonText = $"{_view.HotKeyPrefix}{text}";
+            }
         }
 
         public async void StartProcess()
@@ -108,7 +117,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             else
             {
                 Processing = true;
-                StartButtonText = "&Stop Process";
+                SetStartButtonText("Stop Process");
                 CloseButtonEnabled = false;
 
                 RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.ItemsTableSeederProgress += MegaDbEfDataProcessor_ItemsTableSeederProgress;
@@ -140,7 +149,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         private void FinishProcess(bool reset)
         {
             Processing = false;
-            StartButtonText = StartButtonDefaultText;
+            SetStartButtonText(StartButtonDefaultText);
             CloseButtonEnabled = true;
             StartButtonEnabled = true;
             RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.ItemsTableSeederProgress -=

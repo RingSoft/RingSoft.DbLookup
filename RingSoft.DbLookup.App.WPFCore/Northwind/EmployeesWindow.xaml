@@ -7,7 +7,7 @@
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
-        Title="EmployeesWindow" Height="450" Width="800">
+        Title="Employee" Height="500" Width="600">
     <Window.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
     </Window.DataContext>
@@ -32,9 +32,9 @@
                 <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=EmployeeId}"/>
             </Border>
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="First Name"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}"/>
+            <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}"/>
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Last Name"/>
-            <TextBox Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}"/>
+            <TextBox x:Name="LastNameTextBox" Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}"/>
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Courtesy"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
                 <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=TitleOfCourtesy, Mode=TwoWay}" Width="100"/>
@@ -46,7 +46,49 @@
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Title"/>
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Title, Mode=TwoWay}"/>
             <Label Grid.Row="3" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Supervisor"/>
-            <controls:AutoFillControl Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}"/>
+            <controls:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}"/>
+            <TabControl x:Name="TabControl" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
+                <TabItem Header="Contact Info">
+                    <Grid Width="500" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="Address" Style="{StaticResource ControlLabel}"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
+                        <Label Grid.Column="0" Grid.Row="1" Content="City" Style="{StaticResource ControlLabel}"/>
+                        <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
+                            <Label Content="Region" Style="{StaticResource ControlLabel}"/>
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
+                        </DockPanel>
+                        <Label Grid.Column="0" Grid.Row="2" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
+                        <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
+                            <Label Content="Country" Style="{StaticResource ControlLabel}"/>
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
+                        </DockPanel>
+                        <Label Grid.Column="0" Grid.Row="3" Content="Home Phone Number" Style="{StaticResource ControlLabel}"/>
+                        <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=HomePhone, Mode=TwoWay}" Width="130"/>
+                            <Label Content="Extension" Style="{StaticResource ControlLabel}"/>
+                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Extension, Mode=TwoWay}" Width="100" HorizontalAlignment="Left"/>
+                        </DockPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Orders">
+                    <DockPanel>
+                        <Button Content="_Add/Modify" x:Name="AddModifyButton" VerticalAlignment="Top"/>
+                        <controls:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}"/>
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

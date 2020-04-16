@@ -24,7 +24,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
         private AutoFillSetup _locationAutoFillSetup;
-        public AutoFillSetup LocationAutoFillSetup => _locationAutoFillSetup;
+        public AutoFillSetup LocationAutoFillSetup
+        {
+            get => _locationAutoFillSetup;
+            set
+            {
+                if (_locationAutoFillSetup == value)
+                    return;
+
+                _locationAutoFillSetup = value;
+                OnPropertyChanged(nameof(LocationAutoFillSetup));
+            }
+        }
 
         private AutoFillValue _locationAutoFillValue;
         public AutoFillValue LocationAutoFillValue
@@ -41,7 +52,19 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
         private AutoFillSetup _manufacturerSetup;
-        public AutoFillSetup ManufacturerAutoFillSetup => _manufacturerSetup;
+
+        public AutoFillSetup ManufacturerAutoFillSetup
+        {
+            get => _manufacturerSetup;
+            set
+            {
+                if (_manufacturerSetup == value)
+                    return;
+
+                _manufacturerSetup = value;
+                OnPropertyChanged(nameof(ManufacturerAutoFillSetup));
+            }
+        }
 
         private AutoFillValue _manufacturerAutoFillValue;
         public AutoFillValue ManufacturerAutoFillValue
@@ -63,8 +86,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
 
-            _locationAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.LocationId));
-            _manufacturerSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ManufacturerId));
+            LocationAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.LocationId));
+            ManufacturerAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ManufacturerId));
             base.Initialize();
         }
 

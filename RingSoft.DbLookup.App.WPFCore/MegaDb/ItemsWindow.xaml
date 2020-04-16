@@ -4,16 +4,36 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
-        xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
-        Title="ItemsWindow" Height="450" Width="800">
+        Title="Items" Height="175" Width="500">
     <Window.DataContext>
-        <lib:ItemViewModel x:Name="ItemsViewModel"/>
+        <vmlib:ItemViewModel x:Name="ItemsViewModel"/>
     </Window.DataContext>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
-        <Grid>
-
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Style="{StaticResource ControlLabel}" Content="Item ID"/>
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}" Width="100" HorizontalAlignment="Left">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ItemId}"/>
+            </Border>
+            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
+            <controls:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3"/>
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Location"/>
+            <controls:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay}"/>
+            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Manufacturer"/>
+            <controls:AutoFillControl x:Name="ManufacturerControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay}"/>
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

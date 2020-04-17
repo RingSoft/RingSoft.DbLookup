@@ -27,7 +27,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
         private LookupDefinition<ItemLookup, Item> _itemsLookup;
-        public LookupDefinitionBase ItemsLookupDefinition => _itemsLookup;
+        public LookupDefinition<ItemLookup, Item> ItemsLookupDefinition
+        {
+            get => _itemsLookup;
+            set
+            {
+                if (_itemsLookup == value)
+                    return;
+
+                _itemsLookup = value;
+                OnPropertyChanged(nameof(ItemsLookupDefinition));
+            }
+        }
 
         private LookupCommand _itemsLookupCommand;
 
@@ -50,12 +61,14 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
 
-            _itemsLookup =
+            var itemsLookup =
                 new LookupDefinition<ItemLookup, Item>(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
 
-            _itemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item", p => p.Name, 50);
-            _itemsLookup.Include(p => p.Location)
+            itemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item", p => p.Name, 50);
+            itemsLookup.Include(p => p.Location)
                 .AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Name, 50);
+
+            ItemsLookupDefinition = itemsLookup;
 
             base.Initialize();
         }

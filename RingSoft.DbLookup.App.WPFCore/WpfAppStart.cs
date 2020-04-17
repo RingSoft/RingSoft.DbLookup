@@ -4,6 +4,7 @@ using System.Windows.Input;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
+using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.GetDataProcessor;
@@ -80,24 +81,24 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private void MegaDbLookupContextOnLookupView(object sender, LookupAddViewArgs e)
         {
-            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
-            //{
-            //    var itemForm = new ItemForm();
-            //    itemForm.InitializeFromLookupData(e);
-            //    itemForm.ShowDialog();
-            //}
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
-            //{
-            //    var locationsForm = new LocationForm();
-            //    locationsForm.InitializeFromLookupData(e);
-            //    locationsForm.ShowDialog();
-            //}
-            //else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
-            //{
-            //    var manufacturersForm = new ManufacturerForm();
-            //    manufacturersForm.InitializeFromLookupData(e);
-            //    manufacturersForm.ShowDialog();
-            //}
+            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
+            {
+                var itemsWindow = new ItemsWindow();
+                itemsWindow.InitializeFromLookupData(e);
+                itemsWindow.ShowDialog();
+            }
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
+            {
+                var locationsWindow = new LocationWindow();
+                locationsWindow.InitializeFromLookupData(e);
+                locationsWindow.ShowDialog();
+            }
+            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
+            {
+                var manufacturersWindow = new ManufacturerWindow();
+                manufacturersWindow.InitializeFromLookupData(e);
+                manufacturersWindow.ShowDialog();
+            }
             //else if (e.LookupData.LookupDefinition.TableDefinition ==
             //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
             //{

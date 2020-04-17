@@ -12,6 +12,8 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public partial class LookupWindow : INotifyPropertyChanged
     {
+        protected override bool SetFocusToFirstControl => false;
+
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;

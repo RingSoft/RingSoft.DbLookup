@@ -15,7 +15,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         private AutoFillSetup _stockNumberAutoFillSetup;
 
-        public AutoFillSetup StockNumberAutoFillSetup => _stockNumberAutoFillSetup;
+        public AutoFillSetup StockNumberAutoFillSetup
+        {
+            get => _stockNumberAutoFillSetup;
+            set
+            {
+                if (_stockNumberAutoFillSetup == value)
+                    return;
+
+                _stockNumberAutoFillSetup = value;
+                OnPropertyChanged(nameof(StockNumberAutoFillSetup));
+            }
+        }
 
         private AutoFillValue _stockNumberAutoFillValue;
 
@@ -34,9 +45,20 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         private AutoFillSetup _locationAutoFillSetup;
 
-        public AutoFillSetup LocationAutoFillSetup => _locationAutoFillSetup;
+        public AutoFillSetup LocationAutoFillSetup
+        {
+            get => _locationAutoFillSetup;
+            set
+            {
+                if (_locationAutoFillSetup == value)
+                    return;
 
-        public AutoFillValue _locationAutoFillValue;
+                _locationAutoFillSetup = value;
+                OnPropertyChanged(nameof(LocationAutoFillSetup));
+            }
+        }
+
+        private AutoFillValue _locationAutoFillValue;
 
         public AutoFillValue LocationAutoFillValue
         {
@@ -68,8 +90,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         private LookupDefinition<StockCostQuantityLookup, StockCostQuantity> _stockCostQuantityLookupDefinition;
 
-        public LookupDefinition<StockCostQuantityLookup, StockCostQuantity> StockCostQuantityLookupDefinition =>
-            _stockCostQuantityLookupDefinition;
+        public LookupDefinition<StockCostQuantityLookup, StockCostQuantity> StockCostQuantityLookupDefinition
+        {
+            get => _stockCostQuantityLookupDefinition;
+            set
+            {
+                if (_stockCostQuantityLookupDefinition == value)
+                    return;
+
+                _stockCostQuantityLookupDefinition = value;
+                OnPropertyChanged(nameof(StockCostQuantityLookupDefinition));
+            }
+        }
 
         private LookupCommand _stockCostQuantityLookupCommand;
 
@@ -96,7 +128,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             stockLookupDefinition.AddVisibleColumnDefinition(p => p.StockNumber, "Stock Number", p => p.StockNumber,
                 99).IsDistinct();
 
-            _stockNumberAutoFillSetup = new AutoFillSetup(stockLookupDefinition)
+            StockNumberAutoFillSetup = new AutoFillSetup(stockLookupDefinition)
             {
                 AllowLookupAdd = false,
                 AllowLookupView = false
@@ -106,13 +138,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             locationLookupDefinition.AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Location, 99)
                 .IsDistinct();
 
-            _locationAutoFillSetup = new AutoFillSetup(locationLookupDefinition)
+            LocationAutoFillSetup = new AutoFillSetup(locationLookupDefinition)
             {
                 AllowLookupAdd = false,
                 AllowLookupView = false
             };
 
-            _stockCostQuantityLookupDefinition =
+            StockCostQuantityLookupDefinition =
                 _lookupContext.MegaDbContextConfiguration.StockCostQuantityLookupFiltered.Clone();
 
             base.Initialize();

@@ -53,6 +53,12 @@ namespace RingSoft.DbLookup.App.WPFCore
                 itemsWindow.ShowDialog();
             };
 
+            StockTrackerButton.Click += (sender, args) =>
+            {
+                var stockMasterWindow = new StockMasterWindow();
+                stockMasterWindow.ShowDialog();
+            };
+
             CloseButton.Click += (sender, args) => Close();
         }
     }

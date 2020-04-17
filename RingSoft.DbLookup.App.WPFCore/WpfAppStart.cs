@@ -99,20 +99,20 @@ namespace RingSoft.DbLookup.App.WPFCore
                 manufacturersWindow.InitializeFromLookupData(e);
                 manufacturersWindow.ShowDialog();
             }
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
-            //{
-            //    var stockMasterForm = new StockMasterForm();
-            //    stockMasterForm.InitializeFromLookupData(e);
-            //    stockMasterForm.ShowDialog();
-            //}
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
-            //{
-            //    var stockCostQuantityForm = new StockCostQuantityForm();
-            //    stockCostQuantityForm.InitializeFromLookupData(e);
-            //    stockCostQuantityForm.ShowDialog();
-            //}
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
+            {
+                var stockMasterWindow = new StockMasterWindow();
+                stockMasterWindow.InitializeFromLookupData(e);
+                stockMasterWindow.ShowDialog();
+            }
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
+            {
+                var stockCostQuantityWindow = new StockCostQuantityWindow();
+                stockCostQuantityWindow.InitializeFromLookupData(e);
+                stockCostQuantityWindow.ShowDialog();
+            }
         }
 
         private void NorthwindLookupContext_LookupView(object sender, LookupAddViewArgs e)

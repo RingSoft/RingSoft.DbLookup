@@ -1,0 +1,30 @@
+﻿<controls:BaseWindow x:Class="RingSoft.DbLookup.App.WPFCore.DevLogix.DevLogixTestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        mc:Ignorable="d"
+        Title="DevLogixTestWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid Margin="5">
+        <TabControl>
+            <TabItem Header="Data Entry Controls">
+
+            </TabItem>
+            <TabItem Header="Reusable Lookup Test">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <controls:AutoFillControl Width="200" Setup="{Binding Path=AutoFillSetup}" Value="{Binding Path=AutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button x:Name="ChangeButton" Margin="5,0,0,0" Content="_Change"/>
+                    </StackPanel>
+                    <controls:LookupControl Grid.Row="1" LookupDefinition="{Binding Path=ReusableLookupDefinition}" Command="{Binding Path=ReusableCommand}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</controls:BaseWindow>

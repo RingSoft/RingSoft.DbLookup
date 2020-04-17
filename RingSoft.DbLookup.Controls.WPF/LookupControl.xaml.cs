@@ -132,6 +132,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
+            if (LookupData != null)
+                ClearLookupControl();
+
             LookupData = new LookupDataBase(LookupDefinition, this);
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;
             LookupData.DataSourceChanged += LookupData_DataSourceChanged;

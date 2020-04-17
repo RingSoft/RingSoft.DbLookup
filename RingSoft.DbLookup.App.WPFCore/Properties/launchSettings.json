@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RingSoft.DbLookup.App.WPFCore": {
+      "commandName": "Project",
+      "commandLineArgs": "-devLogixx"
+    }
+  }
+}

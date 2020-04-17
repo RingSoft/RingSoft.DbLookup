@@ -275,6 +275,9 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         private void SetupControl([NotNull] LookupDefinitionBase lookupDefinition)
         {
+            if (LookupData != null)
+                ClearLookupControl();
+
             LookupData = new LookupDataBase(lookupDefinition, this);
 
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;

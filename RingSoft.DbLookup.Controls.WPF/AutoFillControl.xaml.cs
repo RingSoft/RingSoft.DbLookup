@@ -1,10 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.Lookup;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -139,6 +138,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
+            if (AutoFillData != null)
+                ClearValue();
+
             AutoFillData = new AutoFillData(Setup.LookupDefinition, Setup.Distinct)
             { ShowContainsBox = Setup.ShowContainsBox };
 

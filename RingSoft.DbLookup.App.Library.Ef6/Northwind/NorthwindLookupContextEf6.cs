@@ -37,7 +37,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
 
         protected override void InitializeEf6FieldDefinitions()
         {
-            NorthwindContextConfiguration.InitializeFieldDefinitions();
+            NorthwindContextConfiguration.InitializeModel();
         }
 
         public bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings)

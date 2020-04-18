@@ -41,6 +41,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             InitializeComponent();
 
+            var title = lookupDefinition.Title;
+            if (title.IsNullOrEmpty())
+                title = lookupDefinition.TableDefinition.ToString();
+
+            Title = $"{title} Lookup";
             ContentRendered += (sender, args) =>
             {
                 LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;

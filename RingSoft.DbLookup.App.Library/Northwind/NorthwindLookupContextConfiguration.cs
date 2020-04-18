@@ -146,7 +146,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             _lookupContext.Products.HasLookupDefinition(ProductsLookup);
 
             CustomerIdLookup = new LookupDefinition<CustomerLookup, Customer>(_lookupContext.Customers);
-            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "CustomerId", p => p.CustomerID, 20);
+            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "Customer Id", p => p.CustomerID, 20);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 40);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
@@ -183,15 +183,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             Reinitialize(registrySettings);
             return TestConnection();
         }
-
-        public void InitializeFieldDefinitions()
+        
+        public void InitializeModel()
         {
+            _lookupContext.Orders.HasDescription("Orders");
+            _lookupContext.Customers.HasDescription("Customers");
+
+            _lookupContext.OrderDetails.HasDescription("Order Details");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).HasDescription("Product");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
+            _lookupContext.Employees.HasDescription("Employees");
             _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor");
         }
 

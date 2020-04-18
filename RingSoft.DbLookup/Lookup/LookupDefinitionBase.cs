@@ -77,6 +77,14 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public TableFilterDefinitionBase FilterDefinition { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the title that shows on the lookup window.
+        /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
+        public string Title { get; set; }
+
         private readonly List<LookupColumnBase> _visibleColumns = new List<LookupColumnBase>();
         private readonly List<LookupColumnBase> _hiddenColumns = new List<LookupColumnBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();

@@ -135,6 +135,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             };
 
             var locationLookupDefinition = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.Stocks);
+            locationLookupDefinition.Title = "Stock Locations";
             locationLookupDefinition.AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Location, 99)
                 .IsDistinct();
 

@@ -88,6 +88,12 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         protected override void OnLoad(EventArgs e)
         {
+            var title = _lookupDefinition.Title;
+            if (title.IsNullOrEmpty())
+                title = _lookupDefinition.TableDefinition.ToString();
+
+            Text = $@"{title} Lookup";
+
             LookupControl.RefreshData(false, _initialSearchFor);
             base.OnLoad(e);
         }

@@ -116,10 +116,15 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         public void InitializeModel()
         {
+            _lookupContext.Items.HasDescription("Items");
+            _lookupContext.Locations.HasDescription("Locations");
+            _lookupContext.Manufacturers.HasDescription("Manufacturers");
+
             _lookupContext.Stocks.HasDescription("Stocks").HasRecordDescription("Stock Item");
             _lookupContext.Stocks.GetFieldDefinition(p => p.StockNumber).HasDescription("Stock Number");
             _lookupContext.Stocks.GetFieldDefinition(p => p.Price).HasDecimalFieldType(DecimalFieldTypes.Currency);
 
+            _lookupContext.StockCostQuantities.HasDescription("Stock Purchases");
             _lookupContext.StockCostQuantities.GetFieldDefinition(p => p.Quantity).HasDecimalCount(2);
             _lookupContext.StockCostQuantities.GetFieldDefinition(p => p.Cost)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);

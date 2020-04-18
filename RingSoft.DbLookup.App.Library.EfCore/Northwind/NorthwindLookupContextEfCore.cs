@@ -34,12 +34,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         protected override void InitializeCoreTableDefinitions()
         {
-            
         }
 
         protected override void InitializeCoreFieldDefinitions()
         {
-            NorthwindContextConfiguration.InitializeFieldDefinitions();
+            NorthwindContextConfiguration.InitializeModel();
         }
 
         public bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings)

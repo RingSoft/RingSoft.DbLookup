@@ -24,7 +24,6 @@ namespace RingSoft.DbLookup.Tests
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
-            var test = string.Empty;
             SetupDataProcessors();
 
             SetupComplexQuery();

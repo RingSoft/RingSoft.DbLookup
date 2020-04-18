@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
@@ -58,6 +59,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </returns>
         public override string FormatValue(string value)
         {
+            if (TableDefinition.PrimaryKeyFields.Contains(this))
+                return value;
+
             var formatString = NumberFormatString;
             if (formatString.IsNullOrEmpty())
                 formatString = GblMethods.GetNumFormat(0, false);

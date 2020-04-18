@@ -38,6 +38,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             if (!RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration.TestConnection())
             {
                 DatabaseSettingsButton.PerformClick();
+                return;
             }
             var stockMasterForm = new StockMasterForm();
             stockMasterForm.ShowDialog();
@@ -48,6 +49,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             if (!RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration.TestConnection())
             {
                 DatabaseSettingsButton.PerformClick();
+                return;
             }
             var itemsForm = new ItemForm();
             itemsForm.ShowDialog();
@@ -58,6 +60,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContextConfiguration.TestConnection())
             {
                 DatabaseSettingsButton.PerformClick();
+                return;
             }
             var ordersForm = new OrdersForm();
             ordersForm.ShowDialog();

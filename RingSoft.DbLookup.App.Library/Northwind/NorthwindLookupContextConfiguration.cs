@@ -109,9 +109,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             OrdersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 25);
             OrdersLookup.Include(p => p.Customer)
-                .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 25);
+                .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 50);
             OrdersLookup.Include(p => p.Employee);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", orderEmployeeNameFormula, 50);
+            OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", orderEmployeeNameFormula, 25);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
 

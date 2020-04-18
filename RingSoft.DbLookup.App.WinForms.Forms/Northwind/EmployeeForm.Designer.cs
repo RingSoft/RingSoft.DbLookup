@@ -45,6 +45,7 @@
             this.AddressTextBox = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.OrdersPage = new System.Windows.Forms.TabPage();
+            this.OrdersControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
             this.AddModifyButton = new System.Windows.Forms.Button();
             this.HireDateControl = new System.Windows.Forms.DateTimePicker();
             this.label7 = new System.Windows.Forms.Label();
@@ -62,7 +63,6 @@
             this.FirstNameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SupervisorControl = new RingSoft.DbLookup.Controls.WinForms.AutoFillControl();
-            this.OrdersControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
             this.TabControl.SuspendLayout();
             this.ContactPage.SuspendLayout();
             this.OrdersPage.SuspendLayout();
@@ -229,6 +229,20 @@
             this.OrdersPage.Text = "Orders";
             this.OrdersPage.UseVisualStyleBackColor = true;
             // 
+            // OrdersControl
+            // 
+            this.OrdersControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OrdersControl.Command = null;
+            this.OrdersControl.DataSourceChanged = null;
+            this.OrdersControl.Location = new System.Drawing.Point(88, 7);
+            this.OrdersControl.LookupDefinition = null;
+            this.OrdersControl.Name = "OrdersControl";
+            this.OrdersControl.SearchText = "";
+            this.OrdersControl.Size = new System.Drawing.Size(416, 191);
+            this.OrdersControl.TabIndex = 1;
+            // 
             // AddModifyButton
             // 
             this.AddModifyButton.Location = new System.Drawing.Point(6, 6);
@@ -378,20 +392,6 @@
             this.SupervisorControl.TabOutAfterLookupSelect = true;
             this.SupervisorControl.Value = null;
             // 
-            // OrdersControl
-            // 
-            this.OrdersControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.OrdersControl.Command = null;
-            this.OrdersControl.DataSourceChanged = null;
-            this.OrdersControl.Location = new System.Drawing.Point(88, 7);
-            this.OrdersControl.LookupDefinition = null;
-            this.OrdersControl.Name = "OrdersControl";
-            this.OrdersControl.SearchText = "";
-            this.OrdersControl.Size = new System.Drawing.Size(416, 191);
-            this.OrdersControl.TabIndex = 1;
-            // 
             // EmployeeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -415,7 +415,7 @@
             this.Controls.Add(this.FirstNameTextBox);
             this.Controls.Add(this.label1);
             this.Name = "EmployeeForm";
-            this.Text = "Employee";
+            this.Text = "Employees";
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.FirstNameTextBox, 0);
             this.Controls.SetChildIndex(this.label2, 0);

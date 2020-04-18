@@ -131,5 +131,14 @@ namespace RingSoft.DbLookup.Lookup
                     }
             }
         }
+
+        protected override LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
+        {
+            if (DataType == FieldDataTypes.Integer)
+                if (FieldDefinition.TableDefinition.PrimaryKeyFields.Contains(FieldDefinition))
+                    return LookupColumnAlignmentTypes.Left;
+
+            return base.SetupDefaultHorizontalAlignment();
+        }
     }
 }

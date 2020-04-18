@@ -7,7 +7,7 @@
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
-        Title="Employee" Height="500" Width="600">
+        Title="Employees" Height="500" Width="600">
     <Window.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
     </Window.DataContext>

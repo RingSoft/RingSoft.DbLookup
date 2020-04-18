@@ -56,8 +56,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public void ConfigureLookups()
         {
             ItemsLookup = new LookupDefinition<ItemLookup, Item>(_lookupContext.Items);
-            ItemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item Name", p => p.Name, 34);
-            ItemsLookup.AddVisibleColumnDefinition(p => p.ItemId, "Item Id", p => p.Id, 10);
+            ItemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item Name", p => p.Name, 24);
+            ItemsLookup.AddVisibleColumnDefinition(p => p.ItemId, "Item Id", p => p.Id, 20);
             ItemsLookup.Include(p => p.Location)
                 .AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Name, 28);
             ItemsLookup.Include(p => p.Manufacturer)

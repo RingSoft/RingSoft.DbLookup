@@ -429,7 +429,7 @@
             this.MegaDbSeedItemsTableButton.Name = "MegaDbSeedItemsTableButton";
             this.MegaDbSeedItemsTableButton.Size = new System.Drawing.Size(102, 23);
             this.MegaDbSeedItemsTableButton.TabIndex = 6;
-            this.MegaDbSeedItemsTableButton.Text = "Seed Items Table";
+            this.MegaDbSeedItemsTableButton.Text = "&Seed Items Table";
             this.MegaDbSeedItemsTableButton.UseVisualStyleBackColor = true;
             // 
             // NorthwindPlatformGroupBox
@@ -454,7 +454,7 @@
             this.SqliteNorthwindTestConButton.Name = "SqliteNorthwindTestConButton";
             this.SqliteNorthwindTestConButton.Size = new System.Drawing.Size(99, 23);
             this.SqliteNorthwindTestConButton.TabIndex = 6;
-            this.SqliteNorthwindTestConButton.Text = "Test Connection";
+            this.SqliteNorthwindTestConButton.Text = "&Test Connection";
             this.SqliteNorthwindTestConButton.UseVisualStyleBackColor = true;
             // 
             // NorthwindSqliteFileNameLabel

@@ -85,18 +85,21 @@
 
         protected internal void SetupColumn()
         {
+            HorizontalAlignment = SetupDefaultHorizontalAlignment();
+        }
+
+        protected virtual LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
+        {
             switch (DataType)
             {
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    HorizontalAlignment = LookupColumnAlignmentTypes.Right;
-                    break;
+                    return LookupColumnAlignmentTypes.Right;
                 default:
-                    HorizontalAlignment = LookupColumnAlignmentTypes.Left;
+                    return LookupColumnAlignmentTypes.Left;
                     break;
             }
         }
-
         internal virtual void CopyFrom(LookupColumnBase source)
         {
             Caption = source.Caption;

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using RingSoft.DbLookup.GetDataProcessor;
+﻿using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -575,21 +574,49 @@ namespace RingSoft.DbLookup.Lookup
             GetInitData(true, false);
         }
 
+        public void OnMouseWheelDown()
+        {
+            var newSelectedRowIndex = SelectedRowIndex - 3;
+            if (newSelectedRowIndex < 0)
+                newSelectedRowIndex = -1;
+
+            GotoNextRecord(3, newSelectedRowIndex);
+        }
+
         /// <summary>
         /// Goto the next record.
         /// </summary>
-        public void GotoNextRecord()
+        public void GotoNextRecord(int recordCount = 1)
+        {
+            GotoNextRecord(recordCount, -2);
+        }
+
+        private void GotoNextRecord(int recordCount, int selectedRowIndex)
         {
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
 
+            var startIndex = recordCount - 1;
             var newDataTable = LookupResultsDataTable.Clone();
-            if (GetNextRecords(LookupResultsDataTable.Rows[0], UserInterface.PageSize, newDataTable, "GotoNextRecord"))
+            if (GetNextRecords(LookupResultsDataTable.Rows[startIndex], UserInterface.PageSize, newDataTable, "GotoNextRecord"))
             {
+                var newStartIndex = startIndex - (UserInterface.PageSize - newDataTable.Rows.Count);
+                if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize && newStartIndex >= 0)
+                {
+                    newDataTable = LookupResultsDataTable.Clone();
+                    GetNextRecords(LookupResultsDataTable.Rows[newStartIndex],
+                        UserInterface.PageSize, newDataTable, "GotoNextPage");
+                }
                 if (newDataTable.Rows.Count >= UserInterface.PageSize)
                 {
+                    if (selectedRowIndex == -2)
+                        selectedRowIndex = LookupResultsDataTable.Rows.Count - 1;
+                    else if (selectedRowIndex >= 0)
+                    {
+                        selectedRowIndex += (startIndex - newStartIndex);
+                    }
                     LookupResultsDataTable = newDataTable;
-                    OutputData(LookupResultsDataTable.Rows.Count - 1, LookupScrollPositions.Middle);
+                    OutputData(selectedRowIndex, LookupScrollPositions.Middle);
                 }
             }
         }
@@ -599,27 +626,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoNextPage()
         {
-            if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
-                return;
-
-            var newDataTable = LookupResultsDataTable.Clone();
-            if (GetNextRecords(LookupResultsDataTable.Rows[LookupResultsDataTable.Rows.Count - 1],
-                UserInterface.PageSize, newDataTable, "GotoNextPage"))
-            {
-                if (newDataTable.Rows.Count > 0)
-                {
-                    if (newDataTable.Rows.Count < UserInterface.PageSize)
-                    {
-                        var index = newDataTable.Rows.Count - 1;
-                        newDataTable = LookupResultsDataTable.Clone();
-                        GetNextRecords(LookupResultsDataTable.Rows[index],
-                            UserInterface.PageSize, newDataTable, "OnPageDown");
-                    }
-
-                    LookupResultsDataTable = newDataTable;
-                    OutputData(LookupResultsDataTable.Rows.Count - 1, LookupScrollPositions.Middle);
-                }
-            }
+            GotoNextRecord(UserInterface.PageSize);
         }
 
         /// <summary>

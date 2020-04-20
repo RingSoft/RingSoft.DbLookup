@@ -1,14 +1,14 @@
-﻿using System;
+﻿using RingSoft.DbLookup.Lookup;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using RingSoft.DbLookup.Controls.WPF;
-using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -156,10 +156,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 GetRecordCountButton.Click += (sender, args) => { GetRecordCountButtonClick(); };
                 ListView.MouseDoubleClick += (sender, args) => { OnEnter(); };
+                ScrollBar.Scroll += ScrollBar_Scroll;
+                ListView.PreviewMouseWheel += ListView_PreviewMouseWheel;
             }
 
             LookupGridView.Columns.Clear();
-            var columnCount = LookupDefinition.VisibleColumns.Count;
             foreach (var column in LookupDefinition.VisibleColumns)
             {
                 var columnWdth = GetWidthFromPercent(ListView, column.PercentWidth);
@@ -215,6 +216,44 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
                 _refreshPendingData = null;
+            }
+        }
+
+        private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Delta > 0)
+                LookupData.OnMouseWheelDown();
+        }
+
+        private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            switch (e.ScrollEventType)
+            {
+                case ScrollEventType.SmallDecrement:
+                    OnUpArrow();
+                    break;
+                case ScrollEventType.SmallIncrement:
+                    OnDownArrow();
+                    break;
+                case ScrollEventType.LargeDecrement:
+                    OnPageUp(false);
+                    break;
+                case ScrollEventType.LargeIncrement:
+                    OnPageDown(false);
+                    break;
+                case ScrollEventType.EndScroll:
+                    //if (e.NewValue == ScrollBar.Minimum)
+                    //    OnHome(false);
+                    //else if (e.NewValue + ScrollBar.LargeChange >= ScrollBar.Maximum)
+                    //    OnEnd(false);
+                    //else
+                    //{
+                    //    if (Math.Abs(ScrollBar.Value - ScrollBar.Minimum) > ScrollBar.Minimum &&
+                    //        Math.Abs(ScrollBar.Value - ScrollBar.Maximum) > ScrollBar.Maximum)
+                    //        SetScrollThumbToMiddle();
+                    //}
+                    break;
             }
         }
 
@@ -366,8 +405,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ScrollBar.Value = ScrollBar.Minimum;
                     break;
                 case LookupScrollPositions.Middle:
-                    double middleValue = Math.Floor((ScrollBar.Maximum - ScrollBar.Minimum) / 2);
-                    ScrollBar.Value = (int)middleValue - 5;
+                    SetScrollThumbToMiddle();
                     break;
                 case LookupScrollPositions.Bottom:
                     ScrollBar.Value = ScrollBar.Maximum;
@@ -393,6 +431,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             if (setupRecordCount)
                 SetupRecordCount();
+        }
+
+        private void SetScrollThumbToMiddle()
+        {
+            double middleValue = Math.Floor((ScrollBar.Maximum - ScrollBar.Minimum) / 2);
+            ScrollBar.Value = (int) middleValue - 5;
         }
 
         public void RefreshData(bool resetSearchFor, string initialSearchFor = "",

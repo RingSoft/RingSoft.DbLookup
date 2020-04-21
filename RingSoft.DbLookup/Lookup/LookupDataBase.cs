@@ -574,13 +574,17 @@ namespace RingSoft.DbLookup.Lookup
             GetInitData(true, false);
         }
 
-        public void OnMouseWheelDown()
+        public void OnMouseWheelForward()
         {
-            var newSelectedRowIndex = SelectedRowIndex - 3;
-            if (newSelectedRowIndex < 0)
-                newSelectedRowIndex = -1;
+            var newSelectedRowIndex = SelectedRowIndex;
+            if (SelectedRowIndex >= 0)
+            {
+                newSelectedRowIndex = SelectedRowIndex - 3;
+                if (newSelectedRowIndex < 0)
+                    newSelectedRowIndex = -1;
+            }
 
-            GotoNextRecord(3, newSelectedRowIndex);
+            GotoNextRecord(3, newSelectedRowIndex, false);
         }
 
         /// <summary>
@@ -588,10 +592,10 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoNextRecord(int recordCount = 1)
         {
-            GotoNextRecord(recordCount, -2);
+            GotoNextRecord(recordCount, 0, true);
         }
 
-        private void GotoNextRecord(int recordCount, int selectedRowIndex)
+        private void GotoNextRecord(int recordCount, int selectedRowIndex, bool setSelIndexToBottom)
         {
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
@@ -609,9 +613,9 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 if (newDataTable.Rows.Count >= UserInterface.PageSize)
                 {
-                    if (selectedRowIndex == -2)
+                    if (setSelIndexToBottom)
                         selectedRowIndex = LookupResultsDataTable.Rows.Count - 1;
-                    else if (selectedRowIndex >= 0)
+                    else if (selectedRowIndex > 0)
                     {
                         selectedRowIndex += (startIndex - newStartIndex);
                     }
@@ -629,13 +633,17 @@ namespace RingSoft.DbLookup.Lookup
             GotoNextRecord(UserInterface.PageSize);
         }
 
-        public void OnMouseWheelUp()
+        public void OnMouseWheelBack()
         {
-            var newSelectedRowIndex = SelectedRowIndex + 3;
-            if (newSelectedRowIndex >= UserInterface.PageSize)
-                newSelectedRowIndex = -1;
+            var newSelectedRowIndex = SelectedRowIndex;
+            if (SelectedRowIndex >= 0)
+            {
+                newSelectedRowIndex = SelectedRowIndex + 3;
+                if (newSelectedRowIndex >= UserInterface.PageSize)
+                    newSelectedRowIndex = -1;
+            }
 
-            GotoPreviousRecord(3, newSelectedRowIndex);
+            GotoPreviousRecord(3, newSelectedRowIndex, false);
         }
 
         /// <summary>
@@ -643,10 +651,10 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoPreviousRecord(int recordCount = 1)
         {
-            GotoPreviousRecord(recordCount, -2);
+            GotoPreviousRecord(recordCount, 0, true);
         }
 
-        private void GotoPreviousRecord(int recordCount, int selectedRowIndex)
+        private void GotoPreviousRecord(int recordCount, int selectedRowIndex, bool setSelIndexToTop)
         {
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
@@ -659,7 +667,8 @@ namespace RingSoft.DbLookup.Lookup
                 if (newDataTable.Rows.Count > 0)
                 {
                     var newStartIndex = startIndex + (LookupResultsDataTable.Rows.Count - newDataTable.Rows.Count);
-                    if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize)
+                    if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize &&
+                        newStartIndex < LookupResultsDataTable.Rows.Count)
                     {
                         newDataTable = LookupResultsDataTable.Clone();
                         GetPreviousRecords(LookupResultsDataTable.Rows[newStartIndex],
@@ -667,9 +676,9 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     if (newDataTable.Rows.Count >= UserInterface.PageSize)
                     {
-                        if (selectedRowIndex == -2)
+                        if (setSelIndexToTop)
                             selectedRowIndex = 0;
-                        else if (selectedRowIndex >= 0)
+                        else if (selectedRowIndex < UserInterface.PageSize - 1)
                         {
                             selectedRowIndex += (startIndex - newStartIndex);
                         }
@@ -687,28 +696,6 @@ namespace RingSoft.DbLookup.Lookup
         public void GotoPreviousPage()
         {
             GotoPreviousRecord(UserInterface.PageSize);
-            //OnMouseWheelUp();
-            return;
-
-            if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
-                return;
-
-            var newDataTable = LookupResultsDataTable.Clone();
-            if (GetPreviousRecords(LookupResultsDataTable.Rows[0], UserInterface.PageSize, newDataTable, "GotoPreviousPage"))
-            {
-                if (newDataTable.Rows.Count > 0)
-                {
-                    if (newDataTable.Rows.Count < UserInterface.PageSize)
-                    {
-                        var index = newDataTable.Rows.Count;
-                        newDataTable = LookupResultsDataTable.Clone();
-                        GetPreviousRecords(LookupResultsDataTable.Rows[LookupResultsDataTable.Rows.Count - index],
-                            UserInterface.PageSize, newDataTable, "OnPageUp");
-                    }
-                    LookupResultsDataTable = newDataTable;
-                    OutputData(0, LookupScrollPositions.Middle);
-                }
-            }
         }
 
         private bool GetNextRecords(DataRow startRow, int recordCount, DataTable resultsTable, string debugMessage)
@@ -1320,7 +1307,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the selected row.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The selected row.  Null if no row is selected.</returns>
         public DataRow GetSelectedRow()
         {
             if (LookupResultsDataTable != null && SelectedRowIndex >= 0 &&

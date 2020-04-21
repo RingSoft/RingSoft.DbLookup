@@ -223,7 +223,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             e.Handled = true;
             if (e.Delta > 0)
-                LookupData.OnMouseWheelDown();
+                LookupData.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
+            else
+                LookupData.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
         }
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -611,20 +613,28 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnPageDown(bool checkSelectedIndex = true)
         {
+            //LookupData.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+
+            //Comment out below code block when debugging mouse wheel.
+
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoNextPage();
-
-            ListView.SelectedIndex = ListView.Items.Count - 1;
+            else
+                ListView.SelectedIndex = ListView.Items.Count - 1;
         }
 
         private void OnPageUp(bool checkSelectedIndex = true)
         {
+            //LookupData.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+
+            //Comment out below code block when debugging mouse wheel.
+
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoPreviousPage();
-
-            ListView.SelectedIndex = 0;
+            else
+                ListView.SelectedIndex = 0;
         }
 
         private void OnEnd(bool checkSelectedIndex = true)
@@ -632,8 +642,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-
-            ListView.SelectedIndex = ListView.Items.Count - 1;
+            else
+                ListView.SelectedIndex = ListView.Items.Count - 1;
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -641,8 +651,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-
-            ListView.SelectedIndex = 0;
+            else
+                ListView.SelectedIndex = 0;
         }
 
         private void OnSearchTypeChanged()

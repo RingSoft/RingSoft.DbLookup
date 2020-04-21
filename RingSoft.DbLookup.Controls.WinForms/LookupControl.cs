@@ -141,6 +141,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             SearchForTextBox.TextChanged += SearchForTextBox_TextChanged;
 
             LookupListView.MouseDoubleClick += LookupListView_MouseDoubleClick;
+            LookupListView.MouseWheel += LookupListView_MouseWheel;
 
             ScrollBar.Scroll += ScrollBarOnScroll;
             EqualsRadioButton.Click += SearchTypeRadioButton_Click;
@@ -148,6 +149,14 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
             GetRecordCountButton.Click += GetRecordCountButton_Click;
             RecordCountTimer.Tick += RecordCountTimer_Tick;
+        }
+
+        private void LookupListView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                LookupData.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
+            else
+                LookupData.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
         }
 
         private void ScrollBarOnScroll(object sender, ScrollEventArgs e)
@@ -506,20 +515,28 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         private void OnPageDown(bool checkSelectedIndex = true)
         {
+            //LookupData.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+
+            //Comment out below code block when debugging mouse wheel.
+
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex >= LookupListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoNextPage();
-
-            LookupListView.SelectItem(LookupListView.Items.Count - 1);
+            else
+                LookupListView.SelectItem(LookupListView.Items.Count - 1);
         }
 
         private void OnPageUp(bool checkSelectedIndex = true)
         {
+            //LookupData.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+
+            //Comment out below code block when debugging mouse wheel.
+
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoPreviousPage();
-
-            LookupListView.SelectItem(0);
+            else
+                LookupListView.SelectItem(0);
         }
 
         private void OnEnd(bool checkSelectedIndex = true)
@@ -527,8 +544,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex >= LookupListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-
-            LookupListView.SelectItem(LookupListView.Items.Count - 1);
+            else
+                LookupListView.SelectItem(LookupListView.Items.Count - 1);
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -536,8 +553,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-
-            LookupListView.SelectItem(0);
+            else
+                LookupListView.SelectItem(0);
         }
 
         private void OnEnter()

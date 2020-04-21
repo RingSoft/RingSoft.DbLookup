@@ -629,22 +629,54 @@ namespace RingSoft.DbLookup.Lookup
             GotoNextRecord(UserInterface.PageSize);
         }
 
+        public void OnMouseWheelUp()
+        {
+            var newSelectedRowIndex = SelectedRowIndex + 3;
+            if (newSelectedRowIndex >= UserInterface.PageSize)
+                newSelectedRowIndex = -1;
+
+            GotoPreviousRecord(3, newSelectedRowIndex);
+        }
+
         /// <summary>
         /// Goto the previous record.
         /// </summary>
-        public void GotoPreviousRecord()
+        public void GotoPreviousRecord(int recordCount = 1)
+        {
+            GotoPreviousRecord(recordCount, -2);
+        }
+
+        private void GotoPreviousRecord(int recordCount, int selectedRowIndex)
         {
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
 
+            var startIndex = LookupResultsDataTable.Rows.Count - recordCount;
             var newDataTable = LookupResultsDataTable.Clone();
-            if (GetPreviousRecords(LookupResultsDataTable.Rows[LookupResultsDataTable.Rows.Count - 1],
+            if (GetPreviousRecords(LookupResultsDataTable.Rows[startIndex],
                 UserInterface.PageSize, newDataTable, "GotoPreviousRecord"))
             {
-                if (newDataTable.Rows.Count >= UserInterface.PageSize)
+                if (newDataTable.Rows.Count > 0)
                 {
-                    LookupResultsDataTable = newDataTable;
-                    OutputData(0, LookupScrollPositions.Middle);
+                    var newStartIndex = startIndex + (LookupResultsDataTable.Rows.Count - newDataTable.Rows.Count);
+                    if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize)
+                    {
+                        newDataTable = LookupResultsDataTable.Clone();
+                        GetPreviousRecords(LookupResultsDataTable.Rows[newStartIndex],
+                            UserInterface.PageSize, newDataTable, "OnPageUp");
+                    }
+                    if (newDataTable.Rows.Count >= UserInterface.PageSize)
+                    {
+                        if (selectedRowIndex == -2)
+                            selectedRowIndex = 0;
+                        else if (selectedRowIndex >= 0)
+                        {
+                            selectedRowIndex += (startIndex - newStartIndex);
+                        }
+
+                        LookupResultsDataTable = newDataTable;
+                        OutputData(selectedRowIndex, LookupScrollPositions.Middle);
+                    }
                 }
             }
         }
@@ -654,6 +686,10 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoPreviousPage()
         {
+            GotoPreviousRecord(UserInterface.PageSize);
+            //OnMouseWheelUp();
+            return;
+
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
 

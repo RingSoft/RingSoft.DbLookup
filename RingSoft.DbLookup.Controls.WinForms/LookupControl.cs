@@ -544,8 +544,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex >= LookupListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-            else
-                LookupListView.SelectItem(LookupListView.Items.Count - 1);
+            
+            LookupListView.SelectItem(LookupListView.Items.Count - 1);
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -553,8 +553,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-            else
-                LookupListView.SelectItem(0);
+            
+            LookupListView.SelectItem(0);
         }
 
         private void OnEnter()

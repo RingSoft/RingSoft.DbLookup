@@ -105,6 +105,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private DataTable _dataSource = new DataTable("DataSourceTable");
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        private double _preScrollThumbPosition;
 
         private RefreshPendingData _refreshPendingData;
 
@@ -157,6 +158,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 GetRecordCountButton.Click += (sender, args) => { GetRecordCountButtonClick(); };
                 ListView.MouseDoubleClick += (sender, args) => { OnEnter(); };
                 ScrollBar.Scroll += ScrollBar_Scroll;
+                ScrollBar.PreviewMouseDown += (sender, args) => { _preScrollThumbPosition = ScrollBar.Value; };
                 ListView.PreviewMouseWheel += ListView_PreviewMouseWheel;
             }
 
@@ -230,6 +232,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
+            e.Handled = true;
             switch (e.ScrollEventType)
             {
                 case ScrollEventType.SmallDecrement:
@@ -245,16 +248,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     OnPageDown(false);
                     break;
                 case ScrollEventType.EndScroll:
-                    //if (e.NewValue == ScrollBar.Minimum)
-                    //    OnHome(false);
-                    //else if (e.NewValue + ScrollBar.LargeChange >= ScrollBar.Maximum)
-                    //    OnEnd(false);
-                    //else
-                    //{
-                    //    if (Math.Abs(ScrollBar.Value - ScrollBar.Minimum) > ScrollBar.Minimum &&
-                    //        Math.Abs(ScrollBar.Value - ScrollBar.Maximum) > ScrollBar.Maximum)
-                    //        SetScrollThumbToMiddle();
-                    //}
+                    var newValue = (int)Math.Ceiling(e.NewValue);
+                    var scrollBarMinimum = (int)Math.Ceiling(ScrollBar.Minimum);
+
+                    if (newValue == scrollBarMinimum)
+                        OnHome(false);
+                    else if (e.NewValue + ScrollBar.LargeChange >= ScrollBar.Maximum)
+                        OnEnd(false);
+                    else
+                        ScrollBar.Value = _preScrollThumbPosition;
                     break;
             }
         }
@@ -642,8 +644,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-            else
-                ListView.SelectedIndex = ListView.Items.Count - 1;
+            
+            ListView.SelectedIndex = ListView.Items.Count - 1;
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -651,8 +653,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-            else
-                ListView.SelectedIndex = 0;
+
+            ListView.SelectedIndex = 0;
         }
 
         private void OnSearchTypeChanged()

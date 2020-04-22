@@ -26,6 +26,10 @@ namespace RingSoft.DbLookup.Controls.WinForms
         /// <param name="initialSearchFor">The initial search for text.</param>
         public LookupForm(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
+            if (lookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             InitializeComponent();
 
             _lookupDefinition = lookupDefinition;

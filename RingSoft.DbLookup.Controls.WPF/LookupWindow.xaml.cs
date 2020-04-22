@@ -12,8 +12,6 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public partial class LookupWindow : INotifyPropertyChanged
     {
-        protected override bool SetFocusToFirstControl => false;
-
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;
@@ -36,6 +34,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
+            if (lookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             LookupDefinition = lookupDefinition;
             _allowView = allowView;
 

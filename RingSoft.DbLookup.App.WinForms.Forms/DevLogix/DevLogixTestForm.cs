@@ -2,10 +2,13 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.Controls.WinForms.Annotations;
 using RingSoft.DbLookup.Lookup;
+using MessageBox = System.Windows.MessageBox;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms.DevLogix
 {
@@ -107,6 +110,44 @@ namespace RingSoft.DbLookup.App.WinForms.Forms.DevLogix
                 ReusableLookupDefinition = WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.IssuesLookup;
                 ReusableCommand = new LookupCommand(LookupCommands.Refresh);
             };
+
+            TestLookupExceptionButton.Click += TestLookupExceptionButton_Click;
+            TestAutoFillExceptionButton.Click += (sender, args) =>
+            {
+                AutoFillSetup = new AutoFillSetup(GetBadLookupDefinition());
+                try
+                {
+                    
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            };
+        }
+
+        private void TestLookupExceptionButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ReusableLookupDefinition = GetBadLookupDefinition();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            var lookupDefinition = GetBadLookupDefinition();
+            lookupDefinition.AddVisibleColumnDefinition(p => p.ErrorNumber, "Error", p => p.Number, 0);
+            lookupDefinition.AddVisibleColumnDefinition(p => p.Date, "Date", p => p.HoursSpent, 20);
+            ReusableLookupDefinition = lookupDefinition;
+            ReusableCommand = new LookupCommand(LookupCommands.Refresh);
+        }
+
+        private LookupDefinition<ErrorLookup, Error> GetBadLookupDefinition()
+        {
+            var lookupDefinition = new LookupDefinition<ErrorLookup, Error>(WinFormsAppStart.DevLogixLookupContext.Errors);
+            return lookupDefinition;
         }
 
         protected override void OnLoad(EventArgs e)

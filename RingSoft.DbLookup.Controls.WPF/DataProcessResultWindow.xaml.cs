@@ -9,8 +9,6 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public partial class DataProcessResultWindow
     {
-        protected override bool SetFocusToFirstControl => false;
-
         public DataProcessResultWindow(DataProcessResult dataProcessResult)
         {
             InitializeComponent();
@@ -34,7 +32,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SqlStatementTextBox.Text = dataProcessResult.ProcessedSqlStatement;
             }
 
-            Loaded += (sender, args) => SqlStatementTextBox.Focus();
+            Loaded += (sender, args) =>
+            {
+                SqlStatementTextBox.SelectAll();
+                SqlStatementTextBox.Focus();
+            };
 
             CloseButton.Click += (sender, args) => Close();
         }

@@ -39,36 +39,36 @@
             // 
             // ExitButton
             // 
-            this.ExitButton.Location = new System.Drawing.Point(11, 150);
+            this.ExitButton.Location = new System.Drawing.Point(12, 184);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(290, 31);
+            this.ExitButton.Size = new System.Drawing.Size(325, 31);
             this.ExitButton.TabIndex = 4;
             this.ExitButton.Text = "&Exit";
             this.ExitButton.UseVisualStyleBackColor = true;
             // 
             // StockTrackerButton
             // 
-            this.StockTrackerButton.Location = new System.Drawing.Point(160, 81);
+            this.StockTrackerButton.Location = new System.Drawing.Point(177, 98);
             this.StockTrackerButton.Name = "StockTrackerButton";
-            this.StockTrackerButton.Size = new System.Drawing.Size(143, 63);
+            this.StockTrackerButton.Size = new System.Drawing.Size(160, 80);
             this.StockTrackerButton.TabIndex = 3;
             this.StockTrackerButton.Text = "&Stock Tracker Demo";
             this.StockTrackerButton.UseVisualStyleBackColor = true;
             // 
             // MegaDbButton
             // 
-            this.MegaDbButton.Location = new System.Drawing.Point(11, 81);
+            this.MegaDbButton.Location = new System.Drawing.Point(12, 98);
             this.MegaDbButton.Name = "MegaDbButton";
-            this.MegaDbButton.Size = new System.Drawing.Size(143, 63);
+            this.MegaDbButton.Size = new System.Drawing.Size(160, 80);
             this.MegaDbButton.TabIndex = 2;
             this.MegaDbButton.Text = "&Mega Database Demo";
             this.MegaDbButton.UseVisualStyleBackColor = true;
             // 
             // NorthwindButton
             // 
-            this.NorthwindButton.Location = new System.Drawing.Point(160, 12);
+            this.NorthwindButton.Location = new System.Drawing.Point(177, 12);
             this.NorthwindButton.Name = "NorthwindButton";
-            this.NorthwindButton.Size = new System.Drawing.Size(143, 63);
+            this.NorthwindButton.Size = new System.Drawing.Size(160, 80);
             this.NorthwindButton.TabIndex = 1;
             this.NorthwindButton.Text = "&Northwind Demo";
             this.NorthwindButton.UseVisualStyleBackColor = true;
@@ -77,7 +77,7 @@
             // 
             this.DatabaseSettingsButton.Location = new System.Drawing.Point(11, 12);
             this.DatabaseSettingsButton.Name = "DatabaseSettingsButton";
-            this.DatabaseSettingsButton.Size = new System.Drawing.Size(143, 63);
+            this.DatabaseSettingsButton.Size = new System.Drawing.Size(160, 80);
             this.DatabaseSettingsButton.TabIndex = 0;
             this.DatabaseSettingsButton.Text = "&Database Setup";
             this.DatabaseSettingsButton.UseVisualStyleBackColor = true;
@@ -90,7 +90,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 193);
+            this.ClientSize = new System.Drawing.Size(347, 227);
+            this.ControlBox = false;
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.StockTrackerButton);
             this.Controls.Add(this.MegaDbButton);
@@ -99,7 +100,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainForm";
             this.ShowInTaskbar = true;
-            this.Text = "DB Lookup Demo";
+            this.Text = "RingSoft Database Lookup Demo";
             this.ResumeLayout(false);
 
         }

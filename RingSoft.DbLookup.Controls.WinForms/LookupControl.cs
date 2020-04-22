@@ -284,6 +284,10 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         private void SetupControl([NotNull] LookupDefinitionBase lookupDefinition)
         {
+            if (lookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             if (LookupData != null)
                 ClearLookupControl();
 

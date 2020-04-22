@@ -133,6 +133,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
+            if (LookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             if (LookupData != null)
                 ClearLookupControl();
 
@@ -343,7 +347,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var columnNumber = 1;
                     foreach (var lookupColumnDefinition in LookupData.OrderByList)
                     {
-                        var orderColumnIndex = LookupDefinition.GetIndexOfVisibleColumn(lookupColumnDefinition);
+                        var orderColumnIndex = LookupData.LookupDefinition.GetIndexOfVisibleColumn(lookupColumnDefinition);
                         var orderGridColumnHeader =
                             LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
                         GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
@@ -642,19 +646,21 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void OnEnd(bool checkSelectedIndex = true)
         {
             var selIndex = ListView.SelectedIndex;
+
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-            
-            ListView.SelectedIndex = ListView.Items.Count - 1;
+            else
+                ListView.SelectedIndex = ListView.Items.Count - 1;
         }
 
         private void OnHome(bool checkSelectedIndex = true)
         {
             var selIndex = ListView.SelectedIndex;
+
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-
-            ListView.SelectedIndex = 0;
+            else
+                ListView.SelectedIndex = 0;
         }
 
         private void OnSearchTypeChanged()

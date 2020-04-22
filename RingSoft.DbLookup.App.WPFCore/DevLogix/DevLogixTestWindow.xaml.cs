@@ -1,5 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Controls.WPFCore.Annotations;
@@ -88,8 +92,45 @@ namespace RingSoft.DbLookup.App.WPFCore.DevLogix
                 ReusableLookupDefinition = _devLogixLookupContext.DevLogixConfiguration.IssuesLookup;
                 ReusableCommand = new LookupCommand(LookupCommands.Refresh);
             };
+
+            TestLookupExceptionButton.Click += TestLookupExceptionButton_Click;
+
+            TestAutoFillExceptionButton.Click += (sender, args) =>
+            {
+                try
+                {
+                    AutoFillSetup = new AutoFillSetup(GetBadLookupDefinition());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            };
         }
 
+        private void TestLookupExceptionButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ReusableLookupDefinition = GetBadLookupDefinition();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            var lookupDefinition = GetBadLookupDefinition();
+            lookupDefinition.AddVisibleColumnDefinition(p => p.ErrorNumber, "Error", p => p.Number, 0);
+            lookupDefinition.AddVisibleColumnDefinition(p => p.Date, "Date", p => p.HoursSpent, 20);
+            ReusableLookupDefinition = lookupDefinition;
+            ReusableCommand = new LookupCommand(LookupCommands.Refresh);
+        }
+        private LookupDefinition<ErrorLookup, Error> GetBadLookupDefinition()
+        {
+            var lookupDefinition = new LookupDefinition<ErrorLookup, Error>(_devLogixLookupContext.Errors);
+            return lookupDefinition;
+        }
         private void DevLogixTestWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             AutoFillSetup = new AutoFillSetup(_devLogixLookupContext.DevLogixConfiguration.ErrorsLookup);

@@ -5,17 +5,17 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
                      mc:Ignorable="d"
-        Title="DB Lookup Demo" Height="300" Width="330">
+        Title="RingSoft Database Lookup Demo" Height="300" Width="330" HideControlBox="True">
     <!--d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"-->
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="DatabaseSetupButton" Content="_Database Setup" Margin="0,0,5,5"/>
         <Button x:Name="NorthwindButton" Grid.Row="0" Grid.Column="1" Content="_Northwind Demo" Margin="0,0,0,5"/>

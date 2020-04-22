@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Lookup" Height="450" Width="700"
         WindowStartupLocation="CenterScreen"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" SetFocusToFirstControl="False">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

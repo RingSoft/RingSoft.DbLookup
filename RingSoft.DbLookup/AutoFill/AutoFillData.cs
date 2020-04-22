@@ -118,6 +118,10 @@ namespace RingSoft.DbLookup.AutoFill
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public AutoFillData(LookupDefinitionBase lookupDefinition, bool isDistinct)
         {
+            if (lookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             AutoFillBase autoFillDefinition = null;
 
             switch (lookupDefinition.InitialSortColumnDefinition.ColumnType)

@@ -97,31 +97,21 @@ namespace RSDbLookup.Controls.WinForms
             {
                 var columnWdth = GblMethods.GetWidthFromPercent(this, lookupDefinitionColumn.PercentWidth, false,
                     lookupDefinition.VisibleColumns.Count * 2);
-                if (columnWdth > 0)
-                {
-                    var column = Columns.Add(lookupDefinitionColumn.Caption, columnWdth);
-                    switch (lookupDefinitionColumn.HorizontalAlignment)
-                    {
-                        case LookupColumnAlignmentTypes.Left:
-                            column.TextAlign = HorizontalAlignment.Left;
-                            break;
-                        case LookupColumnAlignmentTypes.Center:
-                            column.TextAlign = HorizontalAlignment.Center;
-                            break;
-                        case LookupColumnAlignmentTypes.Right:
-                            column.TextAlign = HorizontalAlignment.Right;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-                else
-                {
-                    var columnName = lookupDefinitionColumn.Caption;
-                    if (columnName.IsNullOrEmpty())
-                        columnName = lookupDefinitionColumn.PropertyName;
 
-                    throw new Exception($"The {columnName} column is not configured properly.  It must have a caption and percent width greater than 0.");
+                var column = Columns.Add(lookupDefinitionColumn.Caption, columnWdth);
+                switch (lookupDefinitionColumn.HorizontalAlignment)
+                {
+                    case LookupColumnAlignmentTypes.Left:
+                        column.TextAlign = HorizontalAlignment.Left;
+                        break;
+                    case LookupColumnAlignmentTypes.Center:
+                        column.TextAlign = HorizontalAlignment.Center;
+                        break;
+                    case LookupColumnAlignmentTypes.Right:
+                        column.TextAlign = HorizontalAlignment.Right;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

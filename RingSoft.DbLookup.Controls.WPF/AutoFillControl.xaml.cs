@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.AutoFill;
+﻿using System;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -138,6 +139,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
+            if (Setup.LookupDefinition == null || Setup.LookupDefinition.InitialSortColumnDefinition == null)
+                throw new ArgumentException(
+                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
             if (AutoFillData != null)
                 ClearValue();
 

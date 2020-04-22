@@ -30,13 +30,15 @@
         {
             this.TabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.ErrorsLookupControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.ReusableLookupControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
+            this.TestAutoFillControl = new RingSoft.DbLookup.Controls.WinForms.AutoFillControl();
             this.ChangeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.IssuesLookupButton = new System.Windows.Forms.Button();
-            this.ErrorsLookupControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
-            this.TestAutoFillControl = new RingSoft.DbLookup.Controls.WinForms.AutoFillControl();
-            this.ReusableLookupControl = new RingSoft.DbLookup.Controls.WinForms.LookupControl();
+            this.TestLookupExceptionButton = new System.Windows.Forms.Button();
+            this.TestAutoFillExceptionButton = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -66,8 +68,22 @@
             this.tabPage1.Text = "Errors";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // ErrorsLookupControl
+            // 
+            this.ErrorsLookupControl.Command = null;
+            this.ErrorsLookupControl.DataSourceChanged = null;
+            this.ErrorsLookupControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ErrorsLookupControl.Location = new System.Drawing.Point(3, 3);
+            this.ErrorsLookupControl.LookupDefinition = null;
+            this.ErrorsLookupControl.Name = "ErrorsLookupControl";
+            this.ErrorsLookupControl.SearchText = "";
+            this.ErrorsLookupControl.Size = new System.Drawing.Size(761, 367);
+            this.ErrorsLookupControl.TabIndex = 0;
+            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.TestAutoFillExceptionButton);
+            this.tabPage2.Controls.Add(this.TestLookupExceptionButton);
             this.tabPage2.Controls.Add(this.ReusableLookupControl);
             this.tabPage2.Controls.Add(this.TestAutoFillControl);
             this.tabPage2.Controls.Add(this.ChangeButton);
@@ -78,6 +94,31 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // ReusableLookupControl
+            // 
+            this.ReusableLookupControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ReusableLookupControl.Command = null;
+            this.ReusableLookupControl.DataSourceChanged = null;
+            this.ReusableLookupControl.Location = new System.Drawing.Point(7, 36);
+            this.ReusableLookupControl.LookupDefinition = null;
+            this.ReusableLookupControl.Name = "ReusableLookupControl";
+            this.ReusableLookupControl.SearchText = "";
+            this.ReusableLookupControl.Size = new System.Drawing.Size(754, 331);
+            this.ReusableLookupControl.TabIndex = 4;
+            // 
+            // TestAutoFillControl
+            // 
+            this.TestAutoFillControl.IsDirty = false;
+            this.TestAutoFillControl.Location = new System.Drawing.Point(6, 9);
+            this.TestAutoFillControl.Name = "TestAutoFillControl";
+            this.TestAutoFillControl.Setup = null;
+            this.TestAutoFillControl.Size = new System.Drawing.Size(203, 20);
+            this.TestAutoFillControl.TabIndex = 0;
+            this.TestAutoFillControl.TabOutAfterLookupSelect = true;
+            this.TestAutoFillControl.Value = null;
             // 
             // ChangeButton
             // 
@@ -106,42 +147,23 @@
             this.IssuesLookupButton.Text = "&Issues Lookup";
             this.IssuesLookupButton.UseVisualStyleBackColor = true;
             // 
-            // ErrorsLookupControl
+            // TestLookupExceptionButton
             // 
-            this.ErrorsLookupControl.Command = null;
-            this.ErrorsLookupControl.DataSourceChanged = null;
-            this.ErrorsLookupControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorsLookupControl.Location = new System.Drawing.Point(3, 3);
-            this.ErrorsLookupControl.LookupDefinition = null;
-            this.ErrorsLookupControl.Name = "ErrorsLookupControl";
-            this.ErrorsLookupControl.SearchText = "";
-            this.ErrorsLookupControl.Size = new System.Drawing.Size(761, 367);
-            this.ErrorsLookupControl.TabIndex = 0;
+            this.TestLookupExceptionButton.Location = new System.Drawing.Point(297, 9);
+            this.TestLookupExceptionButton.Name = "TestLookupExceptionButton";
+            this.TestLookupExceptionButton.Size = new System.Drawing.Size(130, 23);
+            this.TestLookupExceptionButton.TabIndex = 2;
+            this.TestLookupExceptionButton.Text = "Test Lookup Exception";
+            this.TestLookupExceptionButton.UseVisualStyleBackColor = true;
             // 
-            // TestAutoFillControl
+            // TestAutoFillExceptionButton
             // 
-            this.TestAutoFillControl.IsDirty = false;
-            this.TestAutoFillControl.Location = new System.Drawing.Point(6, 9);
-            this.TestAutoFillControl.Name = "TestAutoFillControl";
-            this.TestAutoFillControl.Setup = null;
-            this.TestAutoFillControl.Size = new System.Drawing.Size(203, 20);
-            this.TestAutoFillControl.TabIndex = 0;
-            this.TestAutoFillControl.TabOutAfterLookupSelect = true;
-            this.TestAutoFillControl.Value = null;
-            // 
-            // ReusableLookupControl
-            // 
-            this.ReusableLookupControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ReusableLookupControl.Command = null;
-            this.ReusableLookupControl.DataSourceChanged = null;
-            this.ReusableLookupControl.Location = new System.Drawing.Point(7, 36);
-            this.ReusableLookupControl.LookupDefinition = null;
-            this.ReusableLookupControl.Name = "ReusableLookupControl";
-            this.ReusableLookupControl.SearchText = "";
-            this.ReusableLookupControl.Size = new System.Drawing.Size(754, 331);
-            this.ReusableLookupControl.TabIndex = 2;
+            this.TestAutoFillExceptionButton.Location = new System.Drawing.Point(434, 9);
+            this.TestAutoFillExceptionButton.Name = "TestAutoFillExceptionButton";
+            this.TestAutoFillExceptionButton.Size = new System.Drawing.Size(136, 23);
+            this.TestAutoFillExceptionButton.TabIndex = 3;
+            this.TestAutoFillExceptionButton.Text = "Test AutoFill Exception";
+            this.TestAutoFillExceptionButton.UseVisualStyleBackColor = true;
             // 
             // DevLogixTestForm
             // 
@@ -172,5 +194,7 @@
         private Controls.WinForms.LookupControl ErrorsLookupControl;
         private Controls.WinForms.LookupControl ReusableLookupControl;
         private Controls.WinForms.AutoFillControl TestAutoFillControl;
+        private System.Windows.Forms.Button TestLookupExceptionButton;
+        private System.Windows.Forms.Button TestAutoFillExceptionButton;
     }
 }

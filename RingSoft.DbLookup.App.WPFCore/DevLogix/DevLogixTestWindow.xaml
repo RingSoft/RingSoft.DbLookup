@@ -21,6 +21,8 @@
                     <StackPanel Orientation="Horizontal">
                         <controls:AutoFillControl Width="200" Setup="{Binding Path=AutoFillSetup}" Value="{Binding Path=AutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button x:Name="ChangeButton" Margin="5,0,0,0" Content="_Change"/>
+                        <Button x:Name="TestLookupExceptionButton" Margin="5,0,0,0" Content="Test Lookup Exception"/>
+                        <Button x:Name="TestAutoFillExceptionButton" Margin="5,0,0,0" Content="Test AutoFill Exception"/>
                     </StackPanel>
                     <controls:LookupControl Grid.Row="1" LookupDefinition="{Binding Path=ReusableLookupDefinition}" Command="{Binding Path=ReusableCommand}"/>
                 </Grid>

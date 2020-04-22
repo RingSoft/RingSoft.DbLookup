@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\magnify.ico</ApplicationIcon>
+    <AssemblyName>RingSoft.DbLookup.App.WPFCore</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

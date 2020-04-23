@@ -231,10 +231,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the first top page of data.
         /// </summary>
-        /// <param name="resetSelectedRowIndex">if set to <c>true</c> then reset the selected row index after fetching data.</param>
-        /// <param name="resetRecordCount">if set to <c>true</c> then reset record count after fetching data.</param>
-        /// <returns></returns>
-        public DataProcessResult GetInitData(bool resetSelectedRowIndex, bool resetRecordCount = true)
+        /// <returns>The data processor result.</returns>
+        public DataProcessResult GetInitData()
+        {
+            return GetInitData(true, true);
+        }
+
+        private DataProcessResult GetInitData(bool resetSelectedRowIndex, bool resetRecordCount, int newSelectedIndex = -1)
         {
             if (resetRecordCount)
                 RecordCount = 0;
@@ -249,7 +252,10 @@ namespace RingSoft.DbLookup.Lookup
             if (getDataResult.ResultCode == GetDataResultCodes.Success)
             {
                 LookupResultsDataTable = getDataResult.DataSet.Tables[0];
-                var selectedIndex = -1;
+                var selectedIndex = newSelectedIndex;
+                if (LookupResultsDataTable.Rows.Count <= 0)
+                    selectedIndex = -1;
+
                 if (!resetSelectedRowIndex && LookupResultsDataTable.Rows.Count > 0)
                     selectedIndex = SelectedRowIndex;
                 OutputData(selectedIndex, LookupScrollPositions.Top);
@@ -1032,7 +1038,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoTop()
         {
-            GetInitData(true, false);
+            GetInitData(true, false, 0);
         }
 
         /// <summary>
@@ -1092,7 +1098,7 @@ namespace RingSoft.DbLookup.Lookup
                     GetSearchEqualsData(searchText);
                     break;
                 case LookupSearchTypes.Contains:
-                    GetInitData(true);
+                    GetInitData(true, true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1292,7 +1298,7 @@ namespace RingSoft.DbLookup.Lookup
             if (!_selectingRecord)
             {
                 if (UserInterface.SearchText.IsNullOrEmpty())
-                    GetInitData(true);
+                    GetInitData(true, true);
                 else
                     OnSearchForChange(UserInterface.SearchText);
             }

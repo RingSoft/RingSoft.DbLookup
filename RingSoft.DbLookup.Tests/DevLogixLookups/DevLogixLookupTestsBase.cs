@@ -19,7 +19,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
             Assert.AreEqual(15, lookupData.LookupResultsList.Count, "Get initial data fails.");
 
@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.ErrorNumber); //Sets to descending.
@@ -105,7 +105,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.Date);
@@ -146,7 +146,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.Date);
@@ -188,7 +188,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.DeveloperType);
@@ -228,7 +228,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.DeveloperType);
@@ -269,7 +269,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.HoursSpent);
@@ -310,7 +310,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.HoursSpent);
@@ -354,7 +354,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
             Assert.AreEqual(13, lookupData.LookupResultsList.Count, "Get initial data fails.");
 
@@ -397,7 +397,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.Task);
@@ -442,7 +442,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
             Assert.AreEqual(13, lookupData.LookupResultsList.Count, "Get initial data fails.");
 
@@ -485,7 +485,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
 
             //Act/Assert
-            var getDataResult = lookupData.GetInitData(true);
+            var getDataResult = lookupData.GetInitData();
             Assert.IsTrue(getDataResult.ResultCode == GetDataResultCodes.Success, "Get initial data fails.");
 
             lookupData.OnColumnClick(p => p.Resolved);

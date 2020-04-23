@@ -432,7 +432,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             if (string.IsNullOrEmpty(initialSearchFor))
             {
                 SearchForTextBox.Text = string.Empty;
-                LookupData.GetInitData(true);
+                LookupData.GetInitData();
             }
             else
             {
@@ -548,8 +548,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex >= LookupListView.Items.Count - 1 || !checkSelectedIndex)
                 LookupData.GotoBottom();
-            
-            LookupListView.SelectItem(LookupListView.Items.Count - 1);
+            else 
+                LookupListView.SelectItem(LookupListView.Items.Count - 1);
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -557,8 +557,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
             var selIndex = LookupListView.GetSelectedIndex();
             if (selIndex <= 0 || !checkSelectedIndex)
                 LookupData.GotoTop();
-            
-            LookupListView.SelectItem(0);
+            else 
+                LookupListView.SelectItem(0);
         }
 
         private void OnEnter()

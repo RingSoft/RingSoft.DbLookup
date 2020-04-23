@@ -104,7 +104,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public override bool TestConnection()
         {
             var itemsLookupData = new LookupDataBase(ItemsLookup, this);
-            var result = itemsLookupData.GetInitData(true);
+            var result = itemsLookupData.GetInitData();
             return result.ResultCode == GetDataResultCodes.Success;
         }
 

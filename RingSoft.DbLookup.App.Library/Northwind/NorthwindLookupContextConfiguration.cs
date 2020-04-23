@@ -174,7 +174,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         public override bool TestConnection()
         {
             var ordersLookupData = new LookupDataBase(OrdersLookup, this);
-            var result = ordersLookupData.GetInitData(true);
+            var result = ordersLookupData.GetInitData();
             return result.ResultCode == GetDataResultCodes.Success;
         }
 

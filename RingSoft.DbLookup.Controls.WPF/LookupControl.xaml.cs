@@ -464,7 +464,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _currentPageSize = GetPageSize();
 
             if (string.IsNullOrEmpty(initialSearchFor))
-                LookupData.GetInitData(true);
+                LookupData.GetInitData();
             else
             {
                 var forceRefresh = SearchForTextBox.Text == initialSearchFor;

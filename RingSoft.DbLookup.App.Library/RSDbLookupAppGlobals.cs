@@ -1,10 +1,10 @@
-﻿using System;
+﻿using RingSoft.DbLookup.GetDataProcessor;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
 
 namespace RingSoft.DbLookup.App.Library
 {
@@ -18,10 +18,8 @@ namespace RingSoft.DbLookup.App.Library
     {
         public string ProgressText { get; set; }
 
-        public AppStartProgressArgs()
-        {
-        }
     }
+
     public class RsDbLookupAppGlobals
     {
         public static IEfProcessor EfProcessor { get; set; }
@@ -51,10 +49,22 @@ namespace RingSoft.DbLookup.App.Library
             }
         }
 
+        public static string AppDataDirectory
+        {
+            get
+            {
+#if DEBUG
+                return AssemblyDirectory;
+#else
+                return $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoftDbLookupApp";
+#endif
+            }
+        }
+
         public static void Initialize()
         {
             var registryElementName = "RegistryFileName";
-            var appSettingsFile = $"{AssemblyDirectory}\\AppSettings.xml";
+            var appSettingsFile = $"{AppDataDirectory}\\AppSettings.xml";
             var xmlProcessor = new XmlProcessor("AppSettings");
             if (File.Exists(appSettingsFile))
             {
@@ -63,7 +73,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             else
             {
-                xmlProcessor.SetElementValue(registryElementName, $"{AssemblyDirectory}\\Registry.xml");
+                xmlProcessor.SetElementValue(registryElementName, $"{AppDataDirectory}\\Registry.xml");
                 var xml = xmlProcessor.OutputXml();
                 WriteTextFile(appSettingsFile, xml);
             }
@@ -74,13 +84,35 @@ namespace RingSoft.DbLookup.App.Library
 
         public static string OpenTextFile(string fileName)
         {
-            var openFile = new System.IO.StreamReader(fileName);
-            return openFile.ReadToEnd();
+            var result = string.Empty;
+            try
+            {
+                var openFile = new StreamReader(fileName);
+                result = openFile.ReadToEnd();
+            }
+            catch (Exception e)
+            {
+                DbDataProcessor.DisplayDataException(e, "Opening text file.");
+            }
+
+            return result;
         }
 
         public static void WriteTextFile(string fileName, string text)
         {
-            File.WriteAllText(fileName, text);
+            try
+            {
+                var directory = Path.GetDirectoryName(fileName);
+                if (!Directory.Exists(directory))
+                    if (directory != null)
+                        Directory.CreateDirectory(directory);
+
+                File.WriteAllText(fileName, text);
+            }
+            catch (Exception e)
+            {
+                DbDataProcessor.DisplayDataException(e, "Writing text file.");
+            }
         }
 
         public static List<string> SplitSqlServerStatements(string sqlScript)
@@ -115,6 +147,24 @@ namespace RingSoft.DbLookup.App.Library
             }
 
             AppStartProgress?.Invoke(null, appStartProgress);
+        }
+
+        public static string EncryptString(string text)
+        {
+            if (text.IsNullOrEmpty())
+                return text;
+
+            var crypto = new RijndaelSimpleTest.Crypto();
+            return crypto.Encrypt(text);
+        }
+
+        public static string DecryptString(string encrypted)
+        {
+            if (encrypted.IsNullOrEmpty())
+                return encrypted;
+
+            var crypto = new RijndaelSimpleTest.Crypto();
+            return crypto.Decrypt(encrypted);
         }
     }
 }

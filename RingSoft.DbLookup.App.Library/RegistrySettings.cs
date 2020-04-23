@@ -103,7 +103,8 @@ namespace RingSoft.DbLookup.App.Library
                 ((int)SecurityTypes.WindowsAuthentication).ToString());
             SqlServerSecurityType = (SecurityTypes)authType.ToInt();
             SqlServerUserName = _registryXml.GetElementValue(SqlServerUserNameKey, "sa");
-            SqlServerPassword = _registryXml.GetElementValue(SqlServerPasswordKey, "");
+            SqlServerPassword =
+                RsDbLookupAppGlobals.DecryptString(_registryXml.GetElementValue(SqlServerPasswordKey, ""));
             SqlServerNorthwindDbName =
                 _registryXml.GetElementValue(SqlServerNorthwindDbNameKey, SqlServerNorthwindDatabaseNameConst);
             SqlServerMegaDbName =
@@ -111,7 +112,7 @@ namespace RingSoft.DbLookup.App.Library
 
             MySqlServerName = _registryXml.GetElementValue(MySqlServerNameKey, "localhost");
             MySqlUserName = _registryXml.GetElementValue(MySqlUserNameKey, "root");
-            MySqlPassword = _registryXml.GetElementValue(MySqlPasswordKey, "");
+            MySqlPassword = RsDbLookupAppGlobals.DecryptString(_registryXml.GetElementValue(MySqlPasswordKey, ""));
             MySqlNorthwindDbName =
                 _registryXml.GetElementValue(MySqlNorthwindDbNameKey, MySqlNorthwindDatabaseNameConst);
             MySqlMegaDbName = _registryXml.GetElementValue(MySqlMegaDbNameKey, MySqlMegaDbDatabaseNameConst);
@@ -120,7 +121,7 @@ namespace RingSoft.DbLookup.App.Library
                 ((int)NorthwindDbPlatforms.Sqlite).ToString());
             NorthwindPlatformType = (NorthwindDbPlatforms) northwindPlatformType.ToInt();
             NorthwindSqliteFileName = _registryXml.GetElementValue(NorthwindSqliteFileNameKey,
-                $@"{RsDbLookupAppGlobals.AssemblyDirectory}\Northwind\Northwind.sqlite");
+                $@"{RsDbLookupAppGlobals.AppDataDirectory}\Northwind\Northwind.sqlite");
 
             var megaDbPlatformType = _registryXml.GetElementValue(MegaDbPlatformTypeKey,
                 ((int)MegaDbPlatforms.SqlServer).ToString());
@@ -134,13 +135,13 @@ namespace RingSoft.DbLookup.App.Library
             _registryXml.SetElementValue(SqlServerServerNameKey, SqlServerServerName);
             _registryXml.SetElementValue(SqlServerAuthTypeKey, ((int)SqlServerSecurityType).ToString());
             _registryXml.SetElementValue(SqlServerUserNameKey, SqlServerUserName);
-            _registryXml.SetElementValue(SqlServerPasswordKey, SqlServerPassword);
+            _registryXml.SetElementValue(SqlServerPasswordKey, RsDbLookupAppGlobals.EncryptString(SqlServerPassword));
             _registryXml.SetElementValue(SqlServerNorthwindDbNameKey, SqlServerNorthwindDbName);
             _registryXml.SetElementValue(SqlServerMegaDbNameKey, SqlServerMegaDbName);
 
             _registryXml.SetElementValue(MySqlServerNameKey, MySqlServerName);
             _registryXml.SetElementValue(MySqlUserNameKey, MySqlUserName);
-            _registryXml.SetElementValue(MySqlPasswordKey, MySqlPassword);
+            _registryXml.SetElementValue(MySqlPasswordKey, RsDbLookupAppGlobals.EncryptString(MySqlPassword));
             _registryXml.SetElementValue(MySqlNorthwindDbNameKey, MySqlNorthwindDbName);
             _registryXml.SetElementValue(MySqlMegaDbNameKey, MySqlMegaDbName);
 

@@ -8,7 +8,7 @@ namespace RingSoft.DbLookup.ModelDefinition
     /// <summary>
     /// A database table definition.
     /// </summary>
-    public class TableDefinitionBase
+    public abstract class TableDefinitionBase
     {
         /// <summary>
         /// Gets the context.

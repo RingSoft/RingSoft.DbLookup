@@ -101,5 +101,8 @@
   <ItemGroup>
     <None Include="Resources\magnify.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WinFormsInstallScript.iss" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

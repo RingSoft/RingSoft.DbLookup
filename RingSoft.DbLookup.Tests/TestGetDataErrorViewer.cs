@@ -9,5 +9,10 @@ namespace RingSoft.DbLookup.Tests
         {
             Debug.WriteLine($"GetDataError!  {dataProcessResult.Message}");
         }
+
+        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        {
+            Debug.WriteLine(text);
+        }
     }
 }

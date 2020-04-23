@@ -56,13 +56,16 @@ namespace RingSoft.DbLookup.App.Library
 #if DEBUG
                 return AssemblyDirectory;
 #else
-                return $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoftDbLookupApp";
+                return $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\ComponentsDemoApp\\{AppSection}";
 #endif
             }
         }
 
-        public static void Initialize()
+        public static string AppSection { get; set; }
+
+        public static void Initialize(string appSection)
         {
+            AppSection = appSection;
             var registryElementName = "RegistryFileName";
             var appSettingsFile = $"{AppDataDirectory}\\AppSettings.xml";
             var xmlProcessor = new XmlProcessor("AppSettings");
@@ -92,7 +95,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.DisplayDataException(e, "Opening text file.");
+                DbDataProcessor.DataProcessResultViewer.ShowMessageBox(e.Message, "Error Opening Text File", RsMessageBoxIcons.Error);
             }
 
             return result;
@@ -111,7 +114,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.DisplayDataException(e, "Writing text file.");
+                DbDataProcessor.DataProcessResultViewer.ShowMessageBox(e.Message, "Error Writing Text File", RsMessageBoxIcons.Error);
             }
         }
 

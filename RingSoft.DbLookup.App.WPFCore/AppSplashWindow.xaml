@@ -7,7 +7,7 @@
         Title="AppSplashWindow" Height="150" Width="350"
         WindowStyle="None" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Label Content="RingSoft Database Lookup Demo" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="18"/>
+        <Label Content="RingSoft Components Demo" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="18"/>
         <TextBlock Text="WPF .NET Core 3.1" TextAlignment="Center" Margin="10"/>
         <TextBlock x:Name="ProgressTextBlock" TextAlignment="Center" Margin="10"/>
         <ProgressBar Width="350" Height="20" IsIndeterminate="True" Margin="10,0,10,0"/>

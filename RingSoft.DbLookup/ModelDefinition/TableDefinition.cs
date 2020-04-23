@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup.ModelDefinition
     /// <seealso cref="TableDefinitionBase" />
     public sealed class TableDefinition<TEntity> : TableDefinitionBase where TEntity : new()
     {
-        internal TableDefinition(LookupContextBase context, string tablePropertyName)
+        public TableDefinition(LookupContextBase context, string tablePropertyName)
         {
             Context = context;
             context.AddTable(this);

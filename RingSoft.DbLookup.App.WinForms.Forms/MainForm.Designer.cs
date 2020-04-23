@@ -100,7 +100,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainForm";
             this.ShowInTaskbar = true;
-            this.Text = "RingSoft Database Lookup Demo";
+            this.Text = "RingSoft Windows Forms Components Demo";
             this.ResumeLayout(false);
 
         }

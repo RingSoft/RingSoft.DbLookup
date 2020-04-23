@@ -10,7 +10,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         protected override void OnStartup(StartupEventArgs e)
         {
             var wpfAppStart = new WpfAppStart(this);
-            wpfAppStart.StartApp(e.Args);
+            wpfAppStart.StartApp("WPF", e.Args);
 
             base.OnStartup(e);
         }

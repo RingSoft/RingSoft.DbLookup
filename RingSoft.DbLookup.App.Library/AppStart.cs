@@ -22,9 +22,9 @@ namespace RingSoft.DbLookup.App.Library
 
         private object _lockCloseWindow = new object();
 
-        public virtual void StartApp(string[] args)
+        public virtual void StartApp(string appName, string[] args)
         {
-            RsDbLookupAppGlobals.Initialize();
+            RsDbLookupAppGlobals.Initialize(appName);
 
             if (args.Contains("-devLogix"))
             {

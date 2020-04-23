@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using RingSoft.DbLookup.GetDataProcessor;
 
@@ -10,6 +11,26 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
             dataProcessResultWindow.ShowDialog();
+        }
+
+        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        {
+            var messageBoxImage = MessageBoxImage.Error;
+            switch (icon)
+            {
+                case RsMessageBoxIcons.Error:
+                    break;
+                case RsMessageBoxIcons.Exclamation:
+                    messageBoxImage = MessageBoxImage.Exclamation;
+                    break;
+                case RsMessageBoxIcons.Information:
+                    messageBoxImage = MessageBoxImage.Information;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(icon), icon, null);
+            }
+
+            MessageBox.Show(text, caption, MessageBoxButton.OK, messageBoxImage);
         }
 
         public void SetWindowCursor(WindowCursorTypes cursor)

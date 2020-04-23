@@ -13,6 +13,26 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         }
 
+        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        {
+            var messageBoxIcon = MessageBoxIcon.Error;
+            switch (icon)
+            {
+                case RsMessageBoxIcons.Error:
+                    break;
+                case RsMessageBoxIcons.Exclamation:
+                    messageBoxIcon = MessageBoxIcon.Exclamation;
+                    break;
+                case RsMessageBoxIcons.Information:
+                    messageBoxIcon = MessageBoxIcon.Information;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(icon), icon, null);
+            }
+
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, messageBoxIcon);
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             switch (cursor)

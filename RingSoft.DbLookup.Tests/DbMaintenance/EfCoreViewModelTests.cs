@@ -12,7 +12,7 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         public static void Setup(TestContext testContext)
         {
             DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
-            RsDbLookupAppGlobals.Initialize();
+            RsDbLookupAppGlobals.Initialize("UnitTests");
             RsDbLookupAppGlobals.EfProcessor = new EfProcessorCore();
             SetupConfigurations();
         }

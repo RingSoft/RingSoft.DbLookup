@@ -23,12 +23,12 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         private MainForm _mainForm;
         private AppSplashForm _splashForm;
 
-        public override void StartApp(string[] args)
+        public override void StartApp(string appSection, string[] args)
         {
             ControlsGlobals.InitUi();
             _mainForm = new MainForm();
 
-            base.StartApp(args);
+            base.StartApp(appSection, args);
         }
 
         protected override void InitializeSplash()

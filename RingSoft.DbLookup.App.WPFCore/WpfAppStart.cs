@@ -26,11 +26,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             _application = application;
         }
 
-        public override void StartApp(string[] args)
+        public override void StartApp(string appSection, string[] args)
         {
             ControlsGlobals.InitUi();
             _mainWindow = new MainWindow();
-            base.StartApp(args);
+            base.StartApp(appSection, args);
         }
 
         protected override void InitializeSplash()

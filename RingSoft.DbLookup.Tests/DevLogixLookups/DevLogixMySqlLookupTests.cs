@@ -18,7 +18,7 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
         public static void Setup(TestContext testContext)
         {
             DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
-            RsDbLookupAppGlobals.Initialize();
+            RsDbLookupAppGlobals.Initialize("UnitTests");
             _context = new DevLogixLookupContextEfCore()
             {
                 DataProcessorType = DataProcessorTypes.MySql

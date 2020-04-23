@@ -16,7 +16,7 @@ namespace RingSoft.DbLookup.App.WinForms
             Application.SetCompatibleTextRenderingDefault(false);
 
             var winFormsAppStart = new WinFormsAppStart();
-            winFormsAppStart.StartApp(args);
+            winFormsAppStart.StartApp("WinForms", args);
         }
     }
 }

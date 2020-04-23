@@ -2,6 +2,13 @@
 
 namespace RingSoft.DbLookup.GetDataProcessor
 {
+    public enum RsMessageBoxIcons
+    {
+        Error = 0,
+        Exclamation = 1,
+        Information = 2
+    }
+
     /// <summary>
     /// Implement this interface to display an error to the user.
     /// </summary>
@@ -12,6 +19,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
         /// </summary>
         /// <param name="dataProcessResult">The get data result.</param>
         void ShowDataProcessResult(DataProcessResult dataProcessResult);
+
+        void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon);
     }
 
     internal class DefaultDataProcessResultViewer : IDataProcessResultViewer
@@ -19,6 +28,11 @@ namespace RingSoft.DbLookup.GetDataProcessor
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             Console.WriteLine(dataProcessResult.Message);
+        }
+
+        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        {
+            Console.WriteLine(text);
         }
     }
 }

@@ -121,7 +121,7 @@ namespace RingSoft.DbLookup.App.Library
                 ((int)NorthwindDbPlatforms.Sqlite).ToString());
             NorthwindPlatformType = (NorthwindDbPlatforms) northwindPlatformType.ToInt();
             NorthwindSqliteFileName = _registryXml.GetElementValue(NorthwindSqliteFileNameKey,
-                $@"{RsDbLookupAppGlobals.AppDataDirectory}\Northwind\Northwind.sqlite");
+                $"{RsDbLookupAppGlobals.AppDataDirectory}\\Northwind\\Northwind.sqlite");
 
             var megaDbPlatformType = _registryXml.GetElementValue(MegaDbPlatformTypeKey,
                 ((int)MegaDbPlatforms.SqlServer).ToString());

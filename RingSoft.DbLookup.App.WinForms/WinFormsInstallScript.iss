@@ -5,7 +5,7 @@
 #define MyAppVersion "1.0"
 #define MyAppPublisher "RingSoft"
 #define MyAppURL "http://www.ringsoft.tech/"
-#define MyAppExeName "RingSoft.DbLookup.App.WPFCore.exe"
+#define MyAppExeName "RingSoft.DbLookup.App.WinForms.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -37,8 +37,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\netcoreapp3.1\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\netcoreapp3.1\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\ComponentsDemoApp\WPF\Northwind\"; Flags: ignoreversion
+Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WinForms\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WinForms\bin\Release\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\ComponentsDemoApp\WinForms\Northwind\"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

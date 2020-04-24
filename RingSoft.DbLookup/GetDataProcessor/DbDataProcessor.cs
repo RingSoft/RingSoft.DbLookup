@@ -307,7 +307,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                     CloseConnection(connection);
                     if (setWaitCursor)
                         WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
-                    DataProcessResultViewer.ShowDataProcessResult(result);
+                    DataProcessResultViewer.ShowMessageBox(result.Message, "SQL Process Failed",
+                        RsMessageBoxIcons.Error);
                     return result;
                 }
             }
@@ -315,8 +316,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
             var newRow = returnTable.NewRow();
             newRow[returnTable.Columns[0]] = totalRecordsAffected;
             returnTable.Rows.Add(newRow);
-            result.DebugMessage +=
-                $"{totalRecordsAffected.ToString(GblMethods.GetNumFormat(0, false))} Records Affected";
+            var outputMessage = $"{totalRecordsAffected.ToString(GblMethods.GetNumFormat(0, false))} Records Affected";
+            result.DebugMessage += outputMessage;
 
             if (!KeepConnectionOpen)
                 CloseConnection(connection);
@@ -324,12 +325,11 @@ namespace RingSoft.DbLookup.GetDataProcessor
             result.ResultCode = GetDataResultCodes.Success;
             if (setWaitCursor)
                 WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+
             if (ShowSqlWindow)
             {
-                if (setWaitCursor)
-                    WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
-
-                DataProcessResultViewer.ShowDataProcessResult(result);
+                DataProcessResultViewer.ShowMessageBox(result.DebugMessage, "SQL Process Success",
+                    RsMessageBoxIcons.Information);
             }
 
             return result;

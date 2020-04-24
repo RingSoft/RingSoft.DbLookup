@@ -91,7 +91,6 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 if (connection.State == ConnectionState.Open)
                     connection.Close();
                 connection.Dispose();
-                connection = null;
                 GC.Collect();
             }
 
@@ -210,7 +209,8 @@ namespace RingSoft.DbLookup.GetDataProcessor
                 result.Message = $"Database Connection Error!\r\n\r\n{e.Message}";
                 result.ResultCode = GetDataResultCodes.DbConnectError;
                 result.ProcessedSqlStatement = ConnectionString;
-                DataProcessResultViewer.ShowDataProcessResult(result);
+                DataProcessResultViewer.ShowMessageBox(result.Message, "Database Connection Error",
+                    RsMessageBoxIcons.Error);
                 CloseConnection(connection);
             }
 

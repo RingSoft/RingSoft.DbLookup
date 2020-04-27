@@ -2,6 +2,8 @@
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.App.Library.DevLogix
 {
@@ -59,6 +61,32 @@ namespace RingSoft.DbLookup.App.Library.DevLogix
                 .AddVisibleColumnDefinition(p => p.TaskPercentComplete, "Task % Complete", p => p.PercentComplete, 18);
 
             _lookupContext.Issues.HasLookupDefinition(IssuesLookup);
+        }
+
+        public void InitializeModel()
+        {
+            _lookupContext.Users.GetFieldDefinition(p => p.Notes).IsMemo();
+            _lookupContext.Users.GetFieldDefinition(p => p.Rights).IsMemo();
+
+            _lookupContext.Errors.GetFieldDefinition(p => p.Date).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Errors.GetFieldDefinition(p => p.FixedDate).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Errors.GetFieldDefinition(p => p.CompletedDate).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Errors.GetFieldDefinition(p => p.Description).IsMemo();
+            _lookupContext.Errors.GetFieldDefinition(p => p.Resolution).IsMemo();
+
+            _lookupContext.Projects.GetFieldDefinition(p => p.Notes).IsMemo();
+            _lookupContext.Projects.GetFieldDefinition(p => p.Deadline).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Projects.GetFieldDefinition(p => p.OriginalDeadline).HasDateType(DbDateTypes.DateTime);
+
+            _lookupContext.Tasks.GetFieldDefinition(p => p.DueDate).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Tasks.GetFieldDefinition(p => p.CompletedDate).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Tasks.GetFieldDefinition(p => p.Notes).IsMemo();
+            _lookupContext.Tasks.GetFieldDefinition(p => p.PercentComplete)
+                .HasDecimalFieldType(DecimalFieldTypes.Percent).HasDecimalCount(0);
+
+            _lookupContext.Issues.GetFieldDefinition(p => p.ResolvedDate).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.Issues.GetFieldDefinition(p => p.Notes).IsMemo();
+            _lookupContext.Issues.GetFieldDefinition(p => p.IsResolved).HasTrueFalseText("Yes", "No");
         }
     }
 }

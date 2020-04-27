@@ -35,11 +35,9 @@ namespace RingSoft.DbLookup.App.Library.Ef6.DevLogix
 
         protected override void InitializeFieldDefinitions()
         {
-            DevLogixLookupContext.InitializeErrorsFields(Errors);
-            DevLogixLookupContext.InitializeIssuesFields(Issues);
-            DevLogixLookupContext.InitializeTasksFields(Tasks);
-            DevLogixLookupContext.InitializeProjectsFields(Projects);
+            DevLogixConfiguration.InitializeModel();
         }
+
         public bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings)
         {
             return true;

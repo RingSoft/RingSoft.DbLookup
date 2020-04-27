@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.EfCore
         /// </value>
         protected abstract DbContext DbContext { get; }
 
-        protected override void BaseInitializeTableDefinitions()
+        protected override void EfInitializeTableDefinitions()
         {
             foreach (var tableDefinition in TableDefinitions)
             {
@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.EfCore
         }
 
 
-        protected override void BaseInitializeFieldDefinitions()
+        protected override void EfInitializeFieldDefinitions()
         {
             foreach (var tableDefinition in TableDefinitions)
             {
@@ -112,7 +112,7 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        protected override void BaseInitializePrimaryKeys()
+        protected override void EfInitializePrimaryKeys()
         {
             foreach (var tableDefinition in TableDefinitions)
             {

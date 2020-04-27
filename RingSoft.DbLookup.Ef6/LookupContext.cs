@@ -22,12 +22,12 @@ namespace RingSoft.DbLookup.Ef6
         /// </value>
         protected abstract DbContext DbContext { get; }
 
-        protected override void BaseInitializeTableDefinitions()
+        protected override void EfInitializeTableDefinitions()
         {
             InitializeTableDefinitions();
         }
 
-        protected override void BaseInitializeFieldDefinitions()
+        protected override void EfInitializeFieldDefinitions()
         {
             var objectContext = ((IObjectContextAdapter)DbContext).ObjectContext;
             var container = objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName,
@@ -103,7 +103,7 @@ namespace RingSoft.DbLookup.Ef6
             }
         }
 
-        protected override void BaseInitializePrimaryKeys()
+        protected override void EfInitializePrimaryKeys()
         {
             var objectContext = ((IObjectContextAdapter)DbContext).ObjectContext;
             var container = objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName,

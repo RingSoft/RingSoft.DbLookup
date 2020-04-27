@@ -97,11 +97,11 @@ namespace RingSoft.DbLookup
         {
             if (!Initialized)
             {
-                BaseInitializeTableDefinitions();
+                EfInitializeTableDefinitions();
 
-                BaseInitializePrimaryKeys();
+                EfInitializePrimaryKeys();
 
-                BaseInitializeFieldDefinitions();
+                EfInitializeFieldDefinitions();
 
                 Initialized = true;
 
@@ -109,11 +109,11 @@ namespace RingSoft.DbLookup
             }
         }
 
-        protected abstract void BaseInitializeTableDefinitions();
+        protected abstract void EfInitializeTableDefinitions();
 
-        protected abstract void BaseInitializeFieldDefinitions();
+        protected abstract void EfInitializeFieldDefinitions();
 
-        protected abstract void BaseInitializePrimaryKeys();
+        protected abstract void EfInitializePrimaryKeys();
 
         /// <summary>
         /// Called by Initialize for derived classes to create lookup definitions and attach them to tables.

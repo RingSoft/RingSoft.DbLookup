@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.EfCore
         /// </value>
         protected abstract DbContext DbContext { get; }
 
-        protected override void InitializeTableDefinitions()
+        protected override void BaseInitializeTableDefinitions()
         {
             foreach (var tableDefinition in TableDefinitions)
             {
@@ -36,11 +36,11 @@ namespace RingSoft.DbLookup.EfCore
                     tableDefinition.HasTableName(entityType.GetTableName());
                 }
             }
-            InitializeCoreTableDefinitions();
+            InitializeTableDefinitions();
         }
 
 
-        protected override void InitializeFieldDefinitions()
+        protected override void BaseInitializeFieldDefinitions()
         {
             foreach (var tableDefinition in TableDefinitions)
             {
@@ -48,7 +48,7 @@ namespace RingSoft.DbLookup.EfCore
                 if (entityType != null)
                     InitializeFields(entityType, tableDefinition);
             }
-            InitializeCoreFieldDefinitions();
+            InitializeFieldDefinitions();
         }
 
         private void InitializeFields(IEntityType entityType, TableDefinitionBase tableDefinition)
@@ -112,7 +112,7 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        protected override void InitializePrimaryKeys()
+        protected override void BaseInitializePrimaryKeys()
         {
             foreach (var tableDefinition in TableDefinitions)
             {
@@ -139,11 +139,11 @@ namespace RingSoft.DbLookup.EfCore
         /// <summary>
         /// Initializes the table definitions.  Derived classes use this to set table definition properties not automatically set up by this class.
         /// </summary>
-        protected abstract void InitializeCoreTableDefinitions();
+        protected abstract void InitializeTableDefinitions();
 
         /// <summary>
         /// Initializes the field definitions.  Derived classes use this to set field definition properties not automatically set up by this class.
         /// </summary>
-        protected abstract void InitializeCoreFieldDefinitions();
+        protected abstract void InitializeFieldDefinitions();
     }
 }

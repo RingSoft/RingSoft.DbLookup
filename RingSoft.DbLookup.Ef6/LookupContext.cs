@@ -22,12 +22,12 @@ namespace RingSoft.DbLookup.Ef6
         /// </value>
         protected abstract DbContext DbContext { get; }
 
-        protected override void InitializeTableDefinitions()
+        protected override void BaseInitializeTableDefinitions()
         {
-            InitializeEf6TableDefinitions();
+            InitializeTableDefinitions();
         }
 
-        protected override void InitializeFieldDefinitions()
+        protected override void BaseInitializeFieldDefinitions()
         {
             var objectContext = ((IObjectContextAdapter)DbContext).ObjectContext;
             var container = objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName,
@@ -42,7 +42,7 @@ namespace RingSoft.DbLookup.Ef6
                     InitializeFields(entitySet, tableDefinition);
             }
 
-            InitializeEf6FieldDefinitions();
+            InitializeFieldDefinitions();
         }
 
         private void InitializeFields(EntitySet entitySet, TableDefinitionBase tableDefinition)
@@ -103,7 +103,7 @@ namespace RingSoft.DbLookup.Ef6
             }
         }
 
-        protected override void InitializePrimaryKeys()
+        protected override void BaseInitializePrimaryKeys()
         {
             var objectContext = ((IObjectContextAdapter)DbContext).ObjectContext;
             var container = objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName,
@@ -134,11 +134,11 @@ namespace RingSoft.DbLookup.Ef6
         /// <summary>
         /// Initializes the table definitions.  Derived classes use this to set table definition properties not automatically set up by this class.
         /// </summary>
-        protected abstract void InitializeEf6TableDefinitions();
+        protected abstract void InitializeTableDefinitions();
 
         /// <summary>
         /// Initializes the field definitions.  Derived classes use this to set field definition properties not automatically set up by this class.
         /// </summary>
-        protected abstract void InitializeEf6FieldDefinitions();
+        protected abstract void InitializeFieldDefinitions();
     }
 }

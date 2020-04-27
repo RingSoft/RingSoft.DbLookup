@@ -25,11 +25,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             Initialize();
         }
 
-        protected override void InitializeCoreTableDefinitions()
+        protected override void InitializeTableDefinitions()
         {
         }
 
-        protected override void InitializeCoreFieldDefinitions()
+        protected override void InitializeFieldDefinitions()
         {
             MegaDbContextConfiguration.InitializeModel();
         }

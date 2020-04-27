@@ -28,11 +28,11 @@ namespace RingSoft.DbLookup.App.Library.DevLogix
             DevLogixConfiguration = new DevLogixLookupContextConfiguration(this);
         }
 
-        protected override void InitializeTableDefinitions()
+        protected override void BaseInitializeTableDefinitions()
         {
         }
 
-        protected override void InitializeFieldDefinitions()
+        protected override void BaseInitializeFieldDefinitions()
         {
             InitializeErrorsFields();
 
@@ -111,7 +111,7 @@ namespace RingSoft.DbLookup.App.Library.DevLogix
             issuesTableDefinition.GetFieldDefinition(p => p.IsResolved).HasTrueFalseText("Yes", "No");
         }
 
-        protected override void InitializePrimaryKeys()
+        protected override void BaseInitializePrimaryKeys()
         {
             Errors.AddPropertyToPrimaryKey(p => p.Id);
             Users.AddPropertyToPrimaryKey(p => p.Id);

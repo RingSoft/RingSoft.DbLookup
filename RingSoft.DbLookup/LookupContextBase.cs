@@ -97,11 +97,11 @@ namespace RingSoft.DbLookup
         {
             if (!Initialized)
             {
-                InitializeTableDefinitions();
+                BaseInitializeTableDefinitions();
 
-                InitializePrimaryKeys();
+                BaseInitializePrimaryKeys();
 
-                InitializeFieldDefinitions();
+                BaseInitializeFieldDefinitions();
 
                 Initialized = true;
 
@@ -109,22 +109,11 @@ namespace RingSoft.DbLookup
             }
         }
 
-        /// <summary>
-        /// Called by Initialize for derived classes to instantiate and/or initialize its table definition properties.
-        /// EntityDefinition properties are automatically instantiated by the constructor of this class.
-        /// </summary>
-        protected abstract void InitializeTableDefinitions();
+        protected abstract void BaseInitializeTableDefinitions();
 
-        /// <summary>
-        /// Called by Initialize for derived classes to add and/or configure field definitions to the table definitions.
-        /// Fields of EntityDefinition properties are automatically added by the constructor of the EntityDefinition class.
-        /// </summary>
-        protected abstract void InitializeFieldDefinitions();
+        protected abstract void BaseInitializeFieldDefinitions();
 
-        /// <summary>
-        /// /// Called by Initialize for derived classes to add field definitions to a table definition's primary key.
-        /// </summary>
-        protected abstract void InitializePrimaryKeys();
+        protected abstract void BaseInitializePrimaryKeys();
 
         /// <summary>
         /// Called by Initialize for derived classes to create lookup definitions and attach them to tables.

@@ -37,12 +37,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
             DevLogixConfiguration.ConfigureLookups();
         }
 
-        protected override void InitializeCoreTableDefinitions()
+        protected override void InitializeTableDefinitions()
         {
             
         }
 
-        protected override void InitializeCoreFieldDefinitions()
+        protected override void InitializeFieldDefinitions()
         {
             DevLogixLookupContext.InitializeErrorsFields(Errors);
             DevLogixLookupContext.InitializeIssuesFields(Issues);

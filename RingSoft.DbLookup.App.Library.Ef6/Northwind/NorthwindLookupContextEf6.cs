@@ -31,11 +31,11 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             NorthwindDbContext = new NorthwindDbContextEf6(this);
             Initialize();
         }
-        protected override void InitializeEf6TableDefinitions()
+        protected override void InitializeTableDefinitions()
         {
         }
 
-        protected override void InitializeEf6FieldDefinitions()
+        protected override void InitializeFieldDefinitions()
         {
             NorthwindContextConfiguration.InitializeModel();
         }

@@ -374,9 +374,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             get
             {
-                if (_orderDate == _newDateTime)
+                if (OrderId == 0)
                     return string.Empty;
-                return _orderDate.ToShortDateString();
+                return OrderId.ToString();
             }
         }
 

@@ -8,24 +8,6 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
-    /// Argument sent in the AutoFillChanged event.
-    /// </summary>
-    public class AutoFillDataChangedArgs
-    {
-        /// <summary>
-        /// Gets a value indicating whether to refresh the contains list.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if refresh contains list; otherwise, <c>false</c>.
-        /// </value>
-        public bool RefreshContainsList { get; }
-
-        public AutoFillDataChangedArgs(bool refreshContainsList)
-        {
-            RefreshContainsList = refreshContainsList;
-        }
-    }
-    /// <summary>
     /// Contains all the data to output during data entry in an AutoFill control.
     /// </summary>
     public class AutoFillData
@@ -37,14 +19,6 @@ namespace RingSoft.DbLookup.AutoFill
         /// The AutoFill definition.
         /// </value>
         public AutoFillBase AutoFillDefinition { get; private set; }
-
-        /// <summary>
-        /// Gets the search for contains text.
-        /// </summary>
-        /// <value>
-        /// The contains text.
-        /// </value>
-        public string ContainsText { get; private set; }
 
         /// <summary>
         /// Gets the text result.
@@ -109,6 +83,8 @@ namespace RingSoft.DbLookup.AutoFill
 
         private const string AutoFillTableName = "AutoFill";
         private const string ContainsTableName = "Contains";
+
+        private string _containsText;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFillData" /> class.
@@ -291,7 +267,12 @@ namespace RingSoft.DbLookup.AutoFill
 
         private void OnOutput(bool refreshContainsList = true)
         {
-            AutoFillDataChanged?.Invoke(this, new AutoFillDataChangedArgs(refreshContainsList));
+            var args = new AutoFillDataChangedArgs(TextResult, CursorStartIndex, TextSelectLength)
+            {
+                RefreshContainsList =  refreshContainsList,
+                ContainsBoxDataTable = ContainsBoxDataTable
+            };
+            AutoFillDataChanged?.Invoke(this, args);
         }
 
         private string GetNewText(string beginText)
@@ -341,7 +322,7 @@ namespace RingSoft.DbLookup.AutoFill
 
                 if (ShowContainsBox)
                 {
-                    ContainsText = beginText;
+                    _containsText = beginText;
                     ContainsBoxDataTable = result.DataSet.Tables[ContainsTableName];
                 }
             }
@@ -441,7 +422,7 @@ namespace RingSoft.DbLookup.AutoFill
 
                 if (ShowContainsBox)
                 {
-                    ContainsText = text;
+                    _containsText = text;
                     ContainsBoxDataTable = result.DataSet.Tables[ContainsTableName];
                 }
             }
@@ -529,10 +510,10 @@ namespace RingSoft.DbLookup.AutoFill
         public AutoFillContainsItem GetAutoFillContainsItem(DataRow containsDataRow)
         {
             var text = containsDataRow.GetRowValue(AutoFillDefinition.SelectSqlAlias);
-            var firstIndex = text.IndexOf(ContainsText, StringComparison.OrdinalIgnoreCase);
+            var firstIndex = text.IndexOf(_containsText, StringComparison.OrdinalIgnoreCase);
             var prefix = text.LeftStr(firstIndex);
-            var containsText = text.MidStr(firstIndex, ContainsText.Length);
-            var suffix = text.RightStr(text.Length - (firstIndex + ContainsText.Length));
+            var containsText = text.MidStr(firstIndex, _containsText.Length);
+            var suffix = text.RightStr(text.Length - (firstIndex + _containsText.Length));
             return new AutoFillContainsItem
             {
                 PrefixText = prefix,

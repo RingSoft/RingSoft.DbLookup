@@ -186,17 +186,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             //var preSelLen = AutoFillText.SelectionLength;
             //MessageBox.Show($"PreText = {startText}");
 
-            AutoFillTextBox.Text = AutoFillData.TextResult;
-            AutoFillTextBox.SelectionStart = AutoFillData.CursorStartIndex;
-            AutoFillTextBox.SelectionLength = AutoFillData.TextSelectLength;
+            AutoFillTextBox.Text = e.TextResult;
+            AutoFillTextBox.SelectionStart = e.CursorStartIndex;
+            AutoFillTextBox.SelectionLength = e.TextSelectLength;
 
             if (e.RefreshContainsList)
             {
                 var openPopup = false;
                 ContainsItems.Clear();
-                if (AutoFillData.ShowContainsBox && AutoFillData.ContainsBoxDataTable != null)
+                if (AutoFillData.ShowContainsBox && e.ContainsBoxDataTable != null)
                 {
-                    foreach (DataRow dataRow in AutoFillData.ContainsBoxDataTable.Rows)
+                    foreach (DataRow dataRow in e.ContainsBoxDataTable.Rows)
                     {
                         ContainsItems.Add(AutoFillData.GetAutoFillContainsItem(dataRow));
                         openPopup = true;
@@ -209,7 +209,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_onValuePropertySetting)
             {
                 _onAutoFillDataChanged = true;
-                Value = new AutoFillValue(AutoFillData.PrimaryKeyValue, AutoFillData.TextResult);
+                Value = new AutoFillValue(AutoFillData.PrimaryKeyValue, e.TextResult);
                 _onAutoFillDataChanged = false;
             }
 

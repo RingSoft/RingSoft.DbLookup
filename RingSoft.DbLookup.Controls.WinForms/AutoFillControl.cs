@@ -177,7 +177,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
             AutoFillData = new AutoFillData(_lookupDefinition, distinct) { ShowContainsBox = showContainsBox };
 
-            AutoFillData.AutoFillDataChanged += (sender, args) => OnAutoFillChanged();
+            AutoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 
             _autoFillContainsForm.SetupControl(this, AutoFillText);
 
@@ -269,7 +269,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         //    base.OnSizeChanged(e);
         //}
 
-        private void OnAutoFillChanged()
+        private void AutoFillData_AutoFillDataChanged(object sender, AutoFillDataChangedArgs e)
         {
             //Unit Test
             //var startText = AutoFillText.Text;
@@ -281,9 +281,9 @@ namespace RingSoft.DbLookup.Controls.WinForms
             //var preSelLen = AutoFillText.SelectionLength;
             //MessageBox.Show($"PreText = {startText}");
 
-            AutoFillText.Text = AutoFillData.TextResult;
-            AutoFillText.SelectionStart = AutoFillData.CursorStartIndex;
-            AutoFillText.SelectionLength = AutoFillData.TextSelectLength;
+            AutoFillText.Text = e.TextResult;
+            AutoFillText.SelectionStart = e.CursorStartIndex;
+            AutoFillText.SelectionLength = e.TextSelectLength;
 
             if (!_autoFillPropertyChanging)
             {

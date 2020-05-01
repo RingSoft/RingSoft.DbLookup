@@ -122,10 +122,10 @@ namespace RingSoft.DbLookup.Lookup
         public IReadOnlyList<LookupColumnBase> OrderByList => _orderByList;
 
         /// <summary>
-        /// Gets the primary key value.
+        /// Gets the selected primary key value.
         /// </summary>
         /// <value>
-        /// The primary key value.
+        /// The selected primary key value.
         /// </value>
         public PrimaryKeyValue PrimaryKeyValue
         {
@@ -149,20 +149,9 @@ namespace RingSoft.DbLookup.Lookup
         public PrimaryKeyValue ParentWindowPrimaryKeyValue { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether search for is changing.
+        /// Occurs when this object's data has changed.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if search for is changing; otherwise, <c>false</c>.
-        /// </value>
-        public bool SearchForChanging { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether records are being counted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if counting records; otherwise, <c>false</c>.
-        /// </value>
-        public bool CountingRecords { get; private set; }
+        public event EventHandler<LookupDataChangedArgs> LookupDataChanged;
 
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
@@ -182,6 +171,8 @@ namespace RingSoft.DbLookup.Lookup
         private readonly List<LookupColumnBase> _orderByList = new List<LookupColumnBase>();
         private int _selectedIndex;
         private bool _selectingRecord;
+        private bool _countingRecords;
+        private bool _searchForChanging;
 
         private void OutputData(int selectedRowIndex, LookupScrollPositions currentPosition)
         {
@@ -198,18 +189,18 @@ namespace RingSoft.DbLookup.Lookup
 
             ProcessLookupData();
 
-            LookupDataChanged?.Invoke(this, EventArgs.Empty);
+            var args = new LookupDataChangedArgs(LookupResultsDataTable, SelectedRowIndex, ScrollPosition)
+            {
+                CountingRecords = _countingRecords,
+                SearchForChanging = _searchForChanging
+            };
+            LookupDataChanged?.Invoke(this, args);
         }
 
         protected virtual void ProcessLookupData()
         {
 
         }
-
-        /// <summary>
-        /// Occurs when this object's data has changed.
-        /// </summary>
-        public event EventHandler LookupDataChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupDataBase"/> class.
@@ -1079,7 +1070,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void OnSearchForChange(string searchText)
         {
-            SearchForChanging = true;
+            _searchForChanging = true;
             if (searchText.IsNullOrEmpty())
             {
                 if (LookupResultsDataTable != null && LookupResultsDataTable.Rows.Count > 0)
@@ -1089,7 +1080,7 @@ namespace RingSoft.DbLookup.Lookup
                     GotoTop();
                 }
 
-                SearchForChanging = false;
+                _searchForChanging = false;
                 return;
             }
             switch (UserInterface.SearchType)
@@ -1104,7 +1095,7 @@ namespace RingSoft.DbLookup.Lookup
                     throw new ArgumentOutOfRangeException();
             }
 
-            SearchForChanging = false;
+            _searchForChanging = false;
         }
 
         private void GetSearchEqualsData(string searchText)
@@ -1335,7 +1326,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns></returns>
         public async Task<bool> GetRecordCount()
         {
-            CountingRecords = true;
+            _countingRecords = true;
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
 
             if (UserInterface.SearchType == LookupSearchTypes.Contains &&
@@ -1374,7 +1365,7 @@ namespace RingSoft.DbLookup.Lookup
                 result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
             });
 
-            CountingRecords = false;
+            _countingRecords = false;
             if (result.ResultCode == GetDataResultCodes.Success)
             {
                 RecordCount = result.DataSet.Tables[0].Rows[0].GetRowValue("Count").ToInt();

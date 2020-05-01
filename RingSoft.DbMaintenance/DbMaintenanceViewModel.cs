@@ -164,9 +164,9 @@ namespace RingSoft.DbMaintenance
             _lookupData.OnColumnClick(columnIndex, true);
         }
 
-        private void _lookupData_LookupDataChanged(object sender, EventArgs e)
+        private void _lookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)
         {
-            if (_lookupData.SelectedRowIndex >= 0)
+            if (e.SelectedRowIndex >= 0)
             {
                 MaintenanceMode = DbMaintenanceModes.EditMode;
                 TEntity newEntity =

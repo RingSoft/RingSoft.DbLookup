@@ -350,10 +350,10 @@ namespace RingSoft.DbLookup.Controls.WinForms
             EqualsRadioButton.Left += delta;
         }
 
-        private void LookupData_LookupDataChanged(object sender, EventArgs e)
+        private void LookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)
         {
             LookupListView.Items.Clear();
-            foreach (DataRow dataRow in LookupData.LookupResultsDataTable.Rows)
+            foreach (DataRow dataRow in e.OutputTable.Rows)
             {
                 ListViewItem item = null;
                 foreach (var lookupDefinitionColumn in LookupData.LookupDefinition.VisibleColumns)
@@ -372,7 +372,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             }
 
             ScrollBar.Enabled = true;
-            switch (LookupData.ScrollPosition)
+            switch (e.ScrollPosition)
             {
                 case LookupScrollPositions.Disabled:
                     ScrollBar.Enabled = false;
@@ -390,17 +390,17 @@ namespace RingSoft.DbLookup.Controls.WinForms
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            LookupListView.SelectItem(LookupData.SelectedRowIndex);
+            LookupListView.SelectItem(e.SelectedRowIndex);
 
             var setupRecordCount = true;
             switch (SearchType)
             {
                 case LookupSearchTypes.Equals:
-                    if (LookupData.CountingRecords)
+                    if (e.CountingRecords)
                         setupRecordCount = false;
                     break;
                 case LookupSearchTypes.Contains:
-                    if (!LookupData.SearchForChanging)
+                    if (!e.SearchForChanging)
                         setupRecordCount = false;
                     break;
                 default:

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+// ReSharper disable InconsistentNaming
 
 namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {

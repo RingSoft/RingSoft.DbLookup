@@ -8,14 +8,6 @@ namespace RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator
     /// <seealso cref="DbSelectSqlGenerator" />
     public class SqlServerSelectSqlGenerator : DbSelectSqlGenerator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SqlServerSelectSqlGenerator"/> class.
-        /// </summary>
-        public SqlServerSelectSqlGenerator()
-        {
-            
-        }
-
         protected override string GenerateWhereItemSqlFieldNameText(WhereItem whereItem)
         {
             var sql = base.GenerateWhereItemSqlFieldNameText(whereItem);

@@ -114,7 +114,7 @@ namespace RingSoft.DbLookup.Ef6
                 var entitySet = container.EntitySets.FirstOrDefault(f => f.ElementType.Name == tableDefinition.EntityName);
                 if (entitySet == null)
                 {
-                    throw new Exception($"Table Definition '{tableDefinition.ToString()}' not found as a DbSet in the DbContext object.");
+                    throw new Exception($"Table Definition '{tableDefinition}' not found as a DbSet in the DbContext object.");
                 }
 
                 SetupEntityPrimaryKey(entitySet, tableDefinition);

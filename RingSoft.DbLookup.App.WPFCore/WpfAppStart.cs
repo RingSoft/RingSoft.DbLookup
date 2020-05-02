@@ -1,7 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Ef6;
 using RingSoft.DbLookup.App.Library.EfCore;
-using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.App.WPFCore.DevLogix;
 using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;

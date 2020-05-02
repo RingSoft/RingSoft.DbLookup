@@ -1,9 +1,9 @@
-﻿using RingSoft.DbLookup.Controls.WPFCore.Annotations;
-using RingSoft.DbLookup.Lookup;
+﻿using RingSoft.DbLookup.Lookup;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using RingSoft.DbLookup.Controls.WPF.Properties;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

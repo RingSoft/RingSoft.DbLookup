@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library
 {
@@ -157,7 +158,7 @@ namespace RingSoft.DbLookup.App.Library
             if (text.IsNullOrEmpty())
                 return text;
 
-            var crypto = new RijndaelSimpleTest.Crypto();
+            var crypto = new Crypto();
             return crypto.Encrypt(text);
         }
 
@@ -166,7 +167,7 @@ namespace RingSoft.DbLookup.App.Library
             if (encrypted.IsNullOrEmpty())
                 return encrypted;
 
-            var crypto = new RijndaelSimpleTest.Crypto();
+            var crypto = new Crypto();
             return crypto.Decrypt(encrypted);
         }
     }

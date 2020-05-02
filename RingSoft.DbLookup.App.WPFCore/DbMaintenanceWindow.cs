@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup.App.WPFCore
     {
         public abstract DbMaintenanceViewModelBase ViewModel { get; }
 
-        public abstract WPFCore.DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
+        public abstract DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
 
         protected void Initialize()
         {

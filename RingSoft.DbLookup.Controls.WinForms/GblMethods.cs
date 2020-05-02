@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
 
-namespace RSDbLookup.Controls.WinForms
+namespace RingSoft.DbLookup.Controls.WinForms
 {
     public static class GblMethods
     {
@@ -16,7 +18,7 @@ namespace RSDbLookup.Controls.WinForms
             {
                 var controlWidth = control.Width - (adjustScroll ? (GetSystemMetrics(SM_CXVSCROLL) + 7) : 0);
                 controlWidth -= offset;
-                width = (int)System.Math.Floor(controlWidth * (percentWidth / 100));
+                width = (int)Math.Floor(controlWidth * (percentWidth / 100));
             }
             return width;
         }

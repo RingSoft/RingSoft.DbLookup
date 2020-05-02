@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+#pragma warning disable 618
 
 namespace RingSoft.DbLookup.App.Library
 {
@@ -263,80 +264,36 @@ namespace RingSoft.DbLookup.App.Library
             return plainText;
         }
     }
-    /// <summary>
-    /// Illustrates the use of RijndaelSimple class to encrypt and decrypt data.
-    /// </summary>
-    public class RijndaelSimpleTest
+    internal class Crypto
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main(string[] args)
+        private string _passPhrase = "Pas5pr@se";        // can be any string
+        private string _saltValue = "s@1tValue";        // can be any string
+
+        private const string HashAlgorithm = "SHA1";             // can be "MD5"
+        private const int PasswordIterations = 2;                  // can be any number
+        private const string InitVector = "7B6D8EEA99044d08"; // must be 16 bytes
+        private const int KeySize = 256;                // can be 192 or 128
+
+        public string PassPhrase
         {
-            string plainText = "Hello, World!";    // original plaintext
-
-            string passPhrase = "Pas5pr@se";        // can be any string
-            string saltValue = "s@1tValue";        // can be any string
-            string hashAlgorithm = "SHA1";             // can be "MD5"
-            int passwordIterations = 2;                  // can be any number
-            string initVector = "@1B2c3D4e5F6g7H8"; // must be 16 bytes
-            int keySize = 256;                // can be 192 or 128
-
-            Console.WriteLine(String.Format("Plaintext : {0}", plainText));
-
-            string cipherText = RijndaelSimple.Encrypt(plainText,
-                                                        passPhrase,
-                                                        saltValue,
-                                                        hashAlgorithm,
-                                                        passwordIterations,
-                                                        initVector,
-                                                        keySize);
-
-            Console.WriteLine(String.Format("Encrypted : {0}", cipherText));
-
-            plainText = RijndaelSimple.Decrypt(cipherText,
-                                                        passPhrase,
-                                                        saltValue,
-                                                        hashAlgorithm,
-                                                        passwordIterations,
-                                                        initVector,
-                                                        keySize);
-
-            Console.WriteLine(String.Format("Decrypted : {0}", plainText));
+            get { return _passPhrase; }
+            set { _passPhrase = value; }
+        }
+        public string SaltValue
+        {
+            get { return _saltValue; }
+            set { _saltValue = value; }
         }
 
-        internal class Crypto
+        internal string Encrypt(string decrypted)
         {
-            private string _passPhrase = "Pas5pr@se";        // can be any string
-            private string _saltValue = "s@1tValue";        // can be any string
-
-            private const string HashAlgorithm = "SHA1";             // can be "MD5"
-            private const int PasswordIterations = 2;                  // can be any number
-            private const string InitVector = "7B6D8EEA99044d08"; // must be 16 bytes
-            private const int KeySize = 256;                // can be 192 or 128
-
-            public string PassPhrase
-            {
-                get { return _passPhrase; }
-                set { _passPhrase = value; }
-            }
-            public string SaltValue
-            {
-                get { return _saltValue; }
-                set { _saltValue = value; }
-            }
-
-            internal string Encrypt(string decrypted)
-            {
-                return RijndaelSimple.Encrypt(decrypted, _passPhrase, _saltValue, HashAlgorithm,
-                    PasswordIterations, InitVector, KeySize);
-            }
-            internal string Decrypt(string encrypted)
-            {
-                return RijndaelSimple.Decrypt(encrypted, _passPhrase, _saltValue, HashAlgorithm,
-                    PasswordIterations, InitVector, KeySize);
-            }
+            return RijndaelSimple.Encrypt(decrypted, _passPhrase, _saltValue, HashAlgorithm,
+                PasswordIterations, InitVector, KeySize);
+        }
+        internal string Decrypt(string encrypted)
+        {
+            return RijndaelSimple.Decrypt(encrypted, _passPhrase, _saltValue, HashAlgorithm,
+                PasswordIterations, InitVector, KeySize);
         }
     }
 }

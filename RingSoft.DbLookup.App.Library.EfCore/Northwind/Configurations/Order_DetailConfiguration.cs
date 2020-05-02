@@ -4,7 +4,7 @@ using RingSoft.DbLookup.App.Library.Northwind.Model;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations
 {
-    public class Order_DetailConfiguration : IEntityTypeConfiguration<Order_Detail>
+    public class OrderDetailConfiguration : IEntityTypeConfiguration<Order_Detail>
     {
         public void Configure(EntityTypeBuilder<Order_Detail> builder)
         {

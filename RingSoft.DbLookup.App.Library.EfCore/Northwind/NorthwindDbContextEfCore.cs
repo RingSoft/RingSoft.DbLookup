@@ -56,7 +56,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new Order_DetailConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeTerritoryConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerCustomerDemoConfiguration());
 

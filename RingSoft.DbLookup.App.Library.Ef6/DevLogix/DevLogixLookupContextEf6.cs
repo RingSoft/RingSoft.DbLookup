@@ -24,7 +24,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.DevLogix
         public DevLogixLookupContextEf6()
         {
             DevLogixConfiguration = new DevLogixLookupContextConfiguration(this);
-            DevLogixDbContext = new DevLogixDbContextEf6(this);
+            DevLogixDbContext = new DevLogixDbContextEf6();
             Initialize();
         }
 

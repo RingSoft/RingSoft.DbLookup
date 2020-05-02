@@ -97,7 +97,6 @@
                     return LookupColumnAlignmentTypes.Right;
                 default:
                     return LookupColumnAlignmentTypes.Left;
-                    break;
             }
         }
         internal virtual void CopyFrom(LookupColumnBase source)

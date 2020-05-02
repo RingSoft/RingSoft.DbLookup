@@ -6,7 +6,7 @@ using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Controls.WinForms;
-using RingSoft.DbLookup.Controls.WinForms.Annotations;
+using RingSoft.DbLookup.Controls.WinForms.Properties;
 using RingSoft.DbLookup.Lookup;
 using MessageBox = System.Windows.MessageBox;
 
@@ -156,7 +156,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms.DevLogix
             ReusableLookupDefinition = WinFormsAppStart.DevLogixLookupContext.DevLogixConfiguration.ErrorsLookup;
             ReusableCommand = new LookupCommand(LookupCommands.Refresh);
 
-            var error = new Library.DevLogix.Model.Error();
+            var error = new Error();
             error.Id = 124;
             AutoFillValue = new AutoFillValue(WinFormsAppStart.DevLogixLookupContext.Errors.GetPrimaryKeyValueFromEntity(error),
                 "E-124");

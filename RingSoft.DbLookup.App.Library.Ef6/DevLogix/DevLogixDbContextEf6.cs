@@ -16,13 +16,6 @@ namespace RingSoft.DbLookup.App.Library.Ef6.DevLogix
 
         public DbSet<Issue> Issues { get; set; }
 
-        private DevLogixLookupContextEf6 _lookupContext;
-
-        public DevLogixDbContextEf6(DevLogixLookupContextEf6 lookupContext)
-        {
-            _lookupContext = lookupContext;
-        }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<DevLogixDbContextEf6>(null);

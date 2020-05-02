@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 // ReSharper disable InconsistentNaming
 
@@ -40,8 +41,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (HideControlBox)
                 {
-                    var hwnd = new WindowInteropHelper((Window) sender).Handle;
-                    var value = GetWindowLong(hwnd, GWL_STYLE);
+                    var hwnd = new WindowInteropHelper((Window) sender ?? throw new InvalidOperationException()).Handle;
+                    GetWindowLong(hwnd, GWL_STYLE);
                     SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_BOTH);
                 }
             };

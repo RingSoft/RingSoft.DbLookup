@@ -3,10 +3,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using RingSoft.DbLookup.Controls.WinForms.Annotations;
+using RingSoft.DbLookup.Controls.WinForms.Properties;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
-using RSDbLookup.Controls.WinForms;
 
 namespace RingSoft.DbLookup.Controls.WinForms
 {
@@ -616,7 +615,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
                 ShowRecordCountLabel();
                 var recordsText = LookupData.RecordCount == 1 ? "" : "s";
                 RecordCountLabel.Text =
-                    $@"{LookupData.RecordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
+                    $@"{LookupData.RecordCount.ToString(DbLookup.GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
             }
             else
             {
@@ -636,7 +635,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         private void RecordCountTimer_Tick(object sender, EventArgs e)
         {
             _timerInterval++;
-            RecordCountLabel.Text = $@"Counting Records {GblMethods.StringDuplicate(".", _timerInterval)}";
+            RecordCountLabel.Text = $@"Counting Records {DbLookup.GblMethods.StringDuplicate(".", _timerInterval)}";
             if (_timerInterval > 8)
                 _timerInterval = 0;
         }

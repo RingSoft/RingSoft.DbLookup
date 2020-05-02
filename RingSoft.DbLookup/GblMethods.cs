@@ -101,7 +101,7 @@ namespace RingSoft.DbLookup
 
         public static string FormatDateValue(this DateTime value, DbDateTypes dateType)
         {
-            var formatString = string.Empty;
+            string formatString;
             switch (dateType)
             {
                 case DbDateTypes.DateOnly:

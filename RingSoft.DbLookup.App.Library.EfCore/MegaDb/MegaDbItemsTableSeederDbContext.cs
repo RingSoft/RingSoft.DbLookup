@@ -16,7 +16,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         }
         public async Task<int> SaveChangesAsync(CancellationToken token)
         {
-            var result = 0;
+            int result;
             try
             {
                 result = await _context.SaveChangesAsync(token);

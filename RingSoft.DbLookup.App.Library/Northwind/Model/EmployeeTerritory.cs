@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.App.Library.Northwind.Model
+﻿// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {
     public class EmployeeTerritory
     {

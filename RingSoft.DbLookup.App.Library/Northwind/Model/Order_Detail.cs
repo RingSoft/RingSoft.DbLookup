@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {
     [Table("Order Details")]
-    public class Order_Detail
+    public sealed class Order_Detail
     {
         [Key]
         [Column(Order = 0)]
@@ -23,8 +25,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         public float Discount { get; set; }
 
-        public virtual Order Order { get; set; }
+        public Order Order { get; set; }
 
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
     }
 }

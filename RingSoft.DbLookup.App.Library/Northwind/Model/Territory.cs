@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {
-    public class Territory
+    public sealed class Territory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Territory()
@@ -20,9 +22,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         public int RegionID { get; set; }
 
-        public virtual Region Region { get; set; }
+        public Region Region { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeTerritory> Employees { get; set; }
+        public ICollection<EmployeeTerritory> Employees { get; set; }
     }
 }

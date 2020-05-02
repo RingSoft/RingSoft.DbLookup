@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Controls.WinForms
 {

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations;
 using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {
@@ -75,7 +76,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 
         public async new Task<int> SaveChangesAsync(CancellationToken token)
         {
-            var result = 0;
+            int result;
             try
             {
                 result = await base.SaveChangesAsync(token);

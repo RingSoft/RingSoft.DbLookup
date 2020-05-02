@@ -6,7 +6,7 @@ using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.Controls.WPFCore.Annotations;
+using RingSoft.DbLookup.Controls.WPF.Properties;
 using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.App.WPFCore.DevLogix
@@ -131,7 +131,7 @@ namespace RingSoft.DbLookup.App.WPFCore.DevLogix
             var lookupDefinition = new LookupDefinition<ErrorLookup, Error>(_devLogixLookupContext.Errors);
             return lookupDefinition;
         }
-        private void DevLogixTestWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void DevLogixTestWindow_Loaded(object sender, RoutedEventArgs e)
         {
             AutoFillSetup = new AutoFillSetup(_devLogixLookupContext.DevLogixConfiguration.ErrorsLookup);
             ReusableLookupDefinition = _devLogixLookupContext.DevLogixConfiguration.ErrorsLookup;

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.Controls.WinForms.Annotations;
+using RingSoft.DbLookup.Controls.WinForms.Properties;
 using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WinForms

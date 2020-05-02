@@ -552,7 +552,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (e.AddedItems.Count > 0)
             {
-                var index = ListView.Items.IndexOf(e.AddedItems[0]);
+                var index = ListView.Items.IndexOf(e.AddedItems[0] ?? throw new InvalidOperationException());
                 LookupData.SelectedRowIndex = index;
             }
         }

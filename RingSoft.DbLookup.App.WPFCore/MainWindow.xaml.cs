@@ -1,9 +1,8 @@
-﻿using RingSoft.DbLookup.App.WPFCore.MegaDb;
+﻿using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
 using System;
 using System.Windows.Threading;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {

@@ -24,11 +24,6 @@ namespace RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator
         /// </value>
         protected override char SqlObjectSuffixChar => '`';
 
-        public MySqlSelectSqlGenerator()
-        {
-            
-        }
-
         /// <summary>
         /// Generates the top record count SQL text.  Override if this method is not compatible with your database platform.
         /// </summary>

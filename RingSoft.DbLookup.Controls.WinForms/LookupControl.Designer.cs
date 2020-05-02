@@ -38,7 +38,7 @@
             this.SearchForTextBox = new System.Windows.Forms.TextBox();
             this.SearchForLabel = new System.Windows.Forms.Label();
             this.RecordCountTimer = new System.Windows.Forms.Timer(this.components);
-            this.LookupListView = new RSDbLookup.Controls.WinForms.LookupListView();
+            this.LookupListView = new LookupListView();
             this.SuspendLayout();
             // 
             // RecordCountLabel
@@ -173,6 +173,6 @@
         private System.Windows.Forms.TextBox SearchForTextBox;
         private System.Windows.Forms.Label SearchForLabel;
         private System.Windows.Forms.Timer RecordCountTimer;
-        private RSDbLookup.Controls.WinForms.LookupListView LookupListView;
+        private LookupListView LookupListView;
     }
 }

@@ -3,9 +3,9 @@ using RingSoft.DbLookup.App.Library.Northwind.Model;
 
 namespace RingSoft.DbLookup.App.Library.Ef6.Northwind.Configurations
 {
-    public class Order_DetailConfiguration : EntityTypeConfiguration<Order_Detail>
+    public class OrderDetailConfiguration : EntityTypeConfiguration<Order_Detail>
     {
-        public Order_DetailConfiguration()
+        public OrderDetailConfiguration()
         {
             HasKey(p => new {p.OrderID, p.ProductID});
 

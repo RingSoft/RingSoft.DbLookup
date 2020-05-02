@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
 
             modelBuilder.Configurations.Add(new OrderConfiguration());
             modelBuilder.Configurations.Add(new ProductConfiguration());
-            modelBuilder.Configurations.Add(new Order_DetailConfiguration());
+            modelBuilder.Configurations.Add(new OrderDetailConfiguration());
             modelBuilder.Configurations.Add(new EmployeeTerritoryConfiguration());
             modelBuilder.Configurations.Add(new CustomerCustomerDemoConfiguration());
 

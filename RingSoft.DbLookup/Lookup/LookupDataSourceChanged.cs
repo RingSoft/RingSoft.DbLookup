@@ -3,10 +3,5 @@
     public class LookupDataSourceChanged
     {
         public bool DataSourceChanged { get; } = true;
-
-        public LookupDataSourceChanged()
-        {
-
-        }
     }
 }

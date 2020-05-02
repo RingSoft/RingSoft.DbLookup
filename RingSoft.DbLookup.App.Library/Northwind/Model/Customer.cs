@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+// ReSharper disable InconsistentNaming
 
 namespace RingSoft.DbLookup.App.Library.Northwind.Model
 {
-    public class Customer
+    public sealed class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
@@ -47,9 +48,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         public string Fax { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerCustomerDemo> CustomerDemographics { get; set; }
+        public ICollection<CustomerCustomerDemo> CustomerDemographics { get; set; }
     }
 }

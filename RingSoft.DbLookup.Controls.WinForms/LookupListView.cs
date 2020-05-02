@@ -1,13 +1,12 @@
-﻿using RingSoft.DbLookup;
-using RingSoft.DbLookup.Lookup;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using RingSoft.DbLookup.Lookup;
 
 // ReSharper disable InconsistentNaming
 
-namespace RSDbLookup.Controls.WinForms
+namespace RingSoft.DbLookup.Controls.WinForms
 {
     internal class LookupListView : ListView
     {
@@ -43,7 +42,7 @@ namespace RSDbLookup.Controls.WinForms
             {
                 case 0x83: // WM_NCCALCSIZE
                     //Turn off the vertical scrollbar.
-                    int style = (int)GetWindowLong(this.Handle, GWL_STYLE);
+                    int style = GetWindowLong(this.Handle, GWL_STYLE);
                     if ((style & WS_VSCROLL) == WS_VSCROLL)
                         SetWindowLong(this.Handle, GWL_STYLE, style & ~WS_VSCROLL);
                     base.WndProc(ref m);

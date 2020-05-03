@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations;
-using RingSoft.DbLookup.App.Library.LookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb

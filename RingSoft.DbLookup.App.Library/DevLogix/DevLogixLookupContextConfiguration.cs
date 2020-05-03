@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;

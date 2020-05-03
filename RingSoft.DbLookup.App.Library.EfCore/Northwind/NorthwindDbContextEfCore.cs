@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind

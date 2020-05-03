@@ -1,5 +1,5 @@
 ﻿using RingSoft.DbLookup.App.Library.DevLogix.Model;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.DevLogix

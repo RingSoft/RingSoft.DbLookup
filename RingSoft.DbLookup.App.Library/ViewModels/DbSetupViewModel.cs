@@ -5,7 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbMaintenance;
 

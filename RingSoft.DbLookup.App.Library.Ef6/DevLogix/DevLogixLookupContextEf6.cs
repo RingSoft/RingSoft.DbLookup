@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using RingSoft.DbLookup.App.Library.DevLogix;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.Ef6.DevLogix

@@ -1,9 +1,10 @@
-﻿using RingSoft.DbLookup.App.Library.LookupContext;
+﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.Ef6;
 using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.Ef6
 {
-    public abstract class AppLookupContextEf6 : DbLookup.Ef6.LookupContext
+    public abstract class AppLookupContextEf6 : LookupContext
     {
         public abstract AppLookupContextConfiguration LookupContextConfiguration { get; }
 

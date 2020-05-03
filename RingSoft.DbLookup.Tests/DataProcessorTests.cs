@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.QueryBuilder;
 

@@ -2,7 +2,7 @@
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 
-namespace RingSoft.DbLookup.App.Library.LookupContext
+namespace RingSoft.DbLookup.App.Library.LibLookupContext
 {
     public interface IAppLookupContext
     {

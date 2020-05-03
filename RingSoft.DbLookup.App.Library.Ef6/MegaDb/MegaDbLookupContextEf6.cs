@@ -1,5 +1,5 @@
 ﻿using System.Data.Entity;
-using RingSoft.DbLookup.App.Library.LookupContext;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.ModelDefinition;

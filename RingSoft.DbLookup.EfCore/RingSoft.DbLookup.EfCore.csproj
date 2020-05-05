@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.91.0</Version>
+    <Authors>Peter Ringering</Authors>
+    <Product>RingSoft.DbLookup.EntityFrameworkCore</Product>
+    <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>http://www.ringsoft.site</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
+    <PackageTags>Database Paging, Entity Framework Core</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

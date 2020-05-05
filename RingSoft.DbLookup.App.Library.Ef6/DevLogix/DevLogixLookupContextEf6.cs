@@ -28,12 +28,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.DevLogix
             Initialize();
         }
 
-        protected override void InitializeTableDefinitions()
-        {
-            
-        }
-
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             DevLogixConfiguration.InitializeModel();
         }

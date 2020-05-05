@@ -24,11 +24,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.MegaDb
             MegaDbDbContext = new MegaDbDbContextEf6(this);
             Initialize();
         }
-        protected override void InitializeTableDefinitions()
-        {
-        }
-
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             MegaDbContextConfiguration.InitializeModel();
         }

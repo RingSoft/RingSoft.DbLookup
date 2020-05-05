@@ -37,12 +37,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
             DevLogixConfiguration.ConfigureLookups();
         }
 
-        protected override void InitializeTableDefinitions()
-        {
-            
-        }
-
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             DevLogixConfiguration.InitializeModel();
         }

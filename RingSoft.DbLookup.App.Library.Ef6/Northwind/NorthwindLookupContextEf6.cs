@@ -31,11 +31,8 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             NorthwindDbContext = new NorthwindDbContextEf6(this);
             Initialize();
         }
-        protected override void InitializeTableDefinitions()
-        {
-        }
 
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             NorthwindContextConfiguration.InitializeModel();
         }

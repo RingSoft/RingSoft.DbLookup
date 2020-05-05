@@ -32,11 +32,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             Initialize();
         }
 
-        protected override void InitializeTableDefinitions()
-        {
-        }
-
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             NorthwindContextConfiguration.InitializeModel();
         }

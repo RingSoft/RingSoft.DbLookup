@@ -42,8 +42,10 @@ namespace RingSoft.DbLookup.Ef6
                 var tableProcessingArgs = new TableProcessingArgs(tableDefinition, $"Processing {tableDefinition} Fields");
                 OnTableProcessing(tableProcessingArgs);
                 var entitySet = container.EntitySets.FirstOrDefault(f => f.ElementType.Name == tableDefinition.EntityName);
-                if (entitySet != null)
-                    InitializeFields(entitySet, tableDefinition);
+                if (entitySet == null)
+                    throw new Exception($"Table Definition '{tableDefinition}' is not a DbSet in the DbContext object.");
+
+                InitializeFields(entitySet, tableDefinition);
             }
 
             SetupModel();

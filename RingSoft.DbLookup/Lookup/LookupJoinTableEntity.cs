@@ -17,10 +17,10 @@ namespace RingSoft.DbLookup.Lookup
         private LookupEntityDefinition<TLookupEntity> _lookupEntityDefinition;
 
         internal LookupJoinTableEntity(LookupEntityDefinition<TLookupEntity> lookupEntityDefinition,
-            TableDefinitionBase tableDefinition, string propertyName) : base(lookupEntityDefinition)
+            TableDefinitionBase tableDefinition, string propertyName, string propertyType) : base(lookupEntityDefinition)
         {
             _lookupEntityDefinition = lookupEntityDefinition;
-            SetJoinDefinition(tableDefinition, propertyName);
+            SetJoinDefinition(tableDefinition, propertyName, propertyType);
         }
 
         private LookupJoinTableEntity(LookupEntityDefinition<TLookupEntity> lookupEntityDefinition) : base(lookupEntityDefinition)
@@ -28,13 +28,21 @@ namespace RingSoft.DbLookup.Lookup
             _lookupEntityDefinition = lookupEntityDefinition;
         }
 
-        private void SetJoinDefinition(TableDefinitionBase tableDefinition, string propertyName)
+        private void SetJoinDefinition(TableDefinitionBase tableDefinition, string propertyName, string propertyType)
         {
             var foreignFieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(f => f.ParentJoinForeignKeyDefinition != null &&
                                                                                               f.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName == propertyName);
 
             if (foreignFieldDefinition == null)
+            {
+                var propertyTable =
+                    tableDefinition.Context.TableDefinitions.FirstOrDefault(t => t.EntityName == propertyType);
+
+                if (propertyTable == null)
+                    throw new ArgumentException($"Property type '{propertyType}' is not setup as a Table Definition in the Lookup Context.");
+
                 throw new ArgumentException($"Property '{propertyName}' was not configured by the Entity Framework.");
+            }
 
             SetJoinDefinition(foreignFieldDefinition);
         }
@@ -104,10 +112,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             var parentTable = JoinDefinition.ForeignKeyDefinition.PrimaryTable;
             var relatedPropertyName = relatedProperty.GetFullPropertyName();
+            var relatedPropertyType = relatedProperty.ReturnType.Name;
 
             var returnEntity = new LookupJoinTableEntity<TLookupEntity, TParentRelatedEntity>(_lookupEntityDefinition);
             returnEntity.JoinDefinition = JoinDefinition;
-            returnEntity.SetJoinDefinition(parentTable, relatedPropertyName);
+            returnEntity.SetJoinDefinition(parentTable, relatedPropertyName, relatedPropertyType);
             
             return returnEntity;
         }

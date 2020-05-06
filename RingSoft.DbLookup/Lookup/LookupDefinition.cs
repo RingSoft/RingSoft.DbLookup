@@ -94,7 +94,7 @@ namespace RingSoft.DbLookup.Lookup
             where TRelatedEntity : class
 
         {
-            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TRelatedEntity>(this, ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName());
+            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TRelatedEntity>(this, ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(), relatedProperty.ReturnType.Name);
             return returnEntity;
         }
 

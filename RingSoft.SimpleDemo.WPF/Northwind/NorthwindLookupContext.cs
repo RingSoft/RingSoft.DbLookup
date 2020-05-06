@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
@@ -10,6 +6,9 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.SimpleDemo.WPF.Northwind.LookupModel;
 using RingSoft.SimpleDemo.WPF.Northwind.Model;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace RingSoft.SimpleDemo.WPF.Northwind
 {

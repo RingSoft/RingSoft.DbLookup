@@ -27,14 +27,19 @@ namespace RingSoft.DbLookup.EfCore
         /// </summary>
         protected abstract void SetupModel();
 
+
         protected override void EfInitializeTableDefinitions()
         {
+            var dbSetName = $"{nameof(DbSet<object>)}`1";
+            var properties = DbContext.GetType().GetProperties().Where(w => w.PropertyType.Name == dbSetName).ToList();
             foreach (var tableDefinition in TableDefinitions)
             {
                 var entityType = DbContext.Model.FindEntityType(tableDefinition.FullEntityName);
-                if (entityType == null)
+                var dbSetExists = properties.Any(p =>
+                    p.PropertyType.GenericTypeArguments.Any(g => g.Name == tableDefinition.EntityName));
+                if (entityType == null || !dbSetExists)
                 {
-                    throw new Exception($"Table Definition '{tableDefinition}' not found as a DbSet in the DbContext object.");
+                    throw new Exception($"Table Definition '{tableDefinition}' is not a DbSet in the DbContext object.");
                 }
                 else
                 {

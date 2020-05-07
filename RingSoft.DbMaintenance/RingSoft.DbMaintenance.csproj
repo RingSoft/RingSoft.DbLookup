@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
-    <Version>0.91.0</Version>
+    <Version>0.91.3</Version>
     <Authors>Peter Ringering</Authors>
-    <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EntityFrameworkCore or RingSoft.DbLookup.EntityFramework6.</Description>
+    <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>http://www.ringsoft.site</PackageProjectUrl>

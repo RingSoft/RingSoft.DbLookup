@@ -61,17 +61,7 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             Initialize();
         }
 
-        //protected override void SetupModel()
-        //{
-        //    NorthwindContextConfiguration.InitializeModel();
-        //}
-
-        protected override void InitializeTableDefinitions()
-        {
-            //throw new System.NotImplementedException();
-        }
-
-        protected override void InitializeFieldDefinitions()
+        protected override void SetupModel()
         {
             Orders.HasDescription("Orders");
             Customers.HasDescription("Customers");

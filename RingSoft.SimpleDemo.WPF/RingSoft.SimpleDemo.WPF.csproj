@@ -99,6 +99,7 @@
     <Compile Include="Northwind\NorthwindDbContext.cs" />
     <Compile Include="Northwind\NorthwindEfDataProcessor.cs" />
     <Compile Include="Northwind\NorthwindLookupContext.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -135,13 +136,13 @@
       <Version>8.0.20</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.Controls.WPF">
-      <Version>0.91.0</Version>
+      <Version>0.91.2</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.EfCore">
-      <Version>0.91.0</Version>
+      <Version>0.91.1</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbMaintenance">
-      <Version>0.91.0</Version>
+      <Version>0.91.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

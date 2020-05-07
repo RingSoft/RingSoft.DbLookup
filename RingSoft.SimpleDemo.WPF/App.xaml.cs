@@ -8,7 +8,7 @@ namespace RingSoft.SimpleDemo.WPF
     /// </summary>
     public partial class App
     {
-        public NorthwindLookupContext LookupContext => _lookupContext;
+        public static NorthwindLookupContext LookupContext => _lookupContext;
 
         private static NorthwindLookupContext _lookupContext;
 

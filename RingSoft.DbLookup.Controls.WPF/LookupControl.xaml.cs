@@ -114,7 +114,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupControl()
         {
-            InitializeComponent();
+            //InitializeComponent();
+
+            this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
             Loaded += (sender, args) =>
             {
                 if (IsVisible)

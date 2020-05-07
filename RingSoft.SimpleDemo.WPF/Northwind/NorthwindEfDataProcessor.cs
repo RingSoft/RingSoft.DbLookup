@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.EfCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.SimpleDemo.WPF.Northwind.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RingSoft.SimpleDemo.WPF.Northwind
 {
@@ -29,19 +28,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
                 .FirstOrDefault(f => f.OrderID == orderId);
         }
 
-        public bool SaveOrder(Order order)
-        {
-            var context = new NorthwindDbContext();
-            return context.SaveEntity(context.Orders, order, "Saving Order");
-        }
-
-        public bool DeleteOrder(int orderId)
-        {
-            var context = new NorthwindDbContext();
-            var order = context.Orders.FirstOrDefault(p => p.OrderID == orderId);
-            return context.DeleteEntity(context.Orders, order, "Deleting Order");
-        }
-
         public List<Order_Detail> GetOrderDetails(int orderId)
         {
             var context = new NorthwindDbContext();
@@ -55,34 +41,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             return context.OrderDetails.Include(i => i.Product)
                 .Include(i => i.Order)
                 .FirstOrDefault(f => f.OrderID == orderId && f.ProductID == productId);
-        }
-
-        public bool SaveOrderDetail(Order_Detail orderDetail)
-        {
-            using (var context = new NorthwindDbContext())
-            {
-                if (context.OrderDetails.FirstOrDefault(f =>
-                        f.OrderID == orderDetail.OrderID && f.ProductID == orderDetail.ProductID) == null)
-                    return context.AddNewEntity(context.OrderDetails, orderDetail, "Saving Order Detail");
-            }
-
-            using (var context = new NorthwindDbContext())
-            {
-                return context.SaveEntity(context.OrderDetails, orderDetail, "Saving Order Detail");
-            }
-        }
-
-        public bool DeleteOrderDetail(int orderId, int productId)
-        {
-            var context = new NorthwindDbContext();
-            var orderDetail = context.OrderDetails.FirstOrDefault(f => f.OrderID == orderId && f.ProductID == productId);
-            return context.DeleteEntity(context.OrderDetails, orderDetail, "Deleting Order Detail.");
-        }
-
-        public Product GetProduct(int productId)
-        {
-            var context = new NorthwindDbContext();
-            return context.Products.FirstOrDefault(f => f.ProductID == productId);
         }
     }
 }

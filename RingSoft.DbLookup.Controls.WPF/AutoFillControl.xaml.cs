@@ -112,7 +112,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             TabOutAfterLookupSelect = true;
 
-            InitializeComponent();
+            //InitializeComponent();
+            this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/AutoFillControl.xaml");
 
             Loaded += (sender, args) =>
             {

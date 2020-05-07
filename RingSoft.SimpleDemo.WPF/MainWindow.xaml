@@ -11,7 +11,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -19,7 +22,20 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="OrdersLookupButton" Content="Orders Lookup"/>
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}" Width="100" HorizontalAlignment="Left">
+            <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=OrderId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Border>
         <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Customer"/>
-        <controls:AutoFillControl Grid.Row="1" Grid.Column="1" Width="200"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <controls:AutoFillControl x:Name="CustomerControl" Width="100" Setup="{Binding Path=CustomerAutoFillSetup}" Value="{Binding Path=CustomerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Border Style="{StaticResource ReadOnlyBorder}" Margin="5,0,0,0">
+                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Width="250" Text="{Binding Path=CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </Border>
+        </StackPanel>
+        <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Employee"/>
+        <controls:AutoFillControl Grid.Row="2" Grid.Column="1" Width="200" HorizontalAlignment="Left" Setup="{Binding Path=EmployeeAutoFillSetup}" Value="{Binding Path=EmployeeAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Content="Order Details"/>
+        <controls:LookupControl Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsCommand}"/>
+        <Button x:Name="CloseButton" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" Margin="0,5,0,0" Content="_Close"/>
     </Grid>
 </controls:BaseWindow>

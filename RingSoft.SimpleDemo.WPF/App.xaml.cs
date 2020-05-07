@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.SimpleDemo.WPF.Northwind;
 
 namespace RingSoft.SimpleDemo.WPF
@@ -8,14 +9,18 @@ namespace RingSoft.SimpleDemo.WPF
     /// </summary>
     public partial class App
     {
-        public static NorthwindLookupContext LookupContext => _lookupContext;
+        public static NorthwindLookupContext LookupContext { get; private set; }
 
-        private static NorthwindLookupContext _lookupContext;
+        public static NorthwindEfDataProcessor EfDataProcessor { get; private set; }
+
+
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _lookupContext = new NorthwindLookupContext();
+            LookupContext = new NorthwindLookupContext();
+            EfDataProcessor = new NorthwindEfDataProcessor();
 
+            ControlsGlobals.InitUi();
             base.OnStartup(e);
         }
     }

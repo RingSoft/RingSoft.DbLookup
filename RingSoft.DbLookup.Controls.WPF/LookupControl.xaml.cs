@@ -589,6 +589,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     break;
                 case Key.Enter:
                     OnEnter();
+                    e.Handled = true;
                     break;
             }
         }

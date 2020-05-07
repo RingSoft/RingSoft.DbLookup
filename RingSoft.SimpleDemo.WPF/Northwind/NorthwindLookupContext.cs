@@ -14,9 +14,7 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
 {
     public class NorthwindLookupContext : LookupContext
     {
-        protected override DbContext DbContext => NorthwindDbContext;
-        internal NorthwindDbContext NorthwindDbContext { get; }
-
+        protected override DbContext DbContext { get; }
         public override DbDataProcessor DataProcessor { get; }
 
         public TableDefinition<Category> Categories { get; set; }
@@ -46,7 +44,7 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
 
         public NorthwindLookupContext()
         {
-            NorthwindDbContext = new NorthwindDbContext(this);
+            DbContext = new NorthwindDbContext(this);
 
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);

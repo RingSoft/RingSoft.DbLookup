@@ -23,7 +23,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             var context = new NorthwindDbContext();
             var result = context.Orders.Include(i => i.Customer)
                 .Include(i => i.Employee)
-                .Include(i => i.Shipper)
                 .FirstOrDefault(f => f.OrderID == orderId);
 
             DbDataProcessor.WindowCursor.SetWindowCursor(WindowCursorTypes.Default);

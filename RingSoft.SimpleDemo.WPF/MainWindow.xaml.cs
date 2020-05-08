@@ -160,7 +160,8 @@ namespace RingSoft.SimpleDemo.WPF
 
         private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var lookupWindow = new LookupWindow(App.LookupContext.OrdersLookup, false, false, OrderId.ToString());
+            var lookupWindow = new LookupWindow(App.LookupContext.OrdersLookup, false, false,
+                OrderId > 0 ? OrderId.ToString() : string.Empty);
             lookupWindow.LookupSelect += (o, args) =>
             {
                 var order = App.LookupContext.Orders.GetEntityFromPrimaryKeyValue(args.LookupData.PrimaryKeyValue);

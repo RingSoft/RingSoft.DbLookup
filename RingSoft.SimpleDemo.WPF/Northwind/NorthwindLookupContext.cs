@@ -24,23 +24,14 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
         public TableDefinition<Order> Orders { get; set; }
         public TableDefinition<Order_Detail> OrderDetails { get; set; }
         public TableDefinition<Product> Products { get; set; }
-        public TableDefinition<Shipper> Shippers { get; set; }
 
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
 
-        public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsLookup { get; private set; }
-
         public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsFormLookup { get; private set; }
-
-        public LookupDefinition<ProductLookup, Product> ProductsLookup { get; private set; }
 
         public LookupDefinition<CustomerLookup, Customer> CustomerIdLookup { get; private set; }
 
-        public LookupDefinition<CustomerLookup, Customer> CustomerNameLookup { get; private set; }
-
         public LookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
-
-        public LookupDefinition<ShipperLookup, Shipper> ShippersLookup { get; private set; }
 
         public NorthwindLookupContext()
         {
@@ -93,18 +84,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
 
             Orders.HasLookupDefinition(OrdersLookup);
 
-            OrderDetailsLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(OrderDetails);
-            OrderDetailsLookup.Include(p => p.Order)
-                .AddVisibleColumnDefinition(p => p.OrderDate, "Order Date", p => p.OrderDate, 20);
-            OrderDetailsLookup.Include(p => p.Product)
-                .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
-            OrderDetailsLookup.Include(p => p.Product).Include(p => p.Category)
-                .AddVisibleColumnDefinition(p => p.CategoryName, "Category", p => p.CategoryName, 20);
-            OrderDetailsLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 10);
-            OrderDetailsLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 10);
-
-            OrderDetails.HasLookupDefinition(OrderDetailsLookup);
-
             OrderDetailsFormLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(OrderDetails);
             OrderDetailsFormLookup.Include(p => p.Product)
                 .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
@@ -114,25 +93,12 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
                 .HasNumberFormatString("c").HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Discount, "Discount", p => p.Discount, 15);
 
-            ProductsLookup = new LookupDefinition<ProductLookup, Product>(Products);
-            ProductsLookup.AddVisibleColumnDefinition(p => p.ProductName, "Name", p => p.ProductName, 40);
-            ProductsLookup.Include(p => p.Category)
-                .AddVisibleColumnDefinition(p => p.Category, "Category", p => p.CategoryName, 20);
-            ProductsLookup.AddVisibleColumnDefinition(p => p.UnitsInStock, "Quantity On Hand", p => p.UnitsInStock, 20);
-            ProductsLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 20);
-
-            Products.HasLookupDefinition(ProductsLookup);
-
             CustomerIdLookup = new LookupDefinition<CustomerLookup, Customer>(Customers);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "Customer Id", p => p.CustomerID, 20);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 40);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
             Customers.HasLookupDefinition(CustomerIdLookup);
-
-            CustomerNameLookup = new LookupDefinition<CustomerLookup, Customer>(Customers);
-            CustomerNameLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 60);
-            CustomerNameLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
             EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(Employees);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40);
@@ -141,13 +107,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40);
 
             Employees.HasLookupDefinition(EmployeesLookup);
-
-            ShippersLookup = new LookupDefinition<ShipperLookup, Shipper>(Shippers);
-            ShippersLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 75);
-            ShippersLookup.AddVisibleColumnDefinition(p => p.Phone, "Phone", p => p.Phone, 25);
-
-            Shippers.HasLookupDefinition(ShippersLookup);
-
         }
     }
 }

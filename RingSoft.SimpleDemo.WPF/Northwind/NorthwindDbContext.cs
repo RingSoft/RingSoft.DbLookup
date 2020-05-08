@@ -13,7 +13,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
         public DbSet<Order> Orders { get; set; }
         public DbSet<Order_Detail> OrderDetails { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Shipper> Shippers { get; set; }
 
         private static NorthwindLookupContext _lookupContext;
 

@@ -95,7 +95,6 @@
     <Compile Include="Northwind\Model\Order.cs" />
     <Compile Include="Northwind\Model\Order_Detail.cs" />
     <Compile Include="Northwind\Model\Product.cs" />
-    <Compile Include="Northwind\Model\Shipper.cs" />
     <Compile Include="Northwind\NorthwindDbContext.cs" />
     <Compile Include="Northwind\NorthwindEfDataProcessor.cs" />
     <Compile Include="Northwind\NorthwindLookupContext.cs" />

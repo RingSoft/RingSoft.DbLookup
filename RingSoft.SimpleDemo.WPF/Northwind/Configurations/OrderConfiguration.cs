@@ -15,10 +15,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind.Configurations
             builder.HasOne(p => p.Employee)
                 .WithMany(p => p.Orders)
                 .HasForeignKey(p => p.EmployeeID).IsRequired();
-
-            builder.HasOne(p => p.Shipper)
-                .WithMany(p => p.Orders)
-                .HasForeignKey(p => p.ShipVia).IsRequired();
         }
     }
 }

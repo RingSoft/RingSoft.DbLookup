@@ -155,8 +155,7 @@ namespace RingSoft.SimpleDemo.WPF
 
             OrdersLookupButton.Click += OrdersLookupButton_Click;
 
-            OrderDetailsLookupDefinition = App.LookupContext.OrderDetailsLookup.Clone();
-            OrderDetailsCommand = new LookupCommand(LookupCommands.Refresh);
+            OrderDetailsLookupDefinition = App.LookupContext.OrderDetailsFormLookup.Clone();
         }
 
         private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)

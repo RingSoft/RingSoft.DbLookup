@@ -26,7 +26,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public BaseWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            PreviewKeyDown += (sender, args) =>
+            KeyDown += (sender, args) =>
             {
                 switch (args.Key)
                 {

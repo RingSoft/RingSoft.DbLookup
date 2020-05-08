@@ -274,7 +274,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                     IsDirty = true;
                     break;
                 case Key.Escape:
-                    Popup.IsOpen = false;
+                    if (Popup.IsOpen)
+                    {
+                        Popup.IsOpen = false;
+                        e.Handled = true;
+                    }
+
                     break;
                 case Key.Down:
                     if (Popup.IsOpen && ListBox.SelectedIndex < ContainsItems.Count - 1)

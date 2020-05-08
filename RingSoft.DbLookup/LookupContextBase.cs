@@ -62,6 +62,12 @@ namespace RingSoft.DbLookup
         /// </value>
         public abstract DbDataProcessor DataProcessor { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this class has been initialized by the Entity Framework platform.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized { get; private set; }
 
         /// <summary>
@@ -91,7 +97,8 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// Initializes this instance.  Creates the primary and foreign keys.
+        /// Has the Entity Framework platform set up this object's table and field properties based on DbContext's model setup.
+        /// Derived classes constructor must execute this method.
         /// </summary>
         public void Initialize()
         {

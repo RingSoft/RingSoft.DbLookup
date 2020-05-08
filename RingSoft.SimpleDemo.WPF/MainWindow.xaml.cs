@@ -170,6 +170,8 @@ namespace RingSoft.SimpleDemo.WPF
                 CustomerAutoFillValue =
                     new AutoFillValue(App.LookupContext.Customers.GetPrimaryKeyValueFromEntity(order.Customer),
                         order.CustomerID);
+                CompanyName = order.Customer.CompanyName;
+
                 var employeeText = $"{order.Employee.FirstName} {order.Employee.LastName}";
                 EmployeeAutoFillValue =
                     new AutoFillValue(App.LookupContext.Employees.GetPrimaryKeyValueFromEntity(order.Employee),

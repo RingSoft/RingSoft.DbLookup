@@ -1,6 +1,6 @@
 ﻿namespace RingSoft.DbLookup.QueryBuilder
 {
-    /// <summary>This class represents a table name that appears after the FROM keyword.</summary>
+    /// <summary>This class represents a table name that appears after the FROM or JOIN keyword.</summary>
     public class QueryTable
     {
         /// <summary>Gets the base query object that this table is assigned to.</summary>
@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Gets the name of the table to use on the left side of the "." in "[].[]" SQL frament.
+        /// Gets the name of the table to use on the left side of the "." in "[].[]" SQL fragment.
         /// </summary>
         /// <returns>If Alias is not empty, then it is returned.  Else Name is returned.</returns>
         public string GetTableName()

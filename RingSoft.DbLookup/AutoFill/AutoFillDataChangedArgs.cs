@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace RingSoft.DbLookup
+namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
     /// Argument sent in the AutoFillChanged event.

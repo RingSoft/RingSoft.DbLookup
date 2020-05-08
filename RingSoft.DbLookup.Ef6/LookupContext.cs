@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Infrastructure;
@@ -29,6 +30,8 @@ namespace RingSoft.DbLookup.Ef6
 
         protected override void EfInitializeTableDefinitions()
         {
+            if (DbContext == null)
+                throw new Exception("DbContext must be instantiated before initialization.");
         }
 
         protected override void EfInitializeFieldDefinitions()

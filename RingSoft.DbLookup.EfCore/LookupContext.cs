@@ -23,13 +23,16 @@ namespace RingSoft.DbLookup.EfCore
         protected abstract DbContext DbContext { get; }
 
         /// <summary>
-        /// Derived classes use this to set table and field definition properties not automatically set up by this class.
+        /// Derived classes use this to set table and field definition properties not automatically set up by the Entity Framework platform.
         /// </summary>
         protected abstract void SetupModel();
 
 
         protected override void EfInitializeTableDefinitions()
         {
+            if (DbContext == null)
+                throw new Exception("DbContext must be instantiated before initialization.");
+
             var dbSetName = $"{nameof(DbSet<object>)}`1";
             var properties = DbContext.GetType().GetProperties().Where(w => w.PropertyType.Name == dbSetName).ToList();
             foreach (var tableDefinition in TableDefinitions)

@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace RingSoft.DbLookup.QueryBuilder
 {
-    /// <summary>This class encapsulates a SQL statement.</summary>
+    /// <summary>This class is used to build a SELECT SQL statement.  It is not comprehensive.</summary>
     public class SelectQuery : QueryBase
     {
         public override QueryTypes QueryType => QueryTypes.SelectQuery;

@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.GetDataProcessor
     public abstract class DbDataProcessor
     {
         /// <summary>
-        /// Gets the connection string.
+        /// Gets the database connection string.
         /// </summary>
         /// <value>
         /// The connection string.

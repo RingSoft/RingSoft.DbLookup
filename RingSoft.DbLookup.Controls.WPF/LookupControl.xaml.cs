@@ -446,7 +446,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void SetScrollThumbToMiddle()
         {
             double middleValue = Math.Floor((ScrollBar.Maximum - ScrollBar.Minimum) / 2);
-            ScrollBar.Value = (int) middleValue - 5;
+            ScrollBar.Value = (int)middleValue - 5;
         }
 
         public void RefreshData(bool resetSearchFor, string initialSearchFor = "",

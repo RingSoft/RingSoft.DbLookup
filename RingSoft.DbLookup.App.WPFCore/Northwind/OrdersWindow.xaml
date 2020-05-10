@@ -55,9 +55,9 @@
                     <DockPanel>
                         <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
                         <controls:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
-                            <controls:LookupControl.LookupColumns>
-
-                            </controls:LookupControl.LookupColumns>
+                            <controls:LookupControl.Columns>
+                                <controls:LookupColumn/>
+                            </controls:LookupControl.Columns>
                         </controls:LookupControl>
                     </DockPanel>
                 </TabItem>

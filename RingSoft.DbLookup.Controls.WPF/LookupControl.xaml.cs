@@ -99,6 +99,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupDataBase LookupData { get; private set; }
 
+        public LookupColumnCollection LookupColumns { get; }
+
         private bool _controlLoaded;
         private int _originalPageSize;
         private int _currentPageSize;
@@ -114,9 +116,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupControl()
         {
+            LookupColumns = new LookupColumnCollection();
             //InitializeComponent();
 
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
+
             Loaded += (sender, args) =>
             {
                 if (IsVisible)

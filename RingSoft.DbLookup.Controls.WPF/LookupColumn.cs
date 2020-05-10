@@ -1,6 +1,6 @@
 ﻿namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class LookupDesignerColumns
+    public class LookupColumn
     {
     }
 }

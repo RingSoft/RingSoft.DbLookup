@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -129,7 +130,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             //InitializeComponent();
 
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
-            Columns.CollectionChanged += Columns_CollectionChanged;
+            Columns.CollectionChanged += (sender, args) => SetupDesigner();
 
             Loaded += (sender, args) =>
             {
@@ -187,9 +188,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             foreach (var column in LookupDefinition.VisibleColumns)
             {
-                var columnWdth = GetWidthFromPercent(ListView, column.PercentWidth);
-                var cellTemplate = GetCellDataTemplate(column);
-                var gridColumn = AddGridViewColumn(column.Caption, columnWdth, column.SelectSqlAlias, cellTemplate);
+                var columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
+                
+                var gridColumn = AddGridViewColumn(column.Caption, columnWidth, column.SelectSqlAlias,
+                    column.HorizontalAlignment);
 
                 ((INotifyPropertyChanged)gridColumn).PropertyChanged += (sender, args) =>
                 {
@@ -212,7 +214,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         private GridViewColumn AddGridViewColumn(string caption, double width, string dataColumnName,
-            DataTemplate cellTemplate)
+            LookupColumnAlignmentTypes horizontalAlignmentType)
         {
             var gridColumn = new GridViewColumn
             {
@@ -221,7 +223,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     Content = caption // + "\r\nLine2\r\nLine3"
                 },
                 Width = width,
-                CellTemplate = cellTemplate
+                CellTemplate = GetCellDataTemplate(horizontalAlignmentType, dataColumnName)
             };
             LookupGridView.Columns.Add(gridColumn);
             _dataSource.Columns.Add(dataColumnName);
@@ -256,9 +258,27 @@ namespace RingSoft.DbLookup.Controls.WPF
             SetActiveColumn(sortColumnIndex, dataType);
         }
 
-        private void Columns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void SetupDesigner()
         {
-            //throw new NotImplementedException();
+            if (!DesignerProperties.GetIsInDesignMode(this))
+                return;
+            
+            LookupGridView.Columns.Clear();
+            _dataSource.Columns.Clear();
+            var index = 1;
+
+            foreach (var column in Columns)
+            {
+                var caption = $"Column #{index}";
+                var gridColumn = AddGridViewColumn(caption, 100, $"Column{index}",
+                    LookupColumnAlignmentTypes.Left);
+            }
+
+            var sortColumnIndex = -1;
+            if (Columns.Any())
+                sortColumnIndex = 0;
+
+            InitializeHeader(sortColumnIndex, FieldDataTypes.String);
         }
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -306,11 +326,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DataSourceChanged = new LookupDataSourceChanged();
         }
 
-        private static DataTemplate GetCellDataTemplate(LookupColumnBase column)
+        private static DataTemplate GetCellDataTemplate(LookupColumnAlignmentTypes horizontalAlignmentType,
+            string dataColumnName)
         {
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(TextBlock));
-            switch (column.HorizontalAlignment)
+            switch (horizontalAlignmentType)
             {
                 case LookupColumnAlignmentTypes.Left:
                     factory.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Left);
@@ -324,7 +345,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            factory.SetBinding(TextBlock.TextProperty, new Binding(column.SelectSqlAlias));
+            factory.SetBinding(TextBlock.TextProperty, new Binding(dataColumnName));
             template.VisualTree = factory;
 
             return template;

@@ -6,6 +6,7 @@
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lookmodel="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="Orders" Height="575" Width="800">
     <Window.DataContext>
@@ -56,7 +57,7 @@
                         <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
                         <controls:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
                             <controls:LookupControl.Columns>
-                                <controls:LookupColumn/>
+                                <controls:LookupColumn PropertyName="{controls:NameOf Product, Type={x:Type lookmodel:OrderDetailLookup}}" Content="Product"/>
                             </controls:LookupControl.Columns>
                         </controls:LookupControl>
                     </DockPanel>

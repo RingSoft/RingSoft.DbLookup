@@ -124,6 +124,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool _resettingSearchFor;
         private double _itemHeight;
+        private int _designSortIndex = -1;
 
         public LookupControl()
         {
@@ -132,20 +133,29 @@ namespace RingSoft.DbLookup.Controls.WPF
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
             Columns.CollectionChanged += (sender, args) => SetupDesigner();
 
-            Loaded += (sender, args) =>
-            {
-                if (IsVisible)
-                {
-                    if (LookupDefinition != null && !_controlLoaded)
-                        SetupControl();
-                    _controlLoaded = true;
-                }
-            };
+            Loaded += (sender, args) => OnLoad();
             SearchForTextBox.GotFocus += (sender, args) =>
             {
                 SearchForTextBox.SelectionStart = 0;
                 SearchForTextBox.SelectionLength = SearchForTextBox.Text.Length;
             };
+        }
+
+        private void OnLoad()
+        {
+            if (IsVisible)
+            {
+                SizeChanged += (sender, args) => LookupControlSizeChanged();
+                if (_designSortIndex >= 0 && DesignerProperties.GetIsInDesignMode(this))
+                {
+                    InitializeHeader(_designSortIndex);
+                    DesignerFillGrid();
+                }
+
+                if (LookupDefinition != null && !_controlLoaded)
+                    SetupControl();
+                _controlLoaded = true;
+            }
         }
 
         private void SetupControl()
@@ -163,7 +173,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_controlLoaded)
             {
-                SizeChanged += (sender, args) => LookupControlSizeChanged();
                 SearchForTextBox.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
                 SearchForTextBox.TextChanged += (sender, args) =>
                 {
@@ -205,7 +214,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             var sortColumnIndex =
                 LookupDefinition.GetIndexOfVisibleColumn(LookupDefinition.InitialSortColumnDefinition);
 
-            InitializeHeader(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
+            InitializeHeader(sortColumnIndex);
+            SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
+
             if (_refreshPendingData != null)
             {
                 RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
@@ -231,7 +242,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             return gridColumn;
         }
 
-        private void InitializeHeader(int sortColumnIndex, FieldDataTypes dataType)
+        private void InitializeHeader(int sortColumnIndex)
         {
             GridViewHeaderRowPresenter header = (GridViewHeaderRowPresenter)LookupGridView.GetType()
                 .GetProperty("HeaderRowPresenter", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -251,11 +262,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupGridView.ColumnHeaderContainerStyle = style;
             }
 
+            ResetColumnHeaderSort(sortColumnIndex);
+        }
+
+        private void ResetColumnHeaderSort(int sortColumnIndex)
+        {
             var sortColumn = LookupGridView.Columns[sortColumnIndex];
             _lastHeaderClicked = sortColumn.Header as GridViewColumnHeader;
             _lastDirection = ListSortDirection.Ascending;
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
-            SetActiveColumn(sortColumnIndex, dataType);
         }
 
         private void SetupDesigner()
@@ -264,21 +279,68 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             
             LookupGridView.Columns.Clear();
+            _dataSource.Rows.Clear();
             _dataSource.Columns.Clear();
+
             var index = 1;
 
             foreach (var column in Columns)
             {
-                var caption = $"Column #{index}";
-                var gridColumn = AddGridViewColumn(caption, 100, $"Column{index}",
+                column.DataColumnName = $"Column{index}";
+                AddGridViewColumn(column.Content, 200, column.DataColumnName,
                     LookupColumnAlignmentTypes.Left);
+                column.PropertyChanged -= Column_PropertyChanged;
+                column.PropertyChanged += Column_PropertyChanged;
+                index++;
             }
 
-            var sortColumnIndex = -1;
             if (Columns.Any())
-                sortColumnIndex = 0;
+                _designSortIndex = 0;
 
-            InitializeHeader(sortColumnIndex, FieldDataTypes.String);
+            //var xcolumnHeader = LookupGridView.Columns[0].Header as GridViewColumnHeader;
+            //xcolumnHeader.Content = $"_dataSource Col Count = {_dataSource.Columns.Count}";
+
+            ResetColumnHeaderSort(_designSortIndex);
+            SetActiveColumn(_designSortIndex, FieldDataTypes.String);
+            if (PageSize > 0)
+                DesignerFillGrid();
+        }
+
+        private void DesignerFillGrid()
+        {
+            _dataSource.Rows.Clear();
+            var pageSize = GetPageSize(false);
+            //SearchForTextBox.Text = $"Page size = {pageSize}";
+            for (var i = 0; i < pageSize; i++)
+            {
+                var newDataRow = _dataSource.NewRow();
+                foreach (var column in Columns)
+                {
+                    var cellValue = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+                    //cellValue = lookupDefinitionColumn.FormatValue(cellValue);
+                    newDataRow[column.DataColumnName] = cellValue;
+                }
+
+                _dataSource.Rows.Add(newDataRow);
+            }
+
+            ListView.ItemsSource = _dataSource.DefaultView;
+        }
+
+        private void Column_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var lookupColumn = (LookupColumn) sender;
+            var columnIndex = Columns.IndexOf(lookupColumn);
+            var gridColumn = LookupGridView.Columns[columnIndex];
+
+            if (e.PropertyName == nameof(LookupColumn.Content))
+            {
+                var columnHeader = (GridViewColumnHeader) gridColumn.Header;
+                columnHeader.Content = lookupColumn.Content;
+
+                if (columnIndex == _designSortIndex)
+                    SetActiveColumn(_designSortIndex, FieldDataTypes.String);
+            }
         }
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -442,7 +504,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (originalPageSize != newPageSize && originalPageSize > 0)
             {
-                LookupData.OnChangePageSize();
+                if (DesignerProperties.GetIsInDesignMode(this))
+                    DesignerFillGrid();
+                else
+                {
+                    LookupData?.OnChangePageSize();
+                }
             }
         }
 
@@ -535,7 +602,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private int GetPageSize()
+        private int GetPageSize(bool setOriginalPageSize = true)
         {
             //var itemHeight = 0.0;
             if (_itemHeight <= 0)
@@ -563,7 +630,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (header != null)
                 totalHeight -= header.ActualHeight;
 
-
             double items = 10;
             if (_itemHeight > 0)
                 items = totalHeight / _itemHeight;
@@ -571,10 +637,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             var pageSize = (int)(Math.Floor(items)) - 1;
 
             var scrollViewer = FindVisualChild<ScrollViewer>(ListView);
-            if (scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
+
+            if (scrollViewer != null && scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
                 pageSize -= 1;
 
-            _originalPageSize = pageSize;
+            if (setOriginalPageSize)
+                _originalPageSize = pageSize;
             return pageSize;
 
         }

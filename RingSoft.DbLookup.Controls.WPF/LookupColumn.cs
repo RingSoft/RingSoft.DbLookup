@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -36,7 +37,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private double _width = 100;
+        private double _width;
 
         public double Width
         {
@@ -51,6 +52,24 @@ namespace RingSoft.DbLookup.Controls.WPF
                 OnPropertyChanged(nameof(Width));
             }
         }
+
+        private TextAlignment _textAlignment = TextAlignment.Left;
+        
+        public TextAlignment TextAlignment
+        {
+            get => _textAlignment;
+            set
+            {
+                TextAlignmentChanged = true;
+                if (_textAlignment == value)
+                    return;
+
+                _textAlignment = value;
+                OnPropertyChanged(nameof(TextAlignment));
+            }
+        }
+
+        public bool TextAlignmentChanged { get; private set; }
 
         public string PropertyName { get; set; }
 

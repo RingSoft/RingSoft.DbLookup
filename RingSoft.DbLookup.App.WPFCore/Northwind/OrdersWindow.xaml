@@ -57,7 +57,9 @@
                         <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
                         <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
                             <lc:LookupControl.Columns>
-                                <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Header="Product" DesignText="Chef Anton's Cajun Seasoning" Width="200"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="200" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="100" Header="Price" TextAlignment="Right" DesignText="$100,000.00"/>
                             </lc:LookupControl.Columns>
                         </lc:LookupControl>
                     </DockPanel>

@@ -20,8 +20,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (serviceProvider == null)
                 throw new ArgumentNullException(nameof(serviceProvider));
 
-            if (Type == null || string.IsNullOrEmpty(Member) || Member.Contains("."))
-                throw new ArgumentException("Syntax for x:NameOf is [propertyName] Type={x:Type [className]}");
+            if (Type == null || Member.Contains("."))
+                throw new ArgumentException("Syntax for x:NameOf is [propertyName], Type={x:Type [className]}");
+
+            if (string.IsNullOrEmpty(Member))
+                return Member;
 
             var pinfo = Type.GetRuntimeProperties().FirstOrDefault(pi => pi.Name == Member);
             var finfo = Type.GetRuntimeFields().FirstOrDefault(fi => fi.Name == Member);

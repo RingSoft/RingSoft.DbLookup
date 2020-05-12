@@ -287,7 +287,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             foreach (var column in Columns)
             {
                 column.DataColumnName = $"Column{index}";
-                AddGridViewColumn(column.Content, 200, column.DataColumnName,
+                AddGridViewColumn(column.Header, column.Width, column.DataColumnName,
                     LookupColumnAlignmentTypes.Left);
                 column.PropertyChanged -= Column_PropertyChanged;
                 column.PropertyChanged += Column_PropertyChanged;
@@ -296,9 +296,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (Columns.Any())
                 _designSortIndex = 0;
-
-            //var xcolumnHeader = LookupGridView.Columns[0].Header as GridViewColumnHeader;
-            //xcolumnHeader.Content = $"_dataSource Col Count = {_dataSource.Columns.Count}";
 
             ResetColumnHeaderSort(_designSortIndex);
             SetActiveColumn(_designSortIndex, FieldDataTypes.String);
@@ -310,14 +307,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             _dataSource.Rows.Clear();
             var pageSize = GetPageSize(false);
-            //SearchForTextBox.Text = $"Page size = {pageSize}";
+            
             for (var i = 0; i < pageSize; i++)
             {
                 var newDataRow = _dataSource.NewRow();
                 foreach (var column in Columns)
                 {
-                    var cellValue = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
-                    //cellValue = lookupDefinitionColumn.FormatValue(cellValue);
+                    var cellValue = column.DesignText;
                     newDataRow[column.DataColumnName] = cellValue;
                 }
 
@@ -333,13 +329,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             var columnIndex = Columns.IndexOf(lookupColumn);
             var gridColumn = LookupGridView.Columns[columnIndex];
 
-            if (e.PropertyName == nameof(LookupColumn.Content))
+            if (e.PropertyName == nameof(LookupColumn.Header))
             {
                 var columnHeader = (GridViewColumnHeader) gridColumn.Header;
-                columnHeader.Content = lookupColumn.Content;
+                columnHeader.Content = lookupColumn.Header;
 
                 if (columnIndex == _designSortIndex)
                     SetActiveColumn(_designSortIndex, FieldDataTypes.String);
+            }
+            else if (e.PropertyName == nameof(LookupColumn.DesignText))
+            {
+                DesignerFillGrid();
+            }
+            else if (e.PropertyName == nameof(LookupColumn.Width))
+            {
+                gridColumn.Width = lookupColumn.Width;
             }
         }
 

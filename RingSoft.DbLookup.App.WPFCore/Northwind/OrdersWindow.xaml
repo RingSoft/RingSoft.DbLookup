@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
-        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-        xmlns:lookmodel="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="Orders" Height="575" Width="800">
     <Window.DataContext>
@@ -32,16 +32,16 @@
                     <TextBlock Width="70" Text="{Binding OrderId}" Style="{StaticResource ReadOnlyTextBlock}"/>
                 </Border>
                 <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <controls:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100"/>
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100"/>
                 <Border Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Width="200" Text="{Binding CompanyName}" Style="{StaticResource ReadOnlyTextBlock}"/>
                 </Border>
             </StackPanel>
             <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <controls:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay}" Width="150"/>
+                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay}" Width="150"/>
                 <Label Content="Ship Via" Style="{StaticResource ControlLabel}"/>
-                <controls:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay}" Width="150"/>
+                <lc:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay}" Width="150"/>
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
@@ -55,11 +55,11 @@
                 <TabItem Header="Details">
                     <DockPanel>
                         <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
-                        <controls:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
-                            <controls:LookupControl.Columns>
-                                <controls:LookupColumn PropertyName="{controls:NameOf Product, Type={x:Type lookmodel:OrderDetailLookup}}" Content="Product"/>
-                            </controls:LookupControl.Columns>
-                        </controls:LookupControl>
+                        <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
+                            <lc:LookupControl.Columns>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Header="Product" DesignText="Chef Anton's Cajun Seasoning" Width="200"/>
+                            </lc:LookupControl.Columns>
+                        </lc:LookupControl>
                     </DockPanel>
                 </TabItem>
                 <TabItem Header="Shipping Data">

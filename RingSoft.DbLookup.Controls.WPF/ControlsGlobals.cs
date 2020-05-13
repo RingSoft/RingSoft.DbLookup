@@ -1,7 +1,7 @@
-﻿using System;
+﻿using RingSoft.DbLookup.GetDataProcessor;
+using System;
 using System.Windows;
 using System.Windows.Input;
-using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -9,8 +9,11 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
-            var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
-            dataProcessResultWindow.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
+                dataProcessResultWindow.ShowDialog();
+            });
         }
 
         public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)

@@ -165,7 +165,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             if (LookupData != null)
+            {
                 ClearLookupControl();
+                Columns.Clear();
+            }
 
             LookupData = new LookupDataBase(LookupDefinition, this);
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;
@@ -195,24 +198,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupGridView.Columns.Clear();
             _dataSource.Columns.Clear();
 
-            foreach (var column in LookupDefinition.VisibleColumns)
-            {
-                var columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
-                
-                var gridColumn = AddGridViewColumn(column.Caption, columnWidth, column.SelectSqlAlias,
-                    TranslateLookupColumnAlignmentType(column.HorizontalAlignment));
-
-                ((INotifyPropertyChanged)gridColumn).PropertyChanged += (sender, args) =>
-                {
-                    if (args.PropertyName == "ActualWidth")
-                    {
-                        LookupControlSizeChanged();
-                    }
-                };
-            }
+            if (Columns.Any())
+                MergeLookupDefinition();
+            else
+                ImportLookupDefinition();
 
             var sortColumnIndex =
-                LookupDefinition.GetIndexOfVisibleColumn(LookupDefinition.InitialSortColumnDefinition);
+                GetIndexOfVisibleColumnDefinition(LookupDefinition.InitialSortColumnDefinition);
 
             InitializeHeader(sortColumnIndex);
             SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
@@ -222,6 +214,53 @@ namespace RingSoft.DbLookup.Controls.WPF
                 RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
                 _refreshPendingData = null;
             }
+        }
+
+        private void MergeLookupDefinition()
+        {
+            if (Columns.FirstOrDefault(f => f.PropertyName == LookupDefinition.InitialSortColumnDefinition.PropertyName) == null)
+                throw new Exception($"No Lookup Column was added to Columns collection for initial sort column Property '{LookupDefinition.InitialSortColumnDefinition.PropertyName}'.");
+
+            foreach (var lookupColumn in Columns)
+            {
+                var lookupColumnDefinition =
+                    LookupDefinition.VisibleColumns.FirstOrDefault(f => f.PropertyName == lookupColumn.PropertyName);
+                if (lookupColumnDefinition == null)
+                    throw new Exception($"No visible Lookup Column Definition was found for Property '{lookupColumn.PropertyName}'.");
+
+                lookupColumn.DataColumnName = lookupColumnDefinition.SelectSqlAlias;
+                lookupColumn.LookupColumnDefinition = lookupColumnDefinition;
+                if (!lookupColumn.TextAlignmentChanged)
+                    lookupColumn.TextAlignment =
+                        TranslateLookupColumnAlignmentType(lookupColumnDefinition.HorizontalAlignment);
+
+                AddColumnToGrid(lookupColumn);
+            }
+        }
+
+        private void ImportLookupDefinition()
+        {
+            foreach (var column in LookupDefinition.VisibleColumns)
+            {
+                var columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
+                var lookupColumn = new LookupColumn
+                {
+                    DataColumnName = column.SelectSqlAlias,
+                    Header = column.Caption,
+                    LookupColumnDefinition = column,
+                    PropertyName = column.PropertyName,
+                    TextAlignment = TranslateLookupColumnAlignmentType(column.HorizontalAlignment),
+                    Width = columnWidth
+                };
+                Columns.Add(lookupColumn);
+                AddColumnToGrid(lookupColumn);
+            }
+        }
+
+        private int GetIndexOfVisibleColumnDefinition(LookupColumnBase lookupColumnDefinition)
+        {
+            var lookupColumn = Columns.FirstOrDefault(f => f.LookupColumnDefinition == lookupColumnDefinition);
+            return Columns.IndexOf(lookupColumn);
         }
 
         private TextAlignment TranslateLookupColumnAlignmentType(LookupColumnAlignmentTypes lookupColumnAlignmentType)
@@ -269,6 +308,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var column = LookupGridView.Columns[sortColumnIndex];
                 var columnHeader = column.Header as GridViewColumnHeader;
                 var glyphSize = GridViewSort.GetGlyphSize(columnHeader, ListSortDirection.Ascending, ListView);
+                
                 Style style = new Style();
                 style.TargetType = typeof(GridViewColumnHeader);
                 style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, header.ActualHeight + glyphSize.Height + 5));
@@ -302,8 +342,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             foreach (var column in Columns)
             {
                 column.DataColumnName = $"Column{index}";
-                AddGridViewColumn(column.Header, column.Width, column.DataColumnName,
-                    column.TextAlignment);
+                AddColumnToGrid(column);
                 column.PropertyChanged -= Column_PropertyChanged;
                 column.PropertyChanged += Column_PropertyChanged;
                 index++;
@@ -317,6 +356,20 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (PageSize > 0)
                 DesignerFillGrid();
+        }
+
+        private void AddColumnToGrid(LookupColumn column)
+        {
+            var gridColumn = AddGridViewColumn(column.Header, column.Width, column.DataColumnName,
+                column.TextAlignment);
+
+            ((INotifyPropertyChanged)gridColumn).PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "ActualWidth")
+                {
+                    LookupControlSizeChanged();
+                }
+            };
         }
 
         private void DesignerFillGrid()
@@ -351,11 +404,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (e.PropertyName == nameof(LookupColumn.Header))
             {
-                var columnHeader = (GridViewColumnHeader) gridColumn.Header;
+                var columnHeader = (GridViewColumnHeader)gridColumn.Header;
                 columnHeader.Content = lookupColumn.Header;
-
-                if (columnIndex == _designSortIndex)
-                    SetActiveColumn(_designSortIndex, FieldDataTypes.String);
+                InitializeHeader(_designSortIndex);
+                DesignerFillGrid();
+                //if (columnIndex == _designSortIndex)
+                //    SetActiveColumn(_designSortIndex, FieldDataTypes.String);
+                //SetupDesigner();
             }
             else if (e.PropertyName == nameof(LookupColumn.DesignText))
             {
@@ -364,7 +419,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             else if (e.PropertyName == nameof(LookupColumn.Width))
             {
                 gridColumn.Width = lookupColumn.Width;
-                DesignerFillGrid();
             }
             else if (e.PropertyName == nameof(LookupColumn.TextAlignment))
             {
@@ -470,6 +524,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         _lastDirection = direction;
                     }
 
+                    SearchForTextBox.Text = string.Empty;
                     var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
                     LookupData.OnColumnClick(columnIndex, resetSortOrder);
 
@@ -486,7 +541,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var columnNumber = 1;
                     foreach (var lookupColumnDefinition in LookupData.OrderByList)
                     {
-                        var orderColumnIndex = LookupData.LookupDefinition.GetIndexOfVisibleColumn(lookupColumnDefinition);
+                        var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
                         var orderGridColumnHeader =
                             LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
                         GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
@@ -539,11 +594,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             foreach (DataRow dataRow in e.OutputTable.Rows)
             {
                 var newDataRow = _dataSource.NewRow();
-                foreach (var lookupDefinitionColumn in LookupData.LookupDefinition.VisibleColumns)
+                foreach (var lookupColumn in Columns)
                 {
-                    var cellValue = dataRow.GetRowValue(lookupDefinitionColumn.SelectSqlAlias);
-                    cellValue = lookupDefinitionColumn.FormatValue(cellValue);
-                    newDataRow[lookupDefinitionColumn.SelectSqlAlias] = cellValue;
+                    var cellValue = dataRow.GetRowValue(lookupColumn.DataColumnName);
+                    cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                    newDataRow[lookupColumn.DataColumnName] = cellValue;
                 }
 
                 _dataSource.Rows.Add(newDataRow);

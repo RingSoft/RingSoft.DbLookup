@@ -60,6 +60,7 @@
                                 <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="200" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="100" Header="Price" TextAlignment="Right" DesignText="$100,000.00"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf ExtendedPrice, Type={x:Type lm:OrderDetailLookup}}" Width="100" Header="Extended&#13;&#10;Pri"/>
                             </lc:LookupControl.Columns>
                         </lc:LookupControl>
                     </DockPanel>

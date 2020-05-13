@@ -1330,8 +1330,7 @@ namespace RingSoft.DbLookup.Lookup
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
 
             if (UserInterface.SearchType == LookupSearchTypes.Contains &&
-                SortColumnDefinition.DataType == FieldDataTypes.String &&
-                SortColumnDefinition.ColumnType == LookupColumnTypes.Field)
+                SortColumnDefinition.DataType == FieldDataTypes.String)
             {
                 if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                 {
@@ -1345,6 +1344,19 @@ namespace RingSoft.DbLookup.Lookup
                             AddCountParentJoin(joins, join);
                             TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
                         }
+                    }
+                }
+                else if (SortColumnDefinition is LookupFormulaColumnDefinition)
+                {
+                    if (LookupDefinition.Joins.Any())
+                    {
+                        List<TableFieldJoinDefinition> joins = new List<TableFieldJoinDefinition>();
+                        foreach (var join in LookupDefinition.Joins)
+                        {
+                            AddCountParentJoin(joins, join);
+                        }
+
+                        TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
                     }
                 }
             }

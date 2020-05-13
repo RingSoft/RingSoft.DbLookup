@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -11,8 +10,6 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
     public sealed class IntegerFieldDefinition : FieldDefinitionType<IntegerFieldDefinition>
     {
         public override FieldDataTypes FieldDataType => FieldDataTypes.Integer;
-
-        public override ValueTypes ValueType => ValueTypes.Numeric;
 
         /// <summary>
         /// Gets the number format string.

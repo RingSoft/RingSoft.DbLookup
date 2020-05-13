@@ -1,6 +1,4 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
-
-namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
+﻿namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// A boolean (True/False) field definition.
@@ -14,14 +12,6 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// The type of the field data.
         /// </value>
         public override FieldDataTypes FieldDataType => FieldDataTypes.Bool;
-
-        /// <summary>
-        /// Gets the type of the value for use in queries.
-        /// </summary>
-        /// <value>
-        /// The type of the value.
-        /// </value>
-        public override ValueTypes ValueType => ValueTypes.Bool;
 
         /// <summary>
         /// Gets the true text.

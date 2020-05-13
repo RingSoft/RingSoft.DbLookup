@@ -47,7 +47,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The type of the value.
         /// </value>
-        public abstract ValueTypes ValueType { get; }
+        public virtual ValueTypes ValueType => GblMethods.GetValueTypeForFieldDataType(FieldDataType);
 
         /// <summary>
         /// Gets the parent join foreign key definition.

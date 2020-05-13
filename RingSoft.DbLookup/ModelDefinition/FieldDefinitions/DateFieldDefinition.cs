@@ -10,8 +10,6 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
     {
         public override FieldDataTypes FieldDataType => FieldDataTypes.DateTime;
 
-        public override ValueTypes ValueType => ValueTypes.DateTime;
-
         /// <summary>
         /// Gets the type of the date.
         /// </summary>

@@ -1,6 +1,4 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
-
-namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
+﻿namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// An enumerator field definition.
@@ -10,8 +8,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
     {
         public override FieldDataTypes FieldDataType => FieldDataTypes.Enum;
-        public override ValueTypes ValueType => ValueTypes.Numeric;
-
+        
         /// <summary>
         /// Gets the enum translation.
         /// </summary>

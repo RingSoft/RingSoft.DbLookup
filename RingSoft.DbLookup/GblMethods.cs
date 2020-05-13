@@ -312,5 +312,24 @@ namespace RingSoft.DbLookup
 
             return FieldDataTypes.String;
         }
+
+        public static ValueTypes GetValueTypeForFieldDataType(FieldDataTypes fieldDataType)
+        {
+            switch (fieldDataType)
+            {
+                case FieldDataTypes.String:
+                    return ValueTypes.String;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.Decimal:
+                case FieldDataTypes.Enum:
+                    return ValueTypes.Numeric;
+                case FieldDataTypes.DateTime:
+                    return ValueTypes.DateTime;
+                case FieldDataTypes.Bool:
+                    return ValueTypes.Bool;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fieldDataType), fieldDataType, null);
+            }
+        }
     }
 }

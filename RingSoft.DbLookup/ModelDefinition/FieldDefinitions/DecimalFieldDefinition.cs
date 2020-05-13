@@ -1,5 +1,4 @@
 ﻿using System;
-using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -17,7 +16,6 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
     public sealed class DecimalFieldDefinition : FieldDefinitionType<DecimalFieldDefinition>
     {
         public override FieldDataTypes FieldDataType => FieldDataTypes.Decimal;
-        public override ValueTypes ValueType => ValueTypes.Numeric;
 
         /// <summary>
         /// Gets the decimal count.

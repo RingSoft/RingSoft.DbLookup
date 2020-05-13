@@ -1,4 +1,5 @@
 ﻿using System;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -23,6 +24,14 @@ namespace RingSoft.DbLookup.Lookup
         /// The type of the data.
         /// </value>
         public override FieldDataTypes DataType => _dataType;
+
+        /// <summary>
+        /// Gets the type of the value.
+        /// </summary>
+        /// <value>
+        /// The type of the value.
+        /// </value>
+        public ValueTypes ValueType => GblMethods.GetValueTypeForFieldDataType(DataType);
 
         /// <summary>
         /// Gets the select SQL alias.

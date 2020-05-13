@@ -309,7 +309,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 header.UpdateLayout();
 
                 var column = LookupGridView.Columns[sortColumnIndex];
-                var columnHeader = column.Header as GridViewColumnHeader;
+                var columnHeader = (GridViewColumnHeader)column.Header;
                 var glyphSize = GridViewSort.GetGlyphSize(columnHeader, ListSortDirection.Ascending, ListView);
                 
                 Style style = new Style();
@@ -318,10 +318,29 @@ namespace RingSoft.DbLookup.Controls.WPF
                 style.Setters.Add(new Setter(GridViewColumnHeader.VerticalContentAlignmentProperty, VerticalAlignment.Bottom));
 
                 LookupGridView.ColumnHeaderContainerStyle = style;
+                LookupGridView.ColumnHeaderTemplate = GetColumnHeaderDataTemplate();
+
                 header.UpdateLayout();
             }
 
             ResetColumnHeaderSort(sortColumnIndex);
+        }
+
+        private DataTemplate GetColumnHeaderDataTemplate()
+        {
+            var template = new DataTemplate();
+
+            var factory = new FrameworkElementFactory(typeof(TextBlock));
+            factory.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Center);
+
+            var binding = new Binding(TextBlock.TextProperty.Name);
+            binding.RelativeSource = new RelativeSource(RelativeSourceMode.TemplatedParent);
+            binding.Path = new PropertyPath(nameof(GridViewColumnHeader.Content));
+            factory.SetBinding(TextBlock.TextProperty, binding);
+            
+            template.VisualTree = factory;
+
+            return template;
         }
 
         private double GetHeaderHeight(GridViewHeaderRowPresenter header)
@@ -580,6 +599,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     SearchForTextBox.Text = string.Empty;
                     var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
+
                     LookupData.OnColumnClick(columnIndex, resetSortOrder);
 
                     for (int i = 0; i < LookupGridView.Columns.Count; i++)
@@ -610,10 +630,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetActiveColumn(int sortColumnIndex, FieldDataTypes datatype)
         {
-            var column = LookupGridView.Columns[sortColumnIndex];
-            var columnHeader = column.Header as GridViewColumnHeader;
-            if (columnHeader != null)
-                SearchForLabel.Content = $@"Search For {columnHeader.Content}";
+            var column = Columns[sortColumnIndex];
+            var headerText = column.Header.Replace('\n', ' ');
+            SearchForLabel.Content = $@"Search For {headerText}";
 
             if (datatype == FieldDataTypes.String)
             {

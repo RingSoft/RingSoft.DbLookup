@@ -87,7 +87,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             var employeeNameFormula = "[Employees].[FirstName] + ' ' + [Employees].[LastName]";
             var employeeSupervisorFormula = "[Employees_Employees_ReportsTo].[FirstName] + ' ' + [Employees_Employees_ReportsTo].[LastName]";
             var orderEmployeeNameFormula = GetOrdersEmployeeNameFormula();
-            var extendedPriceFormula = "[Order Details].[Quantity] * [Order Details].[UnitPrice]";
+            var extendedPriceFormula = "([Order Details].[Quantity] * 1.0) * [Order Details].[UnitPrice]";
 
             switch (DataProcessorType)
             {
@@ -100,7 +100,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 case DataProcessorTypes.MySql:
                     employeeNameFormula = "CONCAT(`Employees`.`FirstName`, ' ', `Employees`.`LastName`)";
                     employeeSupervisorFormula = "CONCAT(`Employees_Employees_ReportsTo`.`FirstName`, ' ', `Employees_Employees_ReportsTo`.`LastName`)";
-                    extendedPriceFormula = "`order details`.`Quantity` * `order details`.`UnitPrice`";
+                    extendedPriceFormula = "(`order details`.`Quantity` * 1.0) * `order details`.`UnitPrice`";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

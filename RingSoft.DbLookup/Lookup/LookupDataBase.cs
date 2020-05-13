@@ -359,7 +359,8 @@ namespace RingSoft.DbLookup.Lookup
                 case LookupColumnTypes.Formula:
                     if (SortColumnDefinition is LookupFormulaColumnDefinition sortFormulaColumnDefinition)
                     {
-                        query.AddWhereItemFormula(sortFormulaColumnDefinition.Formula, condition, searchText);
+                        query.AddWhereItemFormula(sortFormulaColumnDefinition.Formula, condition, searchText,
+                            sortFormulaColumnDefinition.ValueType);
                     }
 
                     break;
@@ -874,7 +875,8 @@ namespace RingSoft.DbLookup.Lookup
                 case LookupColumnTypes.Formula:
                     if (lookupColumnType is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
-                        return HasMoreThan1Record(searchValue, lookupFormulaColumn.Formula, query, debugMessage);
+                        return HasMoreThan1Record(searchValue, lookupFormulaColumn.Formula, query,
+                            lookupFormulaColumn.ValueType, debugMessage);
                     }
                     break;
             }
@@ -919,10 +921,11 @@ namespace RingSoft.DbLookup.Lookup
             return false;
         }
 
-        private bool HasMoreThan1Record(string searchValue, string formula, SelectQuery query, string debugMessage)
+        private bool HasMoreThan1Record(string searchValue, string formula, SelectQuery query, ValueTypes valueType,
+            string debugMessage)
         {
             query.SetMaxRecords(2);
-            query.AddWhereItemFormula(formula, Conditions.Equals, searchValue);
+            query.AddWhereItemFormula(formula, Conditions.Equals, searchValue, valueType);
 
             query.DebugMessage = $"LookupData.{debugMessage}.HasMoreThan1Record?";
             var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
@@ -1228,7 +1231,8 @@ namespace RingSoft.DbLookup.Lookup
                 case LookupColumnTypes.Formula:
                     if (SortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
-                        query.AddWhereItemFormula(lookupFormulaColumn.Formula, condition, searchText);
+                        query.AddWhereItemFormula(lookupFormulaColumn.Formula, condition, searchText,
+                            lookupFormulaColumn.ValueType);
                     }
 
                     break;

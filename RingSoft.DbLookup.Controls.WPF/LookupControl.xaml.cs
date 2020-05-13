@@ -124,6 +124,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _resettingSearchFor;
         private double _itemHeight;
         private int _designSortIndex = -1;
+        private double _designModeHeaderLineHeight;
 
         public LookupControl()
         {
@@ -304,20 +305,73 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (header != null)
             {
+                CalculateDesignHeaderLineHeight(header);
                 header.UpdateLayout();
+
                 var column = LookupGridView.Columns[sortColumnIndex];
                 var columnHeader = column.Header as GridViewColumnHeader;
                 var glyphSize = GridViewSort.GetGlyphSize(columnHeader, ListSortDirection.Ascending, ListView);
                 
                 Style style = new Style();
                 style.TargetType = typeof(GridViewColumnHeader);
-                style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, header.ActualHeight + glyphSize.Height + 5));
+                style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, GetHeaderHeight(header) + glyphSize.Height + 5));
                 style.Setters.Add(new Setter(GridViewColumnHeader.VerticalContentAlignmentProperty, VerticalAlignment.Bottom));
 
                 LookupGridView.ColumnHeaderContainerStyle = style;
+                header.UpdateLayout();
             }
 
             ResetColumnHeaderSort(sortColumnIndex);
+        }
+
+        private double GetHeaderHeight(GridViewHeaderRowPresenter header)
+        {
+            var height = header.ActualHeight;
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                var lineFeedCount = 0;
+                var startIndex = 0;
+                foreach (var column in Columns)
+                {
+                    while (startIndex >= 0)
+                    {
+                        startIndex = column.Header.IndexOf('\n', startIndex);
+                        if (startIndex >= 0)
+                        {
+                            lineFeedCount++;
+                            startIndex++;
+                        }
+                    }
+
+                    startIndex = 0;
+                }
+
+                height = _designModeHeaderLineHeight * (lineFeedCount + 1);
+            }
+            return height;
+        }
+
+        private void CalculateDesignHeaderLineHeight(GridViewHeaderRowPresenter header)
+        {
+            if (_designModeHeaderLineHeight > 0 || !DesignerProperties.GetIsInDesignMode(this))
+                return;
+
+            foreach (var column in LookupGridView.Columns)
+            {
+                var columnHeader = (GridViewColumnHeader) column.Header;
+                columnHeader.Content = "WWWWW\r\nWWW";
+            }
+            header.UpdateLayout();
+            _designModeHeaderLineHeight = header.ActualHeight / 2;
+
+            var index = 0;
+            foreach (var column in LookupGridView.Columns)
+            {
+                var columnHeader = (GridViewColumnHeader) column.Header;
+                var lookupColumn = Columns[index];
+                columnHeader.Content = lookupColumn.Header;
+                index++;
+            }
         }
 
         private void ResetColumnHeaderSort(int sortColumnIndex)

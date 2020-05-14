@@ -5,6 +5,7 @@
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
      xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+     xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
      xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
      mc:Ignorable="d"
      Title="Locations" Height="400" Width="500">
@@ -34,6 +35,10 @@
             <Label Grid.Row="1" Grid.Column="1" Content="Items"/>
             <Button x:Name="AddModifyButton" Grid.Row="2" Grid.Column="0" Content="_Add/Modify" Height="20" VerticalAlignment="Top"/>
             <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}">
+                <lc:LookupControl.LookupColumns>
+                    <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
+                    <lc:LookupColumn PropertyName="{lc:NameOf Manufacturer, Type={x:Type lm:ItemLookup}}" Width="150" Header="Manufacturer" DesignText="Albertsons"/>
+                </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
         </Grid>
     </DockPanel>

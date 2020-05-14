@@ -129,8 +129,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         public LookupControl()
         {
             //InitializeComponent();
-            LookupColumns = new ObservableCollection<LookupColumn>();
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
+
+            if (LookupColumns == null)
+            {
+                LookupColumns = new ObservableCollection<LookupColumn>();
+            }
 
             LookupColumns.CollectionChanged += (sender, args) => OnLookupColumnsChanged();
 
@@ -144,18 +148,15 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnLoad()
         {
+            if (_designSortIndex >= 0 && DesignerProperties.GetIsInDesignMode(this))
+            {
+                InitializeHeader(_designSortIndex);
+                DesignerFillGrid();
+            }
+
             if (IsVisible)
             {
                 SizeChanged += (sender, args) => LookupControlSizeChanged();
-                if (_designSortIndex >= 0 && DesignerProperties.GetIsInDesignMode(this))
-                {
-                    InitializeHeader(_designSortIndex);
-                    if (PageSize == 0)
-                    {
-                        //Don't run this if this has already been run
-                        DesignerFillGrid();
-                    }
-                }
 
                 if (LookupDefinition != null && !_controlLoaded)
                     SetupControl();
@@ -490,6 +491,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var columnHeader = (GridViewColumnHeader)gridColumn.Header;
                 columnHeader.Content = lookupColumn.Header;
                 InitializeHeader(_designSortIndex);
+
                 DesignerFillGrid();
 
                 if (columnIndex == _designSortIndex && !lookupColumn.Header.IsNullOrEmpty())
@@ -667,7 +669,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (originalPageSize != newPageSize && originalPageSize > 0)
             {
                 if (DesignerProperties.GetIsInDesignMode(this))
+                {
                     DesignerFillGrid();
+                }
                 else
                 {
                     LookupData?.OnChangePageSize();
@@ -769,14 +773,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             //var itemHeight = 0.0;
             if (_itemHeight <= 0)
             {
+                ListView.ItemsSource = null;
                 var addBlankRow = ListView.Items.Count <= 0;
-                
                 if (addBlankRow)
+                {
                     ListView.Items.Add("text");
+                }
 
                 var item = ListView.Items.GetItemAt(0);
                 ListView.UpdateLayout();
-                if (ListView.ItemContainerGenerator.ContainerFromItem(item) is ListViewItem listViewItem)
+
+                var containerItem = ListView.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (containerItem is ListViewItem listViewItem)
                 {
                     _itemHeight = listViewItem.ActualHeight;
                 }

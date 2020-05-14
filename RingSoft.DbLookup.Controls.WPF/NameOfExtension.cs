@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var pinfo = Type.GetRuntimeProperties().FirstOrDefault(pi => pi.Name == Member);
             var finfo = Type.GetRuntimeFields().FirstOrDefault(fi => fi.Name == Member);
             if (pinfo == null && finfo == null)
-                throw new ArgumentException($"No property or field found for {Member} in {Type}");
+                throw new ArgumentException($"No property or field found for {Member} in {Type.Name}");
 
             return Member;
         }

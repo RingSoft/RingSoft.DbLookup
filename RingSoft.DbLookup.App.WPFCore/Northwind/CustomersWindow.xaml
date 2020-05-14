@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
-        xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="Customers" Height="450" Width="500">
     <Window.DataContext>
-        <lib:CustomerViewModel x:Name="CustomersViewModel"/>
+        <vmlib:CustomerViewModel x:Name="CustomersViewModel"/>
     </Window.DataContext>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top" />

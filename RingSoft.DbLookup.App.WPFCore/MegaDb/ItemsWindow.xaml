@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
-        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="Items" Height="175" Width="500">
@@ -29,11 +29,11 @@
                 <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ItemId}"/>
             </Border>
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
-            <controls:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3"/>
+            <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3"/>
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Location"/>
-            <controls:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <lc:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Manufacturer"/>
-            <controls:AutoFillControl x:Name="ManufacturerControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <lc:AutoFillControl x:Name="ManufacturerControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

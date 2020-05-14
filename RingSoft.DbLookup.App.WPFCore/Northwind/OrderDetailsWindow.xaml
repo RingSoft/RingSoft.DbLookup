@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
@@ -41,7 +41,7 @@
                 <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=OrderDate, StringFormat=MM/dd/yyyy}"/>
             </Border>
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Product"/>
-            <controls:AutoFillControl x:Name="ProductControl" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Setup="{Binding Path=ProductAutoFillSetup}" Value="{Binding Path=ProductAutoFillValue, Mode=TwoWay}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
+            <lc:AutoFillControl x:Name="ProductControl" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Setup="{Binding Path=ProductAutoFillSetup}" Value="{Binding Path=ProductAutoFillValue, Mode=TwoWay}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
             <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Quantity"/>
             <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Quantity, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Grid.Row="4" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Price"/>

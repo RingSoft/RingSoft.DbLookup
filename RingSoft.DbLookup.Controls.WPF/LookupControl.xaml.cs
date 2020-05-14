@@ -131,8 +131,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             //InitializeComponent();
             LookupColumns = new ObservableCollection<LookupColumn>();
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
-            
-            LookupColumns.CollectionChanged += (sender, args) => SetupDesigner();
+
+            LookupColumns.CollectionChanged += (sender, args) => OnLookupColumnsChanged();
 
             Loaded += (sender, args) => OnLoad();
             SearchForTextBox.GotFocus += (sender, args) =>
@@ -408,7 +408,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
         }
 
-        private void SetupDesigner()
+        private void OnLookupColumnsChanged()
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
                 return;
@@ -505,7 +505,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             else if (e.PropertyName == nameof(LookupColumn.TextAlignment))
             {
-                SetupDesigner();
+                OnLookupColumnsChanged();
             }
         }
 

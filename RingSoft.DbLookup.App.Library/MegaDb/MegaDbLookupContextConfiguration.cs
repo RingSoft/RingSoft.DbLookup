@@ -96,8 +96,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
                 new LookupDefinition<StockCostQuantityLookup, StockCostQuantity>(_lookupContext.StockCostQuantities);
             StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.PurchasedDate, "Purchase Date",
                 p => p.PurchasedDateTime, 50);
-            StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity,
-                25);
+            StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 25);
             StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Cost, "Cost", p => p.Cost, 25);
         }
 

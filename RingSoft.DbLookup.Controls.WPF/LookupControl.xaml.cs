@@ -150,7 +150,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_designSortIndex >= 0 && DesignerProperties.GetIsInDesignMode(this))
                 {
                     InitializeHeader(_designSortIndex);
-                    DesignerFillGrid();
+                    if (PageSize == 0)
+                    {
+                        //Don't run this if this has already been run
+                        DesignerFillGrid();
+                    }
                 }
 
                 if (LookupDefinition != null && !_controlLoaded)

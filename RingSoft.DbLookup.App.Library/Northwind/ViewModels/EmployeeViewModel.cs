@@ -322,9 +322,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo));
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 30);
+            ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
             ordersLookup.Include(p => p.Customer)
-                .AddVisibleColumnDefinition(p => p.Customer, "Company Name", p => p.CompanyName, 70);
+                .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
 
             OrdersLookupDefinition = ordersLookup;
 

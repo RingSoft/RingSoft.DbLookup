@@ -198,10 +198,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 30);
+            ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
             ordersLookup.Include(p => p.Employee);
-            ordersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee",
-                _lookupContext.NorthwindContextConfiguration.GetOrdersEmployeeNameFormula(), 70);
+            ordersLookup.AddVisibleColumnDefinition(p => p.Employee, 
+                _lookupContext.NorthwindContextConfiguration.GetOrdersEmployeeNameFormula());
 
             OrdersLookupDefinition = ordersLookup;
 

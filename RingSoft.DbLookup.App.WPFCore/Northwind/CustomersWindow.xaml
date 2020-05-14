@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
-        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Title="Customers" Height="450" Width="500">
     <Window.DataContext>
@@ -26,7 +27,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label Content="Customer ID" Style="{StaticResource ControlLabel}" IsEnabled="{Binding PrimaryKeyControlsEnabled}" />
-            <controls:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" />
+            <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" />
             <Label Grid.Row="0" Grid.Column="2" Content="Company Name" Style="{StaticResource ControlLabel}" />
             <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" Style="{StaticResource StandardTextBox}" />
             <Label Grid.Row="1" Grid.Column="0" Content="Contact Title" Style="{StaticResource ControlLabel}" />
@@ -71,7 +72,12 @@
                 <TabItem Header="Orders">
                     <DockPanel>
                         <Button Content="_Add/Modify" x:Name="AddModifyButton" VerticalAlignment="Top"/>
-                        <controls:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}"/>
+                        <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}">
+                            <lc:LookupControl.LookupColumns>
+                                <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderLookup}}" Width="100" Header="Order Date" DesignText="01/01/1980"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Employee, Type={x:Type lm:OrderLookup}}" Width="260" Header="Employee" DesignText="Andrew Fuller"/>
+                            </lc:LookupControl.LookupColumns>
+                        </lc:LookupControl>
                     </DockPanel>
                 </TabItem>
             </TabControl>

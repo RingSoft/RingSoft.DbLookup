@@ -94,14 +94,15 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ViewButtonClick()
         {
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty);
+            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
             args.CallBackToken.RefreshData += (sender, eventArgs) => LookupCallBackRefreshData();
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void AddButtonClick()
         {
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add, LookupControl.SearchText);
+            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
+                LookupControl.SearchText, this);
             args.CallBackToken.RefreshData += (sender, eventArgs) => LookupCallBackRefreshData();
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }

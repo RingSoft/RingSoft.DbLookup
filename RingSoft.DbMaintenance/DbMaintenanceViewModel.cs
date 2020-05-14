@@ -237,7 +237,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnFindButton()
         {
-            View.ShowFindLookupForm(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor);
+            View.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor);
         }
 
         private void View_LookupFormReturn(object sender, LookupSelectArgs e)
@@ -256,7 +256,7 @@ namespace RingSoft.DbMaintenance
             _selectingRecord = true;
             LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.PrimaryKeyValue);
             View.CloseWindow();
-            LookupAddViewArgs.LookupData.ViewSelectedRow(0);
+            LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
         }
 
         /// <summary>

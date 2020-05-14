@@ -46,6 +46,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 var ordersWindow = new OrdersWindow();
+                ordersWindow.Owner = this;
                 ordersWindow.ShowDialog();
             };
 
@@ -57,6 +58,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 var itemsWindow = new ItemsWindow();
+                itemsWindow.Owner = this;
                 itemsWindow.ShowDialog();
             };
 
@@ -68,6 +70,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 var stockMasterWindow = new StockMasterWindow();
+                stockMasterWindow.Owner = this;
                 stockMasterWindow.ShowDialog();
             };
 
@@ -77,6 +80,8 @@ namespace RingSoft.DbLookup.App.WPFCore
         private void DatabaseSetupClick()
         {
             var dbSetupWindow = new DbSetupWindow();
+            dbSetupWindow.ShowInTaskbar = false;
+            dbSetupWindow.Owner = this;
             dbSetupWindow.ShowDialog();
         }
     }

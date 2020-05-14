@@ -66,14 +66,14 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         private void ViewButton_Click(object sender, EventArgs e)
         {
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty);
+            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
             args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add, LookupControl.SearchText);
+            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add, LookupControl.SearchText, this);
             args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }

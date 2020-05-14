@@ -564,7 +564,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         {
             var selectedIndex = LookupListView.GetSelectedIndex();
             if (selectedIndex >= 0)
-                LookupData.ViewSelectedRow(selectedIndex);
+                LookupData.ViewSelectedRow(selectedIndex, this);
         }
 
         private LookupSearchTypes GetLookupSearchType()
@@ -659,9 +659,9 @@ namespace RingSoft.DbLookup.Controls.WinForms
                     case LookupCommands.AddModify:
                         var selectedIndex = LookupListView.GetSelectedIndex();
                         if (selectedIndex >= 0)
-                            LookupData.ViewSelectedRow(selectedIndex);
+                            LookupData.ViewSelectedRow(selectedIndex, this);
                         else
-                            LookupData.AddNewRow();
+                            LookupData.AddNewRow(this);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

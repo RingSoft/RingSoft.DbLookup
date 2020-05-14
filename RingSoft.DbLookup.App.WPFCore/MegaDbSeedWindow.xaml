@@ -6,7 +6,7 @@
                      xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
                      xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
                      mc:Ignorable="d"
-        Title="Mega Database Items Table Seeder" Height="150" Width="400">
+        Title="Mega Database Items Table Seeder" Height="150" Width="400" ShowInTaskbar="False">
     <Window.DataContext>
         <vmlib:MegaDbSeedViewModel x:Name="MegaDbSeedViewModel"/>
     </Window.DataContext>

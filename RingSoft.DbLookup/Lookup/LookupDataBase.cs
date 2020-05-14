@@ -1247,12 +1247,13 @@ namespace RingSoft.DbLookup.Lookup
         /// Views the selected row.
         /// </summary>
         /// <param name="selectedIndex">Index of the selected row.</param>
-        public void ViewSelectedRow(int selectedIndex)
+        /// <param name="ownerWindow">The owner window.</param>
+        public void ViewSelectedRow(int selectedIndex, object ownerWindow)
         {
             if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
             {
                 _selectingRecord = true;
-                var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty)
+                var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
                 {
                     ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue
                 };
@@ -1269,9 +1270,10 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Adds a new row.
         /// </summary>
-        public void AddNewRow()
+        /// <param name="ownerWindow">The owner window.</param>
+        public void AddNewRow(object ownerWindow)
         {
-            var args = new LookupAddViewArgs(this, true, LookupFormModes.Add, string.Empty)
+            var args = new LookupAddViewArgs(this, true, LookupFormModes.Add, string.Empty, ownerWindow)
             {
                 ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue
             };

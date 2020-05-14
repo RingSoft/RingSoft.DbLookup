@@ -1021,7 +1021,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var selectedIndex = ListView.SelectedIndex;
             if (selectedIndex >= 0)
-                LookupData.ViewSelectedRow(selectedIndex);
+                LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this));
         }
 
         private void ExecuteCommand()
@@ -1040,9 +1040,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.AddModify:
                         var selectedIndex = ListView.SelectedIndex;
                         if (selectedIndex >= 0)
-                            LookupData.ViewSelectedRow(selectedIndex);
+                            LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this));
                         else
-                            LookupData.AddNewRow();
+                            LookupData.AddNewRow(Window.GetWindow(this));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

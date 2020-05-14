@@ -32,7 +32,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="allowAdd">if set to <c>true</c> allow add.</param>
         /// <param name="allowView">if set to <c>true</c> allow view.</param>
         /// <param name="initialSearchFor">The initial search for.</param>
-        void ShowFindLookupForm(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor);
+        void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor);
 
         /// <summary>
         /// Occurs when the lookup form closes and the user selects a record from the lookup form.

@@ -145,6 +145,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             string defaultDbName, string dbName)
         {
             var sqlScriptWindow = new SqlScriptWindow(dataProcessor, scriptFileName, sql, splitGo, defaultDbName, dbName);
+            sqlScriptWindow.Owner = this;
             sqlScriptWindow.ShowDialog();
         }
 
@@ -243,6 +244,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         public void ShowMegaDbItemsTableSeederForm(MegaDbPlatforms megaDbPlatform)
         {
             var seederWindow = new MegaDbSeedWindow(megaDbPlatform);
+            seederWindow.Owner = this;
             seederWindow.ShowDialog();
         }
     }

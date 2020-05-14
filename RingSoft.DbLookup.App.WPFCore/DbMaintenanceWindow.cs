@@ -18,6 +18,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         protected void Initialize()
         {
+            ShowInTaskbar = false;
             MaintenanceButtonsControl.Margin = new Thickness(0, 0, 0, 2.5);
 
             MaintenanceButtonsControl.PreviousButton.Click += (sender, args) => ViewModel.OnGotoPreviousButton();
@@ -104,7 +105,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
         }
 
-        public void ShowFindLookupForm(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
+        public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
             var lookupWindow =
                 new LookupWindow(lookupDefinition, allowAdd, allowView, initialSearchFor);

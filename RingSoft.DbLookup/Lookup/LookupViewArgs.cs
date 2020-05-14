@@ -68,19 +68,30 @@
         public LookupCallBackToken CallBackToken { get; }
 
         /// <summary>
+        /// Gets the owner window.
+        /// </summary>
+        /// <value>
+        /// The owner window.
+        /// </value>
+        public object OwnerWindow { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>
         /// <param name="fromLookupControl">if set to <c>true</c> then this is from a lookup control.</param>
         /// <param name="lookupFormMode">The lookup form mode.</param>
         /// <param name="initialAddModeText">The initial add mode text.</param>
-        public LookupAddViewArgs(LookupDataBase lookupData, bool fromLookupControl, LookupFormModes lookupFormMode, string initialAddModeText)
+        /// <param name="ownerWindow">The owner window that launched this.</param>
+        public LookupAddViewArgs(LookupDataBase lookupData, bool fromLookupControl, LookupFormModes lookupFormMode,
+            string initialAddModeText, object ownerWindow)
         {
             LookupData = lookupData;
             FromLookupControl = fromLookupControl;
             LookupFormMode = lookupFormMode;
             InitialAddModeText = initialAddModeText;
             CallBackToken = new LookupCallBackToken();
+            OwnerWindow = ownerWindow;
         }
     }
 }

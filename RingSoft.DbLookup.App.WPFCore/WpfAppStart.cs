@@ -86,35 +86,25 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
             {
-                var itemsWindow = new ItemsWindow();
-                itemsWindow.InitializeFromLookupData(e);
-                itemsWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new ItemsWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
             {
-                var locationsWindow = new LocationWindow();
-                locationsWindow.InitializeFromLookupData(e);
-                locationsWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new LocationWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
             {
-                var manufacturersWindow = new ManufacturerWindow();
-                manufacturersWindow.InitializeFromLookupData(e);
-                manufacturersWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new ManufacturerWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
             {
-                var stockMasterWindow = new StockMasterWindow();
-                stockMasterWindow.InitializeFromLookupData(e);
-                stockMasterWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new StockMasterWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
             {
-                var stockCostQuantityWindow = new StockCostQuantityWindow();
-                stockCostQuantityWindow.InitializeFromLookupData(e);
-                stockCostQuantityWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new StockCostQuantityWindow(), e);
             }
         }
 
@@ -122,29 +112,30 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
             {
-                var customersWindow = new CustomersWindow();
-                customersWindow.InitializeFromLookupData(e);
-                customersWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new CustomersWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
             {
-                var ordersWindow = new OrdersWindow();
-                ordersWindow.InitializeFromLookupData(e);
-                ordersWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new OrdersWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
             {
-                var employeesWindow = new EmployeesWindow();
-                employeesWindow.InitializeFromLookupData(e);
-                employeesWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new EmployeesWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
             {
-                var orderDetailsWindow = new OrderDetailsWindow();
-                orderDetailsWindow.InitializeFromLookupData(e);
-                orderDetailsWindow.ShowDialog();
+                ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
             }
+        }
+
+        private void ShowAddOnTheFlyWindow(DbMaintenanceWindow maintenanceWindow, LookupAddViewArgs e)
+        {
+            if (e.OwnerWindow is Window ownerWindow)
+                maintenanceWindow.Owner = ownerWindow;
+
+            maintenanceWindow.InitializeFromLookupData(e);
+            maintenanceWindow.ShowDialog();
         }
     }
 }

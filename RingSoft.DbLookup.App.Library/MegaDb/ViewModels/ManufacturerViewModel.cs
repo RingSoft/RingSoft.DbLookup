@@ -64,9 +64,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             var itemsLookup =
                 new LookupDefinition<ItemLookup, Item>(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
 
-            itemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item", p => p.Name, 50);
+            itemsLookup.AddVisibleColumnDefinition(p => p.Name, p => p.Name);
             itemsLookup.Include(p => p.Location)
-                .AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Name, 50);
+                .AddVisibleColumnDefinition(p => p.Location, p => p.Name);
 
             ItemsLookupDefinition = itemsLookup;
 

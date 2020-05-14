@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
-        xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
         Title="Manufacturers" Height="400" Width="500">
@@ -30,10 +31,15 @@
                 <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ManufacturerId}"/>
             </Border>
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
-            <controls:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3" Width="200" HorizontalAlignment="Left"/>
+            <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3" Width="200" HorizontalAlignment="Left"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Items"/>
             <Button x:Name="AddModifyButton" Grid.Row="2" Grid.Column="0" Content="_Add/Modify" Height="20" VerticalAlignment="Top"/>
-            <controls:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}"/>
+            <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}">
+                <lc:LookupControl.LookupColumns>
+                    <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
+                    <lc:LookupColumn PropertyName="{lc:NameOf Location, Type={x:Type lm:ItemLookup}}" Width="140" Header="Location" DesignText="Produce"/>
+                </lc:LookupControl.LookupColumns>
+            </lc:LookupControl>
         </Grid>
 
     </DockPanel>

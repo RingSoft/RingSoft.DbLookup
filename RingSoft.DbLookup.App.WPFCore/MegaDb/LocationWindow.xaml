@@ -37,7 +37,7 @@
             <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}">
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
-                    <lc:LookupColumn PropertyName="{lc:NameOf Manufacturer, Type={x:Type lm:ItemLookup}}" Width="150" Header="Manufacturer" DesignText="Albertsons"/>
+                    <lc:LookupColumn PropertyName="{lc:NameOf Manufacturer, Type={x:Type lm:ItemLookup}}" Width="150" Header="Manufacturer" DesignText="Western Family"/>
                 </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
         </Grid>

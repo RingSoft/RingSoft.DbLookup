@@ -35,6 +35,18 @@ namespace RingSoft.DbLookup.App.WPFCore
                 timer.Start();
             };
 
+            //Closing += (sender, args) =>
+            //{
+            //    if (_openWindows > 0)
+            //    {
+            //        var message = "All open windows must be closed before exiting the application.";
+            //        MessageBox.Show(this, message, "Application Exit", MessageBoxButton.OK,
+            //            MessageBoxImage.Exclamation);
+
+            //        args.Cancel = true;
+            //    }
+            //};
+
             DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();
 
             NorthwindButton.Click += (sender, args) =>
@@ -79,6 +91,12 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private void DatabaseSetupClick()
         {
+            //if (_openWindows > 0)
+            //{
+            //    var message = "All open windows must be closed before modifying the Database Settings.";
+            //    MessageBox.Show(this, message, "Database Settings", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            //    return;
+            //}
             var dbSetupWindow = new DbSetupWindow();
             dbSetupWindow.ShowInTaskbar = false;
             dbSetupWindow.Owner = this;

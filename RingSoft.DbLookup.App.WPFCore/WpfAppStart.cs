@@ -134,6 +134,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             if (e.OwnerWindow is Window ownerWindow)
                 maintenanceWindow.Owner = ownerWindow;
 
+            maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.InitializeFromLookupData(e);
             maintenanceWindow.ShowDialog();
         }

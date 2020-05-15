@@ -129,19 +129,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
-      <Version>3.1.3</Version>
+      <Version>3.1.4</Version>
     </PackageReference>
     <PackageReference Include="MySql.Data">
       <Version>8.0.20</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.Controls.WPF">
-      <Version>0.91.3</Version>
+      <Version>0.92.1</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.EfCore">
-      <Version>0.91.3</Version>
+      <Version>0.92.1</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbMaintenance">
-      <Version>0.91.3</Version>
+      <Version>0.92.1</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.112.2</Version>

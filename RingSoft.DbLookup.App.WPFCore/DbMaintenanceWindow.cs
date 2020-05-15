@@ -114,6 +114,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 LookupFormReturn?.Invoke(this, args);
             };
+            lookupWindow.Owner = this;
             lookupWindow.ShowDialog();
         }
 

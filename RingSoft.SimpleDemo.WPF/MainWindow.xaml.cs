@@ -155,7 +155,17 @@ namespace RingSoft.SimpleDemo.WPF
 
             OrdersLookupButton.Click += OrdersLookupButton_Click;
 
-            OrderDetailsLookupDefinition = App.LookupContext.OrderDetailsFormLookup.Clone();
+            var extendedPriceFormula = "([Order Details].[Quantity] * 1.0) * [Order Details].[UnitPrice]";
+            var orderDetailsLookupDefinition = new LookupDefinition<OrderDetailLookup, Order_Detail>(App.LookupContext.OrderDetails);
+            orderDetailsLookupDefinition.Include(p => p.Product)
+                .AddVisibleColumnDefinition(p => p.Product, p => p.ProductName);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.Quantity, p => p.Quantity);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.UnitPrice, p => p.UnitPrice);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.ExtendedPrice, extendedPriceFormula)
+                .HasNumberFormatString("c").HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.Discount, p => p.Discount);
+
+            OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
         }
 
         private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)

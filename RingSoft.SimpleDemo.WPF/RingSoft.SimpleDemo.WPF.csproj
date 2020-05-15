@@ -134,18 +134,23 @@
     <PackageReference Include="MySql.Data">
       <Version>8.0.20</Version>
     </PackageReference>
-    <PackageReference Include="RingSoft.DbLookup.Controls.WPF">
-      <Version>0.92.1</Version>
-    </PackageReference>
-    <PackageReference Include="RingSoft.DbLookup.EfCore">
-      <Version>0.92.1</Version>
-    </PackageReference>
-    <PackageReference Include="RingSoft.DbMaintenance">
-      <Version>0.92.1</Version>
-    </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.112.2</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup.Controls.WPF\RingSoft.DbLookup.Controls.WPF.csproj">
+      <Project>{f4051808-f6f8-468f-bab8-d004a9dd74e4}</Project>
+      <Name>RingSoft.DbLookup.Controls.WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RingSoft.DbLookup.EfCore\RingSoft.DbLookup.EfCore.csproj">
+      <Project>{ae802915-82d2-486f-838c-3acf7e1c71d7}</Project>
+      <Name>RingSoft.DbLookup.EfCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj">
+      <Project>{f5ea8cc1-689c-4254-954e-916d7b225dab}</Project>
+      <Name>RingSoft.DbLookup</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

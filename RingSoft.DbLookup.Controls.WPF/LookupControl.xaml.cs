@@ -99,14 +99,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             set { SetValue(DataSourceChangedProperty, value); }
         }
 
-        public static readonly DependencyProperty LookupColumnsProperty =
-            DependencyProperty.Register("LookupColumns", typeof(ObservableCollection<LookupColumn>), typeof(LookupControl));
+        //public static readonly DependencyProperty LookupColumnsProperty =
+        //    DependencyProperty.Register("LookupColumns", typeof(ObservableCollection<LookupColumn>), typeof(LookupControl));
 
-        public ObservableCollection<LookupColumn> LookupColumns
-        {
-            get { return (ObservableCollection<LookupColumn>)GetValue(LookupColumnsProperty); }
-            set { SetValue(LookupColumnsProperty, value); }
-        }
+        //public ObservableCollection<LookupColumn> LookupColumns
+        //{
+        //    get { return (ObservableCollection<LookupColumn>)GetValue(LookupColumnsProperty); }
+        //    set { SetValue(LookupColumnsProperty, value); }
+        //}
+
+        public ObservableCollection<LookupColumn> LookupColumns { get; }
 
         public LookupDataBase LookupData { get; private set; }
 
@@ -128,13 +130,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupControl()
         {
+            LookupColumns = new ObservableCollection<LookupColumn>();
+
             //InitializeComponent();
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/LookupControl.xaml");
-
-            if (LookupColumns == null)
-            {
-                LookupColumns = new ObservableCollection<LookupColumn>();
-            }
 
             LookupColumns.CollectionChanged += (sender, args) => OnLookupColumnsChanged();
 
@@ -237,8 +236,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 lookupColumn.DataColumnName = lookupColumnDefinition.SelectSqlAlias;
                 lookupColumn.LookupColumnDefinition = lookupColumnDefinition;
                 if (!lookupColumn.TextAlignmentChanged)
-                    lookupColumn.TextAlignment =
-                        TranslateLookupColumnAlignmentType(lookupColumnDefinition.HorizontalAlignment);
+                    lookupColumn.TextAlignment = lookupColumnDefinition.HorizontalAlignment;
 
                 AddColumnToGrid(lookupColumn);
             }
@@ -255,7 +253,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     Header = column.Caption,
                     LookupColumnDefinition = column,
                     PropertyName = column.PropertyName,
-                    TextAlignment = TranslateLookupColumnAlignmentType(column.HorizontalAlignment),
+                    TextAlignment = column.HorizontalAlignment,
                     Width = columnWidth
                 };
                 LookupColumns.Add(lookupColumn);
@@ -267,21 +265,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var lookupColumn = LookupColumns.FirstOrDefault(f => f.LookupColumnDefinition == lookupColumnDefinition);
             return LookupColumns.IndexOf(lookupColumn);
-        }
-
-        private TextAlignment TranslateLookupColumnAlignmentType(LookupColumnAlignmentTypes lookupColumnAlignmentType)
-        {
-            switch (lookupColumnAlignmentType)
-            {
-                case LookupColumnAlignmentTypes.Left:
-                    return TextAlignment.Left;
-                case LookupColumnAlignmentTypes.Center:
-                    return TextAlignment.Center;
-                case LookupColumnAlignmentTypes.Right:
-                    return TextAlignment.Right;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(lookupColumnAlignmentType), lookupColumnAlignmentType, null);
-            }
         }
 
         private GridViewColumn AddGridViewColumn(string caption, double width, string dataColumnName,
@@ -308,7 +291,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 .GetProperty("HeaderRowPresenter", BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.GetValue(LookupGridView);
 
-            if (header != null)
+            if (header != null && LookupGridView.Columns.Any())
             {
                 CalculateDesignHeaderLineHeight(header);
                 header.UpdateLayout();
@@ -383,6 +366,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (_designModeHeaderLineHeight > 0 || !DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            if (!LookupGridView.Columns.Any())
+                return;
+
             foreach (var column in LookupGridView.Columns)
             {
                 var columnHeader = (GridViewColumnHeader) column.Header;
@@ -403,6 +389,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ResetColumnHeaderSort(int sortColumnIndex)
         {
+            if (!LookupGridView.Columns.Any())
+                return;
+
             var sortColumn = LookupGridView.Columns[sortColumnIndex];
             _lastHeaderClicked = sortColumn.Header as GridViewColumnHeader;
             _lastDirection = ListSortDirection.Ascending;
@@ -432,20 +421,30 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupColumns.Any())
                 _designSortIndex = 0;
 
-            ResetColumnHeaderSort(_designSortIndex);
-
+            InitializeHeader(_designSortIndex);
             SetActiveColumn(_designSortIndex, FieldDataTypes.String);
-
-            if (PageSize > 0)
-            {
-                DesignerFillGrid();
-            }
+            DesignerFillGrid();
         }
 
         private void AddColumnToGrid(LookupColumn column)
         {
+            TextAlignment gridTextAlignment;
+            switch (column.TextAlignment)
+            {
+                case LookupColumnAlignmentTypes.Left:
+                    gridTextAlignment = TextAlignment.Left;
+                    break;
+                case LookupColumnAlignmentTypes.Center:
+                    gridTextAlignment = TextAlignment.Center;
+                    break;
+                case LookupColumnAlignmentTypes.Right:
+                    gridTextAlignment = TextAlignment.Right;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             var gridColumn = AddGridViewColumn(column.Header, column.Width, column.DataColumnName,
-                column.TextAlignment);
+                gridTextAlignment);
 
             ((INotifyPropertyChanged)gridColumn).PropertyChanged += (sender, args) =>
             {
@@ -479,7 +478,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void Column_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this) && !LookupGridView.Columns.Any())
                 return;
 
             var lookupColumn = (LookupColumn) sender;
@@ -490,6 +489,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 var columnHeader = (GridViewColumnHeader)gridColumn.Header;
                 columnHeader.Content = lookupColumn.Header;
+
                 InitializeHeader(_designSortIndex);
 
                 DesignerFillGrid();
@@ -642,6 +642,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetActiveColumn(int sortColumnIndex, FieldDataTypes datatype)
         {
+            if (!LookupColumns.Any())
+                return;
+
             var column = LookupColumns[sortColumnIndex];
 
             if (!column.Header.IsNullOrEmpty())

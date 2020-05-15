@@ -27,8 +27,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
 
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
 
-        public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsFormLookup { get; private set; }
-
         public LookupDefinition<CustomerLookup, Customer> CustomerIdLookup { get; private set; }
 
         public LookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
@@ -71,9 +69,7 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             var employeeNameFormula = "[Employees].[FirstName] || ' ' || [Employees].[LastName]";
             var employeeSupervisorFormula = "[Employees_Employees_ReportsTo].[FirstName] || ' ' || [Employees_Employees_ReportsTo].[LastName]";
             var orderEmployeeNameFormula = "[Orders_Employees_EmployeeID].[FirstName] || ' ' || [Orders_Employees_EmployeeID].[LastName]";
-            var extendedPriceFormula = "[Order Details].[Quantity] * [Order Details].[UnitPrice]";
-
-
+            
             OrdersLookup = new LookupDefinition<OrderLookup, Order>(Orders);
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderId, "Order ID", p => p.OrderID, 15);
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 20);
@@ -83,15 +79,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", orderEmployeeNameFormula, 25);
 
             Orders.HasLookupDefinition(OrdersLookup);
-
-            OrderDetailsFormLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(OrderDetails);
-            OrderDetailsFormLookup.Include(p => p.Product)
-                .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 15);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Ext. Price", extendedPriceFormula, 15)
-                .HasNumberFormatString("c").HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Discount, "Discount", p => p.Discount, 15);
 
             CustomerIdLookup = new LookupDefinition<CustomerLookup, Customer>(Customers);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "Customer Id", p => p.CustomerID, 20);

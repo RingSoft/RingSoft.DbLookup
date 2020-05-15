@@ -2,7 +2,6 @@
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -53,9 +52,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private TextAlignment _textAlignment = TextAlignment.Left;
+        private LookupColumnAlignmentTypes _textAlignment = LookupColumnAlignmentTypes.Left;
         
-        public TextAlignment TextAlignment
+        public LookupColumnAlignmentTypes TextAlignment
         {
             get => _textAlignment;
             set

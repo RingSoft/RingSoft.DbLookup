@@ -6,7 +6,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public sealed class LookupColumnCollection : IList<LookupColumn>
     {
+        public event EventHandler CollectionChanged;
+
         private List<LookupColumn> _lookupColumns = new List<LookupColumn>();
+
+        private void OnCollectionChanged()
+        {
+            CollectionChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public IEnumerator<LookupColumn> GetEnumerator()
         {
@@ -22,11 +29,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (!Contains(item))
                 _lookupColumns.Add(item);
+            OnCollectionChanged();
         }
 
         public void Clear()
         {
             _lookupColumns.Clear();
+            OnCollectionChanged();
         }
 
         public bool Contains(LookupColumn item)
@@ -47,11 +56,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 array[i + arrayIndex] = _lookupColumns[i];
             }
+            OnCollectionChanged();
         }
 
         public bool Remove(LookupColumn item)
         {
-            return _lookupColumns.Remove(item);
+            var result = _lookupColumns.Remove(item);
+            OnCollectionChanged();
+            return result;
         }
 
         public int Count => _lookupColumns.Count;
@@ -68,17 +80,23 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void Insert(int index, LookupColumn item)
         {
             _lookupColumns.Insert(index, item);
+            OnCollectionChanged();
         }
 
         void IList<LookupColumn>.RemoveAt(int index)
         {
             _lookupColumns.RemoveAt(index);
+            OnCollectionChanged();
         }
 
         public LookupColumn this[int index]
         {
-            get { return _lookupColumns[index]; }
-            set { _lookupColumns[index] = value; }
+            get => _lookupColumns[index];
+            set
+            {
+                _lookupColumns[index] = value;
+                OnCollectionChanged();
+            }
         }
     }
 }

@@ -99,15 +99,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             set { SetValue(DataSourceChangedProperty, value); }
         }
 
-        //public static readonly DependencyProperty LookupColumnsProperty =
-        //    DependencyProperty.Register("LookupColumns", typeof(ObservableCollection<LookupColumn>), typeof(LookupControl));
-
-        //public ObservableCollection<LookupColumn> LookupColumns
-        //{
-        //    get { return (ObservableCollection<LookupColumn>)GetValue(LookupColumnsProperty); }
-        //    set { SetValue(LookupColumnsProperty, value); }
-        //}
-
         public ObservableCollection<LookupColumn> LookupColumns { get; }
 
         public LookupDataBase LookupData { get; private set; }

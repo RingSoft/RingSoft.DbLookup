@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.ViewModels;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -148,6 +148,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             sqlScriptWindow.Owner = this;
             sqlScriptWindow.ShowDialog();
         }
+
 
         public string ShowOpenFileDialog(string initialDirectory, string fileName, string defaultExt, string filter)
         {

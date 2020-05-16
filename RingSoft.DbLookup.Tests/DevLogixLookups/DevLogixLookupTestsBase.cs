@@ -2,7 +2,7 @@
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.DevLogix;
 using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Tests.DevLogixLookups

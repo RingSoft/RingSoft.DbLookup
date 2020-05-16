@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;

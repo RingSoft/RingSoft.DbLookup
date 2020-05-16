@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Tests.DbMaintenance
 {

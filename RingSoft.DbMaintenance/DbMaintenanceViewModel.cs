@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;

@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Ef6;
-using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.Ef6
 {

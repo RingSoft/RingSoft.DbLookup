@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels

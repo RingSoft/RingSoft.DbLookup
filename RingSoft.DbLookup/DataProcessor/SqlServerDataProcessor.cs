@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator;
+using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookup.GetDataProcessor
+namespace RingSoft.DbLookup.DataProcessor
 {
     public enum SecurityTypes
     {

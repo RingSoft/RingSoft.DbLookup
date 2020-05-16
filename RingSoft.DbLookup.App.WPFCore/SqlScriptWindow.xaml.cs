@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Win32;
 using RingSoft.DbLookup.App.Library.ViewModels;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {

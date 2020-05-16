@@ -1,6 +1,6 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
-using System;
+﻿using System;
 using System.Drawing;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WinForms
 {

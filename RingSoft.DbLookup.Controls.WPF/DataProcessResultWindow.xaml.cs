@@ -1,6 +1,6 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
-using System;
+﻿using System;
 using System.Windows.Media;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

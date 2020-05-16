@@ -1,10 +1,11 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using RingSoft.DbLookup.DataProcessor;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library

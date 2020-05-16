@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
-using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {

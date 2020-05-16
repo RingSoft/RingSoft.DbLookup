@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
-using RingSoft.DbLookup.GetDataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.EfCore
 {

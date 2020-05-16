@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookup.GetDataProcessor
+namespace RingSoft.DbLookup.DataProcessor
 {
     public enum GetDataResultCodes
     {

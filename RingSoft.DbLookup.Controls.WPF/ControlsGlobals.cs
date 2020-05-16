@@ -1,7 +1,7 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

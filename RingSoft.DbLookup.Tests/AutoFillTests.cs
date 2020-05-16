@@ -3,7 +3,7 @@ using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.GetDataProcessor;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Tests
 {

@@ -1,6 +1,6 @@
 ﻿using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator
+namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {
     /// <summary>
     /// Generates a SELECT SQL statement for the Microsoft SQL Server database platform.

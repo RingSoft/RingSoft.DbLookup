@@ -6,7 +6,7 @@
                      xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
                      xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library;assembly=RingSoft.DbLookup.App.Library"
                      xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-                     xmlns:dp="clr-namespace:RingSoft.DbLookup.GetDataProcessor;assembly=RingSoft.DbLookup"
+                     xmlns:dp="clr-namespace:RingSoft.DbLookup.DataProcessor;assembly=RingSoft.DbLookup"
                      mc:Ignorable="d"
         Title="Database Settings" Height="350" Width="400">
     <Window.DataContext>

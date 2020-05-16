@@ -1,4 +1,4 @@
-﻿namespace RingSoft.DbLookup.GetDataProcessor
+﻿namespace RingSoft.DbLookup.DataProcessor
 {
     public enum WindowCursorTypes
     {

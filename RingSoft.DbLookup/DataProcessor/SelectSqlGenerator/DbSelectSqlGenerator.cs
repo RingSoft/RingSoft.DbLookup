@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using RingSoft.DbLookup.QueryBuilder;
 
-namespace RingSoft.DbLookup.GetDataProcessor.SelectSqlGenerator
+namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {
     /// <summary>Implement this interface to generate a SELECT SQL statement for a database platform based on what's in the Query object.</summary>
     public abstract class DbSelectSqlGenerator

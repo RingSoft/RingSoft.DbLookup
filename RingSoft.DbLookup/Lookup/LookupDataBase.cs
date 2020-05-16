@@ -1,5 +1,4 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup
 {

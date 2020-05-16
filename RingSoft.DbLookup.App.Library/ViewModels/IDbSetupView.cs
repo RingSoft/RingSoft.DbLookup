@@ -1,4 +1,4 @@
-﻿using RingSoft.DbLookup.GetDataProcessor;
+﻿using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels
 {

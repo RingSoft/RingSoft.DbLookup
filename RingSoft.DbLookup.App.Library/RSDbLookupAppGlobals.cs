@@ -97,7 +97,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.DataProcessResultViewer.ShowMessageBox(e.Message, "Error Opening Text File", RsMessageBoxIcons.Error);
+                DbDataProcessor.UserInterface.ShowMessageBox(e.Message, "Error Opening Text File", RsMessageBoxIcons.Error);
             }
 
             return result;
@@ -116,7 +116,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.DataProcessResultViewer.ShowMessageBox(e.Message, "Error Writing Text File", RsMessageBoxIcons.Error);
+                DbDataProcessor.UserInterface.ShowMessageBox(e.Message, "Error Writing Text File", RsMessageBoxIcons.Error);
             }
         }
 

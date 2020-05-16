@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
-using RingSoft.DbLookup.GetDataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;

@@ -4,7 +4,7 @@ using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WinForms
 {
-    public class ControlsUserInterface : IDataProcessResultViewer, IWindowCursor
+    public class ControlsUserInterface : IDbLookupUserInterface
     {
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
@@ -54,8 +54,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
         public static void InitUi()
         {
-            DbDataProcessor.DataProcessResultViewer = _userInterface;
-            DbDataProcessor.WindowCursor = _userInterface;
+            DbDataProcessor.UserInterface = _userInterface;
         }
     }
 }

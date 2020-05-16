@@ -49,7 +49,7 @@ namespace RingSoft.DbLookup.Tests
 
         private static void SetupDataProcessors()
         {
-            DbDataProcessor.DataProcessResultViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.UserInterface = new TestGetDataErrorViewer();
             _sqlServerDataProcessor = new SqlServerDataProcessor()
             {
                 Server = "localhost\\SQLEXPRESS",

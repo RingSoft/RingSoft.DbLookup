@@ -135,10 +135,10 @@
       <Version>8.0.20</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.Controls.WPF">
-      <Version>0.92.2</Version>
+      <Version>0.92.3</Version>
     </PackageReference>
     <PackageReference Include="RingSoft.DbLookup.EfCore">
-      <Version>0.92.2</Version>
+      <Version>0.92.3</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.112.2</Version>

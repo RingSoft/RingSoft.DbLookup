@@ -173,9 +173,9 @@ namespace RingSoft.DbMaintenance
                     TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.PrimaryKeyValue);
 
                 ChangingEntity = true;
-                DbDataProcessor.WindowCursor.SetWindowCursor(WindowCursorTypes.Wait);
+                DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
                 LoadFromEntity(newEntity);
-                DbDataProcessor.WindowCursor.SetWindowCursor(WindowCursorTypes.Default);
+                DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
                 DeleteButtonEnabled = true;

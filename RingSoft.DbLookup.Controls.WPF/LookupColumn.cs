@@ -74,7 +74,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public string DataColumnName { get; internal set; }
 
-        public LookupColumnBase LookupColumnDefinition { get; internal set; }
+        public LookupColumnDefinitionBase LookupColumnDefinition { get; internal set; }
             
         public event PropertyChangedEventHandler PropertyChanged;
 

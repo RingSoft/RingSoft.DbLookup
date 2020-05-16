@@ -33,7 +33,7 @@
         public string RawSql { get; set; }
 
         /// <summary>
-        /// Gets or sets the debug message.
+        /// Gets or sets the debug message which is displayed in the DataResultViewer.
         /// </summary>
         /// <value>
         /// The debug message.

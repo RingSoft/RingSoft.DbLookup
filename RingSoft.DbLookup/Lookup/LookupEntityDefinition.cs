@@ -140,7 +140,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <returns></returns>
-        public LookupColumnBase GetColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
+        public LookupColumnDefinitionBase GetColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
         {
             var propertyName = lookupEntityProperty.GetFullPropertyName();
             var column = VisibleColumns.FirstOrDefault(c => c.PropertyName == propertyName);
@@ -274,7 +274,7 @@ namespace RingSoft.DbLookup.Lookup
             return entity;
         }
 
-        private void ProcessColumn(TLookupEntity listItem, DataRow dataRow, LookupColumnBase column)
+        private void ProcessColumn(TLookupEntity listItem, DataRow dataRow, LookupColumnDefinitionBase column)
         {
             if (column.PropertyName.IsNullOrEmpty())
                 return;

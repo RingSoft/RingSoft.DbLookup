@@ -70,7 +70,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The sort column definition.
         /// </value>
-        public LookupColumnBase SortColumnDefinition { get; private set; }
+        public LookupColumnDefinitionBase SortColumnDefinition { get; private set; }
 
         /// <summary>
         /// Gets the type of the order by.
@@ -119,7 +119,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The order by list.
         /// </value>
-        public IReadOnlyList<LookupColumnBase> OrderByList => _orderByList;
+        public IReadOnlyList<LookupColumnDefinitionBase> OrderByList => _orderByList;
 
         /// <summary>
         /// Gets the selected primary key value.
@@ -168,7 +168,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler<SelectedIndexChangedEventArgs> SelectedIndexChanged;
 
-        private readonly List<LookupColumnBase> _orderByList = new List<LookupColumnBase>();
+        private readonly List<LookupColumnDefinitionBase> _orderByList = new List<LookupColumnDefinitionBase>();
         private int _selectedIndex;
         private bool _selectingRecord;
         private bool _countingRecords;
@@ -369,7 +369,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        private void AddColumnToQuery(SelectQuery query, LookupColumnBase lookupDefinitionColumn, bool hiddenColumn)
+        private void AddColumnToQuery(SelectQuery query, LookupColumnDefinitionBase lookupDefinitionColumn, bool hiddenColumn)
         {
             var sqlFieldName = lookupDefinitionColumn.SelectSqlAlias;
             var queryTable = GetQueryTableForColumn(query, lookupDefinitionColumn);
@@ -454,7 +454,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        private void AddColumnToQueryOrderBy(LookupColumnBase columnDefinition, SelectQuery query, OrderByTypes orderBy)
+        private void AddColumnToQueryOrderBy(LookupColumnDefinitionBase columnDefinition, SelectQuery query, OrderByTypes orderBy)
         {
             switch (columnDefinition.ColumnType)
             {
@@ -498,7 +498,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        private QueryTable GetQueryTableForColumn(SelectQuery query, LookupColumnBase lookupColumnDefinition)
+        private QueryTable GetQueryTableForColumn(SelectQuery query, LookupColumnDefinitionBase lookupColumnDefinition)
         {
             switch (lookupColumnDefinition.ColumnType)
             {
@@ -860,7 +860,7 @@ namespace RingSoft.DbLookup.Lookup
             return true;
         }
 
-        private bool HasMoreThan1Record(string searchValue, LookupColumnBase lookupColumnType, SelectQuery query,
+        private bool HasMoreThan1Record(string searchValue, LookupColumnDefinitionBase lookupColumnType, SelectQuery query,
             QueryTable queryTable, string debugMessage)
         {
             switch (lookupColumnType.ColumnType)

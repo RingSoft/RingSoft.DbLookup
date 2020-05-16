@@ -62,32 +62,32 @@ namespace RingSoft.DbLookup
                 TextValue = trueText
             });
         }
+    }
+
+    /// <summary>
+    /// A database field's numeric value and its corresponding text value.
+    /// </summary>
+    public class TypeTranslation
+    {
+        /// <summary>
+        /// Gets the numeric value.
+        /// </summary>
+        /// <value>
+        /// The numeric value.
+        /// </value>
+        public int NumericValue { get; internal set; }
 
         /// <summary>
-        /// A database field's numeric value and its corresponding text value.
+        /// Gets the text value.
         /// </summary>
-        public class TypeTranslation
+        /// <value>
+        /// The text value.
+        /// </value>
+        public string TextValue { get; internal set; }
+
+        public override string ToString()
         {
-            /// <summary>
-            /// Gets the numeric value.
-            /// </summary>
-            /// <value>
-            /// The numeric value.
-            /// </value>
-            public int NumericValue { get; internal set; }
-
-            /// <summary>
-            /// Gets the text value.
-            /// </summary>
-            /// <value>
-            /// The text value.
-            /// </value>
-            public string TextValue { get; internal set; }
-
-            public override string ToString()
-            {
-                return TextValue;
-            }
+            return TextValue;
         }
     }
 }

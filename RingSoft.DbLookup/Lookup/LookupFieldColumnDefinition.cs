@@ -8,8 +8,8 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// A lookup column based on a field definition.
     /// </summary>
-    /// <seealso cref="LookupColumnBase" />
-    public class LookupFieldColumnDefinition : LookupColumnType<LookupFieldColumnDefinition>
+    /// <seealso cref="LookupColumnDefinitionBase" />
+    public class LookupFieldColumnDefinition : LookupColumnDefinitionType<LookupFieldColumnDefinition>
     {
         /// <summary>
         /// Gets the type of the column.
@@ -66,7 +66,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
-        internal override void CopyFrom(LookupColumnBase source)
+        internal override void CopyFrom(LookupColumnDefinitionBase source)
         {
             if (source is LookupFieldColumnDefinition sourceFieldColumn)
             {
@@ -99,7 +99,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>This object for fluent processing.</returns>
-        public LookupColumnBase IsDistinct(bool value = true)
+        public LookupColumnDefinitionBase IsDistinct(bool value = true)
         {
             var isPrimaryKey = FieldDefinition.TableDefinition.PrimaryKeyFields.Count > 1 &&
                                FieldDefinition.TableDefinition.PrimaryKeyFields.Contains(FieldDefinition);
@@ -116,7 +116,7 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
-        private void ValidateNonPrimaryKeyFields(IReadOnlyList<LookupColumnBase> columns)
+        private void ValidateNonPrimaryKeyFields(IReadOnlyList<LookupColumnDefinitionBase> columns)
         {
             var nonPrimaryFieldsFound = columns.Any(a => a.ColumnType == LookupColumnTypes.Formula);
             if (!nonPrimaryFieldsFound)

@@ -155,7 +155,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="column">The column.</param>
         /// <exception cref="ArgumentException">Column {column.Caption} is not found in this view model's table lookup definition.</exception>
-        protected void ChangeSortColumn(LookupColumnBase column)
+        protected void ChangeSortColumn(LookupColumnDefinitionBase column)
         {
             var columnIndex = _lookupData.LookupDefinition.GetIndexOfVisibleColumn(column);
             if (columnIndex < 0)

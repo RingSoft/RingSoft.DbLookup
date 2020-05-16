@@ -1,5 +1,8 @@
 ﻿namespace RingSoft.DbLookup.QueryBuilder
 {
+    /// <summary>
+    /// Maps a Primary field to a foreign field in a Join table.
+    /// </summary>
     public class JoinField
     {
         /// <summary>

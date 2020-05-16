@@ -1,7 +1,7 @@
 ﻿namespace RingSoft.DbLookup.Lookup
 {
-    public abstract class LookupColumnType<TColumnDefinition> : LookupColumnBase
-        where TColumnDefinition : LookupColumnType<TColumnDefinition>
+    public abstract class LookupColumnDefinitionType<TColumnDefinition> : LookupColumnDefinitionBase
+        where TColumnDefinition : LookupColumnDefinitionType<TColumnDefinition>
     {
 
         /// <summary>

@@ -10,8 +10,6 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
 
         event EventHandler<LookupAddViewArgs> LookupAddView;
 
-        event EventHandler<TableProcessingArgs> TableProcessing;
-
         bool Initialized { get; }
 
         AppLookupContextConfiguration LookupContextConfiguration { get; }

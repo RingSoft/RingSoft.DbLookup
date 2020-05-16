@@ -27,7 +27,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The visible columns.
         /// </value>
-        public IReadOnlyList<LookupColumnBase> VisibleColumns => _visibleColumns;
+        public IReadOnlyList<LookupColumnDefinitionBase> VisibleColumns => _visibleColumns;
 
         /// <summary>
         /// Gets the hidden columns.
@@ -35,7 +35,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The hidden columns.
         /// </value>
-        public IReadOnlyList<LookupColumnBase> HiddenColumns => _hiddenColumns;
+        public IReadOnlyList<LookupColumnDefinitionBase> HiddenColumns => _hiddenColumns;
 
         /// <summary>
         /// Gets the joins.
@@ -51,7 +51,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The initial sort column definition.
         /// </value>
-        public LookupColumnBase InitialSortColumnDefinition { get; set; }
+        public LookupColumnDefinitionBase InitialSortColumnDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the initial type of the order by.
@@ -85,8 +85,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Title { get; set; }
 
-        private readonly List<LookupColumnBase> _visibleColumns = new List<LookupColumnBase>();
-        private readonly List<LookupColumnBase> _hiddenColumns = new List<LookupColumnBase>();
+        private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
+        private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        private void CopyColumns(IReadOnlyList<LookupColumnBase> sourceColumnList, bool hidden)
+        private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)
         {
             foreach (var columnType in sourceColumnList)
             {
@@ -285,7 +285,7 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        internal List<LookupFieldColumnDefinition> GetDistinctColumns(IReadOnlyList<LookupColumnBase> columns)
+        internal List<LookupFieldColumnDefinition> GetDistinctColumns(IReadOnlyList<LookupColumnDefinitionBase> columns)
         {
             var result = new List<LookupFieldColumnDefinition>();
             var fieldColumns = columns.Where(w => w.ColumnType == LookupColumnTypes.Field);
@@ -336,7 +336,7 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
-        internal void ProcessVisibleColumnDefinition(LookupColumnBase columnDefinition)
+        internal void ProcessVisibleColumnDefinition(LookupColumnDefinitionBase columnDefinition)
         {
             if (InitialSortColumnDefinition == null)
                 InitialSortColumnDefinition = columnDefinition;
@@ -353,7 +353,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="visibleColumnDefinition">The visible column definition.</param>
         /// <returns></returns>
-        public int GetIndexOfVisibleColumn(LookupColumnBase visibleColumnDefinition)
+        public int GetIndexOfVisibleColumn(LookupColumnDefinitionBase visibleColumnDefinition)
         {
             return _visibleColumns.IndexOf(visibleColumnDefinition);
         }

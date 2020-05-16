@@ -252,7 +252,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private int GetIndexOfVisibleColumnDefinition(LookupColumnBase lookupColumnDefinition)
+        private int GetIndexOfVisibleColumnDefinition(LookupColumnDefinitionBase lookupColumnDefinition)
         {
             var lookupColumn = LookupColumns.FirstOrDefault(f => f.LookupColumnDefinition == lookupColumnDefinition);
             return LookupColumns.IndexOf(lookupColumn);

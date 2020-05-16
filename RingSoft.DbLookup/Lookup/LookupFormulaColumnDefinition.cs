@@ -6,8 +6,8 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// A lookup column based on a formula.
     /// </summary>
-    /// <seealso cref="LookupColumnBase" />
-    public class LookupFormulaColumnDefinition : LookupColumnType<LookupFormulaColumnDefinition>
+    /// <seealso cref="LookupColumnDefinitionBase" />
+    public class LookupFormulaColumnDefinition : LookupColumnDefinitionType<LookupFormulaColumnDefinition>
     {
         /// <summary>
         /// Gets the type of the column.
@@ -81,7 +81,7 @@ namespace RingSoft.DbLookup.Lookup
             SetupColumn();
         }
 
-        internal override void CopyFrom(LookupColumnBase source)
+        internal override void CopyFrom(LookupColumnDefinitionBase source)
         {
             if (source is LookupFormulaColumnDefinition formulaSource)
             {

@@ -16,7 +16,7 @@
     /// <summary>
     /// The lookup column definition base class.
     /// </summary>
-    public abstract class LookupColumnBase
+    public abstract class LookupColumnDefinitionBase
     {
         /// <summary>
         /// Gets the type of the column.
@@ -99,7 +99,7 @@
                     return LookupColumnAlignmentTypes.Left;
             }
         }
-        internal virtual void CopyFrom(LookupColumnBase source)
+        internal virtual void CopyFrom(LookupColumnDefinitionBase source)
         {
             Caption = source.Caption;
             PropertyName = source.PropertyName;

@@ -7,6 +7,12 @@ namespace RingSoft.DbLookup.QueryBuilder
     /// <summary>This class is used to build a SELECT SQL statement.  It is not comprehensive.</summary>
     public class SelectQuery : QueryBase
     {
+        /// <summary>
+        /// Gets the type of the query.
+        /// </summary>
+        /// <value>
+        /// The type of the query.
+        /// </value>
         public override QueryTypes QueryType => QueryTypes.SelectQuery;
 
         /// <summary>

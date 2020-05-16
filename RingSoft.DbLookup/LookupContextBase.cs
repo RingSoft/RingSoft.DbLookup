@@ -6,39 +6,6 @@ using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup
 {
-    /// <summary>
-    /// Arguments passed in by the TableProcessing event to show which table is being processed by the Entity Framework.
-    /// </summary>
-    public class TableProcessingArgs
-    {
-        /// <summary>
-        /// Gets the table definition that's being processed.
-        /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
-        public TableDefinitionBase TableDefinition { get; }
-
-        /// <summary>
-        /// Gets the status.
-        /// </summary>
-        /// <value>
-        /// The status.
-        /// </value>
-        public string Status { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TableProcessingArgs"/> class.
-        /// </summary>
-        /// <param name="tableDefinition">The table definition.</param>
-        /// <param name="status">The status.</param>
-        public TableProcessingArgs(TableDefinitionBase tableDefinition, string status)
-        {
-            TableDefinition = tableDefinition;
-
-            Status = status;
-        }
-    }
 
     // ReSharper disable once InconsistentNaming
     /// <summary>
@@ -74,11 +41,6 @@ namespace RingSoft.DbLookup
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
-
-        /// <summary>
-        /// Occurs when a table is being processed by the Entity Framework.
-        /// </summary>
-        public event EventHandler<TableProcessingArgs> TableProcessing;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 
@@ -139,15 +101,6 @@ namespace RingSoft.DbLookup
         public virtual void OnAddViewLookup(LookupAddViewArgs e)
         {
             LookupAddView?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Occurs when a table is being processed by the Entity Framework.
-        /// </summary>
-        /// <param name="e">The table processing arguments.</param>
-        protected virtual void OnTableProcessing(TableProcessingArgs e)
-        {
-            TableProcessing?.Invoke(this, e);
         }
     }
 }

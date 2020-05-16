@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// <summary>
     /// Interaction logic for LookupControl.xaml
     /// </summary>
-    public partial class LookupControl : ILookupUserInterface
+    public partial class LookupControl : ILookupControl
     {
         private class RefreshPendingData
         {

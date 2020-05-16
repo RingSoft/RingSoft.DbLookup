@@ -15,8 +15,8 @@ namespace RingSoft.DbMaintenance
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="DbMaintenanceViewModelBase" />
-    /// <seealso cref="ILookupUserInterface" />
-    public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupUserInterface
+    /// <seealso cref="ILookupControl" />
+    public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl
         where TEntity : new()
     {
         public int PageSize { get; } = 1;

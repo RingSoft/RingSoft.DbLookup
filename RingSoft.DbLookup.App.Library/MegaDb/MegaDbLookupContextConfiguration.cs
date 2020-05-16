@@ -8,7 +8,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb
 {
-    public class MegaDbLookupContextConfiguration : AppLookupContextConfiguration, ILookupUserInterface
+    public class MegaDbLookupContextConfiguration : AppLookupContextConfiguration, ILookupControl
     {
         public LookupDefinition<ItemLookup, Item> ItemsLookup { get; private set; }
 

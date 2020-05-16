@@ -9,7 +9,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.App.Library.Northwind
 {
-    public class NorthwindLookupContextConfiguration : AppLookupContextConfiguration, ILookupUserInterface
+    public class NorthwindLookupContextConfiguration : AppLookupContextConfiguration, ILookupControl
     {
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
 

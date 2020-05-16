@@ -2,7 +2,7 @@
 
 namespace RingSoft.DbLookup.App.Library
 {
-    public class LookupDataUserInterface : ILookupUserInterface
+    public class LookupDataUserInterface : ILookupControl
     {
         public int PageSize { get; set; } = 15;
         public LookupSearchTypes SearchType { get; set; } = LookupSearchTypes.Equals;

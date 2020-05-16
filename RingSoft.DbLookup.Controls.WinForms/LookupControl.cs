@@ -13,8 +13,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
     /// Displays lookup data based on the setup defined in the lookup definition.
     /// </summary>
     /// <seealso cref="System.Windows.Forms.UserControl" />
-    /// <seealso cref="ILookupUserInterface" />
-    public partial class LookupControl : UserControl, ILookupUserInterface, INotifyPropertyChanged
+    /// <seealso cref="ILookupControl" />
+    public partial class LookupControl : UserControl, ILookupControl, INotifyPropertyChanged
     {
         /// <summary>
         /// Gets the number of rows on a page.

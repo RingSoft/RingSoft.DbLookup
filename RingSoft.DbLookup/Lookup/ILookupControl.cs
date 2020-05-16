@@ -9,7 +9,7 @@
     /// <summary>
     /// The lookup's user interface.
     /// </summary>
-    public interface ILookupUserInterface
+    public interface ILookupControl
     {
         /// <summary>
         /// Gets the number of rows on a page.

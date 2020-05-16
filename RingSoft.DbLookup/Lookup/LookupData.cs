@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="userInterface">The user interface.</param>
-        public LookupData(LookupEntityDefinition<TLookupEntity> lookupDefinition, ILookupUserInterface userInterface)
+        public LookupData(LookupEntityDefinition<TLookupEntity> lookupDefinition, ILookupControl userInterface)
             : base(lookupDefinition, userInterface)
         {
             _lookupEntityDefinition = lookupDefinition;

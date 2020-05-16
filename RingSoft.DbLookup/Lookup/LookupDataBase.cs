@@ -62,7 +62,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public LookupDefinitionBase LookupDefinition { get; }
 
-        public ILookupUserInterface UserInterface { get; }
+        public ILookupControl LookupControl { get; }
 
         /// <summary>
         /// Gets the sort column definition.
@@ -177,7 +177,7 @@ namespace RingSoft.DbLookup.Lookup
         private void OutputData(int selectedRowIndex, LookupScrollPositions currentPosition)
         {
             SetScrollPosition(currentPosition);
-            if (UserInterface.PageSize == 1)
+            if (LookupControl.PageSize == 1)
                 SelectedRowIndex = LookupResultsDataTable.Rows.Count - 1;
             else
             {
@@ -207,14 +207,14 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="userInterface">The user interface.</param>
-        public LookupDataBase(LookupDefinitionBase lookupDefinition, ILookupUserInterface userInterface)
+        public LookupDataBase(LookupDefinitionBase lookupDefinition, ILookupControl userInterface)
         {
             if (lookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             LookupDefinition = lookupDefinition;
-            UserInterface = userInterface;
+            LookupControl = userInterface;
             SortColumnDefinition = lookupDefinition.InitialSortColumnDefinition;
             OrderByType = lookupDefinition.InitialOrderByType;
         }
@@ -233,7 +233,7 @@ namespace RingSoft.DbLookup.Lookup
             if (resetRecordCount)
                 RecordCount = 0;
 
-            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(UserInterface.PageSize);
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
 
             SetupBaseQuery(query, false);
 
@@ -267,7 +267,7 @@ namespace RingSoft.DbLookup.Lookup
                 throw new ArgumentException(
                     $"Primary key value Table Definition '{PrimaryKeyValue.TableDefinition.TableName}' does not match this Lookup Definition's Table Definition '{LookupDefinition.TableDefinition.TableName}'");
 
-            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(UserInterface.PageSize);
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
 
             SetupBaseQuery(query, false);
 
@@ -332,10 +332,10 @@ namespace RingSoft.DbLookup.Lookup
 
         private void AddSortColumnToQueryWhere(SelectQuery query)
         {
-            if (UserInterface.SearchType == LookupSearchTypes.Contains &&
+            if (LookupControl.SearchType == LookupSearchTypes.Contains &&
                 SortColumnDefinition.DataType == FieldDataTypes.String)
             {
-                AddSortColumnToQueryWhere(query, Conditions.Contains, UserInterface.SearchText);
+                AddSortColumnToQueryWhere(query, Conditions.Contains, LookupControl.SearchText);
             }
         }
 
@@ -604,16 +604,16 @@ namespace RingSoft.DbLookup.Lookup
 
             var startIndex = recordCount - 1;
             var newDataTable = LookupResultsDataTable.Clone();
-            if (GetNextRecords(LookupResultsDataTable.Rows[startIndex], UserInterface.PageSize, newDataTable, "GotoNextRecord"))
+            if (GetNextRecords(LookupResultsDataTable.Rows[startIndex], LookupControl.PageSize, newDataTable, "GotoNextRecord"))
             {
-                var newStartIndex = startIndex - (UserInterface.PageSize - newDataTable.Rows.Count);
-                if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize && newStartIndex >= 0)
+                var newStartIndex = startIndex - (LookupControl.PageSize - newDataTable.Rows.Count);
+                if (recordCount > 1 && newDataTable.Rows.Count < LookupControl.PageSize && newStartIndex >= 0)
                 {
                     newDataTable = LookupResultsDataTable.Clone();
                     GetNextRecords(LookupResultsDataTable.Rows[newStartIndex],
-                        UserInterface.PageSize, newDataTable, "GotoNextPage");
+                        LookupControl.PageSize, newDataTable, "GotoNextPage");
                 }
-                if (newDataTable.Rows.Count >= UserInterface.PageSize)
+                if (newDataTable.Rows.Count >= LookupControl.PageSize)
                 {
                     if (setSelIndexToBottom)
                         selectedRowIndex = LookupResultsDataTable.Rows.Count - 1;
@@ -632,7 +632,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoNextPage()
         {
-            GotoNextRecord(UserInterface.PageSize);
+            GotoNextRecord(LookupControl.PageSize);
         }
 
         public void OnMouseWheelBack()
@@ -641,7 +641,7 @@ namespace RingSoft.DbLookup.Lookup
             if (SelectedRowIndex >= 0)
             {
                 newSelectedRowIndex = SelectedRowIndex + 3;
-                if (newSelectedRowIndex >= UserInterface.PageSize)
+                if (newSelectedRowIndex >= LookupControl.PageSize)
                     newSelectedRowIndex = -1;
             }
 
@@ -664,23 +664,23 @@ namespace RingSoft.DbLookup.Lookup
             var startIndex = LookupResultsDataTable.Rows.Count - recordCount;
             var newDataTable = LookupResultsDataTable.Clone();
             if (GetPreviousRecords(LookupResultsDataTable.Rows[startIndex],
-                UserInterface.PageSize, newDataTable, "GotoPreviousRecord"))
+                LookupControl.PageSize, newDataTable, "GotoPreviousRecord"))
             {
                 if (newDataTable.Rows.Count > 0)
                 {
                     var newStartIndex = startIndex + (LookupResultsDataTable.Rows.Count - newDataTable.Rows.Count);
-                    if (recordCount > 1 && newDataTable.Rows.Count < UserInterface.PageSize &&
+                    if (recordCount > 1 && newDataTable.Rows.Count < LookupControl.PageSize &&
                         newStartIndex < LookupResultsDataTable.Rows.Count)
                     {
                         newDataTable = LookupResultsDataTable.Clone();
                         GetPreviousRecords(LookupResultsDataTable.Rows[newStartIndex],
-                            UserInterface.PageSize, newDataTable, "OnPageUp");
+                            LookupControl.PageSize, newDataTable, "OnPageUp");
                     }
-                    if (newDataTable.Rows.Count >= UserInterface.PageSize)
+                    if (newDataTable.Rows.Count >= LookupControl.PageSize)
                     {
                         if (setSelIndexToTop)
                             selectedRowIndex = 0;
-                        else if (selectedRowIndex < UserInterface.PageSize - 1)
+                        else if (selectedRowIndex < LookupControl.PageSize - 1)
                         {
                             selectedRowIndex += (startIndex - newStartIndex);
                         }
@@ -697,7 +697,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoPreviousPage()
         {
-            GotoPreviousRecord(UserInterface.PageSize);
+            GotoPreviousRecord(LookupControl.PageSize);
         }
 
         private bool GetNextRecords(DataRow startRow, int recordCount, DataTable resultsTable, string debugMessage)
@@ -943,7 +943,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var prevCheckTable = LookupResultsDataTable.Clone();
             var nextCheckTable = LookupResultsDataTable.Clone();
-            if (LookupResultsDataTable.Rows.Count >= UserInterface.PageSize && UserInterface.PageSize > 0)
+            if (LookupResultsDataTable.Rows.Count >= LookupControl.PageSize && LookupControl.PageSize > 0)
             {
                 switch (currentPosition)
                 {
@@ -999,11 +999,11 @@ namespace RingSoft.DbLookup.Lookup
                     GetInitData(false, false);
                     return;
                 }
-                if (GetNextRecords(previousTable.Rows[0], UserInterface.PageSize, newDataTable, "OnChangePageSize"))
+                if (GetNextRecords(previousTable.Rows[0], LookupControl.PageSize, newDataTable, "OnChangePageSize"))
                 {
-                    if (newDataTable.Rows.Count < UserInterface.PageSize)
+                    if (newDataTable.Rows.Count < LookupControl.PageSize)
                     {
-                        var previousCount = UserInterface.PageSize - newDataTable.Rows.Count;
+                        var previousCount = LookupControl.PageSize - newDataTable.Rows.Count;
                         previousTable.Clear();
                         if (GetPreviousRecords(newDataTable.Rows[0], previousCount, previousTable, "OnChangePageSize"))
                         {
@@ -1040,7 +1040,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public void GotoBottom()
         {
-            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(UserInterface.PageSize);
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
 
             SetupBaseQuery(query, true);
 
@@ -1078,7 +1078,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (LookupResultsDataTable != null && LookupResultsDataTable.Rows.Count > 0)
                 {
-                    if (UserInterface.SearchType == LookupSearchTypes.Contains)
+                    if (LookupControl.SearchType == LookupSearchTypes.Contains)
                         ResetRecordCount();
                     GotoTop();
                 }
@@ -1086,7 +1086,7 @@ namespace RingSoft.DbLookup.Lookup
                 _searchForChanging = false;
                 return;
             }
-            switch (UserInterface.SearchType)
+            switch (LookupControl.SearchType)
             {
                 case LookupSearchTypes.Equals:
                     GetSearchEqualsData(searchText);
@@ -1133,8 +1133,8 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var topRecordCount = Convert.ToInt32(Math.Floor((double)UserInterface.PageSize / 2));
-            var bottomRecordCount = (UserInterface.PageSize - topRecordCount) - 1;
+            var topRecordCount = Convert.ToInt32(Math.Floor((double)LookupControl.PageSize / 2));
+            var bottomRecordCount = (LookupControl.PageSize - topRecordCount) - 1;
             var middleRow = LookupResultsDataTable.Rows[0];
             var scrollPosition = LookupScrollPositions.Middle;
             
@@ -1149,14 +1149,14 @@ namespace RingSoft.DbLookup.Lookup
             if (!GetNextRecords(middleRow, bottomRecordCount, LookupResultsDataTable, "GetSearchEquals"))
                 return;
 
-            if (LookupResultsDataTable.Rows.Count < UserInterface.PageSize)
+            if (LookupResultsDataTable.Rows.Count < LookupControl.PageSize)
             {
                 scrollPosition = LookupScrollPositions.Bottom;
                 if (!GetPreviousRecords(LookupResultsDataTable.Rows[0],
-                    UserInterface.PageSize - LookupResultsDataTable.Rows.Count, LookupResultsDataTable, "GetSearchEquals"))
+                    LookupControl.PageSize - LookupResultsDataTable.Rows.Count, LookupResultsDataTable, "GetSearchEquals"))
                     return;
 
-                if (LookupResultsDataTable.Rows.Count < UserInterface.PageSize)
+                if (LookupResultsDataTable.Rows.Count < LookupControl.PageSize)
                     scrollPosition = LookupScrollPositions.Disabled;
             }
 
@@ -1294,10 +1294,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (!_selectingRecord)
             {
-                if (UserInterface.SearchText.IsNullOrEmpty())
+                if (LookupControl.SearchText.IsNullOrEmpty())
                     GetInitData(true, true);
                 else
-                    OnSearchForChange(UserInterface.SearchText);
+                    OnSearchForChange(LookupControl.SearchText);
             }
             _selectingRecord = false;
         }
@@ -1335,7 +1335,7 @@ namespace RingSoft.DbLookup.Lookup
             _countingRecords = true;
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
 
-            if (UserInterface.SearchType == LookupSearchTypes.Contains &&
+            if (LookupControl.SearchType == LookupSearchTypes.Contains &&
                 SortColumnDefinition.DataType == FieldDataTypes.String)
             {
                 if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)

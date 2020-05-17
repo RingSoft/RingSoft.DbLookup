@@ -299,10 +299,6 @@ namespace RingSoft.DbLookup.Controls.WinForms
             //var preSelLen = AutoFillText.SelectionLength;
             //MessageBox.Show($"PreText = {startText}");
 
-            AutoFillText.Text = e.TextResult;
-            AutoFillText.SelectionStart = e.CursorStartIndex;
-            AutoFillText.SelectionLength = e.TextSelectLength;
-
             if (!_autoFillPropertyChanging)
             {
                 _onAutoFillDataChanged = true;

@@ -29,44 +29,12 @@ namespace RingSoft.DbLookup.AutoFill
         public IAutoFillControl AutoFillControl { get; }
 
         /// <summary>
-        /// Gets the current text result.
-        /// </summary>
-        /// <value>
-        /// The text result.
-        /// </value>
-        public string TextResult { get; private set; }
-
-        /// <summary>
-        /// Gets the current start index of the cursor.
-        /// </summary>
-        /// <value>
-        /// The start index of the cursor.
-        /// </value>
-        public int CursorStartIndex { get; private set; }
-
-        /// <summary>
-        /// Gets the current text select length.
-        /// </summary>
-        /// <value>
-        /// The length of the text select.
-        /// </value>
-        public int TextSelectLength { get; private set; }
-
-        /// <summary>
         /// Gets the current PrimaryKeyValue.
         /// </summary>
         /// <value>
         /// The primary key value.
         /// </value>
         public PrimaryKeyValue PrimaryKeyValue { get; private set; }
-
-        /// <summary>
-        /// Gets the current contains box DataTable.
-        /// </summary>
-        /// <value>
-        /// The contains box data table.
-        /// </value>
-        public DataTable ContainsBoxDataTable { get; private set; }
 
         /// <summary>
         /// Gets or sets the maximum number of rows in the contains box.
@@ -93,6 +61,7 @@ namespace RingSoft.DbLookup.AutoFill
         private const string ContainsTableName = "Contains";
 
         private string _containsText;
+        private DataTable _containsBoxDataTable;
 
         /// <summary>
         /// Initializes a new instance of this class.
@@ -207,15 +176,15 @@ namespace RingSoft.DbLookup.AutoFill
             if (newText.IsNullOrEmpty())
             {
                 GetContainsBoxDataTable(beginText);
-                TextResult = beginText;
-                CursorStartIndex = selectionStart + 1;
-                TextSelectLength = 0;
+                AutoFillControl.EditText = beginText;
+                AutoFillControl.SelectionStart = selectionStart + 1;
+                AutoFillControl.SelectionLength = 0;
             }
             else
             {
-                TextResult = newText;
-                CursorStartIndex = selectionStart + 1;
-                TextSelectLength = newText.Length - CursorStartIndex;
+                AutoFillControl.EditText = newText;
+                AutoFillControl.SelectionStart = selectionStart + 1;
+                AutoFillControl.SelectionLength = newText.Length - AutoFillControl.SelectionStart;
             }
 
             OnOutput();
@@ -236,9 +205,9 @@ namespace RingSoft.DbLookup.AutoFill
             var newText = leftText + rightText;
 
             GetContainsBoxDataTable(newText);
-            TextResult = newText;
-            CursorStartIndex = selectionStart;
-            TextSelectLength = 0;
+            AutoFillControl.EditText = newText;
+            AutoFillControl.SelectionStart = selectionStart;
+            AutoFillControl.SelectionLength = 0;
             ClearPrimaryKeyValue();
 
             OnOutput();
@@ -270,9 +239,9 @@ namespace RingSoft.DbLookup.AutoFill
             newText += rightText;
 
             GetContainsBoxDataTable(newText);
-            TextResult = newText;
-            CursorStartIndex = newSelectStart;
-            TextSelectLength = 0;
+            AutoFillControl.EditText = newText;
+            AutoFillControl.SelectionStart = newSelectStart;
+            AutoFillControl.SelectionLength = 0;
             ClearPrimaryKeyValue();
 
             OnOutput();
@@ -288,10 +257,10 @@ namespace RingSoft.DbLookup.AutoFill
 
         private void OnOutput(bool refreshContainsList = true)
         {
-            var args = new AutoFillDataChangedArgs(TextResult, CursorStartIndex, TextSelectLength)
+            var args = new AutoFillDataChangedArgs()
             {
                 RefreshContainsList =  refreshContainsList,
-                ContainsBoxDataTable = ContainsBoxDataTable
+                ContainsBoxDataTable = _containsBoxDataTable
             };
             AutoFillDataChanged?.Invoke(this, args);
         }
@@ -344,7 +313,7 @@ namespace RingSoft.DbLookup.AutoFill
                 if (ShowContainsBox)
                 {
                     _containsText = beginText;
-                    ContainsBoxDataTable = result.DataSet.Tables[ContainsTableName];
+                    _containsBoxDataTable = result.DataSet.Tables[ContainsTableName];
                 }
             }
 
@@ -444,7 +413,7 @@ namespace RingSoft.DbLookup.AutoFill
                 if (ShowContainsBox)
                 {
                     _containsText = text;
-                    ContainsBoxDataTable = result.DataSet.Tables[ContainsTableName];
+                    _containsBoxDataTable = result.DataSet.Tables[ContainsTableName];
                 }
             }
         }
@@ -479,14 +448,14 @@ namespace RingSoft.DbLookup.AutoFill
         /// <param name="newContainsBoxIndex">New index of the contains box.</param>
         public void OnChangeContainsIndex(int newContainsBoxIndex)
         {
-            if (ContainsBoxDataTable != null && newContainsBoxIndex >= 0 && newContainsBoxIndex < ContainsBoxDataTable.Rows.Count)
+            if (_containsBoxDataTable != null && newContainsBoxIndex >= 0 && newContainsBoxIndex < _containsBoxDataTable.Rows.Count)
             {
-                var dataRow = ContainsBoxDataTable.Rows[newContainsBoxIndex];
-                TextResult = dataRow.GetRowValue(AutoFillDefinition.SelectSqlAlias);
+                var dataRow = _containsBoxDataTable.Rows[newContainsBoxIndex];
+                AutoFillControl.EditText = dataRow.GetRowValue(AutoFillDefinition.SelectSqlAlias);
                 PrimaryKeyValue = new PrimaryKeyValue(AutoFillDefinition.TableDefinition);
                 PrimaryKeyValue.PopulateFromDataRow(dataRow);
-                CursorStartIndex = TextResult.Length;
-                TextSelectLength = 0;
+                AutoFillControl.SelectionStart = AutoFillControl.EditText.Length;
+                AutoFillControl.SelectionLength = 0;
                 OnOutput(false);
             }
         }
@@ -505,9 +474,9 @@ namespace RingSoft.DbLookup.AutoFill
             }
             ClearPrimaryKeyValue();
             PrimaryKeyValue.CopyFromPrimaryKeyValue(primaryKeyValue);
-            TextResult = text.IsNullOrEmpty()?string.Empty:text;
-            CursorStartIndex = 0;
-            TextSelectLength = TextResult.Length;
+            AutoFillControl.EditText = text.IsNullOrEmpty()?string.Empty:text;
+            AutoFillControl.SelectionStart = 0;
+            AutoFillControl.SelectionLength = AutoFillControl.EditText.Length;
             OnOutput(refreshContainsList);
         }
 
@@ -517,9 +486,9 @@ namespace RingSoft.DbLookup.AutoFill
         public void ClearValue()
         {
             ClearPrimaryKeyValue();
-            TextResult = string.Empty;
-            CursorStartIndex = TextSelectLength = 0;
-            ContainsBoxDataTable = null;
+            AutoFillControl.EditText = string.Empty;
+            AutoFillControl.SelectionStart = AutoFillControl.SelectionLength = 0;
+            _containsBoxDataTable = null;
             OnOutput();
         }
 
@@ -554,10 +523,10 @@ namespace RingSoft.DbLookup.AutoFill
         /// <param name="refreshContainsList">if set to <c>true</c> refresh the contains list.</param>
         public void RefreshData(bool refreshContainsList)
         {
-            if (!TextResult.IsNullOrEmpty())
+            if (!AutoFillControl.EditText.IsNullOrEmpty())
             {
                 ClearPrimaryKeyValue();
-                GetContainsBoxDataTable(TextResult);
+                GetContainsBoxDataTable(AutoFillControl.EditText);
                 OnOutput(refreshContainsList);
             }
         }

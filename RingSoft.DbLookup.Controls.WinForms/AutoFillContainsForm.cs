@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         private void AutoFillDataOnAutoFillDataChanged(object sender, AutoFillDataChangedArgs e)
         {
             if (e.RefreshContainsList)
-                FillList();
+                FillList(e);
         }
 
         private void AutoFillContainsListOnSelectedIndexChanged(object sender, EventArgs e)
@@ -37,14 +37,14 @@ namespace RingSoft.DbLookup.Controls.WinForms
             _autoFillControl.AutoFillData.OnChangeContainsIndex(AutoFillContainsList.SelectedIndex);
         }
 
-        public void FillList()
+        public void FillList(AutoFillDataChangedArgs e)
         {
             AutoFillContainsList.Items.Clear();
             var height = 0;
-            if (_autoFillControl.AutoFillData.ShowContainsBox && _autoFillControl.AutoFillData.ContainsBoxDataTable != null)
+            if (_autoFillControl.AutoFillData.ShowContainsBox && e.ContainsBoxDataTable != null)
             {
                 var itemIndex = 0;
-                foreach (DataRow dataRow in _autoFillControl.AutoFillData.ContainsBoxDataTable.Rows)
+                foreach (DataRow dataRow in e.ContainsBoxDataTable.Rows)
                 {
                     var text = dataRow.GetRowValue(_autoFillControl.AutoFillData.AutoFillDefinition
                         .SelectSqlAlias);

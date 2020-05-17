@@ -32,9 +32,9 @@ namespace RingSoft.DbLookup.Tests
             var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
             autoFillData.OnKeyCharPressed('c');
 
-            Assert.AreEqual("Change PunchTo", autoFillData.TextResult);
-            Assert.AreEqual(1, autoFillData.CursorStartIndex);
-            Assert.AreEqual(13, autoFillData.TextSelectLength);
+            Assert.AreEqual("Change PunchTo", autoFillControl.EditText);
+            Assert.AreEqual(1, autoFillControl.SelectionStart);
+            Assert.AreEqual(13, autoFillControl.SelectionLength);
             Assert.AreEqual(389, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -51,9 +51,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnKeyCharPressed('h');
 
-            Assert.AreEqual("Change PunchTo", autoFillData.TextResult);
-            Assert.AreEqual(2, autoFillData.CursorStartIndex);
-            Assert.AreEqual(12, autoFillData.TextSelectLength);
+            Assert.AreEqual("Change PunchTo", autoFillControl.EditText);
+            Assert.AreEqual(2, autoFillControl.SelectionStart);
+            Assert.AreEqual(12, autoFillControl.SelectionLength);
             Assert.AreEqual(389, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -70,9 +70,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnKeyCharPressed('o');
 
-            Assert.AreEqual("ChohTo", autoFillData.TextResult);
-            Assert.AreEqual(3, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("ChohTo", autoFillControl.EditText);
+            Assert.AreEqual(3, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -89,9 +89,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnKeyCharPressed('r');
 
-            Assert.AreEqual("Pr", autoFillData.TextResult);
-            Assert.AreEqual(2, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("Pr", autoFillControl.EditText);
+            Assert.AreEqual(2, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -108,9 +108,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnBackspaceKeyDown();
 
-            Assert.AreEqual("P", autoFillData.TextResult);
-            Assert.AreEqual(1, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("P", autoFillControl.EditText);
+            Assert.AreEqual(1, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -127,9 +127,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnBackspaceKeyDown();
 
-            Assert.AreEqual("Pokup", autoFillData.TextResult);
-            Assert.AreEqual(2, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("Pokup", autoFillControl.EditText);
+            Assert.AreEqual(2, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -146,9 +146,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnBackspaceKeyDown();
 
-            Assert.AreEqual("", autoFillData.TextResult);
-            Assert.AreEqual(0, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("", autoFillControl.EditText);
+            Assert.AreEqual(0, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -165,9 +165,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnDeleteKeyDown();
 
-            Assert.AreEqual("Adlete", autoFillData.TextResult);
-            Assert.AreEqual(2, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("Adlete", autoFillControl.EditText);
+            Assert.AreEqual(2, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
 
@@ -184,9 +184,9 @@ namespace RingSoft.DbLookup.Tests
 
             autoFillData.OnDeleteKeyDown();
 
-            Assert.AreEqual("C", autoFillData.TextResult);
-            Assert.AreEqual(1, autoFillData.CursorStartIndex);
-            Assert.AreEqual(0, autoFillData.TextSelectLength);
+            Assert.AreEqual("C", autoFillControl.EditText);
+            Assert.AreEqual(1, autoFillControl.SelectionStart);
+            Assert.AreEqual(0, autoFillControl.SelectionLength);
             Assert.AreEqual(0, _context.Issues.GetEntityFromPrimaryKeyValue(autoFillData.PrimaryKeyValue).Id);
         }
     }

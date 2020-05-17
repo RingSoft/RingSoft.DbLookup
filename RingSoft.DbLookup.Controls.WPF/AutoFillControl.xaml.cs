@@ -204,10 +204,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             //var preSelLen = AutoFillText.SelectionLength;
             //MessageBox.Show($"PreText = {startText}");
 
-            AutoFillTextBox.Text = e.TextResult;
-            AutoFillTextBox.SelectionStart = e.CursorStartIndex;
-            AutoFillTextBox.SelectionLength = e.TextSelectLength;
-
             if (e.RefreshContainsList)
             {
                 var openPopup = false;
@@ -227,7 +223,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_onValuePropertySetting)
             {
                 _onAutoFillDataChanged = true;
-                Value = new AutoFillValue(AutoFillData.PrimaryKeyValue, e.TextResult);
+                Value = new AutoFillValue(AutoFillData.PrimaryKeyValue, EditText);
                 _onAutoFillDataChanged = false;
             }
 

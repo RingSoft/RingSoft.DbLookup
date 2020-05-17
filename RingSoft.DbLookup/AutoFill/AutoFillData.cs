@@ -21,6 +21,14 @@ namespace RingSoft.DbLookup.AutoFill
         public AutoFillDefinitionBase AutoFillDefinition { get; private set; }
 
         /// <summary>
+        /// Gets the AutoFill control that displays the data.
+        /// </summary>
+        /// <value>
+        /// The AutoFill control.
+        /// </value>
+        public IAutoFillControl AutoFillControl { get; }
+
+        /// <summary>
         /// Gets the current text result.
         /// </summary>
         /// <value>
@@ -89,14 +97,18 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
+        /// <param name="autoFillControl">The AutoFill control.</param>
         /// <param name="lookupDefinition">The lookup definition used to create the AutoFillDefinition based on the initial sort column definition.</param>
         /// <param name="isDistinct">Set to true if there should only be distinct values.</param>
+        /// <exception cref="ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public AutoFillData(LookupDefinitionBase lookupDefinition, bool isDistinct)
+        public AutoFillData(IAutoFillControl autoFillControl, LookupDefinitionBase lookupDefinition, bool isDistinct)
         {
             if (lookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+
+            AutoFillControl = autoFillControl;
 
             AutoFillDefinitionBase autoFillDefinition = null;
 
@@ -134,11 +146,14 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
+        /// <param name="autoFillControl">The AutoFill control.</param>
         /// <param name="autoFillDefinition">The AutoFillDefinition.</param>
         /// <exception cref="ArgumentException">AutoFill's Field definition cannot be a memo field.</exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public AutoFillData(AutoFillDefinitionBase autoFillDefinition)
+        public AutoFillData(IAutoFillControl autoFillControl, AutoFillDefinitionBase autoFillDefinition)
         {
+            AutoFillControl = autoFillControl;
+
             Initialize(autoFillDefinition);
         }
 
@@ -167,16 +182,17 @@ namespace RingSoft.DbLookup.AutoFill
         /// Called when a keyboard character is pressed.
         /// </summary>
         /// <param name="keyChar">The key character that was pressed.</param>
-        /// <param name="text">The control's text.</param>
-        /// <param name="selectionStart">The selection start.</param>
-        /// <param name="selectionLength">Length of the selection.</param>
         /// <returns></returns>
-        public bool OnKeyCharPressed(char keyChar, string text, int selectionStart, int selectionLength)
+        public bool OnKeyCharPressed(char keyChar)
         {
+            var text = AutoFillControl.EditText;
+            var selectionStart = AutoFillControl.SelectionStart;
+            var selectionLength = AutoFillControl.SelectionLength;
+
             switch (keyChar)
             {
                 case '\b':
-                    OnBackspaceKeyDown(text, selectionStart, selectionLength);
+                    OnBackspaceKeyDown();
                     return true;
                 case '\u001b':  //Escape
                 case '\t':
@@ -209,11 +225,12 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Called when the delete key is pressed.
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="selectionStart">The selection start.</param>
-        /// <param name="selectionLength">Length of the selection.</param>
-        public void OnDeleteKeyDown(string text, int selectionStart, int selectionLength)
+        public void OnDeleteKeyDown()
         {
+            var text = AutoFillControl.EditText;
+            var selectionStart = AutoFillControl.SelectionStart;
+            var selectionLength = AutoFillControl.SelectionLength;
+
             var leftText = text.LeftStr(selectionStart);
             var rightText = GetRightText(text, selectionStart, selectionLength);
             var newText = leftText + rightText;
@@ -230,11 +247,12 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Called when the backspace key is pressed.
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="selectionStart">The selection start.</param>
-        /// <param name="selectionLength">Length of the selection.</param>
-        public void OnBackspaceKeyDown(string text, int selectionStart, int selectionLength)
+        public void OnBackspaceKeyDown()
         {
+            var text = AutoFillControl.EditText;
+            var selectionStart = AutoFillControl.SelectionStart;
+            var selectionLength = AutoFillControl.SelectionLength;
+
             if (selectionStart == 0)
             {
                 return;
@@ -262,6 +280,9 @@ namespace RingSoft.DbLookup.AutoFill
 
         private string GetRightText(string text, int selectionStart, int selectionLength)
         {
+            if (text.IsNullOrEmpty())
+                return string.Empty;
+
             return text.RightStr(text.Length - (selectionLength + selectionStart));
         }
 

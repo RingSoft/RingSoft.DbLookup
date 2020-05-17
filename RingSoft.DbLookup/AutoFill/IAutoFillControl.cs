@@ -1,8 +1,8 @@
 ﻿namespace RingSoft.DbLookup.AutoFill
 {
-    public interface IAutoFilllControl
+    public interface IAutoFillControl
     {
-        string Text { get; set; }
+        string EditText { get; set; }
 
         int SelectionStart { get; set; }
 

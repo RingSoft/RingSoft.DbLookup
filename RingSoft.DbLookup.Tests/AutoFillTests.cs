@@ -28,8 +28,9 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_FirstChar()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
-            autoFillData.OnKeyCharPressed('c', "", 0, 0);
+            var autoFillControl = new TestAutoFillControl();
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
+            autoFillData.OnKeyCharPressed('c');
 
             Assert.AreEqual("Change PunchTo", autoFillData.TextResult);
             Assert.AreEqual(1, autoFillData.CursorStartIndex);
@@ -40,9 +41,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_SecondChar()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Change PunchTo",
+                SelectionStart = 1,
+                SelectionLength = 13
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnKeyCharPressed('h', "Change PunchTo", 1, 13);
+            autoFillData.OnKeyCharPressed('h');
 
             Assert.AreEqual("Change PunchTo", autoFillData.TextResult);
             Assert.AreEqual(2, autoFillData.CursorStartIndex);
@@ -53,9 +60,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_CharInMiddleSelLengthInMiddle()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Change PunchTo",
+                SelectionStart = 2,
+                SelectionLength = 9
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnKeyCharPressed('o', "Change PunchTo", 2, 9);
+            autoFillData.OnKeyCharPressed('o');
 
             Assert.AreEqual("ChohTo", autoFillData.TextResult);
             Assert.AreEqual(3, autoFillData.CursorStartIndex);
@@ -66,9 +79,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_CharInMiddleSelLengthAtEnd()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Populate Lookup",
+                SelectionStart = 1,
+                SelectionLength = 14
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnKeyCharPressed('r', "Populate Lookup", 1, 14);
+            autoFillData.OnKeyCharPressed('r');
 
             Assert.AreEqual("Pr", autoFillData.TextResult);
             Assert.AreEqual(2, autoFillData.CursorStartIndex);
@@ -79,9 +98,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_BackspaceFromEnd()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Pr",
+                SelectionStart = 2,
+                SelectionLength = 0
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnBackspaceKeyDown("Pr", 2, 0);
+            autoFillData.OnBackspaceKeyDown();
 
             Assert.AreEqual("P", autoFillData.TextResult);
             Assert.AreEqual(1, autoFillData.CursorStartIndex);
@@ -92,9 +117,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_BackspaceWithCursorInMiddleSelLengthInMiddle()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Populate Lookup",
+                SelectionStart = 2,
+                SelectionLength = 10
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnBackspaceKeyDown("Populate Lookup", 2, 10);
+            autoFillData.OnBackspaceKeyDown();
 
             Assert.AreEqual("Pokup", autoFillData.TextResult);
             Assert.AreEqual(2, autoFillData.CursorStartIndex);
@@ -105,9 +136,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_BackspaceFromEndToStart()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "P",
+                SelectionStart = 1,
+                SelectionLength = 0
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnBackspaceKeyDown("P", 1, 0);
+            autoFillData.OnBackspaceKeyDown();
 
             Assert.AreEqual("", autoFillData.TextResult);
             Assert.AreEqual(0, autoFillData.CursorStartIndex);
@@ -118,9 +155,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_DeleteWithCursorInMiddleSelLengthInMiddle()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Add % Complete",
+                SelectionStart = 2,
+                SelectionLength = 8
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnDeleteKeyDown("Add % Complete", 2, 8);
+            autoFillData.OnDeleteKeyDown();
 
             Assert.AreEqual("Adlete", autoFillData.TextResult);
             Assert.AreEqual(2, autoFillData.CursorStartIndex);
@@ -131,9 +174,15 @@ namespace RingSoft.DbLookup.Tests
         [TestMethod]
         public void IssuesAutoFill_DeleteWithCursorInMiddleSelLengthToEnd()
         {
-            var autoFillData = new AutoFillData(_autoFillDefinition);
+            var autoFillControl = new TestAutoFillControl
+            {
+                EditText = "Change PunchTo",
+                SelectionStart = 1,
+                SelectionLength = 13
+            };
+            var autoFillData = new AutoFillData(autoFillControl, _autoFillDefinition);
 
-            autoFillData.OnDeleteKeyDown("Change PunchTo", 1, 13);
+            autoFillData.OnDeleteKeyDown();
 
             Assert.AreEqual("C", autoFillData.TextResult);
             Assert.AreEqual(1, autoFillData.CursorStartIndex);

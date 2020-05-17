@@ -13,8 +13,26 @@ namespace RingSoft.DbLookup.Controls.WinForms
     /// </summary>
     /// <seealso cref="System.Windows.Forms.UserControl" />
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public partial class AutoFillControl : UserControl, INotifyPropertyChanged
+    public partial class AutoFillControl : UserControl, IAutoFillControl, INotifyPropertyChanged
     {
+        public string EditText
+        {
+            get => AutoFillText.Text;
+            set => AutoFillText.Text = value;
+        }
+
+        public int SelectionStart
+        {
+            get => AutoFillText.SelectionStart;
+            set => AutoFillText.SelectionStart = value;
+        }
+
+        public int SelectionLength
+        {
+            get => AutoFillText.SelectionLength;
+            set => AutoFillText.SelectionLength = value;
+        }
+
         /// <summary>
         /// Gets the AutoFill data.
         /// </summary>
@@ -134,7 +152,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             switch (e.KeyCode)
             {
                 case Keys.Delete:
-                    AutoFillData.OnDeleteKeyDown(AutoFillText.Text, AutoFillText.SelectionStart, AutoFillText.SelectionLength);
+                    AutoFillData.OnDeleteKeyDown();
                     e.Handled = true;
                     IsDirty = true;
                     break;
@@ -160,7 +178,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             if (((ModifierKeys & Keys.Control) != 0) || (ModifierKeys & Keys.Alt) != 0)
                 return;
 
-            if (AutoFillData.OnKeyCharPressed(e.KeyChar, AutoFillText.Text, AutoFillText.SelectionStart, AutoFillText.SelectionLength))
+            if (AutoFillData.OnKeyCharPressed(e.KeyChar))
                 e.Handled = true;
             IsDirty = true;
         }
@@ -175,7 +193,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             _lookupAllowAdd = lookupAllowAdd;
             _lookupAllowView = lookupAllowView;
 
-            AutoFillData = new AutoFillData(_lookupDefinition, distinct) { ShowContainsBox = showContainsBox };
+            AutoFillData = new AutoFillData(this, _lookupDefinition, distinct) { ShowContainsBox = showContainsBox };
 
             AutoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 

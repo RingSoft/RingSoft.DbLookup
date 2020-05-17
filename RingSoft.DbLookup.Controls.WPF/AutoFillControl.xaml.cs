@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// <summary>
     /// Interaction logic for AutoFillControl.xaml
     /// </summary>
-    public partial class AutoFillControl
+    public partial class AutoFillControl : IAutoFillControl
     {
         public ObservableCollection<AutoFillContainsItem> ContainsItems { get; set; } =
             new ObservableCollection<AutoFillContainsItem>();
@@ -102,6 +102,23 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </value>
         public AutoFillData AutoFillData { get; private set; }
 
+        public string EditText
+        {
+            get => AutoFillTextBox.Text;
+            set => AutoFillTextBox.Text = value;
+        }
+
+        public int SelectionStart
+        {
+            get => AutoFillTextBox.SelectionStart;
+            set => AutoFillTextBox.SelectionStart = value;
+        }
+
+        public int SelectionLength
+        {
+            get => AutoFillTextBox.SelectionLength;
+            set => AutoFillTextBox.SelectionLength = value;
+        }
 
         private bool _controlLoaded;
         private bool _onAutoFillDataChanged;
@@ -147,7 +164,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (AutoFillData != null)
                 ClearValue();
 
-            AutoFillData = new AutoFillData(Setup.LookupDefinition, Setup.Distinct)
+            AutoFillData = new AutoFillData(this, Setup.LookupDefinition, Setup.Distinct)
             { ShowContainsBox = Setup.ShowContainsBox };
 
 
@@ -262,14 +279,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (e.Key)
             {
                 case Key.Back:
-                    AutoFillData.OnBackspaceKeyDown(AutoFillTextBox.Text, AutoFillTextBox.SelectionStart,
-                        AutoFillTextBox.SelectionLength);
+                    AutoFillData.OnBackspaceKeyDown();
                     e.Handled = true;
                     IsDirty = true;
                     break;
                 case Key.Delete:
-                    AutoFillData.OnDeleteKeyDown(AutoFillTextBox.Text, AutoFillTextBox.SelectionStart,
-                        AutoFillTextBox.SelectionLength);
+                    AutoFillData.OnDeleteKeyDown();
                     e.Handled = true;
                     IsDirty = true;
                     break;
@@ -306,7 +321,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
                 return;
 
-            if (AutoFillData.OnKeyCharPressed(e.Text[0], AutoFillTextBox.Text, AutoFillTextBox.SelectionStart, AutoFillTextBox.SelectionLength))
+            if (AutoFillData.OnKeyCharPressed(e.Text[0]))
                 e.Handled = true;
             IsDirty = true;
         }

@@ -7,8 +7,8 @@ namespace RingSoft.DbLookup.AutoFill
     /// <summary>
     /// An AutoFill field.
     /// </summary>
-    /// <seealso cref="AutoFillBase" />
-    public class AutoFillFieldDefinition : AutoFillBase
+    /// <seealso cref="AutoFillDefinitionBase" />
+    public class AutoFillFieldDefinition : AutoFillDefinitionBase
     {
         /// <summary>
         /// Gets the type.

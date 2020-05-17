@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class GridViewSort
+    internal class GridViewSort
     {
         #region Public attached properties
 

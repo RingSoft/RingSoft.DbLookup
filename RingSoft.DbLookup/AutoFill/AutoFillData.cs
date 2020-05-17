@@ -13,15 +13,15 @@ namespace RingSoft.DbLookup.AutoFill
     public class AutoFillData
     {
         /// <summary>
-        /// Gets the AutoFill definition.
+        /// Gets the AutoFill definition which defines how this class will operate.
         /// </summary>
         /// <value>
         /// The AutoFill definition.
         /// </value>
-        public AutoFillBase AutoFillDefinition { get; private set; }
+        public AutoFillDefinitionBase AutoFillDefinition { get; private set; }
 
         /// <summary>
-        /// Gets the text result.
+        /// Gets the current text result.
         /// </summary>
         /// <value>
         /// The text result.
@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.AutoFill
         public string TextResult { get; private set; }
 
         /// <summary>
-        /// Gets the start index of the cursor.
+        /// Gets the current start index of the cursor.
         /// </summary>
         /// <value>
         /// The start index of the cursor.
@@ -37,7 +37,7 @@ namespace RingSoft.DbLookup.AutoFill
         public int CursorStartIndex { get; private set; }
 
         /// <summary>
-        /// Gets the length of the text select.
+        /// Gets the current text select length.
         /// </summary>
         /// <value>
         /// The length of the text select.
@@ -45,7 +45,7 @@ namespace RingSoft.DbLookup.AutoFill
         public int TextSelectLength { get; private set; }
 
         /// <summary>
-        /// Gets the primary key value.
+        /// Gets the current PrimaryKeyValue.
         /// </summary>
         /// <value>
         /// The primary key value.
@@ -53,7 +53,7 @@ namespace RingSoft.DbLookup.AutoFill
         public PrimaryKeyValue PrimaryKeyValue { get; private set; }
 
         /// <summary>
-        /// Gets the contains box data table.
+        /// Gets the current contains box DataTable.
         /// </summary>
         /// <value>
         /// The contains box data table.
@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup.AutoFill
         public DataTable ContainsBoxDataTable { get; private set; }
 
         /// <summary>
-        /// Gets or sets the contains box maximum rows.
+        /// Gets or sets the maximum number of rows in the contains box.
         /// </summary>
         /// <value>
         /// The contains box maximum rows.
@@ -77,7 +77,7 @@ namespace RingSoft.DbLookup.AutoFill
         public bool ShowContainsBox { get; set; } = true;
 
         /// <summary>
-        /// Occurs when AutoFill data is changed.
+        /// Occurs when this object's data changes.
         /// </summary>
         public event EventHandler<AutoFillDataChangedArgs> AutoFillDataChanged;
 
@@ -87,10 +87,10 @@ namespace RingSoft.DbLookup.AutoFill
         private string _containsText;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillData" /> class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="lookupDefinition">The lookup definition.</param>
-        /// <param name="isDistinct">if set to <c>true</c> is distinct.</param>
+        /// <param name="lookupDefinition">The lookup definition used to create the AutoFillDefinition based on the initial sort column definition.</param>
+        /// <param name="isDistinct">Set to true if there should only be distinct values.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public AutoFillData(LookupDefinitionBase lookupDefinition, bool isDistinct)
         {
@@ -98,7 +98,7 @@ namespace RingSoft.DbLookup.AutoFill
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            AutoFillBase autoFillDefinition = null;
+            AutoFillDefinitionBase autoFillDefinition = null;
 
             switch (lookupDefinition.InitialSortColumnDefinition.ColumnType)
             {
@@ -132,17 +132,17 @@ namespace RingSoft.DbLookup.AutoFill
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillData"/> class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="autoFillDefinition">The AutoFill definition.</param>
+        /// <param name="autoFillDefinition">The AutoFillDefinition.</param>
         /// <exception cref="ArgumentException">AutoFill's Field definition cannot be a memo field.</exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public AutoFillData(AutoFillBase autoFillDefinition)
+        public AutoFillData(AutoFillDefinitionBase autoFillDefinition)
         {
             Initialize(autoFillDefinition);
         }
 
-        private void Initialize(AutoFillBase autoFillDefinition)
+        private void Initialize(AutoFillDefinitionBase autoFillDefinition)
         {
             switch (autoFillDefinition.Type)
             {
@@ -166,8 +166,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Called when a keyboard character is pressed.
         /// </summary>
-        /// <param name="keyChar">The key character.</param>
-        /// <param name="text">The text.</param>
+        /// <param name="keyChar">The key character that was pressed.</param>
+        /// <param name="text">The control's text.</param>
         /// <param name="selectionStart">The selection start.</param>
         /// <param name="selectionLength">Length of the selection.</param>
         /// <returns></returns>

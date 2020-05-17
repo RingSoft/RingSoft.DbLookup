@@ -14,12 +14,12 @@ namespace RingSoft.DbLookup.AutoFill
     }
 
     /// <summary>
-    /// The AutoFill base class.
+    /// The AutoFill definition base class used to determine how the AutoFill engine will behave.
     /// </summary>
-    public abstract class AutoFillBase
+    public abstract class AutoFillDefinitionBase
     {
         /// <summary>
-        /// Gets the type.
+        /// Gets the AutoFill Definition type.
         /// </summary>
         /// <value>
         /// The type.
@@ -27,7 +27,7 @@ namespace RingSoft.DbLookup.AutoFill
         public abstract AutoFillTypes Type { get; }
 
         /// <summary>
-        /// Gets the select SQL alias.
+        /// Gets the AS SQL alias used in the SELECT clause.
         /// </summary>
         /// <value>
         /// The select SQL alias.
@@ -43,7 +43,7 @@ namespace RingSoft.DbLookup.AutoFill
         public TableDefinitionBase TableDefinition { get; }
 
         /// <summary>
-        /// Gets the filter definition.
+        /// Gets the filter definition used to filter the data.
         /// </summary>
         /// <value>
         /// The filter definition.
@@ -51,10 +51,10 @@ namespace RingSoft.DbLookup.AutoFill
         public TableFilterDefinitionBase FilterDefinition { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillBase"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillDefinitionBase"/> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
-        public AutoFillBase(TableDefinitionBase tableDefinition)
+        public AutoFillDefinitionBase(TableDefinitionBase tableDefinition)
         {
             SelectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
             TableDefinition = tableDefinition;

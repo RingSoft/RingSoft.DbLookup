@@ -9,7 +9,7 @@ using System.Windows.Navigation;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public static class WpfExtensionMethods
+    internal static class WpfExtensionMethods
     {
         public static void LoadViewFromUri(this UserControl userControl, string baseUri)
         {

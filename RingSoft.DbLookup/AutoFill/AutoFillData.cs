@@ -8,7 +8,7 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.AutoFill
 {
     /// <summary>
-    /// Contains all the data to output during data entry in an AutoFill control.
+    /// Contains all the data to process during data entry in an AutoFill control.
     /// </summary>
     public class AutoFillData
     {
@@ -21,7 +21,7 @@ namespace RingSoft.DbLookup.AutoFill
         public AutoFillDefinitionBase AutoFillDefinition { get; private set; }
 
         /// <summary>
-        /// Gets the AutoFill control that displays the data.
+        /// Gets the IAutoFillControl interface that gets and displays the data.
         /// </summary>
         /// <value>
         /// The AutoFill control.
@@ -66,7 +66,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="autoFillControl">The AutoFill control.</param>
+        /// <param name="autoFillControl">The AutoFill control interface.</param>
         /// <param name="lookupDefinition">The lookup definition used to create the AutoFillDefinition based on the initial sort column definition.</param>
         /// <param name="isDistinct">Set to true if there should only be distinct values.</param>
         /// <exception cref="ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
@@ -115,7 +115,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="autoFillControl">The AutoFill control.</param>
+        /// <param name="autoFillControl">The AutoFill control interface.</param>
         /// <param name="autoFillDefinition">The AutoFillDefinition.</param>
         /// <exception cref="ArgumentException">AutoFill's Field definition cannot be a memo field.</exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
@@ -151,7 +151,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// Called when a keyboard character is pressed.
         /// </summary>
         /// <param name="keyChar">The key character that was pressed.</param>
-        /// <returns></returns>
+        /// <returns>True if the character was processed</returns>
         public bool OnKeyCharPressed(char keyChar)
         {
             var text = AutoFillControl.EditText;
@@ -461,11 +461,11 @@ namespace RingSoft.DbLookup.AutoFill
         }
 
         /// <summary>
-        /// Sets the value.
+        /// Sets the primary key value and text.
         /// </summary>
         /// <param name="primaryKeyValue">The primary key value.</param>
         /// <param name="text">The text.</param>
-        /// <param name="refreshContainsList">if set to <c>true</c> then refresh the contains listbox.</param>
+        /// <param name="refreshContainsList">if set to true then refresh the contains listbox.</param>
         public void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList)
         {
             if (refreshContainsList)
@@ -496,7 +496,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// Gets the AutoFill contains item to put into the contains list box.  Value is in pieces so the contains text is bolded.
         /// </summary>
         /// <param name="containsDataRow">The contains data row.</param>
-        /// <returns></returns>
+        /// <returns>An Auto Fill Contains object that splits the text into prefix, contains(bold) and suffix.</returns>
         public AutoFillContainsItem GetAutoFillContainsItem(DataRow containsDataRow)
         {
             var text = containsDataRow.GetRowValue(AutoFillDefinition.SelectSqlAlias);
@@ -520,7 +520,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <summary>
         /// Refreshes the data.
         /// </summary>
-        /// <param name="refreshContainsList">if set to <c>true</c> refresh the contains list.</param>
+        /// <param name="refreshContainsList">If set to true refresh the contains list.</param>
         public void RefreshData(bool refreshContainsList)
         {
             if (!AutoFillControl.EditText.IsNullOrEmpty())

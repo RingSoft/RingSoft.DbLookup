@@ -62,6 +62,12 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public LookupDefinitionBase LookupDefinition { get; }
 
+        /// <summary>
+        /// Gets the lookup control.
+        /// </summary>
+        /// <value>
+        /// The lookup control.
+        /// </value>
         public ILookupControl LookupControl { get; }
 
         /// <summary>
@@ -108,8 +114,7 @@ namespace RingSoft.DbLookup.Lookup
             set
             {
                 _selectedIndex = value;
-                if (SelectedIndexChanged != null)
-                    SelectedIndexChanged(this, new SelectedIndexChangedEventArgs(value));
+                SelectedIndexChanged?.Invoke(this, new SelectedIndexChangedEventArgs(value));
             }
         }
 

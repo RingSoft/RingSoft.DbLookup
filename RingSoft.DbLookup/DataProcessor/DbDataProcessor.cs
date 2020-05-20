@@ -8,7 +8,7 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.DataProcessor
 {
     /// <summary>
-    /// Base class for retrieving data from a database.
+    /// Base class for processing database data.
     /// </summary>
     public abstract class DbDataProcessor
     {
@@ -56,10 +56,10 @@ namespace RingSoft.DbLookup.DataProcessor
         }
 
         /// <summary>
-        /// Shows the SQL window.
+        /// Shows the data process result viewer window right after a SQL statement is processed.  Useful in debugging.
         /// </summary>
-        /// <param name="value">if set to <c>true</c> then the data process result viewer will show every time a Sql statement is executed.</param>
-        public static void ShowDataProcessResultWindow(bool value = true)
+        /// <param name="value">If set to true then the data process result viewer will right after a SQL statement is processed.</param>
+        public static void ShowSqlStatementWindow(bool value = true)
         {
             _showSqlWindow = value;
         }

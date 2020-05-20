@@ -174,7 +174,7 @@ namespace RingSoft.SimpleDemo.WPF
                 OrderId > 0 ? OrderId.ToString() : string.Empty);
             lookupWindow.LookupSelect += (o, args) =>
             {
-                var order = App.LookupContext.Orders.GetEntityFromPrimaryKeyValue(args.LookupData.PrimaryKeyValue);
+                var order = App.LookupContext.Orders.GetEntityFromPrimaryKeyValue(args.LookupData.SelectedPrimaryKeyValue);
                 order = App.EfDataProcessor.GetOrder(order.OrderID);
                 OrderId = order.OrderID;
                 CustomerAutoFillValue =

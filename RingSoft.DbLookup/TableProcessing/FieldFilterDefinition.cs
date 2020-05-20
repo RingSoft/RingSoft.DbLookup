@@ -127,20 +127,9 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         /// <summary>
-        /// Updates the condition.
-        /// </summary>
-        /// <param name="condition">The condition.</param>
-        /// <returns>This object.</returns>
-        public FieldFilterDefinition UpdateCondition(Conditions condition)
-        {
-            Condition = condition;
-            return this;
-        }
-
-        /// <summary>
         /// Sets if the search is case sensitive.
         /// </summary>
-        /// <param name="value">if set to <c>true</c> then the search is case sensitive.</param>
+        /// <param name="value">if set to True then the search is case sensitive.</param>
         /// <returns>This object.</returns>
         public FieldFilterDefinition IsCaseSensitive(bool value = true)
         {

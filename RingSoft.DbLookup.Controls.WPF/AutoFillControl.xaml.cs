@@ -335,7 +335,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var text = e.LookupData.GetSelectedRow()
                 .GetRowValue(Setup.LookupDefinition.InitialSortColumnDefinition.SelectSqlAlias);
-            SetValue(e.LookupData.PrimaryKeyValue, text);
+            SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
             IsDirty = true;
             if (TabOutAfterLookupSelect)
             {

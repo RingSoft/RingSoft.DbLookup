@@ -15,13 +15,8 @@ namespace RingSoft.DbLookup.Lookup
     /// <seealso cref="LookupDefinitionBase" />
     public class LookupEntityDefinition<TLookupEntity> : LookupDefinitionBase where TLookupEntity : new()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LookupEntityDefinition{TLookupEntity}"/> class.
-        /// </summary>
-        /// <param name="tableDefinition">The table definition.</param>
-        public LookupEntityDefinition(TableDefinitionBase tableDefinition) : base(tableDefinition)
+        internal LookupEntityDefinition(TableDefinitionBase tableDefinition) : base(tableDefinition)
         {
-            LookupEntityName = typeof(TLookupEntity).Name;
         }
 
         /// <summary>
@@ -30,46 +25,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns>
         /// An object that derives from this LookupEntityDefinition class.
         /// </returns>
-        protected override LookupDefinitionBase BaseClone()
+        protected internal override LookupDefinitionBase BaseClone()
         {
             var clone = new LookupEntityDefinition<TLookupEntity>(TableDefinition);
             clone.CopyLookupData(this);
             return clone;
         }
 
-        /// <summary>
-        /// Calls BaseClone and returns a LookupEntityDefinition instance.
-        /// </summary>
-        /// <returns>A copy of this object.</returns>
-        public new LookupEntityDefinition<TLookupEntity> Clone()
-        {
-            return BaseClone() as LookupEntityDefinition<TLookupEntity>;
-        }
-
-        /// <summary>
-        /// Includes the specified foreign field definition.
-        /// </summary>
-        /// <param name="foreignFieldDefinition">The foreign field definition.</param>
-        /// <returns></returns>
-        public new LookupJoinEntity<TLookupEntity> Include(FieldDefinition foreignFieldDefinition)
-
-        {
-            var returnEntity = new LookupJoinEntity<TLookupEntity>(this, foreignFieldDefinition);
-            return returnEntity;
-        }
-
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(
-            Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            FieldDefinition fieldDefinition)
-        {
-            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, fieldDefinition, 0);
-        }
 
         /// <summary>
         /// Adds a visible column definition.
@@ -79,7 +41,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="fieldDefinition">The field definition.</param>
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
         /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(
+        internal LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
             FieldDefinition fieldDefinition,
             double percentWidth)

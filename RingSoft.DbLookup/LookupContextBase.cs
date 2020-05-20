@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup
         public IReadOnlyList<TableDefinitionBase> TableDefinitions => _tables;
 
         /// <summary>
-        /// Gets the data processor.
+        /// Gets the data processor used to process all queries and SQL statements.
         /// </summary>
         /// <value>
         /// The data processor.
@@ -85,7 +85,7 @@ namespace RingSoft.DbLookup
         protected abstract void EfInitializePrimaryKeys();
 
         /// <summary>
-        /// Called by Initialize for derived classes to create lookup definitions and attach them to tables.
+        /// Called by Initialize for inheriting classes to create lookup definitions and attach them to table definitions.
         /// </summary>
         protected abstract void InitializeLookupDefinitions();
 
@@ -95,9 +95,14 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// Occurs when a user wishes to view a selected lookup/autofill primary key value.  Fires the ViewSelectedPrimaryKey event.
+        /// Inheritor classes use this to set table and field definition properties not automatically set up by the Entity Framework platform.
         /// </summary>
-        /// <param name="e">The lookup primary key arguments.</param>
+        protected abstract void SetupModel();
+
+        /// <summary>
+        /// Occurs when a user wishes to view a selected lookup primary key value.  Fires the LookupAddView event.
+        /// </summary>
+        /// <param name="e">The lookup add view arguments.</param>
         public virtual void OnAddViewLookup(LookupAddViewArgs e)
         {
             LookupAddView?.Invoke(this, e);

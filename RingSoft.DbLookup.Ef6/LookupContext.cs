@@ -23,11 +23,6 @@ namespace RingSoft.DbLookup.Ef6
         /// </value>
         protected abstract DbContext DbContext { get; }
 
-        /// <summary>
-        /// Derived classes use this to set table and field definition properties not automatically set up by this class.
-        /// </summary>
-        protected abstract void SetupModel();
-
         protected override void EfInitializeTableDefinitions()
         {
             if (DbContext == null)

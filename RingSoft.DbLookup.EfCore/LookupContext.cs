@@ -15,18 +15,12 @@ namespace RingSoft.DbLookup.EfCore
     {
 
         /// <summary>
-        /// Gets the Entity Framework Core database context used to set up the table and field definition properties of derived classes.
+        /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
         /// </summary>
         /// <value>
         /// The database context.
         /// </value>
         protected abstract DbContext DbContext { get; }
-
-        /// <summary>
-        /// Derived classes use this to set table and field definition properties not automatically set up by the Entity Framework platform.
-        /// </summary>
-        protected abstract void SetupModel();
-
 
         protected override void EfInitializeTableDefinitions()
         {

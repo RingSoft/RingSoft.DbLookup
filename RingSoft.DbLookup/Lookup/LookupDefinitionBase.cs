@@ -100,7 +100,7 @@ namespace RingSoft.DbLookup.Lookup
             FilterDefinition = new TableFilterDefinitionBase();
         }
 
-        protected virtual LookupDefinitionBase BaseClone()
+        protected internal virtual LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinitionBase(TableDefinition);
             clone.CopyLookupData(this);

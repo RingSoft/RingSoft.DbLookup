@@ -7,7 +7,7 @@
     }
 
     /// <summary>
-    /// Arguments sent when the user wants to select or view a lookup record.
+    /// Arguments sent when the user wants to select or view a lookup row.
     /// </summary>
     public class LookupAddViewArgs
     {
@@ -68,7 +68,7 @@
         public LookupCallBackToken CallBackToken { get; }
 
         /// <summary>
-        /// Gets the owner window.
+        /// Gets the owner window that is firing this event.  For use in setting owner property of the WPF window associated with the Table Definition.
         /// </summary>
         /// <value>
         /// The owner window.

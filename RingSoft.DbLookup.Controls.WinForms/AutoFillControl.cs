@@ -224,7 +224,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         {
             var text = e.LookupData.GetSelectedRow()
                 .GetRowValue(_lookupDefinition.InitialSortColumnDefinition.SelectSqlAlias);
-            Value = new AutoFillValue(e.LookupData.PrimaryKeyValue, text);
+            Value = new AutoFillValue(e.LookupData.SelectedPrimaryKeyValue, text);
             IsDirty = true;
             if (TabOutAfterLookupSelect)
             {

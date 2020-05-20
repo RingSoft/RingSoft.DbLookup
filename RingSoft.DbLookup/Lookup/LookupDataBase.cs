@@ -132,7 +132,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The selected primary key value.
         /// </value>
-        public PrimaryKeyValue PrimaryKeyValue
+        public PrimaryKeyValue SelectedPrimaryKeyValue
         {
             get
             {
@@ -270,7 +270,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (primaryKey.TableDefinition != LookupDefinition.TableDefinition)
                 throw new ArgumentException(
-                    $"Primary key value Table Definition '{PrimaryKeyValue.TableDefinition.TableName}' does not match this Lookup Definition's Table Definition '{LookupDefinition.TableDefinition.TableName}'");
+                    $"Primary key value Table Definition '{SelectedPrimaryKeyValue.TableDefinition.TableName}' does not match this Lookup Definition's Table Definition '{LookupDefinition.TableDefinition.TableName}'");
 
             var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
 

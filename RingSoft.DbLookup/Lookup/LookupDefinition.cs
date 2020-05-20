@@ -6,13 +6,12 @@ using RingSoft.DbLookup.TableProcessing;
 namespace RingSoft.DbLookup.Lookup
 {
     /// <summary>
-    /// Contains all the data necessary for a lookup.
+    /// Contains all the data necessary to show a lookup.
     /// </summary>
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TEntity">The type of entity used by the Entity Framework platform.</typeparam>
     /// <seealso cref="LookupEntityDefinition{TLookupEntity}" />
-    public class LookupDefinition<TLookupEntity, TEntity> 
-        : LookupEntityDefinition<TLookupEntity>
+    public class LookupDefinition<TLookupEntity, TEntity> : LookupEntityDefinition<TLookupEntity>
         where TLookupEntity : new() where TEntity : new()
     {
         /// <summary>
@@ -37,11 +36,12 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="tableDefinition">The table definition.</param>
         public LookupDefinition(TableDefinition<TEntity> tableDefinition) : base(tableDefinition)
         {
+            LookupEntityName = typeof(TLookupEntity).Name;
             TableDefinition = tableDefinition;
             base.FilterDefinition = FilterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
         }
 
-        protected override LookupDefinitionBase BaseClone()
+        protected internal override LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinition<TLookupEntity, TEntity>(TableDefinition);
             clone.CopyLookupData(this);

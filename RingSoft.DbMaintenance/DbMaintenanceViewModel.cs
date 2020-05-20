@@ -133,7 +133,7 @@ namespace RingSoft.DbMaintenance
                         KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
                         break;
                     case LookupFormModes.View:
-                        primaryKeyValue = LookupAddViewArgs.LookupData.PrimaryKeyValue;
+                        primaryKeyValue = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -170,7 +170,7 @@ namespace RingSoft.DbMaintenance
             {
                 MaintenanceMode = DbMaintenanceModes.EditMode;
                 TEntity newEntity =
-                    TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.PrimaryKeyValue);
+                    TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.SelectedPrimaryKeyValue);
 
                 ChangingEntity = true;
                 DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
@@ -245,7 +245,7 @@ namespace RingSoft.DbMaintenance
             if (!CheckDirty())
                 return;
 
-            _lookupData.SelectPrimaryKey(e.LookupData.PrimaryKeyValue);
+            _lookupData.SelectPrimaryKey(e.LookupData.SelectedPrimaryKeyValue);
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace RingSoft.DbMaintenance
         public override void OnSelectButton()
         {
             _selectingRecord = true;
-            LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.PrimaryKeyValue);
+            LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
             View.CloseWindow();
             LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
         }

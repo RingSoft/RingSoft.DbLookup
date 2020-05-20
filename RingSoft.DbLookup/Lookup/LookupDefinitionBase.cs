@@ -89,11 +89,7 @@ namespace RingSoft.DbLookup.Lookup
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
-        /// </summary>
-        /// <param name="tableDefinition">The table definition.</param>
-        public LookupDefinitionBase(TableDefinitionBase tableDefinition)
+        internal LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {
             tableDefinition.Context.Initialize();
             TableDefinition = tableDefinition;
@@ -116,7 +112,7 @@ namespace RingSoft.DbLookup.Lookup
             return BaseClone();
         }
 
-        protected virtual void CopyLookupData(LookupDefinitionBase source)
+        protected internal virtual void CopyLookupData(LookupDefinitionBase source)
         {
             CopyColumns(source.VisibleColumns, false);
             CopyColumns(source.HiddenColumns, true);
@@ -175,12 +171,8 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        /// <summary>
-        /// Adds a hidden column.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition)
+        
+        internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -197,13 +189,7 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        /// <summary>
-        /// Adds a hidden column.
-        /// </summary>
-        /// <param name="formula">The formula.</param>
-        /// <param name="dataType">Type of the data.</param>
-        /// <returns></returns>
-        public LookupFormulaColumnDefinition AddHiddenColumn(string formula, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition AddHiddenColumn(string formula, FieldDataTypes dataType)
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
@@ -216,24 +202,7 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(FieldDefinition fieldDefinition)
-        {
-            return AddVisibleColumnDefinition(string.Empty, fieldDefinition, 0);
-        }
-
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="caption">The caption.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth)
+        internal LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -301,26 +270,7 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        /// <summary>
-        /// Adds a visible formula column definition.
-        /// </summary>
-        /// <param name="formula">The formula.</param>
-        /// <param name="dataType">Type of the data.</param>
-        /// <returns></returns>
-        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string formula, FieldDataTypes dataType)
-        {
-            return AddVisibleColumnDefinition(string.Empty, formula, 0, dataType);
-        }
-
-        /// <summary>
-        /// Adds the visible column definition.
-        /// </summary>
-        /// <param name="caption">The caption.</param>
-        /// <param name="formula">The formula.</param>
-        /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <param name="dataType">Type of the data.</param>
-        /// <returns></returns>
-        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula, double percentWidth, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula, double percentWidth, FieldDataTypes dataType)
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
@@ -356,17 +306,6 @@ namespace RingSoft.DbLookup.Lookup
         public int GetIndexOfVisibleColumn(LookupColumnDefinitionBase visibleColumnDefinition)
         {
             return _visibleColumns.IndexOf(visibleColumnDefinition);
-        }
-
-        /// <summary>
-        /// Includes a specified foreign field definition.
-        /// </summary>
-        /// <param name="foreignFieldDefinition">The foreign field definition.</param>
-        /// <returns></returns>
-        public LookupJoin Include(FieldDefinition foreignFieldDefinition)
-        {
-            var lookupJoin = new LookupJoin(this, foreignFieldDefinition);
-            return lookupJoin;
         }
     }
 }

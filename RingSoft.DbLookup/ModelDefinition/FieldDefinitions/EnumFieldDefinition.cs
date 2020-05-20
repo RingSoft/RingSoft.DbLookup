@@ -10,7 +10,7 @@
         public override FieldDataTypes FieldDataType => FieldDataTypes.Enum;
         
         /// <summary>
-        /// Gets the enum translation.
+        /// Gets the enum translation object which maps an enumerator value to its associated description.
         /// </summary>
         /// <value>
         /// The enum translation.

@@ -9,7 +9,8 @@ namespace RingSoft.DbLookup.Lookup
     /// A lookup column based on a field definition.
     /// </summary>
     /// <seealso cref="LookupColumnDefinitionBase" />
-    public class LookupFieldColumnDefinition : LookupColumnDefinitionType<LookupFieldColumnDefinition>
+    public class LookupFieldColumnDefinition
+        : LookupColumnDefinitionType<LookupFieldColumnDefinition>
     {
         /// <summary>
         /// Gets the type of the column.

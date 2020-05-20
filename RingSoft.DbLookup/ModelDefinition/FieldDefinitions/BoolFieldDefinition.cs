@@ -14,7 +14,7 @@
         public override FieldDataTypes FieldDataType => FieldDataTypes.Bool;
 
         /// <summary>
-        /// Gets the true text.
+        /// Gets the displayed true value text.
         /// </summary>
         /// <value>
         /// The true text.
@@ -22,7 +22,7 @@
         public string TrueText { get; private set; } = "True";
 
         /// <summary>
-        /// Gets the false text.
+        /// Gets the displayed false value text.
         /// </summary>
         /// <value>
         /// The false text.
@@ -32,8 +32,8 @@
         /// <summary>
         /// Sets the displayed text for True and False values.
         /// </summary>
-        /// <param name="trueText">The true text.</param>
-        /// <param name="falseText">The false text.</param>
+        /// <param name="trueText">The new True text.</param>
+        /// <param name="falseText">The new False text.</param>
         /// <returns></returns>
         public BoolFieldDefinition HasTrueFalseText(string trueText, string falseText)
         {

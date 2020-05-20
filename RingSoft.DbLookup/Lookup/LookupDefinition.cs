@@ -11,7 +11,8 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="LookupEntityDefinition{TLookupEntity}" />
-    public class LookupDefinition<TLookupEntity, TEntity> : LookupEntityDefinition<TLookupEntity>
+    public class LookupDefinition<TLookupEntity, TEntity> 
+        : LookupEntityDefinition<TLookupEntity>
         where TLookupEntity : new() where TEntity : new()
     {
         /// <summary>

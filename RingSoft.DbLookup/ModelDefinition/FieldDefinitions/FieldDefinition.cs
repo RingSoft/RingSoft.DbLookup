@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public ForeignKeyDefinition ParentJoinForeignKeyDefinition { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether [allow nulls].
+        /// Gets a value indicating whether this field allows null values.
         /// </summary>
         /// <value>
         ///   <c>true</c> if [allow nulls]; otherwise, <c>false</c>.
@@ -79,11 +79,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the name of the field.
+        /// Sets the name of the field.  For use only by the Entity Framework classes.
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
-        /// <returns>This object.</returns>
-        public FieldDefinition HasFieldName(string fieldName)
+        public void HasFieldName(string fieldName)
         {
             var field = TableDefinition.FieldDefinitions.FirstOrDefault(f => f.FieldName == fieldName);
             if (field != null && field != this)
@@ -91,13 +90,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 throw new ArgumentException($"Field name '{fieldName}' already exists in this table.");
             }
             FieldName = fieldName;
-            return this;
         }
 
         /// <summary>
-        /// Sets the field description.
+        /// Sets the field description that the user will see.
         /// </summary>
-        /// <param name="description">The description.</param>
+        /// <param name="description">The description value.</param>
         /// <returns>This object.</returns>
         public FieldDefinition HasDescription(string description)
         {
@@ -106,17 +104,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the parent foreign key definition.
-        /// </summary>
-        /// <param name="parentFieldDefinition">The parent field definition.</param>
-        /// <returns>This object.</returns>
-        public ForeignKeyDefinition SetParentField(FieldDefinition parentFieldDefinition)
-        {
-            return SetParentField(parentFieldDefinition, string.Empty);
-        }
-
-        /// <summary>
-        /// Sets the parent foreign key definition.
+        /// Sets the parent foreign key definition.  For use only by the Entity Framework classes.
         /// </summary>
         /// <param name="parentFieldDefinition">The parent field definition.</param>
         /// <param name="propertyName">The object's property name</param>
@@ -143,14 +131,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Determines whether this field will allow nulls.
+        /// Determines whether this field will allow nulls.  For use only by the Entity Framework classes.
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns></returns>
-        public FieldDefinition IsRequired(bool value = true)
+        public void IsRequired(bool value = true)
         {
             AllowNulls = !value;
-            return this;
         }
 
         public override string ToString()

@@ -3,6 +3,9 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
+    /// <summary>
+    /// Represents a filter field item in a table filter definition.
+    /// </summary>
     public class FieldFilterDefinition
     {
         /// <summary>
@@ -38,7 +41,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public Conditions Condition { get; internal set; }
 
         /// <summary>
-        /// Gets the value.
+        /// Gets the value to filter.
         /// </summary>
         /// <value>
         /// The value.
@@ -145,7 +148,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return this;
         }
 
-        public void CopyFrom(FieldFilterDefinition source)
+        internal void CopyFrom(FieldFilterDefinition source)
         {
             FieldDefinition = source.FieldDefinition;
             Condition = source.Condition;

@@ -18,7 +18,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public override FieldDataTypes FieldDataType => FieldDataTypes.Decimal;
 
         /// <summary>
-        /// Gets the decimal count.
+        /// Gets the number of digits to the right of the decimal point.
         /// </summary>
         /// <value>
         /// The decimal count.
@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public DecimalFieldTypes DecimalFieldType { get; internal set; }
 
         /// <summary>
-        /// Gets the number format string.
+        /// Gets the number format string.  Default value is empty.
         /// </summary>
         /// <value>
         /// The number format string.
@@ -47,9 +47,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the decimal count.
+        /// Sets the number of digits to the right of the decimal point.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The new digits value.</param>
         /// <returns>This object.</returns>
         public DecimalFieldDefinition HasDecimalCount(int value)
         {
@@ -58,9 +58,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the type of the decimal field.
+        /// Sets the type of this decimal field.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The new DecimalFieldTypes value.</param>
         /// <returns>This object.</returns>
         public DecimalFieldDefinition HasDecimalFieldType(DecimalFieldTypes value)
         {
@@ -71,7 +71,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Sets the number format string.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The new format string value.</param>
         /// <returns>This object.</returns>
         public DecimalFieldDefinition HasNumberFormatString(string value)
         {

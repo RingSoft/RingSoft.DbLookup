@@ -35,17 +35,6 @@
         }
 
         /// <summary>
-        /// Sets the parent foreign key definition.
-        /// </summary>
-        /// <param name="parentFieldDefinition">The parent field definition.</param>
-        /// <returns>This object.</returns>
-        public new TFieldDefinition SetParentField(FieldDefinition parentFieldDefinition)
-        {
-            base.SetParentField(parentFieldDefinition);
-            return (TFieldDefinition)this;
-        }
-
-        /// <summary>
         /// Determines whether this field will allow nulls.
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>

@@ -10,7 +10,9 @@ namespace RingSoft.DbLookup.TableProcessing
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="TableFilterDefinitionBase" />
-    public class TableFilterDefinition<TEntity> : TableFilterDefinitionBase where TEntity : new()
+    public class TableFilterDefinition<TEntity> 
+        : TableFilterDefinitionBase 
+        where TEntity : new()
     {
         private TableDefinition<TEntity> _entityTableDefinition;
 

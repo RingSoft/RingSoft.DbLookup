@@ -73,7 +73,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="formula">The formula.</param>
         /// <param name="dataType">Type of the data.</param>
-        public LookupFormulaColumnDefinition(string formula, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition(string formula, FieldDataTypes dataType)
         {
             Formula = formula;
             _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();

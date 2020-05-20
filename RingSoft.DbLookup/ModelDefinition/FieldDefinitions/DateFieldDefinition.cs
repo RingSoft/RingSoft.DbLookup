@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Sets the type of the date.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The new DbDateTypes value.</param>
         /// <returns>This object.</returns>
         public DateFieldDefinition HasDateType(DbDateTypes value)
         {
@@ -43,9 +43,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the date format string.
+        /// Sets the date format string to override the default formatting based on the DateType property.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The new format string value.</param>
         /// <returns>This object.</returns>
         public DateFieldDefinition HasDateFormatString(string value)
         {

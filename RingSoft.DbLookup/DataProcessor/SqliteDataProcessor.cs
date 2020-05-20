@@ -16,7 +16,7 @@ namespace RingSoft.DbLookup.DataProcessor
         protected override DbSelectSqlGenerator SqlGenerator => _generator;
 
         /// <summary>
-        /// Gets or sets the name of the Microsoft Access .mdb/.accdb file.
+        /// Gets or sets the name of the Sqlite .sqlite file.
         /// </summary>
         /// <value>
         /// The name of the file.

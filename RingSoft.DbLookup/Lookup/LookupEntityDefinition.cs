@@ -1,10 +1,9 @@
-﻿using System;
+﻿using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
-using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -62,42 +61,6 @@ namespace RingSoft.DbLookup.Lookup
             return GblMethods.GetFieldDataTypeForType(propertyType);
         }
 
-        /// <summary>
-        /// Gets the column definition.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <returns></returns>
-        public LookupColumnDefinitionBase GetColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
-        {
-            var propertyName = lookupEntityProperty.GetFullPropertyName();
-            var column = VisibleColumns.FirstOrDefault(c => c.PropertyName == propertyName);
-            if (column == null)
-                column = HiddenColumns.FirstOrDefault(c => c.PropertyName == propertyName);
-            return column;
-        }
-
-        /// <summary>
-        /// Adds a hidden column.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, FieldDefinition fieldDefinition)
-        {
-            ValidateProperty(lookupEntityProperty, true, string.Empty);
-
-            var column = base.AddHiddenColumn(fieldDefinition);
-            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
-            return column;
-        }
-
-        public LookupFormulaColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula)
-        {
-            ValidateProperty(lookupEntityProperty, true, lookupEntityProperty.GetFullPropertyName());
-            var column = base.AddHiddenColumn(formula, GetFieldDataTypeForProperty(lookupEntityProperty));
-            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
-            return column;
-        }
 
         internal void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
         {

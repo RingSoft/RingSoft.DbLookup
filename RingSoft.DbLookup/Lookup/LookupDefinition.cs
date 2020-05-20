@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
@@ -144,7 +146,45 @@ namespace RingSoft.DbLookup.Lookup
             Expression<Func<TEntity, object>> entityProperty)
         {
             var field = TableDefinition.GetPropertyField(entityProperty.GetFullPropertyName());
-            return base.AddHiddenColumn(lookupEntityProperty, field);
+            return AddHiddenColumn(lookupEntityProperty, field);
+        }
+
+        /// <summary>
+        /// Adds a hidden column.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns></returns>
+        private LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, FieldDefinition fieldDefinition)
+        {
+            ValidateProperty(lookupEntityProperty, true, string.Empty);
+
+            var column = base.AddHiddenColumn(fieldDefinition);
+            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            return column;
+        }
+
+        public LookupFormulaColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula)
+        {
+            ValidateProperty(lookupEntityProperty, true, lookupEntityProperty.GetFullPropertyName());
+            var column = base.AddHiddenColumn(formula, GetFieldDataTypeForProperty(lookupEntityProperty));
+            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            return column;
+        }
+
+
+        /// <summary>
+        /// Gets the column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <returns></returns>
+        public LookupColumnDefinitionBase GetColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
+        {
+            var propertyName = lookupEntityProperty.GetFullPropertyName();
+            var column = VisibleColumns.FirstOrDefault(c => c.PropertyName == propertyName);
+            if (column == null)
+                column = HiddenColumns.FirstOrDefault(c => c.PropertyName == propertyName);
+            return column;
         }
     }
 }

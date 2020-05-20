@@ -86,6 +86,41 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
+        /// Adds a visible formula column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="formula">The formula.</param>
+        /// <returns></returns>
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula)
+        {
+            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, formula, 0);
+        }
+
+        /// <summary>
+        /// Adds a visible formula column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="formula">The formula.</param>
+        /// <param name="percentWidth">The percent of the lookup's total width.</param>
+        /// <returns></returns>
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption, string formula,
+            double percentWidth)
+        {
+            var columnName = caption;
+            if (columnName.IsNullOrEmpty())
+                columnName = lookupEntityProperty.GetFullPropertyName();
+
+            ValidateProperty(lookupEntityProperty, false, columnName);
+            var column = base.AddVisibleColumnDefinition(caption, formula, percentWidth,
+                GetFieldDataTypeForProperty(lookupEntityProperty));
+            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            return column;
+        }
+
+        /// <summary>
         /// Includes the specified related property.
         /// </summary>
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>

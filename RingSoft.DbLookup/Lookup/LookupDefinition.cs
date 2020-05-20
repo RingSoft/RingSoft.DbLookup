@@ -100,19 +100,6 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Includes the specified entity property.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <returns></returns>
-        public LookupJoinEntity<TLookupEntity> Include(Expression<Func<TEntity, object>> entityProperty)
-
-        {
-            var field = TableDefinition.GetPropertyField(entityProperty.GetFullPropertyName());
-            var returnEntity = new LookupJoinEntity<TLookupEntity>(this, field);
-            return returnEntity;
-        }
-
-        /// <summary>
         /// Adds a hidden column.
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>

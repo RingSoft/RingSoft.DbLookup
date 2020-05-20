@@ -53,8 +53,8 @@ namespace RingSoft.DbLookup.App.Library.DevLogix
             IssuesLookup.Include(p => p.Task).Include(p => p.Project)
                 .AddVisibleColumnDefinition(p => p.Project, "Project", p => p.Name, 15);
 
-            IssuesLookup.Include(p => p.TaskId)
-                .AddVisibleColumnDefinition(p => p.Task, "Task", _lookupContext.Tasks.GetFieldDefinition(p => p.Name), 15);
+            IssuesLookup.Include(p => p.Task)
+                .AddVisibleColumnDefinition(p => p.Task, "Task", p => p.Name, 15);
 
             IssuesLookup.AddVisibleColumnDefinition(p => p.Resolved, "Resolved?", p => p.IsResolved, 12);
             IssuesLookup.Include(p => p.Task)

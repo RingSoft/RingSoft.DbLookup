@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -22,51 +20,6 @@ namespace RingSoft.DbLookup.Lookup
         protected internal LookupJoinEntity(LookupEntityDefinition<TLookupEntity> lookupEntityDefinition) : base(lookupEntityDefinition)
         {
             _lookupEntityDefinition = lookupEntityDefinition;
-        }
-
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(
-            Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            FieldDefinition fieldDefinition)
-        {
-            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, fieldDefinition, 0);
-        }
-
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            string caption, FieldDefinition fieldDefinition, double percentWidth)
-        {
-            var columnDefinition = AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
-            columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
-
-            return columnDefinition;
-        }
-
-        /// <summary>
-        /// Adds a hidden column.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            FieldDefinition fieldDefinition)
-        {
-            var columnDefinition = AddHiddenColumn(fieldDefinition);
-            columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
-
-            return columnDefinition;
         }
 
         /// <summary>

@@ -219,16 +219,6 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Adds a visible column definition.
         /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(FieldDefinition fieldDefinition)
-        {
-            return AddVisibleColumnDefinition(string.Empty, fieldDefinition, 0);
-        }
-
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
         /// <param name="caption">The caption.</param>
         /// <param name="fieldDefinition">The field definition.</param>
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
@@ -299,17 +289,6 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Adds a visible formula column definition.
-        /// </summary>
-        /// <param name="formula">The formula.</param>
-        /// <param name="dataType">Type of the data.</param>
-        /// <returns></returns>
-        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string formula, FieldDataTypes dataType)
-        {
-            return AddVisibleColumnDefinition(string.Empty, formula, 0, dataType);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -68,7 +69,6 @@ namespace RingSoft.DbLookup.Lookup
         public new event EventHandler<LookupDataChangedArgs<TLookupEntity>> LookupDataChanged;
 
         private List<TLookupEntity> _lookupResults = new List<TLookupEntity>();
-        private LookupEntityDefinition<TLookupEntity> _lookupEntityDefinition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupData{TLookupEntity}"/> class.
@@ -78,17 +78,63 @@ namespace RingSoft.DbLookup.Lookup
         public LookupData(LookupEntityDefinition<TLookupEntity> lookupDefinition, ILookupControl userInterface)
             : base(lookupDefinition, userInterface)
         {
-            _lookupEntityDefinition = lookupDefinition;
         }
 
         protected override void ProcessLookupData()
         {
             base.ProcessLookupData();
             _lookupResults.Clear();
-            _lookupResults = _lookupEntityDefinition.GetLookupResultsListFromLookupData(this);
+            _lookupResults = GetLookupResultsListFromLookupData(this);
 
             var output = new LookupDataChangedArgs<TLookupEntity>(this);
             LookupDataChanged?.Invoke(this, output);
+        }
+
+        /// <summary>
+        /// Gets the lookup results list from lookup data.
+        /// </summary>
+        /// <param name="lookupData">The lookup data.</param>
+        /// <returns></returns>
+        public List<TLookupEntity> GetLookupResultsListFromLookupData(LookupDataBase lookupData)
+        {
+            var lookupResults = new List<TLookupEntity>();
+
+            if (lookupData.LookupResultsDataTable != null)
+            {
+                foreach (DataRow dataRow in lookupData.LookupResultsDataTable.Rows)
+                {
+                    lookupResults.Add(GetEntityFromDataRow(dataRow));
+                }
+            }
+
+            return lookupResults;
+        }
+
+
+        private TLookupEntity GetEntityFromDataRow(DataRow dataRow)
+        {
+            var entity = (TLookupEntity)Activator.CreateInstance(typeof(TLookupEntity));
+
+            foreach (var lookupDefinitionVisibleColumn in LookupDefinition.VisibleColumns)
+            {
+                ProcessColumn(entity, dataRow, lookupDefinitionVisibleColumn);
+            }
+
+            foreach (var lookupDefinitionHiddenColumn in LookupDefinition.HiddenColumns)
+            {
+                ProcessColumn(entity, dataRow, lookupDefinitionHiddenColumn);
+            }
+
+            return entity;
+        }
+
+        private void ProcessColumn(TLookupEntity listItem, DataRow dataRow, LookupColumnDefinitionBase column)
+        {
+            if (column.PropertyName.IsNullOrEmpty())
+                return;
+
+            var value = dataRow.GetRowValue(column.SelectSqlAlias);
+            GblMethods.SetPropertyValue(listItem, column.PropertyName, value);
         }
 
         /// <summary>

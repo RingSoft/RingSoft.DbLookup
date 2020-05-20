@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using RingSoft.DbLookup.ModelDefinition;
+﻿using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -84,7 +84,7 @@ namespace RingSoft.DbLookup.Lookup
             string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth)
         {
             var field = TableDefinition.GetPropertyField(entityProperty.GetFullPropertyName());
-            return base.AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth);
+            return AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth);
         }
 
         /// <summary>
@@ -186,5 +186,81 @@ namespace RingSoft.DbLookup.Lookup
                 column = HiddenColumns.FirstOrDefault(c => c.PropertyName == propertyName);
             return column;
         }
+
+        /// <summary>
+        /// Adds a visible column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="percentWidth">The percent of the lookup's total width.</param>
+        /// <returns></returns>
+        internal LookupFieldColumnDefinition AddVisibleColumnDefinition(
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
+            FieldDefinition fieldDefinition,
+            double percentWidth)
+        {
+            var columnName = caption;
+            if (columnName.IsNullOrEmpty())
+                columnName = lookupEntityProperty.GetFullPropertyName();
+
+            ValidateProperty(lookupEntityProperty, false, columnName);
+            var column = base.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
+            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            return column;
+        }
+
+        internal FieldDataTypes GetFieldDataTypeForProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
+        {
+            var propertyType = GetTypeFromExpression(lookupEntityProperty);
+            return GblMethods.GetFieldDataTypeForType(propertyType);
+        }
+
+
+        internal void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
+        {
+            var propertyType = GetTypeFromExpression(lookupEntityProperty);
+            if (propertyType == typeof(string)
+                || propertyType == typeof(DateTime)
+                || propertyType == typeof(decimal)
+                || propertyType == typeof(double)
+                || propertyType == typeof(float)
+                || propertyType == typeof(int)
+                || propertyType == typeof(long)
+                || propertyType == typeof(byte)
+                || propertyType == typeof(short)
+            )
+            {
+                //OK
+            }
+            else if (propertyType == typeof(bool))
+            {
+                if (!hiddenProperty)
+                    throw new ArgumentException($"Visible bool column '{columnName}' will get converted to a string.  You must map this visible bool column to a string property.");
+            }
+            else if (propertyType.BaseType == typeof(Enum))
+            {
+                if (!hiddenProperty)
+                    throw new ArgumentException($"Visible enumerator column '{columnName}' will get converted to a string.  You must map this visible enumerator column to a string property.");
+            }
+            else
+            {
+                throw new ArgumentException($"Property '{lookupEntityProperty.GetFullPropertyName()}' of type '{propertyType.Name}' is not supported.");
+            }
+        }
+
+        private Type GetTypeFromExpression(Expression<Func<TLookupEntity, object>> expr)
+        {
+            if ((expr.Body.NodeType == ExpressionType.Convert) ||
+                (expr.Body.NodeType == ExpressionType.ConvertChecked))
+            {
+                var unary = expr.Body as UnaryExpression;
+                if (unary != null)
+                    return unary.Operand.Type;
+            }
+
+            return expr.Body.Type;
+        }
+
     }
 }

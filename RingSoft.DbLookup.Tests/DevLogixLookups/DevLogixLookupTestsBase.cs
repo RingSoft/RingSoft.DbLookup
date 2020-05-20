@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.DevLogix;
 using RingSoft.DbLookup.App.Library.DevLogix.LookupModel;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 
@@ -16,7 +17,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -58,7 +61,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -102,7 +107,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -143,7 +150,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -185,7 +194,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -225,7 +236,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -266,7 +279,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -307,7 +322,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 15;
-            var lookupData = new LookupData<ErrorLookup>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<ErrorLookup, Error>(LookupContext.DevLogixConfiguration.ErrorsLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -351,7 +368,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 13;
-            var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<IssueLookup, Issue>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -394,7 +413,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 13;
-            var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<IssueLookup, Issue>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -439,7 +460,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 13;
-            var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<IssueLookup, Issue>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();
@@ -482,7 +505,9 @@ namespace RingSoft.DbLookup.Tests.DevLogixLookups
             //Arrange
             var userInterface = new LookupDataUserInterface();
             userInterface.PageSize = 13;
-            var lookupData = new LookupData<IssueLookup>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(), userInterface);
+            var lookupData =
+                new LookupData<IssueLookup, Issue>(LookupContext.DevLogixConfiguration.IssuesLookup.Clone(),
+                    userInterface);
 
             //Act/Assert
             var getDataResult = lookupData.GetInitData();

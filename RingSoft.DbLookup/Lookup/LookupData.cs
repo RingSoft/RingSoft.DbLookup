@@ -10,7 +10,9 @@ namespace RingSoft.DbLookup.Lookup
     /// The arguments sent to the LookupDataChanged event.
     /// </summary>
     /// <typeparam name="TLookupEntity">The lookup entity.</typeparam>
-    public class LookupDataChangedArgs<TLookupEntity> where TLookupEntity : new()
+    /// <typeparam name="TEntity">The entity</typeparam>
+    public class LookupDataChangedArgs<TLookupEntity, TEntity> 
+        where TLookupEntity : new() where TEntity : new()
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         /// <summary>
@@ -19,13 +21,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The lookup data.
         /// </value>
-        public LookupData<TLookupEntity> LookupData { get; }
+        public LookupData<TLookupEntity, TEntity> LookupData { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataChangedArgs{TLookupEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataChangedArgs{TLookupEntity, TEntity}"/> class.
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>
-        public LookupDataChangedArgs(LookupData<TLookupEntity> lookupData)
+        public LookupDataChangedArgs(LookupData<TLookupEntity, TEntity> lookupData)
         {
             LookupData = lookupData;
         }
@@ -35,8 +37,10 @@ namespace RingSoft.DbLookup.Lookup
     /// A lookup's data.
     /// </summary>
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="LookupDataBase" />
-    public class LookupData<TLookupEntity> : LookupDataBase where TLookupEntity : new()
+    public class LookupData<TLookupEntity, TEntity> : LookupDataBase 
+        where TLookupEntity : new() where TEntity : new()
     {
         /// <summary>
         /// Gets the lookup results list.
@@ -66,16 +70,16 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Occurs when this object's data changes.
         /// </summary>
-        public new event EventHandler<LookupDataChangedArgs<TLookupEntity>> LookupDataChanged;
+        public new event EventHandler<LookupDataChangedArgs<TLookupEntity, TEntity>> LookupDataChanged;
 
         private List<TLookupEntity> _lookupResults = new List<TLookupEntity>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupData{TLookupEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupData{TLookupEntity, TEntity}"/> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="userInterface">The user interface.</param>
-        public LookupData(LookupEntityDefinition<TLookupEntity> lookupDefinition, ILookupControl userInterface)
+        public LookupData(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, ILookupControl userInterface)
             : base(lookupDefinition, userInterface)
         {
         }
@@ -86,7 +90,7 @@ namespace RingSoft.DbLookup.Lookup
             _lookupResults.Clear();
             _lookupResults = GetLookupResultsListFromLookupData(this);
 
-            var output = new LookupDataChangedArgs<TLookupEntity>(this);
+            var output = new LookupDataChangedArgs<TLookupEntity, TEntity>(this);
             LookupDataChanged?.Invoke(this, output);
         }
 

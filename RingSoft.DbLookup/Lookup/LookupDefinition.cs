@@ -12,8 +12,8 @@ namespace RingSoft.DbLookup.Lookup
     /// </summary>
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
     /// <typeparam name="TEntity">The type of entity used by the Entity Framework platform.</typeparam>
-    /// <seealso cref="LookupEntityDefinition{TLookupEntity}" />
-    public class LookupDefinition<TLookupEntity, TEntity> : LookupEntityDefinition<TLookupEntity>
+    /// <seealso cref="LookupDefinitionBase" />
+    public class LookupDefinition<TLookupEntity, TEntity> : LookupDefinitionBase
         where TLookupEntity : new() where TEntity : new()
     {
         /// <summary>
@@ -128,11 +128,11 @@ namespace RingSoft.DbLookup.Lookup
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
         /// <returns></returns>
-        public LookupJoinTableEntity<TLookupEntity, TRelatedEntity> Include<TRelatedEntity>(Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
+        public LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity> Include<TRelatedEntity>(Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
             where TRelatedEntity : class
 
         {
-            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TRelatedEntity>(this, ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(), relatedProperty.ReturnType.Name);
+            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>(this, ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(), relatedProperty.ReturnType.Name);
             return returnEntity;
         }
 

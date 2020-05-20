@@ -9,21 +9,22 @@ namespace RingSoft.DbLookup.Lookup
     /// A join to an entity definition.
     /// </summary>
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
+    /// <typeparam name="TEntity">The entity.</typeparam>
     /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
     /// <seealso cref="LookupJoin" />
-    public class LookupJoinTableEntity<TLookupEntity, TRelatedEntity>  : LookupJoin
-        where TLookupEntity : new() where TRelatedEntity : class
+    public class LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>  : LookupJoin
+        where TLookupEntity : new() where TEntity : new() where TRelatedEntity : class
     {
-        private LookupEntityDefinition<TLookupEntity> _lookupEntityDefinition;
+        private LookupDefinition<TLookupEntity, TEntity> _lookupEntityDefinition;
 
-        internal LookupJoinTableEntity(LookupEntityDefinition<TLookupEntity> lookupEntityDefinition,
+        internal LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition,
             TableDefinitionBase tableDefinition, string propertyName, string propertyType) : base(lookupEntityDefinition)
         {
             _lookupEntityDefinition = lookupEntityDefinition;
             SetJoinDefinition(tableDefinition, propertyName, propertyType);
         }
 
-        private LookupJoinTableEntity(LookupEntityDefinition<TLookupEntity> lookupEntityDefinition) : base(lookupEntityDefinition)
+        private LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition) : base(lookupEntityDefinition)
         {
             _lookupEntityDefinition = lookupEntityDefinition;
         }
@@ -106,7 +107,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <typeparam name="TParentRelatedEntity">The type of the parent related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
         /// <returns></returns>
-        public LookupJoinTableEntity<TLookupEntity, TParentRelatedEntity> Include<TParentRelatedEntity>(Expression<Func<TRelatedEntity, TParentRelatedEntity>> relatedProperty)
+        public LookupJoinTableEntity<TLookupEntity, TEntity, TParentRelatedEntity> Include<TParentRelatedEntity>(Expression<Func<TRelatedEntity, TParentRelatedEntity>> relatedProperty)
             where TParentRelatedEntity : class
 
         {
@@ -114,7 +115,7 @@ namespace RingSoft.DbLookup.Lookup
             var relatedPropertyName = relatedProperty.GetFullPropertyName();
             var relatedPropertyType = relatedProperty.ReturnType.Name;
 
-            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TParentRelatedEntity>(_lookupEntityDefinition);
+            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TParentRelatedEntity>(_lookupEntityDefinition);
             returnEntity.JoinDefinition = JoinDefinition;
             returnEntity.SetJoinDefinition(parentTable, relatedPropertyName, relatedPropertyType);
             

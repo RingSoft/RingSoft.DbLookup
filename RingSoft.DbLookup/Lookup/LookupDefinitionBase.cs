@@ -78,7 +78,7 @@ namespace RingSoft.DbLookup.Lookup
         public TableFilterDefinitionBase FilterDefinition { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the title that shows on the lookup window. Test
+        /// Gets or sets the title that shows on the lookup window.
         /// </summary>
         /// <value>
         /// The title.

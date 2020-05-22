@@ -10,8 +10,7 @@ namespace RingSoft.DbLookup.TableProcessing
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="TableFilterDefinitionBase" />
-    public class TableFilterDefinition<TEntity> 
-        : TableFilterDefinitionBase 
+    public class TableFilterDefinition<TEntity> : TableFilterDefinitionBase 
         where TEntity : new()
     {
         private TableDefinition<TEntity> _entityTableDefinition;
@@ -24,280 +23,280 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, string>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, string>> entityProperty,
             Conditions condition, string value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, int>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, int>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, int?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, int?>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, long>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, long>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, long?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, long?>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, byte>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, byte>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, byte?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, byte?>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, short>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, short>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, short?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, short?>> entityProperty,
             Conditions condition, int value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double>> entityProperty,
             Conditions condition, double value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double?>> entityProperty,
             Conditions condition, double value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, float>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, float>> entityProperty,
             Conditions condition, float value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, float?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, float?>> entityProperty,
             Conditions condition, float value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal>> entityProperty,
             Conditions condition, decimal value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal?>> entityProperty,
             Conditions condition, decimal value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, DateTime>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, DateTime>> entityProperty,
             Conditions condition, DateTime value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, DateTime?>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, DateTime?>> entityProperty,
             Conditions condition, DateTime value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, bool>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, bool>> entityProperty,
             Conditions condition, bool value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> entityProperty,
             Conditions condition, Enum value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
         /// <summary>
         /// Adds a fixed filter.
         /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="entityProperty">The entity property.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> propertyExpression,
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> entityProperty,
             Conditions condition, string value)
         {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
+            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 

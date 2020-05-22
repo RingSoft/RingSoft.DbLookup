@@ -388,7 +388,7 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
-        private string FormatDateString(DateTime value, DbDateTypes dateType)
+        internal static string FormatDateString(DateTime value, DbDateTypes dateType)
         {
             string stringValue;
             switch (dateType)
@@ -662,6 +662,23 @@ namespace RingSoft.DbLookup.QueryBuilder
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, bool value)
         {
             return AddWhereItemFormula(formula, condition, BoolToString(value), ValueTypes.Bool);
+        }
+
+        /// <summary>
+        /// Creates a where item formula object and adds it to the WhereItems list.  Used for formulas that have no condition or value.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <returns></returns>
+        public WhereFormulaItem AddWhereItemFormula(string formula)
+        {
+            var whereItem = new WhereFormulaItem
+            {
+                Formula = formula,
+                NoValue = true
+            };
+            _whereItems.Add(whereItem);
+
+            return whereItem;
         }
 
         internal WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, string value,

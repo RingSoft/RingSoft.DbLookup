@@ -6,15 +6,10 @@ namespace RingSoft.DbLookup.TableProcessing
     /// <summary>
     /// Represents a filter field item in a table filter definition.
     /// </summary>
-    public class FieldFilterDefinition
+    public class FieldFilterDefinition : FilterItemType<FieldFilterDefinition>
     {
-        /// <summary>
-        /// Gets the table filter definition.
-        /// </summary>
-        /// <value>
-        /// The table filter definition.
-        /// </value>
-        public TableFilterDefinitionBase TableFilterDefinition { get; internal set; }
+        public override FilterItemTypes Type => FilterItemTypes.Field;
+
 
         /// <summary>
         /// Gets the field definition.
@@ -23,14 +18,6 @@ namespace RingSoft.DbLookup.TableProcessing
         /// The field definition.
         /// </value>
         public FieldDefinition FieldDefinition { get; internal set; }
-
-        /// <summary>
-        /// Gets the left parentheses count.
-        /// </summary>
-        /// <value>
-        /// The left parentheses count.
-        /// </value>
-        public int LeftParenthesesCount { get; internal set; }
 
         /// <summary>
         /// Gets the condition.
@@ -47,22 +34,6 @@ namespace RingSoft.DbLookup.TableProcessing
         /// The value.
         /// </value>
         public string Value { get; internal set; }
-
-        /// <summary>
-        /// Gets the right parentheses count.
-        /// </summary>
-        /// <value>
-        /// The right parentheses count.
-        /// </value>
-        public int RightParenthesesCount { get; internal set; }
-
-        /// <summary>
-        /// Gets the end logic.
-        /// </summary>
-        /// <value>
-        /// The end logic.
-        /// </value>
-        public EndLogics EndLogic { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the search is case sensitive.
@@ -94,39 +65,6 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         /// <summary>
-        /// Sets the left parentheses count.
-        /// </summary>
-        /// <param name="count">The count.</param>
-        /// <returns>This object.</returns>
-        public FieldFilterDefinition SetLeftParenthesesCount(int count)
-        {
-            LeftParenthesesCount = count;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the right parentheses count.
-        /// </summary>
-        /// <param name="count">The count.</param>
-        /// <returns>This object.</returns>
-        public FieldFilterDefinition SetRightParenthesesCount(int count)
-        {
-            RightParenthesesCount = count;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the end logic.
-        /// </summary>
-        /// <param name="endLogic">The end logic (AND or OR).</param>
-        /// <returns>This object.</returns>
-        public FieldFilterDefinition SetEndLogic(EndLogics endLogic)
-        {
-            EndLogic = endLogic;
-            return this;
-        }
-
-        /// <summary>
         /// Sets if the search is case sensitive.
         /// </summary>
         /// <param name="value">if set to True then the search is case sensitive.</param>
@@ -137,23 +75,23 @@ namespace RingSoft.DbLookup.TableProcessing
             return this;
         }
 
-        internal void CopyFrom(FieldFilterDefinition source)
+        internal override void CopyFrom(FilterItemDefinition source)
         {
-            FieldDefinition = source.FieldDefinition;
-            Condition = source.Condition;
-            Value = source.Value;
-            LeftParenthesesCount = source.LeftParenthesesCount;
-            RightParenthesesCount = source.RightParenthesesCount;
-            EndLogic = source.EndLogic;
-            CastEnumValueAsInt = source.CastEnumValueAsInt;
-            CaseSensitive = source.CaseSensitive;
-            if (source.JoinDefinition != null)
+            var fieldFilterDefinition = (FieldFilterDefinition) source;
+            FieldDefinition = fieldFilterDefinition.FieldDefinition;
+            Condition = fieldFilterDefinition.Condition;
+            Value = fieldFilterDefinition.Value;
+            CastEnumValueAsInt = fieldFilterDefinition.CastEnumValueAsInt;
+            CaseSensitive = fieldFilterDefinition.CaseSensitive;
+
+            if (fieldFilterDefinition.JoinDefinition != null)
             {
                 JoinDefinition = new TableFieldJoinDefinition();
-                JoinDefinition.CopyFrom(source.JoinDefinition);
+                JoinDefinition.CopyFrom(fieldFilterDefinition.JoinDefinition);
                 TableFilterDefinition.AddJoin(JoinDefinition);
             }
 
+            base.CopyFrom(source);
         }
     }
 }

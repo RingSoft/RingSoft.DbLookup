@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The fixed filters.
         /// </value>
-        public IReadOnlyList<FieldFilterDefinition> FixedFilters => _fixedFilterDefinitions;
+        public IReadOnlyList<FilterItemDefinition> FixedFilters => _fixedFilterDefinitions;
 
         /// <summary>
         /// Gets the user filters.
@@ -48,7 +48,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The user filters.
         /// </value>
-        public IReadOnlyList<FieldFilterDefinition> UserFilters => _userFilterDefinitions;
+        public IReadOnlyList<FilterItemDefinition> UserFilters => _userFilterDefinitions;
 
         /// <summary>
         /// Gets the joins.
@@ -63,8 +63,8 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </summary>
         public event EventHandler<TableFilterCopiedArgs> FilterCopied;
 
-        private readonly List<FieldFilterDefinition> _fixedFilterDefinitions = new List<FieldFilterDefinition>();
-        private readonly List<FieldFilterDefinition> _userFilterDefinitions = new List<FieldFilterDefinition>();
+        private readonly List<FilterItemDefinition> _fixedFilterDefinitions = new List<FilterItemDefinition>();
+        private readonly List<FilterItemDefinition> _userFilterDefinitions = new List<FilterItemDefinition>();
         private readonly List<TableFieldJoinDefinition> _joinDefinitions = new List<TableFieldJoinDefinition>();
 
         internal TableFilterDefinitionBase()
@@ -97,17 +97,27 @@ namespace RingSoft.DbLookup.TableProcessing
             FilterCopied?.Invoke(this, e);
         }
 
-        private void CopyFilters(IReadOnlyList<FieldFilterDefinition> sourceFilters, List<FieldFilterDefinition> destinationFilters)
+        private void CopyFilters(IReadOnlyList<FilterItemDefinition> sourceFilters, List<FilterItemDefinition> destinationFilters)
         {
             destinationFilters.Clear();
             foreach (var sourceFilter in sourceFilters)
             {
-                var fieldFilter = new FieldFilterDefinition
+                FilterItemDefinition newFilterItem;
+                switch (sourceFilter.Type)
                 {
-                    TableFilterDefinition = this
-                };
-                fieldFilter.CopyFrom(sourceFilter);
-                destinationFilters.Add(fieldFilter);
+                    case FilterItemTypes.Field:
+                        newFilterItem = new FieldFilterDefinition();
+                        break;
+                    case FilterItemTypes.Formula:
+                        newFilterItem = new FormulaFilterDefinition();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                newFilterItem.TableFilterDefinition = this;
+                newFilterItem.CopyFrom(sourceFilter);
+                destinationFilters.Add(newFilterItem);
             }
         }
 
@@ -125,12 +135,30 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
+        protected internal FormulaFilterDefinition CreateFormulaFilter(string formula)
+        {
+            var formulaFilter = new FormulaFilterDefinition
+            {
+                TableFilterDefinition = this,
+                Formula = formula,
+            };
+
+            return formulaFilter;
+        }
+
         private FieldFilterDefinition CreateAddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
             _fixedFilterDefinitions.Add(fieldFilter);
             return fieldFilter;
+        }
+
+        private FormulaFilterDefinition CreateAddFixedFilter(string formula)
+        {
+            var formulaFilter = CreateFormulaFilter(formula);
+            _fixedFilterDefinitions.Add(formulaFilter);
+            return formulaFilter;
         }
 
         internal FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
@@ -184,6 +212,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        public FormulaFilterDefinition AddFixedFilter(string formula)
+        {
+            return CreateAddFixedFilter(formula);
+        }
+
         internal void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
         {
             if (!_joinDefinitions.Contains(foreignKeyDefinition))
@@ -198,6 +231,13 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
+        internal FormulaFilterDefinition AddUserFilter(string formula)
+        {
+            var formulaFilter = CreateFormulaFilter(formula);
+            _userFilterDefinitions.Add(formulaFilter);
+            return formulaFilter;
+        }
+
         internal void ProcessQuery(SelectQuery query)
         {
             ProcessFieldJoins(query, Joins);
@@ -205,41 +245,29 @@ namespace RingSoft.DbLookup.TableProcessing
             ProcessFilters(query, UserFilters);
         }
 
-        private void ProcessFilters(SelectQuery query, IReadOnlyList<FieldFilterDefinition> filters)
+        private void ProcessFilters(SelectQuery query, IReadOnlyList<FilterItemDefinition> filters)
         {
             WhereItem firstWhere = null, lastWhere = null;
-            foreach (var fieldFilterDefinition in filters)
+            foreach (var filterDefinition in filters)
             {
-                var queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
-                var value = fieldFilterDefinition.Value;
-
-                var dateType = DbDateTypes.DateOnly;
-                if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.DateTime)
+                switch (filterDefinition.Type)
                 {
-                    var dateField = fieldFilterDefinition.FieldDefinition as DateFieldDefinition;
-                    if (dateField != null)
-                        dateType = dateField.DateType;
+                    case FilterItemTypes.Field:
+                        var fieldFilterDefinition = (FieldFilterDefinition) filterDefinition;
+                        lastWhere = ProcessFieldFilter(query, fieldFilterDefinition, lastWhere);
+                        break;
+                    case FilterItemTypes.Formula:
+                        var formulaFilter = (FormulaFilterDefinition) filterDefinition;
+                        lastWhere = query.AddWhereItemFormula(formulaFilter.Formula);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-
-                if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.Enum && !fieldFilterDefinition.CastEnumValueAsInt)
-                {
-                    var enumField = fieldFilterDefinition.FieldDefinition as EnumFieldDefinition;
-                    if (enumField != null)
-                        lastWhere = query.AddWhereItemEnum(queryTable, enumField.FieldName,
-                            fieldFilterDefinition.Condition, value, enumField.EnumTranslation);
-                }
-                else
-                {
-                    lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
-                        fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
-                }
-
                 if (lastWhere != null)
                 {
-                    lastWhere.SetEndLogic(fieldFilterDefinition.EndLogic)
-                        .SetLeftParenthesesCount(fieldFilterDefinition.LeftParenthesesCount)
-                        .SetRightParenthesesCount(fieldFilterDefinition.RightParenthesesCount)
-                        .IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
+                    lastWhere.SetEndLogic(filterDefinition.EndLogic)
+                        .SetLeftParenthesesCount(filterDefinition.LeftParenthesesCount)
+                        .SetRightParenthesesCount(filterDefinition.RightParenthesesCount);
 
                     if (firstWhere == null)
                         firstWhere = lastWhere;
@@ -255,6 +283,41 @@ namespace RingSoft.DbLookup.TableProcessing
                     lastWhere.SetEndLogic(EndLogics.And);
                 }
             }
+        }
+
+        private WhereItem ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition,
+            WhereItem lastWhere)
+        {
+            var value = fieldFilterDefinition.Value;
+            var queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
+
+            var dateType = DbDateTypes.DateOnly;
+            if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.DateTime)
+            {
+                var dateField = fieldFilterDefinition.FieldDefinition as DateFieldDefinition;
+                if (dateField != null)
+                    dateType = dateField.DateType;
+            }
+
+            if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.Enum &&
+                !fieldFilterDefinition.CastEnumValueAsInt)
+            {
+                var enumField = fieldFilterDefinition.FieldDefinition as EnumFieldDefinition;
+                if (enumField != null)
+                    lastWhere = query.AddWhereItemEnum(queryTable, enumField.FieldName,
+                        fieldFilterDefinition.Condition, value, enumField.EnumTranslation);
+            }
+            else
+            {
+                lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
+                    fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
+            }
+
+            if (lastWhere != null)
+            {
+                lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
+            }
+            return lastWhere;
         }
 
         internal static void ProcessFieldJoins(SelectQuery query, IReadOnlyList<TableFieldJoinDefinition> joins)
@@ -298,5 +361,15 @@ namespace RingSoft.DbLookup.TableProcessing
             return query.BaseTable;
         }
 
+        internal bool HasFormulaFilters()
+        {
+            if (_fixedFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula))
+                return true;
+
+            if (_userFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula))
+                return true;
+
+            return false;
+        }
     }
 }

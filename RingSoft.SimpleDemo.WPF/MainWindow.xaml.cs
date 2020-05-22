@@ -190,6 +190,11 @@ namespace RingSoft.SimpleDemo.WPF
                 OrderDetailsLookupDefinition.FilterDefinition.ClearFixedFilters();
                 OrderDetailsLookupDefinition.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals,
                     order.OrderID);
+
+                //Testing.
+                //OrderDetailsLookupDefinition.FilterDefinition.AddFixedFilter("[Order Details_Products_ProductID].[ProductName] LIKE '%A%'");
+                //DbDataProcessor.ShowSqlStatementWindow();
+
                 OrderDetailsCommand = new LookupCommand(LookupCommands.Refresh);
             };
             

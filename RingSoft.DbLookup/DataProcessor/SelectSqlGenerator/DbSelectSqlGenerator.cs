@@ -343,7 +343,13 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                     case WhereItemTypes.Formula:
                         if (whereItem is WhereFormulaItem whereFormulaItem)
                         {
-                            var formulaText = GenerateWhereItemFormulaText(whereFormulaItem, whereFormulaItem.Formula);
+                            string formulaText;
+
+                            if (whereFormulaItem.NoValue)
+                                formulaText = GenerateWhereItemNoValueFormulaText(whereFormulaItem.Formula);
+                            else
+                                formulaText = GenerateWhereItemFormulaText(whereFormulaItem, whereFormulaItem.Formula);
+
                             whereItemSql +=
                                 $"{whereLinePrefix}{FormatFormulaSqlText(formulaText, whereLinePrefix)}";
                         }
@@ -444,6 +450,14 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             var sql = "(\r\n";
             sql += $"\t{FormatFormulaSqlText(formula, "\t")}\r\n";
             sql += $") {condition} {sqlValue}";
+            return sql;
+        }
+
+        private string GenerateWhereItemNoValueFormulaText(string formula)
+        {
+            var sql = "(\r\n";
+            sql += $"\t{FormatFormulaSqlText(formula, "\t")}\r\n";
+            sql += $")";
             return sql;
         }
 

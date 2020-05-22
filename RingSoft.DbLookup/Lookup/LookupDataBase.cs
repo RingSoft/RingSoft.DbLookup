@@ -1339,6 +1339,8 @@ namespace RingSoft.DbLookup.Lookup
         {
             _countingRecords = true;
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
+            List<TableFieldJoinDefinition> joins = null;
+            var formulasFound = false;
 
             if (LookupControl.SearchType == LookupSearchTypes.Contains &&
                 SortColumnDefinition.DataType == FieldDataTypes.String)
@@ -1347,30 +1349,29 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     if (!lookupFieldColumn.JoinQueryTableAlias.IsNullOrEmpty())
                     {
-                        List<TableFieldJoinDefinition> joins = new List<TableFieldJoinDefinition>();
+                        joins = new List<TableFieldJoinDefinition>();
                         var join = LookupDefinition.Joins.FirstOrDefault(j =>
                             j.Alias == lookupFieldColumn.JoinQueryTableAlias);
                         if (join != null)
                         {
                             AddCountParentJoin(joins, join);
-                            TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
                         }
                     }
                 }
                 else if (SortColumnDefinition is LookupFormulaColumnDefinition)
                 {
-                    if (LookupDefinition.Joins.Any())
-                    {
-                        List<TableFieldJoinDefinition> joins = new List<TableFieldJoinDefinition>();
-                        foreach (var join in LookupDefinition.Joins)
-                        {
-                            AddCountParentJoin(joins, join);
-                        }
-
-                        TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
-                    }
+                    formulasFound = true;
+                    joins = AddCountJoinDefinitions();
                 }
             }
+
+            if (LookupDefinition.FilterDefinition.HasFormulaFilters() && !formulasFound)
+            {
+                joins = AddCountJoinDefinitions();
+            }
+
+            if (joins != null)
+                TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
 
             foreach (var tableDefinitionPrimaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
             {
@@ -1396,6 +1397,31 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return false;
+        }
+
+        private List<TableFieldJoinDefinition> AddCountJoinDefinitions()
+        {
+            List<TableFieldJoinDefinition> joins = null;
+            if (LookupDefinition.Joins.Any())
+            {
+                joins = new List<TableFieldJoinDefinition>();
+                foreach (var join in LookupDefinition.Joins)
+                {
+                    AddCountParentJoin(joins, @join);
+                }
+            }
+
+            if (LookupDefinition.FilterDefinition.Joins.Any())
+            {
+                if (joins == null)
+                    joins = new List<TableFieldJoinDefinition>();
+                foreach (var join in LookupDefinition.FilterDefinition.Joins)
+                {
+                    AddCountParentJoin(joins, join);
+                }
+            }
+
+            return joins;
         }
 
         private void AddCountParentJoin(List<TableFieldJoinDefinition> joins, TableFieldJoinDefinition join)

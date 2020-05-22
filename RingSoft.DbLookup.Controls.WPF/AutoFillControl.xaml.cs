@@ -74,13 +74,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public static readonly DependencyProperty TabOutAfterLookupSelectProperty =
             DependencyProperty.Register("TabOutAfterLookupSelect", typeof(bool), typeof(AutoFillControl));
-        //, new FrameworkPropertyMetadata(TabOutAfterLookupSelectChangedCallback));
-
-        //Uncomment to debug data binding.
-        //private static void TabOutAfterLookupSelectChangedCallback(DependencyObject obj,
-        //    DependencyPropertyChangedEventArgs args)
-        //{
-        //}
 
         /// <summary>
         /// Gets or sets a value indicating whether to automatically tab out after lookup select.
@@ -92,6 +85,36 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             get { return (bool)GetValue(TabOutAfterLookupSelectProperty); }
             set { SetValue(TabOutAfterLookupSelectProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowContainsBoxProperty =
+            DependencyProperty.Register("ShowContainsBox", typeof(bool), typeof(AutoFillControl));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show the contains box.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if to show the contains box; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowContainsBox
+        {
+            get { return (bool)GetValue(ShowContainsBoxProperty); }
+            set { SetValue(ShowContainsBoxProperty, value); }
+        }
+
+        public static readonly DependencyProperty ContainsBoxMaxRowsProperty =
+            DependencyProperty.Register("ContainsBoxMaxRows", typeof(int), typeof(AutoFillControl));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show the contains box.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if to show the contains box; otherwise, <c>false</c>.
+        /// </value>
+        public int ContainsBoxMaxRows
+        {
+            get { return (int)GetValue(ContainsBoxMaxRowsProperty); }
+            set { SetValue(ContainsBoxMaxRowsProperty, value); }
         }
 
         /// <summary>
@@ -125,10 +148,15 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _onValuePropertySetting;
         private bool _pendingAutoFillValue;
 
+        static AutoFillControl()
+        {
+            ShowContainsBoxProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
+            TabOutAfterLookupSelectProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
+            ContainsBoxMaxRowsProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(5));
+        }
+
         public AutoFillControl()
         {
-            TabOutAfterLookupSelect = true;
-
             //InitializeComponent();
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/AutoFillControl.xaml");
 
@@ -165,7 +193,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ClearValue();
 
             AutoFillData = new AutoFillData(this, Setup.LookupDefinition, Setup.Distinct)
-            { ShowContainsBox = Setup.ShowContainsBox };
+            {
+                ShowContainsBox = ShowContainsBox,
+                ContainsBoxMaxRows = ContainsBoxMaxRows
+            };
 
 
             AutoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;

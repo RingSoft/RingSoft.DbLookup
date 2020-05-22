@@ -34,14 +34,6 @@ namespace RingSoft.DbLookup.AutoFill
         public bool AllowLookupView { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets a value indicating whether to show the contains box.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if show the contains box; otherwise, <c>false</c>.
-        /// </value>
-        public bool ShowContainsBox { get; set; } = true;
-
-        /// <summary>
         /// Gets or sets a value indicating whether this AutoFill is distinct.
         /// </summary>
         /// <value>

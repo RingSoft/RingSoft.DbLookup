@@ -203,6 +203,9 @@ namespace RingSoft.SimpleDemo.WPF
 
         private void UpdateCompanyName()
         {
+            if (CustomerAutoFillValue == null)
+                return;
+
             if (CustomerAutoFillValue.PrimaryKeyValue.ContainsValidData())
             {
                 var customer =

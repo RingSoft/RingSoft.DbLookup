@@ -117,7 +117,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
                 if (value != null)
                     SetupControl(value.LookupDefinition, value.AllowLookupAdd, value.AllowLookupView,
-                        value.ShowContainsBox, value.Distinct);
+                        value.Distinct);
             }
         }
 
@@ -184,7 +184,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
         }
 
         private void SetupControl(LookupDefinitionBase lookupDefinition, bool lookupAllowAdd, bool lookupAllowView,
-            bool showContainsBox, bool distinct)
+            bool distinct)
         {
             if (_lookupDefinition != null)
                 ClearValue();
@@ -193,7 +193,7 @@ namespace RingSoft.DbLookup.Controls.WinForms
             _lookupAllowAdd = lookupAllowAdd;
             _lookupAllowView = lookupAllowView;
 
-            AutoFillData = new AutoFillData(this, _lookupDefinition, distinct) { ShowContainsBox = showContainsBox };
+            AutoFillData = new AutoFillData(this, _lookupDefinition, distinct);
 
             AutoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 

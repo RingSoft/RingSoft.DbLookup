@@ -19,6 +19,15 @@ namespace RingSoft.DbLookup.Controls.WPF
         private const int GWL_STYLE = -16;
 
         private const int WS_BOTH = 0x30000; //maximize and minimize buttons
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to close window when the escape key is pressed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if to close window when the escape key is pressed; otherwise, <c>false</c>.
+        /// </value>
+        public bool CloseOnEscape { get; set; } = true;
+
         public bool SetFocusToFirstControl { get; set; } = true;
 
         public bool HideControlBox { get; set; }
@@ -31,8 +40,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 switch (args.Key)
                 {
                     case Key.Escape:
-                        Close();
-                        args.Handled = true;
+                        if (CloseOnEscape)
+                        {
+                            Close();
+                            args.Handled = true;
+                        }
+
                         break;
                 }
             };

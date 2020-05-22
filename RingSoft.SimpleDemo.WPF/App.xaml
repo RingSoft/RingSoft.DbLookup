@@ -1,6 +1,7 @@
 ﻿<Application x:Class="RingSoft.SimpleDemo.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style TargetType="Border" x:Key="ReadOnlyBorder">
@@ -16,6 +17,12 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <!--<Setter Property="Margin" Value="2.5"/>-->
+        </Style>
+        <!--Test-->
+        <Style TargetType="lc:AutoFillControl">
+            <!--<Setter Property="ShowContainsBox" Value="False"/>-->
+            <!--<Setter Property="TabOutAfterLookupSelect" Value="False"/>-->
+            <!--<Setter Property="ContainsBoxMaxRows" Value="8"/>-->
         </Style>
     </Application.Resources>
 </Application>

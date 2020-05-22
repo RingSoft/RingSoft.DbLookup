@@ -1,6 +1,4 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
-
-namespace RingSoft.DbLookup.TableProcessing
+﻿namespace RingSoft.DbLookup.TableProcessing
 {
     public class FormulaFilterDefinition : FilterItemType<FormulaFilterDefinition>
     {

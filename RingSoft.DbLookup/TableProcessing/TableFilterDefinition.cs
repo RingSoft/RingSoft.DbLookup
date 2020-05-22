@@ -16,11 +16,7 @@ namespace RingSoft.DbLookup.TableProcessing
     {
         private TableDefinition<TEntity> _entityTableDefinition;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TableFilterDefinition{TEntity}"/> class.
-        /// </summary>
-        /// <param name="entityTableDefinition">The entity table definition.</param>
-        public TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition)
+        internal TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition)
         {
             _entityTableDefinition = entityTableDefinition;
         }

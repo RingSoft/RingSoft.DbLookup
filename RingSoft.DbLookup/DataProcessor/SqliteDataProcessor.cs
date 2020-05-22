@@ -6,7 +6,7 @@ using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 namespace RingSoft.DbLookup.DataProcessor
 {
     /// <summary>
-    /// Retrieves data from a Sqlite database file.
+    /// Processes data for a Sqlite file name.
     /// </summary>
     /// <seealso cref="DbDataProcessor" />
     public class SqliteDataProcessor : DbDataProcessor

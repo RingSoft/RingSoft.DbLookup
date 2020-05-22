@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
-        /// Sets the is memo.
+        /// Used to make this field a memo type.
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>This object.</returns>

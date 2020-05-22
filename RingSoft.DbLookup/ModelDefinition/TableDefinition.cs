@@ -8,7 +8,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 namespace RingSoft.DbLookup.ModelDefinition
 {
     /// <summary>
-    /// An table definition used in the Entity Framework.
+    /// A table definition used in the Entity Framework.
     /// </summary>
     /// <typeparam name="TEntity">A database table class used in the Entity Framework.</typeparam>
     /// <seealso cref="TableDefinitionBase" />

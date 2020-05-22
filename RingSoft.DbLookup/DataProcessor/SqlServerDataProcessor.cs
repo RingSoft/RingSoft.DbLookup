@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.DataProcessor
     }
 
     /// <summary>
-    /// Retrieves data from a Microsoft SQL Server database.
+    /// Processes data for the Microsoft SQL Server database platform.
     /// </summary>
     /// <seealso cref="DbDataProcessor" />
     public class SqlServerDataProcessor : DbDataProcessor

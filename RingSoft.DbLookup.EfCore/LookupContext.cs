@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.EfCore
                     p.PropertyType.GenericTypeArguments.Any(g => g.Name == tableDefinition.EntityName));
                 if (entityType == null || !dbSetExists)
                 {
-                    throw new Exception($"Table Definition '{tableDefinition}' is not a DbSet in the DbContext object.");
+                    throw new Exception($"Table Definition '{tableDefinition}' is not a DbSet in the DbContext class.");
                 }
                 else
                 {

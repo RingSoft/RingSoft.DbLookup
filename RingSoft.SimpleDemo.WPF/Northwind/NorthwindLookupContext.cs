@@ -18,7 +18,6 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
         public override DbDataProcessor DataProcessor { get; }
 
         public TableDefinition<Category> Categories { get; set; }
-
         public TableDefinition<Customer> Customers { get; set; }
         public TableDefinition<Employee> Employees { get; set; }
         public TableDefinition<Order> Orders { get; set; }
@@ -26,9 +25,7 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
         public TableDefinition<Product> Products { get; set; }
 
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
-
         public LookupDefinition<CustomerLookup, Customer> CustomerIdLookup { get; private set; }
-
         public LookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
 
         public NorthwindLookupContext()

@@ -67,6 +67,11 @@ namespace RingSoft.DbLookup.TableProcessing
         private readonly List<FieldFilterDefinition> _userFilterDefinitions = new List<FieldFilterDefinition>();
         private readonly List<TableFieldJoinDefinition> _joinDefinitions = new List<TableFieldJoinDefinition>();
 
+        internal TableFilterDefinitionBase()
+        {
+            
+        }
+
         /// <summary>
         /// Clears the fixed filters.
         /// </summary>
@@ -106,7 +111,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        protected FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition, Conditions condition,
+        protected internal FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             var fieldFilter = new FieldFilterDefinition
@@ -128,106 +133,50 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value);
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(IntegerFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(IntegerFieldDefinition fieldDefinition, Conditions condition,
             int value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString());
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
             double value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
             decimal value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
             DateTime value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">if set to <c>true</c> [value].</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(BoolFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(BoolFieldDefinition fieldDefinition, Conditions condition,
             bool value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
             Enum value)
         {
             var numValue = Convert.ToInt32(value);
             return CreateAddFixedFilter(fieldDefinition, condition, numValue.ToString());
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             var result = CreateAddFixedFilter(fieldDefinition, condition, value);
@@ -241,14 +190,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 _joinDefinitions.Add(foreignKeyDefinition);
         }
 
-        /// <summary>
-        /// Adds a user filter.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
+        internal FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);

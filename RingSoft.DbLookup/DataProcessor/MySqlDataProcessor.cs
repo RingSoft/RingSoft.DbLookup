@@ -6,7 +6,7 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.DataProcessor
 {
     /// <summary>
-    /// Retrieves data from a MySql database.
+    /// Processes data for the MySQL database platform.
     /// </summary>
     /// <seealso cref="DbDataProcessor" />
 
@@ -25,7 +25,7 @@ namespace RingSoft.DbLookup.DataProcessor
         public string Server { get; set; }
 
         /// <summary>
-        /// Gets or sets the database.
+        /// Gets or sets the database name.
         /// </summary>
         /// <value>
         /// The database.
@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.DataProcessor
         public string Database { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the user.
+        /// Gets or sets the user name.
         /// </summary>
         /// <value>
         /// The name of the user.

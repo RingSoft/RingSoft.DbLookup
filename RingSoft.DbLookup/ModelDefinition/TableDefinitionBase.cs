@@ -252,7 +252,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Sets the record description.
+        /// Sets the description to describe an individual record name.
         /// </summary>
         /// <param name="description">The description.</param>
         /// <returns></returns>

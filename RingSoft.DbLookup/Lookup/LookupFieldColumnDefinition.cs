@@ -100,7 +100,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>This object for fluent processing.</returns>
-        public LookupColumnDefinitionBase IsDistinct(bool value = true)
+        public LookupFieldColumnDefinition IsDistinct(bool value = true)
         {
             var isPrimaryKey = FieldDefinition.TableDefinition.PrimaryKeyFields.Count > 1 &&
                                FieldDefinition.TableDefinition.PrimaryKeyFields.Contains(FieldDefinition);

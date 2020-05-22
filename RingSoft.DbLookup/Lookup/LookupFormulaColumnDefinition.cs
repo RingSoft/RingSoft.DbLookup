@@ -94,7 +94,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Sets the number format string.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The number format string.</param>
         /// <returns>This object.</returns>
         public LookupFormulaColumnDefinition HasNumberFormatString(string value)
         {
@@ -117,7 +117,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Sets the date format string.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The date format string.</param>
         /// <returns>This object.</returns>
         public LookupFormulaColumnDefinition HasDateFormatString(string value)
         {

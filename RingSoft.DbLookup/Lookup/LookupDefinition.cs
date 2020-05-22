@@ -60,7 +60,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Adds a visible column definition.
+        /// Adds a visible column definition.  Should only be used with the WPF LookupControl.
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="entityProperty">The entity property.</param>
@@ -187,15 +187,7 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
-        /// <summary>
-        /// Adds a visible column definition.
-        /// </summary>
-        /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
-        internal LookupFieldColumnDefinition AddVisibleColumnDefinition(
+        private LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
             FieldDefinition fieldDefinition,
             double percentWidth)
@@ -210,14 +202,14 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
-        internal FieldDataTypes GetFieldDataTypeForProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
+        private FieldDataTypes GetFieldDataTypeForProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
         {
             var propertyType = GetTypeFromExpression(lookupEntityProperty);
             return GblMethods.GetFieldDataTypeForType(propertyType);
         }
 
 
-        internal void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
+        private void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
         {
             var propertyType = GetTypeFromExpression(lookupEntityProperty);
             if (propertyType == typeof(string)

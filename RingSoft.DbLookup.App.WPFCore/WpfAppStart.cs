@@ -7,7 +7,9 @@ using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.Lookup;
 using System;
+using System.Data.Common;
 using System.Windows;
+using System.Data.SqlClient;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -28,6 +30,10 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override void StartApp(string appSection, string[] args)
         {
             ControlsGlobals.InitUi();
+
+            //Necessary so .NET Core 3.x is compatible with Entity Framework 6.
+            DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
+
             _mainWindow = new MainWindow();
             base.StartApp(appSection, args);
         }

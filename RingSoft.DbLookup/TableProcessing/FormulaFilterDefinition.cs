@@ -14,14 +14,6 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public string Formula { get; internal set; }
 
-        /// <summary>
-        /// Gets the value type.
-        /// </summary>
-        /// <value>
-        /// The value type.
-        /// </value>
-        public ValueTypes ValueType { get; internal set; }
-
         internal FormulaFilterDefinition()
         {
             

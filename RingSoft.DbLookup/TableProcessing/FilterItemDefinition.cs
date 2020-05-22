@@ -8,6 +8,9 @@ namespace RingSoft.DbLookup.TableProcessing
         Formula = 1
     }
 
+    /// <summary>
+    /// Represents a filter item in a TableFilterDefinition.
+    /// </summary>
     public abstract class FilterItemDefinition
     {
         /// <summary>

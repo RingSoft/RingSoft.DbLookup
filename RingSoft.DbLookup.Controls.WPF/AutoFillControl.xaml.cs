@@ -9,7 +9,7 @@ using System.Windows.Input;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Interaction logic for AutoFillControl.xaml
+    /// A control to auto fill a value into a text box and show similar values in a drop down contains box as the user types.
     /// </summary>
     public partial class AutoFillControl : IAutoFillControl
     {
@@ -20,6 +20,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(SetupChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the AutoFillSetup to determine how this control will behave.
+        /// </summary>
+        /// <value>
+        /// The AutoFillSetup.
+        /// </value>
         public AutoFillSetup Setup
         {
             get { return (AutoFillSetup)GetValue(SetupProperty); }
@@ -38,6 +44,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("Value", typeof(AutoFillValue), typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(ValueChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the AutoFillValue.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
         public AutoFillValue Value
         {
             get { return (AutoFillValue)GetValue(ValueProperty); }
@@ -66,6 +78,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         //{
         //}
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this control's value has changed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this control's value has changed; otherwise, <c>false</c>.
+        /// </value>
         public bool IsDirty
         {
             get { return (bool)GetValue(IsDirtyProperty); }
@@ -76,7 +94,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("TabOutAfterLookupSelect", typeof(bool), typeof(AutoFillControl));
 
         /// <summary>
-        /// Gets or sets a value indicating whether to automatically tab out after lookup select.
+        /// Gets or sets a value indicating whether to automatically tab out after the user selects a record in the LookupWindow.
         /// </summary>
         /// <value>
         ///   <c>true</c> if to tab out after lookup select; otherwise, <c>false</c>.
@@ -106,24 +124,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("ContainsBoxMaxRows", typeof(int), typeof(AutoFillControl));
 
         /// <summary>
-        /// Gets or sets a value indicating whether to show the contains box.
+        /// Gets or sets the contains box maximum number of rows.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if to show the contains box; otherwise, <c>false</c>.
+        /// The contains box maximum number of rows.
         /// </value>
         public int ContainsBoxMaxRows
         {
             get { return (int)GetValue(ContainsBoxMaxRowsProperty); }
             set { SetValue(ContainsBoxMaxRowsProperty, value); }
         }
-
-        /// <summary>
-        /// Gets the AutoFill data.
-        /// </summary>
-        /// <value>
-        /// The auto fill data.
-        /// </value>
-        public AutoFillData AutoFillData { get; private set; }
 
         public string EditText
         {
@@ -143,6 +153,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             set => AutoFillTextBox.SelectionLength = value;
         }
 
+        private AutoFillData _autoFillData;
         private bool _controlLoaded;
         private bool _onAutoFillDataChanged;
         private bool _onValuePropertySetting;
@@ -189,17 +200,17 @@ namespace RingSoft.DbLookup.Controls.WPF
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            if (AutoFillData != null)
+            if (_autoFillData != null)
                 ClearValue();
 
-            AutoFillData = new AutoFillData(this, Setup.LookupDefinition, Setup.Distinct)
+            _autoFillData = new AutoFillData(this, Setup.LookupDefinition, Setup.Distinct)
             {
                 ShowContainsBox = ShowContainsBox,
                 ContainsBoxMaxRows = ContainsBoxMaxRows
             };
 
 
-            AutoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
+            _autoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 
             if (!_controlLoaded)
             {
@@ -208,7 +219,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 AutoFillTextBox.PreviewTextInput += AutoFillTextBox_PreviewTextInput;
                 ListBox.SelectionChanged += (sender, args) =>
                 {
-                    AutoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
+                    _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
                 };
                 LookupButton.Click += (sender, args) => ShowLookupWindow();
             }
@@ -239,11 +250,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 var openPopup = false;
                 ContainsItems.Clear();
-                if (AutoFillData.ShowContainsBox && e.ContainsBoxDataTable != null)
+                if (_autoFillData.ShowContainsBox && e.ContainsBoxDataTable != null)
                 {
                     foreach (DataRow dataRow in e.ContainsBoxDataTable.Rows)
                     {
-                        ContainsItems.Add(AutoFillData.GetAutoFillContainsItem(dataRow));
+                        ContainsItems.Add(_autoFillData.GetAutoFillContainsItem(dataRow));
                         openPopup = true;
                     }
                 }
@@ -254,7 +265,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_onValuePropertySetting)
             {
                 _onAutoFillDataChanged = true;
-                Value = new AutoFillValue(AutoFillData.PrimaryKeyValue, EditText);
+                Value = new AutoFillValue(_autoFillData.PrimaryKeyValue, EditText);
                 _onAutoFillDataChanged = false;
             }
 
@@ -274,7 +285,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             else
             {
-                if (AutoFillData == null)
+                if (_autoFillData == null)
                     _pendingAutoFillValue = true;
 
                 SetValue(Value.PrimaryKeyValue, Value.Text);
@@ -283,22 +294,19 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetValue(PrimaryKeyValue primaryKeyValue, string text)
         {
-            if (AutoFillData == null)
+            if (_autoFillData == null)
             {
                 return;
             }
-            AutoFillData.SetValue(primaryKeyValue, text, Popup.IsOpen); //Must set to false otherwise list shows when control is tabbed out.
+            _autoFillData.SetValue(primaryKeyValue, text, Popup.IsOpen); //Must set to false otherwise list shows when control is tabbed out.
         }
 
-        /// <summary>
-        /// Clears the value.
-        /// </summary>
-        public void ClearValue()
+        private void ClearValue()
         {
-            if (AutoFillData == null)
+            if (_autoFillData == null)
                 return;
 
-            AutoFillData.ClearValue();
+            _autoFillData.ClearValue();
         }
 
         private void AutoFillTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -306,12 +314,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (e.Key)
             {
                 case Key.Back:
-                    AutoFillData.OnBackspaceKeyDown();
+                    _autoFillData.OnBackspaceKeyDown();
                     e.Handled = true;
                     IsDirty = true;
                     break;
                 case Key.Delete:
-                    AutoFillData.OnDeleteKeyDown();
+                    _autoFillData.OnDeleteKeyDown();
                     e.Handled = true;
                     IsDirty = true;
                     break;
@@ -348,7 +356,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
                 return;
 
-            if (AutoFillData.OnKeyCharPressed(e.Text[0]))
+            if (_autoFillData.OnKeyCharPressed(e.Text[0]))
                 e.Handled = true;
             IsDirty = true;
         }
@@ -357,7 +365,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var lookupWindow = new LookupWindow(Setup.LookupDefinition, Setup.AllowLookupAdd, Setup.AllowLookupView, AutoFillTextBox.Text);
             lookupWindow.Owner = Window.GetWindow(this);
-            lookupWindow.RefreshData += (o, args) => AutoFillData.RefreshData(Popup.IsOpen);
+            lookupWindow.RefreshData += (o, args) => _autoFillData.RefreshData(Popup.IsOpen);
             lookupWindow.LookupSelect += LookupForm_LookupSelect;
             lookupWindow.ShowDialog();
         }

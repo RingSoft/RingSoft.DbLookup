@@ -355,15 +355,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="debugMessage">The debug message.</param>
         public static void DisplayDataException(Exception exception, string debugMessage)
         {
-            var getDataResult = new DataProcessResult(debugMessage)
-            {
-                Message = exception.Message,
-                ResultCode = GetDataResultCodes.SqlError
-            };
-
             UserInterface.SetWindowCursor(WindowCursorTypes.Default);
-
-            UserInterface.ShowDataProcessResult(getDataResult);
+            UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
         }
     }
 }

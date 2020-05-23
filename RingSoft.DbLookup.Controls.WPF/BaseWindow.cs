@@ -9,6 +9,10 @@ using System.Windows.Interop;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// The base class for WPF Windows.  Extends the System.Windows.Window class.
+    /// </summary>
+    /// <seealso cref="System.Windows.Window" />
     public class BaseWindow : Window
     {
         [DllImport("user32.dll")]
@@ -28,8 +32,20 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </value>
         public bool CloseOnEscape { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value whether to set focus to the first editable control when the window first shows.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [set focus to first control]; otherwise, <c>false</c>.
+        /// </value>
         public bool SetFocusToFirstControl { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to hide the control box.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [hide control box]; otherwise, <c>false</c>.
+        /// </value>
         public bool HideControlBox { get; set; }
 
         public BaseWindow()

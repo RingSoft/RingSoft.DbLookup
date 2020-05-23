@@ -5,9 +5,19 @@ using System.Runtime.CompilerServices;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// A column in a LookupControl's ListView control.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class LookupColumn : INotifyPropertyChanged
     {
         private string _header;
+        /// <summary>
+        /// Gets or sets the column header text.
+        /// </summary>
+        /// <value>
+        /// The header.
+        /// </value>
         public string Header
         {
             get => _header;
@@ -23,6 +33,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private string _designText;
 
+        /// <summary>
+        /// Gets or sets the text to put into this column's cell for all rows in the ListView when in design mode.
+        /// </summary>
+        /// <value>
+        /// The design text.
+        /// </value>
         public string DesignText
         {
             get => _designText;
@@ -38,6 +54,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private double _width;
 
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         public double Width
         {
             get => _width;
@@ -53,7 +75,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         private LookupColumnAlignmentTypes _textAlignment = LookupColumnAlignmentTypes.Left;
-        
+
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
+        /// <value>
+        /// The text alignment.
+        /// </value>
         public LookupColumnAlignmentTypes TextAlignment
         {
             get => _textAlignment;

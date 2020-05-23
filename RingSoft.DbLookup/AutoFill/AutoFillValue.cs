@@ -13,7 +13,6 @@
         /// </value>
         public PrimaryKeyValue PrimaryKeyValue { get; }
 
-
         /// <summary>
         /// Gets the text.
         /// </summary>
@@ -26,21 +25,6 @@
         {
             PrimaryKeyValue = primaryKeyValue;
             Text = text;
-        }
-
-        /// <summary>
-        /// Determines whether this AutoFill primary key value is equal to the specified compare to primary key value.
-        /// </summary>
-        /// <param name="compareTo">The compare to.</param>
-        /// <returns>
-        ///   <c>true</c> if the primary key value is equal to the specified compare to primary key value; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsEqualTo(AutoFillValue compareTo)
-        {
-            if (compareTo == null)
-                return false;
-
-            return PrimaryKeyValue.IsEqualTo(compareTo.PrimaryKeyValue);
         }
 
         public override string ToString()

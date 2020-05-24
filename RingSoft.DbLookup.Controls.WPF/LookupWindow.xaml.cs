@@ -32,6 +32,14 @@ namespace RingSoft.DbLookup.Controls.WPF
         private LookupDefinitionBase _lookupDefinition;
         private bool _allowView;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupWindow"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="allowAdd">if set to <c>true</c> [allow add].</param>
+        /// <param name="allowView">if set to <c>true</c> [allow view].</param>
+        /// <param name="initialSearchFor">The initial search for.</param>
+        /// <exception cref="ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
         public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
             if (lookupDefinition.InitialSortColumnDefinition == null)

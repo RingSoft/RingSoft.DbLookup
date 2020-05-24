@@ -98,6 +98,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool TextAlignmentChanged { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the name of the property.  This is used to map this column to a visible LookupColumnDefinition in the LookupDefintion.  Use the NameOfExtension to make sure this value is correct.
+        /// </summary>
+        /// <value>
+        /// The name of the property.
+        /// </value>
         public string PropertyName { get; set; }
 
         public string DataColumnName { get; internal set; }

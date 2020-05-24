@@ -5,6 +5,10 @@ using System.Windows.Markup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// A WPF Markup extension which returns the name of a class's property member and validates that it is valid in case it is changed.  This is used by the Loo
+    /// </summary>
+    /// <seealso cref="System.Windows.Markup.MarkupExtension" />
     [ContentProperty(nameof(Member))]
     public class NameOfExtension : MarkupExtension
     {

@@ -51,7 +51,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Gets the lookup add on the fly arguments.
+        /// Gets the add-on-the fly arguments sent by the LookupControl or the LookupWindow.
         /// </summary>
         /// <value>
         /// The lookup add on the fly arguments.
@@ -72,7 +72,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         /// The find button lookup definition.
         /// </value>
-        public LookupDefinitionBase FindButtonLookupDefinition { get; protected set; }
+        protected LookupDefinitionBase FindButtonLookupDefinition { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the base entity is loading from the database or is being cleared.
@@ -80,7 +80,39 @@ namespace RingSoft.DbMaintenance
         /// <value>
         ///   <c>true</c> if loading from the database or clearing; otherwise, <c>false</c>.
         /// </value>
-        public bool ChangingEntity { get; private set; }
+        protected bool ChangingEntity { get; private set; }
+
+        /// <summary>
+        /// Gets the rename key auto fill value message caption.  Override this for localization.
+        /// </summary>
+        /// <value>
+        /// The rename key auto fill value caption.  Override this for localization.
+        /// </value>
+        protected virtual string RenameKeyAutoFillValueCaption => "Change Unique Field Value";
+
+        /// <summary>
+        /// Gets the validate field fail caption.  Override this for localization.
+        /// </summary>
+        /// <value>
+        /// The validate field fail caption.
+        /// </value>
+        protected virtual string ValidateFieldFailCaption => "Validation Failure!";
+
+        /// <summary>
+        /// Gets the save changes message.  Override this for localization.
+        /// </summary>
+        /// <value>
+        /// The save changes message.
+        /// </value>
+        protected virtual string SaveChangesMessage => "Do you wish to save your changes to this data?";
+
+        /// <summary>
+        /// Gets the confirm delete caption.  Override this for localization.
+        /// </summary>
+        /// <value>
+        /// The confirm delete caption.
+        /// </value>
+        protected virtual string ConfirmDeleteCaption => "Confirm Delete";
 
         private LookupDataBase _lookupData;
         private bool _fromLookupFormAddView;
@@ -114,7 +146,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Initializes this instance.
+        /// Initializes this instance.  Executed after the view is loaded.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected virtual void Initialize()
@@ -345,15 +377,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Gets the rename key auto fill value caption.
-        /// </summary>
-        /// <value>
-        /// The rename key auto fill value caption.  Override this for localization.
-        /// </value>
-        protected virtual string RenameKeyAutoFillValueCaption => "Change Unique Field Value";
-
-        /// <summary>
-        /// Gets the rename the key auto fill value message.  Override this for localization.
+        /// This is the message that will show when the user tries to rename a record's unique key AutoFillValue.  Checks to see if the user really wants to rename an existing record or create a new record instead.  Override this for localization.
         /// </summary>
         /// <param name="recordDescription">The record description.</param>
         /// <param name="fieldDescription">The field description.</param>
@@ -399,14 +423,6 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Gets the validate field fail caption.  Override this for localization.
-        /// </summary>
-        /// <value>
-        /// The validate field fail caption.
-        /// </value>
-        protected virtual string ValidateFieldFailCaption => "Validation Failure!";
-
-        /// <summary>
         /// Gets the validates the field fail message.  Override this for localization.
         /// </summary>
         /// <param name="fieldDefinition">The field definition.</param>
@@ -418,7 +434,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Override this to get the auto fill value for nullable foreign key field.
+        /// Override this to get the auto fill value for a nullable foreign key field.  Used by validation.  If the returned value has text but not a valid PrimaryKeyValue then it will fail validation.
         /// </summary>
         /// <param name="fieldDefinition">The field definition.</param>
         /// <returns></returns>
@@ -447,14 +463,7 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        /// <summary>
-        /// Checks to see if the record dirty flag has been raised and if so, asks the user if he/she wants to save the data.
-        /// </summary>
-        /// <returns>
-        /// True if the user successfully saved the data or declined to save.  Otherwise false which means the user wants to abort the operation that called this function.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public bool CheckDirty()
+        private bool CheckDirty()
         {
             if (RecordDirty)
             {
@@ -479,14 +488,6 @@ namespace RingSoft.DbMaintenance
             }
             return true;
         }
-
-        /// <summary>
-        /// Gets the save changes message.  Override this for localization.
-        /// </summary>
-        /// <value>
-        /// The save changes message.
-        /// </value>
-        protected virtual string SaveChangesMessage => "Do you wish to save your changes to this data?";
 
         /// <summary>
         /// Called when the Delete button is clicked.
@@ -515,21 +516,13 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Gets the confirm delete caption.  Override this for localization.
-        /// </summary>
-        /// <value>
-        /// The confirm delete caption.
-        /// </value>
-        protected virtual string ConfirmDeleteCaption => "Confirm Delete";
-
-        /// <summary>
         /// Gets the confirm delete message.  Override this for localization.
         /// </summary>
-        /// <param name="description">The description.</param>
+        /// <param name="recordDescription">The record description.</param>
         /// <returns></returns>
-        protected virtual string ConfirmDeleteMessage(string description)
+        protected virtual string ConfirmDeleteMessage(string recordDescription)
         {
-            var message = $"Are you sure you wish to delete this {description}?";
+            var message = $"Are you sure you wish to delete this {recordDescription}?";
             return message;
         }
 
@@ -550,13 +543,13 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Loads from entity.
+        /// Loads this view model from the entity generated from TableDefinition's GetEntityFromPrimaryKeyValue method.
         /// </summary>
         /// <param name="newEntity">The new entity.</param>
         protected abstract void LoadFromEntity(TEntity newEntity);
 
         /// <summary>
-        /// Creates and returns a lookup command.
+        /// Creates and returns a LookupCommand. The primaryKeyValue argument must be passed in if this view model does not set the KeyAutoFillValue property.
         /// </summary>
         /// <param name="command">The command type.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
@@ -619,7 +612,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Selects the primary key.
+        /// Loads a record into the view model for the PrimaryKeyValue argument.
         /// </summary>
         /// <param name="primaryKeyValue">The primary key value.</param>
         protected void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
@@ -640,7 +633,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Executes the add modify command.
+        /// Attempts top save the record if in add mode and returns that result.  Execute this method prior to sending the AddModify LookupCommand.
         /// </summary>
         /// <returns></returns>
         protected virtual DbMaintenanceResults ExecuteAddModifyCommand()

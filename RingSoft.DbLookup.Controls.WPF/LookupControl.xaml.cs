@@ -59,6 +59,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("LookupDefinition", typeof(LookupDefinitionBase), typeof(LookupControl),
                 new FrameworkPropertyMetadata(LookupDefinitionChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>
+        /// The lookup definition.
+        /// </value>
         public LookupDefinitionBase LookupDefinition
         {
             get { return (LookupDefinitionBase)GetValue(LookupDefinitionProperty); }
@@ -77,6 +83,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyProperty.Register("Command", typeof(LookupCommand), typeof(LookupControl),
                 new FrameworkPropertyMetadata(CommandChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the LookupCommand which is used by view models to tell this control to either refresh, clear etc.
+        /// </summary>
+        /// <value>
+        /// The command.
+        /// </value>
         public LookupCommand Command
         {
             get { return (LookupCommand)GetValue(CommandProperty); }
@@ -99,6 +111,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             set { SetValue(DataSourceChangedProperty, value); }
         }
 
+        /// <summary>
+        /// Gets a list of LookupColumns which allow adding new columns.
+        /// </summary>
+        /// <value>
+        /// The lookup columns.
+        /// </value>
         public ObservableCollection<LookupColumn> LookupColumns { get; }
 
         public LookupDataBase LookupData { get; private set; }
@@ -735,6 +753,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             ScrollBar.Value = (int)middleValue - 5;
         }
 
+        /// <summary>
+        /// Refreshes the data based on changes in the LookupDefinition.
+        /// </summary>
+        /// <param name="resetSearchFor">If set to true then reset the Search For text box.</param>
+        /// <param name="initialSearchFor">The new Search For value.</param>
+        /// <param name="parentWindowPrimaryKeyValue">The parent window's PrimaryKeyValue.</param>
         public void RefreshData(bool resetSearchFor, string initialSearchFor = "",
             PrimaryKeyValue parentWindowPrimaryKeyValue = null)
         {
@@ -832,7 +856,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             return null;
         }
 
-        public double GetWidthFromPercent(Control control, double percentWidth)
+        private double GetWidthFromPercent(Control control, double percentWidth)
         {
             double width = 0;
             if (percentWidth > 0)
@@ -980,7 +1004,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        public void SetupRecordCount()
+        private void SetupRecordCount()
         {
             var showRecordCount = false;
             if (LookupData.ScrollPosition == LookupScrollPositions.Disabled)
@@ -1044,7 +1068,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
         /// <summary>
-        /// Clears the lookup control.
+        /// Clears all the data in the list view.
         /// </summary>
         public void ClearLookupControl()
         {

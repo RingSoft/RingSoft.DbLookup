@@ -25,7 +25,7 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
-        /// Gets the view lookup definition.
+        /// Gets the view lookup definition used to get the next and previous record.
         /// </summary>
         /// <value>
         /// The view lookup definition.
@@ -51,10 +51,10 @@ namespace RingSoft.DbMaintenance
         private AutoFillSetup _keyAutoFillSetup;
 
         /// <summary>
-        /// Gets the key auto fill setup.
+        /// Gets the unique key control auto fill setup.
         /// </summary>
         /// <value>
-        /// The key auto fill setup.
+        /// The unique key control auto fill setup.
         /// </value>
         public AutoFillSetup KeyAutoFillSetup
         {
@@ -71,7 +71,7 @@ namespace RingSoft.DbMaintenance
 
         private AutoFillValue _keyAutoFillValue;
         /// <summary>
-        /// Gets or sets the key auto fill value.
+        /// Gets or sets the unique key control auto fill value.
         /// </summary>
         /// <value>
         /// The key auto fill value.
@@ -112,7 +112,7 @@ namespace RingSoft.DbMaintenance
 
         private bool _selectButtonEnabled;
         /// <summary>
-        /// Gets or sets a value indicating whether the select button is enabled.
+        /// Gets or sets a value indicating whether the Select button is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if the select button is enabled; otherwise, <c>false</c>.
@@ -131,7 +131,7 @@ namespace RingSoft.DbMaintenance
 
         private bool _deleteButtonEnabled;
         /// <summary>
-        /// Gets or sets a value indicating whether the delete button is enabled.
+        /// Gets or sets a value indicating whether the Delete button is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if the delete button is enabled; otherwise, <c>false</c>.
@@ -152,7 +152,7 @@ namespace RingSoft.DbMaintenance
         private bool _keyValueDirty;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the data in the key value control has been changed.
+        /// Gets or sets a value indicating whether the data in the user-editable unique key value control has been changed.  Used when focus leaves the unique user-editable control.  When that happens and this value is true, then the record matching that unique value is automatically loaded.
         /// </summary>
         /// <value>
         ///   <c>true</c> if data in the key value control has changed; otherwise, <c>false</c>.
@@ -178,9 +178,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         /// The maintenance mode.
         /// </value>
-        public DbMaintenanceModes MaintenanceMode { get; protected set; }
-
-        private bool _dirtyFlag;
+        protected DbMaintenanceModes MaintenanceMode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user has changed the data on this record and has yet to save.
@@ -188,11 +186,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         ///   <c>true</c> if there are unsaved changes in this record; otherwise, <c>false</c>.
         /// </value>
-        public bool RecordDirty
-        {
-            get => _dirtyFlag;
-            protected set => _dirtyFlag = value;
-        }
+        protected bool RecordDirty { get; set; }
 
 
         protected internal void Setup(LookupDefinitionBase lookupDefinition)
@@ -206,7 +200,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Called when the view is loaded.  Sets the View interface.
+        /// Executed when the view is loaded.  Sets the View interface and initializes this object.
         /// </summary>
         /// <param name="view">The View interface.</param>
         public void OnViewLoaded(IDbMaintenanceView view)
@@ -220,49 +214,49 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Called when Previous button is clicked.
+        /// Executed when Previous button is clicked.
         /// </summary>
         public abstract void OnGotoPreviousButton();
 
         /// <summary>
-        /// Called when Next button is clicked.
+        /// Executed when Next button is clicked.
         /// </summary>
         public abstract void OnGotoNextButton();
 
         /// <summary>
-        /// Called when the Find button is clicked.
+        /// Executed when the Find button is clicked.
         /// </summary>
         public abstract void OnFindButton();
 
         /// <summary>
-        /// Called when the Select button is clicked.
+        /// Executed when the Select button is clicked.
         /// </summary>
         public abstract void OnSelectButton();
 
         /// <summary>
-        /// Called when the New button is clicked.
+        /// Executed when the New button is clicked.
         /// </summary>
         public abstract void OnNewButton();
 
         /// <summary>
-        /// Called when the Save button is clicked.
+        /// Executed when the Save button is clicked.
         /// </summary>
         /// <returns>The result.</returns>
         public abstract DbMaintenanceResults OnSaveButton();
 
         /// <summary>
-        /// Called when the Delete button is clicked.
+        /// Executed when the Delete button is clicked.
         /// </summary>
         /// <returns>The result.</returns>
         public abstract DbMaintenanceResults OnDeleteButton();
 
         /// <summary>
-        /// Called when the key control looses focus.  Used to ensure no duplicate value in the key control is entered.
+        /// Executed when the key control looses focus.  Used to ensure no duplicate value in the key control is entered.
         /// </summary>
         public abstract void OnKeyControlLeave();
 
         /// <summary>
-        /// called when the user is trying to close the view.
+        /// Executed when the user is trying to close the view.
         /// </summary>
         /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
         public abstract void OnWindowClosing(CancelEventArgs e);
@@ -279,7 +273,7 @@ namespace RingSoft.DbMaintenance
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Called when a property value has changed.
+        /// Executed when a property value has changed.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="raiseDirtyFlag">if set to <c>true</c> set RecordDirty property to true indicating the user has changed data.</param>

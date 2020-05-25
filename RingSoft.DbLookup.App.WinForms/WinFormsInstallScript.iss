@@ -37,7 +37,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WinForms\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WinForms\bin\Release\*"; Excludes: "*.xml, *.sqlite"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.App.WinForms\bin\Release\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\ComponentsDemoApp\WinForms\Northwind\"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

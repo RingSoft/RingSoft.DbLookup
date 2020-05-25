@@ -16,6 +16,9 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public abstract DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
 
+
+        public event EventHandler<LookupSelectArgs> LookupFormReturn;
+
         protected void Initialize()
         {
             ShowInTaskbar = false;
@@ -118,7 +121,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             lookupWindow.ShowDialog();
         }
 
-        public event EventHandler<LookupSelectArgs> LookupFormReturn;
         public void CloseWindow()
         {
             Close();

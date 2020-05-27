@@ -10,8 +10,10 @@ namespace RingSoft.DbLookup.App.WPFCore
     /// </summary>
     public partial class SqlScriptWindow : ISqlScriptView
     {
+        private bool _executeResult;
+
         public SqlScriptWindow(DbDataProcessor dataProcessor, string fileName, string sqlText, bool splitGo,
-            string defaultDbName, string dbName)
+            string defaultDbName, string dbName, bool showExecSuccessMessage)
         {
             InitializeComponent();
 
@@ -25,9 +27,15 @@ namespace RingSoft.DbLookup.App.WPFCore
             EditMenu.SubmenuOpened += (sender, args) => CopyMenu.IsEnabled = SqlScriptTextBox.SelectionLength > 0;
             CopyMenu.Click += (sender, args) => Clipboard.SetText(SqlScriptTextBox.SelectedText);
             SaveAsMenu.Click += (sender, args) => SqlScriptViewModel.SaveAs();
-            CloseButton.Click += (sender, args) => CloseWindow();
-            ExitMenu.Click += (sender, args) => CloseWindow();
-            ExecuteButton.Click += (sender, args) => SqlScriptViewModel.ExecuteButton_Click();
+            CloseButton.Click += (sender, args) => CloseWindow(false);
+            ExitMenu.Click += (sender, args) => CloseWindow(false);
+            ExecuteButton.Click += (sender, args) => SqlScriptViewModel.ExecuteButton_Click(showExecSuccessMessage);
+        }
+
+        public new bool ShowDialog()
+        {
+            base.ShowDialog();
+            return _executeResult;
         }
 
         public string ShowSaveFileDialog(string initialDirectory, string fileName, string defaultExt, string filter)
@@ -48,8 +56,9 @@ namespace RingSoft.DbLookup.App.WPFCore
             return string.Empty;
         }
 
-        public void CloseWindow()
+        public void CloseWindow(bool result)
         {
+            _executeResult = result;
             Close();
         }
     }

@@ -121,6 +121,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupDataBase LookupData { get; private set; }
 
+        /// <summary>
+        /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
+        /// </summary>
+        public event EventHandler<LookupAddViewArgs> LookupView;
 
         private bool _controlLoaded;
         private int _originalPageSize;
@@ -187,6 +191,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupData = new LookupDataBase(LookupDefinition, this);
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;
             LookupData.DataSourceChanged += LookupData_DataSourceChanged;
+            LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
 
             if (!_controlLoaded)
             {
@@ -1039,7 +1044,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var selectedIndex = ListView.SelectedIndex;
             if (selectedIndex >= 0)
+            {
                 LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this));
+            }
         }
 
         private void ExecuteCommand()

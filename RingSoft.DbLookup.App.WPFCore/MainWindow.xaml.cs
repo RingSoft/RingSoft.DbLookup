@@ -13,6 +13,8 @@ namespace RingSoft.DbLookup.App.WPFCore
     {
         public event EventHandler Done;
 
+        private DbSetupWindow _dbSetupWindow;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,8 +33,17 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             ContentRendered += (sender, args) =>
             {
-                Activate();
+                if (_dbSetupWindow != null)
+                    _dbSetupWindow.Activate();
+                else 
+                    Activate();
                 timer.Start();
+            };
+
+            Loaded += (sender, args) =>
+            {
+                if (RsDbLookupAppGlobals.FirstTime)
+                    DatabaseSetupClick();
             };
 
             //Closing += (sender, args) =>
@@ -97,10 +108,10 @@ namespace RingSoft.DbLookup.App.WPFCore
             //    MessageBox.Show(this, message, "Database Settings", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             //    return;
             //}
-            var dbSetupWindow = new DbSetupWindow();
-            dbSetupWindow.ShowInTaskbar = false;
-            dbSetupWindow.Owner = this;
-            dbSetupWindow.ShowDialog();
+            _dbSetupWindow = new DbSetupWindow();
+            _dbSetupWindow.ShowInTaskbar = false;
+            _dbSetupWindow.Owner = this;
+            _dbSetupWindow.ShowDialog();
         }
     }
 }

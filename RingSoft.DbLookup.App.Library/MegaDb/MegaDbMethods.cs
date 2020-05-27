@@ -8,7 +8,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
     public class MegaDbMethods
     {
         public static async Task<int> SeedItemsTable(IMegaDbDbContext context, IMegaDbEfDataProcessor processor,
-            int maxRecords, CancellationToken token, MegaDbPlatforms platformType)
+            int maxRecords, CancellationToken token)
         {
             var result = 0;
             var insertResult = true;

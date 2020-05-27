@@ -1,7 +1,7 @@
-﻿using System;
+﻿using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb
 {
@@ -46,7 +46,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         bool DeleteManufacturer(int manufacturerId);
 
-        Task<int> SeedItemsTable(int maxRecords, CancellationToken token, MegaDbPlatforms platformType);
+        Task<int> SeedItemsTable(int maxRecords, CancellationToken token);
 
         void OnItemsTableSeederProgress(ItemsTableSeederProgressArgs e);
 

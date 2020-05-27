@@ -141,14 +141,14 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
         }
 
-        public void ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,
-            string defaultDbName, string dbName)
+        public bool ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,
+            string defaultDbName, string dbName, bool showExecSuccessMessage)
         {
-            var sqlScriptWindow = new SqlScriptWindow(dataProcessor, scriptFileName, sql, splitGo, defaultDbName, dbName);
+            var sqlScriptWindow = new SqlScriptWindow(dataProcessor, scriptFileName, sql, splitGo, defaultDbName,
+                dbName, showExecSuccessMessage);
             sqlScriptWindow.Owner = this;
-            sqlScriptWindow.ShowDialog();
+            return sqlScriptWindow.ShowDialog();
         }
-
 
         public string ShowOpenFileDialog(string initialDirectory, string fileName, string defaultExt, string filter)
         {
@@ -242,9 +242,9 @@ namespace RingSoft.DbLookup.App.WPFCore
             Close();
         }
 
-        public void ShowMegaDbItemsTableSeederForm(MegaDbPlatforms megaDbPlatform)
+        public void ShowMegaDbItemsTableSeederForm()
         {
-            var seederWindow = new MegaDbSeedWindow(megaDbPlatform);
+            var seederWindow = new MegaDbSeedWindow();
             seederWindow.Owner = this;
             seederWindow.ShowDialog();
         }

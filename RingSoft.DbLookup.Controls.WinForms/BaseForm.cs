@@ -4,6 +4,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
 {
     public partial class BaseForm : Form
     {
+        public bool CloseOnEscape { get; set; } = true;
+
         public BaseForm()
         {
             InitializeComponent();
@@ -21,8 +23,13 @@ namespace RingSoft.DbLookup.Controls.WinForms
                 switch (keyData & Keys.KeyCode)
                 {
                     case Keys.Escape:
-                        Close();
-                        return true;
+                        if (CloseOnEscape)
+                        {
+                            Close();
+                            return true;
+                        }
+
+                        break;
                 }
             }
             return base.ProcessCmdKey(ref msg, keyData);

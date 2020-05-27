@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
     {
         string ShowSaveFileDialog(string initialDirectory, string fileName, string defaultExt, string filter);
 
-        void CloseWindow();
+        void CloseWindow(bool result);
     }
 
     public class SqlScriptViewModel : INotifyPropertyChanged
@@ -79,21 +79,22 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             }
         }
 
-        public void ExecuteButton_Click()
+        public void ExecuteButton_Click(bool showExecSuccessMessage)
         {
-            DbDataProcessor.ShowSqlStatementWindow();
+            DataProcessResult result;
+            DbDataProcessor.ShowSqlStatementWindow(showExecSuccessMessage);
             if (_splitGo)
             {
                 var sqls = RsDbLookupAppGlobals.SplitSqlServerStatements(SqlText);
-                _dataProcessor.ExecuteSqls(sqls, true);
+                result = _dataProcessor.ExecuteSqls(sqls, true);
             }
             else
             {
-                _dataProcessor.ExecuteSql(SqlText, true);
+                result = _dataProcessor.ExecuteSql(SqlText, true);
             }
 
             DbDataProcessor.ShowSqlStatementWindow(false);
-            _view.CloseWindow();
+            _view.CloseWindow(result.ResultCode == GetDataResultCodes.Success);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

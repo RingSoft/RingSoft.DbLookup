@@ -116,6 +116,11 @@ namespace RingSoft.DbLookup.Controls.WinForms
             }
         }
 
+        /// <summary>
+        /// Occurs when a user wishes to add or view a selected lookup row.  Set the Handled property to True to not send this message to the LookupContext.
+        /// </summary>
+        public event EventHandler<LookupAddViewArgs> LookupView;
+
         private int _originalPageSize;
         private int _currentPageSize;
         private int _timerInterval;
@@ -294,6 +299,8 @@ namespace RingSoft.DbLookup.Controls.WinForms
 
             LookupData.LookupDataChanged += LookupData_LookupDataChanged;
             LookupData.DataSourceChanged += LookupData_DataSourceChanged;
+            LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
+
             LookupListView.SetupColumns(LookupData.LookupDefinition);
 
             var sortOrder = SortOrder.Ascending;

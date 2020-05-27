@@ -84,17 +84,15 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         private string _progressLabelText = ProgressLabelDefaultText;
         private bool _closeButtonEnabled = true;
 
-        private MegaDbPlatforms _platformType;
         private CancellationTokenSource _cancellationTokenSource;
         private CancellationToken _cancellationToken;
         private IMegaDbSeedView _view;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnViewLoaded(IMegaDbSeedView view, MegaDbPlatforms platformType)
+        public void OnViewLoaded(IMegaDbSeedView view)
         {
             _view = view;
-            _platformType = platformType;
             SetStartButtonText(StartButtonDefaultText);
         }
 
@@ -125,8 +123,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
                 var result =
-                    await RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SeedItemsTable(MaxRecords, _cancellationToken,
-                        _platformType);
+                    await RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SeedItemsTable(MaxRecords, _cancellationToken);
                 FinishProcess(result <= 0);
                 if (result > 0)
                 {

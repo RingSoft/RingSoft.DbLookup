@@ -27,6 +27,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public event EventHandler<LookupSelectArgs> LookupSelect;
 
+        /// <summary>
+        /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
+        /// </summary>
+        public event EventHandler<LookupAddViewArgs> LookupView;
+
+
         public event EventHandler RefreshData;
 
         private LookupDefinitionBase _lookupDefinition;
@@ -104,7 +110,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
             args.CallBackToken.RefreshData += (sender, eventArgs) => LookupCallBackRefreshData();
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+
+            LookupView?.Invoke(this, args);
+            if (!args.Handled)
+                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void AddButtonClick()
@@ -112,7 +121,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
                 LookupControl.SearchText, this);
             args.CallBackToken.RefreshData += (sender, eventArgs) => LookupCallBackRefreshData();
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+
+            LookupView?.Invoke(this, args);
+            if (!args.Handled)
+                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void LookupCallBackRefreshData()

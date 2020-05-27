@@ -65,6 +65,8 @@ namespace RingSoft.DbLookup.App.Library
 
         public static string AppSection { get; set; }
 
+        public static bool FirstTime { get; set; }
+
         public static void Initialize(string appSection)
         {
             AppSection = appSection;
@@ -78,6 +80,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             else
             {
+                FirstTime = true;
                 xmlProcessor.SetElementValue(registryElementName, $"{AppDataDirectory}\\Registry.xml");
                 var xml = xmlProcessor.OutputXml();
                 WriteTextFile(appSettingsFile, xml);

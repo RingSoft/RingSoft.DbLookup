@@ -12,6 +12,11 @@ namespace RingSoft.DbLookup.Controls.WinForms
     {
         public event EventHandler RefreshData;
 
+        /// <summary>
+        /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
+        /// </summary>
+        public event EventHandler<LookupAddViewArgs> LookupView;
+
         private LookupDefinitionBase _lookupDefinition;
         private bool _allowView;
         private string _initialSearchFor;
@@ -68,14 +73,20 @@ namespace RingSoft.DbLookup.Controls.WinForms
         {
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
             args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+
+            LookupView?.Invoke(this, args);
+            if (!args.Handled)
+                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void AddButton_Click(object sender, EventArgs e)
         {
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add, LookupControl.SearchText, this);
             args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+
+            LookupView?.Invoke(this, args);
+            if (!args.Handled)
+                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void LookupCallBack_RefreshData(object sender, EventArgs e)

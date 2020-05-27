@@ -1,21 +1,17 @@
-﻿using System;
+﻿using RingSoft.DbLookup.App.Library.ViewModels;
+using RingSoft.DbLookup.Controls.WinForms;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.App.Library.ViewModels;
-using RingSoft.DbLookup.Controls.WinForms;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
     public partial class MegaDbSeedForm : BaseForm, IMegaDbSeedView
     {
-        private MegaDbPlatforms _platformType;
         private MegaDbSeedViewModel _viewModel = new MegaDbSeedViewModel();
 
-        public MegaDbSeedForm(MegaDbPlatforms platformType)
+        public MegaDbSeedForm()
         {
-            _platformType = platformType;
-
             InitializeComponent();
 
             MaxRecordsTextBox.BindTextBoxToIntFormat(_viewModel, nameof(_viewModel.MaxRecords));
@@ -40,7 +36,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            _viewModel.OnViewLoaded(this, _platformType);
+            _viewModel.OnViewLoaded(this);
             base.OnLoad(e);
         }
 

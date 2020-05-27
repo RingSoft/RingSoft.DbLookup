@@ -74,10 +74,10 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             return context.DeleteEntity(context.Manufacturers, manufacturer,"Deleting Manufacturer");
         }
 
-        public async Task<int> SeedItemsTable(int maxRecords, CancellationToken token, MegaDbPlatforms platformType)
+        public async Task<int> SeedItemsTable(int maxRecords, CancellationToken token)
         {
             var context = new MegaDbItemsTableSeederDbContext();
-            return await MegaDbMethods.SeedItemsTable(context, this, maxRecords, token, platformType);
+            return await MegaDbMethods.SeedItemsTable(context, this, maxRecords, token);
         }
 
         public void OnItemsTableSeederProgress(ItemsTableSeederProgressArgs e)

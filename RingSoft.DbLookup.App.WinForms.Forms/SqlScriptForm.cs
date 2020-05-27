@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using RingSoft.DbLookup.App.Library.ViewModels;
+﻿using RingSoft.DbLookup.App.Library.ViewModels;
 using RingSoft.DbLookup.Controls.WinForms;
 using RingSoft.DbLookup.DataProcessor;
+using System;
+using System.Windows.Forms;
 
 namespace RingSoft.DbLookup.App.WinForms.Forms
 {
@@ -14,11 +14,12 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         private bool _splitGo;
         private string _defaultDbName;
         private string _dbName;
+        private bool _executeResult;
 
         private SqlScriptViewModel _viewModel = new SqlScriptViewModel();
 
         public SqlScriptForm(DbDataProcessor dataProcessor, string fileName, string sqlText, bool splitGo,
-            string defaultDbName, string dbName)
+            string defaultDbName, string dbName, bool showExecSuccessMessage)
         {
             _dataProcessor = dataProcessor;
             _fileName = fileName;
@@ -37,7 +38,13 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             SaveAsMenu.Click += (sender, args) => _viewModel.SaveAs();
             CloseButton.Click += CloseButton_Click;
             ExitMenu.Click += (sender, args) => CloseButton.PerformClick();
-            ExecuteButton.Click += (sender, args) => _viewModel.ExecuteButton_Click();
+            ExecuteButton.Click += (sender, args) => _viewModel.ExecuteButton_Click(showExecSuccessMessage);
+        }
+
+        public new bool ShowDialog()
+        {
+            base.ShowDialog();
+            return _executeResult;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -48,7 +55,7 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            Close();
+            CloseWindow(false);
         }
 
         public string ShowSaveFileDialog(string initialDirectory, string fileName, string defaultExt, string filter)
@@ -69,8 +76,9 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             return string.Empty;
         }
 
-        public void CloseWindow()
+        public void CloseWindow(bool result)
         {
+            _executeResult = result;
             Close();
         }
     }

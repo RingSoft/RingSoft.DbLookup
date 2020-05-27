@@ -4,8 +4,8 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 {
     public interface IDbSetupView
     {
-        void ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,
-            string defaultDbName, string dbName);
+        bool ShowScriptDialog(DbDataProcessor dataProcessor, string scriptFileName, string sql, bool splitGo,
+            string defaultDbName, string dbName, bool showExecSuccessMessage);
 
         string ShowOpenFileDialog(string initialDirectory, string fileName, string defaultExt, string filter);
 
@@ -25,6 +25,6 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         void CloseWindow();
 
-        void ShowMegaDbItemsTableSeederForm(MegaDbPlatforms megaDbPlatform);
+        void ShowMegaDbItemsTableSeederForm();
     }
 }

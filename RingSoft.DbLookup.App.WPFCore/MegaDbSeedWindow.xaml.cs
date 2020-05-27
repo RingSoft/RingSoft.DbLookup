@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.App.Library.MegaDb;
+﻿using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.ViewModels;
+using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -10,11 +9,16 @@ namespace RingSoft.DbLookup.App.WPFCore
     /// </summary>
     public partial class MegaDbSeedWindow : IMegaDbSeedView
     {
-        public MegaDbSeedWindow(MegaDbPlatforms platformType)
+        public MegaDbSeedWindow()
         {
             InitializeComponent();
 
-            Loaded += (sender, args) => MegaDbSeedViewModel.OnViewLoaded(this, platformType);
+            Loaded += (sender, args) =>
+            {
+                MegaDbSeedViewModel.OnViewLoaded(this);
+                MaxRecordsTextBox.SelectAll();
+            };
+
             StartProcessButton.Click += (sender, args) => MegaDbSeedViewModel.StartProcess();
             CloseButton.Click += (sender, args) => CloseWindow();
         }

@@ -13,6 +13,8 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
         public MainForm()
         {
             InitializeComponent();
+            CloseOnEscape = false;
+
             DatabaseSettingsButton.Click += DatabaseSettingsButton_Click;
             NorthwindButton.Click += NorthwindButton_Click;
             MegaDbButton.Click += MegaDbButton_Click;
@@ -30,6 +32,9 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             base.OnShown(e);
 
             Activate();
+            if (RsDbLookupAppGlobals.FirstTime)
+                DatabaseSettingsButton.PerformClick();
+
             timer1.Enabled = true;
         }
 

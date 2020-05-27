@@ -1,13 +1,13 @@
-﻿using System;
+﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbMaintenance;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using RingSoft.DbLookup.App.Library.LibLookupContext;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels
 {
@@ -455,14 +455,16 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         public void ShowSqlServerMegaDbScript()
         {
             SqlServerMegaDbDatabaseName = ScrubNewDatabaseName(SqlServerMegaDbDatabaseName);
-            ShowScript(GetSqlServerDataProcessor(), RsDbLookupAppGlobals.SqlServerMegaDbScript,
-                RegistrySettings.SqlServerMegaDbDatabaseNameConst, SqlServerMegaDbDatabaseName, true);
+            ShowMegaDbScript(GetSqlServerDataProcessor(), RsDbLookupAppGlobals.SqlServerMegaDbScript,
+                RegistrySettings.SqlServerMegaDbDatabaseNameConst, SqlServerMegaDbDatabaseName, true,
+                MegaDbPlatforms.SqlServer);
         }
 
         public void ShowMySqlNorthwindScript()
         {
             MySqlNorthwindDatabaseName = MySqlNorthwindDatabaseName.ToLower();
             MySqlNorthwindDatabaseName = ScrubNewDatabaseName(MySqlNorthwindDatabaseName);
+            
             ShowScript(GetMySqlDataProcessor(), RsDbLookupAppGlobals.MySqlNorthwindScript,
                 RegistrySettings.MySqlNorthwindDatabaseNameConst, MySqlNorthwindDatabaseName);
         }
@@ -471,8 +473,9 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         {
             MySqlMegaDbDatabaseName = MySqlMegaDbDatabaseName.ToLower();
             MySqlMegaDbDatabaseName = ScrubNewDatabaseName(MySqlMegaDbDatabaseName);
-            ShowScript(GetMySqlDataProcessor(), RsDbLookupAppGlobals.MySqlMegaDbScript,
-                RegistrySettings.MySqlMegaDbDatabaseNameConst, MySqlMegaDbDatabaseName);
+            ShowMegaDbScript(GetMySqlDataProcessor(), RsDbLookupAppGlobals.MySqlMegaDbScript,
+                RegistrySettings.MySqlMegaDbDatabaseNameConst, MySqlMegaDbDatabaseName, false,
+                MegaDbPlatforms.MySql);
         }
 
         private string ScrubNewDatabaseName(string newDatabaseName)
@@ -484,11 +487,21 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             return result;
         }
 
-        private void ShowScript(DbDataProcessor dataProcessor, string scriptFileName, string defaultDbName,
-            string dbName, bool splitGo = false)
+        private void ShowMegaDbScript(DbDataProcessor dataProcessor, string scriptFileName, string defaultDbName,
+            string dbName, bool splitGo, MegaDbPlatforms platform)
+        {
+            if (ShowScript(dataProcessor, scriptFileName, defaultDbName, dbName, splitGo, false))
+            {
+                MegaDbSeedDatabaseButton_Click(platform);
+            }
+        }
+
+        private bool ShowScript(DbDataProcessor dataProcessor, string scriptFileName, string defaultDbName,
+            string dbName, bool splitGo = false, bool showExecSuccessMessage = true)
         {
             var sql = RsDbLookupAppGlobals.OpenTextFile(scriptFileName);
-            _view.ShowScriptDialog(dataProcessor, scriptFileName, sql, splitGo, defaultDbName, dbName);
+            return _view.ShowScriptDialog(dataProcessor, scriptFileName, sql, splitGo, defaultDbName, dbName,
+                showExecSuccessMessage);
         }
 
         public void GetNorthwindFileName()
@@ -583,11 +596,16 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         private bool ValidateMegaDbSettings()
         {
-            var validateResult = ValidateMegaDbConnection(MegaDbDbPlatform, false);
+            return ValidateMegaDbSettings(MegaDbDbPlatform);
+        }
+
+        private bool ValidateMegaDbSettings(MegaDbPlatforms platform)
+        {
+            var validateResult = ValidateMegaDbConnection(platform, false);
 
             if (!validateResult)
             {
-                _view.ValidationFailSetFocus_MegaDb(MegaDbDbPlatform);
+                _view.ValidationFailSetFocus_MegaDb(platform);
                 var message = "Mega Database validation failed.  Please correct the values before continuing.";
                 _view.ShowValidationMessage(message, "Validation Failure!");
                 return false;
@@ -598,13 +616,27 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         public void MegaDbSeedDatabaseButton_Click()
         {
-            if (!ValidateMegaDbSettings())
+            MegaDbSeedDatabaseButton_Click(MegaDbDbPlatform);
+        }
+
+        public void MegaDbSeedDatabaseButton_Click(MegaDbPlatforms platform)
+        {
+            if (!ValidateMegaDbSettings(platform))
             {
                 return;
             }
 
             SaveRegistry();
             _view.ShowInformationMessage("Database Settings Saved.", "Database Setup");
+
+            var processorType = platform == MegaDbPlatforms.SqlServer
+                ? DataProcessorTypes.SqlServer
+                : DataProcessorTypes.MySql;
+
+            var origProcessorType = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration
+                .DataProcessorType;
+            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration.DataProcessorType =
+                processorType;
 
             if (RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DoesItemsTableHaveData())
             {
@@ -615,6 +647,9 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 {
                     _view.ExitApplication();
                 }
+
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration.DataProcessorType =
+                    origProcessorType;
                 return;
             }
 
@@ -636,7 +671,9 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            _view.ShowMegaDbItemsTableSeederForm(MegaDbDbPlatform);
+            _view.ShowMegaDbItemsTableSeederForm();
+            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContextConfiguration.DataProcessorType =
+                origProcessorType;
         }
 
         [NotifyPropertyChangedInvocator]

@@ -36,12 +36,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             SqliteNorthwindTestConButton.Click +=
                 (sender, args) => DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.Sqlite);
 
-            MegaDbSeedItemsTableButton.Click += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.MegaDbSeedDatabaseButton_Click();
-            };
-
             SqlServerNorthwindComboBox.GotFocus += (sender, args) =>
             {
                 SavePasswords();

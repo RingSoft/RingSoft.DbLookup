@@ -50,7 +50,6 @@
                         <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
                             <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.SqlServer}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbSqlServerRadioEnabled}"/>
                             <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.MySql}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbMySqlRadioEnabled}"/>
-                            <Button x:Name="MegaDbSeedItemsTableButton" Content="_Seed Items Table"/>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>

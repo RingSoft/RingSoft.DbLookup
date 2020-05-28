@@ -60,7 +60,6 @@
             this.MegaDbPlatformGroupBox = new System.Windows.Forms.GroupBox();
             this.MegaDbMySqlRadioButton = new System.Windows.Forms.RadioButton();
             this.MegaDbSqlServerRadioButton = new System.Windows.Forms.RadioButton();
-            this.MegaDbSeedItemsTableButton = new System.Windows.Forms.Button();
             this.NorthwindPlatformGroupBox = new System.Windows.Forms.GroupBox();
             this.SqliteNorthwindTestConButton = new System.Windows.Forms.Button();
             this.NorthwindSqliteFileNameLabel = new System.Windows.Forms.Label();
@@ -393,7 +392,6 @@
             // 
             this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbMySqlRadioButton);
             this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbSqlServerRadioButton);
-            this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbSeedItemsTableButton);
             this.MegaDbPlatformGroupBox.Location = new System.Drawing.Point(14, 163);
             this.MegaDbPlatformGroupBox.Name = "MegaDbPlatformGroupBox";
             this.MegaDbPlatformGroupBox.Size = new System.Drawing.Size(326, 53);
@@ -422,15 +420,6 @@
             this.MegaDbSqlServerRadioButton.TabStop = true;
             this.MegaDbSqlServerRadioButton.Text = "SQL Server";
             this.MegaDbSqlServerRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // MegaDbSeedItemsTableButton
-            // 
-            this.MegaDbSeedItemsTableButton.Location = new System.Drawing.Point(161, 17);
-            this.MegaDbSeedItemsTableButton.Name = "MegaDbSeedItemsTableButton";
-            this.MegaDbSeedItemsTableButton.Size = new System.Drawing.Size(102, 23);
-            this.MegaDbSeedItemsTableButton.TabIndex = 6;
-            this.MegaDbSeedItemsTableButton.Text = "&Seed Items Table";
-            this.MegaDbSeedItemsTableButton.UseVisualStyleBackColor = true;
             // 
             // NorthwindPlatformGroupBox
             // 
@@ -709,7 +698,6 @@
         private System.Windows.Forms.GroupBox MegaDbPlatformGroupBox;
         private System.Windows.Forms.RadioButton MegaDbMySqlRadioButton;
         private System.Windows.Forms.RadioButton MegaDbSqlServerRadioButton;
-        private System.Windows.Forms.Button MegaDbSeedItemsTableButton;
         private System.Windows.Forms.GroupBox NorthwindPlatformGroupBox;
         private System.Windows.Forms.Button SqliteNorthwindTestConButton;
         private System.Windows.Forms.Label NorthwindSqliteFileNameLabel;

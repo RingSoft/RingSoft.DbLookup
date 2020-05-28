@@ -492,7 +492,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         {
             if (ShowScript(dataProcessor, scriptFileName, defaultDbName, dbName, splitGo, false))
             {
-                MegaDbSeedDatabaseButton_Click(platform);
+                MegaDbSeedDatabase(platform);
             }
         }
 
@@ -614,12 +614,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             return true;
         }
 
-        public void MegaDbSeedDatabaseButton_Click()
-        {
-            MegaDbSeedDatabaseButton_Click(MegaDbDbPlatform);
-        }
-
-        public void MegaDbSeedDatabaseButton_Click(MegaDbPlatforms platform)
+        public void MegaDbSeedDatabase(MegaDbPlatforms platform)
         {
             if (!ValidateMegaDbSettings(platform))
             {

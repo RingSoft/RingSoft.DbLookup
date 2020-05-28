@@ -143,8 +143,6 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
 
             OkButton.Click += (sender, args) => _viewModel.OkButton_Click();
             CancelFormButton.Click += CancelButton_Click;
-
-            MegaDbSeedItemsTableButton.Click += (sender, args) => _viewModel.MegaDbSeedDatabaseButton_Click();
         }
 
         private void FillDatabaseCombo(ComboBox comboBox, List<string> list)

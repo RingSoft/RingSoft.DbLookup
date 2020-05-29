@@ -4,14 +4,15 @@
     <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.92.3</Version>
+    <Version>1.00.00</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>http://www.ringsoft.site</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Database Paging, Entity Framework 6, Entity Framework Core, WPF</PackageTags>
-    <PackageReleaseNotes>Changed class names around to make the code easier to understand.</PackageReleaseNotes>
+    <PackageReleaseNotes>Finalized code and released to the public.</PackageReleaseNotes>
+    <PackageIcon>magnify.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,6 +25,10 @@
 
   <ItemGroup>
     <None Remove="Resources\Search16.png" />
+    <None Include="..\magnify.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

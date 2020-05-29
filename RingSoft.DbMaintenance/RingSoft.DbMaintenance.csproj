@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
-    <Version>0.92.3</Version>
+    <Version>1.00.00</Version>
     <Authors>Peter Ringering</Authors>
     <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -10,7 +10,8 @@
     <PackageProjectUrl>http://www.ringsoft.site</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Entity Framework, Database Table Maintenance</PackageTags>
-    <PackageReleaseNotes>Changed class names around to make the code easier to understand.</PackageReleaseNotes>
+    <PackageReleaseNotes>Finalized code and released to the public.</PackageReleaseNotes>
+    <PackageIcon></PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

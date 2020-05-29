@@ -21,7 +21,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             get => _orderId;
             set
             {
-                if (value == _orderId) return;
+                if (value == _orderId) 
+                    return;
+
                 _orderId = value;
                 OnPropertyChanged(nameof(OrderId));
             }

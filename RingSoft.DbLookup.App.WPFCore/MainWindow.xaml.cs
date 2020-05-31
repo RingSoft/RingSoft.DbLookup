@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
 using System;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace RingSoft.DbLookup.App.WPFCore
@@ -13,7 +14,7 @@ namespace RingSoft.DbLookup.App.WPFCore
     {
         public event EventHandler Done;
 
-        private DbSetupWindow _dbSetupWindow;
+        private RegistrySettings _registrySettings;
 
         public MainWindow()
         {
@@ -33,17 +34,13 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             ContentRendered += (sender, args) =>
             {
-                if (_dbSetupWindow != null)
-                    _dbSetupWindow.Activate();
-                else 
-                    Activate();
+                Activate();
                 timer.Start();
             };
 
             Loaded += (sender, args) =>
             {
-                if (RsDbLookupAppGlobals.FirstTime)
-                    DatabaseSetupClick();
+                _registrySettings = new RegistrySettings();
             };
 
             //Closing += (sender, args) =>
@@ -75,11 +72,9 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             MegaDbButton.Click += (sender, args) =>
             {
-                if (!RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.MegaDbContextConfiguration.TestConnection())
-                {
-                    DatabaseSetupClick();
+                if (!ValidateMegaDbWindow())
                     return;
-                }
+
                 var itemsWindow = new ItemsWindow();
                 itemsWindow.Owner = this;
                 itemsWindow.ShowDialog();
@@ -87,11 +82,9 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             StockTrackerButton.Click += (sender, args) =>
             {
-                if (!RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.MegaDbContextConfiguration.TestConnection())
-                {
-                    DatabaseSetupClick();
+                if (!ValidateMegaDbWindow())
                     return;
-                }
+
                 var stockMasterWindow = new StockMasterWindow();
                 stockMasterWindow.Owner = this;
                 stockMasterWindow.ShowDialog();
@@ -100,6 +93,29 @@ namespace RingSoft.DbLookup.App.WPFCore
             CloseButton.Click += (sender, args) => Close();
         }
 
+        private bool ValidateMegaDbWindow()
+        {
+            var result = true;
+            if (_registrySettings.MegaDbPlatformType == MegaDbPlatforms.None)
+            {
+                var message =
+                    "The Mega Database platform type is set to None.  You must set it to a valid platform type before launching this window.";
+                MessageBox.Show(this, message, "Invalid Mega Database Platform Type", MessageBoxButton.OK,
+                    MessageBoxImage.Exclamation);
+                result = false;
+            }
+
+            if (result && !RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.MegaDbContextConfiguration
+                .TestConnection())
+                result = false;
+
+            if (!result)
+            {
+                DatabaseSetupClick();
+            }
+
+            return result;
+        }
         private void DatabaseSetupClick()
         {
             //if (_openWindows > 0)
@@ -108,10 +124,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             //    MessageBox.Show(this, message, "Database Settings", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             //    return;
             //}
-            _dbSetupWindow = new DbSetupWindow();
-            _dbSetupWindow.ShowInTaskbar = false;
-            _dbSetupWindow.Owner = this;
-            _dbSetupWindow.ShowDialog();
+            var dbSetupWindow = new DbSetupWindow();
+            dbSetupWindow.ShowInTaskbar = false;
+            dbSetupWindow.Owner = this;
+            dbSetupWindow.ShowDialog();
+            _registrySettings.LoadFromRegistry();
         }
     }
 }

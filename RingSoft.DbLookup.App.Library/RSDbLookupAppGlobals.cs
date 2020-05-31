@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup.App.Library
 #if DEBUG
                 return AssemblyDirectory;
 #else
-                return $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\ComponentsDemoApp\\{AppSection}";
+                return $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\DbLookupDemoApp\\{AppSection}";
 #endif
             }
         }

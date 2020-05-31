@@ -12,8 +12,9 @@ namespace RingSoft.DbLookup.App.Library
 
     public enum MegaDbPlatforms
     {
-        SqlServer = 0,
-        MySql = 1,
+        None = 0,
+        SqlServer = 1,
+        MySql = 2,
     }
 
     public class RegistrySettings
@@ -124,7 +125,7 @@ namespace RingSoft.DbLookup.App.Library
                 $"{RsDbLookupAppGlobals.AppDataDirectory}\\Northwind\\Northwind.sqlite");
 
             var megaDbPlatformType = _registryXml.GetElementValue(MegaDbPlatformTypeKey,
-                ((int)MegaDbPlatforms.SqlServer).ToString());
+                ((int)MegaDbPlatforms.None).ToString());
             MegaDbPlatformType = (MegaDbPlatforms) megaDbPlatformType.ToInt();
         }
 

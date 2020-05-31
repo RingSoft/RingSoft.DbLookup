@@ -48,9 +48,9 @@ namespace RingSoft.DbLookup.App.WinForms.Forms
             SqliteNorthwindTestConButton.DataBindings.Add(nameof(SqliteNorthwindTestConButton.Enabled), _viewModel,
                 nameof(_viewModel.NorthwindSqliteControlsEnabled), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            MegaDbNoneRadioButton.AddCheckedBinding(_viewModel, nameof(_viewModel.MegaDbDbPlatform), MegaDbPlatforms.None);
+
             MegaDbSqlServerRadioButton.AddCheckedBinding(_viewModel, nameof(_viewModel.MegaDbDbPlatform), MegaDbPlatforms.SqlServer);
-            MegaDbSqlServerRadioButton.DataBindings.Add(nameof(MegaDbSqlServerRadioButton.Enabled), _viewModel,
-                nameof(_viewModel.MegaDbSqlServerRadioEnabled), false, DataSourceUpdateMode.OnPropertyChanged);
 
             MegaDbMySqlRadioButton.AddCheckedBinding(_viewModel, nameof(_viewModel.MegaDbDbPlatform), MegaDbPlatforms.MySql);
             MegaDbMySqlRadioButton.DataBindings.Add(nameof(MegaDbMySqlRadioButton.Enabled), _viewModel,

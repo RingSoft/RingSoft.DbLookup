@@ -118,19 +118,6 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             }
         }
 
-        public bool MegaDbSqlServerRadioEnabled
-        {
-            get => _megaDbSqlServerRadioEnabled;
-            set
-            {
-                if (_megaDbSqlServerRadioEnabled == value)
-                    return;
-
-                _megaDbSqlServerRadioEnabled = value;
-                OnPropertyChanged(nameof(MegaDbSqlServerRadioEnabled));
-            }
-        }
-
         public bool MegaDbMySqlRadioEnabled
         {
             get => _megaDbMySqlRadioEnabled;
@@ -312,7 +299,6 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         private bool _northwindSqliteRadioEnabled = true;
         private bool _northwindSqliteControlsEnabled = true;
 
-        private bool _megaDbSqlServerRadioEnabled = true;
         private bool _megaDbMySqlRadioEnabled = true;
 
         private bool _sqlServerSecurityControlsEnabled = true;
@@ -342,7 +328,8 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 case EntityFrameworkVersions.EntityFramework6:
                     enable = false;
                     NorthwindDbPlatform = NorthwindDbPlatforms.SqlServer;
-                    MegaDbDbPlatform = MegaDbPlatforms.SqlServer;
+                    if (MegaDbDbPlatform != MegaDbPlatforms.None)
+                        MegaDbDbPlatform = MegaDbPlatforms.SqlServer;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -351,7 +338,6 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             NorthwindSqlServerRadioEnabled = enable;
             NorthwindMySqlRadioEnabled = enable;
             NorthwindSqliteRadioEnabled = enable;
-            MegaDbSqlServerRadioEnabled = enable;
             MegaDbMySqlRadioEnabled = enable;
 
             SetupNorthwindSqliteControls();
@@ -520,6 +506,10 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
         {
             var registrySettings = GetRegistrySettings();
             registrySettings.MegaDbPlatformType = platform;
+
+            if (registrySettings.MegaDbPlatformType == MegaDbPlatforms.None)
+                return true;
+
             return ValidateConnection(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext, registrySettings, showMessageBox);
         }
 

@@ -37,6 +37,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         {
             switch (registrySettings.MegaDbPlatformType)
             {
+                case MegaDbPlatforms.None:
                 case MegaDbPlatforms.SqlServer:
                     DataProcessorType = DataProcessorTypes.SqlServer;
                     break;

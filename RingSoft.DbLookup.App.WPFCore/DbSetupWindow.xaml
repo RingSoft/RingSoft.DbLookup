@@ -48,7 +48,8 @@
                     </GroupBox>
                     <GroupBox Header="Mega Database Platform">
                         <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
-                            <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.SqlServer}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbSqlServerRadioEnabled}"/>
+                            <RadioButton Content="None" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.None}, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.SqlServer}, Mode=TwoWay}" VerticalAlignment="Center"/>
                             <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.MySql}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbMySqlRadioEnabled}"/>
                         </StackPanel>
                     </GroupBox>

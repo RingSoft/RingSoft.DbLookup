@@ -79,6 +79,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CancelFormButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
+            this.MegaDbNoneRadioButton = new System.Windows.Forms.RadioButton();
             this.MySqlPage.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.GeneralPage.SuspendLayout();
@@ -390,6 +391,7 @@
             // 
             // MegaDbPlatformGroupBox
             // 
+            this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbNoneRadioButton);
             this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbMySqlRadioButton);
             this.MegaDbPlatformGroupBox.Controls.Add(this.MegaDbSqlServerRadioButton);
             this.MegaDbPlatformGroupBox.Location = new System.Drawing.Point(14, 163);
@@ -402,22 +404,20 @@
             // MegaDbMySqlRadioButton
             // 
             this.MegaDbMySqlRadioButton.AutoSize = true;
-            this.MegaDbMySqlRadioButton.Location = new System.Drawing.Point(95, 20);
+            this.MegaDbMySqlRadioButton.Location = new System.Drawing.Point(150, 19);
             this.MegaDbMySqlRadioButton.Name = "MegaDbMySqlRadioButton";
             this.MegaDbMySqlRadioButton.Size = new System.Drawing.Size(60, 17);
-            this.MegaDbMySqlRadioButton.TabIndex = 1;
+            this.MegaDbMySqlRadioButton.TabIndex = 2;
             this.MegaDbMySqlRadioButton.Text = "MySQL";
             this.MegaDbMySqlRadioButton.UseVisualStyleBackColor = true;
             // 
             // MegaDbSqlServerRadioButton
             // 
             this.MegaDbSqlServerRadioButton.AutoSize = true;
-            this.MegaDbSqlServerRadioButton.Checked = true;
-            this.MegaDbSqlServerRadioButton.Location = new System.Drawing.Point(8, 20);
+            this.MegaDbSqlServerRadioButton.Location = new System.Drawing.Point(63, 19);
             this.MegaDbSqlServerRadioButton.Name = "MegaDbSqlServerRadioButton";
             this.MegaDbSqlServerRadioButton.Size = new System.Drawing.Size(80, 17);
-            this.MegaDbSqlServerRadioButton.TabIndex = 0;
-            this.MegaDbSqlServerRadioButton.TabStop = true;
+            this.MegaDbSqlServerRadioButton.TabIndex = 1;
             this.MegaDbSqlServerRadioButton.Text = "SQL Server";
             this.MegaDbSqlServerRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -633,6 +633,18 @@
             this.OkButton.Text = "&OK";
             this.OkButton.UseVisualStyleBackColor = true;
             // 
+            // MegaDbNoneRadioButton
+            // 
+            this.MegaDbNoneRadioButton.AutoSize = true;
+            this.MegaDbNoneRadioButton.Checked = true;
+            this.MegaDbNoneRadioButton.Location = new System.Drawing.Point(6, 19);
+            this.MegaDbNoneRadioButton.Name = "MegaDbNoneRadioButton";
+            this.MegaDbNoneRadioButton.Size = new System.Drawing.Size(51, 17);
+            this.MegaDbNoneRadioButton.TabIndex = 0;
+            this.MegaDbNoneRadioButton.TabStop = true;
+            this.MegaDbNoneRadioButton.Text = "None";
+            this.MegaDbNoneRadioButton.UseVisualStyleBackColor = true;
+            // 
             // DbSetupForm
             // 
             this.AcceptButton = this.OkButton;
@@ -717,5 +729,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button CancelFormButton;
         private System.Windows.Forms.Button OkButton;
+        private System.Windows.Forms.RadioButton MegaDbNoneRadioButton;
     }
 }

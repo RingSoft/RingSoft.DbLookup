@@ -64,7 +64,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(312, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "RingSoft Components Demo";
+            this.label1.Text = "RingSoft Database Lookup Demo";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2

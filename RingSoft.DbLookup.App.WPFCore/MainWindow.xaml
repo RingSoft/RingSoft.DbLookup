@@ -5,7 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:controls="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
                      mc:Ignorable="d"
-        Title="RingSoft WPF Components Demo" Height="300" Width="330" HideControlBox="True" CloseOnEscape="False">
+        Title="RingSoft Database Lookup Demo" Height="300" Width="330" HideControlBox="True" CloseOnEscape="False">
     <!--d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"-->
     <Grid Margin="5">
         <Grid.RowDefinitions>

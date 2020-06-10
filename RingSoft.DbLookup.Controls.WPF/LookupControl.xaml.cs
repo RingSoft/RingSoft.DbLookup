@@ -176,7 +176,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private void SetupControl()
+        internal void SetupControl()
         {
             if (LookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(
@@ -233,6 +233,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
                 _refreshPendingData = null;
             }
+
+            _controlLoaded = true;
         }
 
         private void MergeLookupDefinition()

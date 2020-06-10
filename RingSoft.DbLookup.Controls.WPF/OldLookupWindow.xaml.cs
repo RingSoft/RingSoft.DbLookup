@@ -10,7 +10,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// <summary>
     /// Interaction logic for LookupWindow.xaml
     /// </summary>
-    public partial class LookupWindow : INotifyPropertyChanged
+    public partial class OldLookupWindow : INotifyPropertyChanged
     {
         public LookupDefinitionBase LookupDefinition
         {
@@ -46,7 +46,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="allowView">if set to <c>true</c> [allow view].</param>
         /// <param name="initialSearchFor">The initial search for.</param>
         /// <exception cref="ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
-        public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
+        public OldLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
             if (lookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(

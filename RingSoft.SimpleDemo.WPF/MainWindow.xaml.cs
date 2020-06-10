@@ -170,7 +170,7 @@ namespace RingSoft.SimpleDemo.WPF
 
         private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var lookupWindow = new LookupWindow(App.LookupContext.OrdersLookup, false, false,
+            var lookupWindow = new DemoLookupWindow(App.LookupContext.OrdersLookup, false, false,
                 OrderId > 0 ? OrderId.ToString() : string.Empty);
             lookupWindow.LookupSelect += (o, args) =>
             {

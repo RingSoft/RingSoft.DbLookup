@@ -97,14 +97,6 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Title { get; set; }
 
-        /// <summary>
-        /// Gets or sets additional information to display to the user on the WPF LookupWindow derived class.
-        /// </summary>
-        /// <value>
-        /// The lookup window data.
-        /// </value>
-        public LookupWindowData LookupWindowData { get; set; }
-
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
@@ -116,7 +108,7 @@ namespace RingSoft.DbLookup.Lookup
             FilterDefinition = new TableFilterDefinitionBase();
         }
 
-        protected internal virtual LookupDefinitionBase BaseClone()
+        protected virtual LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinitionBase(TableDefinition);
             clone.CopyLookupData(this);
@@ -132,7 +124,7 @@ namespace RingSoft.DbLookup.Lookup
             return BaseClone();
         }
 
-        protected internal virtual void CopyLookupData(LookupDefinitionBase source)
+        public virtual void CopyLookupData(LookupDefinitionBase source)
         {
             CopyColumns(source.VisibleColumns, false);
             CopyColumns(source.HiddenColumns, true);
@@ -143,6 +135,8 @@ namespace RingSoft.DbLookup.Lookup
                 newJoin.CopyFrom(joinDefinition);
                 _joinsList.Add(newJoin);
             }
+
+            FilterDefinition.CopyFrom(source.FilterDefinition);
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

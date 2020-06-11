@@ -1,5 +1,4 @@
 ﻿using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.SimpleDemo.WPF.Northwind.LookupModel;

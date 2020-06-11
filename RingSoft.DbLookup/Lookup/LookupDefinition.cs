@@ -43,7 +43,7 @@ namespace RingSoft.DbLookup.Lookup
             base.FilterDefinition = FilterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
         }
 
-        protected internal override LookupDefinitionBase BaseClone()
+        protected override LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinition<TLookupEntity, TEntity>(TableDefinition);
             clone.CopyLookupData(this);

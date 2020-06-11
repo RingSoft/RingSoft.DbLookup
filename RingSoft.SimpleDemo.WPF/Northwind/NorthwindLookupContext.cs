@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
-using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.SimpleDemo.WPF.Northwind.LookupModel;
@@ -24,9 +23,9 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
         public TableDefinition<Order_Detail> OrderDetails { get; set; }
         public TableDefinition<Product> Products { get; set; }
 
-        public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
-        public LookupDefinition<CustomerLookup, Customer> CustomerIdLookup { get; private set; }
-        public LookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
+        public DemoLookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
+        public DemoLookupDefinition<CustomerLookup, Customer> CustomerIdLookup { get; private set; }
+        public DemoLookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
 
         public NorthwindLookupContext()
         {
@@ -67,29 +66,35 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             var employeeSupervisorFormula = "[Employees_Employees_ReportsTo].[FirstName] || ' ' || [Employees_Employees_ReportsTo].[LastName]";
             var orderEmployeeNameFormula = "[Orders_Employees_EmployeeID].[FirstName] || ' ' || [Orders_Employees_EmployeeID].[LastName]";
             
-            OrdersLookup = new LookupDefinition<OrderLookup, Order>(Orders);
+            OrdersLookup = new DemoLookupDefinition<OrderLookup, Order>(Orders);
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderId, "Order ID", p => p.OrderID, 15);
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 20);
             OrdersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 40);
             OrdersLookup.Include(p => p.Employee);
             OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", orderEmployeeNameFormula, 25);
+            OrdersLookup.TopHeader = "Use this window to select an Order.";
 
+            OrdersLookup = OrdersLookup.Clone();
             Orders.HasLookupDefinition(OrdersLookup);
 
-            CustomerIdLookup = new LookupDefinition<CustomerLookup, Customer>(Customers);
+            CustomerIdLookup = new DemoLookupDefinition<CustomerLookup, Customer>(Customers);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "Customer Id", p => p.CustomerID, 20);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 40);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
+            CustomerIdLookup.TopHeader = "Use this window to select a Customer.";
 
+            CustomerIdLookup = CustomerIdLookup.Clone();
             Customers.HasLookupDefinition(CustomerIdLookup);
 
-            EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(Employees);
+            EmployeesLookup = new DemoLookupDefinition<EmployeeLookup, Employee>(Employees);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
             EmployeesLookup.Include(p => p.Employee1);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40);
+            EmployeesLookup.TopHeader = "Use this window to select an Employee.";
 
+            EmployeesLookup = EmployeesLookup.Clone();
             Employees.HasLookupDefinition(EmployeesLookup);
         }
     }

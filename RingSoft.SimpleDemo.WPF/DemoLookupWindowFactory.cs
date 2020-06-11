@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RingSoft.DbLookup.Controls.WPF;
+﻿using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.SimpleDemo.WPF

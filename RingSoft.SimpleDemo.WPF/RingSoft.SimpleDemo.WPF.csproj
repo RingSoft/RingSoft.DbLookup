@@ -78,6 +78,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DemoLookupDefinition.cs" />
     <Compile Include="DemoLookupWindow.xaml.cs">
       <DependentUpon>DemoLookupWindow.xaml</DependentUpon>
     </Compile>

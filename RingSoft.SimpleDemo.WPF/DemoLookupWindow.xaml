@@ -11,15 +11,14 @@
                  Title="DemoLookupWindow">
     <Window.Resources>
         <ControlTemplate x:Key="ControlTemplate" TargetType="{x:Type 
-                        lc:LookupWindow}">
+                        local:DemoLookupWindow}">
             <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
                 <Grid Margin="5" Background="{TemplateBinding Background}" Height="450" Width="700">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="25" />
                     </Grid.RowDefinitions>
-                    <lc:LookupControl x:Name="LookupControl" Margin="0,0,0,5"
-                                      LookupDefinition="{Binding LookupDefinition}" />
+                    <lc:LookupControl x:Name="LookupControl" Margin="0,0,0,5" LookupDefinition="{Binding LookupDefinition}" />
                     <Grid Grid.Row="1" HorizontalAlignment="Left">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />

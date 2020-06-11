@@ -53,11 +53,19 @@ namespace RingSoft.DbLookup.Controls.WPF
     }
     public static class ControlsGlobals
     {
+        public static LookupWindowFactory LookupWindowFactory { get; private set; } = new LookupWindowFactory();
+
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 
         public static void InitUi()
         {
             DbDataProcessor.UserInterface = _userInterface;
+        }
+
+        public static void InitUi(LookupWindowFactory lookupWindowFactory)
+        {
+            DbDataProcessor.UserInterface = _userInterface;
+            LookupWindowFactory = lookupWindowFactory;
         }
     }
 }

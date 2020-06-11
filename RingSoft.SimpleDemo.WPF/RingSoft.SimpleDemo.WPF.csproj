@@ -81,6 +81,7 @@
     <Compile Include="DemoLookupWindow.xaml.cs">
       <DependentUpon>DemoLookupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DemoLookupWindowFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

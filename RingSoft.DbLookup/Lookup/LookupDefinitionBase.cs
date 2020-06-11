@@ -97,6 +97,14 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets additional information to display to the user on the WPF LookupWindow derived class.
+        /// </summary>
+        /// <value>
+        /// The lookup window data.
+        /// </value>
+        public LookupWindowData LookupWindowData { get; set; }
+
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();

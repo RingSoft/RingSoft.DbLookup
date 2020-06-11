@@ -363,7 +363,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ShowLookupWindow()
         {
-            var lookupWindow = new LookupWindow(Setup.LookupDefinition, Setup.AllowLookupAdd, Setup.AllowLookupView, AutoFillTextBox.Text);
+            var lookupWindow = ControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
+                Setup.AllowLookupAdd, Setup.AllowLookupView, AutoFillTextBox.Text);
             lookupWindow.Owner = Window.GetWindow(this);
             lookupWindow.RefreshData += (o, args) => _autoFillData.RefreshData(Popup.IsOpen);
             lookupWindow.LookupSelect += LookupForm_LookupSelect;

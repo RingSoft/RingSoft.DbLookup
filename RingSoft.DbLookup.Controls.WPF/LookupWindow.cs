@@ -213,6 +213,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
+            if (LookupControl == null)
+                return;
+
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 
@@ -223,6 +226,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            if (LookupControl == null)
+                return;
+
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
                 LookupControl.SearchText, this);
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
@@ -239,6 +245,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnSelectButtonClick()
         {
+            if (LookupControl == null)
+                return;
+
             Close();
             var args = new LookupSelectArgs(LookupControl.LookupData);
             LookupSelect?.Invoke(this, args);

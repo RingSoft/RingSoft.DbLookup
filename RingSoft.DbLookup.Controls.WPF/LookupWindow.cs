@@ -1,10 +1,9 @@
-﻿using System;
+﻿using RingSoft.DbLookup.Lookup;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -63,12 +62,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             set
             {
                 if (_lookupControl != null)
-                {
-                    _lookupControl.LookupData.SelectedIndexChanged -= LookupData_SelectedIndexChanged;
-                    _lookupControl.LookupData.LookupView -= LookupData_LookupView;
-                }
+                    _lookupControl.Loaded -= LookupControl_Loaded;
 
                 _lookupControl = value;
+
+                if (_lookupControl != null)
+                    _lookupControl.Loaded += LookupControl_Loaded;
             }
         }
 
@@ -149,7 +148,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public event EventHandler RefreshData;
 
-        private bool _allowAdd;
         private bool _allowView;
         private string _initialSearchFor;
 
@@ -168,7 +166,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             LookupDefinition = lookupDefinition;
             _allowView = allowView;
-            _allowAdd = allowAdd;
             _initialSearchFor = initialSearchFor;
 
             var title = lookupDefinition.Title;
@@ -176,23 +173,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 title = lookupDefinition.TableDefinition.ToString();
 
             Title = $"{title} Lookup";
-            Loaded += LookupWindow_Loaded;
+            Loaded += (sender, args) =>
+            {
+                if (AddButton != null)
+                    AddButton.IsEnabled = allowAdd;
+            };
         }
 
-        private void LookupWindow_Loaded(object sender, RoutedEventArgs e)
+        private void LookupControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (LookupControl != null)
-            {
-                LookupControl.SetupControl();
-                LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
-                LookupControl.LookupData.LookupView += LookupData_LookupView;
-            }
-
-            if (AddButton != null)
-                AddButton.IsEnabled = _allowAdd;
-
-            LookupControl?.RefreshData(false, _initialSearchFor);
-            MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+            LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
+            LookupControl.LookupData.LookupView += LookupData_LookupView;
+            LookupControl.RefreshData(false, _initialSearchFor, null, true);
         }
 
         public override void OnApplyTemplate()

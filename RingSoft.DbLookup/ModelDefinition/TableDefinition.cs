@@ -66,13 +66,14 @@ namespace RingSoft.DbLookup.ModelDefinition
                 {
                     field = AddIntegerField(fieldName);
                 }
-                else if (propertyInfo.PropertyType == typeof(bool))
+                else if (propertyInfo.PropertyType == typeof(bool)
+                    || propertyInfo.PropertyType == typeof(bool?))
                 {
                     field = AddBoolField(fieldName);
                 }
                 else if (propertyInfo.PropertyType.IsValueType)
                 {
-                    throw new ArgumentException($"Property type {propertyInfo.PropertyType.Name} is not supported by this library.");
+                    throw new ArgumentException($"Table Definition: {this} - Property: {fieldName}.  Property type: {propertyInfo.PropertyType.Name} is not supported by this library.");
                 }
 
                 if (field != null)

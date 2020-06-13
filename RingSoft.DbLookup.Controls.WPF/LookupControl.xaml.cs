@@ -151,11 +151,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupColumns.CollectionChanged += (sender, args) => OnLookupColumnsChanged();
 
             Loaded += (sender, args) => OnLoad();
-            SearchForTextBox.GotFocus += (sender, args) =>
-            {
-                SearchForTextBox.SelectionStart = 0;
-                SearchForTextBox.SelectionLength = SearchForTextBox.Text.Length;
-            };
+            SearchForTextBox.GotFocus += (sender, args) => SearchForTextBox_GotFocus();
+        }
+
+        private void SearchForTextBox_GotFocus()
+        {
+            SearchForTextBox.SelectionStart = 0;
+            SearchForTextBox.SelectionLength = SearchForTextBox.Text.Length;
         }
 
         private void OnLoad()
@@ -176,7 +178,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        internal void SetupControl()
+        private void SetupControl()
         {
             if (LookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(
@@ -230,7 +232,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (_refreshPendingData != null)
             {
-                RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue);
+                RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue,
+                    true);
                 _refreshPendingData = null;
             }
 
@@ -763,11 +766,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Refreshes the data based on changes in the LookupDefinition.
         /// </summary>
-        /// <param name="resetSearchFor">If set to true then reset the Search For text box.</param>
+        /// <param name="resetSearchFor">If set to true then reset the Search For TextBox.</param>
         /// <param name="initialSearchFor">The new Search For value.</param>
         /// <param name="parentWindowPrimaryKeyValue">The parent window's PrimaryKeyValue.</param>
+        /// <param name="searchForSelectAll">Select all text in the Search For TextBox.</param>
         public void RefreshData(bool resetSearchFor, string initialSearchFor = "",
-            PrimaryKeyValue parentWindowPrimaryKeyValue = null)
+            PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false)
         {
             if (LookupData == null)
             {
@@ -788,6 +792,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 var forceRefresh = SearchForTextBox.Text == initialSearchFor;
                 SearchForTextBox.Text = initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+
+                if (searchForSelectAll)
+                    SearchForTextBox_GotFocus();
+
                 if (forceRefresh)
                     LookupData.OnSearchForChange(initialSearchFor);
             }

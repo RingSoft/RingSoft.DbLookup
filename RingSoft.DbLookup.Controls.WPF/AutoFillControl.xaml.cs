@@ -153,6 +153,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             set => AutoFillTextBox.SelectionLength = value;
         }
 
+        public event EventHandler ControlDirty;
+
         private AutoFillData _autoFillData;
         private bool _controlLoaded;
         private bool _onAutoFillDataChanged;
@@ -316,12 +318,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 case Key.Back:
                     _autoFillData.OnBackspaceKeyDown();
                     e.Handled = true;
-                    IsDirty = true;
+                    RaiseDirtyFlag();
                     break;
                 case Key.Delete:
                     _autoFillData.OnDeleteKeyDown();
                     e.Handled = true;
-                    IsDirty = true;
+                    RaiseDirtyFlag();
                     break;
                 case Key.Escape:
                     if (Popup.IsOpen)
@@ -358,7 +360,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (_autoFillData.OnKeyCharPressed(e.Text[0]))
                 e.Handled = true;
-            IsDirty = true;
+            RaiseDirtyFlag();
         }
 
         private void ShowLookupWindow()
@@ -376,12 +378,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             var text = e.LookupData.GetSelectedRow()
                 .GetRowValue(Setup.LookupDefinition.InitialSortColumnDefinition.SelectSqlAlias);
             SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
-            IsDirty = true;
+            RaiseDirtyFlag();
             if (TabOutAfterLookupSelect)
             {
                 Send(Key.Tab);
             }
         }
+
+        private void RaiseDirtyFlag()
+        {
+            IsDirty = true;
+            ControlDirty?.Invoke(this, EventArgs.Empty);
+        }
+
         public static void Send(Key key)
         {
             if (Keyboard.PrimaryDevice != null)

@@ -127,6 +127,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler<LookupAddViewArgs> LookupView;
 
         private bool _controlLoaded;
+        private bool _setupRan;
         private int _originalPageSize;
         private int _currentPageSize;
         private DataTable _dataSource = new DataTable("DataSourceTable");
@@ -195,7 +196,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupData.DataSourceChanged += LookupData_DataSourceChanged;
             LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
 
-            if (!_controlLoaded)
+            if (!_setupRan)
             {
                 SearchForTextBox.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
                 SearchForTextBox.TextChanged += (sender, args) =>
@@ -237,7 +238,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _refreshPendingData = null;
             }
 
-            _controlLoaded = true;
+            _setupRan = _controlLoaded = true;
         }
 
         private void MergeLookupDefinition()

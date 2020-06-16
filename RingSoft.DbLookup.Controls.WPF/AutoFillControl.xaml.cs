@@ -160,6 +160,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _onAutoFillDataChanged;
         private bool _onValuePropertySetting;
         private bool _pendingAutoFillValue;
+        private bool _setupRan;
 
         static AutoFillControl()
         {
@@ -178,8 +179,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Setup != null)
                 {
                     SetupControl();
-                    _controlLoaded = true;
                 }
+                _controlLoaded = true;
 
                 if (IsFocused)
                     AutoFillTextBox.Focus();
@@ -214,7 +215,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             _autoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 
-            if (!_controlLoaded)
+            if (!_setupRan)
             {
                 AutoFillTextBox.PreviewKeyDown += AutoFillTextBox_PreviewKeyDown;
 
@@ -233,9 +234,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _onValuePropertySetting = false;
                 _pendingAutoFillValue = false;
             }
+
+            _setupRan = true;
         }
-
-
+        
         private void AutoFillData_AutoFillDataChanged(object sender, AutoFillDataChangedArgs e)
         {
             //Unit Test

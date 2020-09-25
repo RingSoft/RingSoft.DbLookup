@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Input;
@@ -135,6 +136,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             set { SetValue(ContainsBoxMaxRowsProperty, value); }
         }
 
+        public static readonly DependencyProperty DesignTextProperty =
+            DependencyProperty.Register("DesignText", typeof(string), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(DesignTextChangedCallback));
+
+        public string DesignText
+        {
+            get { return (string)GetValue(DesignTextProperty); }
+            set { SetValue(DesignTextProperty, value); }
+        }
+
+        private static void DesignTextChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            autoFillControl.SetDesignText();
+        }
+
         public string EditText
         {
             get => AutoFillTextBox.Text;
@@ -252,6 +270,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             _setupRan = true;
+        }
+
+        private void SetDesignText()
+        {
+            if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty())
+                AutoFillTextBox.Text = DesignText;
         }
         
         private void AutoFillData_AutoFillDataChanged(object sender, AutoFillDataChangedArgs e)

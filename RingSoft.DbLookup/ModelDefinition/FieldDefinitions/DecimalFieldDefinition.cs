@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -41,9 +42,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public string NumberFormatString { get; internal set; }
 
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>
+        /// The culture.
+        /// </value>
+        public CultureInfo Culture { get; private set; }
+
         internal DecimalFieldDefinition()
         {
-            DecimalCount = 2;
+            DecimalCount = LookupDefaults.DefaultDecimalCount;
+            HasCultureId(LookupDefaults.DefaultNumberCultureId);
         }
 
         /// <summary>
@@ -92,6 +102,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
+        /// Sets the culture identifier.
+        /// </summary>
+        /// <param name="cultureId">The culture identifier.</param>
+        /// <returns></returns>
+        public DecimalFieldDefinition HasCultureId(string cultureId)
+        {
+            Culture = new CultureInfo(cultureId);
+            return this;
+        }
+
+        /// <summary>
         /// Formats the value to display.
         /// </summary>
         /// <param name="value">The value from the database.</param>
@@ -120,7 +141,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataType, value, formatString);
+            return GblMethods.FormatValue(FieldDataType, value, Culture, formatString);
         }
     }
 }

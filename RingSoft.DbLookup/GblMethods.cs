@@ -42,20 +42,10 @@ namespace RingSoft.DbLookup
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
         {
-            var decimalChar = "";
-            if (decimals > 0)
-                decimalChar = NumberFormatInfo.CurrentInfo.CurrencyDecimalSeparator;
-            string currencySymbol = "";
             if (isCurrency)
-                currencySymbol = NumberFormatInfo.CurrentInfo.CurrencySymbol;
+                return $"C{decimals}";
 
-            var thousands = NumberFormatInfo.CurrentInfo.CurrencyGroupSeparator;
-            var negativeChar = NumberFormatInfo.CurrentInfo.NegativeSign;
-            var decimalsString = StringDuplicate("0", decimals);
-            var format = currencySymbol + "#" + thousands + "##0" + decimalChar + decimalsString + ";";
-            format += negativeChar + currencySymbol + "#" + thousands + "##0" + decimalChar + decimalsString;
-
-            return format;
+            return $"N{decimals}";
         }
 
         /// <summary>
@@ -122,10 +112,11 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="value">The value to format.</param>
+        /// <param name="culture">The culture.</param>
         /// <param name="formatString">The format string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string FormatValue(FieldDataTypes dataType, string value, string formatString = "")
+        public static string FormatValue(FieldDataTypes dataType, string value, CultureInfo culture, string formatString = "")
         {
             switch (dataType)
             {
@@ -135,19 +126,19 @@ namespace RingSoft.DbLookup
                     if (value.IsNullOrEmpty())
                         value = "0";
                     if (Int32.TryParse(value, out var intValue))
-                        return intValue.ToString(formatString);
+                        return intValue.ToString(formatString, culture.NumberFormat);
                     break;
                 case FieldDataTypes.Decimal:
                     if (value.IsNullOrEmpty())
                         value = "0";
                     if (Decimal.TryParse(value, out var decimalValue))
-                        return decimalValue.ToString(formatString);
+                        return decimalValue.ToString(formatString, culture.NumberFormat);
                     break;
                 case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
                     if (DateTime.TryParse(value, out var dateValue))
-                        return dateValue.ToString(formatString);
+                        return dateValue.ToString(formatString, culture.DateTimeFormat);
                     break;
                 case FieldDataTypes.Bool:
                     break;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
@@ -19,9 +20,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public string NumberFormatString { get; private set; }
 
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>
+        /// The culture.
+        /// </value>
+        public CultureInfo Culture { get; private set; }
+
         internal IntegerFieldDefinition()
         {
             //var unused = HasNumberFormatString(GblMethods.GetNumFormat(0, false));
+            HasCultureId(LookupDefaults.DefaultNumberCultureId);
         }
 
         /// <summary>
@@ -48,6 +58,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         }
 
         /// <summary>
+        /// Sets the culture identifier.
+        /// </summary>
+        /// <param name="cultureId">The culture identifier.</param>
+        /// <returns></returns>
+        public IntegerFieldDefinition HasCultureId(string cultureId)
+        {
+            Culture = new CultureInfo(cultureId);
+            return this;
+        }
+
+        /// <summary>
         /// Formats the value to display.
         /// </summary>
         /// <param name="value">The value from the database.</param>
@@ -63,7 +84,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             if (formatString.IsNullOrEmpty())
                 formatString = GblMethods.GetNumFormat(0, false);
 
-            return GblMethods.FormatValue(FieldDataType, value, formatString);
+            return GblMethods.FormatValue(FieldDataType, value, Culture, formatString);
         }
 
         /// <summary>

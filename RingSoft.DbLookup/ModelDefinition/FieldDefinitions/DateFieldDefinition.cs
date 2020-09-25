@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
@@ -26,9 +27,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public string DateFormatString { get; private set; }
 
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>
+        /// The culture.
+        /// </value>
+        public CultureInfo Culture { get; private set; }
+
         internal DateFieldDefinition()
         {
             DateType = DbDateTypes.DateOnly;
+            HasCultureId(LookupDefaults.DefaultDateCultureId);
         }
 
         /// <summary>
@@ -61,6 +71,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 throw new ArgumentException("Invalid date format string.");
             }
             DateFormatString = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the culture identifier.
+        /// </summary>
+        /// <param name="cultureId">The culture identifier.</param>
+        /// <returns></returns>
+        public DateFieldDefinition HasCultureId(string cultureId)
+        {
+            Culture = new CultureInfo(cultureId);
             return this;
         }
 

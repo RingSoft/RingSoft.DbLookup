@@ -1,6 +1,6 @@
-﻿using System;
-using RingSoft.DbLookup.AutoFill;
+﻿using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
@@ -153,6 +153,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             set => AutoFillTextBox.SelectionLength = value;
         }
 
+        public bool ContainsBoxIsOpen
+        {
+            get
+            {
+                var result = false;
+                if (Popup != null)
+                    result = Popup.IsOpen;
+
+                return result;
+            }
+
+        }
+
         public event EventHandler ControlDirty;
 
         private AutoFillData _autoFillData;
@@ -187,7 +200,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
 
             SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
-            LostFocus += (sender, args) => { Popup.IsOpen = false; };
+            LostFocus += (sender, args) =>
+            {
+                Popup.IsOpen = false;
+            };
             GotFocus += (sender, args) =>
             {
                 AutoFillTextBox.Focus();

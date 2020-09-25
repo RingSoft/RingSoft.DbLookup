@@ -1,5 +1,6 @@
-﻿using System;
-using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DbLookup.QueryBuilder;
+using System;
+using System.Globalization;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -55,7 +56,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The date format string.
         /// </value>
-        public string DateFormatString { get; private set; } = "MM/dd/yyyy";
+        public string DateFormatString { get; private set; }
 
         /// <summary>
         /// Gets the formula.
@@ -64,6 +65,14 @@ namespace RingSoft.DbLookup.Lookup
         /// The formula.
         /// </value>
         public string Formula { get; internal set; }
+
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>
+        /// The culture.
+        /// </value>
+        public CultureInfo NumberCulture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
@@ -78,6 +87,9 @@ namespace RingSoft.DbLookup.Lookup
             Formula = formula;
             _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
             _dataType = dataType;
+
+            DateFormatString = LookupDefaults.DefaultDateCulture.DateTimeFormat.ShortDatePattern;
+
             SetupColumn();
         }
 
@@ -87,6 +99,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 NumberFormatString = formulaSource.NumberFormatString;
                 DateFormatString = formulaSource.DateFormatString;
+                NumberCulture = formulaSource.NumberCulture;
             }
             base.CopyFrom(source);
         }
@@ -137,6 +150,17 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
+        /// Sets the number culture identifier.
+        /// </summary>
+        /// <param name="cultureId">The culture identifier.</param>
+        /// <returns></returns>
+        public LookupFormulaColumnDefinition HasNumberCultureId(string cultureId)
+        {
+            NumberCulture = new CultureInfo(cultureId);
+            return this;
+        }
+
+        /// <summary>
         /// Formats the value to display in the lookup view.
         /// </summary>
         /// <param name="value">The value from the database.</param>
@@ -152,11 +176,11 @@ namespace RingSoft.DbLookup.Lookup
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    return GblMethods.FormatValue(DataType, value, NumberFormatString);
+                    return GblMethods.FormatValue(DataType, value, NumberFormatString, NumberCulture);
                 case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
-                    return GblMethods.FormatValue(DataType, value, DateFormatString);
+                    return GblMethods.FormatValue(DataType, value, DateFormatString, NumberCulture);
                 case FieldDataTypes.Bool:
                     break;
                 default:

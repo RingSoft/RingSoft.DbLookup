@@ -33,12 +33,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The culture.
         /// </value>
-        public CultureInfo Culture { get; private set; }
+        public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultDateCulture;
 
         internal DateFieldDefinition()
         {
             DateType = DbDateTypes.DateOnly;
-            HasCultureId(LookupDefaults.DefaultDateCultureId);
         }
 
         /// <summary>
@@ -101,17 +100,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 switch (DateType)
                 {
                     case DbDateTypes.DateOnly:
-                        formatString = "MM/dd/yyyy";
+                        formatString = Culture.DateTimeFormat.ShortDatePattern;
                         break;
                     case DbDateTypes.DateTime:
-                        formatString = "MM/dd/yyyy hh:mm:ss tt";
+                        formatString = Culture.DateTimeFormat.ShortDatePattern + ' ' + Culture.DateTimeFormat.LongTimePattern;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(value), value, null);
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataType, value, formatString);
+            return GblMethods.FormatValue(FieldDataType, value, formatString, Culture);
         }
     }
 }

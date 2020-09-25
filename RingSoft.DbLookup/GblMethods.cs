@@ -112,12 +112,13 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="value">The value to format.</param>
-        /// <param name="culture">The culture.</param>
         /// <param name="formatString">The format string.</param>
+        /// <param name="culture">The culture.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string FormatValue(FieldDataTypes dataType, string value, CultureInfo culture, string formatString = "")
+        public static string FormatValue(FieldDataTypes dataType, string value, string formatString = "", CultureInfo culture = null)
         {
+           
             switch (dataType)
             {
                 case FieldDataTypes.String:
@@ -125,10 +126,14 @@ namespace RingSoft.DbLookup
                 case FieldDataTypes.Integer:
                     if (value.IsNullOrEmpty())
                         value = "0";
+                    if (culture == null)
+                        culture = LookupDefaults.DefaultNumberCulture;
                     if (Int32.TryParse(value, out var intValue))
                         return intValue.ToString(formatString, culture.NumberFormat);
                     break;
                 case FieldDataTypes.Decimal:
+                    if (culture == null)
+                        culture = LookupDefaults.DefaultNumberCulture;
                     if (value.IsNullOrEmpty())
                         value = "0";
                     if (Decimal.TryParse(value, out var decimalValue))
@@ -137,6 +142,8 @@ namespace RingSoft.DbLookup
                 case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
+                    if (culture == null)
+                        culture = LookupDefaults.DefaultDateCulture;
                     if (DateTime.TryParse(value, out var dateValue))
                         return dateValue.ToString(formatString, culture.DateTimeFormat);
                     break;

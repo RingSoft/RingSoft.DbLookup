@@ -8,20 +8,14 @@ namespace RingSoft.DbLookup
     public static class LookupDefaults
     {
         /// <summary>
-        /// Gets the default number culture identifier.
+        /// Gets the default number culture.
         /// </summary>
         /// <value>
-        /// The default number culture identifier.
+        /// The default number culture.
         /// </value>
-        public static string DefaultNumberCultureId { get; private set; } = CultureInfo.CurrentCulture.Name;
+        public static CultureInfo DefaultNumberCulture { get; private set; }
 
-        /// <summary>
-        /// Gets the default date culture identifier.
-        /// </summary>
-        /// <value>
-        /// The default date culture identifier.
-        /// </value>
-        public static string DefaultDateCultureId { get; private set; } = CultureInfo.CurrentCulture.Name;
+        public static CultureInfo DefaultDateCulture { get; private set; }
 
         /// <summary>
         /// Gets the default decimal count.
@@ -31,14 +25,18 @@ namespace RingSoft.DbLookup
         /// </value>
         public static int DefaultDecimalCount { get; private set; } = 2;
 
+        static LookupDefaults()
+        {
+            DefaultNumberCulture = DefaultDateCulture = CultureInfo.CurrentCulture;
+        }
+
         /// <summary>
         /// Sets the default number culture identifier.
         /// </summary>
         /// <param name="cultureId">The culture identifier.</param>
         public static void SetDefaultNumberCultureId(string cultureId)
         {
-            var unused = new CultureInfo(cultureId);
-            DefaultNumberCultureId = cultureId;
+            DefaultNumberCulture = new CultureInfo(cultureId);
         }
 
         /// <summary>
@@ -47,8 +45,7 @@ namespace RingSoft.DbLookup
         /// <param name="cultureId">The culture identifier.</param>
         public static void SetDefaultDateFormatId(string cultureId)
         {
-            var unused = new CultureInfo(cultureId);
-            DefaultDateCultureId = cultureId;
+            DefaultDateCulture = new CultureInfo(cultureId);
         }
 
         /// <summary>

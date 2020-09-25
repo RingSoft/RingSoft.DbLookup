@@ -26,12 +26,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The culture.
         /// </value>
-        public CultureInfo Culture { get; private set; }
+        public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
         internal IntegerFieldDefinition()
         {
             //var unused = HasNumberFormatString(GblMethods.GetNumFormat(0, false));
-            HasCultureId(LookupDefaults.DefaultNumberCultureId);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             if (formatString.IsNullOrEmpty())
                 formatString = GblMethods.GetNumFormat(0, false);
 
-            return GblMethods.FormatValue(FieldDataType, value, Culture, formatString);
+            return GblMethods.FormatValue(FieldDataType, value, formatString, Culture);
         }
 
         /// <summary>

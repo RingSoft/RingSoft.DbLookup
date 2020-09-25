@@ -48,12 +48,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The culture.
         /// </value>
-        public CultureInfo Culture { get; private set; }
+        public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
         internal DecimalFieldDefinition()
         {
             DecimalCount = LookupDefaults.DefaultDecimalCount;
-            HasCultureId(LookupDefaults.DefaultNumberCultureId);
         }
 
         /// <summary>
@@ -141,7 +140,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataType, value, Culture, formatString);
+            return GblMethods.FormatValue(FieldDataType, value, formatString, Culture);
         }
     }
 }

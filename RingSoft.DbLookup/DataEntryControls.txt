@@ -1,0 +1,3 @@
+install-package RingSoft.DataEntryControls.WPF
+
+install-package RingSoft.DataEntryControls.Engine 00.50.00

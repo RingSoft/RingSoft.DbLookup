@@ -19,6 +19,18 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
             Initialize();
 
             RegisterFormKeyControl(NameControl);
+
+            LocationControl.PreviewLostKeyboardFocus += (sender, args) =>
+            {
+                if (!ItemsViewModel.LocationLostFocusValidation(this))
+                    args.Handled = true;
+            };
+
+            ManufacturerControl.PreviewLostKeyboardFocus += (sender, args) =>
+            {
+                if (!ItemsViewModel.ManufacturerLostFocusValidation())
+                    args.Handled = true;
+            };
         }
 
         public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)

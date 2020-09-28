@@ -370,5 +370,15 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
             return primaryKeyValue;
         }
+
+        public TEntity GetNewRecord(string keyText, object ownerWindow)
+        {
+            var addRecordProcessor = new AddNewRecordProcessor(this, keyText, ownerWindow);
+            var primaryKeyValue = addRecordProcessor.GetNewRecord();
+            if (primaryKeyValue == null)
+                primaryKeyValue = new PrimaryKeyValue(this);
+
+            return GetEntityFromPrimaryKeyValue(primaryKeyValue);
+        }
     }
 }

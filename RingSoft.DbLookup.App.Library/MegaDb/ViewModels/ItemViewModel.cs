@@ -168,5 +168,30 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DeleteItem(ItemId);
         }
+
+        public bool LocationLostFocusValidation(object ownerWindow)
+        {
+            if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            {
+                var message =
+                    $"'{LocationAutoFillValue.Text}' was not found in the database.  Would you like to add it?";
+                if (!View.ShowYesNoMessage(message, "Invalid Location"))
+                    return false;
+
+                var location = _lookupContext.Locations.GetNewRecord(LocationAutoFillValue.Text, ownerWindow);
+                if (location.Id == 0)
+                    return false;
+
+                location = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetLocation(location.Id);
+                LocationAutoFillValue =
+                    new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(location), location.Name);
+            }
+            return true;
+        }
+
+        public bool ManufacturerLostFocusValidation()
+        {
+            return true;
+        }
     }
 }

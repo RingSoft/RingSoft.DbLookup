@@ -254,5 +254,18 @@ namespace RingSoft.DbLookup.Lookup
             return expr.Body.Type;
         }
 
+        /// <summary>
+        /// Creates a new record for this lookup's table.  Calls LookupContext's ShowAddOnTheFly method to show the appropriate database maintenance window for this table.
+        /// </summary>
+        /// <param name="keyText">The key text.</param>
+        /// <param name="ownerWindow">The owner window.</param>
+        /// <param name="newRecordPrimaryKeyValue">The new record primary key value.</param>
+        /// <returns>The new Primary Key Value and new lookup entity.</returns>
+        public NewLookupRow<TLookupEntity> CreateNewRecord(string keyText, object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null)
+        {
+            var addNewRecordProcessor =
+                new AddNewRecordProcessor<TLookupEntity, TEntity>(this, keyText, ownerWindow, newRecordPrimaryKeyValue);
+            return addNewRecordProcessor.AddNewRow();
+        }
     }
 }

@@ -179,13 +179,14 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 if (!View.ShowYesNoMessage(message, "Invalid Location"))
                     return false;
 
-                var location = _lookupContext.Locations.CreateNewRecord(LocationAutoFillValue.Text, ownerWindow);
-                if (location.Id == 0)
+                var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.CreateNewRecord(
+                    LocationAutoFillValue.Text, ownerWindow);
+
+                if (!newRecord.NewPrimaryKeyValue.ContainsValidData())
                     return false;
 
-                location = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetLocation(location.Id);
                 LocationAutoFillValue =
-                    new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(location), location.Name);
+                    new AutoFillValue(newRecord.NewPrimaryKeyValue, newRecord.NewLookupEntity.Name);
             }
             return true;
         }
@@ -195,7 +196,20 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             if (ManufacturerAutoFillValue != null && !ManufacturerAutoFillValue.PrimaryKeyValue.ContainsValidData() &&
                 !ManufacturerAutoFillValue.Text.IsNullOrEmpty())
             {
+                var message =
+                    $"'{ManufacturerAutoFillValue.Text}' was not found in the database.  Would you like to add it?";
+                if (!View.ShowYesNoMessage(message, "Invalid Manufacturer"))
+                    return false;
 
+                var newRecord =
+                    _lookupContext.MegaDbContextConfiguration.ManufacturersLookup.CreateNewRecord(
+                        ManufacturerAutoFillValue.Text, ownerWindow);
+
+                if (!newRecord.NewPrimaryKeyValue.ContainsValidData())
+                    return false;
+
+                ManufacturerAutoFillValue =
+                    new AutoFillValue(newRecord.NewPrimaryKeyValue, newRecord.NewLookupEntity.Name);
             }
             return true;
         }

@@ -179,7 +179,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 if (!View.ShowYesNoMessage(message, "Invalid Location"))
                     return false;
 
-                var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.CreateNewRecord(
+                var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.ShowAddOnTheFlyWindow(
                     LocationAutoFillValue.Text, ownerWindow);
 
                 if (!newRecord.NewPrimaryKeyValue.ContainsValidData())
@@ -202,7 +202,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                     return false;
 
                 var newRecord =
-                    _lookupContext.MegaDbContextConfiguration.ManufacturersLookup.CreateNewRecord(
+                    _lookupContext.MegaDbContextConfiguration.ManufacturersLookup.ShowAddOnTheFlyWindow(
                         ManufacturerAutoFillValue.Text, ownerWindow);
 
                 if (!newRecord.NewPrimaryKeyValue.ContainsValidData())

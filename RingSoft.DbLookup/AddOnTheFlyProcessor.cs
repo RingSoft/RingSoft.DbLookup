@@ -1,23 +1,21 @@
-﻿using System;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
+﻿using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup
 {
-    public class NewLookupRow<TLookupEntity> where TLookupEntity : new()
+    public class NewAddOnTheFlyResult<TLookupEntity> where TLookupEntity : new()
     {
         public TLookupEntity NewLookupEntity { get; private set; }
 
         public PrimaryKeyValue NewPrimaryKeyValue { get; private set; }
 
-        internal NewLookupRow(TLookupEntity newLookupEntity, PrimaryKeyValue newPrimaryKeyValue)
+        internal NewAddOnTheFlyResult(TLookupEntity newLookupEntity, PrimaryKeyValue newPrimaryKeyValue)
         {
             NewLookupEntity = newLookupEntity;
             NewPrimaryKeyValue = newPrimaryKeyValue;
         }
     }
 
-    internal class AddNewRecordProcessor<TLookupEntity, TEntity> : ILookupControl
+    internal class AddOnTheFlyProcessor<TLookupEntity, TEntity> : ILookupControl
         where TLookupEntity : new() where TEntity : new()
     {
         public int PageSize => 1;
@@ -29,7 +27,7 @@ namespace RingSoft.DbLookup
         private object _ownerWindow;
         private PrimaryKeyValue _newPrimaryKeyValue;
 
-        public AddNewRecordProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,
+        public AddOnTheFlyProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,
             object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null)
         {
             _lookupDefinition = lookupDefinition;
@@ -38,7 +36,7 @@ namespace RingSoft.DbLookup
             _newPrimaryKeyValue = newRecordPrimaryKeyValue;
         }
 
-        public NewLookupRow<TLookupEntity> AddNewRow()
+        public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
         {
             var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
             lookupData.LookupView += (sender, viewArgs) =>
@@ -49,8 +47,8 @@ namespace RingSoft.DbLookup
                 _newText, _ownerWindow) { NewRecordPrimaryKeyValue = _newPrimaryKeyValue};
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 
-            var newRecord = new NewLookupRow<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);
-            return newRecord;
+            var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);
+            return result;
         }
     }
 }

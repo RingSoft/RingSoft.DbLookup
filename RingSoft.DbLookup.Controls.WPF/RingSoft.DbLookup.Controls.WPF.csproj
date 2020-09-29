@@ -4,14 +4,14 @@
     <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.11.02</Version>
+    <Version>1.11.03</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://www.ringsoft.site</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Database Paging, Entity Framework 6, Entity Framework Core, WPF</PackageTags>
-    <PackageReleaseNotes>Changed WPF Lookup Window to be based off of a Control Template so that developers can customize its appearance and layout.  Added ability to subclass LookupDefinition to be compatible with the new Lookup Window Control Template.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added ability to launch a database maintenance window in add-on-the-fly mode from outside a lookup window/control.</PackageReleaseNotes>
     <PackageIcon>magnify.png</PackageIcon>
   </PropertyGroup>
 

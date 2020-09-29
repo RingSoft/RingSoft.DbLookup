@@ -371,10 +371,17 @@ namespace RingSoft.DbLookup.ModelDefinition
             return primaryKeyValue;
         }
 
-        public TEntity GetNewRecord(string keyText, object ownerWindow)
+        /// <summary>
+        /// Creates a new record for the table.  Calls LookupContext's ShowAddOnTheFly method to show the appropriate database maintenance window for this table.
+        /// </summary>
+        /// <param name="keyText">The key text.</param>
+        /// <param name="ownerWindow">The owner window.</param>
+        /// <param name="newRecordPrimaryKeyValue">The new record primary key value.</param>
+        /// <returns></returns>
+        public TEntity CreateNewRecord(string keyText, object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null)
         {
             var addRecordProcessor = new AddNewRecordProcessor(this, keyText, ownerWindow);
-            var primaryKeyValue = addRecordProcessor.GetNewRecord();
+            var primaryKeyValue = addRecordProcessor.GetNewRecord(newRecordPrimaryKeyValue);
             if (primaryKeyValue == null)
                 primaryKeyValue = new PrimaryKeyValue(this);
 

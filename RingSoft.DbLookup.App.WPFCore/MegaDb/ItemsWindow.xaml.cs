@@ -28,7 +28,7 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 
             ManufacturerControl.PreviewLostKeyboardFocus += (sender, args) =>
             {
-                if (!ItemsViewModel.ManufacturerLostFocusValidation())
+                if (!ItemsViewModel.ManufacturerLostFocusValidation(this))
                     args.Handled = true;
             };
         }

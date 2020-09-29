@@ -76,6 +76,14 @@
         public object OwnerWindow { get; }
 
         /// <summary>
+        /// Gets the new record's primary key value object.  Used to add a new record in a Db maintenance window with multiple primary key fields.
+        /// </summary>
+        /// <value>
+        /// The new record primary key value.
+        /// </value>
+        public PrimaryKeyValue NewRecordPrimaryKeyValue { get; internal set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>

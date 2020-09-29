@@ -24,7 +24,7 @@ namespace RingSoft.DbLookup
             _ownerWindow = ownerWindow;
         }
 
-        public PrimaryKeyValue GetNewRecord()
+        public PrimaryKeyValue GetNewRecord(PrimaryKeyValue newRecordPrimaryKeyValue)
         {
             var lookupData = new LookupDataBase(_tableDefinition.LookupDefinition, this);
             lookupData.LookupView += (sender, viewArgs) =>
@@ -32,7 +32,7 @@ namespace RingSoft.DbLookup
                 viewArgs.Handled = true;
             };
             var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
-                _newText, _ownerWindow);
+                _newText, _ownerWindow) { NewRecordPrimaryKeyValue = newRecordPrimaryKeyValue};
             _tableDefinition.Context.OnAddViewLookup(args);
             return lookupData.SelectedPrimaryKeyValue;
         }

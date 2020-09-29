@@ -171,14 +171,15 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public bool LocationLostFocusValidation(object ownerWindow)
         {
-            if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.ContainsValidData() &&
+                !LocationAutoFillValue.Text.IsNullOrEmpty())
             {
                 var message =
                     $"'{LocationAutoFillValue.Text}' was not found in the database.  Would you like to add it?";
                 if (!View.ShowYesNoMessage(message, "Invalid Location"))
                     return false;
 
-                var location = _lookupContext.Locations.GetNewRecord(LocationAutoFillValue.Text, ownerWindow);
+                var location = _lookupContext.Locations.CreateNewRecord(LocationAutoFillValue.Text, ownerWindow);
                 if (location.Id == 0)
                     return false;
 
@@ -189,8 +190,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             return true;
         }
 
-        public bool ManufacturerLostFocusValidation()
+        public bool ManufacturerLostFocusValidation(object ownerWindow)
         {
+            if (ManufacturerAutoFillValue != null && !ManufacturerAutoFillValue.PrimaryKeyValue.ContainsValidData() &&
+                !ManufacturerAutoFillValue.Text.IsNullOrEmpty())
+            {
+
+            }
             return true;
         }
     }

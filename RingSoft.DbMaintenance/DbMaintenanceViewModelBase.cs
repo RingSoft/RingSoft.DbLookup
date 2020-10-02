@@ -186,7 +186,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         ///   <c>true</c> if there are unsaved changes in this record; otherwise, <c>false</c>.
         /// </value>
-        protected bool RecordDirty { get; set; }
+        public bool RecordDirty { get; set; }
 
 
         protected internal void Setup(LookupDefinitionBase lookupDefinition)

@@ -472,19 +472,24 @@ namespace RingSoft.DbMaintenance
                     return true;
 
                 var message = SaveChangesMessage;
-                switch (View.ShowYesNoCancelMessage(message, TableDefinition.ToString()))
+                var result = View.ShowYesNoCancelMessage(message, TableDefinition.ToString());
+                switch (result)
                 {
                     case MessageButtons.Yes:
                         if (OnSaveButton() != DbMaintenanceResults.Success)
+                        {
                             return false;
+                        }
                         break;
                     case MessageButtons.No:
                         break;
                     case MessageButtons.Cancel:
+                        OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
                         return false;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
             }
             return true;
         }

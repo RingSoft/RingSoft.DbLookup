@@ -473,6 +473,7 @@ namespace RingSoft.DbMaintenance
 
                 var message = SaveChangesMessage;
                 var result = View.ShowYesNoCancelMessage(message, TableDefinition.ToString());
+                OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
                 switch (result)
                 {
                     case MessageButtons.Yes:
@@ -484,12 +485,10 @@ namespace RingSoft.DbMaintenance
                     case MessageButtons.No:
                         break;
                     case MessageButtons.Cancel:
-                        OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
                         return false;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
             }
             return true;
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
@@ -369,6 +370,64 @@ namespace RingSoft.DbLookup.ModelDefinition
                     GblMethods.GetPropertyValue(entity, primaryKeyValueField.FieldDefinition.PropertyName);
             }
             return primaryKeyValue;
+        }
+
+        /// <summary>
+        /// Validates the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="validationSource">The validation source.</param>
+        /// <returns></returns>
+        public bool ValidateEntity(TEntity entity, IValidationSource validationSource)
+        {
+            var fieldsToValidate = FieldDefinitions.Where(p => p.AllowNulls == false);
+            foreach (var fieldDefinition in fieldsToValidate)
+            {
+                var valueToValidate = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
+                if (!ValidateEntityProperty(validationSource, fieldDefinition, valueToValidate))
+                    return false;
+            }
+
+            fieldsToValidate =
+                FieldDefinitions.Where(p => p.AllowNulls && p.ParentJoinForeignKeyDefinition != null);
+
+            foreach (var fieldDefinition in fieldsToValidate)
+            {
+                var autoFillValue = validationSource.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
+                if (autoFillValue != null && !autoFillValue.PrimaryKeyValue.ContainsValidData() &&
+                    !autoFillValue.Text.IsNullOrEmpty())
+                {
+                    var message = Context.ValidateFieldFailMessage(fieldDefinition);
+                    var title = Context.ValidateFieldFailCaption;
+                    validationSource.OnValidationFail(fieldDefinition, message, title);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Validates the entity property.
+        /// </summary>
+        /// <param name="validationSource">The validation source.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="valueToValidate">The value to validate.</param>
+        /// <returns></returns>
+        private bool ValidateEntityProperty(IValidationSource validationSource, FieldDefinition fieldDefinition,
+            string valueToValidate)
+        {
+            if (!validationSource.ValidateEntityProperty(fieldDefinition, valueToValidate))
+                return false;
+
+            if (!fieldDefinition.ValidateValueForSavingToDb(valueToValidate))
+            {
+                var message = Context.ValidateFieldFailMessage(fieldDefinition);
+                var title = Context.ValidateFieldFailCaption;
+                validationSource.OnValidationFail(fieldDefinition, message, title);
+                return false;
+            }
+
+            return true;
         }
     }
 }

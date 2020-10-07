@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup
 {
@@ -36,6 +37,14 @@ namespace RingSoft.DbLookup
         ///   <c>true</c> if initialized; otherwise, <c>false</c>.
         /// </value>
         public bool Initialized { get; private set; }
+
+        /// <summary>
+        /// Gets the validate field fail caption.  Override this for localization.
+        /// </summary>
+        /// <value>
+        /// The validate field fail caption.
+        /// </value>
+        public virtual string ValidateFieldFailCaption => "Validation Failure!";
 
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
@@ -106,6 +115,17 @@ namespace RingSoft.DbLookup
         public virtual void OnAddViewLookup(LookupAddViewArgs e)
         {
             LookupAddView?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Gets the validates the field fail message.  Override this for localization.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns></returns>
+        public virtual string ValidateFieldFailMessage(FieldDefinition fieldDefinition)
+        {
+            var message = $"{fieldDefinition} has an invalid value.  Please correct the value.";
+            return message;
         }
     }
 }

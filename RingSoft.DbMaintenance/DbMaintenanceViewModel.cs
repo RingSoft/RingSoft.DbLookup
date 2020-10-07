@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using RingSoft.DbLookup;
+﻿using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System;
+using System.ComponentModel;
 
 namespace RingSoft.DbMaintenance
 {
@@ -16,7 +15,7 @@ namespace RingSoft.DbMaintenance
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="DbMaintenanceViewModelBase" />
     /// <seealso cref="ILookupControl" />
-    public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl
+    public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
         where TEntity : new()
     {
         public int PageSize { get; } = 1;
@@ -89,14 +88,6 @@ namespace RingSoft.DbMaintenance
         /// The rename key auto fill value caption.  Override this for localization.
         /// </value>
         protected virtual string RenameKeyAutoFillValueCaption => "Change Unique Field Value";
-
-        /// <summary>
-        /// Gets the validate field fail caption.  Override this for localization.
-        /// </summary>
-        /// <value>
-        /// The validate field fail caption.
-        /// </value>
-        protected virtual string ValidateFieldFailCaption => "Validation Failure!";
 
         /// <summary>
         /// Gets the save changes message.  Override this for localization.
@@ -396,41 +387,12 @@ namespace RingSoft.DbMaintenance
         /// <returns></returns>
         protected virtual bool ValidateEntity(TEntity entity)
         {
-            var fieldsToValidate = TableDefinition.FieldDefinitions.Where(p => p.AllowNulls == false);
-            foreach (var fieldDefinition in fieldsToValidate)
-            {
-                var valueToValidate = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
-                if (!ValidateEntityProperty(entity, fieldDefinition, valueToValidate))
-                    return false;
-            }
-
-            fieldsToValidate =
-                TableDefinition.FieldDefinitions.Where(p => p.AllowNulls && p.ParentJoinForeignKeyDefinition != null);
-
-            foreach (var fieldDefinition in fieldsToValidate)
-            {
-                var autoFillValue = GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
-                if (autoFillValue != null && !autoFillValue.PrimaryKeyValue.ContainsValidData() &&
-                    !autoFillValue.Text.IsNullOrEmpty())
-                {
-                    var message = ValidateFieldFailMessage(fieldDefinition);
-                    var title = ValidateFieldFailCaption;
-                    View.OnValidationFail(fieldDefinition, message, title);
-                    return false;
-                }
-            }
-            return true;
+            return TableDefinition.ValidateEntity(entity, this);
         }
 
-        /// <summary>
-        /// Gets the validates the field fail message.  Override this for localization.
-        /// </summary>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
-        protected virtual string ValidateFieldFailMessage(FieldDefinition fieldDefinition)
+        AutoFillValue IValidationSource.GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
         {
-            var message = $"{fieldDefinition} has an invalid value.  Please correct the value.";
-            return message;
+            return GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
         }
 
         /// <summary>
@@ -443,23 +405,13 @@ namespace RingSoft.DbMaintenance
             return null;
         }
 
-        /// <summary>
-        /// Validates the entity property.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="fieldDefinition">The field definition.</param>
-        /// <param name="valueToValidate">The value to validate.</param>
-        /// <returns></returns>
-        protected virtual bool ValidateEntityProperty(TEntity entity, FieldDefinition fieldDefinition, string valueToValidate)
+        public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
-            if (!fieldDefinition.ValidateValueForSavingToDb(valueToValidate))
-            {
-                var message = ValidateFieldFailMessage(fieldDefinition);
-                var title = ValidateFieldFailCaption;
-                View.OnValidationFail(fieldDefinition, message, title);
-                return false;
-            }
+            View.OnValidationFail(fieldDefinition, text, caption);
+        }
 
+        public virtual bool ValidateEntityProperty(FieldDefinition fieldDefinition, string valueToValidate)
+        {
             return true;
         }
 

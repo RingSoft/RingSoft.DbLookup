@@ -68,7 +68,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public bool SaveOrder(Order order)
         {
             var context = new NorthwindDbContextEfCore();
-            return context.SaveEntity(context.Orders, order, "Saving Order");
+            var result = context.SaveEntity(context.Orders, order, "Saving Order");
+            return result;
         }
 
         public bool DeleteOrder(int orderId)

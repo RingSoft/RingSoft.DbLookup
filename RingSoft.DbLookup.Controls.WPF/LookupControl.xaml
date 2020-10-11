@@ -1,6 +1,5 @@
 ﻿<UserControl x:Class="RingSoft.DbLookup.Controls.WPF.LookupControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -46,7 +45,7 @@
         <Button x:Name="GetRecordCountButton" Grid.Row="2" Content="_Get Record Count" Width="100" HorizontalAlignment="Right" IsTabStop="False"/>
         <StackPanel x:Name="RecordCountStackPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Hidden" >
             <Label x:Name="RecordCountLabel" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="LightGray" Content="1,000,000 Records Found"/>
-            <fa:ImageAwesome x:Name="Spinner" Icon="Spinner"  Spin="True" Height="16" Width="16" Visibility="Collapsed" Margin="5,0,0,0" />
+            <dec:WaitSpinner x:Name="Spinner" Height="16" Width="16" Visibility="Collapsed" Margin="5" EllipseSize="4" />
         </StackPanel>
     </Grid>
 </UserControl>

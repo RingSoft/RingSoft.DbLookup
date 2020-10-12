@@ -163,24 +163,29 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        protected override void LoadFromEntity(StockMaster newEntity)
+        protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var primaryKey = _lookupContext.Stocks.GetPrimaryKeyValueFromEntity(newEntity);
-            StockNumberAutoFillValue = new AutoFillValue(primaryKey, newEntity.StockNumber);
-            LocationAutoFillValue = new AutoFillValue(primaryKey, newEntity.Location);
+            StockNumberAutoFillValue = new AutoFillValue(primaryKeyValue, newEntity.StockNumber);
+            LocationAutoFillValue = new AutoFillValue(primaryKeyValue, newEntity.Location);
 
             var stockItem =
                 RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetStockItem(newEntity.StockNumber,
                     newEntity.Location);
-            Price = stockItem.Price;
+
+            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+
+            return stockItem;
+        }
+
+        protected override void LoadFromEntity(StockMaster entity)
+        {
+            Price = entity.Price;
 
             _stockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
             _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.StockNumber, Conditions.Equals,
                 StockNumberAutoFillValue.Text);
             _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.Location, Conditions.Equals,
                 LocationAutoFillValue.Text);
-
-            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKey);
         }
 
         protected override StockMaster GetEntityData()

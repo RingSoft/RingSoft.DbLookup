@@ -225,7 +225,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 _productDirty = false;
             }
         }
-        protected override void LoadFromEntity(Order_Detail newEntity)
+
+        protected override Order_Detail PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var orderDetail =
                 RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetail(newEntity.OrderID,
@@ -234,9 +235,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ProductAutoFillValue =
                 new AutoFillValue(_lookupContext.Products.GetPrimaryKeyValueFromEntity(orderDetail.Product),
                     orderDetail.Product.ProductName);
-            Quantity = orderDetail.Quantity;
-            Price = orderDetail.UnitPrice;
-            Discount = (decimal) orderDetail.Discount;
+
+            return orderDetail;
+        }
+
+        protected override void LoadFromEntity(Order_Detail entity)
+        {
+            Quantity = entity.Quantity;
+            Price = entity.UnitPrice;
+            Discount = (decimal)entity.Discount;
             _productDirty = false;
         }
 

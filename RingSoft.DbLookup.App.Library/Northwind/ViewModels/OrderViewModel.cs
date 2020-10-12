@@ -407,67 +407,73 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Order newEntity)
+        protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID);
             OrderId = order.OrderID;
-            Customer = new AutoFillValue(_lookupContext.Customers.GetPrimaryKeyValueFromEntity(order.Customer),
-                order.CustomerID);
 
-            if (order.Customer != null)
-                CompanyName = order.Customer.CompanyName;
+            return order;
+        }
+
+        protected override void LoadFromEntity(Order entity)
+        {
+            Customer = new AutoFillValue(_lookupContext.Customers.GetPrimaryKeyValueFromEntity(entity.Customer),
+                entity.CustomerID);
+
+            if (entity.Customer != null)
+                CompanyName = entity.Customer.CompanyName;
 
             var employeeName = string.Empty;
-            if (order.Employee != null)
-                employeeName = GetEmployeeAutoFillValueText(order.Employee);
+            if (entity.Employee != null)
+                employeeName = GetEmployeeAutoFillValueText(entity.Employee);
 
-            Employee = new AutoFillValue(_lookupContext.Employees.GetPrimaryKeyValueFromEntity(order.Employee),
+            Employee = new AutoFillValue(_lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity.Employee),
                 employeeName);
 
-            if (order.RequiredDate == null)
+            if (entity.RequiredDate == null)
                 RequiredDate = _newDateTime;
             else
             {
-                RequiredDate = (DateTime)order.RequiredDate;
+                RequiredDate = (DateTime)entity.RequiredDate;
             }
 
-            if (order.OrderDate == null)
+            if (entity.OrderDate == null)
                 OrderDate = _newDateTime;
             else
             {
-                OrderDate = (DateTime)order.OrderDate;
+                OrderDate = (DateTime)entity.OrderDate;
             }
 
-            if (order.ShippedDate == null)
+            if (entity.ShippedDate == null)
                 ShippedDate = _newDateTime;
             else
             {
-                ShippedDate = (DateTime)order.ShippedDate;
+                ShippedDate = (DateTime)entity.ShippedDate;
             }
 
             var shipCompanyName = string.Empty;
-            if (order.Shipper != null)
-                shipCompanyName = order.Shipper.CompanyName;
+            if (entity.Shipper != null)
+                shipCompanyName = entity.Shipper.CompanyName;
 
-            ShipVia = new AutoFillValue(_lookupContext.Shippers.GetPrimaryKeyValueFromEntity(order.Shipper),
+            ShipVia = new AutoFillValue(_lookupContext.Shippers.GetPrimaryKeyValueFromEntity(entity.Shipper),
                 shipCompanyName);
 
-            Freight = order.Freight;
-            ShipName = order.ShipName;
-            Address = order.ShipAddress;
-            City = order.ShipCity;
-            Region = order.ShipRegion;
-            PostalCode = order.ShipPostalCode;
-            Country = order.ShipCountry;
+            Freight = entity.Freight;
+            ShipName = entity.ShipName;
+            Address = entity.ShipAddress;
+            City = entity.ShipCity;
+            Region = entity.ShipRegion;
+            PostalCode = entity.ShipPostalCode;
+            Country = entity.ShipCountry;
 
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, order.OrderID);
+            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, entity.OrderID);
 
             //_orderDetailsLookup.TableFilterDefinition.Include(p => p.Product)
             //    .Include(p => p.Category)
             //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh,
-                _lookupContext.Orders.GetPrimaryKeyValueFromEntity(order));
+                _lookupContext.Orders.GetPrimaryKeyValueFromEntity(entity));
 
             RefreshTotalControls();
             _customerDirty = false;

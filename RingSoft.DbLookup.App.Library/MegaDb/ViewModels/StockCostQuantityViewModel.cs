@@ -117,7 +117,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
 
-        protected override void LoadFromEntity(StockCostQuantity newEntity)
+        protected override StockCostQuantity PopulatePrimaryKeyControls(StockCostQuantity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             StockNumber = newEntity.StockNumber;
             Location = newEntity.Location;
@@ -126,8 +126,14 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             var stockCostQuantity =
                 RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetStockCostQuantity(newEntity.StockNumber,
                     newEntity.Location, newEntity.PurchasedDateTime);
-            Quantity = stockCostQuantity.Quantity;
-            Cost = stockCostQuantity.Cost;
+
+            return stockCostQuantity;
+        }
+
+        protected override void LoadFromEntity(StockCostQuantity entity)
+        {
+            Quantity = entity.Quantity;
+            Cost = entity.Cost;
         }
 
         protected override StockCostQuantity GetEntityData()

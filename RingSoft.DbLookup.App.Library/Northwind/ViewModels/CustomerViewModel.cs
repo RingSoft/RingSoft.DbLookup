@@ -208,27 +208,31 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Customer newEntity)
+        protected override Customer PopulatePrimaryKeyControls(Customer newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(newEntity.CustomerID);
-            KeyAutoFillValue = new AutoFillValue(_lookupContext.Customers.GetPrimaryKeyValueFromEntity(customer),
-                customer.CustomerID);
+            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, customer.CustomerID);
 
-            CompanyName = customer.CompanyName;
-            ContactName = customer.ContactName;
-            ContactTitle = customer.ContactTitle;
-            Address = customer.Address;
-            City = customer.City;
-            Region = customer.Region;
-            PostalCode = customer.PostalCode;
-            Country = customer.Country;
-            Phone = customer.Phone;
-            Fax = customer.Fax;
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+            return customer;
+        }
+
+        protected override void LoadFromEntity(Customer entity)
+        {
+            CompanyName = entity.CompanyName;
+            ContactName = entity.ContactName;
+            ContactTitle = entity.ContactTitle;
+            Address = entity.Address;
+            City = entity.City;
+            Region = entity.Region;
+            PostalCode = entity.PostalCode;
+            Country = entity.Country;
+            Phone = entity.Phone;
+            Fax = entity.Fax;
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
-                customer.CustomerID);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                entity.CustomerID);
         }
 
         protected override Customer GetEntityData()

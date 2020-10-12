@@ -91,18 +91,22 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Item newEntity)
+        protected override Item PopulatePrimaryKeyControls(Item newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var item = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(newEntity.Id);
             ItemId = item.Id;
-            KeyAutoFillValue = new AutoFillValue(_lookupContext.Items.GetPrimaryKeyValueFromEntity(item),
-                item.Name);
+            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, item.Name);
+            return item;
+        }
+
+        protected override void LoadFromEntity(Item entity)
+        {
             LocationAutoFillValue =
-                new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(item.Location),
-                    item.Location.Name);
+                new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(entity.Location),
+                    entity.Location.Name);
             ManufacturerAutoFillValue =
-                new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(item.Manufacturer),
-                    item.Manufacturer.Name);
+                new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(entity.Manufacturer),
+                    entity.Manufacturer.Name);
         }
 
         protected override Item GetEntityData()

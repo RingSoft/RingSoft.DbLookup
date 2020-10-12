@@ -55,12 +55,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private IMegaDbLookupContext _lookupContext;
-
         protected override void Initialize()
         {
-            _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
-
             var itemsLookup =
                 new LookupDefinition<ItemLookup, Item>(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
 
@@ -73,16 +69,21 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Location newEntity)
+        protected override Location PopulatePrimaryKeyControls(Location newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var location = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetLocation(newEntity.Id);
             LocationId = location.Id;
-            KeyAutoFillValue = new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(location),
-                location.Name);
+            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, location.Name);
 
-            _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, location.Id);
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+
+            return location;
+        }
+
+        protected override void LoadFromEntity(Location entity)
+        {
+            _itemsLookup.FilterDefinition.ClearFixedFilters();
+            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, entity.Id);
         }
 
         protected override Location GetEntityData()

@@ -109,6 +109,7 @@ namespace RingSoft.DbMaintenance
         private bool _fromLookupFormAddView;
         private AutoFillValue _savedKeyAutoFillValue;
         private bool _selectingRecord;
+        private bool _savingRecord;
 
         protected internal override void InternalInitialize()
         {
@@ -197,7 +198,12 @@ namespace RingSoft.DbMaintenance
 
                 ChangingEntity = true;
                 DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
-                LoadFromEntity(newEntity);
+                var entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+
+                if (!_savingRecord)
+                {
+                    LoadFromEntity(entity);
+                }
                 DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
@@ -333,7 +339,10 @@ namespace RingSoft.DbMaintenance
 
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
+            _savingRecord = true;
             _lookupData.SelectPrimaryKey(primaryKey);
+            _savingRecord = false;
+
             View.ShowRecordSavedMessage();
             RecordsChanged = true;
 
@@ -499,10 +508,18 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Loads this view model from the entity generated from TableDefinition's GetEntityFromPrimaryKeyValue method.
+        /// Populates the primary key controls.
         /// </summary>
-        /// <param name="newEntity">The new entity.</param>
-        protected abstract void LoadFromEntity(TEntity newEntity);
+        /// <param name="newEntity">The entity containing just the primary key values.</param>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>An entity populated from the database.</returns>
+        protected abstract TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
+
+        /// <summary>
+        /// Loads this view model from the entity generated from PopulatePrimaryKeyControls.
+        /// </summary>
+        /// <param name="entity">The entity that was loaded from the database by PopulatePrimaryKeyControls.</param>
+        protected abstract void LoadFromEntity(TEntity entity);
 
         /// <summary>
         /// Creates and returns a LookupCommand. The primaryKeyValue argument must be passed in if this view model does not set the KeyAutoFillValue property.

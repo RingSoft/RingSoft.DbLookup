@@ -24,21 +24,14 @@ namespace RingSoft.DbLookup.Ef6
             try
             {
                 dbSet.AddOrUpdate(entity);
-                dbContext.SaveChanges();
             }
             catch (Exception e)
             {
-                var exception = e;
-                if (exception.InnerException != null)
-                    exception = exception.InnerException;
-                if (exception.InnerException != null)
-                    exception = exception.InnerException;
-
-                DbDataProcessor.DisplayDataException(exception, debugMessage);
+                ProcessException(e, debugMessage);
                 return false;
             }
 
-            return true;
+            return dbContext.SaveEfChanges(debugMessage);
         }
 
         /// <summary>
@@ -56,21 +49,46 @@ namespace RingSoft.DbLookup.Ef6
             try
             {
                 dbSet.Remove(entity);
+            }
+            catch (Exception e)
+            { 
+                ProcessException(e, debugMessage);
+                return false;
+            }
+
+            return dbContext.SaveEfChanges(debugMessage);
+        }
+
+        /// <summary>
+        /// A wrapper around DbContext SaveChanges.  Saves the context changes and displays the exception to the user.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="debugMessage">The debug message.</param>
+        /// <returns>True, if data was saved without exceptions.</returns>
+        public static bool SaveEfChanges(this DbContext dbContext, string debugMessage)
+        {
+            try
+            {
                 dbContext.SaveChanges();
             }
             catch (Exception e)
             {
-                var exception = e;
-                if (exception.InnerException != null)
-                    exception = exception.InnerException;
-                if (exception.InnerException != null)
-                    exception = exception.InnerException;
-
-                DbDataProcessor.DisplayDataException(exception, debugMessage);
+                ProcessException(e, debugMessage);
                 return false;
             }
 
             return true;
+        }
+
+        private static void ProcessException(Exception e, string debugMessage)
+        {
+            var exception = e;
+            if (exception.InnerException != null)
+                exception = exception.InnerException;
+            if (exception.InnerException != null)
+                exception = exception.InnerException;
+
+            DbDataProcessor.DisplayDataException(exception, debugMessage);
         }
     }
 }

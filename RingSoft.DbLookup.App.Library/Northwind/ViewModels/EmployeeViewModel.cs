@@ -331,41 +331,46 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Employee newEntity)
+        protected override Employee PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(newEntity.EmployeeID);
 
             EmployeeId = employee.EmployeeID;
-            FirstName = employee.FirstName;
-            LastName = employee.LastName;
-            Title = employee.Title;
-            TitleOfCourtesy = employee.TitleOfCourtesy;
+            return employee;
+        }
 
-            if (employee.BirthDate != null)
-                BirthDate = employee.BirthDate;
+        protected override void LoadFromEntity(Employee entity)
+        {
+            FirstName = entity.FirstName;
+            LastName = entity.LastName;
+            Title = entity.Title;
+            TitleOfCourtesy = entity.TitleOfCourtesy;
+
+            if (entity.BirthDate != null)
+                BirthDate = entity.BirthDate;
             else
                 BirthDate = _newDateTime;
 
-            if (employee.HireDate != null)
-                HireDate = employee.HireDate;
+            if (entity.HireDate != null)
+                HireDate = entity.HireDate;
             else
                 HireDate = _newDateTime;
 
-            Address = employee.Address;
-            City = employee.City;
-            Region = employee.Region;
-            PostalCode = employee.PostalCode;
-            Country = employee.Country;
-            HomePhone = employee.HomePhone;
-            Extension = employee.Extension;
-            Notes = employee.Notes;
-            PhotoPath = employee.PhotoPath;
+            Address = entity.Address;
+            City = entity.City;
+            Region = entity.Region;
+            PostalCode = entity.PostalCode;
+            Country = entity.Country;
+            HomePhone = entity.HomePhone;
+            Extension = entity.Extension;
+            Notes = entity.Notes;
+            PhotoPath = entity.PhotoPath;
 
-            var supervisorPrimaryKey = _lookupContext.Employees.GetPrimaryKeyValueFromEntity(employee.Employee1);
-            if (employee.Employee1 != null)
+            var supervisorPrimaryKey = _lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity.Employee1);
+            if (entity.Employee1 != null)
             {
                 ReportsTo = new AutoFillValue(supervisorPrimaryKey,
-                    $"{employee.Employee1.FirstName} {employee.Employee1.LastName}");
+                    $"{entity.Employee1.FirstName} {entity.Employee1.LastName}");
             }
             else
             {
@@ -374,9 +379,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
-                employee.EmployeeID);
+                entity.EmployeeID);
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh,
-                _lookupContext.Employees.GetPrimaryKeyValueFromEntity(employee));
+                _lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity));
         }
 
         protected override Employee GetEntityData()

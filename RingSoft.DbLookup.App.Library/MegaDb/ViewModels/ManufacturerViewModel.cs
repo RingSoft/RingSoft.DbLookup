@@ -73,16 +73,23 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override void LoadFromEntity(Manufacturer newEntity)
+        protected override Manufacturer PopulatePrimaryKeyControls(Manufacturer newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var manufacturer = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetManufacturer(newEntity.Id);
             ManufacturerId = manufacturer.Id;
             KeyAutoFillValue = new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(manufacturer),
                 manufacturer.Name);
 
-            _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, manufacturer.Id);
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+
+            return manufacturer;
+        }
+
+        protected override void LoadFromEntity(Manufacturer entity)
+        {
+
+            _itemsLookup.FilterDefinition.ClearFixedFilters();
+            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, entity.Id);
         }
 
         protected override Manufacturer GetEntityData()

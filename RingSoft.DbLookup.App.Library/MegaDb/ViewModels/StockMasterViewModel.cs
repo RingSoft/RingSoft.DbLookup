@@ -172,6 +172,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetStockItem(newEntity.StockNumber,
                     newEntity.Location);
 
+            _stockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
+            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.StockNumber, Conditions.Equals,
+                StockNumberAutoFillValue.Text);
+            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.Location, Conditions.Equals,
+                LocationAutoFillValue.Text);
+
             StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
 
             return stockItem;
@@ -180,12 +186,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void LoadFromEntity(StockMaster entity)
         {
             Price = entity.Price;
-
-            _stockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
-            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.StockNumber, Conditions.Equals,
-                StockNumberAutoFillValue.Text);
-            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.Location, Conditions.Equals,
-                LocationAutoFillValue.Text);
         }
 
         protected override StockMaster GetEntityData()

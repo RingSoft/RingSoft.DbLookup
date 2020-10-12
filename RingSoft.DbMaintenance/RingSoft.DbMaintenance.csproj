@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
-    <Version>1.12.01</Version>
+    <Version>1.13.00</Version>
     <Authors>Peter Ringering</Authors>
     <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -10,7 +10,7 @@
     <PackageProjectUrl>https://www.ringsoft.site</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Entity Framework, Database Table Maintenance</PackageTags>
-    <PackageReleaseNotes>Moved entity validation code from DbMaintenanceViewModel to TableDefinition.</PackageReleaseNotes>
+    <PackageReleaseNotes>Split DbMaintenance.LoadFromEntity.  Added PopulatePrimaryKeyControls which runs in Save and Load operations.  LoadFromEntity only runs during Load operations.</PackageReleaseNotes>
     <PackageIcon></PackageIcon>
   </PropertyGroup>
 

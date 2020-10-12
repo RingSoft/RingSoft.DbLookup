@@ -412,6 +412,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID);
             OrderId = order.OrderID;
 
+            _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
+            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, order.OrderID);
+
+            //_orderDetailsLookup.TableFilterDefinition.Include(p => p.Product)
+            //    .Include(p => p.Category)
+            //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
+            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+
             return order;
         }
 
@@ -465,15 +473,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Region = entity.ShipRegion;
             PostalCode = entity.ShipPostalCode;
             Country = entity.ShipCountry;
-
-            _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, entity.OrderID);
-
-            //_orderDetailsLookup.TableFilterDefinition.Include(p => p.Product)
-            //    .Include(p => p.Category)
-            //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh,
-                _lookupContext.Orders.GetPrimaryKeyValueFromEntity(entity));
 
             RefreshTotalControls();
             _customerDirty = false;

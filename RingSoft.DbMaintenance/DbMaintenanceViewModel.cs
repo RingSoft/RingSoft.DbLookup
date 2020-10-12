@@ -508,7 +508,7 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Populates the primary key controls.
+        /// Populates the primary key controls.  This is executed during record save and retrieval operations.
         /// </summary>
         /// <param name="newEntity">The entity containing just the primary key values.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
@@ -516,7 +516,7 @@ namespace RingSoft.DbMaintenance
         protected abstract TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
 
         /// <summary>
-        /// Loads this view model from the entity generated from PopulatePrimaryKeyControls.
+        /// Loads this view model from the entity generated from PopulatePrimaryKeyControls.  This is executed only during record retrieval operations.
         /// </summary>
         /// <param name="entity">The entity that was loaded from the database by PopulatePrimaryKeyControls.</param>
         protected abstract void LoadFromEntity(TEntity entity);

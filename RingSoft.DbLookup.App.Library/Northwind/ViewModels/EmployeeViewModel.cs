@@ -336,6 +336,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(newEntity.EmployeeID);
 
             EmployeeId = employee.EmployeeID;
+
+            _ordersLookup.FilterDefinition.ClearFixedFilters();
+            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
+                EmployeeId);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+
             return employee;
         }
 
@@ -376,12 +382,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 ReportsTo = new AutoFillValue(supervisorPrimaryKey, string.Empty);
             }
-
-            _ordersLookup.FilterDefinition.ClearFixedFilters();
-            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
-                entity.EmployeeID);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh,
-                _lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity));
         }
 
         protected override Employee GetEntityData()

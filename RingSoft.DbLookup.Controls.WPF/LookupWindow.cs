@@ -154,6 +154,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         static LookupWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(typeof(LookupWindow)));
+            ShowInTaskbarProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(false));
         }
 
         public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)

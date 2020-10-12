@@ -213,6 +213,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(newEntity.CustomerID);
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, customer.CustomerID);
 
+            _ordersLookup.FilterDefinition.ClearFixedFilters();
+            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
+                customer.CustomerID);
+
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh);
             return customer;
         }
@@ -229,10 +233,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Country = entity.Country;
             Phone = entity.Phone;
             Fax = entity.Fax;
-
-            _ordersLookup.FilterDefinition.ClearFixedFilters();
-            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
-                entity.CustomerID);
         }
 
         protected override Customer GetEntityData()

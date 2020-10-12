@@ -75,6 +75,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             LocationId = location.Id;
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, location.Name);
 
+            _itemsLookup.FilterDefinition.ClearFixedFilters();
+            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, location.Id);
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh);
 
             return location;
@@ -82,8 +84,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override void LoadFromEntity(Location entity)
         {
-            _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, entity.Id);
         }
 
         protected override Location GetEntityData()

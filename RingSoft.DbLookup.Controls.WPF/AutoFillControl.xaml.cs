@@ -207,7 +207,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             Loaded += (sender, args) =>
             {
-                if (Setup != null)
+                if (Setup != null && !_controlLoaded)
                 {
                     SetupControl();
                 }

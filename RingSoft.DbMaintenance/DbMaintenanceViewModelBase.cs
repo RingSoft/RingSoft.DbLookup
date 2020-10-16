@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.AutoFill;
+﻿using System;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -16,6 +17,16 @@ namespace RingSoft.DbMaintenance
     {
         AddMode = 0,
         EditMode = 1
+    }
+
+    public class CheckDirtyResultArgs
+    {
+        public MessageButtons Result { get; private set; }
+
+        internal CheckDirtyResultArgs(MessageButtons result)
+        {
+            Result = result;
+        }
     }
 
     /// <summary>
@@ -201,6 +212,8 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
+
         protected internal void Setup(LookupDefinitionBase lookupDefinition)
         {
             ViewLookupDefinition = lookupDefinition;
@@ -287,6 +300,11 @@ namespace RingSoft.DbMaintenance
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnCheckDirtyFlagMessageShown(CheckDirtyResultArgs e)
+        {
+            CheckDirtyMessageShown?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Executed when a property value has changed.

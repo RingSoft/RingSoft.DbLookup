@@ -1,6 +1,5 @@
 ﻿using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -17,16 +16,6 @@ namespace RingSoft.DbMaintenance
     {
         AddMode = 0,
         EditMode = 1
-    }
-
-    public class CheckDirtyResultArgs
-    {
-        public MessageButtons Result { get; private set; }
-
-        internal CheckDirtyResultArgs(MessageButtons result)
-        {
-            Result = result;
-        }
     }
 
     /// <summary>
@@ -191,16 +180,26 @@ namespace RingSoft.DbMaintenance
         /// </value>
         protected DbMaintenanceModes MaintenanceMode { get; set; }
 
+        private bool _recordDirty;
+
         /// <summary>
         /// Gets or sets a value indicating whether the user has changed the data on this record and has yet to save.
         /// </summary>
         /// <value>
         ///   <c>true</c> if there are unsaved changes in this record; otherwise, <c>false</c>.
         /// </value>
-        public bool RecordDirty { get; set; }
+        public bool RecordDirty
+        {
+            get => _recordDirty;
+            set
+            {
+                if (_recordDirty == value)
+                    return;
 
-        public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
-
+                _recordDirty = value;
+                OnRecordDirtyChanged(_recordDirty);
+            }
+        }
 
         protected internal void Setup(LookupDefinitionBase lookupDefinition)
         {
@@ -280,9 +279,8 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The e.</param>
         public abstract void InitializeFromLookupData(LookupAddViewArgs e);
 
-        protected virtual void OnCheckDirtyFlagMessageShown(CheckDirtyResultArgs e)
+        protected virtual void OnRecordDirtyChanged(bool newValue)
         {
-            CheckDirtyMessageShown?.Invoke(this, e);
         }
 
         /// <summary>

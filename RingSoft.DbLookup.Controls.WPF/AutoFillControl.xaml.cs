@@ -218,9 +218,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Setup != null && !_controlLoaded)
                 {
                     SetupControl();
-                    ContextMenu = new ContextMenu();
-                    ContextMenu.AddTextBoxContextMenuItems();
-                    AutoFillTextBox.ContextMenu = ContextMenu;
                 }
                 _controlLoaded = true;
 
@@ -239,6 +236,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 AutoFillTextBox.SelectionStart = 0;
                 AutoFillTextBox.SelectionLength = AutoFillTextBox.Text.Length;
             };
+            ContextMenu = new ContextMenu();
+            ContextMenu.AddTextBoxContextMenuItems();
+            AutoFillTextBox.ContextMenu = ContextMenu;
         }
 
         private void SetupControl()

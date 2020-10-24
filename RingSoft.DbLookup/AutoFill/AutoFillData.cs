@@ -154,10 +154,6 @@ namespace RingSoft.DbLookup.AutoFill
         /// <returns>True if the character was processed</returns>
         public bool OnKeyCharPressed(char keyChar)
         {
-            var text = AutoFillControl.EditText;
-            var selectionStart = AutoFillControl.SelectionStart;
-            var selectionLength = AutoFillControl.SelectionLength;
-
             switch (keyChar)
             {
                 case '\b':
@@ -169,6 +165,11 @@ namespace RingSoft.DbLookup.AutoFill
                 case '\n':
                     return false;
             }
+
+            var text = AutoFillControl.EditText;
+            var selectionStart = AutoFillControl.SelectionStart;
+            var selectionLength = AutoFillControl.SelectionLength;
+
             var rightText = GetRightText(text, selectionStart, selectionLength);
             var beginText = text.LeftStr(selectionStart) + keyChar + rightText;
             var newText = GetNewText(beginText);
@@ -189,6 +190,12 @@ namespace RingSoft.DbLookup.AutoFill
 
             OnOutput();
             return true;
+        }
+
+        public void OnTextChanged()
+        {
+            GetContainsBoxDataTable(AutoFillControl.EditText);
+            OnOutput();
         }
 
         /// <summary>

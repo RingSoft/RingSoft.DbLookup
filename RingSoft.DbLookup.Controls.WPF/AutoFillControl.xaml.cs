@@ -1,10 +1,12 @@
-﻿using RingSoft.DbLookup.AutoFill;
+﻿using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -156,7 +158,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         public string EditText
         {
             get => AutoFillTextBox.Text;
-            set => AutoFillTextBox.Text = value;
+            set
+            {
+                _settingText = true;
+                AutoFillTextBox.Text = value;
+                _settingText = false;
+            } 
         }
 
         public int SelectionStart
@@ -192,6 +199,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _onValuePropertySetting;
         private bool _pendingAutoFillValue;
         private bool _setupRan;
+        private bool _settingText;
 
         static AutoFillControl()
         {
@@ -210,6 +218,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Setup != null && !_controlLoaded)
                 {
                     SetupControl();
+                    ContextMenu = new ContextMenu();
+                    ContextMenu.AddTextBoxContextMenuItems();
+                    AutoFillTextBox.ContextMenu = ContextMenu;
                 }
                 _controlLoaded = true;
 
@@ -228,7 +239,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 AutoFillTextBox.SelectionStart = 0;
                 AutoFillTextBox.SelectionLength = AutoFillTextBox.Text.Length;
             };
-
         }
 
         private void SetupControl()
@@ -259,6 +269,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
                 };
                 LookupButton.Click += (sender, args) => ShowLookupWindow();
+                AutoFillTextBox.TextChanged += AutoFillTextBox_TextChanged;
             }
 
             if (_pendingAutoFillValue)
@@ -272,10 +283,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             _setupRan = true;
         }
 
+        private void AutoFillTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_settingText)
+            {
+                _autoFillData.OnTextChanged();
+            }
+        }
+
         private void SetDesignText()
         {
             if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty())
+            {
+                _settingText = true;
                 AutoFillTextBox.Text = DesignText;
+                _settingText = false;
+            }
         }
         
         private void AutoFillData_AutoFillDataChanged(object sender, AutoFillDataChangedArgs e)

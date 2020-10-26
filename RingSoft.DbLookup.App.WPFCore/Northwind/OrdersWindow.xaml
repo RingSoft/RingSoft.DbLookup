@@ -32,7 +32,7 @@
                     <TextBlock Width="70" Text="{Binding OrderId}" Style="{StaticResource ReadOnlyTextBlock}"/>
                 </Border>
                 <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100"/>
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100" CharacterCasing="Upper"/>
                 <Border Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Width="200" Text="{Binding CompanyName}" Style="{StaticResource ReadOnlyTextBlock}"/>
                 </Border>

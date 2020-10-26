@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -155,6 +156,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             autoFillControl.SetDesignText();
         }
 
+        public static readonly DependencyProperty CharacterCasingProperty =
+            DependencyProperty.Register("CharacterCasing", typeof(CharacterCasing), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(CharacterCasingChangedCallback));
+
+        public CharacterCasing CharacterCasing
+        {
+            get { return (CharacterCasing)GetValue(CharacterCasingProperty); }
+            set { SetValue(CharacterCasingProperty, value); }
+        }
+
+        private static void CharacterCasingChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            autoFillControl.AutoFillTextBox.CharacterCasing = autoFillControl.CharacterCasing;
+        }
+
         public string EditText
         {
             get => AutoFillTextBox.Text;
@@ -255,6 +273,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ShowContainsBox = ShowContainsBox,
                 ContainsBoxMaxRows = ContainsBoxMaxRows
             };
+
+            if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+            {
+                if (fieldColumn.FieldDefinition is StringFieldDefinition stringField)
+                    AutoFillTextBox.MaxLength = stringField.MaxLength;
+            }
 
 
             _autoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
@@ -423,7 +447,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
                 return;
 
-            if (_autoFillData.OnKeyCharPressed(e.Text[0]))
+            if (AutoFillTextBox.MaxLength > 0 && AutoFillTextBox.SelectionLength <= 0 &&
+                AutoFillTextBox.Text.Length >= AutoFillTextBox.MaxLength)
+            {
+                System.Media.SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            var newText = e.Text;
+            switch (CharacterCasing)
+            {
+                case CharacterCasing.Normal:
+                    break;
+                case CharacterCasing.Lower:
+                    newText = newText.ToLower();
+                    break;
+                case CharacterCasing.Upper:
+                    newText = newText.ToUpper();
+                    break;
+            }
+            if (_autoFillData.OnKeyCharPressed(newText[0]))
                 e.Handled = true;
             RaiseDirtyFlag();
         }

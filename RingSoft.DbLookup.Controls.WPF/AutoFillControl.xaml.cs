@@ -234,6 +234,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             set => AutoFillTextBox.TextAlignment = value;
         }
 
+        public new Thickness BorderThickness
+        {
+            get => AutoFillTextBox.BorderThickness;
+            set => AutoFillTextBox.BorderThickness = value;
+        }
+
         public event EventHandler ControlDirty;
 
         private AutoFillData _autoFillData;

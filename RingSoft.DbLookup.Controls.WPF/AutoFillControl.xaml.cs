@@ -174,6 +174,72 @@ namespace RingSoft.DbLookup.Controls.WPF
             autoFillControl.AutoFillTextBox.CharacterCasing = autoFillControl.CharacterCasing;
         }
 
+        public static readonly DependencyProperty TextAlignmentProperty =
+            DependencyProperty.Register(nameof(TextAlignment), typeof(TextAlignment), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(TextAlignmentChangedCallback));
+
+        public TextAlignment TextAlignment
+        {
+            get { return (TextAlignment)GetValue(TextAlignmentProperty); }
+            set { SetValue(TextAlignmentProperty, value); }
+        }
+
+        private static void TextAlignmentChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.AutoFillTextBox != null)
+                autoFillControl.AutoFillTextBox.TextAlignment = autoFillControl.TextAlignment;
+        }
+
+        private static void BorderThicknessChangedCallback(DependencyObject obj,
+    DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.AutoFillTextBox != null)
+            {
+                autoFillControl.AutoFillTextBox.BorderThickness = autoFillControl.BorderThickness;
+            }
+        }
+
+        private static void BackgroundChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.AutoFillTextBox != null)
+            {
+                autoFillControl.AutoFillTextBox.Background = autoFillControl.Background;
+            }
+        }
+
+        private static void ForegroundChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.AutoFillTextBox != null)
+            {
+                autoFillControl.AutoFillTextBox.Foreground = autoFillControl.Foreground;
+            }
+        }
+
+        public static readonly DependencyProperty SelectionBrushProperty =
+            DependencyProperty.Register(nameof(SelectionBrush), typeof(Brush), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(SelectionBrushChangedCallback));
+
+        public Brush SelectionBrush
+        {
+            get { return (Brush)GetValue(SelectionBrushProperty); }
+            set { SetValue(SelectionBrushProperty, value); }
+        }
+
+        private static void SelectionBrushChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.AutoFillTextBox != null)
+                autoFillControl.AutoFillTextBox.SelectionBrush = autoFillControl.SelectionBrush;
+        }
+
         public string EditText
         {
             get => AutoFillTextBox.Text;
@@ -210,36 +276,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
-        public new Brush Background
-        {
-            get => AutoFillTextBox.Background;
-            set => AutoFillTextBox.Background = value;
-        }
-
-        public new Brush Foreground
-        {
-            get => AutoFillTextBox.Foreground;
-            set => AutoFillTextBox.Foreground = value;
-        }
-
-        public Brush SelectionBrush
-        {
-            get => AutoFillTextBox.SelectionBrush;
-            set => AutoFillTextBox.SelectionBrush = value;
-        }
-
-        public TextAlignment TextAlignment
-        {
-            get => AutoFillTextBox.TextAlignment;
-            set => AutoFillTextBox.TextAlignment = value;
-        }
-
-        public new Thickness BorderThickness
-        {
-            get => AutoFillTextBox.BorderThickness;
-            set => AutoFillTextBox.BorderThickness = value;
-        }
-
         public event EventHandler ControlDirty;
 
         private AutoFillData _autoFillData;
@@ -255,6 +291,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowContainsBoxProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
             TabOutAfterLookupSelectProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
             ContainsBoxMaxRowsProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(5));
+
+            BorderThicknessProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(new Thickness(1), BorderThicknessChangedCallback));
+
+            BackgroundProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(BackgroundChangedCallback));
+
+            ForegroundProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(ForegroundChangedCallback));
         }
 
         public AutoFillControl()

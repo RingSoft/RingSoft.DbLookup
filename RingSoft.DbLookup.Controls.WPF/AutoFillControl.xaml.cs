@@ -9,6 +9,7 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -207,6 +208,30 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return result;
             }
 
+        }
+
+        public new Brush Background
+        {
+            get => AutoFillTextBox.Background;
+            set => AutoFillTextBox.Background = value;
+        }
+
+        public new Brush Foreground
+        {
+            get => AutoFillTextBox.Foreground;
+            set => AutoFillTextBox.Foreground = value;
+        }
+
+        public Brush SelectionBrush
+        {
+            get => AutoFillTextBox.SelectionBrush;
+            set => AutoFillTextBox.SelectionBrush = value;
+        }
+
+        public TextAlignment TextAlignment
+        {
+            get => AutoFillTextBox.TextAlignment;
+            set => AutoFillTextBox.TextAlignment = value;
         }
 
         public event EventHandler ControlDirty;

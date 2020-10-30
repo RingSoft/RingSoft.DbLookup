@@ -99,6 +99,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             LocationId = 0;
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Clear);
+            //var test = LookupAddViewArgs;
         }
 
         protected override bool SaveEntity(Location entity)
@@ -114,7 +115,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+                ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify, null, "From Location to Item Test");
         }
     }
 }

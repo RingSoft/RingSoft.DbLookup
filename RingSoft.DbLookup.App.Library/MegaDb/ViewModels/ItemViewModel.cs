@@ -86,7 +86,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
 
-            LocationAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.LocationId));
+            LocationAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.LocationId))
+            {
+                AddViewParameter = " From Item To Location Test"
+            };
             ManufacturerAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ManufacturerId));
             base.Initialize();
         }

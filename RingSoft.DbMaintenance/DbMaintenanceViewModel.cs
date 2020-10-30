@@ -526,10 +526,11 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="command">The command type.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <param name="addViewParameter">The add-on-the-fly input parameter.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">You must pass in a primary key value if KeyAutoFillValue is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">command - null</exception>
-        protected LookupCommand GetLookupCommand(LookupCommands command, PrimaryKeyValue primaryKeyValue = null)
+        protected LookupCommand GetLookupCommand(LookupCommands command, PrimaryKeyValue primaryKeyValue = null, object addViewParameter = null)
         {
             if (primaryKeyValue == null && KeyAutoFillValue != null)
                 primaryKeyValue = KeyAutoFillValue.PrimaryKeyValue;
@@ -542,12 +543,12 @@ namespace RingSoft.DbMaintenance
                 case LookupCommands.Refresh:
                     if (primaryKeyValue == null)
                         throw new ArgumentException("You must pass in a primary key value if KeyAutoFillValue is null.");
-                    return new LookupCommand(command, primaryKeyValue, RecordsChanged);
+                    return new LookupCommand(command, primaryKeyValue, RecordsChanged){AddViewParameter = addViewParameter};
                 default:
                     throw new ArgumentOutOfRangeException(nameof(command), command, null);
             }
 
-            return new LookupCommand(command);
+            return new LookupCommand(command){AddViewParameter = addViewParameter};
         }
 
         /// <summary>

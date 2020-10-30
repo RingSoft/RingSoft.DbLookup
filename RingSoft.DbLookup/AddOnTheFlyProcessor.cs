@@ -22,6 +22,8 @@ namespace RingSoft.DbLookup
         public LookupSearchTypes SearchType => LookupSearchTypes.Equals;
         public string SearchText => string.Empty;
 
+        public object AddViewParameter { get; set; }
+
         private LookupDefinition<TLookupEntity, TEntity> _lookupDefinition;
         private string _newText;
         private object _ownerWindow;
@@ -44,7 +46,11 @@ namespace RingSoft.DbLookup
                 viewArgs.Handled = true;
             };
             var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
-                _newText, _ownerWindow) { NewRecordPrimaryKeyValue = _newPrimaryKeyValue};
+                _newText, _ownerWindow)
+            {
+                NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
+                InputParameter = AddViewParameter
+            };
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 
             var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);

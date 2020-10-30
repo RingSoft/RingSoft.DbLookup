@@ -1253,14 +1253,16 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="selectedIndex">Index of the selected row.</param>
         /// <param name="ownerWindow">The owner window.</param>
-        public void ViewSelectedRow(int selectedIndex, object ownerWindow)
+        /// <param name="inputParameter">The input parameter.</param>
+        public void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter = null)
         {
             if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
             {
                 _selectingRecord = true;
                 var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
                 {
-                    ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue
+                    ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+                    InputParameter = inputParameter
                 };
                 OnLookupView(args);
                 if (!args.Handled)
@@ -1276,11 +1278,13 @@ namespace RingSoft.DbLookup.Lookup
         /// Adds a new row.
         /// </summary>
         /// <param name="ownerWindow">The owner window.</param>
-        public void AddNewRow(object ownerWindow)
+        /// <param name="inputParameter">The input parameter.</param>
+        public void AddNewRow(object ownerWindow, object inputParameter = null)
         {
             var args = new LookupAddViewArgs(this, true, LookupFormModes.Add, string.Empty, ownerWindow)
             {
-                ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue
+                ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+                InputParameter = inputParameter
             };
             args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
             LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);

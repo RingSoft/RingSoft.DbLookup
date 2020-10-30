@@ -41,6 +41,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// </value>
         public bool Distinct { get; set; }
 
+        public object AddViewParameter { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the class with a lookup definition that is attached to the primary table of the parent join definition of the foreign field definition parameter.
         /// </summary>

@@ -83,6 +83,8 @@
         /// </value>
         public PrimaryKeyValue NewRecordPrimaryKeyValue { get; internal set; }
 
+        public object InputParameter { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

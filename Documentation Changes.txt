@@ -1,0 +1,34 @@
+Documentation Changes
+
+DbLookup
+------------------------------
+LookupCommand Properties
+	AddViewParameter
+
+LookupAddViewArgs Properties
+	InputParameter
+
+LookupDataBase Methods
+	ViewSelectedRow
+	AddNewRow
+
+AutoFillSetup Properties
+	AddViewParameter	
+
+LookupDefinition Methods
+	ShowAddOnTheFlyWindow
+
+AddOnTheFlyProcessor
+
+DbMaintenance
+------------------------------
+DbMaintenanceViewModel Methods
+	GetLookupCommand
+
+Controls.WPF
+------------------------------
+LookupWindow Properties
+	AddViewParameter
+
+AutoFillControl Properties
+	All undocumented properties

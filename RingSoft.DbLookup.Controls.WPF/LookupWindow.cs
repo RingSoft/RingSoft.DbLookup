@@ -136,6 +136,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public object AddViewParameter { get; set; }
+
         /// <summary>
         /// Occurs when a lookup row is selected by the user.
         /// </summary>
@@ -209,7 +211,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl == null)
                 return;
 
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this);
+            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this)
+            {
+                InputParameter = AddViewParameter
+            };
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 
             LookupView?.Invoke(this, args);
@@ -223,7 +228,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
 
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
-                LookupControl.SearchText, this);
+                LookupControl.SearchText, this)
+            {
+                InputParameter = AddViewParameter
+            };
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 
             LookupView?.Invoke(this, args);

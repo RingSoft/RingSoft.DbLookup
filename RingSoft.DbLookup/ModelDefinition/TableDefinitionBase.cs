@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 

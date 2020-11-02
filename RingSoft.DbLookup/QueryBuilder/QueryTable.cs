@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.QueryBuilder
+﻿using RingSoft.DataEntryControls.Engine;
+
+namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>This class represents a table name that appears after the FROM or JOIN keyword.</summary>
     public class QueryTable

@@ -6,7 +6,6 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
 using RingSoft.DataEntryControls.Engine;
-using ExtensionMethods = RingSoft.DbLookup.ExtensionMethods;
 
 namespace RingSoft.DbMaintenance
 {
@@ -356,7 +355,7 @@ namespace RingSoft.DbMaintenance
                 KeyAutoFillValue != null && _savedKeyAutoFillValue.Text != KeyAutoFillValue.Text)
             {
                 var recordDescription = TableDefinition.RecordDescription;
-                if (ExtensionMethods.IsNullOrEmpty(recordDescription))
+                if (recordDescription.IsNullOrEmpty())
                     recordDescription = TableDefinition.ToString();
 
                 var fieldDescription = string.Empty;
@@ -464,7 +463,7 @@ namespace RingSoft.DbMaintenance
         public override DbMaintenanceResults OnDeleteButton()
         {
             var description = TableDefinition.RecordDescription;
-            if (ExtensionMethods.IsNullOrEmpty(description))
+            if (description.IsNullOrEmpty())
                 description = TableDefinition.ToString();
 
             var message = ConfirmDeleteMessage(description);

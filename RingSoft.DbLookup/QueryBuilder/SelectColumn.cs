@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.QueryBuilder
+﻿using RingSoft.DataEntryControls.Engine;
+
+namespace RingSoft.DbLookup.QueryBuilder
 {
     public enum ColumnTypes
     {

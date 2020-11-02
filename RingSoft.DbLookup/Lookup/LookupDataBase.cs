@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup

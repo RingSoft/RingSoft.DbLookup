@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup
 {

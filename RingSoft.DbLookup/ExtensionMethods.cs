@@ -1,62 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup
 {
     public static class ExtensionMethods
     {
-        public static bool IsNullOrEmpty(this string value)
-        {
-            return String.IsNullOrEmpty(value);
-        }
-
-        public static string LeftStr(this string param, int length)
-        {
-            //we start at 0 since we want to get the characters starting from the
-            //left and with the specified lenght and assign it to a variable
-            if (string.IsNullOrEmpty(param))
-                return "";
-
-            string result = param.Substring(0, length);
-            //return the result of the operation
-            return result;
-        }
-        public static string RightStr(this string param, int length)
-        {
-            //start at the index based on the lenght of the sting minus
-            //the specified lenght and assign it a variable
-            if (string.IsNullOrEmpty(param))
-                return "";
-
-            int nStart = param.Length - length;
-            string result = param.Substring(nStart, length);
-            //return the result of the operation
-            return result;
-        }
-
-        public static string MidStr(this string param, int startIndex, int length)
-        {
-            //start at the specified index in the string ang get N number of
-            //characters depending on the lenght and assign it to a variable
-            if (string.IsNullOrEmpty(param))
-                return "";
-
-            string result = param.Substring(startIndex, length);
-            //return the result of the operation
-            return result;
-        }
 
         public static string TrimRight(this string value, string trimChars)
         {
             return value.LeftStr(value.Length - trimChars.Length);
-        }
-
-        public static int ToInt(this string value)
-        {
-            value = value.Trim();
-            int.TryParse(value, out var intReturn);
-            return intReturn;
         }
 
         #region Property Name
@@ -121,17 +75,6 @@ namespace RingSoft.DbLookup
                 );
         }
 
-        public static bool IsNullable<T>(this T obj)
-        {
-            if (obj == null)
-                return true; // obvious
-            Type type = typeof(T);
-            if (!type.IsValueType)
-                return true; // ref-type
-            if (Nullable.GetUnderlyingType(type) != null)
-                return true; // Nullable<T>
-            return false; // value-type
-        }
         #endregion
     }
 }

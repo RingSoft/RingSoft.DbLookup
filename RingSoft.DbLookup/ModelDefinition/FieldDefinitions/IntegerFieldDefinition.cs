@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {

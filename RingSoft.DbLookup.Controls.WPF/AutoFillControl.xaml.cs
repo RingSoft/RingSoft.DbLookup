@@ -1,4 +1,5 @@
 ﻿using RingSoft.DataEntryControls.WPF;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;

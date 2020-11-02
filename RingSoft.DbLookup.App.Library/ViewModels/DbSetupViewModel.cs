@@ -8,6 +8,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels
 {

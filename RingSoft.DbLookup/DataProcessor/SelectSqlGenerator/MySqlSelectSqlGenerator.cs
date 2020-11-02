@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {

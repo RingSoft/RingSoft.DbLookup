@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.DataProcessor
 {

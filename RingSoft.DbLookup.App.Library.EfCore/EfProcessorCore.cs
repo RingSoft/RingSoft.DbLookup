@@ -15,13 +15,23 @@ namespace RingSoft.DbLookup.App.Library.EfCore
 
         public EfProcessorCore()
         {
-            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.Northwind);
+            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitNorthwind);
             NorthwindLookupContext = new NorthwindLookupContextEfCore();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
 
-            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.MegaDb);
+            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToNorthwind);
+            NorthwindEfDataProcessor.GetProduct(1);
+
+            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitMegaDb);
             MegaDbLookupContext = new MegaDbLookupContextEfCore();
             MegaDbEfDataProcessor = new MegaDbEfDataProcessorCore();
+
+            var registrySettings = new RegistrySettings();
+            if (registrySettings.MegaDbPlatformType != MegaDbPlatforms.None)
+            {
+                RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToMegaDb);
+                MegaDbEfDataProcessor.GetItem(1);
+            }
         }
     }
 }

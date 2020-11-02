@@ -12,8 +12,10 @@ namespace RingSoft.DbLookup.App.Library
 {
     public enum GlobalsProgressStatus
     {
-        Northwind,
-        MegaDb
+        InitNorthwind,
+        InitMegaDb,
+        ConnectingToNorthwind,
+        ConnectingToMegaDb
     }
 
     public class AppStartProgressArgs
@@ -144,11 +146,17 @@ namespace RingSoft.DbLookup.App.Library
             var appStartProgress = new AppStartProgressArgs();
             switch (status)
             {
-                case GlobalsProgressStatus.Northwind:
+                case GlobalsProgressStatus.InitNorthwind:
                     appStartProgress.ProgressText = "Initializing Northwind Entity Framework Structure.";
                     break;
-                case GlobalsProgressStatus.MegaDb:
+                case GlobalsProgressStatus.InitMegaDb:
                     appStartProgress.ProgressText = "Initializing Mega Database Entity Framework Structure.";
+                    break;
+                case GlobalsProgressStatus.ConnectingToNorthwind:
+                    appStartProgress.ProgressText = "Connecting to the Northwind Database.";
+                    break;
+                case GlobalsProgressStatus.ConnectingToMegaDb:
+                    appStartProgress.ProgressText = "Connecting to the Mega Database.";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, null);

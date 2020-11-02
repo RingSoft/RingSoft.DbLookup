@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="IsTabStop" Value="False" />

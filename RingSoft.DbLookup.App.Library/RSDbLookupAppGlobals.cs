@@ -1,10 +1,10 @@
-﻿using System;
+﻿using RingSoft.DataEntryControls.Engine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using RingSoft.DbLookup.DataProcessor;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -102,7 +102,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.UserInterface.ShowMessageBox(e.Message, "Error Opening Text File", RsMessageBoxIcons.Error);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error Opening Text File", RsMessageBoxIcons.Error);
             }
 
             return result;
@@ -121,7 +121,7 @@ namespace RingSoft.DbLookup.App.Library
             }
             catch (Exception e)
             {
-                DbDataProcessor.UserInterface.ShowMessageBox(e.Message, "Error Writing Text File", RsMessageBoxIcons.Error);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error Writing Text File", RsMessageBoxIcons.Error);
             }
         }
 

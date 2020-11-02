@@ -1,11 +1,12 @@
 ﻿using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
+using RingSoft.DataEntryControls.Engine;
+using ExtensionMethods = RingSoft.DbLookup.ExtensionMethods;
 
 namespace RingSoft.DbMaintenance
 {
@@ -197,14 +198,14 @@ namespace RingSoft.DbMaintenance
                     TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.SelectedPrimaryKeyValue);
 
                 ChangingEntity = true;
-                DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
                 var entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
 
                 if (!_savingRecord)
                 {
                     LoadFromEntity(entity);
                 }
-                DbDataProcessor.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
                 DeleteButtonEnabled = true;
@@ -355,7 +356,7 @@ namespace RingSoft.DbMaintenance
                 KeyAutoFillValue != null && _savedKeyAutoFillValue.Text != KeyAutoFillValue.Text)
             {
                 var recordDescription = TableDefinition.RecordDescription;
-                if (recordDescription.IsNullOrEmpty())
+                if (ExtensionMethods.IsNullOrEmpty(recordDescription))
                     recordDescription = TableDefinition.ToString();
 
                 var fieldDescription = string.Empty;
@@ -463,7 +464,7 @@ namespace RingSoft.DbMaintenance
         public override DbMaintenanceResults OnDeleteButton()
         {
             var description = TableDefinition.RecordDescription;
-            if (description.IsNullOrEmpty())
+            if (ExtensionMethods.IsNullOrEmpty(description))
                 description = TableDefinition.ToString();
 
             var message = ConfirmDeleteMessage(description);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -133,7 +134,7 @@ namespace RingSoft.DbLookup.DataProcessor
         public DataProcessResult GetData(QuerySet querySet, bool setWaitCursor = true)
         {
             if (setWaitCursor)
-                UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             
             var result = new DataProcessResult(querySet.DebugMessage);
 
@@ -154,14 +155,14 @@ namespace RingSoft.DbLookup.DataProcessor
                 if (result.ResultCode == GetDataResultCodes.SqlError)
                 {
                     if (setWaitCursor)
-                        UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                        ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                     UserInterface.ShowDataProcessResult(result);
                     return result;
                 }
                 else if (ShowSqlWindow)
                 {
                     if (setWaitCursor)
-                        UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                        ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                     result.ResultCode = GetDataResultCodes.Success;
                     result.DebugMessage += $"{Environment.NewLine}{Environment.NewLine}Result Row Count = ";
                     result.DebugMessage += $"{result.DataSet.Tables[0].Rows.Count}";
@@ -175,7 +176,7 @@ namespace RingSoft.DbLookup.DataProcessor
 
             result.ResultCode = GetDataResultCodes.Success;
             if (setWaitCursor)
-                UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
             return result;
         }
 
@@ -193,12 +194,12 @@ namespace RingSoft.DbLookup.DataProcessor
             catch (Exception e)
             {
                 if (setCursor)
-                    UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                    ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
                 result.Message = $"Database Connection Error!\r\n\r\n{e.Message}";
                 result.ResultCode = GetDataResultCodes.DbConnectError;
                 result.ProcessedSqlStatement = ConnectionString;
-                UserInterface.ShowMessageBox(result.Message, "Database Connection Error",
+                ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "Database Connection Error",
                     RsMessageBoxIcons.Error);
                 CloseConnection(connection);
             }
@@ -264,7 +265,7 @@ namespace RingSoft.DbLookup.DataProcessor
         public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false, bool setWaitCursor = true)
         {
             if (setWaitCursor)
-                UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
 
             var result = new DataProcessResult(string.Empty);
 
@@ -295,8 +296,8 @@ namespace RingSoft.DbLookup.DataProcessor
                 {
                     CloseConnection(connection);
                     if (setWaitCursor)
-                        UserInterface.SetWindowCursor(WindowCursorTypes.Default);
-                    UserInterface.ShowMessageBox(result.Message, "SQL Process Failed",
+                        ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                    ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "SQL Process Failed",
                         RsMessageBoxIcons.Error);
                     return result;
                 }
@@ -313,11 +314,11 @@ namespace RingSoft.DbLookup.DataProcessor
 
             result.ResultCode = GetDataResultCodes.Success;
             if (setWaitCursor)
-                UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
             if (ShowSqlWindow)
             {
-                UserInterface.ShowMessageBox(result.DebugMessage, "SQL Process Success",
+                ControlsGlobals.UserInterface.ShowMessageBox(result.DebugMessage, "SQL Process Success",
                     RsMessageBoxIcons.Information);
             }
 
@@ -355,8 +356,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="debugMessage">The debug message.</param>
         public static void DisplayDataException(Exception exception, string debugMessage)
         {
-            UserInterface.SetWindowCursor(WindowCursorTypes.Default);
-            UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+            ControlsGlobals.UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
         }
     }
 }

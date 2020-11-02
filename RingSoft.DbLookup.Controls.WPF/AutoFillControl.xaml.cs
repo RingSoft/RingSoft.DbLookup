@@ -549,7 +549,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ShowLookupWindow()
         {
-            var lookupWindow = ControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
+            var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
                 Setup.AllowLookupAdd, Setup.AllowLookupView, AutoFillTextBox.Text);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 

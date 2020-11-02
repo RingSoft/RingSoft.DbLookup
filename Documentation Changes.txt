@@ -20,6 +20,8 @@ LookupDefinition Methods
 
 AddOnTheFlyProcessor
 
+IUserInterface
+
 DbMaintenance
 ------------------------------
 DbMaintenanceViewModel Methods

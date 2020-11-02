@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -51,7 +52,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
     }
-    public static class ControlsGlobals
+    public static class LookupControlsGlobals
     {
         public static LookupWindowFactory LookupWindowFactory { get; private set; } = new LookupWindowFactory();
 
@@ -60,12 +61,14 @@ namespace RingSoft.DbLookup.Controls.WPF
         public static void InitUi()
         {
             DbDataProcessor.UserInterface = _userInterface;
+            WPFControlsGlobals.InitUi();
         }
 
         public static void InitUi(LookupWindowFactory lookupWindowFactory)
         {
             DbDataProcessor.UserInterface = _userInterface;
             LookupWindowFactory = lookupWindowFactory;
+            WPFControlsGlobals.InitUi();
         }
     }
 }

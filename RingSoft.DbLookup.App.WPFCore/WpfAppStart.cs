@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void StartApp(string appSection, string[] args)
         {
-            ControlsGlobals.InitUi();
+            LookupControlsGlobals.InitUi();
 
             //Necessary so .NET Core 3.x is compatible with Entity Framework 6.
             DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);

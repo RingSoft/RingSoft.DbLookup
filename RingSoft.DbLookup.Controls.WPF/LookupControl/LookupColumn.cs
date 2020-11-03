@@ -3,6 +3,7 @@ using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+// ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
@@ -55,7 +56,7 @@
                 <TabItem Header="Details">
                     <DockPanel>
                         <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
-                        <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}">
+                        <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}" DesignText="Chef Anton's Cajun Seasoning">
                             <lc:LookupControl.LookupColumns>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="250" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>
@@ -117,7 +118,7 @@
                     <TextBlock Text="{Binding Path=TotalDiscount, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
                 </Border>
                 <Label Grid.Column="0" Grid.Row="2" Content="Freight" Style="{StaticResource ControlLabel}"/>
-                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Freight, Mode=TwoWay, StringFormat='c', UpdateSourceTrigger=PropertyChanged}" Height="20" HorizontalContentAlignment="Right" Margin="2.5,0,2.5,0"/>
+                <dec:DecimalEditControl Grid.Column="1" Grid.Row="2"  Value="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FormatType="Currency" AllowNullValue="True" Height="20" Margin="2.5,0,2.5,0" DesignText="$1,000.00"/>
                 <Label Grid.Column="0" Grid.Row="3" Content="Total" Style="{StaticResource ControlLabel}"/>
                 <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Text="{Binding Path=Total, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>

@@ -56,7 +56,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "RecordCountStackPanel", Type = typeof(StackPanel))]
     [TemplatePart(Name = "RecordCountLabel", Type = typeof(Label))]
     [TemplatePart(Name = "Spinner", Type = typeof(Control))]
-    public class NewLookupControl : Control, ILookupControl
+    public class LookupControl : Control, ILookupControl
     {
         private class RefreshPendingData
         {
@@ -129,7 +129,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public static readonly DependencyProperty LookupDefinitionProperty =
-            DependencyProperty.Register("LookupDefinition", typeof(LookupDefinitionBase), typeof(NewLookupControl),
+            DependencyProperty.Register("LookupDefinition", typeof(LookupDefinitionBase), typeof(LookupControl),
                 new FrameworkPropertyMetadata(LookupDefinitionChangedCallback));
 
         /// <summary>
@@ -147,13 +147,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         private static void LookupDefinitionChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var lookupControl = (NewLookupControl)obj;
+            var lookupControl = (LookupControl)obj;
             if (lookupControl._controlLoaded)
                 lookupControl.SetupControl();
         }
 
         public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(LookupCommand), typeof(NewLookupControl),
+            DependencyProperty.Register("Command", typeof(LookupCommand), typeof(LookupControl),
                 new FrameworkPropertyMetadata(CommandChangedCallback));
 
         /// <summary>
@@ -171,12 +171,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         private static void CommandChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var lookupControl = (NewLookupControl)obj;
+            var lookupControl = (LookupControl)obj;
             lookupControl.ExecuteCommand();
         }
 
         public static readonly DependencyProperty DataSourceChangedProperty =
-            DependencyProperty.Register("DataSourceChanged", typeof(LookupDataSourceChanged), typeof(NewLookupControl));
+            DependencyProperty.Register("DataSourceChanged", typeof(LookupDataSourceChanged), typeof(LookupControl));
 
         public LookupDataSourceChanged DataSourceChanged
         {
@@ -185,7 +185,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public static readonly DependencyProperty DesignTextProperty =
-            DependencyProperty.Register("DesignText", typeof(string), typeof(NewLookupControl),
+            DependencyProperty.Register("DesignText", typeof(string), typeof(LookupControl),
                 new FrameworkPropertyMetadata(DesignTextChangedCallback));
 
         public string DesignText
@@ -197,7 +197,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private static void DesignTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var lookupControl = (NewLookupControl)obj;
+            var lookupControl = (LookupControl)obj;
             lookupControl.SetDesignText();
         }
 
@@ -233,12 +233,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double _designModeHeaderLineHeight;
 
 
-        static NewLookupControl()
+        static LookupControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(NewLookupControl), new FrameworkPropertyMetadata(typeof(NewLookupControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
+
+            FocusableProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
+            KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(LookupControl),
+                new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
 
-        public NewLookupControl()
+        public LookupControl()
         {
             LookupColumns = new ObservableCollection<LookupColumn>();
 
@@ -276,6 +280,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void OnLoad()
         {
             OnLookupColumnsChanged();
+            SetDesignText();
             if (_designSortIndex >= 0 && DesignerProperties.GetIsInDesignMode(this))
             {
                 InitializeHeader(_designSortIndex);
@@ -1300,7 +1305,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty())
             {
-                SearchForTextBox.DesignText = DesignText;
+                if (SearchForTextBox != null)
+                    SearchForTextBox.DesignText = DesignText;
             }
         }
     }

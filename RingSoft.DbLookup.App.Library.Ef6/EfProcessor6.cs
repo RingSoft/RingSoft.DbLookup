@@ -18,8 +18,9 @@ namespace RingSoft.DbLookup.App.Library.Ef6
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitNorthwind);
             NorthwindLookupContext = new NorthwindLookupContextEf6();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessor6();
+            
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToNorthwind);
-            NorthwindEfDataProcessor.GetProduct(1);
+            RsDbLookupAppGlobals.ConnectToNorthwind(NorthwindEfDataProcessor, NorthwindLookupContext);
 
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitMegaDb);
             MegaDbLookupContext = new MegaDbLookupContextEf6();
@@ -29,7 +30,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6
             if (registrySettings.MegaDbPlatformType != MegaDbPlatforms.None)
             {
                 RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToMegaDb);
-                MegaDbEfDataProcessor.GetItem(1);
+                RsDbLookupAppGlobals.ConnectToMegaDb(MegaDbEfDataProcessor, MegaDbLookupContext);
             }
         }
     }

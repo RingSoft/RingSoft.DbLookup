@@ -1,4 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.App.Library.MegaDb;
+using RingSoft.DbLookup.App.Library.Northwind;
+using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -181,6 +184,21 @@ namespace RingSoft.DbLookup.App.Library
 
             var crypto = new Crypto();
             return crypto.Decrypt(encrypted);
+        }
+
+        public static void ConnectToNorthwind(INorthwindEfDataProcessor processor,
+            INorthwindLookupContext lookupContext)
+        {
+            processor.GetProduct(1);
+            var query = new SelectQuery(lookupContext.Products.TableName).SetMaxRecords(1);
+            lookupContext.Products.Context.DataProcessor.GetData(query, false);
+        }
+
+        public static void ConnectToMegaDb(IMegaDbEfDataProcessor processor, IMegaDbLookupContext lookupContext)
+        {
+            processor.GetItem(1);
+            var query = new SelectQuery(lookupContext.Items.TableName).SetMaxRecords(1);
+            lookupContext.Items.Context.DataProcessor.GetData(query, false);
         }
     }
 }

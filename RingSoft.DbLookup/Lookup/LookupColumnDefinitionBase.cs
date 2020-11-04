@@ -13,11 +13,24 @@
         Right = 2
     }
 
+    public enum LookupColumnSearchForControls
+    {
+        StringControl = LookupColumnDefinitionBase.SearchForStringControl,
+        IntegerControl = LookupColumnDefinitionBase.SearchForIntegerControl,
+        DecimalControl = LookupColumnDefinitionBase.SearchForDecimalControl,
+        DateControl = LookupColumnDefinitionBase.SearchForDateControl
+    }
+
     /// <summary>
     /// The lookup column definition base class.
     /// </summary>
     public abstract class LookupColumnDefinitionBase
     {
+        public const int SearchForStringControl = 0;
+        public const int SearchForIntegerControl = 1;
+        public const int SearchForDecimalControl = 2;
+        public const int SearchForDateControl = 3;
+
         /// <summary>
         /// Gets the type of the column.
         /// </summary>
@@ -83,6 +96,8 @@
         /// </value>
         public LookupColumnAlignmentTypes HorizontalAlignment { get; private set; } = LookupColumnAlignmentTypes.Left;
 
+        public int? SearchForControl { get; private set; } = null;
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
@@ -105,6 +120,7 @@
             PropertyName = source.PropertyName;
             PercentWidth = source.PercentWidth;
             HorizontalAlignment = source.HorizontalAlignment;
+            SearchForControl = source.SearchForControl;
         }
 
         /// <summary>
@@ -121,6 +137,11 @@
         public void HasHorizontalAlignmentType(LookupColumnAlignmentTypes alignmentType)
         {
             HorizontalAlignment = alignmentType;
+        }
+
+        public void HasSearchForControl(int controlId)
+        {
+
         }
     }
 }

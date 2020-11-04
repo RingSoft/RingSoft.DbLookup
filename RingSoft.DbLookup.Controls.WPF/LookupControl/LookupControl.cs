@@ -105,6 +105,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     SearchForControl.PreviewKeyDown -= SearchForControl_PreviewKeyDown;
                     SearchForControl.TextChanged -= SearchForControl_TextChanged;
+                    SearchForControl.Control.PreviewLostKeyboardFocus -= Control_PreviewLostKeyboardFocus;
                 }
 
                 _lookupSearchForControl = value;
@@ -113,6 +114,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     SearchForControl.PreviewKeyDown += SearchForControl_PreviewKeyDown;
                     SearchForControl.TextChanged += SearchForControl_TextChanged;
+                    SearchForControl.Control.PreviewLostKeyboardFocus += Control_PreviewLostKeyboardFocus;
                 }
             }
         }
@@ -388,6 +390,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             OnListViewKeyDown(e);
+        }
+
+        private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (ReferenceEquals(e.NewFocus, ListView))
+                e.Handled = true;
         }
 
         private void MergeLookupDefinition()
@@ -849,12 +857,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                     SearchForStackPanel.Children.Add(SearchForControl.Control);
                     if (IsKeyboardFocusWithin)
                         SearchForControl.Control.Focus();
-
-                    SearchForControl.Control.PreviewLostKeyboardFocus += (sender, args) =>
-                    {
-                        if (ReferenceEquals(args.NewFocus, ListView))
-                            args.Handled = true;
-                    };
 
                     Focusable = false;
                 }

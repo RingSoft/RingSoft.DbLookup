@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup
 {
@@ -76,5 +77,24 @@ namespace RingSoft.DbLookup
         }
 
         #endregion
+
+        public static LookupColumnSearchForControls TranslateFieldDataTypeToControl(this FieldDataTypes dataType)
+        {
+            switch (dataType)
+            {
+                case FieldDataTypes.String:
+                case FieldDataTypes.Enum:
+                case FieldDataTypes.Bool:
+                    return LookupColumnSearchForControls.StringControl;
+                case FieldDataTypes.Integer:
+                    return LookupColumnSearchForControls.IntegerControl;
+                case FieldDataTypes.Decimal:
+                    return LookupColumnSearchForControls.DecimalControl;
+                case FieldDataTypes.DateTime:
+                    return LookupColumnSearchForControls.DateControl;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
+            }
+        }
     }
 }

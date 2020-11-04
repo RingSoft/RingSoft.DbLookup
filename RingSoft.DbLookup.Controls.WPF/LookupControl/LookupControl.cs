@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +12,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.Lookup;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -49,7 +48,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "SearchForLabel", Type = typeof(Label))]
     [TemplatePart(Name = "EqualsRadioButton", Type = typeof(RadioButton))]
     [TemplatePart(Name = "ContainsRadioButton", Type = typeof(RadioButton))]
-    [TemplatePart(Name = "SearchForTextBox", Type = typeof(StringEditControl))]
+    [TemplatePart(Name = "SearchForStackPanel", Type = typeof(StackPanel))]
     [TemplatePart(Name = "ListView", Type = typeof(ListView))]
     [TemplatePart(Name = "LookupGridView", Type = typeof(GridView))]
     [TemplatePart(Name = "ScrollBar", Type = typeof(ScrollBar))]
@@ -77,6 +76,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public RadioButton ContainsRadioButton { get; set; }
 
+        public StackPanel SearchForStackPanel { get; set; }
+
         public ListView ListView { get; set; }
 
         public GridView LookupGridView { get; set; }
@@ -93,7 +94,28 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         //--------------------------------------------------------------
 
-        public StringEditControl SearchForTextBox { get; set; }
+        private LookupSearchForControl _lookupSearchForControl;
+
+        public LookupSearchForControl SearchForControl
+        {
+            get => _lookupSearchForControl;
+            set
+            {
+                if (_lookupSearchForControl != null)
+                {
+                    SearchForControl.PreviewKeyDown -= SearchForControl_PreviewKeyDown;
+                    SearchForControl.TextChanged -= SearchForControl_TextChanged;
+                }
+
+                _lookupSearchForControl = value;
+
+                if (_lookupSearchForControl != null)
+                {
+                    SearchForControl.PreviewKeyDown += SearchForControl_PreviewKeyDown;
+                    SearchForControl.TextChanged += SearchForControl_TextChanged;
+                }
+            }
+        }
 
         public int PageSize => _currentPageSize;
 
@@ -115,15 +137,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             get
             {
-                if (SearchForTextBox == null)
+                if (SearchForControl == null)
                     return string.Empty;
 
-                return SearchForTextBox.Text;
+                return SearchForControl.SearchText;
             }
             set
             {
                 _resettingSearchFor = true;
-                SearchForTextBox.Text = value;
+                if (SearchForControl != null)
+                    SearchForControl.SearchText = value;
                 _resettingSearchFor = false;
             }
         }
@@ -231,13 +254,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double _itemHeight;
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
-
+        private TextBox _designModeSearchForTextBox;
 
         static LookupControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
 
-            FocusableProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
+            //FocusableProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(LookupControl),
                 new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
@@ -256,7 +279,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             SearchForLabel = GetTemplateChild(nameof(SearchForLabel)) as Label;
             EqualsRadioButton = GetTemplateChild(nameof(EqualsRadioButton)) as RadioButton;
             ContainsRadioButton = GetTemplateChild(nameof(ContainsRadioButton)) as RadioButton;
-            SearchForTextBox = GetTemplateChild(nameof(SearchForTextBox)) as StringEditControl;
+            SearchForStackPanel = GetTemplateChild(nameof(SearchForStackPanel)) as StackPanel;
             ListView = GetTemplateChild(nameof(ListView)) as ListView;
             LookupGridView = GetTemplateChild(nameof(LookupGridView)) as GridView;
             ScrollBar = GetTemplateChild(nameof(ScrollBar)) as ScrollBar;
@@ -265,16 +288,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountLabel = GetTemplateChild(nameof(RecordCountLabel)) as Label;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
 
-            if (SearchForTextBox != null)
-                SearchForTextBox.GotFocus += (sender, args) => SearchForTextBox_GotFocus();
-
             base.OnApplyTemplate();
-        }
-
-        private void SearchForTextBox_GotFocus()
-        {
-            SearchForTextBox.SelectionStart = 0;
-            SearchForTextBox.SelectionLength = SearchForTextBox.Text.Length;
         }
 
         private void OnLoad()
@@ -316,13 +330,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
-                SearchForTextBox.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
-                SearchForTextBox.TextChanged += (sender, args) =>
-                {
-                    if (!_resettingSearchFor)
-                        LookupData.OnSearchForChange(SearchForTextBox.Text);
-                };
-
                 if (ListView != null)
                 {
                     ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
@@ -370,6 +377,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             _setupRan = _controlLoaded = true;
+        }
+
+        private void SearchForControl_TextChanged(object sender, EventArgs e)
+        {
+            if (!_resettingSearchFor)
+                LookupData.OnSearchForChange(SearchForControl.SearchText);
+        }
+
+        private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            OnListViewKeyDown(e);
         }
 
         private void MergeLookupDefinition()
@@ -776,7 +794,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                         _lastDirection = direction;
                     }
 
-                    SearchForTextBox.Text = string.Empty;
+                    if (SearchForControl != null)
+                        SearchForControl.SearchText = string.Empty;
+
                     var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
 
                     LookupData.OnColumnClick(columnIndex, resetSortOrder);
@@ -802,7 +822,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
 
                     SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
-                    SearchForTextBox.Focus();
+                    SearchForControl?.Control.Focus();
                 }
             }
         }
@@ -811,6 +831,34 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (!LookupColumns.Any())
                 return;
+
+            if (SearchForStackPanel != null)
+            {
+                if (DesignerProperties.GetIsInDesignMode(this))
+                {
+                    _designModeSearchForTextBox = new TextBox();
+                    SearchForStackPanel.Children.Add(_designModeSearchForTextBox);
+                }
+                else
+                {
+                    var lookupColumnDefinition = LookupDefinition.VisibleColumns[sortColumnIndex];
+                    SearchForControl =
+                        LookupControlsGlobals.LookupControlSearchForFactory.CreateSearchForControl(lookupColumnDefinition);
+
+                    SearchForStackPanel.Children.Clear();
+                    SearchForStackPanel.Children.Add(SearchForControl.Control);
+                    if (IsKeyboardFocusWithin)
+                        SearchForControl.Control.Focus();
+
+                    SearchForControl.Control.PreviewLostKeyboardFocus += (sender, args) =>
+                    {
+                        if (ReferenceEquals(args.NewFocus, ListView))
+                            args.Handled = true;
+                    };
+
+                    Focusable = false;
+                }
+            }
 
             var column = LookupColumns[sortColumnIndex];
 
@@ -943,7 +991,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
             if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
-                initialSearchFor = SearchForTextBox.Text;
+            {
+                if (SearchForControl != null)
+                    initialSearchFor = SearchForControl.SearchText;
+            }
 
             _currentPageSize = GetPageSize();
 
@@ -951,14 +1002,20 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupData.GetInitData();
             else
             {
-                var forceRefresh = SearchForTextBox.Text == initialSearchFor;
-                SearchForTextBox.Text = initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+                if (SearchForControl != null)
+                {
+                    var forceRefresh = SearchForControl.SearchText == initialSearchFor;
+                    SearchForControl.SearchText =
+                        initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
 
-                if (searchForSelectAll)
-                    SearchForTextBox_GotFocus();
+                    if (searchForSelectAll)
+                    {
+                        SearchForControl.SelectAll();
+                    }
 
-                if (forceRefresh)
-                    LookupData.OnSearchForChange(initialSearchFor);
+                    if (forceRefresh)
+                        LookupData.OnSearchForChange(initialSearchFor);
+                }
             }
         }
 
@@ -1185,8 +1242,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!SearchText.IsNullOrEmpty())
                 LookupData.ResetRecordCount();
 
-            SearchForTextBox.Focus();
-            RefreshData(false, SearchForTextBox.Text);
+            if (SearchForControl != null)
+            {
+                SearchForControl.Control.Focus();
+                RefreshData(false, SearchForControl.SearchText);
+            }
         }
         private async void GetRecordCountButtonClick()
         {
@@ -1298,15 +1358,17 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (EqualsRadioButton != null)
                 EqualsRadioButton.IsChecked = true;
-            SearchForTextBox.Text = string.Empty;
+
+            if (SearchForControl != null)
+                SearchForControl.SearchText = string.Empty;
         }
 
         private void SetDesignText()
         {
             if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty())
             {
-                if (SearchForTextBox != null)
-                    SearchForTextBox.DesignText = DesignText;
+                if (_designModeSearchForTextBox != null)
+                    _designModeSearchForTextBox.Text = DesignText;
             }
         }
     }

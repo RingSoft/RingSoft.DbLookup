@@ -20,7 +20,8 @@ namespace RingSoft.SimpleDemo.WPF
             LookupContext = new NorthwindLookupContext();
             EfDataProcessor = new NorthwindEfDataProcessor();
 
-            LookupControlsGlobals.InitUi(new DemoLookupWindowFactory());
+            LookupControlsGlobals.InitUi();
+            LookupControlsGlobals.LookupWindowFactory = new DemoLookupWindowFactory();
             base.OnStartup(e);
         }
     }

@@ -60,5 +60,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         public virtual void SetFocusToControl()
         {
         }
+
+        public virtual bool CanProcessSearchForKey(Key key)
+        {
+            return true;
+        }
     }
 }

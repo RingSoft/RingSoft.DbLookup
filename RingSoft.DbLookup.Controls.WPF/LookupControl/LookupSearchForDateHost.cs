@@ -1,14 +1,14 @@
-﻿using System;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookup.QueryBuilder;
+using System;
+using System.Windows.Input;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    class LookupSearchForDateHost : LookupSearchForHost<DateEditControl>
+    public class LookupSearchForDateHost : LookupSearchForDropDownHost<DateEditControl>
     {
         public override string SearchText
         {
@@ -49,6 +49,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected override void Initialize(DateEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
             Control.AllowNullValue = true;
+            Control.PlayValidationSoundOnLostFocus = false;
 
             if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
             {
@@ -70,10 +71,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
-        public override void SetFocusToControl()
+        public override bool CanProcessSearchForKey(Key key)
         {
-            Control.Focus();
-            base.SetFocusToControl();
+            if (Control.IsPopupOpen())
+            {
+                switch (key)
+                {
+                    case Key.Left:
+                    case Key.Right:
+                    case Key.Up:
+                    case Key.Down:
+                        return false;
+                }
+            }
+
+            return base.CanProcessSearchForKey(key);
         }
     }
 }

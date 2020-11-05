@@ -1,5 +1,4 @@
 ﻿using RingSoft.DbLookup.Lookup;
-using System;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF

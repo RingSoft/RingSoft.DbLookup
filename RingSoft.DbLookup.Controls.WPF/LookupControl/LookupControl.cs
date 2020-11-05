@@ -262,8 +262,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
 
-            //FocusableProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
             IsTabStopProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
+
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(LookupControl),
                 new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
@@ -312,6 +312,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                     SetupControl();
                 _controlLoaded = true;
             }
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            SearchForHost?.Control.Focus();
+
+            base.OnGotFocus(e);
         }
 
         private void SetupControl()
@@ -860,8 +867,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         SearchForHost.Control.Loaded += (sender, args) =>
                         {
-                            if (!SearchForHost.Control.Focus())
-                                SearchForHost.SetFocusToControl();
+                            SearchForHost.Control.Focus();
+                            SearchForHost.SetFocusToControl();
                         };
                     }
                 }
@@ -1121,6 +1128,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnListViewKeyDown(KeyEventArgs e)
         {
+            if (SearchForHost != null)
+            {
+                if (!SearchForHost.CanProcessSearchForKey(e.Key))
+                {
+                    return;
+                }
+            }
+
             switch (e.Key)
             {
                 case Key.Down:

@@ -181,6 +181,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (AddButton != null)
                     AddButton.IsEnabled = allowAdd;
+
+                LookupControl?.Focus();
             };
         }
 

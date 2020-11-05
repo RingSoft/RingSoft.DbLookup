@@ -14,5 +14,11 @@
             base.HasHorizontalAlignmentType(alignmentType);
             return (TColumnDefinition) this;
         }
+
+        public new TColumnDefinition HasSearchForHostId(int hostId)
+        {
+            base.HasSearchForHostId(hostId);
+            return (TColumnDefinition) this;
+        }
     }
 }

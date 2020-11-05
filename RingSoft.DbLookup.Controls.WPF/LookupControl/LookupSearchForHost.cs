@@ -6,47 +6,43 @@ using RingSoft.DbLookup.Lookup;
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public abstract class LookupSearchForControl<TControl> : LookupSearchForControl
+    public abstract class LookupSearchForHost<TControl> : LookupSearchForHost
         where TControl : Control
     {
         public new TControl Control { get; private set; }
 
         protected abstract TControl ConstructControl();
 
-        protected LookupSearchForControl(LookupColumnDefinitionBase lookupColumn) : base(lookupColumn)
-        {
-        }
-
-        internal override void InternalInitialize()
+        internal override void InternalInitialize(LookupColumnDefinitionBase columnDefinition)
         {
             Control = ConstructControl();
             base.Control = Control;
 
-            base.InternalInitialize();
-            Initialize(Control);
+            base.InternalInitialize(columnDefinition);
+            Initialize(Control, columnDefinition);
         }
 
-        protected abstract void Initialize(TControl control);
+        protected abstract void Initialize(TControl control, LookupColumnDefinitionBase columnDefinition);
     }
-    public abstract class LookupSearchForControl
+    public abstract class LookupSearchForHost
     {
         public Control Control { get; protected internal set; }
 
-        public LookupColumnDefinitionBase LookupColumn { get; }
+        public LookupColumnDefinitionBase LookupColumn { get; private set; }
 
         public abstract string SearchText { get; set; }
 
         public event EventHandler<KeyEventArgs> PreviewKeyDown;
         public event EventHandler TextChanged;
 
-        protected internal LookupSearchForControl(LookupColumnDefinitionBase lookupColumn)
+        protected internal LookupSearchForHost()
         {
-            LookupColumn = lookupColumn;
         }
 
-        internal virtual void InternalInitialize()
+        internal virtual void InternalInitialize(LookupColumnDefinitionBase columnDefinition)
         {
             Control.PreviewKeyDown += (sender, args) => OnPreviewKeyDown(args);
+            LookupColumn = columnDefinition;
         }
 
         public abstract void SelectAll();
@@ -59,6 +55,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected void OnTextChanged()
         {
             TextChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public virtual void SetFocusToControl()
+        {
         }
     }
 }

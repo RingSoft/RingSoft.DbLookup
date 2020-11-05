@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
@@ -78,22 +79,35 @@ namespace RingSoft.DbLookup
 
         #endregion
 
-        public static LookupColumnSearchForControls TranslateFieldDataTypeToControl(this FieldDataTypes dataType)
+        public static int ConvertFieldDataTypeToSearchForHostId(this FieldDataTypes dataType)
         {
             switch (dataType)
             {
                 case FieldDataTypes.String:
                 case FieldDataTypes.Enum:
                 case FieldDataTypes.Bool:
-                    return LookupColumnSearchForControls.StringControl;
+                    return LookupColumnDefinitionBase.SearchForStringHostId;
                 case FieldDataTypes.Integer:
-                    return LookupColumnSearchForControls.IntegerControl;
+                    return LookupColumnDefinitionBase.SearchForIntegerHostId;
                 case FieldDataTypes.Decimal:
-                    return LookupColumnSearchForControls.DecimalControl;
+                    return LookupColumnDefinitionBase.SearchForDecimalHostId;
                 case FieldDataTypes.DateTime:
-                    return LookupColumnSearchForControls.DateControl;
+                    return LookupColumnDefinitionBase.SearchForDateHostId;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
+            }
+        }
+
+        public static DateFormatTypes ConvertDbDateTypeToDateFormatType(this DbDateTypes dbDateType)
+        {
+            switch (dbDateType)
+            {
+                case DbDateTypes.DateOnly:
+                    return DateFormatTypes.DateOnly;
+                case DbDateTypes.DateTime:
+                    return DateFormatTypes.DateTime;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dbDateType), dbDateType, null);
             }
         }
     }

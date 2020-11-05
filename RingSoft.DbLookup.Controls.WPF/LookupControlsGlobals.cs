@@ -19,7 +19,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public static LookupWindowFactory LookupWindowFactory { get; set; } = new LookupWindowFactory();
 
-        public static LookupControlSearchForFactory LookupControlSearchForFactory { get; set; } = new LookupControlSearchForFactory();
+        public static LookupSearchForHostFactory LookupControlSearchForFactory { get; set; } = new LookupSearchForHostFactory();
 
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 

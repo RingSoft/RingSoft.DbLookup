@@ -4,16 +4,12 @@ using RingSoft.DbLookup.Lookup;
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class LookupSearchForStringControl : LookupSearchForControl<StringEditControl>
+    public class LookupSearchForStringHost : LookupSearchForHost<StringEditControl>
     {
         public override string SearchText
         {
             get => Control.Text;
             set => Control.Text = value;
-        }
-
-        public LookupSearchForStringControl(LookupColumnDefinitionBase lookupColumn) : base(lookupColumn)
-        {
         }
 
         protected override StringEditControl ConstructControl()
@@ -22,7 +18,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             return result;
         }
 
-        protected override void Initialize(StringEditControl control)
+        protected override void Initialize(StringEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
             Control.TextChanged += (sender, args) => OnTextChanged();
         }

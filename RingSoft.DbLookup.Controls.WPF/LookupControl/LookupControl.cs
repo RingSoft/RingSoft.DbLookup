@@ -94,27 +94,27 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         //--------------------------------------------------------------
 
-        private LookupSearchForControl _lookupSearchForControl;
+        private LookupSearchForHost _lookupSearchForHost;
 
-        public LookupSearchForControl SearchForControl
+        public LookupSearchForHost SearchForHost
         {
-            get => _lookupSearchForControl;
+            get => _lookupSearchForHost;
             set
             {
-                if (_lookupSearchForControl != null)
+                if (_lookupSearchForHost != null)
                 {
-                    SearchForControl.PreviewKeyDown -= SearchForControl_PreviewKeyDown;
-                    SearchForControl.TextChanged -= SearchForControl_TextChanged;
-                    SearchForControl.Control.PreviewLostKeyboardFocus -= Control_PreviewLostKeyboardFocus;
+                    SearchForHost.PreviewKeyDown -= SearchForControl_PreviewKeyDown;
+                    SearchForHost.TextChanged -= SearchForControl_TextChanged;
+                    SearchForHost.Control.PreviewLostKeyboardFocus -= Control_PreviewLostKeyboardFocus;
                 }
 
-                _lookupSearchForControl = value;
+                _lookupSearchForHost = value;
 
-                if (_lookupSearchForControl != null)
+                if (_lookupSearchForHost != null)
                 {
-                    SearchForControl.PreviewKeyDown += SearchForControl_PreviewKeyDown;
-                    SearchForControl.TextChanged += SearchForControl_TextChanged;
-                    SearchForControl.Control.PreviewLostKeyboardFocus += Control_PreviewLostKeyboardFocus;
+                    SearchForHost.PreviewKeyDown += SearchForControl_PreviewKeyDown;
+                    SearchForHost.TextChanged += SearchForControl_TextChanged;
+                    SearchForHost.Control.PreviewLostKeyboardFocus += Control_PreviewLostKeyboardFocus;
                 }
             }
         }
@@ -139,16 +139,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             get
             {
-                if (SearchForControl == null)
+                if (SearchForHost == null)
                     return string.Empty;
 
-                return SearchForControl.SearchText;
+                return SearchForHost.SearchText;
             }
             set
             {
                 _resettingSearchFor = true;
-                if (SearchForControl != null)
-                    SearchForControl.SearchText = value;
+                if (SearchForHost != null)
+                    SearchForHost.SearchText = value;
                 _resettingSearchFor = false;
             }
         }
@@ -263,6 +263,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
 
             //FocusableProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
+            IsTabStopProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(false));
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(LookupControl),
                 new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
@@ -384,7 +385,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
             if (!_resettingSearchFor)
-                LookupData.OnSearchForChange(SearchForControl.SearchText);
+                LookupData.OnSearchForChange(SearchForHost.SearchText);
         }
 
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -802,8 +803,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                         _lastDirection = direction;
                     }
 
-                    if (SearchForControl != null)
-                        SearchForControl.SearchText = string.Empty;
+                    if (SearchForHost != null)
+                        SearchForHost.SearchText = string.Empty;
 
                     var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
 
@@ -830,7 +831,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
 
                     SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
-                    SearchForControl?.Control.Focus();
+                    SearchForHost?.Control.Focus();
                 }
             }
         }
@@ -850,15 +851,19 @@ namespace RingSoft.DbLookup.Controls.WPF
                 else
                 {
                     var lookupColumnDefinition = LookupDefinition.VisibleColumns[sortColumnIndex];
-                    SearchForControl =
-                        LookupControlsGlobals.LookupControlSearchForFactory.CreateSearchForControl(lookupColumnDefinition);
+                    SearchForHost =
+                        LookupControlsGlobals.LookupControlSearchForFactory.CreateSearchForHost(lookupColumnDefinition);
 
                     SearchForStackPanel.Children.Clear();
-                    SearchForStackPanel.Children.Add(SearchForControl.Control);
+                    SearchForStackPanel.Children.Add(SearchForHost.Control);
                     if (IsKeyboardFocusWithin)
-                        SearchForControl.Control.Focus();
-
-                    Focusable = false;
+                    {
+                        SearchForHost.Control.Loaded += (sender, args) =>
+                        {
+                            if (!SearchForHost.Control.Focus())
+                                SearchForHost.SetFocusToControl();
+                        };
+                    }
                 }
             }
 
@@ -994,8 +999,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
             {
-                if (SearchForControl != null)
-                    initialSearchFor = SearchForControl.SearchText;
+                if (SearchForHost != null)
+                    initialSearchFor = SearchForHost.SearchText;
             }
 
             _currentPageSize = GetPageSize();
@@ -1004,15 +1009,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupData.GetInitData();
             else
             {
-                if (SearchForControl != null)
+                if (SearchForHost != null)
                 {
-                    var forceRefresh = SearchForControl.SearchText == initialSearchFor;
-                    SearchForControl.SearchText =
+                    var forceRefresh = SearchForHost.SearchText == initialSearchFor;
+                    SearchForHost.SearchText =
                         initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
 
                     if (searchForSelectAll)
                     {
-                        SearchForControl.SelectAll();
+                        SearchForHost.SelectAll();
                     }
 
                     if (forceRefresh)
@@ -1244,10 +1249,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!SearchText.IsNullOrEmpty())
                 LookupData.ResetRecordCount();
 
-            if (SearchForControl != null)
+            if (SearchForHost != null)
             {
-                SearchForControl.Control.Focus();
-                RefreshData(false, SearchForControl.SearchText);
+                SearchForHost.Control.Focus();
+                RefreshData(false, SearchForHost.SearchText);
             }
         }
         private async void GetRecordCountButtonClick()
@@ -1361,8 +1366,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (EqualsRadioButton != null)
                 EqualsRadioButton.IsChecked = true;
 
-            if (SearchForControl != null)
-                SearchForControl.SearchText = string.Empty;
+            if (SearchForHost != null)
+                SearchForHost.SearchText = string.Empty;
         }
 
         private void SetDesignText()

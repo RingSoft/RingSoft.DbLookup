@@ -58,6 +58,19 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public bool Distinct { get; private set; }
 
+        public override int? SearchForHostId
+        {
+            get
+            {
+                var result = base.SearchForHostId;
+                if (result == null)
+                    result = FieldDefinition.SearchForHostId;
+
+                return result;
+            }
+            internal set => base.SearchForHostId = value;
+        } 
+
         private string _selectSqlAlias = string.Empty;
 
         internal LookupFieldColumnDefinition(FieldDefinition fieldDefinition)

@@ -23,6 +23,14 @@ AddOnTheFlyProcessor
 IUserInterface
 
 DbMaintenance
+
+LookupColumnDefinitionBase
+
+LookupColumnDefinitionType
+
+FieldDefinition
+
+FieldDefinitionType
 ------------------------------
 DbMaintenanceViewModel Methods
 	GetLookupCommand

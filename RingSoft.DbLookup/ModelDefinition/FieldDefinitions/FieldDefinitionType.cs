@@ -44,5 +44,11 @@
             base.IsRequired(value);
             return (TFieldDefinition) this;
         }
+
+        public new TFieldDefinition HasSearchForHostId(int hostId)
+        {
+            base.HasSearchForHostId(hostId);
+            return (TFieldDefinition)this;
+        }
     }
 }

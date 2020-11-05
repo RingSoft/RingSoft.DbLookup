@@ -13,23 +13,15 @@
         Right = 2
     }
 
-    public enum LookupColumnSearchForControls
-    {
-        StringControl = LookupColumnDefinitionBase.SearchForStringControl,
-        IntegerControl = LookupColumnDefinitionBase.SearchForIntegerControl,
-        DecimalControl = LookupColumnDefinitionBase.SearchForDecimalControl,
-        DateControl = LookupColumnDefinitionBase.SearchForDateControl
-    }
-
     /// <summary>
     /// The lookup column definition base class.
     /// </summary>
     public abstract class LookupColumnDefinitionBase
     {
-        public const int SearchForStringControl = 0;
-        public const int SearchForIntegerControl = 1;
-        public const int SearchForDecimalControl = 2;
-        public const int SearchForDateControl = 3;
+        public const int SearchForStringHostId = 0;
+        public const int SearchForIntegerHostId = 1;
+        public const int SearchForDecimalHostId = 2;
+        public const int SearchForDateHostId = 3;
 
         /// <summary>
         /// Gets the type of the column.
@@ -96,7 +88,7 @@
         /// </value>
         public LookupColumnAlignmentTypes HorizontalAlignment { get; private set; } = LookupColumnAlignmentTypes.Left;
 
-        public int? SearchForControl { get; private set; } = null;
+        public virtual int? SearchForHostId { get; internal set; }
 
         protected internal void SetupColumn()
         {
@@ -120,7 +112,7 @@
             PropertyName = source.PropertyName;
             PercentWidth = source.PercentWidth;
             HorizontalAlignment = source.HorizontalAlignment;
-            SearchForControl = source.SearchForControl;
+            SearchForHostId = source.SearchForHostId;
         }
 
         /// <summary>
@@ -139,9 +131,9 @@
             HorizontalAlignment = alignmentType;
         }
 
-        public void HasSearchForControl(int controlId)
+        public void HasSearchForHostId(int hostId)
         {
-
+            SearchForHostId = hostId;
         }
     }
 }

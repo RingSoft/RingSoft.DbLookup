@@ -19,8 +19,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected virtual LookupSearchForHost CreateSearchForHost(int? hostId)
         {
-            if (hostId == LookupColumnDefinitionBase.SearchForStringHostId)
-                return new LookupSearchForStringHost();
+            if (hostId == LookupColumnDefinitionBase.SearchForDecimalHostId)
+                return new LookupSearchForDecimalHost();
             else if (hostId == LookupColumnDefinitionBase.SearchForDateHostId)
                 return new LookupSearchForDateHost();
 

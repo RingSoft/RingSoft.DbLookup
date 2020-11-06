@@ -90,7 +90,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             try
             {
                 var checkFormat = string.Format(format, number);
-                var unused = int.Parse(GblMethods.NumTextToString(checkFormat));
+                var unused = decimal.Parse(GblMethods.NumTextToString(checkFormat));
             }
             catch (Exception)
             {

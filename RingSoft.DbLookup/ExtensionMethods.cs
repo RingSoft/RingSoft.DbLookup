@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
@@ -108,6 +109,22 @@ namespace RingSoft.DbLookup
                     return DateFormatTypes.DateTime;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dbDateType), dbDateType, null);
+            }
+        }
+
+        public static DecimalEditFormatTypes ConvertDecimalFieldTypeToDecimalEditFormatType(
+            this DecimalFieldTypes decimalFieldType)
+        {
+            switch (decimalFieldType)
+            {
+                case DecimalFieldTypes.Decimal:
+                    return DecimalEditFormatTypes.Number;
+                case DecimalFieldTypes.Currency:
+                    return DecimalEditFormatTypes.Currency;
+                case DecimalFieldTypes.Percent:
+                    return DecimalEditFormatTypes.Percent;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(decimalFieldType), decimalFieldType, null);
             }
         }
     }

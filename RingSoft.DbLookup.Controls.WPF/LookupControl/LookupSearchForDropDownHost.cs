@@ -7,6 +7,11 @@ namespace RingSoft.DbLookup.Controls.WPF
     public abstract class LookupSearchForDropDownHost<TDropDownControl> : LookupSearchForHost<TDropDownControl>
         where TDropDownControl : DropDownEditControl
     {
+        public override void SelectAll()
+        {
+            Control.TextBox?.SelectAll();
+        }
+
         public override void SetFocusToControl()
         {
             Control.TextBox?.Focus();

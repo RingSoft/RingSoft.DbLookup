@@ -1,6 +1,7 @@
 ﻿using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Globalization;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -66,13 +67,46 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Formula { get; internal set; }
 
+        private CultureInfo _columnCulture;
+
         /// <summary>
         /// Gets the culture.
         /// </summary>
         /// <value>
         /// The culture.
         /// </value>
-        public CultureInfo NumberCulture { get; private set; } = LookupDefaults.DefaultNumberCulture;
+        public CultureInfo ColumnCulture
+        {
+            get
+            {
+                if (_columnCulture == null)
+                {
+                    if (DataType == FieldDataTypes.DateTime)
+                        return LookupDefaults.DefaultDateCulture;
+                    else
+                        return LookupDefaults.DefaultNumberCulture;
+                }
+
+                return _columnCulture;
+            }
+            private set => _columnCulture = value;
+        }
+
+        /// <summary>
+        /// Gets the number of digits to the right of the decimal point.
+        /// </summary>
+        /// <value>
+        /// The decimal count.
+        /// </value>
+        public int DecimalCount { get; internal set; }
+
+        /// <summary>
+        /// Gets the type of the decimal field.
+        /// </summary>
+        /// <value>
+        /// The type of the decimal field.
+        /// </value>
+        public DecimalFieldTypes DecimalFieldType { get; internal set; }
 
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
@@ -89,6 +123,7 @@ namespace RingSoft.DbLookup.Lookup
             _dataType = dataType;
 
             DateFormatString = LookupDefaults.DefaultDateCulture.DateTimeFormat.ShortDatePattern;
+            DecimalCount = LookupDefaults.DefaultDecimalCount;
 
             SetupColumn();
         }
@@ -99,7 +134,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 NumberFormatString = formulaSource.NumberFormatString;
                 DateFormatString = formulaSource.DateFormatString;
-                NumberCulture = formulaSource.NumberCulture;
+                ColumnCulture = formulaSource.ColumnCulture;
             }
             base.CopyFrom(source);
         }
@@ -150,13 +185,13 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Sets the number culture identifier.
+        /// Sets the column culture identifier.
         /// </summary>
         /// <param name="cultureId">The culture identifier.</param>
         /// <returns></returns>
-        public LookupFormulaColumnDefinition HasNumberCultureId(string cultureId)
+        public LookupFormulaColumnDefinition HasColumnCultureId(string cultureId)
         {
-            NumberCulture = new CultureInfo(cultureId);
+            ColumnCulture = new CultureInfo(cultureId);
             return this;
         }
 
@@ -176,11 +211,11 @@ namespace RingSoft.DbLookup.Lookup
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    return GblMethods.FormatValue(DataType, value, NumberFormatString, NumberCulture);
+                    return GblMethods.FormatValue(DataType, value, NumberFormatString, ColumnCulture);
                 case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
-                    return GblMethods.FormatValue(DataType, value, DateFormatString, NumberCulture);
+                    return GblMethods.FormatValue(DataType, value, DateFormatString, ColumnCulture);
                 case FieldDataTypes.Bool:
                     break;
                 default:
@@ -188,6 +223,28 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return GblMethods.FormatValue(DataType, value);
+        }
+
+        /// <summary>
+        /// Sets the number of digits to the right of the decimal point.
+        /// </summary>
+        /// <param name="value">The new digits value.</param>
+        /// <returns>This object.</returns>
+        public LookupFormulaColumnDefinition HasDecimalCount(int value)
+        {
+            DecimalCount = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the type of this decimal field.
+        /// </summary>
+        /// <param name="value">The new DecimalFieldTypes value.</param>
+        /// <returns>This object.</returns>
+        public LookupFormulaColumnDefinition HasDecimalFieldType(DecimalFieldTypes value)
+        {
+            DecimalFieldType = value;
+            return this;
         }
     }
 }

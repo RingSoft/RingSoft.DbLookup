@@ -36,11 +36,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private DateTime? _currentValue;
 
-        public override void SelectAll()
-        {
-            Control.TextBox.SelectAll();
-        }
-
         protected override DateEditControl ConstructControl()
         {
             return new DateEditControl();
@@ -51,14 +46,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             Control.AllowNullValue = true;
             Control.PlayValidationSoundOnLostFocus = false;
 
-            if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
+            switch (columnDefinition.ColumnType)
             {
-                if (fieldColumnDefinition.FieldDefinition is DateFieldDefinition dateFieldDefinition)
-                {
-                    Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
-                    Control.CultureId = dateFieldDefinition.Culture.Name;
-                    Control.DisplayFormat = dateFieldDefinition.DateFormatString;
-                }
+                case LookupColumnTypes.Field:
+                    if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
+                    {
+                        if (fieldColumnDefinition.FieldDefinition is DateFieldDefinition dateFieldDefinition)
+                        {
+                            Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
+                            Control.CultureId = dateFieldDefinition.Culture.Name;
+                            Control.DisplayFormat = dateFieldDefinition.DateFormatString;
+                        }
+                    }
+                    break;
+                case LookupColumnTypes.Formula:
+                    if (columnDefinition is LookupFormulaColumnDefinition formulaColumnDefinition)
+                    {
+                        control.CultureId = formulaColumnDefinition.ColumnCulture.Name;
+                        control.DisplayFormat = formulaColumnDefinition.DateFormatString;
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             Control.ValueChanged += (sender, args) =>

@@ -95,23 +95,29 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <exception cref="ArgumentOutOfRangeException">value - null</exception>
         public override string FormatValue(string value)
         {
-            var formatString = DateFormatString;
+            return FormatDateValue(value, DateFormatString, DateType, Culture);
+        }
+
+        public static string FormatDateValue(string dateValue, string dateFormatString, DbDateTypes dateType,
+            CultureInfo culture)
+        {
+            var formatString = dateFormatString;
             if (formatString.IsNullOrEmpty())
             {
-                switch (DateType)
+                switch (dateType)
                 {
                     case DbDateTypes.DateOnly:
-                        formatString = Culture.DateTimeFormat.ShortDatePattern;
+                        formatString = culture.DateTimeFormat.ShortDatePattern;
                         break;
                     case DbDateTypes.DateTime:
-                        formatString = Culture.DateTimeFormat.ShortDatePattern + ' ' + Culture.DateTimeFormat.LongTimePattern;
+                        formatString = culture.DateTimeFormat.ShortDatePattern + ' ' + culture.DateTimeFormat.LongTimePattern;
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
+                        throw new ArgumentOutOfRangeException(nameof(dateValue), dateValue, null);
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataType, value, formatString, Culture);
+            return GblMethods.FormatValue(FieldDataTypes.DateTime, dateValue, formatString, culture);
         }
     }
 }

@@ -133,8 +133,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 15);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Ext. Price", extendedPriceFormula, 15)
-                .HasNumberFormatString("c").HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
+            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice", extendedPriceFormula, 15)
+                .HasDecimalFieldType(DecimalFieldTypes.Currency)
+                .HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Discount, "Discount", p => p.Discount, 15);
             
             ProductsLookup = new LookupDefinition<ProductLookup, Product>(_lookupContext.Products);

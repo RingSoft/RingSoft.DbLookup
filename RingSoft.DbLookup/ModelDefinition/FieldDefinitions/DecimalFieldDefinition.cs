@@ -122,26 +122,32 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public override string FormatValue(string value)
         {
-            var formatString = NumberFormatString;
+            return FormatNumericValue(value, NumberFormatString, DecimalFieldType, DecimalCount, Culture);
+        }
+
+        public static string FormatNumericValue(string numericValue, string numberFormatString,
+            DecimalFieldTypes decimalFieldType, int decimalCount, CultureInfo culture)
+        {
+            var formatString = numberFormatString;
             if (formatString.IsNullOrEmpty())
             {
-                switch (DecimalFieldType)
+                switch (decimalFieldType)
                 {
                     case DecimalFieldTypes.Decimal:
-                        formatString = GblMethods.GetNumFormat(DecimalCount, false);
+                        formatString = GblMethods.GetNumFormat(decimalCount, false);
                         break;
                     case DecimalFieldTypes.Currency:
-                        formatString = GblMethods.GetNumFormat(DecimalCount, true);
+                        formatString = GblMethods.GetNumFormat(decimalCount, true);
                         break;
                     case DecimalFieldTypes.Percent:
-                        formatString = GblMethods.GetPercentFormat(DecimalCount);
+                        formatString = GblMethods.GetPercentFormat(decimalCount);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataType, value, formatString, Culture);
+            return GblMethods.FormatValue(FieldDataTypes.Decimal, numericValue, formatString, culture);
         }
     }
 }

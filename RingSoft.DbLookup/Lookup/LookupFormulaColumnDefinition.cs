@@ -49,7 +49,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The number format string.
         /// </value>
-        public string NumberFormatString { get; internal set; } = GblMethods.GetNumFormat(2, false);
+        public string NumberFormatString { get; internal set; }
 
         /// <summary>
         /// Gets the date format string.
@@ -108,6 +108,14 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public DecimalFieldTypes DecimalFieldType { get; internal set; }
 
+        /// <summary>
+        /// Gets the type of the date.
+        /// </summary>
+        /// <value>
+        /// The type of the date.
+        /// </value>
+        public DbDateTypes DateType { get; private set; }
+
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 
@@ -135,6 +143,9 @@ namespace RingSoft.DbLookup.Lookup
                 NumberFormatString = formulaSource.NumberFormatString;
                 DateFormatString = formulaSource.DateFormatString;
                 ColumnCulture = formulaSource.ColumnCulture;
+                DecimalCount = formulaSource.DecimalCount;
+                DecimalFieldType = formulaSource.DecimalFieldType;
+                DateType = formulaSource.DateType;
             }
             base.CopyFrom(source);
         }
@@ -211,11 +222,12 @@ namespace RingSoft.DbLookup.Lookup
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    return GblMethods.FormatValue(DataType, value, NumberFormatString, ColumnCulture);
+                    return DecimalFieldDefinition.FormatNumericValue(value, NumberFormatString, DecimalFieldType,
+                        DecimalCount, ColumnCulture);
                 case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
-                    return GblMethods.FormatValue(DataType, value, DateFormatString, ColumnCulture);
+                    return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture);
                 case FieldDataTypes.Bool:
                     break;
                 default:
@@ -244,6 +256,17 @@ namespace RingSoft.DbLookup.Lookup
         public LookupFormulaColumnDefinition HasDecimalFieldType(DecimalFieldTypes value)
         {
             DecimalFieldType = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the type of the date.
+        /// </summary>
+        /// <param name="value">The new DbDateTypes value.</param>
+        /// <returns>This object.</returns>
+        public LookupFormulaColumnDefinition HasDateType(DbDateTypes value)
+        {
+            DateType = value;
             return this;
         }
     }

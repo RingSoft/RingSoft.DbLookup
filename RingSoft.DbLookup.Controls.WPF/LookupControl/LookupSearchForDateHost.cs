@@ -3,7 +3,7 @@ using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
-using System.Windows.Input;
+using System.Windows;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -34,6 +34,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        protected virtual double? DefaultDateOnlyWidth { get; set; } = 100;
+
+        protected virtual double? DefaultDateTimeWidth { get; set; } = 175;
+
         private DateTime? _currentValue;
 
         protected override DateEditControl ConstructControl()
@@ -62,6 +66,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 case LookupColumnTypes.Formula:
                     if (columnDefinition is LookupFormulaColumnDefinition formulaColumnDefinition)
                     {
+                        control.DateFormatType =
+                            formulaColumnDefinition.DateType.ConvertDbDateTypeToDateFormatType();
                         control.CultureId = formulaColumnDefinition.ColumnCulture.Name;
                         control.DisplayFormat = formulaColumnDefinition.DateFormatString;
                     }
@@ -78,23 +84,28 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _currentValue = Control.Value;
                 }
             };
-        }
 
-        public override bool CanProcessSearchForKey(Key key)
-        {
-            if (Control.IsPopupOpen())
+            switch (Control.DateFormatType)
             {
-                switch (key)
-                {
-                    case Key.Left:
-                    case Key.Right:
-                    case Key.Up:
-                    case Key.Down:
-                        return false;
-                }
-            }
+                case DateFormatTypes.DateOnly:
+                    if (DefaultDateOnlyWidth != null)
+                    {
+                        Control.HorizontalAlignment = HorizontalAlignment.Left;
+                        Control.Width = (double) DefaultDateOnlyWidth;
+                    }
 
-            return base.CanProcessSearchForKey(key);
+                    break;
+                case DateFormatTypes.DateTime:
+                    if (DefaultDateTimeWidth != null)
+                    {
+                        Control.HorizontalAlignment = HorizontalAlignment.Left;
+                        Control.Width = (double) DefaultDateTimeWidth;
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

@@ -20,12 +20,17 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public override bool CanProcessSearchForKey(Key key)
         {
+            if (Control.IsPopupOpen())
+                return false;
+
             switch (key)
             {
-                case Key.Enter:
-                case Key.Escape:
-                    return !Control.IsPopupOpen();
+                case Key.Home:
+                    return Control.SelectionStart == 0 && Control.SelectionLength == 0;
+                case Key.End:
+                    return Control.SelectionStart == Control.Text.Length;
             }
+
             return base.CanProcessSearchForKey(key);
         }
     }

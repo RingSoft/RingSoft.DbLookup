@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System;
+using System.Windows;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -15,6 +15,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             get => Control.Value.ToString();
             set => Control.Value = value.ToDecimal(Control.Culture);
         }
+        
+        protected virtual double? DefaultWidth { get; set; } = 140;
+
         protected override DecimalEditControl ConstructControl()
         {
             return new DecimalEditControl();
@@ -53,6 +56,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+
+            if (DefaultWidth != null)
+            {
+                Control.HorizontalAlignment = HorizontalAlignment.Left;
+                Control.Width = (double)DefaultWidth;
             }
         }
     }

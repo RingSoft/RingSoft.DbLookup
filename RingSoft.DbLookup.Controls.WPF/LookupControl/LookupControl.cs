@@ -776,70 +776,91 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            ListSortDirection direction = _lastDirection;
 
             if (headerClicked != null)
             {
-                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
+                OnColumnClick(columnIndex, true);
+            }
+        }
+
+        private void OnColumnClick(int columnIndex, bool mouseClick)
+        {
+            if (LookupGridView == null)
+                return;
+
+            if (columnIndex > LookupGridView.Columns.Count - 1)
+            {
+                System.Media.SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            var headerClicked = LookupGridView.Columns[columnIndex].Header as GridViewColumnHeader;
+            if (headerClicked == null)
+                return;
+
+            ListSortDirection direction = _lastDirection;
+
+            if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+            {
+                var controlKeyPressed = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+                var resetSortOrder = !controlKeyPressed || _lastHeaderClicked == headerClicked;
+                if (!mouseClick)
+                    resetSortOrder = true;
+
+                if (resetSortOrder)
                 {
-                    var controlKeyPressed = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-                    var resetSortOrder = !controlKeyPressed || _lastHeaderClicked == headerClicked;
-                    if (resetSortOrder)
+                    if (headerClicked != _lastHeaderClicked)
                     {
-                        if (headerClicked != _lastHeaderClicked)
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        if (_lastDirection == ListSortDirection.Ascending)
                         {
-                            direction = ListSortDirection.Ascending;
+                            direction = ListSortDirection.Descending;
                         }
                         else
                         {
-                            if (_lastDirection == ListSortDirection.Ascending)
-                            {
-                                direction = ListSortDirection.Descending;
-                            }
-                            else
-                            {
-                                direction = ListSortDirection.Ascending;
-                            }
+                            direction = ListSortDirection.Ascending;
                         }
                     }
-
-                    if (resetSortOrder)
-                    {
-                        GridViewSort.ApplySort(direction, ListView, headerClicked);
-                        _lastHeaderClicked = headerClicked;
-                        _lastDirection = direction;
-                    }
-
-                    if (SearchForHost != null)
-                        SearchForHost.SearchText = string.Empty;
-
-                    var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
-
-                    LookupData.OnColumnClick(columnIndex, resetSortOrder);
-
-                    for (int i = 0; i < LookupGridView.Columns.Count; i++)
-                    {
-                        var gridColumn = LookupGridView.Columns[i];
-                        if (gridColumn != _lastHeaderClicked.Column)
-                        {
-                            var columnHeader = gridColumn.Header as GridViewColumnHeader;
-                            GridViewSort.RemoveSortGlyph(columnHeader);
-                        }
-                    }
-
-                    var columnNumber = 1;
-                    foreach (var lookupColumnDefinition in LookupData.OrderByList)
-                    {
-                        var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
-                        var orderGridColumnHeader =
-                            LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
-                        GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
-                        columnNumber++;
-                    }
-
-                    SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
-                    SearchForHost?.Control.Focus();
                 }
+
+                if (resetSortOrder)
+                {
+                    GridViewSort.ApplySort(direction, ListView, headerClicked);
+                    _lastHeaderClicked = headerClicked;
+                    _lastDirection = direction;
+                }
+
+                if (SearchForHost != null)
+                    SearchForHost.SearchText = string.Empty;
+
+                LookupData.OnColumnClick(columnIndex, resetSortOrder);
+
+                for (int i = 0; i < LookupGridView.Columns.Count; i++)
+                {
+                    var gridColumn = LookupGridView.Columns[i];
+                    if (gridColumn != _lastHeaderClicked.Column)
+                    {
+                        var columnHeader = gridColumn.Header as GridViewColumnHeader;
+                        GridViewSort.RemoveSortGlyph(columnHeader);
+                    }
+                }
+
+                var columnNumber = 1;
+                foreach (var lookupColumnDefinition in LookupData.OrderByList)
+                {
+                    var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
+                    var orderGridColumnHeader =
+                        LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
+                    GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
+                    columnNumber++;
+                }
+
+                SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
+                SearchForHost?.Control.Focus();
             }
         }
 
@@ -1128,10 +1149,65 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnListViewKeyDown(KeyEventArgs e)
         {
-            if (SearchForHost != null)
+            if (SearchForHost != null && SearchForHost.Control.IsFocused)
             {
                 if (!SearchForHost.CanProcessSearchForKey(e.Key))
                 {
+                    return;
+                }
+            }
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                int? sortColumnIndex = null;
+                switch (e.Key)
+                {
+                    case Key.D1:
+                    case Key.NumPad1:
+                        sortColumnIndex = 0;
+                        break;
+                    case Key.D2:
+                    case Key.NumPad2:
+                        sortColumnIndex = 1;
+                        break;
+                    case Key.D3:
+                    case Key.NumPad3:
+                        sortColumnIndex = 2;
+                        break;
+                    case Key.D4:
+                    case Key.NumPad4:
+                        sortColumnIndex = 3;
+                        break;
+                    case Key.D5:
+                    case Key.NumPad5:
+                        sortColumnIndex = 4;
+                        break;
+                    case Key.D6:
+                    case Key.NumPad6:
+                        sortColumnIndex = 5;
+                        break;
+                    case Key.D7:
+                    case Key.NumPad7:
+                        sortColumnIndex = 6;
+                        break;
+                    case Key.D8:
+                    case Key.NumPad8:
+                        sortColumnIndex = 7;
+                        break;
+                    case Key.D9:
+                    case Key.NumPad9:
+                        sortColumnIndex = 8;
+                        break;
+                    case Key.D0:
+                    case Key.NumPad0:
+                        sortColumnIndex = 9;
+                        break;
+                }
+
+                if (sortColumnIndex != null)
+                {
+                    OnColumnClick((int) sortColumnIndex, false);
+                    e.Handled = true;
                     return;
                 }
             }

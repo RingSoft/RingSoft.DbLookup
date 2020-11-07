@@ -9,7 +9,21 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="TextBox"/>
+                                <Button x:Name="Button" Grid.Column="1" Width="20" IsTabStop="False">
+                                    <Image Source="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"></Image>
+                                </Button>
+                            </Grid>
+                            <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=AutoFillTextBox}" StaysOpen="False" Placement="Bottom">
+                                <ListBox x:Name="ListBox"/>
+                            </Popup>
+                        </StackPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

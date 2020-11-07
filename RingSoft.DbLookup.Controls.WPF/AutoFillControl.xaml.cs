@@ -311,7 +311,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             Loaded += (sender, args) => OnLoad();
 
-                SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
+            SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
             LostFocus += (sender, args) =>
             {
                 Popup.IsOpen = false;

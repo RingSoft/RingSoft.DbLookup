@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -140,7 +141,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             get
             {
                 if (SearchForHost == null)
-                    return string.Empty;
+                    return String.Empty;
 
                 return SearchForHost.SearchText;
             }
@@ -791,7 +792,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (columnIndex > LookupGridView.Columns.Count - 1)
             {
-                System.Media.SystemSounds.Exclamation.Play();
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
@@ -835,7 +836,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
 
                 if (SearchForHost != null)
-                    SearchForHost.SearchText = string.Empty;
+                    SearchForHost.SearchText = String.Empty;
 
                 LookupData.OnColumnClick(columnIndex, resetSortOrder);
 
@@ -1033,7 +1034,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             _currentPageSize = GetPageSize();
 
-            if (string.IsNullOrEmpty(initialSearchFor))
+            if (String.IsNullOrEmpty(initialSearchFor))
                 LookupData.GetInitData();
             else
             {
@@ -1429,7 +1430,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         ClearLookupControl();
                         break;
                     case LookupCommands.Refresh:
-                        RefreshData(command.ResetSearchFor, string.Empty, command.ParentWindowPrimaryKeyValue);
+                        RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.AddModify:
                         var selectedIndex = ListView?.SelectedIndex ?? 0;
@@ -1458,7 +1459,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 EqualsRadioButton.IsChecked = true;
 
             if (SearchForHost != null)
-                SearchForHost.SearchText = string.Empty;
+                SearchForHost.SearchText = String.Empty;
         }
 
         private void SetDesignText()

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.Lookup;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup
 {
@@ -79,25 +78,6 @@ namespace RingSoft.DbLookup
         }
 
         #endregion
-
-        public static int ConvertFieldDataTypeToSearchForHostId(this FieldDataTypes dataType)
-        {
-            switch (dataType)
-            {
-                case FieldDataTypes.String:
-                case FieldDataTypes.Enum:
-                case FieldDataTypes.Bool:
-                    return LookupColumnDefinitionBase.SearchForStringHostId;
-                case FieldDataTypes.Integer:
-                    return LookupColumnDefinitionBase.SearchForIntegerHostId;
-                case FieldDataTypes.Decimal:
-                    return LookupColumnDefinitionBase.SearchForDecimalHostId;
-                case FieldDataTypes.DateTime:
-                    return LookupColumnDefinitionBase.SearchForDateHostId;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
-            }
-        }
 
         public static DateFormatTypes ConvertDbDateTypeToDateFormatType(this DbDateTypes dbDateType)
         {

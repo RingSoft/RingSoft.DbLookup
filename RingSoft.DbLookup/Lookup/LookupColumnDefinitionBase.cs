@@ -18,11 +18,6 @@
     /// </summary>
     public abstract class LookupColumnDefinitionBase
     {
-        public const int SearchForStringHostId = 0;
-        public const int SearchForIntegerHostId = 1;
-        public const int SearchForDecimalHostId = 2;
-        public const int SearchForDateHostId = 3;
-
         /// <summary>
         /// Gets the type of the column.
         /// </summary>

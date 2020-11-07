@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -308,19 +309,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             //InitializeComponent();
             this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/AutoFillControl.xaml");
 
-            Loaded += (sender, args) =>
-            {
-                if (Setup != null && !_controlLoaded)
-                {
-                    SetupControl();
-                }
-                _controlLoaded = true;
+            Loaded += (sender, args) => OnLoad();
 
-                if (IsFocused)
-                    AutoFillTextBox.Focus();
-            };
-
-            SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
+                SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
             LostFocus += (sender, args) =>
             {
                 Popup.IsOpen = false;
@@ -334,6 +325,45 @@ namespace RingSoft.DbLookup.Controls.WPF
             ContextMenu = new ContextMenu();
             ContextMenu.AddTextBoxContextMenuItems();
             AutoFillTextBox.ContextMenu = ContextMenu;
+        }
+
+        private void OnLoad()
+        {
+            if (Setup != null && !_controlLoaded)
+            {
+                SetupControl();
+            }
+            _controlLoaded = true;
+
+            if (IsFocused)
+                AutoFillTextBox.Focus();
+
+            CreateContainsTemplate();
+        }
+
+        private void CreateContainsTemplate()
+        {
+            var dataTemplate = new DataTemplate();
+
+            var stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanelFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+
+            var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+            textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(nameof(AutoFillContainsItem.PrefixText)));
+            stackPanelFactory.AppendChild(textBlockFactory);
+
+            textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+            textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(nameof(AutoFillContainsItem.ContainsText)));
+            textBlockFactory.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+            stackPanelFactory.AppendChild(textBlockFactory);
+            
+            textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+            textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(nameof(AutoFillContainsItem.SuffixText)));
+            stackPanelFactory.AppendChild(textBlockFactory);
+
+            dataTemplate.VisualTree = stackPanelFactory;
+            ListBox.ItemTemplate = dataTemplate;
+            ListBox.ItemsSource = ContainsItems;
         }
 
         private void SetupControl()

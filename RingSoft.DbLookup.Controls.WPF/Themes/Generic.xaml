@@ -4,6 +4,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupControlTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillControlTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
 </ResourceDictionary>

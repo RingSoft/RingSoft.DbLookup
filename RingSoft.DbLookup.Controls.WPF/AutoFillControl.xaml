@@ -24,17 +24,7 @@
             </Button>
         </Grid>
         <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=AutoFillTextBox}" StaysOpen="False" Placement="Bottom">
-            <ListBox x:Name="ListBox" ItemsSource="{Binding ContainsItems, ElementName=BaseControl}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding PrefixText}"/>
-                            <TextBlock Text="{Binding ContainsText}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding SuffixText}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ListBox x:Name="ListBox"/>
         </Popup>
     </StackPanel>
 </UserControl>

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

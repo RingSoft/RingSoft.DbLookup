@@ -1,27 +1,66 @@
-﻿using RingSoft.DataEntryControls.WPF;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// A control to auto fill a value into a text box and show similar values in a drop down contains box as the user types.
+    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
+    ///
+    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
+    ///
+    ///
+    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+    ///
+    /// You will also need to add a project reference from the project where the XAML file lives
+    /// to this project and Rebuild to avoid compilation errors:
+    ///
+    ///     Right click on the target project in the Solution Explorer and
+    ///     "Add Reference"->"Projects"->[Browse to and select this project]
+    ///
+    ///
+    /// Step 2)
+    /// Go ahead and use your control in the XAML file.
+    ///
+    ///     <MyNamespace:NewAutoFillControl/>
+    ///
     /// </summary>
-    public partial class AutoFillControl : IAutoFillControl
+    [TemplatePart(Name = "TextBox", Type = typeof(TextBox))]
+    [TemplatePart(Name = "Button", Type = typeof(Button))]
+    [TemplatePart(Name = "Popup", Type = typeof(Popup))]
+    [TemplatePart(Name = "ListBox", Type = typeof(ListBox))]
+    public class AutoFillControl : Control, IAutoFillControl
     {
+        public TextBox TextBox { get; set; }
+
+        public Button Button { get; set; }
+
+        public Popup Popup { get; set; }
+
+        public ListBox ListBox { get; set; }
+
         public ObservableCollection<AutoFillContainsItem> ContainsItems { get; set; } =
-            new ObservableCollection<AutoFillContainsItem>();
+    new ObservableCollection<AutoFillContainsItem>();
 
         public static readonly DependencyProperty SetupProperty =
             DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillControl),
@@ -173,7 +212,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            autoFillControl.AutoFillTextBox.CharacterCasing = autoFillControl.CharacterCasing;
+
+            if (autoFillControl.TextBox != null)
+                autoFillControl.TextBox.CharacterCasing = autoFillControl.CharacterCasing;
         }
 
         public static readonly DependencyProperty TextAlignmentProperty =
@@ -190,17 +231,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            if (autoFillControl.AutoFillTextBox != null)
-                autoFillControl.AutoFillTextBox.TextAlignment = autoFillControl.TextAlignment;
+            if (autoFillControl.TextBox != null)
+                autoFillControl.TextBox.TextAlignment = autoFillControl.TextAlignment;
         }
 
         private static void BorderThicknessChangedCallback(DependencyObject obj,
     DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            if (autoFillControl.AutoFillTextBox != null)
+            if (autoFillControl.TextBox != null)
             {
-                autoFillControl.AutoFillTextBox.BorderThickness = autoFillControl.BorderThickness;
+                autoFillControl.TextBox.BorderThickness = autoFillControl.BorderThickness;
             }
         }
 
@@ -208,9 +249,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            if (autoFillControl.AutoFillTextBox != null)
+            if (autoFillControl.TextBox != null)
             {
-                autoFillControl.AutoFillTextBox.Background = autoFillControl.Background;
+                autoFillControl.TextBox.Background = autoFillControl.Background;
             }
         }
 
@@ -218,9 +259,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            if (autoFillControl.AutoFillTextBox != null)
+            if (autoFillControl.TextBox != null)
             {
-                autoFillControl.AutoFillTextBox.Foreground = autoFillControl.Foreground;
+                autoFillControl.TextBox.Foreground = autoFillControl.Foreground;
             }
         }
 
@@ -238,31 +279,60 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var autoFillControl = (AutoFillControl)obj;
-            if (autoFillControl.AutoFillTextBox != null)
-                autoFillControl.AutoFillTextBox.SelectionBrush = autoFillControl.SelectionBrush;
+            if (autoFillControl.TextBox != null)
+                autoFillControl.TextBox.SelectionBrush = autoFillControl.SelectionBrush;
         }
 
         public string EditText
         {
-            get => AutoFillTextBox.Text;
+            get
+            {
+                if (TextBox != null)
+                    return TextBox.Text;
+
+                return string.Empty;
+            }
             set
             {
-                _settingText = true;
-                AutoFillTextBox.Text = value;
-                _settingText = false;
-            } 
+                if (TextBox != null)
+                {
+                    _settingText = true;
+                    TextBox.Text = value;
+                    _settingText = false;
+                }
+            }
         }
 
         public int SelectionStart
         {
-            get => AutoFillTextBox.SelectionStart;
-            set => AutoFillTextBox.SelectionStart = value;
+            get
+            {
+                if (TextBox != null)
+                    return TextBox.SelectionStart;
+
+                return 0;
+            }
+            set
+            {
+                if (TextBox != null)
+                    TextBox.SelectionStart = value;
+            }
         }
 
         public int SelectionLength
         {
-            get => AutoFillTextBox.SelectionLength;
-            set => AutoFillTextBox.SelectionLength = value;
+            get
+            {
+                if (TextBox != null)
+                    return TextBox.SelectionLength;
+
+                return 0;
+            }
+            set
+            {
+                if (TextBox != null)
+                    TextBox.SelectionLength = value;
+            }
         }
 
         public bool ContainsBoxIsOpen
@@ -290,6 +360,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         static AutoFillControl()
         {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(typeof(AutoFillControl)));
+
+            IsTabStopProperty.OverrideMetadata(typeof(AutoFillControl), new FrameworkPropertyMetadata(false));
+
+            KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
+
             ShowContainsBoxProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
             TabOutAfterLookupSelectProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
             ContainsBoxMaxRowsProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(5));
@@ -302,29 +380,48 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             ForegroundProperty.OverrideMetadata(typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(ForegroundChangedCallback));
+
         }
 
         public AutoFillControl()
         {
-            //InitializeComponent();
-            this.LoadViewFromUri("/RingSoft.DbLookup.Controls.WPF;component/AutoFillControl.xaml");
-
             Loaded += (sender, args) => OnLoad();
 
-            SizeChanged += (sender, args) => { ListBox.Width = AutoFillTextBox.ActualWidth; };
+            SizeChanged += (sender, args) =>
+            {
+                if (TextBox != null && ListBox != null)
+                    ListBox.Width = TextBox.ActualWidth;
+            };
             LostFocus += (sender, args) =>
             {
-                Popup.IsOpen = false;
+                if (Popup != null)
+                    Popup.IsOpen = false;
             };
             GotFocus += (sender, args) =>
             {
-                AutoFillTextBox.Focus();
-                AutoFillTextBox.SelectionStart = 0;
-                AutoFillTextBox.SelectionLength = AutoFillTextBox.Text.Length;
+                if (TextBox != null)
+                {
+                    TextBox.Focus();
+                    TextBox.SelectionStart = 0;
+                    TextBox.SelectionLength = TextBox.Text.Length;
+                }
             };
             ContextMenu = new ContextMenu();
             ContextMenu.AddTextBoxContextMenuItems();
-            AutoFillTextBox.ContextMenu = ContextMenu;
+
+        }
+
+        public override void OnApplyTemplate()
+        {
+            TextBox = GetTemplateChild(nameof(TextBox)) as TextBox;
+            Button = GetTemplateChild(nameof(Button)) as Button;
+            Popup = GetTemplateChild(nameof(Popup)) as Popup;
+            ListBox = GetTemplateChild(nameof(ListBox)) as ListBox;
+
+            if (TextBox != null)
+                TextBox.ContextMenu = ContextMenu;
+
+            base.OnApplyTemplate();
         }
 
         private void OnLoad()
@@ -336,13 +433,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             _controlLoaded = true;
 
             if (IsFocused)
-                AutoFillTextBox.Focus();
+                TextBox?.Focus();
 
             CreateContainsTemplate();
         }
 
         private void CreateContainsTemplate()
         {
+            if (ListBox == null)
+                return;
+
             var dataTemplate = new DataTemplate();
 
             var stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
@@ -356,7 +456,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(nameof(AutoFillContainsItem.ContainsText)));
             textBlockFactory.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
             stackPanelFactory.AppendChild(textBlockFactory);
-            
+
             textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
             textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(nameof(AutoFillContainsItem.SuffixText)));
             stackPanelFactory.AppendChild(textBlockFactory);
@@ -383,8 +483,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
             {
-                if (fieldColumn.FieldDefinition is StringFieldDefinition stringField)
-                    AutoFillTextBox.MaxLength = stringField.MaxLength;
+                if (fieldColumn.FieldDefinition is StringFieldDefinition stringField && TextBox != null)
+                    TextBox.MaxLength = stringField.MaxLength;
             }
 
 
@@ -392,15 +492,23 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
-                AutoFillTextBox.PreviewKeyDown += AutoFillTextBox_PreviewKeyDown;
-
-                AutoFillTextBox.PreviewTextInput += AutoFillTextBox_PreviewTextInput;
-                ListBox.SelectionChanged += (sender, args) =>
+                if (TextBox != null)
                 {
-                    _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
-                };
-                LookupButton.Click += (sender, args) => ShowLookupWindow();
-                AutoFillTextBox.TextChanged += AutoFillTextBox_TextChanged;
+                    TextBox.PreviewKeyDown += TextBox_PreviewKeyDown;
+                    TextBox.PreviewTextInput += TextBox_PreviewTextInput;
+                    TextBox.TextChanged += TextBox_TextChanged;
+                }
+
+                if (ListBox != null)
+                {
+                    ListBox.SelectionChanged += (sender, args) =>
+                    {
+                        _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
+                    };
+                }
+
+                if (Button != null)
+                    Button.Click += (sender, args) => ShowLookupWindow();
             }
 
             if (_pendingAutoFillValue)
@@ -414,7 +522,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _setupRan = true;
         }
 
-        private void AutoFillTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!_settingText)
             {
@@ -424,14 +532,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetDesignText()
         {
-            if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty())
+            if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty() && TextBox != null)
             {
                 _settingText = true;
-                AutoFillTextBox.Text = DesignText;
+                TextBox.Text = DesignText;
                 _settingText = false;
             }
         }
-        
+
         private void AutoFillData_AutoFillDataChanged(object sender, AutoFillDataChangedArgs e)
         {
             //Unit Test
@@ -457,7 +565,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
-                Popup.IsOpen = openPopup;
+                if (Popup != null)
+                    Popup.IsOpen = openPopup;
             }
 
             if (!_onValuePropertySetting)
@@ -496,7 +605,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 return;
             }
-            _autoFillData.SetValue(primaryKeyValue, text, Popup.IsOpen); //Must set to false otherwise list shows when control is tabbed out.
+
+            var isOpen = false;
+            if (Popup != null)
+                isOpen = Popup.IsOpen;
+
+            _autoFillData.SetValue(primaryKeyValue, text, isOpen); //Must set to false otherwise list shows when control is tabbed out.
         }
 
         private void ClearValue()
@@ -507,7 +621,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _autoFillData.ClearValue();
         }
 
-        private void AutoFillTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -522,7 +636,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     RaiseDirtyFlag();
                     break;
                 case Key.Escape:
-                    if (Popup.IsOpen)
+                    if (Popup != null && Popup.IsOpen)
                     {
                         Popup.IsOpen = false;
                         e.Handled = true;
@@ -530,13 +644,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     break;
                 case Key.Down:
-                    if (Popup.IsOpen && ListBox.SelectedIndex < ContainsItems.Count - 1)
+                    if (Popup != null && Popup.IsOpen && ListBox != null && ListBox.SelectedIndex < ContainsItems.Count - 1)
                     {
                         ListBox.SelectedIndex++;
                     }
                     break;
                 case Key.Up:
-                    if (Popup.IsOpen && ListBox.SelectedIndex > 0)
+                    if (Popup != null && Popup.IsOpen && ListBox != null && ListBox.SelectedIndex > 0)
                         ListBox.SelectedIndex--;
                     break;
                 case Key.F5:
@@ -546,7 +660,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
-        private void AutoFillTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 return;
@@ -554,8 +668,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
                 return;
 
-            if (AutoFillTextBox.MaxLength > 0 && AutoFillTextBox.SelectionLength <= 0 &&
-                AutoFillTextBox.Text.Length >= AutoFillTextBox.MaxLength)
+            if (TextBox.MaxLength > 0 && TextBox.SelectionLength <= 0 &&
+                TextBox.Text.Length >= TextBox.MaxLength)
             {
                 System.Media.SystemSounds.Exclamation.Play();
                 return;
@@ -580,12 +694,23 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ShowLookupWindow()
         {
+            var initialText = string.Empty;
+            if (TextBox != null)
+                initialText = TextBox.Text;
+
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
-                Setup.AllowLookupAdd, Setup.AllowLookupView, AutoFillTextBox.Text);
+                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
             lookupWindow.Owner = Window.GetWindow(this);
-            lookupWindow.RefreshData += (o, args) => _autoFillData.RefreshData(Popup.IsOpen);
+            lookupWindow.RefreshData += (o, args) =>
+            {
+                var popupIsOpen = false;
+                if (Popup != null)
+                    popupIsOpen = Popup.IsOpen;
+
+                _autoFillData.RefreshData(popupIsOpen);
+            };
             lookupWindow.LookupSelect += LookupForm_LookupSelect;
             lookupWindow.ShowDialog();
         }

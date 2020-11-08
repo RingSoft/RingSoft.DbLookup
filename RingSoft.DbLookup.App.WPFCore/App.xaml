@@ -1,8 +1,30 @@
 ﻿<Application x:Class="RingSoft.DbLookup.App.WPFCore.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:lib="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF">
+             xmlns:lib="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+             xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF">
     <Application.Resources>
+        <Style TargetType="dec:ReadOnlyBox" x:Key="ReadOnlyBox">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="2.5"/>
+        </Style>
+        <Style TargetType="dec:StringReadOnlyBox" BasedOn="{StaticResource ReadOnlyBox}"/>
+        <Style TargetType="dec:DecimalReadOnlyBox" x:Key="GlobalDecimalReadOnlyBoxStyle" BasedOn="{StaticResource ReadOnlyBox}"/>
+        <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource GlobalDecimalReadOnlyBoxStyle}"/>
+
+        <Style TargetType="TextBox" x:Key="GlobalTextBoxStyle">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource GlobalTextBoxStyle}"/>
+
+        <Style TargetType="dec:StringEditControl" x:Key="GlobalStringEditControlStyle" BasedOn="{StaticResource GlobalTextBoxStyle}">
+            <Setter Property="SelectAllOnGotFocus" Value="True"/>
+        </Style>
+
+        <Style TargetType="dec:StringEditControl" BasedOn="{StaticResource GlobalStringEditControlStyle}"/>
+
         <Style TargetType="Border" x:Key="ReadOnlyBorder">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="LightGray"/>

@@ -13,6 +13,19 @@
     <Window.DataContext>
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="dec:DateEditControl">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="AllowNullValue" Value="True"/>
+            <Setter Property="DesignText" Value="01/01/1980"/>
+        </Style>
+        <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource GlobalDecimalReadOnlyBoxStyle}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FormatType" Value="Currency"/>
+            <Setter Property="DesignText" Value="$1,000,000.00"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
         <Grid Margin="5">
@@ -29,28 +42,24 @@
             </Grid.RowDefinitions>
             <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Style="{StaticResource ReadOnlyBorder}">
-                    <TextBlock Width="70" Text="{Binding OrderId}" Style="{StaticResource ReadOnlyTextBlock}"/>
-                </Border>
+                <dec:StringReadOnlyBox Text="{Binding Path=OrderId}" Width="70"/>
                 <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay}" Width="100" CharacterCasing="Upper"/>
-                <Border Style="{StaticResource ReadOnlyBorder}">
-                    <TextBlock Width="200" Text="{Binding CompanyName}" Style="{StaticResource ReadOnlyTextBlock}"/>
-                </Border>
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="WANDK" Width="100" CharacterCasing="Upper"/>
+                <dec:StringReadOnlyBox Width="200" Text="{Binding CompanyName}"/>
             </StackPanel>
             <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay}" Width="150"/>
+                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150"/>
                 <Label Content="Ship Via" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay}" Width="150"/>
+                <lc:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Federal Shipping" Width="150"/>
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <DatePicker SelectedDate="{Binding Path=OrderDate, Mode=TwoWay}"/>
+                <dec:DateEditControl Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Label Content="Required Date" Style="{StaticResource ControlLabel}"/>
-                <DatePicker SelectedDate="{Binding Path=RequiredDate, Mode=TwoWay}"/>
+                <dec:DateEditControl Value="{Binding Path=RequiredDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>
-                <DatePicker SelectedDate="{Binding Path=ShippedDate, Mode=TwoWay}"/>
+                <dec:DateEditControl Value="{Binding Path=ShippedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
                 <TabItem Header="Details">
@@ -80,20 +89,20 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Content="Name" Style="{StaticResource ControlLabel}"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=ShipName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left"/>
+                        <dec:StringEditControl x:Name="ShipNameEdit" Grid.Column="1" Grid.Row="0" Text="{Binding Path=ShipName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
                         <Label Grid.Column="0" Grid.Row="1" Content="Address" Style="{StaticResource ControlLabel}"/>
-                        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
+                        <dec:StringEditControl x:Name="AddressEdit" Grid.Column="1" Grid.Row="1" Text="{Binding Path=Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="0" Grid.Row="2" Content="City" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
+                            <dec:StringEditControl x:Name="CityEdit" Text="{Binding Path=City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="125"/>
                             <Label Content="Region" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
+                            <dec:StringEditControl x:Name="RegionEdit" Text="{Binding Path=Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="3" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
+                            <dec:StringEditControl x:Name="PostalCodeEdit" Text="{Binding Path=PostalCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                             <Label Content="Country" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
+                            <dec:StringEditControl x:Name="CountryEdit" Text="{Binding Path=Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DockPanel>
                     </Grid>
                 </TabItem>
@@ -101,7 +110,7 @@
             <Grid Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -110,19 +119,19 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Content="Sub Total" Style="{StaticResource ControlLabel}"/>
-                <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource ReadOnlyBorder}">
+                <!--<Border Grid.Column="1" Grid.Row="0" Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Text="{Binding Path=SubTotal, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
-                </Border>
+                </Border>-->
+                <dec:DecimalReadOnlyBox Grid.Column="1" Grid.Row="0" Value="{Binding SubTotal}"/>
                 <Label Grid.Column="0" Grid.Row="1" Content="Total Discount" Style="{StaticResource ControlLabel}"/>
-                <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ReadOnlyBorder}">
+                <!--<Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ReadOnlyBorder}">
                     <TextBlock Text="{Binding Path=TotalDiscount, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
-                </Border>
+                </Border>-->
+                <dec:DecimalReadOnlyBox Grid.Column="1" Grid.Row="1" Value="{Binding TotalDiscount}"/>
                 <Label Grid.Column="0" Grid.Row="2" Content="Freight" Style="{StaticResource ControlLabel}"/>
-                <dec:DecimalEditControl Grid.Column="1" Grid.Row="2"  Value="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FormatType="Currency" AllowNullValue="True" Height="20" Margin="2.5,0,2.5,0" DesignText="$1,000.00"/>
+                <dec:DecimalEditControl Grid.Column="1" Grid.Row="2" FormatType="Currency" Value="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="$100.00" HorizontalAlignment="Stretch"/>
                 <Label Grid.Column="0" Grid.Row="3" Content="Total" Style="{StaticResource ControlLabel}"/>
-                <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource ReadOnlyBorder}">
-                    <TextBlock Text="{Binding Path=Total, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
-                </Border>
+                <dec:DecimalReadOnlyBox Grid.Column="1" Grid.Row="3" Value="{Binding Path=Total}"/>
             </Grid>
         </Grid>
     </DockPanel>

@@ -394,7 +394,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
             LostFocus += (sender, args) =>
             {
-                Popup.IsOpen = false;
+                if (Popup != null)
+                    Popup.IsOpen = false;
             };
             GotFocus += (sender, args) =>
             {
@@ -439,6 +440,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void CreateContainsTemplate()
         {
+            if (ListBox == null)
+                return;
+
             var dataTemplate = new DataTemplate();
 
             var stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
@@ -495,11 +499,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                     TextBox.TextChanged += TextBox_TextChanged;
                 }
 
-                ListBox.SelectionChanged += (sender, args) =>
+                if (ListBox != null)
                 {
-                    _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
-                };
-                Button.Click += (sender, args) => ShowLookupWindow();
+                    ListBox.SelectionChanged += (sender, args) =>
+                    {
+                        _autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
+                    };
+                }
+
+                if (Button != null)
+                    Button.Click += (sender, args) => ShowLookupWindow();
             }
 
             if (_pendingAutoFillValue)
@@ -556,7 +565,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
-                Popup.IsOpen = openPopup;
+                if (Popup != null)
+                    Popup.IsOpen = openPopup;
             }
 
             if (!_onValuePropertySetting)
@@ -595,7 +605,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 return;
             }
-            _autoFillData.SetValue(primaryKeyValue, text, Popup.IsOpen); //Must set to false otherwise list shows when control is tabbed out.
+
+            var isOpen = false;
+            if (Popup != null)
+                isOpen = Popup.IsOpen;
+
+            _autoFillData.SetValue(primaryKeyValue, text, isOpen); //Must set to false otherwise list shows when control is tabbed out.
         }
 
         private void ClearValue()
@@ -621,7 +636,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     RaiseDirtyFlag();
                     break;
                 case Key.Escape:
-                    if (Popup.IsOpen)
+                    if (Popup != null && Popup.IsOpen)
                     {
                         Popup.IsOpen = false;
                         e.Handled = true;
@@ -629,13 +644,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     break;
                 case Key.Down:
-                    if (Popup.IsOpen && ListBox.SelectedIndex < ContainsItems.Count - 1)
+                    if (Popup != null && Popup.IsOpen && ListBox != null && ListBox.SelectedIndex < ContainsItems.Count - 1)
                     {
                         ListBox.SelectedIndex++;
                     }
                     break;
                 case Key.Up:
-                    if (Popup.IsOpen && ListBox.SelectedIndex > 0)
+                    if (Popup != null && Popup.IsOpen && ListBox != null && ListBox.SelectedIndex > 0)
                         ListBox.SelectedIndex--;
                     break;
                 case Key.F5:
@@ -688,7 +703,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
             lookupWindow.Owner = Window.GetWindow(this);
-            lookupWindow.RefreshData += (o, args) => _autoFillData.RefreshData(Popup.IsOpen);
+            lookupWindow.RefreshData += (o, args) =>
+            {
+                var popupIsOpen = false;
+                if (Popup != null)
+                    popupIsOpen = Popup.IsOpen;
+
+                _autoFillData.RefreshData(popupIsOpen);
+            };
             lookupWindow.LookupSelect += LookupForm_LookupSelect;
             lookupWindow.ShowDialog();
         }

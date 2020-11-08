@@ -27,6 +27,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             DbDataProcessor.UserInterface = _userInterface;
             WPFControlsGlobals.InitUi();
+            WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
     }
 }

@@ -12,15 +12,31 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="DatabaseSetupButton" Content="_Database Setup" Margin="0,0,5,5"/>
-        <Button x:Name="NorthwindButton" Grid.Row="0" Grid.Column="1" Content="_Northwind Demo" Margin="0,0,0,5"/>
+        <Button x:Name="NorthwindLookupButton" Margin="0,0,5,5">
+            <Button.Content>
+                <StackPanel>
+                    <AccessText Text="_Northwind Demo"/>
+                    <TextBlock Text="(Lookup Control)" FontSize="10" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Button x:Name="NorthwindGridButton" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5">
+            <Button.Content>
+                <StackPanel>
+                    <AccessText Text="N_orthwind Demo"/>
+                    <TextBlock Text="(Grid Control)" FontSize="10" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
         <Button x:Name="MegaDbButton" Grid.Row="1" Grid.Column="0" Content="_Mega Database Demo" Margin="0,0,5,0"/>
         <Button x:Name="StockTrackerButton" Grid.Row="1" Grid.Column="1" Content="_Stock Tracker Demo"/>
-        <Button x:Name="CloseButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
+        <Button x:Name="DatabaseSetupButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="_Database Setup" Margin="0,5,0,0"/>
+        <Button x:Name="CloseButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
     </Grid>
 </dec:BaseWindow>

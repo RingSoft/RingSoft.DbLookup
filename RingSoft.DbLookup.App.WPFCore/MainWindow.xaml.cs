@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();
 
-            NorthwindButton.Click += (sender, args) =>
+            NorthwindLookupButton.Click += (sender, args) =>
             {
                 if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
                     .TestConnection())

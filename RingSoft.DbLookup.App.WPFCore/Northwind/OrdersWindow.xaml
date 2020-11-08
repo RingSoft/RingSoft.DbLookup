@@ -42,10 +42,10 @@
             </Grid.RowDefinitions>
             <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <dec:StringReadOnlyBox Text="{Binding Path=OrderId}" Width="70"/>
+                <dec:StringReadOnlyBox Text="{Binding Path=OrderId}"  DesignText="999999888" Width="70"/>
                 <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="WANDK" Width="100" CharacterCasing="Upper"/>
-                <dec:StringReadOnlyBox Width="200" Text="{Binding CompanyName}"/>
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2.5" DesignText="WANDK" Width="100" CharacterCasing="Upper"/>
+                <dec:StringReadOnlyBox Width="200" Text="{Binding CompanyName}" DesignText="Rattlesnake Canyon Grocery"/>
             </StackPanel>
             <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">

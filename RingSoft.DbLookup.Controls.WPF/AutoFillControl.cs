@@ -421,6 +421,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (TextBox != null)
                 TextBox.ContextMenu = ContextMenu;
 
+            SetDesignText();
+
             base.OnApplyTemplate();
         }
 

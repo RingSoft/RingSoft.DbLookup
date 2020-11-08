@@ -15,7 +15,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="TextBox"/>
+                                <TextBox x:Name="TextBox" VerticalContentAlignment="Center"/>
                                 <Button x:Name="Button" Grid.Column="1" Width="20" IsTabStop="False">
                                     <Image Source="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"></Image>
                                 </Button>

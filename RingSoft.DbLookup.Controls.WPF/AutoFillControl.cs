@@ -472,6 +472,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             dataTemplate.VisualTree = stackPanelFactory;
             ListBox.ItemTemplate = dataTemplate;
             ListBox.ItemsSource = ContainsItems;
+
+            var style = new Style(typeof(ListBoxItem));
+            var eventSetter = new EventSetter(ListBoxItem.PreviewMouseLeftButtonDownEvent,
+                new MouseButtonEventHandler(ListBox_PreviewMouseLeftButtonDown));
+            style.Setters.Add(eventSetter);
+            ListBox.ItemContainerStyle = style;
+        }
+
+        private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem listBoxItem = sender as ListBoxItem;
+            ListBox.SelectedItem = listBoxItem?.DataContext;
         }
 
         private void SetupControl()

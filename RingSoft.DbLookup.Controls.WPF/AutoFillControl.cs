@@ -440,6 +440,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             CreateContainsTemplate();
         }
 
+        public new bool Focus()
+        {
+            base.Focus();
+            return IsKeyboardFocusWithin;
+        }
+
         private void CreateContainsTemplate()
         {
             if (ListBox == null)

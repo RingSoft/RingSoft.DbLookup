@@ -1,10 +1,10 @@
-﻿using System.Windows.Input;
-using System.Windows.Media;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid.CellProps;
+﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.NorthwindApp.Library;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.ControlHost;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

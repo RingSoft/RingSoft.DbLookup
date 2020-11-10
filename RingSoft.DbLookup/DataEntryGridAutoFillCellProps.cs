@@ -1,8 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid.CellProps;
 using RingSoft.DbLookup.AutoFill;
 
-namespace RingSoft.DbLookup
+namespace RingSoft.DataEntryControls.NorthwindApp.Library
 {
     public class DataEntryGridAutoFillCellProps : DataEntryGridCellProps
     {

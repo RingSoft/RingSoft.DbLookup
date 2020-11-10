@@ -382,6 +382,23 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        private OrderDetailsGridManager _detailsGridManager;
+
+        public OrderDetailsGridManager DetailsGridManager
+        {
+            get => _detailsGridManager;
+            set
+            {
+                if (_detailsGridManager == value)
+                    return;
+
+                _detailsGridManager = value;
+                OnPropertyChanged(nameof(DetailsGridManager));
+            }
+        }
+
+        public bool GridMode { get; set; }
+
         private readonly DateTime _newDateTime = DateTime.Today;
 
         private INorthwindLookupContext _lookupContext;
@@ -403,6 +420,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             OrderDetailsLookupDefinition =
                 _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
+
+            DetailsGridManager = new OrderDetailsGridManager(this);
 
             base.Initialize();
         }
@@ -486,14 +505,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (Freight != null)
                 freight = (decimal) Freight;
 
-            var orderDetails = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetails(OrderId);
-
-            foreach (var orderDetail in orderDetails)
+            if (GridMode)
             {
-                var extendedPrice = orderDetail.Quantity * orderDetail.UnitPrice;
-                subTotal += extendedPrice;
-                var decimalDiscount = (decimal) orderDetail.Discount;
-                totalDiscount += decimalDiscount;
+            }
+            else
+            {
+                var orderDetails = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetails(OrderId);
+
+                foreach (var orderDetail in orderDetails)
+                {
+                    var extendedPrice = orderDetail.Quantity * orderDetail.UnitPrice;
+                    subTotal += extendedPrice;
+                    var decimalDiscount = (decimal) orderDetail.Discount;
+                    totalDiscount += decimalDiscount;
+                }
             }
 
             SubTotal = subTotal;

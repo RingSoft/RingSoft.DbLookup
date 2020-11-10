@@ -70,6 +70,19 @@ namespace RingSoft.DbLookup.App.WPFCore
                 ordersWindow.ShowDialog();
             };
 
+            NorthwindGridButton.Click += (sender, args) =>
+            {
+                if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
+                    .TestConnection())
+                {
+                    DatabaseSetupClick();
+                    return;
+                }
+                var ordersWindow = new OrdersGridWindow();
+                ordersWindow.Owner = this;
+                ordersWindow.ShowDialog();
+            };
+
             MegaDbButton.Click += (sender, args) =>
             {
                 if (!ValidateMegaDbWindow())

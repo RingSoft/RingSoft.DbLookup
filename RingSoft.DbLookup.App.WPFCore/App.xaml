@@ -28,7 +28,7 @@
 
         <Style TargetType="deg:DataEntryGrid">
             <Setter Property="EnterToTab" Value="True"/>
-            <Setter Property="CancelEditOnEscape" Value="True"/>
+            <Setter Property="CloseWindowOnEscape" Value="True"/>
             <Setter Property="GridLinesVisibility" Value="All"/>
             <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
             <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>

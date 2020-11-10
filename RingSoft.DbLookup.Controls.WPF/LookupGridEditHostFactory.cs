@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.WPF.DataEntryGrid;
+﻿using RingSoft.DataEntryControls.NorthwindApp.Library;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.ControlHost;
 
 namespace RingSoft.DbLookup.Controls.WPF

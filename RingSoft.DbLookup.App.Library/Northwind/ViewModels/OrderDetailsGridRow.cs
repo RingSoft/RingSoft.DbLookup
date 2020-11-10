@@ -18,7 +18,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public decimal Price { get; set; }
 
-        public decimal ExtendedPrice { get; set; }
+        public decimal ExtendedPrice => Math.Round(Quantity * Price, 2);
 
         public decimal Discount { get; set; }
 
@@ -36,12 +36,22 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _productAutoFillSetup = new AutoFillSetup(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID));
             _quantitySetup = new IntegerEditControlSetup();
             _quantitySetup.InitializeFromType(typeof(short));
-            _decimalSetup = new DecimalEditControlSetup();
+            _decimalSetup = new DecimalEditControlSetup(){FormatType = DecimalEditFormatTypes.Currency};
         }
 
         public override DataEntryGridCellProps GetCellProps(int columnId)
         {
             var column = (OrderDetailsGridColumns) columnId;
+
+            switch (column)
+            {
+                case OrderDetailsGridColumns.Product:
+                    break;
+                default:
+                    if (IsNew)
+                        return new DataEntryGridTextCellProps(this, columnId);
+                    break;
+            }
             switch (column)
             {
                 case OrderDetailsGridColumns.Product:
@@ -60,20 +70,64 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        public override DataEntryGridCellStyle GetCellStyle(int columnId)
+        {
+            var column = (OrderDetailsGridColumns) columnId;
+            switch (column)
+            {
+                case OrderDetailsGridColumns.Product:
+                    break;
+                case OrderDetailsGridColumns.ExtendedPrice:
+                    return  new DataEntryGridCellStyle{CellStyle = DataEntryGridCellStyles.Disabled};
+                default:
+                {
+                    if (IsNew)
+                        return new DataEntryGridCellStyle {CellStyle = DataEntryGridCellStyles.Disabled};
+                }
+                    break;
+            }
+
+            return base.GetCellStyle(columnId);
+        }
+
         public override void SetCellValue(DataEntryGridCellProps value)
         {
             var column = (OrderDetailsGridColumns) value.ColumnId;
             switch (column)
             {
                 case OrderDetailsGridColumns.Product:
+                    if (value is DataEntryGridAutoFillCellProps autoFillCellProps)
+                    {
+                        if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.ContainsValidData())
+                        {
+                            ProductAutoFillValue = autoFillCellProps.AutoFillValue;
+                            LoadFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
+                        }
+                    }
                     break;
                 case OrderDetailsGridColumns.Quantity:
+                    if (value is DataEntryGridIntegerCellProps integerCellProps)
+                    {
+                        if (integerCellProps.Value != null) 
+                            Quantity = (int) integerCellProps.Value;
+                        _manager.OrderViewModel.RefreshTotalControls();
+                    }
                     break;
                 case OrderDetailsGridColumns.Price:
-                    break;
-                case OrderDetailsGridColumns.ExtendedPrice:
+                    if (value is DataEntryGridDecimalCellProps decimalCellProps)
+                    {
+                        if (decimalCellProps.Value != null)
+                            Price = (decimal) decimalCellProps.Value;
+                        _manager.OrderViewModel.RefreshTotalControls();
+                    }
                     break;
                 case OrderDetailsGridColumns.Discount:
+                    if (value is DataEntryGridDecimalCellProps discountCellProps)
+                    {
+                        if (discountCellProps.Value != null)
+                            Discount = (decimal)discountCellProps.Value;
+                        _manager.OrderViewModel.RefreshTotalControls();
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -81,19 +135,43 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.SetCellValue(value);
         }
 
+        private void LoadFromPrimaryKeyValue(PrimaryKeyValue primaryKeyValue)
+        {
+            var product =
+                _lookupContext.Products.GetEntityFromPrimaryKeyValue(primaryKeyValue);
+            LoadFromProduct(product);
+        }
+
+        private void LoadFromProduct(Product product)
+        {
+            product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
+            Quantity = 1;
+            if (product.UnitPrice != null)
+                Price = (decimal) product.UnitPrice;
+            _manager.OrderViewModel.RefreshTotalControls();
+        }
+
         public override void LoadFromEntity(Order_Detail entity)
         {
-            throw new System.NotImplementedException();
+            var productPrimaryKey = _lookupContext.Products.GetPrimaryKeyValueFromEntity(entity.Product);
+            ProductAutoFillValue = new AutoFillValue(productPrimaryKey, entity.Product.ProductName);
+            Quantity = entity.Quantity;
+            Price = entity.UnitPrice;
+            Discount = (decimal) entity.Discount;
         }
 
         public override bool ValidateRow()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public override void SaveToEntity(Order_Detail entity, int rowIndex)
         {
-            throw new System.NotImplementedException();
+            var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
+            entity.ProductID = product.ProductID;
+            entity.Quantity = (short)Quantity;
+            entity.UnitPrice = Price;
+            entity.Discount = (float)Discount;
         }
     }
 }

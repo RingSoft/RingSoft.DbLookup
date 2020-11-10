@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -10,8 +11,14 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
+    public interface IOrderView : IDbMaintenanceView
+    {
+        void OnGridValidationFailed();
+    }
     public class OrderViewModel : DbMaintenanceViewModel<Order>
     {
+        public IOrderView OrderView { get; private set; }
+
         public override TableDefinition<Order> TableDefinition =>
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
 
@@ -131,8 +138,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private DateTime _requiredDate;
-        public DateTime RequiredDate
+        private DateTime? _requiredDate;
+        public DateTime? RequiredDate
         {
             get => _requiredDate;
             set
@@ -157,9 +164,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private DateTime _shippedDate;
+        private DateTime? _shippedDate;
 
-        public DateTime ShippedDate
+        public DateTime? ShippedDate
         {
             get => _shippedDate;
             set
@@ -407,12 +414,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public OrderViewModel()
         {
-            _orderDate = _requiredDate = _shippedDate = _newDateTime;
+            _orderDate = _newDateTime;
+            _requiredDate = _shippedDate = null;
         }
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+            OrderView = View as IOrderView ??
+                             throw new ArgumentException(
+                                 $"ViewModel requires an {nameof(IOrderView)} interface.");
+
 
             CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID));
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID));
@@ -428,7 +440,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID);
+            var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID, GridMode);
             OrderId = order.OrderID;
 
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
@@ -457,13 +469,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Employee = new AutoFillValue(_lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity.Employee),
                 employeeName);
 
-            if (entity.RequiredDate == null)
-                RequiredDate = _newDateTime;
-            else
-            {
-                RequiredDate = (DateTime)entity.RequiredDate;
-            }
-
+            RequiredDate = entity.RequiredDate;
             if (entity.OrderDate == null)
                 OrderDate = _newDateTime;
             else
@@ -471,12 +477,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 OrderDate = (DateTime)entity.OrderDate;
             }
 
-            if (entity.ShippedDate == null)
-                ShippedDate = _newDateTime;
-            else
-            {
-                ShippedDate = (DateTime)entity.ShippedDate;
-            }
+            ShippedDate = entity.ShippedDate;
 
             var shipCompanyName = string.Empty;
             if (entity.Shipper != null)
@@ -493,6 +494,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             PostalCode = entity.ShipPostalCode;
             Country = entity.ShipCountry;
 
+            DetailsGridManager.LoadGrid(entity.Order_Details);
+
             RefreshTotalControls();
             _customerDirty = false;
         }
@@ -507,6 +510,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             if (GridMode)
             {
+                var productsRows = DetailsGridManager.Rows.OfType<OrderDetailsGridRow>();
+                foreach (var productRow in productsRows)
+                {
+                    subTotal += productRow.ExtendedPrice;
+                    totalDiscount += productRow.Discount;
+                }
             }
             else
             {
@@ -572,7 +581,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             OrderId = 0;
             Customer = Employee = ShipVia = null;
-            OrderDate = RequiredDate = ShippedDate = _newDateTime;
+            OrderDate = _newDateTime;
+            RequiredDate = ShippedDate = null;
             CompanyName = string.Empty;
             SubTotal = TotalDiscount = Total = 0;
             Freight = 0;
@@ -608,6 +618,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             _customerDirty = false;
+            DetailsGridManager.SetupForNewRecord();
         }
 
         protected override AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
@@ -626,7 +637,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool SaveEntity(Order entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveOrder(entity);
+            var orderDetails = DetailsGridManager.GetEntityList();
+            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveOrder(entity, orderDetails);
         }
 
         protected override bool DeleteEntity()

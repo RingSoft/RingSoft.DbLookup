@@ -57,7 +57,7 @@
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <dec:DateEditControl Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <dec:DateEditControl Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AllowNullValue="False"/>
                 <Label Content="Required Date" Style="{StaticResource ControlLabel}"/>
                 <dec:DateEditControl Value="{Binding Path=RequiredDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>
@@ -65,7 +65,7 @@
             </StackPanel>
             <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
                 <TabItem Header="Details">
-                    <deg:DataEntryGrid Manager="{Binding DetailsGridManager}">
+                    <deg:DataEntryGrid x:Name="DetailsGrid" Manager="{Binding DetailsGridManager}">
                         <deg:DataEntryGrid.Columns>
                             <deg:DataEntryGridColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.ProductColumnId}" Header="Product" DesignText="Chef Anton's Cajun Seasoning" Width="300"/>
                             <deg:DataEntryGridColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.QuantityColumnId}"  Header="Quantity" Alignment="Right" DesignText="1,000" Width="75"/>

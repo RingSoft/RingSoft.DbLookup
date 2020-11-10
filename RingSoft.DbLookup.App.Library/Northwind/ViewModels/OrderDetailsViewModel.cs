@@ -270,7 +270,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 var order = _lookupContext.Orders.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                     .ParentWindowPrimaryKeyValue);
-                order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(order.OrderID);
+                order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(order.OrderID, false);
                 LoadFromOrder(order);
             }
 

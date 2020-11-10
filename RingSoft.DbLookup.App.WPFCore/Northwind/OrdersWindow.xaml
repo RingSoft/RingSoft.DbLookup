@@ -55,7 +55,7 @@
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <dec:DateEditControl Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <dec:DateEditControl Value="{Binding Path=OrderDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AllowNullValue="False"/>
                 <Label Content="Required Date" Style="{StaticResource ControlLabel}"/>
                 <dec:DateEditControl Value="{Binding Path=RequiredDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>

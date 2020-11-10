@@ -1,4 +1,5 @@
 ﻿using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
@@ -7,7 +8,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     /// <summary>
     /// Interaction logic for OrdersWindow.xaml
     /// </summary>
-    public partial class OrdersWindow
+    public partial class OrdersWindow : IOrderView
     {
         public override DbMaintenanceViewModelBase ViewModel => OrdersViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
@@ -40,6 +41,10 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                 ShipViaControl.Focus();
 
             base.OnValidationFail(fieldDefinition, text, caption);
+        }
+
+        public void OnGridValidationFailed()
+        {
         }
     }
 }

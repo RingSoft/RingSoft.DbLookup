@@ -17,9 +17,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         bool DeleteEmployee(int employeeId);
 
-        Order GetOrder(int orderId);
+        Order GetOrder(int orderId, bool gridMode);
 
-        bool SaveOrder(Order order);
+        bool SaveOrder(Order order, List<Order_Detail> details);
 
         bool DeleteOrder(int orderId);
 

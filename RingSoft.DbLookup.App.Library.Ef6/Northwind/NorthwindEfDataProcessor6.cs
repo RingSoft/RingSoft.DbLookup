@@ -47,13 +47,24 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             return context.DeleteEntity(context.Employees, employee, "Deleting Employee");
         }
 
-        public Order GetOrder(int orderId)
+        public Order GetOrder(int orderId, bool gridMode)
         {
             var context = new NorthwindDbContextEf6();
-            return context.Orders.Include(i => i.Customer)
-                .Include(i => i.Employee)
-                .Include(i => i.Shipper)
-                .FirstOrDefault(f => f.OrderID == orderId);
+            if (gridMode)
+            {
+                return context.Orders.Include(i => i.Customer)
+                    .Include(i => i.Employee)
+                    .Include(i => i.Shipper)
+                    .Include(i => i.Order_Details.Select(s => s.Product))
+                    .FirstOrDefault(f => f.OrderID == orderId);
+            }
+            else
+            {
+                return context.Orders.Include(i => i.Customer)
+                    .Include(i => i.Employee)
+                    .Include(i => i.Shipper)
+                    .FirstOrDefault(f => f.OrderID == orderId);
+            }
         }
 
         public bool SaveOrder(Order order)
@@ -62,10 +73,30 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             return context.SaveEntity(context.Orders, order, "Saving Order");
         }
 
+        public bool SaveOrder(Order order, List<Order_Detail> details)
+        {
+            var context = new NorthwindDbContextEf6();
+            var result = context.SaveEntity(context.Orders, order, "Saving Order");
+
+            if (result && details != null)
+            {
+                context.OrderDetails.RemoveRange(context.OrderDetails.Where(w => w.OrderID == order.OrderID));
+
+                foreach (var orderDetail in details)
+                {
+                    orderDetail.OrderID = order.OrderID;
+                    context.OrderDetails.Add(orderDetail);
+                }
+                result = context.SaveEfChanges("Saving Order Details");
+            }
+            return result;
+        }
+
         public bool DeleteOrder(int orderId)
         {
             var context = new NorthwindDbContextEf6();
             var order = context.Orders.FirstOrDefault(p => p.OrderID == orderId);
+            context.OrderDetails.RemoveRange(context.OrderDetails.Where(w => w.OrderID == order.OrderID));
             return context.DeleteEntity(context.Orders, order, "Deleting Order");
         }
 

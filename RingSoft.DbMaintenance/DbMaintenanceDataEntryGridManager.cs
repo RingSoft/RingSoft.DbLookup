@@ -16,6 +16,9 @@ namespace RingSoft.DbMaintenance
 
         public virtual void LoadGrid(IEnumerable<TEntity> entityList)
         {
+            if (entityList == null)
+                return;
+
             Grid?.SetBulkInsertMode();
             PreLoadGridFromEntity();
             foreach (var entity in entityList)

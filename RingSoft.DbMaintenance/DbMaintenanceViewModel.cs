@@ -162,7 +162,7 @@ namespace RingSoft.DbMaintenance
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                if (primaryKeyValue.ContainsValidData())
+                if (primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
             }
             else
@@ -320,7 +320,7 @@ namespace RingSoft.DbMaintenance
         public override DbMaintenanceResults OnSaveButton()
         {
             if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
-                KeyAutoFillValue.PrimaryKeyValue.ContainsValidData())
+                KeyAutoFillValue.PrimaryKeyValue.IsValid)
             {
                 _lookupData.SelectPrimaryKey(KeyAutoFillValue.PrimaryKeyValue);
                 return DbMaintenanceResults.Success;
@@ -429,7 +429,7 @@ namespace RingSoft.DbMaintenance
             if (RecordDirty)
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
-                    KeyAutoFillValue.PrimaryKeyValue.ContainsValidData())
+                    KeyAutoFillValue.PrimaryKeyValue.IsValid)
                     return true;
 
                 var message = SaveChangesMessage;
@@ -591,7 +591,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="primaryKeyValue">The primary key value.</param>
         protected void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
         {
-            if (primaryKeyValue.ContainsValidData())
+            if (primaryKeyValue.IsValid)
                 _lookupData.SelectPrimaryKey(primaryKeyValue);
         }
 

@@ -39,8 +39,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (AutoFillCellProps.AutoFillValue != null && Control.Value != null)
             {
-                if (Control.Value.PrimaryKeyValue.ContainsValidData() &&
-                    AutoFillCellProps.AutoFillValue.PrimaryKeyValue.ContainsValidData())
+                var cellPrimaryKeyIsValid = AutoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid;
+                var controlPrimaryKeyIsValid = AutoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid;
+
+                if (controlPrimaryKeyIsValid != cellPrimaryKeyIsValid)
+                    return true;
+
+                if (controlPrimaryKeyIsValid)
                 {
                     return !Control.Value.PrimaryKeyValue.IsEqualTo(AutoFillCellProps.AutoFillValue
                         .PrimaryKeyValue);

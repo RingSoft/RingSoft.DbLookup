@@ -190,7 +190,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public override void OnKeyControlLeave()
         {
-            if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid)
             {
                 var product =
                     _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
@@ -211,7 +211,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private void LoadProductData()
         {
-            if (_productDirty && ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            if (_productDirty && ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid)
             {
                 var product =
                     _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
@@ -251,7 +251,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             var orderDetail = new Order_Detail();
             orderDetail.OrderID = OrderId;
-            if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid)
             {
                 var product =
                     _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);

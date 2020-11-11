@@ -205,7 +205,7 @@ namespace RingSoft.SimpleDemo.WPF
             if (CustomerAutoFillValue == null)
                 return;
 
-            if (CustomerAutoFillValue.PrimaryKeyValue.ContainsValidData())
+            if (CustomerAutoFillValue.PrimaryKeyValue.IsValid)
             {
                 var customer =
                     App.LookupContext.Customers.GetEntityFromPrimaryKeyValue(CustomerAutoFillValue.PrimaryKeyValue);

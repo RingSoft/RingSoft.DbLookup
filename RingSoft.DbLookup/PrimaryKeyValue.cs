@@ -67,6 +67,25 @@ namespace RingSoft.DbLookup
         private List<PrimaryKeyValueField> _fieldValues = new List<PrimaryKeyValueField>();
 
         /// <summary>
+        /// Determines whether all the primary key value fields have data.
+        /// </summary>
+        /// <returns>
+        ///   <c>false</c> if at least one value field is null; otherwise, <c>true</c>.
+        /// </returns>
+        public bool IsValid
+        {
+            get
+            {
+                foreach (var primaryKeyValueField in KeyValueFields)
+                {
+                    if (primaryKeyValueField.Value.IsNullOrEmpty())
+                        return false;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrimaryKeyValue"/> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
@@ -135,22 +154,6 @@ namespace RingSoft.DbLookup
                     .FirstOrDefault(f => f.FieldDefinition.FieldName == keyValueField.FieldDefinition.FieldName)
                     ?.Value;
             }
-        }
-
-        /// <summary>
-        /// Determines whether all the primary key value fields have data.
-        /// </summary>
-        /// <returns>
-        ///   <c>false</c> if at least one value field is null; otherwise, <c>true</c>.
-        /// </returns>
-        public bool ContainsValidData()
-        {
-            foreach (var primaryKeyValueField in KeyValueFields)
-            {
-                if (primaryKeyValueField.Value.IsNullOrEmpty())
-                    return false;
-            }
-            return true;
         }
     }
 }

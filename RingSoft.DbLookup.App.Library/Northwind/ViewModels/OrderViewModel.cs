@@ -545,19 +545,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var order = new Order();
             order.OrderID = OrderId;
 
-            if (Customer != null && Customer.PrimaryKeyValue.ContainsValidData())
+            if (Customer != null && Customer.PrimaryKeyValue.IsValid)
             {
                 var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
                 order.CustomerID = customer.CustomerID;
             }
 
-            if (Employee != null && Employee.PrimaryKeyValue.ContainsValidData())
+            if (Employee != null && Employee.PrimaryKeyValue.IsValid)
             {
                 var employee = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(Employee.PrimaryKeyValue);
                 order.EmployeeID = employee.EmployeeID;
             }
 
-            if (ShipVia != null && ShipVia.PrimaryKeyValue.ContainsValidData())
+            if (ShipVia != null && ShipVia.PrimaryKeyValue.IsValid)
             {
                 var shipVia = _lookupContext.Shippers.GetEntityFromPrimaryKeyValue(ShipVia.PrimaryKeyValue);
                 order.ShipVia = shipVia.ShipperID;
@@ -650,7 +650,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (_customerDirty)
             {
-                if (Customer?.PrimaryKeyValue == null || !Customer.PrimaryKeyValue.ContainsValidData())
+                if (Customer?.PrimaryKeyValue == null || !Customer.PrimaryKeyValue.IsValid)
                 {
                     CompanyName = string.Empty;
                 }

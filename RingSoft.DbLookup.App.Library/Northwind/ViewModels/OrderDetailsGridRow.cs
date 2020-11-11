@@ -98,10 +98,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case OrderDetailsGridColumns.Product:
                     if (value is DataEntryGridAutoFillCellProps autoFillCellProps)
                     {
-                        if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.ContainsValidData())
+                        if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid)
                         {
                             ProductAutoFillValue = autoFillCellProps.AutoFillValue;
                             LoadFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
+                        }
+                        else
+                        {
+                            
                         }
                     }
                     break;

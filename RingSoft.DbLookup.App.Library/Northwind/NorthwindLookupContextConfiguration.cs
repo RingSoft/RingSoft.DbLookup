@@ -27,6 +27,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public LookupDefinition<ShipperLookup, Shipper> ShippersLookup { get; private set; }
 
+        public LookupDefinition<SupplierLookup, Supplier> SuppliersLookup { get; private set; }
+
+        public LookupDefinition<CategoryLookup, Category> CategoriesLookup { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
         public NorthwindLookupContextConfiguration(INorthwindLookupContext lookupContext)
         {
@@ -171,6 +175,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             ShippersLookup.AddVisibleColumnDefinition(p => p.Phone, "Phone", p => p.Phone, 25);
 
             _lookupContext.Shippers.HasLookupDefinition(ShippersLookup);
+
+            SuppliersLookup = new LookupDefinition<SupplierLookup, Supplier>(_lookupContext.Suppliers);
+            SuppliersLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 60);
+            SuppliersLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
+            _lookupContext.Suppliers.HasLookupDefinition(SuppliersLookup);
+
+            CategoriesLookup = new LookupDefinition<CategoryLookup, Category>(_lookupContext.Categories);
+            CategoriesLookup.AddVisibleColumnDefinition(p => p.CategoryName, "Category Name", p => p.CategoryName, 40);
+            CategoriesLookup.AddVisibleColumnDefinition(p => p.Description, "Description", p => p.Description, 60);
+            _lookupContext.Categories.HasLookupDefinition(CategoriesLookup);
+
         }
 
         public override bool TestConnection()

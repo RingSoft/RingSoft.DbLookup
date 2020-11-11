@@ -133,6 +133,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
             }
+            else if (e.LookupData.LookupDefinition.TableDefinition ==
+                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
+            {
+                ShowAddOnTheFlyWindow(new ProductsWindow(), e);
+            }
         }
 
         private void ShowAddOnTheFlyWindow(DbMaintenanceWindow maintenanceWindow, LookupAddViewArgs e)

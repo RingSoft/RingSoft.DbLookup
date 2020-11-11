@@ -115,9 +115,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal? _unitsInStock;
+        private short? _unitsInStock;
 
-        public decimal? UnitsInStock
+        public short? UnitsInStock
         {
             get => _unitsInStock;
             set
@@ -130,9 +130,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal? _unitsOnOrder;
+        private short? _unitsOnOrder;
 
-        public decimal? UnitsOnOrder
+        public short? UnitsOnOrder
         {
             get => _unitsOnOrder;
             set
@@ -145,9 +145,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal? _reorderLevel;
+        private short? _reorderLevel;
 
-        public decimal? ReorderLevel
+        public short? ReorderLevel
         {
             get => _reorderLevel;
             set
@@ -206,12 +206,62 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Product entity)
         {
-            throw new System.NotImplementedException();
+            PrimaryKeyValue primaryKey;
+            if (entity.Supplier != null)
+            {
+                primaryKey = _lookupContext.Suppliers.GetPrimaryKeyValueFromEntity(entity.Supplier);
+                SupplierAutoFillValue = new AutoFillValue(primaryKey, entity.Supplier.CompanyName);
+            }
+            else
+            {
+                SupplierAutoFillValue = null;
+            }
+
+            if (entity.Category != null)
+            {
+                primaryKey = _lookupContext.Categories.GetPrimaryKeyValueFromEntity(entity.Category);
+                CategoryAutoFillValue = new AutoFillValue(primaryKey, entity.Category.CategoryName);
+            }
+            else
+            {
+                CategoryAutoFillValue = null;
+            }
+
+            QuantityPerUnit = entity.QuantityPerUnit;
+            UnitPrice = entity.UnitPrice;
+            UnitsInStock = entity.UnitsInStock;
+            UnitsOnOrder = entity.UnitsOnOrder;
+            ReorderLevel = entity.ReorderLevel;
+            Discontinued = entity.Discontinued;
         }
 
         protected override Product GetEntityData()
         {
-            throw new System.NotImplementedException();
+            var product = new Product
+            {
+                ProductID = ProductId,
+                ProductName = KeyAutoFillValue.Text,
+                QuantityPerUnit = QuantityPerUnit,
+                UnitPrice = UnitPrice,
+                UnitsInStock = UnitsInStock,
+                UnitsOnOrder = UnitsOnOrder,
+                ReorderLevel = ReorderLevel,
+                Discontinued = Discontinued
+            };
+
+            if (CategoryAutoFillValue != null)
+            {
+                product.CategoryID = _lookupContext.Categories
+                    .GetEntityFromPrimaryKeyValue(CategoryAutoFillValue.PrimaryKeyValue).CategoryId;
+            }
+
+            if (SupplierAutoFillValue != null)
+            {
+                product.SupplierID = _lookupContext.Suppliers
+                    .GetEntityFromPrimaryKeyValue(SupplierAutoFillValue.PrimaryKeyValue).SupplierID;
+            }
+
+            return product;
         }
 
         protected override void ClearData()
@@ -219,19 +269,21 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ProductId = 0;
             QuantityPerUnit = string.Empty;
 
-            CategoryAutoFillValue = SupplierAutoFillValue = null;
-            UnitPrice = UnitsInStock = UnitsOnOrder = ReorderLevel = null;
+            CategoryAutoFillValue = null;
+            SupplierAutoFillValue = null;
+            UnitPrice = null;
+            UnitsInStock = UnitsOnOrder = ReorderLevel = null;
             Discontinued = false;
         }
 
         protected override bool SaveEntity(Product entity)
         {
-            throw new System.NotImplementedException();
+            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveProduct(entity);
         }
 
         protected override bool DeleteEntity()
         {
-            throw new System.NotImplementedException();
+            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteProduct(ProductId);
         }
     }
 }

@@ -78,13 +78,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             }
         }
 
-        public bool SaveOrder(Order order)
-        {
-            var context = new NorthwindDbContextEfCore();
-            var result = context.SaveEntity(context.Orders, order, "Saving Order");
-            return result;
-        }
-
         public bool SaveOrder(Order order, List<Order_Detail> details)
         {
             var context = new NorthwindDbContextEfCore();
@@ -151,7 +144,31 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public Product GetProduct(int productId)
         {
             var context = new NorthwindDbContextEfCore();
-            return context.Products.FirstOrDefault(f => f.ProductID == productId);
+            return context.Products
+                .Include(i => i.Category)
+                .Include(i => i.Supplier)
+                .FirstOrDefault(f => f.ProductID == productId);
+        }
+
+        public bool SaveProduct(Product product)
+        {
+            using (var context = new NorthwindDbContextEfCore())
+            {
+                if (context.Products.FirstOrDefault(f => f.ProductID == product.ProductID) == null)
+                    return context.AddNewEntity(context.Products, product, "Saving Product");
+            }
+
+            using (var context = new NorthwindDbContextEfCore())
+            {
+                return context.SaveEntity(context.Products, product, "Saving Product");
+            }
+        }
+
+        public bool DeleteProduct(int productId)
+        {
+            var context = new NorthwindDbContextEfCore();
+            var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
+            return context.DeleteEntity(context.Products, product, "Deleting Product");
         }
     }
 }

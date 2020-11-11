@@ -32,5 +32,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         bool DeleteOrderDetail(int orderId, int productId);
 
         Product GetProduct(int productId);
+
+        bool SaveProduct(Product product);
+
+        bool DeleteProduct(int productId);
     }
 }

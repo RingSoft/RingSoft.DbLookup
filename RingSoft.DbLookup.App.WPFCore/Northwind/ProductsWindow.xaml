@@ -19,6 +19,7 @@
         <Style TargetType="dec:IntegerEditControl">
             <Setter Property="MaximumValue" Value="32000"/>
             <Setter Property="MinimumValue" Value="0"/>
+            <Setter Property="AllowNullValue" Value="True"/>
         </Style>
     </Window.Resources>
     <DockPanel>

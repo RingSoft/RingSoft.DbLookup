@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public interface IOrderView : IDbMaintenanceView
     {
-        void OnGridValidationFailed();
+        object OwnerWindow { get; }
     }
     public class OrderViewModel : DbMaintenanceViewModel<Order>
     {

@@ -20,7 +20,7 @@ namespace RingSoft.DbLookup
     {
         public int PageSize => 1;
         public LookupSearchTypes SearchType => LookupSearchTypes.Equals;
-        public string SearchText => string.Empty;
+        public string SearchText => _newText;
 
         public object AddViewParameter { get; set; }
 
@@ -50,6 +50,10 @@ namespace RingSoft.DbLookup
             {
                 NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
                 InputParameter = AddViewParameter
+            };
+            args.CallBackToken.RefreshData += (sender, eventArgs) =>
+            {
+                lookupData.RefreshData();
             };
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 

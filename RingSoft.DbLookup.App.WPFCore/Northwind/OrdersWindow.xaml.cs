@@ -10,6 +10,8 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     /// </summary>
     public partial class OrdersWindow : IOrderView
     {
+        public object OwnerWindow => this;
+
         public override DbMaintenanceViewModelBase ViewModel => OrdersViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
 

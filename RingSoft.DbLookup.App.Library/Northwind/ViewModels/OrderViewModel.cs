@@ -540,6 +540,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return $"{employee.FirstName} {employee.LastName}";
         }
 
+        protected override bool ValidateEntity(Order entity)
+        {
+            var result = base.ValidateEntity(entity);
+
+            if (result)
+                result = DetailsGridManager.ValidateGrid();
+
+            return result;
+        }
+
         protected override Order GetEntityData()
         {
             var order = new Order();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.NorthwindApp.Library;
@@ -98,14 +99,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case OrderDetailsGridColumns.Product:
                     if (value is DataEntryGridAutoFillCellProps autoFillCellProps)
                     {
+                        var validProduct = true;
                         if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid)
                         {
-                            ProductAutoFillValue = autoFillCellProps.AutoFillValue;
-                            LoadFromProduct(ProductAutoFillValue.PrimaryKeyValue);
+                            validProduct = SetProduct(autoFillCellProps.AutoFillValue);
                         }
                         else
                         {
-                            var validProduct = false;
+                            validProduct = false;
                             var message =
                                 $"'{autoFillCellProps.AutoFillValue.Text}' is not a valid Product.  Do you wish to create a new Product?";
                             if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Invalid Product") ==
@@ -116,18 +117,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                         autoFillCellProps.Text, _manager.OrderViewModel.OrderView.OwnerWindow);
                                 if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
                                 {
-                                    ProductAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,
+                                    var newAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,
                                         newProductResult.NewLookupEntity.ProductName);
-                                    LoadFromProduct(newProductResult.NewPrimaryKeyValue);
-                                    validProduct = true;
+                                    validProduct = SetProduct(newAutoFillValue);
                                 }
                             }
-
-                            if (!validProduct)
-                            {
-                                autoFillCellProps.OverrideCellMovement = true;
-                                return; //So IsNew isn't set.
-                            }
+                        }
+                        if (!validProduct)
+                        {
+                            autoFillCellProps.OverrideCellMovement = true;
+                            return; //So IsNew isn't set.
                         }
                     }
                     break;
@@ -161,11 +160,28 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.SetCellValue(value);
         }
 
-        private void LoadFromProduct(PrimaryKeyValue primaryKeyValue)
+        private bool SetProduct(AutoFillValue productValue)
         {
-            var product =
-                _lookupContext.Products.GetEntityFromPrimaryKeyValue(primaryKeyValue);
+            var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(productValue.PrimaryKeyValue);
+            var orderDetails = Manager.Rows.OfType<OrderDetailsGridRow>();
+
+            var existingRow = orderDetails.FirstOrDefault(f => f.ProductId == product.ProductID);
+            if (existingRow != null)
+            {
+                var message = $"'{productValue.Text}' already exists in this order.  Do you wish to modify it instead?";
+                if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Duplicate Product detected.") ==
+                    MessageBoxButtonsResult.Yes)
+                {
+                    _manager.Grid.GotoCell(existingRow, (int)OrderDetailsGridColumns.Product);
+                }
+
+                return false;
+            }
+            ProductId = product.ProductID;
+            ProductAutoFillValue = productValue;
             LoadFromProduct(product);
+
+            return true;
         }
 
         private void LoadFromProduct(Product product)
@@ -179,6 +195,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public override void LoadFromEntity(Order_Detail entity)
         {
+            ProductId = entity.ProductID;
             var productPrimaryKey = _lookupContext.Products.GetPrimaryKeyValueFromEntity(entity.Product);
             ProductAutoFillValue = new AutoFillValue(productPrimaryKey, entity.Product.ProductName);
             Quantity = entity.Quantity;

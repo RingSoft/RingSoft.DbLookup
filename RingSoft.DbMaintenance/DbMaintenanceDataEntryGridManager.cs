@@ -55,7 +55,7 @@ namespace RingSoft.DbMaintenance
 
         public virtual bool ValidateGrid()
         {
-            if (Grid != null && !Grid.CommitCellEdit(CellLostFocusTypes.ValidatingGrid))
+            if (Grid != null && !Grid.CommitCellEdit())
                 return false;
 
             foreach (var dataEntryGridRow in Rows)
@@ -72,6 +72,7 @@ namespace RingSoft.DbMaintenance
             if (Grid == null)
                 return null;
 
+            Grid.CommitCellEdit();
             var result = new List<TEntity>();
             var rowIndex = 0;
             foreach (var dataEntryGridRow in Rows)

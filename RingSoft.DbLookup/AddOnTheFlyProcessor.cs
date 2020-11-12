@@ -51,9 +51,11 @@ namespace RingSoft.DbLookup
                 NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
                 InputParameter = AddViewParameter
             };
+
             args.CallBackToken.RefreshData += (sender, eventArgs) =>
             {
-                lookupData.RefreshData();
+                if (lookupData.SelectedPrimaryKeyValue == null || !lookupData.SelectedPrimaryKeyValue.IsValid)
+                    lookupData.RefreshData();
             };
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 

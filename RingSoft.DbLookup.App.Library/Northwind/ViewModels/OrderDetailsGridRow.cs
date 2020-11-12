@@ -116,9 +116,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                         autoFillCellProps.Text, _manager.OrderViewModel.OrderView.OwnerWindow);
                                 if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
                                 {
-                                    var product = LoadFromProduct(newProductResult.NewPrimaryKeyValue);
                                     ProductAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,
-                                        product.ProductName);
+                                        newProductResult.NewLookupEntity.ProductName);
+                                    LoadFromProduct(newProductResult.NewPrimaryKeyValue);
                                     validProduct = true;
                                 }
                             }
@@ -161,22 +161,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.SetCellValue(value);
         }
 
-        private Product LoadFromProduct(PrimaryKeyValue primaryKeyValue)
+        private void LoadFromProduct(PrimaryKeyValue primaryKeyValue)
         {
             var product =
                 _lookupContext.Products.GetEntityFromPrimaryKeyValue(primaryKeyValue);
-            return LoadFromProduct(product);
+            LoadFromProduct(product);
         }
 
-        private Product LoadFromProduct(Product product)
+        private void LoadFromProduct(Product product)
         {
             product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
             Quantity = 1;
             if (product.UnitPrice != null)
                 Price = (decimal) product.UnitPrice;
             _manager.OrderViewModel.RefreshTotalControls();
-
-            return product;
         }
 
         public override void LoadFromEntity(Order_Detail entity)

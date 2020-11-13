@@ -10,8 +10,11 @@
             <Setter Property="Margin" Value="2.5"/>
         </Style>
         <Style TargetType="dec:StringReadOnlyBox" BasedOn="{StaticResource ReadOnlyBox}"/>
+
         <Style TargetType="dec:DecimalReadOnlyBox" x:Key="GlobalDecimalReadOnlyBoxStyle" BasedOn="{StaticResource ReadOnlyBox}"/>
         <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource GlobalDecimalReadOnlyBoxStyle}"/>
+
+        <Style TargetType="dec:DateReadOnlyBox" BasedOn="{StaticResource ReadOnlyBox}"/>
 
         <Style TargetType="TextBox" x:Key="GlobalTextBoxStyle">
             <Setter Property="Height" Value="20"/>

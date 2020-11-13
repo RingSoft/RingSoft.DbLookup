@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library;
+﻿using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
@@ -25,6 +26,12 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
             CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
 
+            CustomerControl.PreviewLostKeyboardFocus += (sender, args) =>
+            {
+                if (!this.IsWindowClosing(args.NewFocus))
+                    if (!OrdersViewModel.ValidateCustomer())
+                        args.Handled = true;
+            };
         }
         public override void ResetViewForNewRecord()
         {

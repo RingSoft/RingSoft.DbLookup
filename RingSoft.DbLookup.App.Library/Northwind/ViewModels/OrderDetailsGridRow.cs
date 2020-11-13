@@ -2,7 +2,6 @@
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.NorthwindApp.Library;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbMaintenance;
@@ -99,7 +98,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case OrderDetailsGridColumns.Product:
                     if (value is DataEntryGridAutoFillCellProps autoFillCellProps)
                     {
-                        var validProduct = true;
+                        bool validProduct;
                         if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid)
                         {
                             validProduct = SetProduct(autoFillCellProps.AutoFillValue);

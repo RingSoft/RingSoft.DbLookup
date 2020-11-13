@@ -1,5 +1,4 @@
 ﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.NorthwindApp.Library;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbMaintenance;
 using System.Collections.Specialized;

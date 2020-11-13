@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -688,6 +689,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+        }
+
+        public bool ValidateCustomer()
+        {
+            if (Customer != null && !string.IsNullOrEmpty(Customer.Text) &&
+                !Customer.PrimaryKeyValue.IsValid)
+            {
+                var message = "Invalid Customer!";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, "Validation Fail", RsMessageBoxIcons.Exclamation);
+                return false;
+            }
+
+            return true;
         }
     }
 }

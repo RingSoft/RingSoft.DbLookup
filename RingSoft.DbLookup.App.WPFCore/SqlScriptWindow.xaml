@@ -25,8 +25,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                <TextBox x:Name="SqlScriptTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True" FontFamily="Courier New" Text="{Binding Path=SqlText}"/>
+            <ScrollViewer x:Name="ScrollViewer" HorizontalScrollBarVisibility="Visible">
+                <TextBox x:Name="SqlScriptTextBox" Height="{Binding ElementName=ScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" FontFamily="Courier New" Text="{Binding Path=SqlText}"/>
             </ScrollViewer>
             <StackPanel Grid.Row="1" Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="ExecuteButton" Content="_Execute" IsDefault="True" Margin="0,0,5,0" Width="50"/>

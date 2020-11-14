@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             Dispatcher.Invoke(() =>
             {
                 ProgressBar.Value = e.CurrentRecord;
-                ProgressTextBlock.Text = e.Message;
+                ProgressBox.Text = e.Message;
                 StartProcessButton.IsEnabled = e.AllowCancel;
             });
         }

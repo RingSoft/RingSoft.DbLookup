@@ -22,10 +22,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Style="{StaticResource ControlLabel}" Content="Items Table Maximum Records"/>
-        <TextBox x:Name="MaxRecordsTextBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=MaxRecords, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ReadOnlyBorder}">
-            <TextBlock x:Name="ProgressTextBlock" Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ProgressLabelText}" HorizontalAlignment="Center"/>
-        </Border>
+
+        <dec:IntegerEditControl x:Name="MaxRecordsTextBox" Grid.Row="0" Grid.Column="1" Value="{Binding Path=MaxRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
+
+        <dec:StringReadOnlyBox x:Name="ProgressBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Path=ProgressLabelText}" HorizontalAlignment="Center" DesignText="Processing Record 1,000,000 of 1,000,000"/>
+
         <ProgressBar x:Name="ProgressBar" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="20" Maximum="{Binding Path=MaxRecords}" Minimum="0"/>
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="StartProcessButton" Content="{Binding Path=StartButtonText}" IsEnabled="{Binding Path=StartButtonEnabled}" Margin="0,0,5,0" Width="75"/>

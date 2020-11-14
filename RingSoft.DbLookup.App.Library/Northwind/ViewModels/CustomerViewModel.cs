@@ -192,11 +192,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         }
 
         private INorthwindLookupContext _lookupContext;
+        private OrderInput _orderInput;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter != null &&
+                LookupAddViewArgs.InputParameter is OrderInput orderInput)
+            {
+                _orderInput = orderInput;
+            }
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
             ordersLookup.Include(p => p.Employee);
@@ -217,7 +223,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
                 customer.CustomerID);
 
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _orderInput);
             return customer;
         }
 
@@ -285,7 +291,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify, null, _orderInput);
         }
     }
 }

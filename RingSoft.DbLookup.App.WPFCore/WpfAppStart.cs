@@ -10,6 +10,7 @@ using System;
 using System.Data.Common;
 using System.Windows;
 using System.Data.SqlClient;
+using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -122,6 +123,15 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
             {
+                if (e.InputParameter is OrderInput orderInput)
+                {
+                    if (orderInput.GridMode)
+                        ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
+                    else 
+                        ShowAddOnTheFlyWindow(new OrdersWindow(), e);
+                    return;
+                }
+                
                 ShowAddOnTheFlyWindow(new OrdersWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)

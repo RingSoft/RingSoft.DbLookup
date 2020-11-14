@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
-        Title="Customers" Height="450" Width="500">
+        Title="Customers" Height="450" Width="575">
     <Window.DataContext>
         <vmlib:CustomerViewModel x:Name="CustomersViewModel"/>
     </Window.DataContext>
@@ -27,13 +28,13 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label Content="Customer ID" Style="{StaticResource ControlLabel}" IsEnabled="{Binding PrimaryKeyControlsEnabled}" />
-            <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper" />
+            <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper"/>
             <Label Grid.Row="0" Grid.Column="2" Content="Company Name" Style="{StaticResource ControlLabel}" />
-            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" Style="{StaticResource StandardTextBox}" />
+            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" DesignText="Ana Trujillo Emparedados y helados"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Contact Title" Style="{StaticResource ControlLabel}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}" Style="{StaticResource StandardTextBox}" />
+            <dec:StringEditControl Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}"/>
             <Label Grid.Row="1" Grid.Column="2" Content="Contact Name" Style="{StaticResource ControlLabel}" />
-            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=ContactName, Mode=TwoWay}" Style="{StaticResource StandardTextBox}" />
+            <dec:StringEditControl Grid.Row="1" Grid.Column="3" Text="{Binding Path=ContactName, Mode=TwoWay}"/>
             <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="TabControl">
                 <TabItem Header="Contact Info">
                     <Grid HorizontalAlignment="Stretch">
@@ -48,31 +49,31 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" Content="Address" Style="{StaticResource ControlLabel}"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
+                        <dec:StringEditControl Grid.Column="1" Grid.Row="0"  Text="{Binding Path=Address, Mode=TwoWay}"/>
                         <Label Grid.Column="0" Grid.Row="1" Content="City" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
+                            <dec:StringEditControl  Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
                             <Label Content="Region" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
+                            <dec:StringEditControl  Text="{Binding Path=Region, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="2" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
+                            <dec:StringEditControl  Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
                             <Label Content="Country" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
+                            <dec:StringEditControl  Text="{Binding Path=Country, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="3" Content="Telephone Number" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Phone, Mode=TwoWay}" Width="130"/>
+                            <dec:StringEditControl  Text="{Binding Path=Phone, Mode=TwoWay}" Width="130"/>
                             <Label Content="Fax Number" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Fax, Mode=TwoWay}"/>
+                            <dec:StringEditControl  Text="{Binding Path=Fax, Mode=TwoWay}"/>
                         </DockPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Orders">
                     <DockPanel>
                         <Button Content="_Add/Modify" x:Name="AddModifyButton" VerticalAlignment="Top"/>
-                        <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}">
+                        <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}" DesignText="Andrew Fuller">
                             <lc:LookupControl.LookupColumns>
                                 <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderLookup}}" Width="100" Header="Order Date" DesignText="01/01/1980"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Employee, Type={x:Type lm:OrderLookup}}" Width="260" Header="Employee" DesignText="Andrew Fuller"/>

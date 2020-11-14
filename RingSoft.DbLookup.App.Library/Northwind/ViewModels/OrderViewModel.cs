@@ -16,6 +16,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     {
         object OwnerWindow { get; }
     }
+
+    public class OrderInput
+    {
+        public bool GridMode { get; set; }
+    }
     public class OrderViewModel : DbMaintenanceViewModel<Order>
     {
         public IOrderView OrderView { get; private set; }
@@ -407,6 +412,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public bool GridMode { get; set; }
 
+        public OrderInput OrderInput { get; private set; }
+
         private readonly DateTime _newDateTime = DateTime.Today;
 
         private INorthwindLookupContext _lookupContext;
@@ -426,9 +433,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                              throw new ArgumentException(
                                  $"ViewModel requires an {nameof(IOrderView)} interface.");
 
+            OrderInput = new OrderInput{GridMode = GridMode};
 
-            CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID));
-            EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID));
+            CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID))
+                {AddViewParameter = OrderInput};
+            EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
+                {AddViewParameter = OrderInput};
             ShipViaAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ShipVia));
 
             OrderDetailsLookupDefinition =

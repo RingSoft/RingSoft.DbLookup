@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
@@ -12,6 +13,13 @@
     <Window.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="dec:DateEditControl">
+            <Setter Property="AllowNullValue" Value="True"/>
+            <Setter Property="DesignText" Value="01/01/2000"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
         <Grid Margin="5">
@@ -29,23 +37,21 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Label Style="{StaticResource ControlLabel}" Content="Employee ID"/>
-            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}" Width="100" HorizontalAlignment="Left">
-                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=EmployeeId}"/>
-            </Border>
+            <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=EmployeeId}" DesignText="123456789" HorizontalAlignment="Left" Width="100"/>
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="First Name"/>
-            <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}"/>
+            <dec:StringEditControl x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}"/>
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Last Name"/>
-            <TextBox x:Name="LastNameTextBox" Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}"/>
+            <dec:StringEditControl x:Name="LastNameTextBox" Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}"/>
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Courtesy"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
-                <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=TitleOfCourtesy, Mode=TwoWay}" Width="100"/>
+                <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=TitleOfCourtesy, Mode=TwoWay}" Width="100"/>
                 <Label Style="{StaticResource ControlLabel}" Content="Birth Date"/>
-                <DatePicker SelectedDate="{Binding Path=BirthDate, Mode=TwoWay}"/>
+                <dec:DateEditControl Value="{Binding Path=BirthDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Style="{StaticResource ControlLabel}" Content="Hire Date"/>
-                <DatePicker SelectedDate="{Binding Path=HireDate, Mode=TwoWay}"/>
+                <dec:DateEditControl Value="{Binding Path=HireDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Title"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Title, Mode=TwoWay}"/>
+            <dec:StringEditControl Grid.Row="3" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Title, Mode=TwoWay}"/>
             <Label Grid.Row="3" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Supervisor"/>
             <lc:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}"/>
             <TabControl x:Name="TabControl" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
@@ -62,24 +68,24 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" Content="Address" Style="{StaticResource ControlLabel}"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
+                        <dec:StringEditControl Grid.Column="1" Grid.Row="0" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Address, Mode=TwoWay}"/>
                         <Label Grid.Column="0" Grid.Row="1" Content="City" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
                             <Label Content="Region" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=Region, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="2" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
                             <Label Content="Country" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=Country, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="3" Content="Home Phone Number" Style="{StaticResource ControlLabel}"/>
                         <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=HomePhone, Mode=TwoWay}" Width="130"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=HomePhone, Mode=TwoWay}" Width="130"/>
                             <Label Content="Extension" Style="{StaticResource ControlLabel}"/>
-                            <TextBox Style="{StaticResource StandardTextBox}" Text="{Binding Path=Extension, Mode=TwoWay}" Width="100" HorizontalAlignment="Left"/>
+                            <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=Extension, Mode=TwoWay}" Width="100" HorizontalAlignment="Left"/>
                         </DockPanel>
                     </Grid>
                 </TabItem>

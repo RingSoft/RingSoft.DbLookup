@@ -312,7 +312,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private readonly DateTime _newDateTime = new DateTime(1980, 1, 1);
         private INorthwindLookupContext _lookupContext;
         private OrderInput _orderInput;
 
@@ -358,17 +357,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             LastName = entity.LastName;
             Title = entity.Title;
             TitleOfCourtesy = entity.TitleOfCourtesy;
-
-            if (entity.BirthDate != null)
-                BirthDate = entity.BirthDate;
-            else
-                BirthDate = _newDateTime;
-
-            if (entity.HireDate != null)
-                HireDate = entity.HireDate;
-            else
-                HireDate = _newDateTime;
-
+            BirthDate = entity.BirthDate;
+            HireDate = entity.HireDate;
             Address = entity.Address;
             City = entity.City;
             Region = entity.Region;
@@ -435,7 +425,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             EmployeeId = 0;
             FirstName = LastName = string.Empty;
             Title = TitleOfCourtesy = Address = City = Region = PostalCode = Country = HomePhone = Extension = Notes= PhotoPath = null;
-            BirthDate = HireDate = _newDateTime;
+            BirthDate = HireDate = null;
             ReportsTo = null;
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }

@@ -314,10 +314,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private readonly DateTime _newDateTime = new DateTime(1980, 1, 1);
         private INorthwindLookupContext _lookupContext;
+        private OrderInput _orderInput;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter != null &&
+                LookupAddViewArgs.InputParameter is OrderInput orderInput)
+            {
+                _orderInput = orderInput;
+            }
 
             ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo));
 
@@ -340,7 +347,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
                 EmployeeId);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, _orderInput);
 
             return employee;
         }
@@ -446,7 +453,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify, null, _orderInput);
         }
     }
 }

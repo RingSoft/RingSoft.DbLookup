@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
@@ -27,9 +28,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Style="{StaticResource ControlLabel}" Content="Manufacturer ID"/>
-            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ReadOnlyBorder}">
-                <TextBlock Style="{StaticResource ReadOnlyTextBlock}" Text="{Binding Path=ManufacturerId}"/>
-            </Border>
+
+            <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ManufacturerId}"/>
+
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
             <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3" Width="200" HorizontalAlignment="Left"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Items"/>

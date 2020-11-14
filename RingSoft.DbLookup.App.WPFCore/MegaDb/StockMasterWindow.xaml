@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
@@ -32,7 +33,9 @@
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Location" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
             <lc:AutoFillControl x:Name="LocationControl" Grid.Row="0" Grid.Column="3" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Price"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Width="100" HorizontalAlignment="Left" Text="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=c}"/>
+
+            <dec:DecimalEditControl Grid.Row="1" Grid.Column="1" FormatType="Currency" Value="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextAlignment="Left" DesignText="$1,000,000.00" Width="125"/>
+
             <Label Grid.Row="2" Grid.Column="1" Content="Purchases"/>
             <Button x:Name="AddModifyButton" Grid.Row="3" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify"/>
             <lc:LookupControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" Command="{Binding Path=StockCostQuantityCommand}">

@@ -111,7 +111,12 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public void OnRecordSelected()
         {
-            
+            if (FocusManager.GetFocusedElement(this) is TextBox textBox)
+            {
+                var lookupControl = textBox.GetParentOfType<LookupControl>();
+                if (lookupControl == null)
+                    textBox.SelectAll();
+            }
         }
 
         public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)

@@ -1150,7 +1150,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnListViewKeyDown(KeyEventArgs e)
         {
-            if (SearchForHost != null && SearchForHost.Control.IsFocused)
+            if (SearchForHost != null && SearchForHost.Control.IsKeyboardFocusWithin)
             {
                 if (!SearchForHost.CanProcessSearchForKey(e.Key))
                 {

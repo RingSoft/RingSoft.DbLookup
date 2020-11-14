@@ -39,6 +39,10 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
             
         }
 
+        public void OnRecordSelected()
+        {
+        }
+
         void IDbMaintenanceView.ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
         {
         }

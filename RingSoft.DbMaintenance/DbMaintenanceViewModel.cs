@@ -203,6 +203,7 @@ namespace RingSoft.DbMaintenance
                 if (!_savingRecord)
                 {
                     LoadFromEntity(entity);
+                    View.OnRecordSelected();
                 }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;

@@ -33,6 +33,8 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         void ResetViewForNewRecord();
 
+        void OnRecordSelected();
+
         /// <summary>
         /// Show the Find button's lookup window.
         /// </summary>

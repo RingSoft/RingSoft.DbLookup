@@ -241,6 +241,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Order_Detail entity)
         {
+            LoadFromOrder(entity.Order);
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
             Discount = (decimal)entity.Discount;

@@ -106,6 +106,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             var context = new NorthwindDbContextEf6();
             return context.OrderDetails.Include(i => i.Product)
                 .Include(i => i.Order)
+                .Include(i => i.Order.Customer)
                 .FirstOrDefault(f => f.OrderID == orderId && f.ProductID == productId);
         }
 

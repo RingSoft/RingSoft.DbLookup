@@ -116,6 +116,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var context = new NorthwindDbContextEfCore();
             return context.OrderDetails.Include(i => i.Product)
                 .Include(i => i.Order)
+                .ThenInclude(t => t.Customer)
                 .FirstOrDefault(f => f.OrderID == orderId && f.ProductID == productId);
         }
 

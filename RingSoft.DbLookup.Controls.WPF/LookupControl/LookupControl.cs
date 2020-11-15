@@ -889,6 +889,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         SearchForHost.Control.Loaded += (sender, args) =>
                         {
+                            SearchForStackPanel.Height = SearchForHost.Control.ActualHeight;
                             SearchForHost.Control.Focus();
                             SearchForHost.SetFocusToControl();
                         };
@@ -900,7 +901,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!column.Header.IsNullOrEmpty())
             {
-                var headerText = column.Header.Replace('\n', ' ');
+                var headerText = column.Header.Replace('\n', ' ').Replace("\r", "");
                 if (SearchForLabel != null)
                     SearchForLabel.Content = $@"Search For {headerText}";
             }

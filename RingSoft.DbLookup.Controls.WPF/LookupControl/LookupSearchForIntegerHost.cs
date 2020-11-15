@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
@@ -38,6 +39,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                         {
                             control.CultureId = integerFieldDefinition.Culture.Name;
                             control.NumberFormatString = integerFieldDefinition.NumberFormatString;
+                            if (integerFieldDefinition.TableDefinition.PrimaryKeyFields.Contains(integerFieldDefinition)
+                            )
+                                control.DataEntryMode = DataEntryModes.ValidateOnly;
                         }
                     }
                     break;

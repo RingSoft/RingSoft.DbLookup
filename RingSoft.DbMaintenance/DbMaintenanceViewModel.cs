@@ -283,6 +283,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnSelectButton()
         {
+            if (!CheckDirty())
+                return;
+
             _selectingRecord = true;
             LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
             View.CloseWindow();

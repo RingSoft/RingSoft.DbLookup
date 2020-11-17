@@ -88,6 +88,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (Control.DateFormatType)
             {
                 case DateFormatTypes.DateOnly:
+                    Control.EntryFormat = "d";
                     if (DefaultDateOnlyWidth != null)
                     {
                         Control.HorizontalAlignment = HorizontalAlignment.Left;
@@ -96,6 +97,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     break;
                 case DateFormatTypes.DateTime:
+                    Control.EntryFormat = "G";
                     if (DefaultDateTimeWidth != null)
                     {
                         Control.HorizontalAlignment = HorizontalAlignment.Left;

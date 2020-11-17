@@ -190,15 +190,11 @@ namespace RingSoft.DbLookup.App.Library
             INorthwindLookupContext lookupContext)
         {
             processor.GetProduct(1);
-            var query = new SelectQuery(lookupContext.Products.TableName).SetMaxRecords(1);
-            lookupContext.DataProcessor.GetData(query, false);
         }
 
         public static void ConnectToMegaDb(IMegaDbEfDataProcessor processor, IMegaDbLookupContext lookupContext)
         {
             processor.GetItem(1);
-            var query = new SelectQuery(lookupContext.Items.TableName).SetMaxRecords(1);
-            lookupContext.DataProcessor.GetData(query, false);
         }
     }
 }

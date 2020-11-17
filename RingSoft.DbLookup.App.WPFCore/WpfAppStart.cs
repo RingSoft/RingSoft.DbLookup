@@ -10,11 +10,13 @@ using System;
 using System.Data.Common;
 using System.Windows;
 using System.Data.SqlClient;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
-    public class WpfAppStart : AppStart
+    public class WpfAppStart : AppStart, IDbLookupUserInterface, IControlsUserInterface
     {
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
@@ -64,7 +66,12 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         protected override void FinishStartup()
         {
+            var lookupUserInterface = DbDataProcessor.UserInterface;
+            DbDataProcessor.UserInterface = this;
+
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
+
+            DbDataProcessor.UserInterface = lookupUserInterface;
 
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
@@ -158,6 +165,31 @@ namespace RingSoft.DbLookup.App.WPFCore
             maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.InitializeFromLookupData(e);
             maintenanceWindow.ShowDialog();
+        }
+
+        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
+        {
+            _splashWindow.ShowErrorMessageBox(dataProcessResult.Message, "Database Connection Error!");
+        }
+
+        public void SetWindowCursor(WindowCursorTypes cursor)
+        {
+            
+        }
+
+        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        {
+            _splashWindow.ShowErrorMessageBox(text, caption);
+        }
+
+        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption)
+        {
+            return MessageBoxButtonsResult.Yes;
+        }
+
+        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption)
+        {
+            return MessageBoxButtonsResult.Cancel;
         }
     }
 }

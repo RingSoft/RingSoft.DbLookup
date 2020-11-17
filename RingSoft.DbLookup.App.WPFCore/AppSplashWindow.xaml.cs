@@ -1,4 +1,7 @@
-﻿using RingSoft.DbLookup.App.Library;
+﻿using System.Windows;
+using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -23,6 +26,15 @@ namespace RingSoft.DbLookup.App.WPFCore
         public void CloseSplash()
         {
             Dispatcher.Invoke(() => Close());
+        }
+
+        public void ShowErrorMessageBox(string message, string caption)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
+            });
+
         }
     }
 }

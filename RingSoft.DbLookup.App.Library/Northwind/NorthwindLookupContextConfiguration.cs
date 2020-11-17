@@ -215,6 +215,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             _lookupContext.Employees.HasDescription("Employees");
             _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor");
+
+            _lookupContext.Products.GetFieldDefinition(p => p.UnitPrice)
+                .HasDecimalFieldType(DecimalFieldTypes.Currency);
         }
 
         public int PageSize { get; } = 15;

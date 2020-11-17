@@ -880,20 +880,27 @@ namespace RingSoft.DbLookup.Controls.WPF
                 else
                 {
                     var lookupColumnDefinition = LookupDefinition.VisibleColumns[sortColumnIndex];
+
+                    if (SearchForHost != null)
+                    {
+                        SearchForHost = null;
+                        SearchForStackPanel.Children.Clear();
+                    }
                     SearchForHost =
                         LookupControlsGlobals.LookupControlSearchForFactory.CreateSearchForHost(lookupColumnDefinition);
-
-                    SearchForStackPanel.Children.Clear();
+                    
                     SearchForStackPanel.Children.Add(SearchForHost.Control);
-                    if (IsKeyboardFocusWithin)
+                    SearchForStackPanel.UpdateLayout();
+
+                    SearchForHost.Control.Loaded += (sender, args) =>
                     {
-                        SearchForHost.Control.Loaded += (sender, args) =>
+                        SearchForStackPanel.Height = SearchForHost.Control.ActualHeight;
+                        if (IsKeyboardFocusWithin)
                         {
-                            SearchForStackPanel.Height = SearchForHost.Control.ActualHeight;
                             SearchForHost.Control.Focus();
                             SearchForHost.SetFocusToControl();
-                        };
-                    }
+                        }
+                    };
                 }
             }
 

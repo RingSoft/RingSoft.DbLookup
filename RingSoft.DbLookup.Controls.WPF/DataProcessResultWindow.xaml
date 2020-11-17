@@ -15,12 +15,12 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label x:Name="TitleLabel" Content="Data Process Error!" FontSize="12" FontWeight="Bold"/>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
-            <TextBox x:Name="ResultTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+        <ScrollViewer x:Name="ResultScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Visible">
+            <TextBox x:Name="ResultTextBox" Height="{Binding ElementName=ResultScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalContentAlignment="Top"/>
         </ScrollViewer>
         <Label Grid.Row="2" x:Name="SqlStatementLabel" Content="Failed SQL Statement"/>
-        <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Visible">
-            <TextBox x:Name="SqlStatementTextBox" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+        <ScrollViewer x:Name="SqlScrollViewer" Grid.Row="3" HorizontalScrollBarVisibility="Visible">
+            <TextBox x:Name="SqlStatementTextBox" Height="{Binding ElementName=SqlScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalContentAlignment="Top"/>
         </ScrollViewer>
         <Button Grid.Row="4" x:Name="CloseButton" Content="_Close" Height="25" Width="75" HorizontalAlignment="Right"/>
     </Grid>

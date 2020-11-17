@@ -1,7 +1,5 @@
-﻿using System.Windows;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.Controls.WPF;
-using RingSoft.DbLookup.DataProcessor;
+﻿using RingSoft.DbLookup.App.Library;
+using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {

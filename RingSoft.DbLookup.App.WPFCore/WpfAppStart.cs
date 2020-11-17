@@ -68,10 +68,13 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             var lookupUserInterface = DbDataProcessor.UserInterface;
             DbDataProcessor.UserInterface = this;
+            var controlsUserInterface = ControlsGlobals.UserInterface;
+            ControlsGlobals.UserInterface = this;
 
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
 
             DbDataProcessor.UserInterface = lookupUserInterface;
+            ControlsGlobals.UserInterface = controlsUserInterface;
 
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;

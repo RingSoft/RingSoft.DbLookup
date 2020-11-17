@@ -1,7 +1,6 @@
 ﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.Northwind;
-using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
 using System.IO;

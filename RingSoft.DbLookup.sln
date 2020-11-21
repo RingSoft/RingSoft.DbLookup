@@ -23,14 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.Controls.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.WPFCore", "RingSoft.DbLookup.App.WPFCore\RingSoft.DbLookup.App.WPFCore.csproj", "{451974A0-8FD2-494E-9EED-669C468206DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.Controls.WinForms", "RingSoft.DbLookup.Controls.WinForms\RingSoft.DbLookup.Controls.WinForms.csproj", "{C544A6F5-3DFA-4399-8AAC-9CBB36CCB598}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WinForms.Forms", "RingSoft.DbLookup.App.WinForms.Forms\RingSoft.DbLookup.App.WinForms.Forms.csproj", "{56BF278E-1DA6-4EB1-8406-63D35A446F38}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookup.App.WinForms", "RingSoft.DbLookup.App.WinForms\RingSoft.DbLookup.App.WinForms.csproj", "{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.SimpleDemo.WPF", "RingSoft.SimpleDemo.WPF\RingSoft.SimpleDemo.WPF.csproj", "{1C8FD869-8837-47D1-9201-3FC17E291645}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,22 +69,6 @@ Global
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{451974A0-8FD2-494E-9EED-669C468206DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C544A6F5-3DFA-4399-8AAC-9CBB36CCB598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C544A6F5-3DFA-4399-8AAC-9CBB36CCB598}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C544A6F5-3DFA-4399-8AAC-9CBB36CCB598}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C544A6F5-3DFA-4399-8AAC-9CBB36CCB598}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56BF278E-1DA6-4EB1-8406-63D35A446F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56BF278E-1DA6-4EB1-8406-63D35A446F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56BF278E-1DA6-4EB1-8406-63D35A446F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56BF278E-1DA6-4EB1-8406-63D35A446F38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A4E1F1-2D8C-4F0E-A1BA-4D95AFD6739B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C8FD869-8837-47D1-9201-3FC17E291645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C8FD869-8837-47D1-9201-3FC17E291645}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C8FD869-8837-47D1-9201-3FC17E291645}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C8FD869-8837-47D1-9201-3FC17E291645}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

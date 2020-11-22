@@ -71,6 +71,8 @@ namespace RingSoft.DbLookup.App.Library
 
         public static bool FirstTime { get; set; }
 
+        public static bool UnitTest { get; set; }
+
         public static void Initialize(string appSection)
         {
             AppSection = appSection;

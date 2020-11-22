@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore;
 using RingSoft.DbLookup.DataProcessor;
@@ -11,7 +12,12 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
-            DbDataProcessor.UserInterface = new TestGetDataErrorViewer();
+            var testViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.UserInterface = testViewer;
+            ControlsGlobals.UserInterface = testViewer;
+
+            RsDbLookupAppGlobals.UnitTest = true;
+
             RsDbLookupAppGlobals.Initialize("UnitTests");
             RsDbLookupAppGlobals.EfProcessor = new EfProcessorCore();
             SetupConfigurations();

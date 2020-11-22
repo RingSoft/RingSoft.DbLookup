@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
@@ -17,7 +18,11 @@ namespace RingSoft.DbLookup.Tests
         public static void Setup(TestContext testContext)
         {
             RsDbLookupAppGlobals.Initialize("UnitTests");
-            DbDataProcessor.UserInterface = new TestGetDataErrorViewer();
+
+            var testViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.UserInterface = testViewer;
+            ControlsGlobals.UserInterface = testViewer;
+
             _context = new DevLogixLookupContextEfCore()
             {
                 DataProcessorType = DataProcessorTypes.Sqlite

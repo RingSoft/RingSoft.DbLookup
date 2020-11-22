@@ -14,7 +14,7 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Tests.DbMaintenance
 {
-    public abstract class DbMaintTestsBase : IDbMaintenanceView
+    public abstract class DbMaintTestsBase : IOrderView
     {
         protected static void SetupConfigurations()
         {
@@ -230,5 +230,7 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
             result = viewModel.OnDeleteButton();
             Assert.AreEqual(DbMaintenanceResults.Success, result, "Delete Record");
         }
+
+        public object OwnerWindow => null;
     }
 }

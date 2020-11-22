@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using RingSoft.DbLookup.App.Library.Northwind;
@@ -126,10 +127,18 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
         public Product GetProduct(int productId)
         {
             var context = new NorthwindDbContextEf6();
-            return context.Products
-                .Include(i => i.Category)
-                .Include(i => i.Supplier)
-                .FirstOrDefault(f => f.ProductID == productId);
+            try
+            {
+                return context.Products
+                    .Include(i => i.Category)
+                    .Include(i => i.Supplier)
+                    .FirstOrDefault(f => f.ProductID == productId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public bool SaveProduct(Product product)

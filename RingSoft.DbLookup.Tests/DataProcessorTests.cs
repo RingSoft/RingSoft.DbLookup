@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
@@ -49,7 +50,10 @@ namespace RingSoft.DbLookup.Tests
 
         private static void SetupDataProcessors()
         {
-            DbDataProcessor.UserInterface = new TestGetDataErrorViewer();
+            var testViewer = new TestGetDataErrorViewer();
+            DbDataProcessor.UserInterface = testViewer;
+            ControlsGlobals.UserInterface = testViewer;
+
             _sqlServerDataProcessor = new SqlServerDataProcessor()
             {
                 Server = "localhost\\SQLEXPRESS",

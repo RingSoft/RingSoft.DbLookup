@@ -267,7 +267,8 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnFindButton()
         {
-            View.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor);
+            View.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
+                _lookupData.SelectedPrimaryKeyValue);
         }
 
         private void View_LookupFormReturn(object sender, LookupSelectArgs e)

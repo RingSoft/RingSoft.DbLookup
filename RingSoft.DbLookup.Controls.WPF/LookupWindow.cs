@@ -140,6 +140,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public object AddViewParameter { get; set; }
 
+        public PrimaryKeyValue InitialSearchForPrimaryKeyValue { get; set; }
+
         /// <summary>
         /// Occurs when a lookup row is selected by the user.
         /// </summary>
@@ -191,7 +193,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
             LookupControl.LookupData.LookupView += LookupData_LookupView;
-            LookupControl.RefreshData(false, _initialSearchFor, null, true);
+            LookupControl.RefreshData(false, _initialSearchFor, null, 
+                true, InitialSearchForPrimaryKeyValue);
         }
 
         public override void OnApplyTemplate()

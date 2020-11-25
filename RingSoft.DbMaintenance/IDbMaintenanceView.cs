@@ -1,4 +1,5 @@
 ﻿using System;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -42,7 +43,9 @@ namespace RingSoft.DbMaintenance
         /// <param name="allowAdd">Should the LookupWindow allow Add?</param>
         /// <param name="allowView">Should the LookupWindow allow View?</param>
         /// <param name="initialSearchFor">The initial search for text.</param>
-        void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor);
+        /// <param name="initialSearchForPrimaryKey">The initial search for primary key value.</param>
+        void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView,
+            string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey);
 
         /// <summary>
         /// Close this window.

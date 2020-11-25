@@ -119,10 +119,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
         }
 
-        public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
+        public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView,
+            string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey)
         {
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(lookupDefinition,
-                allowAdd, allowView, initialSearchFor);
+                allowAdd, allowView, initialSearchFor, initialSearchForPrimaryKey);
 
             lookupWindow.LookupSelect += (sender, args) =>
             {

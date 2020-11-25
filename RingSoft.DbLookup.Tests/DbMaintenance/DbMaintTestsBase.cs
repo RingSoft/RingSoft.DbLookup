@@ -43,7 +43,8 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         {
         }
 
-        void IDbMaintenanceView.ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
+        void IDbMaintenanceView.ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd,
+            bool allowView, string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey)
         {
         }
 

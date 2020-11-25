@@ -273,13 +273,18 @@ namespace RingSoft.DbLookup.Lookup
                 throw new ArgumentException(
                     $"Primary key value Table Definition '{SelectedPrimaryKeyValue.TableDefinition.TableName}' does not match this Lookup Definition's Table Definition '{LookupDefinition.TableDefinition.TableName}'");
 
-            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(1);
 
             SetupBaseQuery(query, false);
 
             foreach (var keyValueField in primaryKey.KeyValueFields)
             {
-                query.AddWhereItem(keyValueField.FieldDefinition.FieldName, Conditions.Equals, keyValueField.Value);
+                var dateType = DbDateTypes.DateOnly;
+                if (keyValueField.FieldDefinition is DateFieldDefinition dateField)
+                    dateType = dateField.DateType;
+
+                query.AddWhereItem(query.BaseTable, keyValueField.FieldDefinition.FieldName, Conditions.Equals,
+                    keyValueField.Value, keyValueField.FieldDefinition.ValueType, dateType);
             }
 
             query.DebugMessage = "LookupData.SelectPrimaryKey";
@@ -292,7 +297,11 @@ namespace RingSoft.DbLookup.Lookup
                 var selectedIndex = -1;
                 if (LookupResultsDataTable.Rows.Count > 0)
                     selectedIndex = 0;
-                OutputData(selectedIndex, LookupScrollPositions.Middle);
+
+                if (LookupControl.PageSize > 1 && selectedIndex == 0)
+                    FillAroundFoundEqualsRow();
+                else 
+                    OutputData(selectedIndex, LookupScrollPositions.Middle);
             }
 
             return getDataResult;
@@ -579,7 +588,10 @@ namespace RingSoft.DbLookup.Lookup
             if (LookupResultsDataTable == null || LookupResultsDataTable.Rows.Count <= 0)
                 return;
 
-            GetInitData(true, false);
+            if (resetSortOrder)
+                GetInitData(true, false);
+            else 
+                OnSearchForChange(LookupControl.SearchText);
         }
 
         public void OnMouseWheelForward()
@@ -1139,11 +1151,17 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var topRecordCount = Convert.ToInt32(Math.Floor((double)LookupControl.PageSize / 2));
-            var bottomRecordCount = (LookupControl.PageSize - topRecordCount) - 1;
+            FillAroundFoundEqualsRow();
+        }
+
+        private void FillAroundFoundEqualsRow()
+        {
             var middleRow = LookupResultsDataTable.Rows[0];
+
+            var topRecordCount = Convert.ToInt32(Math.Floor((double) LookupControl.PageSize / 2));
+            var bottomRecordCount = (LookupControl.PageSize - topRecordCount) - 1;
             var scrollPosition = LookupScrollPositions.Middle;
-            
+
             if (!GetPreviousRecords(middleRow, topRecordCount, LookupResultsDataTable, "GetSearchEquals"))
                 return;
 

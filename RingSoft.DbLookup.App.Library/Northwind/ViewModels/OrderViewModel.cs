@@ -385,15 +385,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        protected override string FindButtonInitialSearchFor
-        {
-            get
-            {
-                if (OrderId == 0)
-                    return string.Empty;
-                return OrderId.ToString();
-            }
-        }
+        protected override string FindButtonInitialSearchFor => OrderDate.ToShortDateString();
 
         private OrderDetailsGridManager _detailsGridManager;
 

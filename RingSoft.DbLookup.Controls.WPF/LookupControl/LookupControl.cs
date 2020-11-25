@@ -13,6 +13,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using RingSoft.DbLookup.DataProcessor;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -835,7 +836,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _lastDirection = direction;
                 }
 
-                if (SearchForHost != null)
+                if (SearchForHost != null && resetSortOrder)
                     SearchForHost.SearchText = String.Empty;
 
                 LookupData.OnColumnClick(columnIndex, resetSortOrder);
@@ -860,7 +861,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     columnNumber++;
                 }
 
-                SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
+                if (resetSortOrder)
+                    SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
+
                 SearchForHost?.Control.Focus();
             }
         }
@@ -1023,8 +1026,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="initialSearchFor">The new Search For value.</param>
         /// <param name="parentWindowPrimaryKeyValue">The parent window's PrimaryKeyValue.</param>
         /// <param name="searchForSelectAll">Select all text in the Search For TextBox.</param>
+        /// <param name="initialSearchForPrimaryKeyValue">The initial search for primary key value.</param>
         public void RefreshData(bool resetSearchFor, string initialSearchFor = "",
-            PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false)
+            PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false,
+            PrimaryKeyValue initialSearchForPrimaryKeyValue = null)
         {
             if (LookupData == null)
             {
@@ -1048,17 +1053,30 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (SearchForHost != null)
                 {
-                    var forceRefresh = SearchForHost.SearchText == initialSearchFor;
-                    SearchForHost.SearchText =
-                        initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
-
-                    if (searchForSelectAll)
+                    if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
                     {
-                        SearchForHost.SelectAll();
-                    }
+                        var forceRefresh = SearchForHost.SearchText == initialSearchFor;
 
-                    if (forceRefresh)
-                        LookupData.OnSearchForChange(initialSearchFor);
+                        SearchForHost.SearchText =
+                            initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+
+                        if (searchForSelectAll)
+                        {
+                            SearchForHost.SelectAll();
+                        }
+
+                        if (forceRefresh)
+                            LookupData.OnSearchForChange(initialSearchFor);
+                    }
+                    else
+                    {
+                        SearchText = initialSearchFor;
+                        if (searchForSelectAll)
+                        {
+                            SearchForHost.SelectAll();
+                        }
+                        LookupData.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+                    }
                 }
             }
         }

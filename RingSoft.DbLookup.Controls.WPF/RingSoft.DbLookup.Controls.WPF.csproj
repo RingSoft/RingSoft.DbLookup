@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="0.95.3" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="0.95.3.1" />
   </ItemGroup>
 
   <ItemGroup>

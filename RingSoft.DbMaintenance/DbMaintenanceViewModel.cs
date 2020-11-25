@@ -105,6 +105,8 @@ namespace RingSoft.DbMaintenance
         /// </value>
         protected virtual string ConfirmDeleteCaption => "Confirm Delete";
 
+        public bool ValidateAllAtOnce { get; set; }
+
         private LookupDataBase _lookupData;
         private bool _fromLookupFormAddView;
         private AutoFillValue _savedKeyAutoFillValue;

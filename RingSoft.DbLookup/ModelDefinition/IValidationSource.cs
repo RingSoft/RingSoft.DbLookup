@@ -5,6 +5,8 @@ namespace RingSoft.DbLookup.ModelDefinition
 {
     public interface IValidationSource
     {
+        bool ValidateAllAtOnce { get; }
+
         AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition);
 
         void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption);

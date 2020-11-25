@@ -381,12 +381,19 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <returns></returns>
         public bool ValidateEntity(TEntity entity, IValidationSource validationSource)
         {
+            var result = true;
+
             var fieldsToValidate = FieldDefinitions.Where(p => p.AllowNulls == false);
             foreach (var fieldDefinition in fieldsToValidate)
             {
                 var valueToValidate = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
                 if (!ValidateEntityProperty(validationSource, fieldDefinition, valueToValidate))
-                    return false;
+                {
+                    result = false;
+
+                    if (!validationSource.ValidateAllAtOnce)
+                        return false;
+                }
             }
 
             fieldsToValidate =
@@ -401,10 +408,14 @@ namespace RingSoft.DbLookup.ModelDefinition
                     var message = Context.ValidateFieldFailMessage(fieldDefinition);
                     var title = Context.ValidateFieldFailCaption;
                     validationSource.OnValidationFail(fieldDefinition, message, title);
-                    return false;
+
+                    result = false;
+
+                    if (!validationSource.ValidateAllAtOnce)
+                        return false;
                 }
             }
-            return true;
+            return result;
         }
 
         /// <summary>

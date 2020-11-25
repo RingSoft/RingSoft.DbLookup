@@ -13,7 +13,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using RingSoft.DbLookup.DataProcessor;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF

@@ -428,7 +428,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrderInput = new OrderInput{GridMode = GridMode};
 
             CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID))
-                {AddViewParameter = OrderInput};
+            {
+                AddViewParameter = OrderInput,
+                AllowLookupAdd = false
+            };
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
                 {AddViewParameter = OrderInput};
             ShipViaAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ShipVia));

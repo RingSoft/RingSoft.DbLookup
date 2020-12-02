@@ -3,6 +3,7 @@ using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbMaintenance
 {
@@ -135,7 +136,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (_selectButtonEnabled == value)
                     return;
-                _selectButtonEnabled = value;
+                SelectCommand.IsEnabled = _selectButtonEnabled = value;
                 OnPropertyChanged(nameof(SelectButtonEnabled));
             }
         }
@@ -155,8 +156,50 @@ namespace RingSoft.DbMaintenance
                 if (_deleteButtonEnabled == value)
                     return;
 
-                _deleteButtonEnabled = value;
+                DeleteCommand.IsEnabled = _deleteButtonEnabled = value;
                 OnPropertyChanged(nameof(DeleteButtonEnabled));
+            }
+        }
+
+        private bool _newButtonEnabled;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the New button is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the new button is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool NewButtonEnabled
+        {
+            get => _newButtonEnabled;
+            set
+            {
+                if (_newButtonEnabled == value)
+                    return;
+
+                NewCommand.IsEnabled = _newButtonEnabled = value;
+                OnPropertyChanged(nameof(NewButtonEnabled));
+            }
+        }
+
+        private bool _saveButtonEnabled;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Save button is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the save button is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool SaveButtonEnabled
+        {
+            get => _saveButtonEnabled;
+            set
+            {
+                if (_saveButtonEnabled == value)
+                    return;
+
+                SaveCommand.IsEnabled = _saveButtonEnabled = value;
+                OnPropertyChanged(nameof(SaveButtonEnabled));
             }
         }
 
@@ -212,7 +255,28 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public RelayCommand PreviousCommand { get; private set; }
+        public RelayCommand NextCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand NewCommand { get; private set; }
+        public RelayCommand FindCommand { get; private set; }
+        public RelayCommand SelectCommand { get; private set; }
+
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
+
+        public DbMaintenanceViewModelBase()
+        {
+            PreviousCommand = new RelayCommand(OnNewButton);
+            NextCommand = new RelayCommand(OnGotoNextButton);
+            SaveCommand = new RelayCommand(OnSaveButton){IsEnabled = SaveButtonEnabled};
+            DeleteCommand = new RelayCommand(OnDeleteButton){IsEnabled = DeleteButtonEnabled};
+            NewCommand = new RelayCommand(OnNewButton){IsEnabled = NewButtonEnabled};
+            FindCommand = new RelayCommand(OnFindButton);
+            SelectCommand = new RelayCommand(OnSelectButton){IsEnabled = SelectButtonEnabled};
+
+            NewButtonEnabled = SaveButtonEnabled = true;
+        }
 
         protected internal void Setup(LookupDefinitionBase lookupDefinition)
         {
@@ -267,13 +331,23 @@ namespace RingSoft.DbMaintenance
         /// Executed when the Save button is clicked.
         /// </summary>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults OnSaveButton();
+        public abstract DbMaintenanceResults DoSave();
+
+        /// <summary>
+        /// Executed when the Save button is clicked.
+        /// </summary>
+        public void OnSaveButton() => DoSave();
 
         /// <summary>
         /// Executed when the Delete button is clicked.
         /// </summary>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults OnDeleteButton();
+        public abstract DbMaintenanceResults DoDelete();
+
+        /// <summary>
+        /// Executed when the Delete button is clicked.
+        /// </summary>
+        public void OnDeleteButton() => DoDelete();
 
         /// <summary>
         /// Executed when the key control looses focus.  Used to ensure no duplicate value in the key control is entered.

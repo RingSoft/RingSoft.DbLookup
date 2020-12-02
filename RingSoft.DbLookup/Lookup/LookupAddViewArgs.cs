@@ -85,6 +85,8 @@
 
         public object InputParameter { get; set; }
 
+        public bool AllowEdit { get; set; } = true;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

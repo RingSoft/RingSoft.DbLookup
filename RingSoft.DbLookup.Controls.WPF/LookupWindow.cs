@@ -155,6 +155,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler RefreshData;
 
         private bool _allowView;
+
         private string _initialSearchFor;
 
         static LookupWindow()
@@ -220,7 +221,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this)
             {
-                InputParameter = AddViewParameter
+                InputParameter = AddViewParameter,
+                AllowEdit = AddButton.IsEnabled
             };
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 

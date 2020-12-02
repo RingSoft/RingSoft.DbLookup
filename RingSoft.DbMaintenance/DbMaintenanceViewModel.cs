@@ -166,6 +166,8 @@ namespace RingSoft.DbMaintenance
                 }
                 if (primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
+
+                NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
             }
             else
             {
@@ -210,7 +212,7 @@ namespace RingSoft.DbMaintenance
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
-                DeleteButtonEnabled = true;
+                DeleteButtonEnabled = SaveButtonEnabled;
                 SelectButtonEnabled = _fromLookupFormAddView;
                 PrimaryKeyControlsEnabled = false;
                 RecordDirty = false;
@@ -324,7 +326,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>
         /// The result.
         /// </returns>
-        public override DbMaintenanceResults OnSaveButton()
+        public override DbMaintenanceResults DoSave()
         {
             if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
                 KeyAutoFillValue.PrimaryKeyValue.IsValid)
@@ -445,7 +447,7 @@ namespace RingSoft.DbMaintenance
                 switch (result)
                 {
                     case MessageButtons.Yes:
-                        if (OnSaveButton() != DbMaintenanceResults.Success)
+                        if (DoSave() != DbMaintenanceResults.Success)
                         {
                             return false;
                         }
@@ -467,7 +469,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>
         /// The result.
         /// </returns>
-        public override DbMaintenanceResults OnDeleteButton()
+        public override DbMaintenanceResults DoDelete()
         {
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())
@@ -623,7 +625,7 @@ namespace RingSoft.DbMaintenance
             if (MaintenanceMode == DbMaintenanceModes.AddMode)
             {
                 var recordsChanged = RecordsChanged;
-                result = OnSaveButton();
+                result = DoSave();
                 RecordsChanged = recordsChanged;
             }
 

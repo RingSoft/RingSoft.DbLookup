@@ -11,7 +11,8 @@ namespace RingSoft.DbMaintenance
     {
         Success,
         ValidationError,
-        DatabaseError
+        DatabaseError,
+        NotAllowed
     }
 
     public enum DbMaintenanceModes
@@ -267,7 +268,7 @@ namespace RingSoft.DbMaintenance
 
         public DbMaintenanceViewModelBase()
         {
-            PreviousCommand = new RelayCommand(OnNewButton);
+            PreviousCommand = new RelayCommand(OnGotoPreviousButton);
             NextCommand = new RelayCommand(OnGotoNextButton);
             SaveCommand = new RelayCommand(OnSaveButton){IsEnabled = SaveButtonEnabled};
             DeleteCommand = new RelayCommand(OnDeleteButton){IsEnabled = DeleteButtonEnabled};

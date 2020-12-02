@@ -167,7 +167,7 @@ namespace RingSoft.DbMaintenance
                 if (primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
 
-                NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
+                DeleteButtonEnabled = NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
             }
             else
             {
@@ -225,6 +225,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnGotoPreviousButton()
         {
+            if (!PreviousCommand.IsEnabled)
+                return;
+
             if (!CheckDirty())
                 return;
 
@@ -248,6 +251,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnGotoNextButton()
         {
+            if (!NextCommand.IsEnabled)
+                return;
+
             if (!CheckDirty())
                 return;
 
@@ -271,6 +277,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnFindButton()
         {
+            if (!FindCommand.IsEnabled)
+                return;
+
             View.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
                 _lookupData.SelectedPrimaryKeyValue);
         }
@@ -288,6 +297,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnSelectButton()
         {
+            if (!SelectCommand.IsEnabled)
+                return;
+
             if (!CheckDirty())
                 return;
 
@@ -328,6 +340,9 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoSave()
         {
+            if (!SaveCommand.IsEnabled)
+                return DbMaintenanceResults.NotAllowed;
+
             if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
                 KeyAutoFillValue.PrimaryKeyValue.IsValid)
             {
@@ -435,7 +450,7 @@ namespace RingSoft.DbMaintenance
 
         private bool CheckDirty()
         {
-            if (RecordDirty)
+            if (RecordDirty && SaveButtonEnabled)
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
                     KeyAutoFillValue.PrimaryKeyValue.IsValid)
@@ -471,6 +486,9 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoDelete()
         {
+            if (!DeleteCommand.IsEnabled)
+                return DbMaintenanceResults.NotAllowed;
+
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())
                 description = TableDefinition.ToString();

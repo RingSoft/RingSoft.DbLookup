@@ -25,26 +25,14 @@ namespace RingSoft.DbLookup.App.WPFCore
             ShowInTaskbar = false;
             MaintenanceButtonsControl.Margin = new Thickness(0, 0, 0, 2.5);
 
-            MaintenanceButtonsControl.PreviousButton.Click += (sender, args) => ViewModel.OnGotoPreviousButton();
-            MaintenanceButtonsControl.NewButton.Click += (sender, args) => ViewModel.OnNewButton();
-            MaintenanceButtonsControl.SaveButton.Click += (sender, args) => ViewModel.OnSaveButton();
-            MaintenanceButtonsControl.DeleteButton.Click += (sender, args) => ViewModel.OnDeleteButton();
-            MaintenanceButtonsControl.FindButton.Click += (sender, args) => ViewModel.OnFindButton();
-            MaintenanceButtonsControl.SelectButton.Click += (sender, args) => ViewModel.OnSelectButton();
+            MaintenanceButtonsControl.PreviousButton.Command = ViewModel.PreviousCommand;
+            MaintenanceButtonsControl.NewButton.Command = ViewModel.NewCommand;
+            MaintenanceButtonsControl.SaveButton.Command = ViewModel.SaveCommand;
+            MaintenanceButtonsControl.DeleteButton.Command = ViewModel.DeleteCommand;
+            MaintenanceButtonsControl.FindButton.Command = ViewModel.FindCommand;
+            MaintenanceButtonsControl.SelectButton.Command = ViewModel.SelectCommand;
+            MaintenanceButtonsControl.NextButton.Command = ViewModel.NextCommand;
             MaintenanceButtonsControl.CloseButton.Click += (sender, args) => CloseWindow();
-            MaintenanceButtonsControl.NextButton.Click += (sender, args) => ViewModel.OnGotoNextButton();
-
-            BindingOperations.SetBinding(MaintenanceButtonsControl.DeleteButton, Button.IsEnabledProperty, new Binding
-            {
-                Source = ViewModel,
-                Path = new PropertyPath(nameof(ViewModel.DeleteButtonEnabled))
-            });
-
-            BindingOperations.SetBinding(MaintenanceButtonsControl.SelectButton, Button.IsEnabledProperty, new Binding
-            {
-                Source = ViewModel,
-                Path = new PropertyPath(nameof(ViewModel.SelectButtonEnabled))
-            });
 
             Loaded += (sender, args) => ViewModel.OnViewLoaded(this);
             PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;

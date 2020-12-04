@@ -712,7 +712,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             RaiseDirtyFlag();
         }
 
-        private void ShowLookupWindow()
+        protected virtual void ShowLookupWindow()
         {
             var initialText = string.Empty;
             if (TextBox != null)

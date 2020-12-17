@@ -20,7 +20,7 @@
                                     <Image Source="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"></Image>
                                 </Button>
                             </Grid>
-                            <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=AutoFillTextBox}" StaysOpen="False" Placement="Bottom">
+                            <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=TextBox}" StaysOpen="False" Placement="Bottom">
                                 <ListBox x:Name="ListBox"/>
                             </Popup>
                         </StackPanel>

@@ -243,6 +243,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler<LookupAddViewArgs> LookupView;
 
         private bool _controlLoaded;
+        private bool _onLoadRan;
         private bool _setupRan;
         private int _originalPageSize;
         private int _currentPageSize;
@@ -271,11 +272,19 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupControl()
         {
+            var d = DependencyPropertyDescriptor.FromProperty(IsVisibleProperty, typeof(LookupControl));
+            d.AddValueChanged(this, OnIsVisiblePropertyChanged);
+
             LookupColumns = new ObservableCollection<LookupColumn>();
 
             LookupColumns.CollectionChanged += (sender, args) => OnLookupColumnsChanged();
 
             Loaded += (sender, args) => OnLoad();
+        }
+
+        private void OnIsVisiblePropertyChanged(object sender, EventArgs e)
+        {
+            LoadOnIsVisible();
         }
 
         public override void OnApplyTemplate()
@@ -293,12 +302,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
 
             base.OnApplyTemplate();
-
-            //if (_onLoadRan && IsVisible)
-            //{
-            //    _setupRan = false;
-            //    LoadOnVisible();
-            //}
         }
 
         private void OnLoad()
@@ -311,11 +314,21 @@ namespace RingSoft.DbLookup.Controls.WPF
                 DesignerFillGrid();
             }
 
-            if (IsVisible)
+            //This runs twice when control is in a tab page.  Once when the control is loaded and again when tab page is loaded.
+            _onLoadRan = true;
+            LoadOnIsVisible();
+        }
+
+        private void LoadOnIsVisible()
+        {
+            //All 4 of these variables must be checked to ensure the following scenarios work:
+            //* Northwind Customers Window Orders tab page works.
+            //* SimpleDemo Order Details lookup when initial is collapsed and then is expanded.
+            if (IsVisible && _onLoadRan && !_controlLoaded && ListView != null)
             {
                 SizeChanged += (sender, args) => LookupControlSizeChanged();
 
-                if (LookupDefinition != null && !_controlLoaded)
+                if (LookupDefinition != null)
                     SetupControl();
                 _controlLoaded = true;
             }
@@ -334,7 +347,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            if (LookupData != null && _setupRan)
+            if (LookupData != null)
             {
                 ClearLookupControl();
                 LookupColumns.Clear();

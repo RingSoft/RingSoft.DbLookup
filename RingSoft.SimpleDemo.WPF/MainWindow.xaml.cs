@@ -139,10 +139,12 @@ namespace RingSoft.SimpleDemo.WPF
         {
             InitializeComponent();
 
-            Loaded += (sender, args) =>
-            {
-                OrderDetailsControl.Visibility = Visibility.Collapsed;
-            };
+            //LookupControl can only be collapsed in Loaded event handler.
+
+            //Loaded += (sender, args) =>
+            //{
+            //    OrderDetailsControl.Visibility = Visibility.Collapsed;
+            //};
 
             CustomerAutoFillSetup = new AutoFillSetup(App.LookupContext.Orders.GetFieldDefinition(p => p.CustomerID))
             {
@@ -173,9 +175,10 @@ namespace RingSoft.SimpleDemo.WPF
 
             OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
 
+            ExpandButton.Visibility = Visibility.Collapsed;
             ExpandButton.Click += (sender, args) =>
             {
-                if (CustomerStackPanel.Visibility == Visibility.Collapsed)
+                if (OrderDetailsControl.Visibility == Visibility.Collapsed)
                 {
                     CustomerStackPanel.Visibility = Visibility.Visible;
                     OrderDetailsControl.Visibility = Visibility.Visible;
@@ -188,7 +191,7 @@ namespace RingSoft.SimpleDemo.WPF
             };
         }
 
-        private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OrdersLookupButton_Click(object sender, RoutedEventArgs e)
         {
             var lookupWindow = new DemoLookupWindow(App.LookupContext.OrdersLookup, false, false,
                 OrderId > 0 ? OrderId.ToString() : string.Empty);

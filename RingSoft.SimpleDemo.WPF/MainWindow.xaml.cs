@@ -138,6 +138,12 @@ namespace RingSoft.SimpleDemo.WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                OrderDetailsControl.Visibility = Visibility.Collapsed;
+            };
+
             CustomerAutoFillSetup = new AutoFillSetup(App.LookupContext.Orders.GetFieldDefinition(p => p.CustomerID))
             {
                 AllowLookupAdd =  false,

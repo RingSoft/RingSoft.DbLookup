@@ -38,7 +38,7 @@
         <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Employee"/>
         <lc:AutoFillControl Grid.Row="2" Grid.Column="1" Width="200" HorizontalAlignment="Left" Setup="{Binding Path=EmployeeAutoFillSetup}" Value="{Binding Path=EmployeeAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Content="Order Details"/>
-        <lc:LookupControl Grid.Row="4" Grid.Column="1" x:Name="OrderDetailsControl" Grid.ColumnSpan="2" LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsCommand}" DesignText="Chef Anton's Cajun Seasoning" Visibility="Collapsed">
+        <lc:LookupControl Grid.Row="4" Grid.Column="1" x:Name="OrderDetailsControl" Grid.ColumnSpan="2" LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsCommand}" DesignText="Chef Anton's Cajun Seasoning">
             <lc:LookupControl.LookupColumns>
                 <lc:LookupColumn  PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="300" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
                 <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>

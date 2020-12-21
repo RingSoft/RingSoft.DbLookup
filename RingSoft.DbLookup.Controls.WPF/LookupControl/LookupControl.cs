@@ -258,7 +258,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
-        private bool _pendingApplyTemplate;
 
         static LookupControl()
         {
@@ -293,10 +292,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountLabel = GetTemplateChild(nameof(RecordCountLabel)) as Label;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
 
-            if (_pendingApplyTemplate)
-                LoadOnVisible();
-
             base.OnApplyTemplate();
+
+            //if (_onLoadRan && IsVisible)
+            //{
+            //    _setupRan = false;
+            //    LoadOnVisible();
+            //}
         }
 
         private void OnLoad()
@@ -309,20 +311,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 DesignerFillGrid();
             }
 
-            LoadOnVisible();
-        }
-
-        private void LoadOnVisible()
-        {
-            if (!_controlLoaded)
+            if (IsVisible)
             {
                 SizeChanged += (sender, args) => LookupControlSizeChanged();
 
-                if (LookupDefinition != null)
+                if (LookupDefinition != null && !_controlLoaded)
                     SetupControl();
+                _controlLoaded = true;
             }
-
-            _controlLoaded = true;
         }
 
         protected override void OnGotFocus(RoutedEventArgs e)
@@ -338,7 +334,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            if (LookupData != null)
+            if (LookupData != null && _setupRan)
             {
                 ClearLookupControl();
                 LookupColumns.Clear();
@@ -351,9 +347,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
-                if (ListView == null)
-                    _pendingApplyTemplate = true;
-                else
+                if (ListView != null)
                 {
                     ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
                     ListView.SelectionChanged += ListView_SelectionChanged;

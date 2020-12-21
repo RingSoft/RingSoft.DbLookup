@@ -354,9 +354,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _controlLoaded;
         private bool _onAutoFillDataChanged;
         private bool _onValuePropertySetting;
-        private bool _pendingAutoFillValue;
+        private bool _pendingAutoFillData;
         private bool _setupRan;
         private bool _settingText;
+        private AutoFillValue _pendingAutoFillValue;
 
         static AutoFillControl()
         {
@@ -380,7 +381,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             ForegroundProperty.OverrideMetadata(typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(ForegroundChangedCallback));
-
         }
 
         public AutoFillControl()
@@ -422,6 +422,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 TextBox.ContextMenu = ContextMenu;
 
             SetDesignText();
+
+            if (_controlLoaded && Setup != null)
+            {
+                _setupRan = false;
+                SetupControl();
+                CreateContainsTemplate();
+
+                if (_pendingAutoFillValue != null)
+                {
+                    Value = _pendingAutoFillValue;
+                }
+            }
 
             base.OnApplyTemplate();
         }
@@ -531,12 +543,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                     Button.Click += (sender, args) => ShowLookupWindow();
             }
 
-            if (_pendingAutoFillValue)
+            if (_pendingAutoFillData)
             {
                 _onValuePropertySetting = true;
                 SetValue(Value.PrimaryKeyValue, Value.Text);
                 _onValuePropertySetting = false;
-                _pendingAutoFillValue = false;
+                _pendingAutoFillData = false;
             }
 
             _setupRan = true;
@@ -613,9 +625,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             else
             {
                 if (_autoFillData == null)
-                    _pendingAutoFillValue = true;
+                    _pendingAutoFillData = true;
 
-                SetValue(Value.PrimaryKeyValue, Value.Text);
+                if (TextBox == null)
+                    _pendingAutoFillValue = Value;
+                else 
+                    SetValue(Value.PrimaryKeyValue, Value.Text);
             }
         }
 

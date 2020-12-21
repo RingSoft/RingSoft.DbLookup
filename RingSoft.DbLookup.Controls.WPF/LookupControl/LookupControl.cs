@@ -258,6 +258,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
+        private bool _pendingApplyTemplate;
 
         static LookupControl()
         {
@@ -292,6 +293,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountLabel = GetTemplateChild(nameof(RecordCountLabel)) as Label;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
 
+            if (_pendingApplyTemplate)
+                LoadOnVisible();
+
             base.OnApplyTemplate();
         }
 
@@ -305,14 +309,20 @@ namespace RingSoft.DbLookup.Controls.WPF
                 DesignerFillGrid();
             }
 
-            if (IsVisible)
+            LoadOnVisible();
+        }
+
+        private void LoadOnVisible()
+        {
+            if (!_controlLoaded)
             {
                 SizeChanged += (sender, args) => LookupControlSizeChanged();
 
-                if (LookupDefinition != null && !_controlLoaded)
+                if (LookupDefinition != null)
                     SetupControl();
-                _controlLoaded = true;
             }
+
+            _controlLoaded = true;
         }
 
         protected override void OnGotFocus(RoutedEventArgs e)
@@ -341,7 +351,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
-                if (ListView != null)
+                if (ListView == null)
+                    _pendingApplyTemplate = true;
+                else
                 {
                     ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
                     ListView.SelectionChanged += ListView_SelectionChanged;
@@ -1030,7 +1042,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false,
             PrimaryKeyValue initialSearchForPrimaryKeyValue = null)
         {
-            if (LookupData == null)
+            if (LookupData == null || ListView == null)
             {
                 _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
                 return;

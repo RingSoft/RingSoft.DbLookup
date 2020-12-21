@@ -6,6 +6,7 @@ using RingSoft.SimpleDemo.WPF.Northwind.Model;
 using RingSoft.SimpleDemo.WPF.Properties;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace RingSoft.SimpleDemo.WPF
 {
@@ -165,6 +166,20 @@ namespace RingSoft.SimpleDemo.WPF
             orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.Discount, p => p.Discount);
 
             OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
+
+            ExpandButton.Click += (sender, args) =>
+            {
+                if (CustomerStackPanel.Visibility == Visibility.Collapsed)
+                {
+                    CustomerStackPanel.Visibility = Visibility.Visible;
+                    OrderDetailsControl.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    CustomerStackPanel.Visibility = Visibility.Collapsed;
+                    OrderDetailsControl.Visibility = Visibility.Collapsed;
+                }
+            };
         }
 
         private void OrdersLookupButton_Click(object sender, System.Windows.RoutedEventArgs e)

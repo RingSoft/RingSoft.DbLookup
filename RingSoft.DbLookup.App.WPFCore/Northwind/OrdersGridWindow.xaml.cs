@@ -61,5 +61,16 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
             TabControl.SelectedIndex = 0;
             DetailsGrid.Focus();
         }
+
+        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
+        {
+            TabControl.SelectedIndex = 0;
+            DetailsGrid.Loaded += (sender, args) =>
+            {
+                DetailsGrid.Focus();
+                DetailsGrid.GotoCell(row, columnId);
+            };
+        }
+
     }
 }

@@ -17,6 +17,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     public interface IOrderView : IDbMaintenanceView
     {
         object OwnerWindow { get; }
+
+        void SetFocusToGrid(OrderDetailsGridRow row, int columnId);
     }
 
     public class OrderInput
@@ -410,6 +412,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public OrderInput OrderInput { get; private set; }
 
+        public bool SetInitialFocusToGrid { get; internal set; }
+
+        public int FilterProductId { get; private set; }
+
         private readonly DateTime _newDateTime = DateTime.Today;
 
         private INorthwindLookupContext _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
@@ -714,8 +720,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override TableFilterDefinitionBase GetAddViewFilter()
         {
-            if (LookupAddViewArgs.InputParameter is OrderInput orderInput && orderInput.ProductId > 0)
+            if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == _lookupContext.OrderDetails)
             {
+                SetInitialFocusToGrid = true;
+                var orderDetail =
+                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(LookupAddViewArgs.LookupData
+                        .SelectedPrimaryKeyValue);
+
+                FilterProductId = orderDetail.ProductID;
+
                 var sqlStringBuilder = new StringBuilder();
                 var sqlGen = _lookupContext.DataProcessor.SqlGenerator;
 
@@ -727,7 +740,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 var query = new SelectQuery(_lookupContext.OrderDetails.TableName);
                 query.AddSelectColumn(_lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID).FieldName);
                 query.AddWhereItem(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).FieldName,
-                    Conditions.Equals, orderInput.ProductId);
+                    Conditions.Equals, FilterProductId);
                 sqlStringBuilder.AppendLine(_lookupContext.DataProcessor.SqlGenerator.GenerateSelectStatement(query));
 
                 sqlStringBuilder.AppendLine(")");
@@ -744,7 +757,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override PrimaryKeyValue GetAddViewPrimaryKeyValue()
         {
-            if (LookupAddViewArgs.InputParameter is OrderInput orderInput && orderInput.ProductId > 0)
+            if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == _lookupContext.OrderDetails)
             {
                 var orderDetail =
                     _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(LookupAddViewArgs.LookupData

@@ -1,7 +1,9 @@
-﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+﻿using System.Collections.Generic;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbMaintenance;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -47,6 +49,21 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case NotifyCollectionChangedAction.Remove:
                     OrderViewModel.RefreshTotalControls();
                     break;
+            }
+        }
+
+        public override void LoadGrid(IEnumerable<Order_Detail> entityList)
+        {
+            base.LoadGrid(entityList);
+            if (OrderViewModel.SetInitialFocusToGrid)
+            {
+                OrderViewModel.SetInitialFocusToGrid = false;
+                var orderDetails = Rows.OfType<OrderDetailsGridRow>();
+                var productRow = orderDetails.FirstOrDefault(f => f.ProductId == OrderViewModel.FilterProductId);
+                if (productRow != null)
+                {
+                    OrderViewModel.OrderView.SetFocusToGrid(productRow, ProductColumnId);
+                }
             }
         }
     }

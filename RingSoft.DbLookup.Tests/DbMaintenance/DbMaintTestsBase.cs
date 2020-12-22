@@ -233,5 +233,8 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         }
 
         public object OwnerWindow => null;
+        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
+        {
+        }
     }
 }

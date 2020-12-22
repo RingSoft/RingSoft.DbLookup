@@ -56,5 +56,9 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public void OnGridValidationFailed()
         {
         }
+
+        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
+        {
+        }
     }
 }

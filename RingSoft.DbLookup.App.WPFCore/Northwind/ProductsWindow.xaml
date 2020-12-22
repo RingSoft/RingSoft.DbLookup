@@ -7,8 +7,9 @@
                          xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
                          xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
                          xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+                         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
                          mc:Ignorable="d"
-        Title="Products" Height="300" Width="475">
+        Title="Products" Height="450" Width="475">
     <Window.DataContext>
         <vmlib:ProductViewModel x:Name="ProductViewModel"/>
     </Window.DataContext>
@@ -30,15 +31,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Product ID" Style="{StaticResource ControlLabel}"/>
             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ProductId}" DesignText="123456" Width="60" HorizontalAlignment="Left"/>
@@ -48,17 +47,61 @@
             <lc:AutoFillControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="SupplierControl" DesignText="New England Seafood Cannery" Setup="{Binding SupplierAutoFillSetup}" Value="{Binding Path=SupplierAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalAlignment="Left"/>
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Category"/>
             <lc:AutoFillControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="CategoryControl" DesignText="Grains/Cereals" Width="125" HorizontalAlignment="Left" Setup="{Binding CategoryAutoFillSetup}" Value="{Binding Path=CategoryAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Grid.Row="4" Grid.Column="0" Content="Unit Price" Style="{StaticResource ControlLabel}"/>
-            <dec:DecimalEditControl Grid.Row="4" Grid.Column="1" Value="{Binding Path=UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="$1,000.00" FormatType="Currency" Margin="0,2.5" TextAlignment="Left"/>
-            <Label Grid.Row="4" Grid.Column="2" Content="Quantity Per Unit" Style="{StaticResource ControlLabel}"/>
-            <dec:StringEditControl x:Name="QtyPerUnitEdit" Grid.Row="4" Grid.Column="3" Text="{Binding Path=QuantityPerUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="10 boxes x 8 pieces" Margin="0,2.5"/>
-            <Label Grid.Row="5" Grid.Column="0" Content="Units In Stock" Style="{StaticResource ControlLabel}"/>
-            <dec:IntegerEditControl Grid.Row="5" Grid.Column="1" Value="{Binding Path=UnitsInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Margin="0,2.5"/>
-            <Label Grid.Row="5" Grid.Column="2" Content="Units On Order" Style="{StaticResource ControlLabel}"/>
-            <dec:IntegerEditControl Grid.Row="5" Grid.Column="3" Value="{Binding Path=UnitsOnOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Width="100" HorizontalAlignment="Left" Margin="0,2.5"/>
-            <Label Grid.Row="6" Grid.Column="0" Content="Reorder Level"/>
-            <dec:IntegerEditControl Grid.Row="6" Grid.Column="1" Value="{Binding Path=ReorderLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Margin="0,2.5"/>
-            <CheckBox Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Content="Discontinued" IsChecked="{Binding Path=Discontinued, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2.5" HorizontalAlignment="Left" Width="100" />
+
+            <TabControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
+                <TabItem Header="Qty/Price">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Unit Price" Style="{StaticResource ControlLabel}"/>
+
+                        <dec:DecimalEditControl Grid.Row="0" Grid.Column="1" Value="{Binding Path=UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="$1,000.00" FormatType="Currency" Margin="0,2.5" TextAlignment="Left"/>
+
+                        <Label Grid.Row="0" Grid.Column="2" Content="Quantity Per Unit" Style="{StaticResource ControlLabel}"/>
+
+                        <dec:StringEditControl x:Name="QtyPerUnitEdit" Grid.Row="0" Grid.Column="3" Text="{Binding Path=QuantityPerUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="10 boxes x 8 pieces" Margin="0,2.5"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Units In Stock" Style="{StaticResource ControlLabel}"/>
+
+                        <dec:IntegerEditControl Grid.Row="1" Grid.Column="1" Value="{Binding Path=UnitsInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Margin="0,2.5"/>
+
+                        <Label Grid.Row="1" Grid.Column="2" Content="Units On Order" Style="{StaticResource ControlLabel}"/>
+
+                        <dec:IntegerEditControl Grid.Row="1" Grid.Column="3" Value="{Binding Path=UnitsOnOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Width="100" HorizontalAlignment="Left" Margin="0,2.5"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Content="Reorder Level"/>
+
+                        <dec:IntegerEditControl Grid.Row="2" Grid.Column="1" Value="{Binding Path=ReorderLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999" Margin="0,2.5"/>
+
+                        <CheckBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Content="Discontinued" IsChecked="{Binding Path=Discontinued, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2.5" HorizontalAlignment="Left" Width="100" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Orders">
+                    <Grid>
+                        <lc:LookupControl LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsLookupCommand}">
+                            <lc:LookupControl.LookupColumns>
+                                <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderDetailLookup}}" Width="90" Header="Order Date" DesignText="01/01/1980"/>
+
+                                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderDetailLookup}}" Width="180" Header="Customer" DesignText="Rattlesnake Canyon Grocery"/>
+
+                                <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" DesignText="100" TextAlignment="Right"/>
+
+                                <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="75" Header="Price" DesignText="$100.00" TextAlignment="Right"/>
+                            </lc:LookupControl.LookupColumns>
+                        </lc:LookupControl>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

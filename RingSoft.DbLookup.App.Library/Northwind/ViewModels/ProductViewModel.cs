@@ -1,6 +1,9 @@
-﻿using RingSoft.DbLookup.App.Library.Northwind.Model;
+﻿using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
+using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
@@ -176,6 +179,36 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        private LookupDefinition<OrderDetailLookup, Order_Detail> _orderDetailsLookup;
+
+        public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsLookupDefinition
+        {
+            get => _orderDetailsLookup;
+            set
+            {
+                if (_orderDetailsLookup == value)
+                    return;
+
+                _orderDetailsLookup = value;
+                OnPropertyChanged(nameof(OrderDetailsLookupDefinition), false);
+            }
+        }
+
+        private LookupCommand _orderDetailsLookupCommand;
+
+        public LookupCommand OrderDetailsLookupCommand
+        {
+            get => _orderDetailsLookupCommand;
+            set
+            {
+                if (_orderDetailsLookupCommand == value)
+                    return;
+
+                _orderDetailsLookupCommand = value;
+                OnPropertyChanged(nameof(OrderDetailsLookupCommand), false);
+            }
+        }
+
         private INorthwindLookupContext _lookupContext;
 
         protected override void Initialize()
@@ -192,6 +225,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 AllowLookupView = false
             };
 
+            var orderDetailsLookupDefinition =
+                new LookupDefinition<OrderDetailLookup, Order_Detail>(_lookupContext.OrderDetails);
+            orderDetailsLookupDefinition.Include(p => p.Order)
+                .AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
+            orderDetailsLookupDefinition.Include(p => p.Order)
+                .Include(p => p.Customer)
+                .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.Quantity, p => p.Quantity);
+            orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.UnitPrice, p => p.UnitPrice);
+            OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
+
             base.Initialize();
         }
 
@@ -201,6 +245,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(ProductId);
 
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, product.ProductName);
+
+            _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
+            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.ProductID, Conditions.Equals, ProductId);
+
+            var orderInput = new OrderInput
+            {
+                GridMode = true,
+                ProductId = ProductId
+            };
+
+            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, orderInput);
+
             return product;
         }
 
@@ -274,6 +330,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             UnitPrice = null;
             UnitsInStock = UnitsOnOrder = ReorderLevel = null;
             Discontinued = false;
+            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
         protected override bool SaveEntity(Product entity)

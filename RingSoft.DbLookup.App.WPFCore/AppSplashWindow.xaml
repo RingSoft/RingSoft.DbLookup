@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="AppSplashWindow" Height="150" Width="350"
+        AllowsTransparency="True"
         WindowStyle="None" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Label Content="RingSoft Database Lookup Demo" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="18"/>

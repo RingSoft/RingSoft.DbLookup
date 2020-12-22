@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <value>
         /// The SQL object prefix character.
         /// </value>
-        protected override char SqlObjectPrefixChar => '`';
+        public override char SqlObjectPrefixChar => '`';
 
         /// <summary>
         /// Gets the SQL object suffix character.
@@ -23,7 +23,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <value>
         /// The SQL object suffix character.
         /// </value>
-        protected override char SqlObjectSuffixChar => '`';
+        public override char SqlObjectSuffixChar => '`';
 
         /// <summary>
         /// Generates the top record count SQL text.  Override if this method is not compatible with your database platform.

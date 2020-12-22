@@ -6,6 +6,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -132,11 +133,15 @@ namespace RingSoft.DbMaintenance
 
             if (LookupAddViewArgs != null)
             {
-                _lookupData.LookupDefinition.FilterDefinition.CopyFrom(LookupAddViewArgs.LookupData.LookupDefinition
-                    .FilterDefinition);
+                _lookupData.LookupDefinition.FilterDefinition.CopyFrom(GetAddViewFilter());
             }
 
             Initialize();
+        }
+
+        protected virtual TableFilterDefinitionBase GetAddViewFilter()
+        {
+            return LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
         }
 
         /// <summary>
@@ -147,22 +152,14 @@ namespace RingSoft.DbMaintenance
         {
             if (LookupAddViewArgs != null)
             {
-                PrimaryKeyValue primaryKeyValue;
+                var primaryKeyValue = GetAddViewPrimaryKeyValue();
                 switch (LookupAddViewArgs.LookupFormMode)
                 {
                     case LookupFormModes.Add:
                         RecordDirty = false;
                         OnNewButton();
-                        primaryKeyValue =
-                            LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
-                                .InitialAddModeText);
                         KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
                         break;
-                    case LookupFormModes.View:
-                        primaryKeyValue = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
                 if (primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
@@ -176,6 +173,26 @@ namespace RingSoft.DbMaintenance
             }
 
             RecordDirty = false;
+        }
+
+        protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue()
+        {
+            PrimaryKeyValue result;
+            switch (LookupAddViewArgs.LookupFormMode)
+            {
+                case LookupFormModes.Add:
+                    result =
+                        LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
+                            .InitialAddModeText);
+                    break;
+                case LookupFormModes.View:
+                    result = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return result;
         }
 
         /// <summary>

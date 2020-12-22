@@ -802,6 +802,7 @@ namespace RingSoft.DbLookup.Lookup
                 foreach (var primaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
                 {
                     if (!query.WhereItems.Any(a =>
+                        a.WhereItemType == WhereItemTypes.General &&
                         a.Table.Name == primaryKeyField.TableDefinition.TableName &&
                         a.FieldName == primaryKeyField.FieldName))
                     {

@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup.DataProcessor
     {
         public override string ConnectionString => GenerateConnectionString();
 
-        protected override DbSelectSqlGenerator SqlGenerator => _generator;
+        public override DbSelectSqlGenerator SqlGenerator => _generator;
 
         /// <summary>
         /// Gets or sets the name of the Sqlite .sqlite file.

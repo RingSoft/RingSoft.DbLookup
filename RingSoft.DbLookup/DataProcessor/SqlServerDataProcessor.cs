@@ -26,7 +26,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <value>
         /// The SQL generator.
         /// </value>
-        protected override DbSelectSqlGenerator SqlGenerator => _sqlGenerator;
+        public override DbSelectSqlGenerator SqlGenerator => _sqlGenerator;
 
         /// <summary>
         /// Gets or sets the server name.

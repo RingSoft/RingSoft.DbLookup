@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <value>
         /// The SQL generator.
         /// </value>
-        protected abstract DbSelectSqlGenerator SqlGenerator { get; }
+        public abstract DbSelectSqlGenerator SqlGenerator { get; }
 
         /// <summary>
         /// Gets the user interface for this class to interact with.

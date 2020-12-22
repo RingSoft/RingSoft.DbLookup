@@ -10,8 +10,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
     /// <summary>Implement this interface to generate a SELECT SQL statement for a database platform based on what's in the Query object.</summary>
     public abstract class DbSelectSqlGenerator
     {
-        protected virtual char SqlObjectPrefixChar => '[';
-        protected virtual char SqlObjectSuffixChar => ']';
+        public virtual char SqlObjectPrefixChar => '[';
+        public virtual char SqlObjectSuffixChar => ']';
 
         /// <summary>
         /// Gets the SQL prefix that needs to be at the beginning of each line in the generated SQL statement.  Useful in
@@ -21,6 +21,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// The SQL line prefix.
         /// </value>
         public string SqlLinePrefix { get; protected set; }
+
+        public string FormatSqlObject(string sqlObject) => $"{SqlObjectPrefixChar}{sqlObject}{SqlObjectSuffixChar}";
 
         /// <summary>
         /// Generates the SELECT SQL statement.
@@ -62,7 +64,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             var sqlStringBuilder = new StringBuilder();
 
             sqlStringBuilder.AppendLine(
-                $"{SqlLinePrefix}SELECT COUNT(*) AS {SqlObjectPrefixChar}{countQuery.CountColumnName}{SqlObjectSuffixChar}");
+                $"{SqlLinePrefix}SELECT COUNT(*) AS {FormatSqlObject(countQuery.CountColumnName)}");
             sqlStringBuilder.AppendLine($"{SqlLinePrefix}FROM");
             sqlStringBuilder.AppendLine($"{SqlLinePrefix}(");
 
@@ -70,7 +72,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             sqlStringBuilder.AppendLine(GenerateSelectQueryStatement(countQuery.SelectQuery, true));
             SqlLinePrefix = SqlLinePrefix.TrimRight("\t");
 
-            sqlStringBuilder.AppendLine($"{SqlLinePrefix}) AS {SqlObjectPrefixChar}{countQuery.CountColumnName}{SqlObjectSuffixChar}");
+            sqlStringBuilder.AppendLine($"{SqlLinePrefix}) AS {FormatSqlObject(countQuery.CountColumnName)}");
 
             var sql = sqlStringBuilder.ToString();
             return sql;
@@ -134,7 +136,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 {
                     var selectFragment = string.Empty;
                     var selectLinePrefix = $"{SqlLinePrefix}\t";
-                    var tableField = $"{SqlObjectPrefixChar}{selectColumn.Table.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{selectColumn.ColumnName}{SqlObjectSuffixChar}";
+                    var tableField = $"{FormatSqlObject(selectColumn.Table.GetTableName())}.{FormatSqlObject(selectColumn.ColumnName)}";
 
                     switch (selectColumn.ColumnType)
                     {
@@ -170,7 +172,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                     }
 
                     if (!selectColumn.Alias.IsNullOrEmpty())
-                        selectFragment += $" AS {SqlObjectPrefixChar}{selectColumn.Alias}{SqlObjectSuffixChar}";
+                        selectFragment += $" AS {FormatSqlObject(selectColumn.Alias)}";
 
                     firstColumn = false;
                     selectColumnsSql += $"{selectFragment},\r\n";
@@ -242,7 +244,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <returns></returns>
         protected virtual string GenerateFromClause(SelectQuery query)
         {
-            return $"{SqlLinePrefix}FROM {SqlObjectPrefixChar}{query.BaseTable.Name}{SqlObjectSuffixChar}";
+            return $"{SqlLinePrefix}FROM {FormatSqlObject(query.BaseTable.Name)}";
 
         }
 
@@ -263,7 +265,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             sqlStringBuilder.AppendLine(GenerateSelectQueryStatement(nestedQuery));
             SqlLinePrefix = SqlLinePrefix.TrimRight("\t");
 
-            sqlStringBuilder.AppendLine($"{SqlLinePrefix}){SqlObjectPrefixChar}{query.BaseTable.Name}{SqlObjectSuffixChar}");
+            sqlStringBuilder.AppendLine($"{SqlLinePrefix}){FormatSqlObject(query.BaseTable.Name)}");
 
             return sqlStringBuilder.ToString();
         }
@@ -292,15 +294,15 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                         throw new ArgumentOutOfRangeException();
                 }
 
-                joinSql += $"{SqlObjectPrefixChar}{joinTable.Name}{SqlObjectSuffixChar} ";
+                joinSql += $"{FormatSqlObject(joinTable.Name)} ";
                 if (!joinTable.Alias.IsNullOrEmpty())
-                    joinSql += $"AS {SqlObjectPrefixChar}{joinTable.Alias}{SqlObjectSuffixChar} ";
+                    joinSql += $"AS {FormatSqlObject(joinTable.Alias)} ";
                 joinSql += "ON\r\n";
 
                 foreach (var joinField in joinTable.JoinFields)
                 {
-                    joinSql += $"{SqlLinePrefix}\t{SqlObjectPrefixChar}{joinField.PrimaryTable.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{joinField.PrimaryField}{SqlObjectSuffixChar} = ";
-                    joinSql += $"{SqlObjectPrefixChar}{joinField.PrimaryTable.ForeignTable.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{joinField.ForeignField}{SqlObjectSuffixChar} AND\r\n";
+                    joinSql += $"{SqlLinePrefix}\t{FormatSqlObject(joinField.PrimaryTable.GetTableName())}.{FormatSqlObject(joinField.PrimaryField)} = ";
+                    joinSql += $"{FormatSqlObject(joinField.PrimaryTable.ForeignTable.GetTableName())}.{FormatSqlObject(joinField.ForeignField)} AND\r\n";
                 }
 
                 joinSql = joinSql.TrimRight(" AND\r\n");
@@ -423,7 +425,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         protected virtual string GenerateWhereItemSqlFieldNameText(WhereItem whereItem)
         {
             var sqlFieldName =
-                $"{SqlObjectPrefixChar}{whereItem.Table.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{whereItem.FieldName}{SqlObjectSuffixChar}";
+                $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
             return sqlFieldName;
         }
 
@@ -434,7 +436,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <returns></returns>
         protected virtual string GenerateWhereEnumItemSqlText(WhereEnumItem whereItem)
         {
-            var tableField = $"{SqlObjectPrefixChar}{whereItem.Table.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{whereItem.FieldName}{SqlObjectSuffixChar}";
+            var tableField = $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
             var formula = GenerateEnumeratorSqlFieldText(tableField, whereItem.EnumTranslation);
             var sql = GenerateWhereItemFormulaText(whereItem, formula);
             return sql;
@@ -445,7 +447,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             var tableField = string.Empty;
             if (whereItem.Table != null)
                 tableField =
-                    $"{SqlObjectPrefixChar}{whereItem.Table.GetTableName()}{SqlObjectSuffixChar}.{SqlObjectPrefixChar}{whereItem.FieldName}{SqlObjectSuffixChar}";
+                    $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
             var sqlValue = FormatValueForSqlWhereItem(whereItem);
             var condition = GenerateConditionSqlText(whereItem, tableField);
             var sql = "(\r\n";
@@ -600,8 +602,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 
             foreach (var orderBySegment in query.OrderBySegments)
             {
-                var tableField = $"{SqlObjectPrefixChar}{orderBySegment.Table.GetTableName()}{SqlObjectSuffixChar}.";
-                tableField += $"{ SqlObjectPrefixChar}{orderBySegment.FieldName}{SqlObjectSuffixChar}";
+                var tableField = $"{FormatSqlObject(orderBySegment.Table.GetTableName())}.";
+                tableField += $"{FormatSqlObject(orderBySegment.FieldName)}";
                 var orderByFragment = string.Empty;
                 var orderByLinePrefix = $"{SqlLinePrefix}\t";
 
@@ -687,8 +689,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             var firstGroup = true;
             foreach (var distinctColumn in distinctColumns)
             {
-                var tableField = $"{SqlObjectPrefixChar}{distinctColumn.Table.GetTableName()}{SqlObjectSuffixChar}.";
-                tableField += $"{ SqlObjectPrefixChar}{distinctColumn.ColumnName}{SqlObjectSuffixChar}";
+                var tableField = $"{FormatSqlObject(distinctColumn.Table.GetTableName())}.";
+                tableField += $"{FormatSqlObject(distinctColumn.ColumnName)}";
                 var groupByFragment = string.Empty;
                 var groupByLinePrefix = $"{SqlLinePrefix}\t";
 

@@ -6,6 +6,8 @@
         mc:Ignorable="d"
         Title="AppSplashWindow" Height="150" Width="350"
         AllowsTransparency="True"
+        BorderBrush="Black"
+        BorderThickness="1"
         WindowStyle="None" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Label Content="RingSoft Database Lookup Demo" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="18"/>

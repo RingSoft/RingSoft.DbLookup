@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -8,7 +6,11 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 using RingSoft.DbMaintenance;
+using System;
+using System.Linq;
+using System.Text;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -410,7 +412,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private readonly DateTime _newDateTime = DateTime.Today;
 
-        private INorthwindLookupContext _lookupContext;
+        private INorthwindLookupContext _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
         private bool _customerDirty;
 
@@ -422,7 +424,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void Initialize()
         {
-            _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             OrderView = View as IOrderView ??
                              throw new ArgumentException(
                                  $"ViewModel requires an {nameof(IOrderView)} interface.");
@@ -709,6 +710,51 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             return true;
+        }
+
+        protected override TableFilterDefinitionBase GetAddViewFilter()
+        {
+            if (LookupAddViewArgs.InputParameter is OrderInput orderInput && orderInput.ProductId > 0)
+            {
+                var sqlStringBuilder = new StringBuilder();
+                var sqlGen = _lookupContext.DataProcessor.SqlGenerator;
+
+                sqlStringBuilder.AppendLine(
+                    $"{sqlGen.FormatSqlObject(_lookupContext.Orders.TableName)}.{sqlGen.FormatSqlObject(_lookupContext.Orders.GetFieldDefinition(p => p.OrderID).FieldName)} IN");
+
+                sqlStringBuilder.AppendLine("(");
+
+                var query = new SelectQuery(_lookupContext.OrderDetails.TableName);
+                query.AddSelectColumn(_lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID).FieldName);
+                query.AddWhereItem(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).FieldName,
+                    Conditions.Equals, orderInput.ProductId);
+                sqlStringBuilder.AppendLine(_lookupContext.DataProcessor.SqlGenerator.GenerateSelectStatement(query));
+
+                sqlStringBuilder.AppendLine(")");
+
+                var tableFilterDefinition = new TableFilterDefinition<Order>(TableDefinition);
+                var sql = sqlStringBuilder.ToString();
+                tableFilterDefinition.AddFixedFilter(sql);
+                
+                return tableFilterDefinition;
+            }
+
+            return base.GetAddViewFilter();
+        }
+
+        protected override PrimaryKeyValue GetAddViewPrimaryKeyValue()
+        {
+            if (LookupAddViewArgs.InputParameter is OrderInput orderInput && orderInput.ProductId > 0)
+            {
+                var orderDetail =
+                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(LookupAddViewArgs.LookupData
+                        .SelectedPrimaryKeyValue);
+                
+                var order = new Order{OrderID = orderDetail.OrderID};
+                return TableDefinition.GetPrimaryKeyValueFromEntity(order);
+            }
+
+            return base.GetAddViewPrimaryKeyValue();
         }
     }
 }

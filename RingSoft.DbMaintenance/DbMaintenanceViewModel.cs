@@ -157,7 +157,7 @@ namespace RingSoft.DbMaintenance
         {
             if (LookupAddViewArgs != null)
             {
-                var primaryKeyValue = GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData);
+                var primaryKeyValue = GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
                 switch (LookupAddViewArgs.LookupFormMode)
                 {
                     case LookupFormModes.Add:
@@ -180,25 +180,20 @@ namespace RingSoft.DbMaintenance
             RecordDirty = false;
         }
 
-        protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(LookupDataBase addViewLookupData)
+        protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
-            PrimaryKeyValue result;
+            var result = addViewPrimaryKeyValue;
             switch (LookupAddViewArgs.LookupFormMode)
             {
                 case LookupFormModes.Add:
                     result =
-                        addViewLookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
+                        LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
                             .InitialAddModeText);
                     break;
-                case LookupFormModes.View:
-                    result = addViewLookupData.SelectedPrimaryKeyValue;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             if (result.TableDefinition != TableDefinition)
-                throw new Exception($"The Add/View Lookup Data's Selected Primary Key Definition's Table Definition '{result.TableDefinition}' does not match this Table Definition ('{TableDefinition}').  You must override GetAddViewPrimaryKeyValue and return a PrimaryKeyValue whose Table Definition is '{TableDefinition}'.");
+                throw new Exception($"The Add/View's Primary Key Definition's Table Definition '{result.TableDefinition}' does not match this Table Definition ('{TableDefinition}').  You must override GetAddViewPrimaryKeyValue and return a PrimaryKeyValue whose Table Definition is '{TableDefinition}'.");
 
             return result;
         }

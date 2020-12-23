@@ -755,18 +755,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return base.GetAddViewFilter();
         }
 
-        protected override PrimaryKeyValue GetAddViewPrimaryKeyValue(LookupDataBase addViewLookupData)
+        protected override PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
-            if (addViewLookupData.SelectedPrimaryKeyValue.TableDefinition == _lookupContext.OrderDetails)
+            if (addViewPrimaryKeyValue.TableDefinition == _lookupContext.OrderDetails)
             {
                 var orderDetail =
-                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(addViewLookupData.SelectedPrimaryKeyValue);
+                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(addViewPrimaryKeyValue);
                 
                 var order = new Order{OrderID = orderDetail.OrderID};
                 return TableDefinition.GetPrimaryKeyValueFromEntity(order);
             }
 
-            return base.GetAddViewPrimaryKeyValue(addViewLookupData);
+            return base.GetAddViewPrimaryKeyValue(addViewPrimaryKeyValue);
         }
     }
 }

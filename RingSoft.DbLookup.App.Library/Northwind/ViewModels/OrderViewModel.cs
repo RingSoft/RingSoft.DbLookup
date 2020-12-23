@@ -414,7 +414,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public bool SetInitialFocusToGrid { get; internal set; }
 
-        public int FilterProductId { get; private set; }
+        public int GotoProductId { get; private set; }
 
         private readonly DateTime _newDateTime = DateTime.Today;
 
@@ -727,7 +727,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(LookupAddViewArgs.LookupData
                         .SelectedPrimaryKeyValue);
 
-                FilterProductId = orderDetail.ProductID;
+                GotoProductId = orderDetail.ProductID;
 
                 var sqlStringBuilder = new StringBuilder();
                 var sqlGen = _lookupContext.DataProcessor.SqlGenerator;
@@ -740,7 +740,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 var query = new SelectQuery(_lookupContext.OrderDetails.TableName);
                 query.AddSelectColumn(_lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID).FieldName);
                 query.AddWhereItem(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).FieldName,
-                    Conditions.Equals, FilterProductId);
+                    Conditions.Equals, GotoProductId);
                 sqlStringBuilder.AppendLine(_lookupContext.DataProcessor.SqlGenerator.GenerateSelectStatement(query));
 
                 sqlStringBuilder.AppendLine(")");
@@ -755,19 +755,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return base.GetAddViewFilter();
         }
 
-        protected override PrimaryKeyValue GetAddViewPrimaryKeyValue()
+        protected override PrimaryKeyValue GetAddViewPrimaryKeyValue(LookupDataBase addViewLookupData)
         {
-            if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == _lookupContext.OrderDetails)
+            if (addViewLookupData.SelectedPrimaryKeyValue.TableDefinition == _lookupContext.OrderDetails)
             {
                 var orderDetail =
-                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(LookupAddViewArgs.LookupData
-                        .SelectedPrimaryKeyValue);
+                    _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(addViewLookupData.SelectedPrimaryKeyValue);
                 
                 var order = new Order{OrderID = orderDetail.OrderID};
                 return TableDefinition.GetPrimaryKeyValueFromEntity(order);
             }
 
-            return base.GetAddViewPrimaryKeyValue();
+            return base.GetAddViewPrimaryKeyValue(addViewLookupData);
         }
     }
 }

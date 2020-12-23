@@ -59,7 +59,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 OrderViewModel.SetInitialFocusToGrid = false;
                 var orderDetails = Rows.OfType<OrderDetailsGridRow>();
-                var productRow = orderDetails.FirstOrDefault(f => f.ProductId == OrderViewModel.FilterProductId);
+                var productRow = orderDetails.FirstOrDefault(f => f.ProductId == OrderViewModel.GotoProductId);
                 if (productRow != null)
                 {
                     OrderViewModel.OrderView.SetFocusToGrid(productRow, ProductColumnId);

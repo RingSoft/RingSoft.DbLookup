@@ -133,7 +133,9 @@ namespace RingSoft.DbMaintenance
 
             if (LookupAddViewArgs != null)
             {
-                _lookupData.LookupDefinition.FilterDefinition.CopyFrom(GetAddViewFilter());
+                var filter = GetAddViewFilter();
+                if (filter != null)
+                    _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
             }
 
             Initialize();
@@ -141,7 +143,10 @@ namespace RingSoft.DbMaintenance
 
         protected virtual TableFilterDefinitionBase GetAddViewFilter()
         {
-            return LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
+            if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
+                return LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
+
+            return null;
         }
 
         /// <summary>
@@ -152,7 +157,7 @@ namespace RingSoft.DbMaintenance
         {
             if (LookupAddViewArgs != null)
             {
-                var primaryKeyValue = GetAddViewPrimaryKeyValue();
+                var primaryKeyValue = GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData);
                 switch (LookupAddViewArgs.LookupFormMode)
                 {
                     case LookupFormModes.Add:
@@ -175,22 +180,25 @@ namespace RingSoft.DbMaintenance
             RecordDirty = false;
         }
 
-        protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue()
+        protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(LookupDataBase addViewLookupData)
         {
             PrimaryKeyValue result;
             switch (LookupAddViewArgs.LookupFormMode)
             {
                 case LookupFormModes.Add:
                     result =
-                        LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
+                        addViewLookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
                             .InitialAddModeText);
                     break;
                 case LookupFormModes.View:
-                    result = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
+                    result = addViewLookupData.SelectedPrimaryKeyValue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (result.TableDefinition != TableDefinition)
+                throw new Exception($"The Add/View Lookup Data's Selected Primary Key Definition's Table Definition '{result.TableDefinition}' does not match this Table Definition ('{TableDefinition}').  You must override GetAddViewPrimaryKeyValue and return a PrimaryKeyValue whose Table Definition is '{TableDefinition}'.");
 
             return result;
         }

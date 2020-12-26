@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                     xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
     <Style TargetType="{x:Type local:AutoFillControl}">
@@ -15,7 +16,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="TextBox" VerticalContentAlignment="Center"/>
+                                <dec:StringEditControl x:Name="TextBox" VerticalContentAlignment="Center"/>
                                 <Button x:Name="Button" Grid.Column="1" Width="20" IsTabStop="False">
                                     <Image Source="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"></Image>
                                 </Button>

@@ -13,6 +13,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using RingSoft.DataEntryControls.WPF;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -56,7 +57,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "RecordCountStackPanel", Type = typeof(StackPanel))]
     [TemplatePart(Name = "RecordCountLabel", Type = typeof(Label))]
     [TemplatePart(Name = "Spinner", Type = typeof(Control))]
-    public class LookupControl : Control, ILookupControl
+    public class LookupControl : Control, ILookupControl, IReadOnlyControl
     {
         private class RefreshPendingData
         {
@@ -1515,6 +1516,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_designModeSearchForTextBox != null)
                     _designModeSearchForTextBox.Text = DesignText;
             }
+        }
+
+        public void SetReadOnlyMode(bool readOnlyValue)
+        {
+            
         }
     }
 }

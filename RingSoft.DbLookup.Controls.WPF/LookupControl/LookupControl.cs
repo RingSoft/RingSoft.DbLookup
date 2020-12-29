@@ -259,6 +259,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
+        private object _addViewParameter;
 
         static LookupControl()
         {
@@ -1455,11 +1456,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selectedIndex = ListView.SelectedIndex;
             if (selectedIndex >= 0)
             {
-                object inputParameter = null;
-                if (Command != null)
-                    inputParameter = Command.AddViewParameter;
-
-                LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), inputParameter);
+                LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter);
             }
         }
 
@@ -1474,14 +1471,19 @@ namespace RingSoft.DbLookup.Controls.WPF
                         ClearLookupControl();
                         break;
                     case LookupCommands.Refresh:
+                        _addViewParameter = command.AddViewParameter;
                         RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.AddModify:
+                        var addViewParameter = command.AddViewParameter;
+                        if (addViewParameter == null)
+                            addViewParameter = _addViewParameter;
+
                         var selectedIndex = ListView?.SelectedIndex ?? 0;
                         if (selectedIndex >= 0)
-                            LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), command.AddViewParameter);
+                            LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
                         else
-                            LookupData.AddNewRow(Window.GetWindow(this), command.AddViewParameter);
+                            LookupData.AddNewRow(Window.GetWindow(this), addViewParameter);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

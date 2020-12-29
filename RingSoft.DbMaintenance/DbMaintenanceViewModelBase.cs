@@ -158,7 +158,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 DeleteCommand.IsEnabled = _deleteButtonEnabled = value;
-                OnPropertyChanged(nameof(DeleteButtonEnabled));
+                OnPropertyChanged(nameof(DeleteButtonEnabled), false);
             }
         }
 
@@ -200,7 +200,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 SaveCommand.IsEnabled = _saveButtonEnabled = value;
-                OnPropertyChanged(nameof(SaveButtonEnabled));
+                OnPropertyChanged(nameof(SaveButtonEnabled), false);
             }
         }
 
@@ -255,6 +255,22 @@ namespace RingSoft.DbMaintenance
                 OnRecordDirtyChanged(_recordDirty);
             }
         }
+
+        private bool _readOnlyMode;
+
+        public bool ReadOnlyMode
+        {
+            get => _readOnlyMode;
+            set
+            {
+                if (_readOnlyMode == value)
+                    return;
+
+                _readOnlyMode = value;
+                OnReadOnlyModeChanged(_readOnlyMode);
+            }
+        }
+
 
         public RelayCommand PreviousCommand { get; private set; }
         public RelayCommand NextCommand { get; private set; }
@@ -369,6 +385,23 @@ namespace RingSoft.DbMaintenance
 
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
+        }
+
+        protected virtual void OnReadOnlyModeChanged(bool newValue)
+        {
+            if (newValue)
+            {
+                DeleteButtonEnabled = SaveButtonEnabled = false;
+            }
+            else
+            {
+                if (MaintenanceMode != DbMaintenanceModes.AddMode)
+                    DeleteButtonEnabled = true;
+
+                SaveButtonEnabled = true;
+            }
+
+            View.SetReadOnlyMode(newValue);
         }
 
         /// <summary>

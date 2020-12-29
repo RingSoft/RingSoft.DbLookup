@@ -75,6 +75,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
             
         }
 
+        public void SetReadOnlyMode(bool readOnlyValue)
+        {
+            
+        }
+
         public void TestOrderViewModel()
         {
             var lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;

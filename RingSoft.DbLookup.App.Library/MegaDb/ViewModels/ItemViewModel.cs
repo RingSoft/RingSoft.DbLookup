@@ -1,4 +1,6 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb.Model;
+﻿using System.ComponentModel;
+using System.Linq;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
@@ -82,16 +84,26 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
         private IMegaDbLookupContext _lookupContext;
+        private MegaDbViewModelInput _viewModelInput;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is MegaDbViewModelInput viewModelInput)
+                _viewModelInput = viewModelInput;
+            else
+                _viewModelInput = new MegaDbViewModelInput();
+
+            _viewModelInput.ItemViewModels.Add(this);
 
             LocationAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.LocationId))
             {
-                AddViewParameter = " From Item To Location Test"
+                AddViewParameter = _viewModelInput
             };
-            ManufacturerAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ManufacturerId));
+            ManufacturerAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ManufacturerId))
+            {
+                AddViewParameter = _viewModelInput
+            };
             base.Initialize();
         }
 
@@ -100,6 +112,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             var item = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(newEntity.Id);
             ItemId = item.Id;
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, item.Name);
+
+            ReadOnlyMode = _viewModelInput.ItemViewModels.Any(a => a != this && a.ItemId == ItemId);
+
             return item;
         }
 
@@ -220,6 +235,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                     new AutoFillValue(newRecord.NewPrimaryKeyValue, newRecord.NewLookupEntity.Name);
             }
             return true;
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                _viewModelInput.ItemViewModels.Remove(this);
         }
     }
 }

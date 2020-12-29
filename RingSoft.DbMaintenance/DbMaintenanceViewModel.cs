@@ -166,10 +166,11 @@ namespace RingSoft.DbMaintenance
                         KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
                         break;
                 }
-                if (primaryKeyValue.IsValid)
-                    _lookupData.SelectPrimaryKey(primaryKeyValue);
 
                 DeleteButtonEnabled = NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
+
+                if (primaryKeyValue.IsValid)
+                    _lookupData.SelectPrimaryKey(primaryKeyValue);
             }
             else
             {
@@ -347,6 +348,7 @@ namespace RingSoft.DbMaintenance
             SelectButtonEnabled = false;
             DeleteButtonEnabled = false;
             PrimaryKeyControlsEnabled = true;
+            ReadOnlyMode = false;
 
             View.ResetViewForNewRecord();
             RecordDirty = false;

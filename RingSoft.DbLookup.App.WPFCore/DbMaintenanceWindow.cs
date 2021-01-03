@@ -153,5 +153,16 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public override void SetReadOnlyMode(bool readOnlyValue)
+        {
+            if (readOnlyValue)
+                MaintenanceButtonsControl.NextButton.Focus();
+
+            base.SetReadOnlyMode(readOnlyValue);
+
+            if (!readOnlyValue)
+                ResetViewForNewRecord();
+        }
     }
 }

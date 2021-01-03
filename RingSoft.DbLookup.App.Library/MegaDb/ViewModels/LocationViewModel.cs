@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -97,6 +98,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override void LoadFromEntity(Location entity)
         {
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Location is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Location GetEntityData()

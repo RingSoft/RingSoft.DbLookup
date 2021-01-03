@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -90,6 +91,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override void LoadFromEntity(Manufacturer entity)
         {
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Manufacturer is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Manufacturer GetEntityData()

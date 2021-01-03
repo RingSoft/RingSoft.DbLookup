@@ -126,6 +126,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             ManufacturerAutoFillValue =
                 new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(entity.Manufacturer),
                     entity.Manufacturer.Name);
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Item is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Item GetEntityData()

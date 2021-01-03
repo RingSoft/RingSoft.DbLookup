@@ -1,9 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.WPF;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.ControlHost;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -68,8 +66,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             Control.Setup = AutoFillCellProps.AutoFillSetup;
             Control.Value = AutoFillCellProps.AutoFillValue;
 
-            if (!cellStyle.SelectionColor.IsEmpty)
-                Control.SelectionBrush = new SolidColorBrush(cellStyle.SelectionColor.GetMediaColor());
+            var displayStyle = GetCellDisplayStyle();
+            if (displayStyle.SelectionBrush != null)
+                Control.SelectionBrush = displayStyle.SelectionBrush;
 
             Control.ControlDirty += (sender, args) => OnControlDirty();
         }

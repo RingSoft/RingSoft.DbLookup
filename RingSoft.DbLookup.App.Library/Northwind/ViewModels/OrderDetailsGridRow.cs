@@ -30,6 +30,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public OrderDetailsGridRow(OrderDetailsGridManager manager) : base(manager)
         {
+            //DisplayStyleId = OrderDetailsGridManager.BlueDisplayStyleId;
+
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             _manager = manager;
 
@@ -76,13 +78,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             switch (column)
             {
                 case OrderDetailsGridColumns.Product:
+                    //return new DataEntryGridCellStyle {DisplayStyleId = OrderDetailsGridManager.BlueDisplayStyleId};
                     break;
                 case OrderDetailsGridColumns.ExtendedPrice:
-                    return  new DataEntryGridCellStyle{CellStyle = DataEntryGridCellStyles.Disabled};
+                    return  new DataEntryGridCellStyle{CellStyleType = DataEntryGridCellStyleTypes.Disabled};
                 default:
                 {
                     if (IsNew)
-                        return new DataEntryGridCellStyle {CellStyle = DataEntryGridCellStyles.Disabled};
+                        return new DataEntryGridCellStyle {CellStyleType = DataEntryGridCellStyleTypes.Disabled};
                 }
                     break;
             }

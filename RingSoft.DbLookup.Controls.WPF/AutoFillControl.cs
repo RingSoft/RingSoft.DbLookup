@@ -435,6 +435,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
 
+            if (TextBox != null)
+            {
+                if (Foreground != null)
+                    TextBox.Foreground = Foreground;
+
+                if (Background != null)
+                    TextBox.Background = Background;
+
+                if (SelectionBrush != null)
+                    TextBox.SelectionBrush = SelectionBrush;
+            }
+
             base.OnApplyTemplate();
         }
 

@@ -73,6 +73,9 @@
                             <deg:DataEntryGridColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.ExtendedPriceColumnId}" Header="Extended&#10;Price" Alignment="Right" DesignText="$100,000.00" Width="100"/>
                             <deg:DataEntryGridColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.DiscountColumnId}" Header="Discount" Alignment="Right" DesignText="$100.00" Width="75"/>
                         </deg:DataEntryGrid.Columns>
+                        <deg:DataEntryGrid.DisplayStyles>
+                            <deg:DataEntryGridDisplayStyle DisplayId="{x:Static vmlib:OrderDetailsGridManager.BlueDisplayStyleId}" BackgroundBrush="Blue" ForegroundBrush="White" SelectionBrush="White"/>
+                        </deg:DataEntryGrid.DisplayStyles>
                     </deg:DataEntryGrid>
                 </TabItem>
                 <TabItem Header="Shipping Data">

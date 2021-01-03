@@ -24,6 +24,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public const int ExtendedPriceColumnId = 3;
         public const int DiscountColumnId = 4;
 
+        public const int BlueDisplayStyleId = 200;
+
         public OrderViewModel OrderViewModel { get; }
 
         public OrderDetailsGridManager(OrderViewModel viewModel) : base(viewModel)

@@ -421,6 +421,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         private INorthwindLookupContext _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
         private bool _customerDirty;
+        private NorthwindViewModelInput _viewModelInput;
 
         public OrderViewModel()
         {

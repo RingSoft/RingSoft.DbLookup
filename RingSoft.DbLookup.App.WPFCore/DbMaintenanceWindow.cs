@@ -156,13 +156,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void SetReadOnlyMode(bool readOnlyValue)
         {
-            if (readOnlyValue)
-                MaintenanceButtonsControl.NextButton.Focus();
-
+            var focusedElement = FocusManager.GetFocusedElement(this);
             base.SetReadOnlyMode(readOnlyValue);
 
-            if (!readOnlyValue)
+            if (readOnlyValue)
+            {
+                if (!focusedElement.IsEnabled)
+                    MaintenanceButtonsControl.NextButton.Focus();
+            }
+            else if (MaintenanceButtonsControl.IsKeyboardFocusWithin)
+            {
                 ResetViewForNewRecord();
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿using System.ComponentModel;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -57,10 +59,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         }
 
         private IMegaDbLookupContext _lookupContext;
+        private MegaDbViewModelInput _viewModelInput;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
+
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is MegaDbViewModelInput viewModelInput)
+                _viewModelInput = viewModelInput;
+            else
+                _viewModelInput = new MegaDbViewModelInput();
+
+            _viewModelInput.ManufacturerViewModels.Add(this);
 
             var itemsLookup =
                 new LookupDefinition<ItemLookup, Item>(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
@@ -81,10 +91,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             KeyAutoFillValue = new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(manufacturer),
                 manufacturer.Name);
 
+            ReadOnlyMode =
+                _viewModelInput.ManufacturerViewModels.Any(a => a != this && a.ManufacturerId == ManufacturerId);
+
             _itemsLookup.FilterDefinition.ClearFixedFilters();
             _itemsLookup.FilterDefinition.AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, manufacturer.Id);
 
-            ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh);
+            ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
 
             return manufacturer;
         }
@@ -126,6 +139,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                _viewModelInput.ManufacturerViewModels.Remove(this);
         }
     }
 }

@@ -97,6 +97,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         //--------------------------------------------------------------
 
         private LookupSearchForHost _lookupSearchForHost;
+        private bool _readOnlyMode;
 
         public LookupSearchForHost SearchForHost
         {
@@ -1451,8 +1452,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnEnter()
         {
-            if (ListView == null)
+            if (ListView == null || _readOnlyMode)
+            {
+                SystemSounds.Exclamation.Play();
                 return;
+            }
 
             var selectedIndex = ListView.SelectedIndex;
             if (selectedIndex >= 0)
@@ -1520,7 +1524,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SetReadOnlyMode(bool readOnlyValue)
         {
-            
+            _readOnlyMode = readOnlyValue;
         }
     }
 }

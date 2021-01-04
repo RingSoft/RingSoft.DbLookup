@@ -93,7 +93,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return base.GetCellStyle(columnId);
         }
 
-        public override void SetCellValue(DataEntryGridCellProps value)
+        public override void SetCellValue(DataEntryGridEditingCellProps value)
         {
             var column = (OrderDetailsGridColumns) value.ColumnId;
             switch (column)
@@ -116,7 +116,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             {
                                 var newProductResult =
                                     _lookupContext.NorthwindContextConfiguration.ProductsLookup.ShowAddOnTheFlyWindow(
-                                        autoFillCellProps.Text, _manager.OrderViewModel.OrderView.OwnerWindow);
+                                        autoFillCellProps.AutoFillValue.Text, _manager.OrderViewModel.OrderView.OwnerWindow);
                                 if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
                                 {
                                     var newAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,

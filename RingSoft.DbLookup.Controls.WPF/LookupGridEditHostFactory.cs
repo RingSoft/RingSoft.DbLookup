@@ -1,11 +1,11 @@
 ﻿using RingSoft.DataEntryControls.WPF.DataEntryGrid;
-using RingSoft.DataEntryControls.WPF.DataEntryGrid.ControlHost;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
     public class LookupGridEditHostFactory : DataEntryGridHostFactory
     {
-        public override DataEntryGridControlHostBase GetControlHost(DataEntryGrid grid, int editingControlHostId)
+        public override DataEntryGridEditingControlHostBase GetControlHost(DataEntryGrid grid, int editingControlHostId)
         {
             if (editingControlHostId == DataEntryGridAutoFillCellProps.AutoFillControlHostId)
                 return new DataEntryGridAutoFillHost(grid);

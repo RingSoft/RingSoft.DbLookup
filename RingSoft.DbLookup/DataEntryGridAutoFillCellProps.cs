@@ -3,13 +3,9 @@ using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup
 {
-    public class DataEntryGridAutoFillCellProps : DataEntryGridCellProps
+    public class DataEntryGridAutoFillCellProps : DataEntryGridEditingCellProps
     {
-        public AutoFillSetup AutoFillSetup { get; }
-
-        public AutoFillValue AutoFillValue { get; set; }
-
-        public override string Text
+        public override string DataValue
         {
             get
             {
@@ -19,6 +15,10 @@ namespace RingSoft.DbLookup
                 return string.Empty;
             }
         }
+
+        public AutoFillSetup AutoFillSetup { get; }
+
+        public AutoFillValue AutoFillValue { get; set; }
 
         public const int AutoFillControlHostId = 51;
 

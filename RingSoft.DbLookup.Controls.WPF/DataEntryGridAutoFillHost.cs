@@ -1,11 +1,11 @@
 ﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
-using RingSoft.DataEntryControls.WPF.DataEntryGrid.ControlHost;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class DataEntryGridAutoFillHost : DataEntryGridControlHost<AutoFillControl>
+    public class DataEntryGridAutoFillHost : DataEntryGridEditingControlHost<AutoFillControl>
     {
         public override bool IsDropDownOpen => Control.ContainsBoxIsOpen;
 
@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 
 
-        public override DataEntryGridCellProps GetCellValue()
+        public override DataEntryGridEditingCellProps GetCellValue()
         {
             return new DataEntryGridAutoFillCellProps(Row, ColumnId,
                 Control.Setup, Control.Value);
@@ -59,7 +59,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;
         }
 
-        protected override void OnControlLoaded(AutoFillControl control, DataEntryGridCellProps cellProps,
+        protected override void OnControlLoaded(AutoFillControl control, DataEntryGridEditingCellProps cellProps,
             DataEntryGridCellStyle cellStyle)
         {
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;

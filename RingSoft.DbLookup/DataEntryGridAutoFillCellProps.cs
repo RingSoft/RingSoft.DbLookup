@@ -5,15 +5,12 @@ namespace RingSoft.DbLookup
 {
     public class DataEntryGridAutoFillCellProps : DataEntryGridEditingCellProps
     {
-        public override string DataValue
+        protected override string GetDataValue(DataEntryGridRow row, int columnId, bool controlMode)
         {
-            get
-            {
-                if (AutoFillValue != null)
-                    return AutoFillValue.Text;
+            if (AutoFillValue != null)
+                return AutoFillValue.Text;
 
-                return string.Empty;
-            }
+            return string.Empty;
         }
 
         public AutoFillSetup AutoFillSetup { get; }

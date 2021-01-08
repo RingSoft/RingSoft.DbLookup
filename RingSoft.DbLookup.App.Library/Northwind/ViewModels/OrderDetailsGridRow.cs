@@ -81,11 +81,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     //return new DataEntryGridCellStyle {DisplayStyleId = OrderDetailsGridManager.BlueDisplayStyleId};
                     break;
                 case OrderDetailsGridColumns.ExtendedPrice:
-                    return  new DataEntryGridCellStyle{CellStyleType = DataEntryGridCellStyleTypes.Disabled};
+                    return  new DataEntryGridCellStyle{State = DataEntryGridCellStates.Disabled};
                 default:
                 {
                     if (IsNew)
-                        return new DataEntryGridCellStyle {CellStyleType = DataEntryGridCellStyleTypes.Disabled};
+                        return new DataEntryGridCellStyle {State = DataEntryGridCellStates.Disabled};
                 }
                     break;
             }

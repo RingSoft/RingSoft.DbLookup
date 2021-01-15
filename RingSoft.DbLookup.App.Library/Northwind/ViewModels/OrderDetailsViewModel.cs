@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -56,6 +59,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 OnPropertyChanged(nameof(OrderDate));
             }
         }
+
+        public int ProductId { get; set; }
 
         private AutoFillSetup _productAutoFillSetup;
         public AutoFillSetup ProductAutoFillSetup
@@ -146,6 +151,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
         private bool _productDirty;
 
@@ -158,8 +165,22 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
+            {
+                ViewModelInput = viewModelInput;
+            }
+            else
+            {
+                ViewModelInput = new NorthwindViewModelInput();
+            }
+
+            ViewModelInput.OrderDetailsViewModels.Add(this);
+
             FindButtonLookupDefinition = _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
-            ProductAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID));
+            ProductAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID))
+            {
+                AddViewParameter = ViewModelInput
+            };
 
             if (ViewLookupDefinition is LookupDefinition<OrderDetailLookup, Order_Detail> orderDetailLookup)
             {
@@ -228,6 +249,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Order_Detail PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
         {
+            ProductId = newEntity.ProductID;
             var orderDetail =
                 RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetail(newEntity.OrderID,
                     newEntity.ProductID);
@@ -235,6 +257,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ProductAutoFillValue =
                 new AutoFillValue(_lookupContext.Products.GetPrimaryKeyValueFromEntity(orderDetail.Product),
                     orderDetail.Product.ProductName);
+
+            ReadOnlyMode =
+                ViewModelInput.OrderDetailsViewModels.Any(
+                    a => a != this && a.OrderId == OrderId && a.ProductId == ProductId);
 
             return orderDetail;
         }
@@ -246,6 +272,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Price = entity.UnitPrice;
             Discount = (decimal)entity.Discount;
             _productDirty = false;
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Order Detail is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Order_Detail GetEntityData()
@@ -304,6 +335,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
             return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteOrderDetail(OrderId,
                 product.ProductID);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                ViewModelInput.OrderDetailsViewModels.Remove(this);
         }
     }
 }

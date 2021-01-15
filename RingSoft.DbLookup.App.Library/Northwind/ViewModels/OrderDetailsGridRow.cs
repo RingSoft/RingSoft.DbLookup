@@ -35,7 +35,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             _manager = manager;
 
-            _productAutoFillSetup = new AutoFillSetup(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID));
+            _productAutoFillSetup = new AutoFillSetup(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID))
+            {
+                AddViewParameter = _manager.OrderViewModel.ViewModelInput
+            };
             _quantitySetup = new IntegerEditControlSetup();
             _quantitySetup.InitializeFromType(typeof(short));
             _decimalSetup = new DecimalEditControlSetup(){FormatType = DecimalEditFormatTypes.Currency};

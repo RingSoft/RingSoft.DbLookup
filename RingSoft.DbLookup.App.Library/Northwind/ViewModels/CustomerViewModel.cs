@@ -1,4 +1,7 @@
-﻿using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
+﻿using System.ComponentModel;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -12,6 +15,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     {
         public override TableDefinition<Customer> TableDefinition =>
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers;
+
+        public string  CustomerId { get; set; }
 
         private string _companyName;
         public string CompanyName
@@ -191,18 +196,24 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private INorthwindLookupContext _lookupContext;
-        private OrderInput _orderInput;
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        private INorthwindLookupContext _lookupContext;
+        
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
-            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter != null &&
-                LookupAddViewArgs.InputParameter is OrderInput orderInput)
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
             {
-                _orderInput = orderInput;
+                ViewModelInput = viewModelInput;
             }
+            else
+            {
+                ViewModelInput = new NorthwindViewModelInput();
+            }
+            ViewModelInput.CustomerViewModels.Add(this);
+
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
             ordersLookup.Include(p => p.Employee);
@@ -218,12 +229,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(newEntity.CustomerID);
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, customer.CustomerID);
+            CustomerId = KeyAutoFillValue.Text;
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
                 customer.CustomerID);
 
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _orderInput);
+            ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, ViewModelInput);
             return customer;
         }
 
@@ -239,6 +252,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Country = entity.Country;
             Phone = entity.Phone;
             Fax = entity.Fax;
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Customer is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Customer GetEntityData()
@@ -262,7 +280,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void ClearData()
         {
-            CompanyName = string.Empty;
+            CustomerId = CompanyName = string.Empty;
             Address = City = ContactName = ContactTitle = Country = Fax = Phone = PostalCode = Region = null;
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
@@ -291,7 +309,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify, null, _orderInput);
+                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                ViewModelInput.CustomerViewModels.Remove(this);
         }
     }
 }

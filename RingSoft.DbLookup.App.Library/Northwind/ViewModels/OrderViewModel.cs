@@ -9,6 +9,7 @@ using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using RingSoft.DbMaintenance;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -419,19 +420,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public bool GridMode { get; set; }
 
-        public OrderInput OrderInput { get; private set; }
-
         public bool SetInitialFocusToGrid { get; internal set; }
 
         public int GotoProductId { get; private set; }
+
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
         private readonly DateTime _newDateTime = DateTime.Today;
 
         private INorthwindLookupContext _lookupContext;
 
         private bool _customerDirty;
-        private NorthwindViewModelInput _viewModelInput;
-
+        
         public OrderViewModel()
         {
             _orderDate = _newDateTime;
@@ -446,15 +446,24 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                              throw new ArgumentException(
                                  $"ViewModel requires an {nameof(IOrderView)} interface.");
 
-            OrderInput = new OrderInput{GridMode = GridMode};
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
+            {
+                ViewModelInput = viewModelInput;
+            }
+            else
+            {
+                ViewModelInput = new NorthwindViewModelInput();
+            }
+            ViewModelInput.OrderViewModels.Add(this);
+            ViewModelInput.OrderInput ??= new OrderInput {GridMode = GridMode};
 
             CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID))
             {
-                AddViewParameter = OrderInput,
+                AddViewParameter = ViewModelInput,
                 //AllowLookupAdd = false
             };
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
-                {AddViewParameter = OrderInput};
+                {AddViewParameter = ViewModelInput};
             ShipViaAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ShipVia));
 
             OrderDetailsLookupDefinition =
@@ -476,7 +485,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             //_orderDetailsLookup.TableFilterDefinition.Include(p => p.Product)
             //    .Include(p => p.Category)
             //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
+
+            ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == OrderId);
 
             return order;
         }
@@ -525,6 +536,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             RefreshTotalControls();
             _customerDirty = false;
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Order is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         public void RefreshTotalControls()
@@ -732,6 +748,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override TableFilterDefinitionBase GetAddViewFilter()
         {
+            _lookupContext ??= RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+
             if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == _lookupContext.OrderDetails)
             {
                 SetInitialFocusToGrid = true;
@@ -769,7 +787,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
-            if (addViewPrimaryKeyValue.TableDefinition == _lookupContext.OrderDetails)
+            if (addViewPrimaryKeyValue.TableDefinition ==
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
             {
                 var orderDetail =
                     _lookupContext.OrderDetails.GetEntityFromPrimaryKeyValue(addViewPrimaryKeyValue);
@@ -779,6 +798,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             return base.GetAddViewPrimaryKeyValue(addViewPrimaryKeyValue);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                ViewModelInput.OrderViewModels.Remove(this);
         }
     }
 }

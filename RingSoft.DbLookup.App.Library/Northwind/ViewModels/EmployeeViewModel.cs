@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -312,20 +315,28 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
-        private OrderInput _orderInput;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
-            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter != null &&
-                LookupAddViewArgs.InputParameter is OrderInput orderInput)
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
             {
-                _orderInput = orderInput;
+                ViewModelInput = viewModelInput;
+            }
+            else
+            {
+                ViewModelInput = new NorthwindViewModelInput();
             }
 
-            ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo));
+            ViewModelInput.EmployeeViewModels.Add(this);
+            ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo))
+            {
+                AddViewParameter = ViewModelInput
+            };
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             ordersLookup.AddVisibleColumnDefinition(p => p.OrderDate, p => p.OrderDate);
@@ -346,7 +357,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
                 EmployeeId);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, _orderInput);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
+
+            ReadOnlyMode = ViewModelInput.EmployeeViewModels.Any(a => a != this && a.EmployeeId == EmployeeId);
 
             return employee;
         }
@@ -379,6 +392,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 ReportsTo = new AutoFillValue(supervisorPrimaryKey, string.Empty);
             }
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Employee is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Employee GetEntityData()
@@ -443,7 +461,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify, null, _orderInput);
+                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                ViewModelInput.EmployeeViewModels.Remove(this);
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
+﻿using System.ComponentModel;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -209,11 +212,25 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+
+            if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
+            {
+                ViewModelInput = viewModelInput;
+            }
+            else
+            {
+                ViewModelInput = new NorthwindViewModelInput();
+            }
+
+            ViewModelInput.ProductViewModels.Add(this);
+
             SupplierAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.SupplierID))
             {
                 AllowLookupAdd = false,
@@ -257,6 +274,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, orderInput);
 
+            ReadOnlyMode =
+                ViewModelInput.ProductViewModels.Any(
+                    a => a != this && a.ProductId == ProductId);
+
             return product;
         }
 
@@ -289,6 +310,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             UnitsOnOrder = entity.UnitsOnOrder;
             ReorderLevel = entity.ReorderLevel;
             Discontinued = entity.Discontinued;
+
+            if (ReadOnlyMode)
+                ControlsGlobals.UserInterface.ShowMessageBox(
+                    "This Product is being modified in another window.  Editing not allowed.", "Editing not allowed",
+                    RsMessageBoxIcons.Exclamation);
         }
 
         protected override Product GetEntityData()
@@ -341,6 +367,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override bool DeleteEntity()
         {
             return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteProduct(ProductId);
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            base.OnWindowClosing(e);
+            if (!e.Cancel)
+                ViewModelInput.ProductViewModels.Remove(this);
         }
     }
 }

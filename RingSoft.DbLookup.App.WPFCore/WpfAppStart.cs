@@ -133,9 +133,9 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
             else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
             {
-                if (e.InputParameter is OrderInput orderInput)
+                if (e.InputParameter is NorthwindViewModelInput northwindViewModelInput)
                 {
-                    if (orderInput.GridMode)
+                    if (northwindViewModelInput.OrderInput.GridMode)
                         ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
                     else 
                         ShowAddOnTheFlyWindow(new OrdersWindow(), e);
@@ -151,12 +151,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
             {
-                if (e.InputParameter is OrderInput)
-                {
+                if (e.InputParameter is not NorthwindViewModelInput northwindViewModelInput) return;
+                if (northwindViewModelInput.OrderInput.GridMode)
                     ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
-                    return;
-                }
-                ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
+                else
+                    ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)

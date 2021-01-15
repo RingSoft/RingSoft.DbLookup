@@ -14,13 +14,13 @@
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <Style TargetType="dec:DateEditControl">
+        <Style TargetType="dec:DateEditControl" BasedOn="{StaticResource {x:Type dec:DateEditControl}}">
             <Setter Property="Width" Value="100"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="AllowNullValue" Value="True"/>
             <Setter Property="DesignText" Value="01/01/1980"/>
         </Style>
-        <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource GlobalDecimalReadOnlyBoxStyle}">
+        <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource {x:Type dec:DecimalReadOnlyBox}}">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="FormatType" Value="Currency"/>
             <Setter Property="DesignText" Value="$1,000,000.00"/>

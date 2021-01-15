@@ -4,83 +4,29 @@
              xmlns:deg="clr-namespace:RingSoft.DataEntryControls.WPF.DataEntryGrid;assembly=RingSoft.DataEntryControls.WPF"
              xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF">
     <Application.Resources>
-        <Style TargetType="dec:ReadOnlyBox" x:Key="ReadOnlyBox">
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="Margin" Value="2.5"/>
-        </Style>
-        <Style TargetType="dec:StringReadOnlyBox" BasedOn="{StaticResource ReadOnlyBox}"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resources/ControlStylesResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="dec:DecimalReadOnlyBox" x:Key="GlobalDecimalReadOnlyBoxStyle" BasedOn="{StaticResource ReadOnlyBox}">
-            
-        </Style>
-        <Style TargetType="dec:DecimalReadOnlyBox" BasedOn="{StaticResource GlobalDecimalReadOnlyBoxStyle}"/>
+            <dec:ComparisonConverter x:Key="ComparisonConverter" />
 
-        <Style TargetType="dec:DateReadOnlyBox" BasedOn="{StaticResource ReadOnlyBox}">
-            
-        </Style>
+            <Style TargetType="TextBox" x:Key="StandardTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Height" Value="20" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="PasswordBox" x:Key="StandardPasswordBox">
+                <Setter Property="Height" Value="20" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
+            </Style>
+            <Style TargetType="ComboBox" x:Key="DatabaseComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Height" Value="23" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="IsEditable" Value="True" />
+            </Style>
 
-        <Style TargetType="TextBox" x:Key="GlobalTextBoxStyle">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="TextBox" BasedOn="{StaticResource GlobalTextBoxStyle}"/>
-
-        <Style TargetType="dec:StringEditControl" x:Key="GlobalStringEditControlStyle" BasedOn="{StaticResource GlobalTextBoxStyle}">
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="SelectAllOnGotFocus" Value="True"/>
-        </Style>
-
-        <Style TargetType="dec:StringEditControl" BasedOn="{StaticResource GlobalStringEditControlStyle}"/>
-
-        <Style TargetType="deg:DataEntryGrid">
-            <Setter Property="EnterToTab" Value="True"/>
-            <Setter Property="CloseWindowOnEscape" Value="True"/>
-            <Setter Property="GridLinesVisibility" Value="All"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
-            <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
-            <Setter Property="AlternationCount" Value="2"/>
-        </Style>
-        <Style TargetType="{x:Type DataGridRow}">
-            <Style.Triggers>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" Value="Aqua" />
-                </Trigger>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="White" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextAlignment="Center" Text="{Binding}"></TextBlock>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-        <Style TargetType="Label" x:Key="ControlLabel">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <!--<Setter Property="Margin" Value="2.5"/>-->
-        </Style>
-        <Style TargetType="TextBox" x:Key="StandardTextBox">
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="PasswordBox" x:Key="StandardPasswordBox">
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="ComboBox" x:Key="DatabaseComboBox">
-            <Setter Property="Height" Value="23"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="IsEditable" Value="True"/>
-        </Style>
-        <dec:ComparisonConverter x:Key="ComparisonConverter"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

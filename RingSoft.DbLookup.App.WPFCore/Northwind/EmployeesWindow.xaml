@@ -14,7 +14,7 @@
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <Style TargetType="dec:DateEditControl">
+        <Style TargetType="dec:DateEditControl" BasedOn="{StaticResource {x:Type dec:DateEditControl}}">
             <Setter Property="AllowNullValue" Value="True"/>
             <Setter Property="DesignText" Value="01/01/2000"/>
             <Setter Property="Width" Value="100"/>

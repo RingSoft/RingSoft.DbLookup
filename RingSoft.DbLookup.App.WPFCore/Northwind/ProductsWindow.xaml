@@ -14,10 +14,10 @@
         <vmlib:ProductViewModel x:Name="ProductViewModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <Style TargetType="dec:DecimalEditControl">
+        <Style TargetType="dec:DecimalEditControl" BasedOn="{StaticResource {x:Type dec:DecimalEditControl}}">
             <Setter Property="AllowNullValue" Value="True"/>
         </Style>
-        <Style TargetType="dec:IntegerEditControl">
+        <Style TargetType="dec:IntegerEditControl" BasedOn="{StaticResource {x:Type dec:IntegerEditControl}}">
             <Setter Property="MaximumValue" Value="32000"/>
             <Setter Property="MinimumValue" Value="0"/>
             <Setter Property="AllowNullValue" Value="True"/>

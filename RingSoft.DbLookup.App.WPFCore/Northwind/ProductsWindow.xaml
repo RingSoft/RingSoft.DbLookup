@@ -9,6 +9,7 @@
                          xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
                          xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
                          mc:Ignorable="d"
+                         Style="{StaticResource WindowStyle}"
         Title="Products" Height="450" Width="475">
     <Window.DataContext>
         <vmlib:ProductViewModel x:Name="ProductViewModel"/>

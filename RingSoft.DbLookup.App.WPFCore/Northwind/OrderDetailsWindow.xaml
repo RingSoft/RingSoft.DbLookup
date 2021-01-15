@@ -8,6 +8,7 @@
                          xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
                          xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
                          mc:Ignorable="d"
+                         Style="{StaticResource WindowStyle}"
         Title="Order Details" Height="300" Width="400">
     <Window.DataContext>
         <vmlib:OrderDetailsViewModel x:Name="OrderDetailsViewModel"/>

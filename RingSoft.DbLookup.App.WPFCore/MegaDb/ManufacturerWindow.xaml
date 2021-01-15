@@ -9,6 +9,7 @@
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
         Title="Manufacturers" Height="400" Width="500">
     <Window.DataContext>
         <vmlib:ManufacturerViewModel x:Name="ManufacturerViewModel"/>

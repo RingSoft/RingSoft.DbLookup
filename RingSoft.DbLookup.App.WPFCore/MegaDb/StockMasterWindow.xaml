@@ -9,6 +9,7 @@
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
         Title="Stock Master" Height="450" Width="600">
     <Window.DataContext>
         <vmlib:StockMasterViewModel x:Name="StockMasterViewModel"/>

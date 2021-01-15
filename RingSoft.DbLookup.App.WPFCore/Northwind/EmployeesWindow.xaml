@@ -9,6 +9,7 @@
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
         Title="Employees" Height="500" Width="600">
     <Window.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>

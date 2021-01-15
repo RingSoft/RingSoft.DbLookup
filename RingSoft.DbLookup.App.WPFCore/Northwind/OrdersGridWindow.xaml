@@ -10,7 +10,8 @@
     xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.ViewModels;assembly=RingSoft.DbLookup.App.Library"
     xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
     mc:Ignorable="d"
-    Title="OrdersGridWindow" Height="575" Width="800">
+    Style="{StaticResource WindowStyle}"
+    Title="Orders (Grid Control)" Height="575" Width="800">
     <Window.DataContext>
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
     </Window.DataContext>

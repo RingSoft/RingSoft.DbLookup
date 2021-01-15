@@ -6,6 +6,8 @@
                      xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
                      xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                      mc:Ignorable="d"
+                     Style="{StaticResource WindowStyle}"
+                     EnterToTab="True"
         Title="Create Database SQL Script" Height="450" Width="800" ShowInTaskbar="False">
     <Window.DataContext>
         <vmlib:SqlScriptViewModel x:Name="SqlScriptViewModel"/>

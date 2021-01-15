@@ -8,6 +8,7 @@
         xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
         Title="Items" Height="175" Width="500">
     <Window.DataContext>
         <vmlib:ItemViewModel x:Name="ItemsViewModel"/>

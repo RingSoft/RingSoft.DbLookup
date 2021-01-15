@@ -5,6 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                      mc:Ignorable="d"
+                     Style="{StaticResource WindowStyle}"
         Title="RingSoft Database Lookup Demo" Height="300" Width="330" HideControlBox="True" CloseOnEscape="False">
     <!--d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"-->
     <Grid Margin="5">

@@ -391,7 +391,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        protected override string FindButtonInitialSearchFor => OrderDate.ToShortDateString();
+        protected override string FindButtonInitialSearchFor
+        {
+            get
+            {
+                if (MaintenanceMode == DbMaintenanceModes.AddMode)
+                    return string.Empty;
+
+                return OrderDate.ToShortDateString();
+            }
+        }
 
         private OrderDetailsGridManager _detailsGridManager;
 
@@ -440,7 +449,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID))
             {
                 AddViewParameter = OrderInput,
-                AllowLookupAdd = false
+                //AllowLookupAdd = false
             };
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
                 {AddViewParameter = OrderInput};

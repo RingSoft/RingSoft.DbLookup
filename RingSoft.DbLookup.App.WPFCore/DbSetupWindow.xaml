@@ -8,6 +8,8 @@
                      xmlns:dp="clr-namespace:RingSoft.DbLookup.DataProcessor;assembly=RingSoft.DbLookup"
                      xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                      mc:Ignorable="d"
+                     Style="{StaticResource WindowStyle}"
+                     EnterToTab="True"
         Title="Database Settings" Height="350" Width="400">
     <Window.DataContext>
         <vmlib:DbSetupViewModel x:Name="DbSetupViewModel"/>

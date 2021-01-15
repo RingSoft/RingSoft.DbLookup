@@ -427,7 +427,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private readonly DateTime _newDateTime = DateTime.Today;
 
-        private INorthwindLookupContext _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+        private INorthwindLookupContext _lookupContext;
 
         private bool _customerDirty;
         private NorthwindViewModelInput _viewModelInput;
@@ -440,6 +440,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void Initialize()
         {
+            _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+
             OrderView = View as IOrderView ??
                              throw new ArgumentException(
                                  $"ViewModel requires an {nameof(IOrderView)} interface.");

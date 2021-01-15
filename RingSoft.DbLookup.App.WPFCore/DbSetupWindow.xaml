@@ -101,11 +101,11 @@
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Northwind Database" Style="{StaticResource ControlLabel}"/>
-                        <dec:ComboBoxControl x:Name="SqlServerNorthwindComboBox" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=SqlServerNorthwindDatabaseName, Mode=TwoWay}"/>
+                        <dec:TextComboBoxControl x:Name="SqlServerNorthwindComboBox" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=SqlServerNorthwindDatabaseName, Mode=TwoWay}"/>
                         <Button x:Name="SqlServerNorthwindTestConnectionButton" Grid.Row="1" Grid.Column="1" Content="Test Connection" Margin="0,0,5,0"/>
                         <Button x:Name="SqlServerNorthwindCreateButton" Grid.Row="1" Grid.Column="2" Content="Create"/>
                         <Label Grid.Row="2" Grid.Column="0" Content="Mega Database" Style="{StaticResource ControlLabel}"/>
-                        <dec:ComboBoxControl x:Name="SqlServerMegaDbComboBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=SqlServerMegaDbDatabaseName, Mode=TwoWay}"/>
+                        <dec:TextComboBoxControl x:Name="SqlServerMegaDbComboBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=SqlServerMegaDbDatabaseName, Mode=TwoWay}"/>
                         <Button x:Name="SqlServerMegaDbTestConnectionButton" Grid.Row="3" Grid.Column="1" Content="Test Connection" Margin="0,0,5,0"/>
                         <Button x:Name="SqlServerMegaDbCreateButton" Grid.Row="3" Grid.Column="2" Content="Create"/>
                     </Grid>
@@ -134,11 +134,11 @@
                     <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Password"/>
                     <PasswordBox x:Name="MySqlPasswordBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource StandardPasswordBox}"/>
                     <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Northwind Database"/>
-                    <dec:ComboBoxControl x:Name="MySqlNorthwindComboBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=MySqlNorthwindDatabaseName, Mode=TwoWay}"/>
+                    <dec:TextComboBoxControl x:Name="MySqlNorthwindComboBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=MySqlNorthwindDatabaseName, Mode=TwoWay}"/>
                     <Button x:Name="MySqlNorthwindTestConnectionButton" Grid.Row="4" Grid.Column="1" Content="Test Connection" Margin="0,0,5,0"/>
                     <Button x:Name="MySqlNorthwindCreateButton" Grid.Row="4" Grid.Column="2" Content="Create"/>
                     <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Mega Database"/>
-                    <dec:ComboBoxControl x:Name="MySqlMegaDbComboBox" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=MySqlMegaDbDatabaseName, Mode=TwoWay}"/>
+                    <dec:TextComboBoxControl x:Name="MySqlMegaDbComboBox" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource DatabaseComboBox}" Text="{Binding Path=MySqlMegaDbDatabaseName, Mode=TwoWay}"/>
                     <Button x:Name="MySqlMegaDbTestConnectionButton" Grid.Row="6" Grid.Column="1" Content="Test Connection" Margin="0,0,5,0"/>
                     <Button x:Name="MySqlMegaDbCreateButton" Grid.Row="6" Grid.Column="2" Content="Create"/>
                 </Grid>

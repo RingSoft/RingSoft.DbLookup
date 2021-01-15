@@ -20,6 +20,10 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public event EventHandler<LookupSelectArgs> LookupFormReturn;
 
+        public DbMaintenanceWindow()
+        {
+            EnterToTab = true;
+        }
         protected void Initialize()
         {
             ShowInTaskbar = false;
@@ -154,20 +158,19 @@ namespace RingSoft.DbLookup.App.WPFCore
             MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        public override void SetReadOnlyMode(bool readOnlyValue)
+        protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
-            var focusedElement = FocusManager.GetFocusedElement(this);
-            base.SetReadOnlyMode(readOnlyValue);
-
             if (readOnlyValue)
             {
-                if (!focusedElement.IsEnabled)
+                var focusedElement = FocusManager.GetFocusedElement(this);
+                if (focusedElement == null || !focusedElement.IsEnabled)
                     MaintenanceButtonsControl.NextButton.Focus();
             }
             else if (MaintenanceButtonsControl.IsKeyboardFocusWithin)
             {
-                ResetViewForNewRecord();
+                WPFControlsGlobals.SendKey(Key.Tab);
             }
+
         }
     }
 }

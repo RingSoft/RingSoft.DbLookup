@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.19" />
-    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="0.96.1" />
+    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="0.96.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.112" />

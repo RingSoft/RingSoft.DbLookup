@@ -1287,8 +1287,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                    OnEnter();
-                    e.Handled = true;
+                    if (OnEnter())
+                        e.Handled = true;
                     break;
             }
         }
@@ -1450,19 +1450,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountLabel.Content = @"Counting Records";
         }
 
-        private void OnEnter()
+        private bool OnEnter()
         {
             if (ListView == null || _readOnlyMode)
             {
                 SystemSounds.Exclamation.Play();
-                return;
+            }
+            else
+            {
+                var selectedIndex = ListView.SelectedIndex;
+                if (selectedIndex >= 0)
+                {
+                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter);
+                    return true;
+                }
             }
 
-            var selectedIndex = ListView.SelectedIndex;
-            if (selectedIndex >= 0)
-            {
-                LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter);
-            }
+            return false;
         }
 
         private void ExecuteCommand()

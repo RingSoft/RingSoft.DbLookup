@@ -3,6 +3,8 @@
                     xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                     xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
+    <BitmapImage x:Key="AutoFillButtonImage" UriSource="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"/>
+
     <Style TargetType="{x:Type local:AutoFillControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -18,7 +20,7 @@
                                 </Grid.ColumnDefinitions>
                                 <dec:StringEditControl x:Name="TextBox" VerticalContentAlignment="Center"/>
                                 <Button x:Name="Button" Grid.Column="1" Width="20" IsTabStop="False">
-                                    <Image Source="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"></Image>
+                                    <Image Source="{StaticResource AutoFillButtonImage}"></Image>
                                 </Button>
                             </Grid>
                             <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=TextBox}" StaysOpen="False" Placement="Bottom">

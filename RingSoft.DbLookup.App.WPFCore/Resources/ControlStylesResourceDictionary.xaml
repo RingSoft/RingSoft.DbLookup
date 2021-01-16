@@ -6,7 +6,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
-            Source="pack://application:,,,/RingSoft.DataEntryControls.WPF;component/Themes/DataEntryControlsStyles.xaml" />
+            Source="pack://application:,,,/RingSoft.DbLookup.Controls.WPF;component/Themes/DbLookupControlsStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/BrushesResourceDictionary.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/ComboBoxResourceDictionary.xaml" />
     </ResourceDictionary.MergedDictionaries>

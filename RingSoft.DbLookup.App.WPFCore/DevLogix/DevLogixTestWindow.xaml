@@ -24,6 +24,9 @@
                         <Button x:Name="ChangeButton" Margin="5,0,0,0" Content="_Change"/>
                         <Button x:Name="TestLookupExceptionButton" Margin="5,0,0,0" Content="Test Lookup Exception"/>
                         <Button x:Name="TestAutoFillExceptionButton" Margin="5,0,0,0" Content="Test AutoFill Exception"/>
+                        <Button Width="20">
+                            <Image Source="{StaticResource DateEditImage}"/>
+                        </Button>
                     </StackPanel>
                     <controls:LookupControl Grid.Row="1" LookupDefinition="{Binding Path=ReusableLookupDefinition}" Command="{Binding Path=ReusableCommand}"/>
                 </Grid>

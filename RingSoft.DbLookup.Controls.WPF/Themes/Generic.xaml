@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/DbLookupControlsStyles.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupControlTemplate.xaml"/>
-        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillControlTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

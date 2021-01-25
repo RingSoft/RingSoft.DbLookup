@@ -10,6 +10,21 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
+    public enum ViewModelOperations
+    {
+        Save = 0,
+        Delete = 1
+    }
+
+    public class ViewModelOperationPreviewEventArgs<TEntity> where TEntity : new()
+    {
+        public TEntity Entity { get; internal set; }
+
+        public bool Handled { get; set; }
+
+        public ViewModelOperations  Operation { get; internal set; }
+    }
+
     /// <summary>
     /// The base class of all database maintenance view model classes.
     /// </summary>
@@ -105,6 +120,8 @@ namespace RingSoft.DbMaintenance
         /// The confirm delete caption.
         /// </value>
         protected virtual string ConfirmDeleteCaption => "Confirm Delete";
+
+        public event EventHandler<ViewModelOperationPreviewEventArgs<TEntity>> ViewModelOperationPreview;
 
         public bool ValidateAllAtOnce { get; set; }
 
@@ -366,7 +383,8 @@ namespace RingSoft.DbMaintenance
                 return DbMaintenanceResults.NotAllowed;
 
             if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
-                KeyAutoFillValue.PrimaryKeyValue.IsValid)
+                KeyAutoFillValue.PrimaryKeyValue != null && KeyAutoFillValue.PrimaryKeyValue.IsValid
+                && _lookupData != null)
             {
                 _lookupData.SelectPrimaryKey(KeyAutoFillValue.PrimaryKeyValue);
                 return DbMaintenanceResults.Success;
@@ -379,6 +397,17 @@ namespace RingSoft.DbMaintenance
 
             if (!ValidateEntity(entity))
                 return DbMaintenanceResults.ValidationError;
+
+            var previewArgs = new ViewModelOperationPreviewEventArgs<TEntity>
+            {
+                Entity = entity,
+                Operation = ViewModelOperations.Save
+            };
+
+            OnViewModelOperationPreview(previewArgs);
+
+            if (previewArgs.Handled)
+                return DbMaintenanceResults.NotAllowed;
 
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
@@ -518,6 +547,14 @@ namespace RingSoft.DbMaintenance
             var message = ConfirmDeleteMessage(description);
             if (View.ShowYesNoMessage(message, ConfirmDeleteCaption))
             {
+                var operationArgs = new ViewModelOperationPreviewEventArgs<TEntity>
+                {
+                    Operation = ViewModelOperations.Delete
+                };
+                OnViewModelOperationPreview(operationArgs);
+                if (operationArgs.Handled)
+                    return DbMaintenanceResults.NotAllowed;
+
                 if (!DeleteEntity())
                     return DbMaintenanceResults.DatabaseError;
 
@@ -564,6 +601,12 @@ namespace RingSoft.DbMaintenance
         /// <returns>An entity populated from the database.</returns>
         protected abstract TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
 
+        public void UnitTestLoadFromEntity(TEntity entity)
+        {
+            var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+            LoadFromEntity(PopulatePrimaryKeyControls(entity, primaryKeyValue));
+        }
+
         /// <summary>
         /// Loads this view model from the entity generated from PopulatePrimaryKeyControls.  This is executed only during record retrieval operations.
         /// </summary>
@@ -605,6 +648,8 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <returns></returns>
         protected abstract TEntity GetEntityData();
+
+        public TEntity UnitTestGetEntityData() => GetEntityData();
 
         /// <summary>
         /// Clears the data.
@@ -670,6 +715,11 @@ namespace RingSoft.DbMaintenance
             }
 
             return result;
+        }
+
+        protected virtual void OnViewModelOperationPreview(ViewModelOperationPreviewEventArgs<TEntity> e)
+        {
+            ViewModelOperationPreview?.Invoke(this, e);
         }
 
         /// <summary>

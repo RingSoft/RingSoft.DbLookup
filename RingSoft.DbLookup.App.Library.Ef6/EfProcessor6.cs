@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.Library.Ef6
         public INorthwindLookupContext NorthwindLookupContext { get; }
         public INorthwindEfDataProcessor NorthwindEfDataProcessor { get; }
         public IMegaDbLookupContext MegaDbLookupContext { get; }
-        public IMegaDbEfDataProcessor MegaDbEfDataProcessor { get; }
+        public IMegaDbEfDataProcessor MegaDbEfDataProcessor { get; set; }
 
         public EfProcessor6()
         {

@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
         public INorthwindLookupContext NorthwindLookupContext { get; }
         public INorthwindEfDataProcessor NorthwindEfDataProcessor { get; }
         public IMegaDbLookupContext MegaDbLookupContext { get; }
-        public IMegaDbEfDataProcessor MegaDbEfDataProcessor { get; }
+        public IMegaDbEfDataProcessor MegaDbEfDataProcessor { get; set; }
 
         public EfProcessorCore()
         {
@@ -19,17 +19,20 @@ namespace RingSoft.DbLookup.App.Library.EfCore
             NorthwindLookupContext = new NorthwindLookupContextEfCore();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
 
-            RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToNorthwind);
-            
-            if (NorthwindLookupContext.NorthwindContextConfiguration.TestConnection())
-                RsDbLookupAppGlobals.ConnectToNorthwind(NorthwindEfDataProcessor, NorthwindLookupContext);
+            if (!RsDbLookupAppGlobals.UnitTest)
+            {
+                RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToNorthwind);
+
+                if (NorthwindLookupContext.NorthwindContextConfiguration.TestConnection())
+                    RsDbLookupAppGlobals.ConnectToNorthwind(NorthwindEfDataProcessor, NorthwindLookupContext);
+            }
 
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitMegaDb);
             MegaDbLookupContext = new MegaDbLookupContextEfCore();
             MegaDbEfDataProcessor = new MegaDbEfDataProcessorCore();
 
             var registrySettings = new RegistrySettings();
-            if (registrySettings.MegaDbPlatformType != MegaDbPlatforms.None)
+            if (registrySettings.MegaDbPlatformType != MegaDbPlatforms.None && !RsDbLookupAppGlobals.UnitTest)
             {
                 RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.ConnectingToMegaDb);
                 if (MegaDbLookupContext.MegaDbContextConfiguration.TestConnection())

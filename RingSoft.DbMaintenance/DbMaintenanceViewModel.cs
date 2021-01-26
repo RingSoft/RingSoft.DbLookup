@@ -250,12 +250,18 @@ namespace RingSoft.DbMaintenance
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
 
-                DeleteButtonEnabled = SaveButtonEnabled;
-                SelectButtonEnabled = _fromLookupFormAddView;
-                PrimaryKeyControlsEnabled = false;
-                RecordDirty = false;
-                _savedKeyAutoFillValue = KeyAutoFillValue;
+                OnLookupDataChanged();
             }
+        }
+
+        private void OnLookupDataChanged()
+        {
+            DeleteButtonEnabled = SaveButtonEnabled;
+            SelectButtonEnabled = _fromLookupFormAddView;
+            PrimaryKeyControlsEnabled = false;
+            RecordDirty = false;
+            _savedKeyAutoFillValue = KeyAutoFillValue;
+
         }
 
         /// <summary>
@@ -374,10 +380,11 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Called when the Save button is clicked.
         /// </summary>
+        /// <param name="unitTestMode"></param>
         /// <returns>
         /// The result.
         /// </returns>
-        public override DbMaintenanceResults DoSave()
+        public override DbMaintenanceResults DoSave(bool unitTestMode = false)
         {
             if (!SaveCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
@@ -415,10 +422,20 @@ namespace RingSoft.DbMaintenance
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
             _savingRecord = true;
-            _lookupData.SelectPrimaryKey(primaryKey);
+
+            if (unitTestMode)
+            {
+                PopulatePrimaryKeyControls(entity, primaryKey);
+                OnLookupDataChanged();
+            }
+            else
+            {
+                _lookupData.SelectPrimaryKey(primaryKey);
+            }
+
             _savingRecord = false;
 
-            View.ShowRecordSavedMessage();
+            View?.ShowRecordSavedMessage();
             RecordsChanged = true;
 
             return DbMaintenanceResults.Success;

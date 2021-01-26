@@ -347,8 +347,9 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the Save button is clicked.
         /// </summary>
+        /// <param name="unitTestMode"></param>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults DoSave();
+        public abstract DbMaintenanceResults DoSave(bool unitTestMode = false);
 
         /// <summary>
         /// Executed when the Save button is clicked.
@@ -401,7 +402,7 @@ namespace RingSoft.DbMaintenance
                 SaveButtonEnabled = true;
             }
 
-            View.SetReadOnlyMode(newValue);
+            View?.SetReadOnlyMode(newValue);
         }
 
         /// <summary>

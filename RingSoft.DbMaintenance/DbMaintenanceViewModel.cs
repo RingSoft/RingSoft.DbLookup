@@ -620,8 +620,12 @@ namespace RingSoft.DbMaintenance
 
         public void UnitTestLoadFromEntity(TEntity entity)
         {
+            MaintenanceMode = DbMaintenanceModes.EditMode;
+
             var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
             LoadFromEntity(PopulatePrimaryKeyControls(entity, primaryKeyValue));
+            
+            OnLookupDataChanged();
         }
 
         /// <summary>

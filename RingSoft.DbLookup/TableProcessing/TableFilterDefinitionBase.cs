@@ -276,10 +276,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
             if (firstWhere != null)
             {
-                firstWhere.SetLeftParenthesesCount(firstWhere.LeftParenthesesCount++);
+                firstWhere.SetLeftParenthesesCount(firstWhere.LeftParenthesesCount + 1);
                 if (lastWhere != null)
                 {
-                    lastWhere.SetRightParenthesesCount(lastWhere.RightParenthesesCount++);
+                    lastWhere.SetRightParenthesesCount(lastWhere.RightParenthesesCount + 1);
                     lastWhere.SetEndLogic(EndLogics.And);
                 }
             }

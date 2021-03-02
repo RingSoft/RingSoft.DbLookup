@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "LookupGridView", Type = typeof(GridView))]
     [TemplatePart(Name = "ScrollBar", Type = typeof(ScrollBar))]
     [TemplatePart(Name = "RecordCountStackPanel", Type = typeof(StackPanel))]
-    [TemplatePart(Name = "RecordCountLabel", Type = typeof(Label))]
+    [TemplatePart(Name = "RecordCountControl", Type = typeof(StringReadOnlyBox))]
     [TemplatePart(Name = "Spinner", Type = typeof(Control))]
     public class LookupControl : Control, ILookupControl, IReadOnlyControl
     {
@@ -90,7 +90,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public StackPanel RecordCountStackPanel { get; set; }
 
-        public Label RecordCountLabel { get; set; }
+        public StringReadOnlyBox RecordCountControl { get; set; }
 
         public Control Spinner { get; set; }
 
@@ -301,7 +301,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ScrollBar = GetTemplateChild(nameof(ScrollBar)) as ScrollBar;
             GetRecordCountButton = GetTemplateChild(nameof(GetRecordCountButton)) as Button;
             RecordCountStackPanel = GetTemplateChild(nameof(RecordCountStackPanel)) as StackPanel;
-            RecordCountLabel = GetTemplateChild(nameof(RecordCountLabel)) as Label;
+            RecordCountControl = GetTemplateChild(nameof(RecordCountControl)) as StringReadOnlyBox;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
 
             base.OnApplyTemplate();
@@ -363,6 +363,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
+                SetupRecordCount();
                 if (ListView != null)
                 {
                     ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
@@ -1415,7 +1416,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupRecordCount()
         {
-            if (GetRecordCountButton == null || RecordCountLabel == null || RecordCountStackPanel == null)
+            if (GetRecordCountButton == null || RecordCountControl == null || RecordCountStackPanel == null)
                 return;
 
             var showRecordCount = false;
@@ -1430,7 +1431,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ShowRecordCountLabel();
                 var recordsText = LookupData.RecordCount == 1 ? "" : "s";
-                RecordCountLabel.Content =
+                RecordCountControl.Text =
                     $@"{LookupData.RecordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
             }
             else
@@ -1442,12 +1443,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ShowRecordCountLabel()
         {
-            if (GetRecordCountButton == null || RecordCountLabel == null || RecordCountStackPanel == null)
+            if (GetRecordCountButton == null || RecordCountControl == null || RecordCountStackPanel == null)
                 return;
 
             GetRecordCountButton.Visibility = Visibility.Hidden;
             RecordCountStackPanel.Visibility = Visibility.Visible;
-            RecordCountLabel.Content = @"Counting Records";
+            RecordCountControl.Text = @"Counting Records";
         }
 
         private bool OnEnter()

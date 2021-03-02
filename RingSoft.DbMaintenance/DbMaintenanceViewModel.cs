@@ -389,8 +389,7 @@ namespace RingSoft.DbMaintenance
             if (!SaveCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
-            if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
-                KeyAutoFillValue.PrimaryKeyValue != null && KeyAutoFillValue.PrimaryKeyValue.IsValid
+            if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue.IsValid()
                 && _lookupData != null)
             {
                 _lookupData.SelectPrimaryKey(KeyAutoFillValue.PrimaryKeyValue);
@@ -520,8 +519,7 @@ namespace RingSoft.DbMaintenance
         {
             if (RecordDirty && SaveButtonEnabled)
             {
-                if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue != null &&
-                    KeyAutoFillValue.PrimaryKeyValue.IsValid)
+                if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue.IsValid())
                     return true;
 
                 var message = SaveChangesMessage;

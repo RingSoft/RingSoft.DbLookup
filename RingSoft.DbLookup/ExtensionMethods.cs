@@ -4,6 +4,7 @@ using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup
 {
@@ -106,6 +107,11 @@ namespace RingSoft.DbLookup
                 default:
                     throw new ArgumentOutOfRangeException(nameof(decimalFieldType), decimalFieldType, null);
             }
+        }
+
+        public static bool IsValid(this AutoFillValue autoFillValue)
+        {
+            return autoFillValue?.PrimaryKeyValue != null && autoFillValue.PrimaryKeyValue.IsValid;
         }
     }
 }

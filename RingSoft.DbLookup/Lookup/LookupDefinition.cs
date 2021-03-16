@@ -210,6 +210,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
         {
             var propertyType = GetTypeFromExpression(lookupEntityProperty);

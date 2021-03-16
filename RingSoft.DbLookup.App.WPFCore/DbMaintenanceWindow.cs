@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             MaintenanceButtonsControl.FindButton.Command = ViewModel.FindCommand;
             MaintenanceButtonsControl.SelectButton.Command = ViewModel.SelectCommand;
             MaintenanceButtonsControl.NextButton.Command = ViewModel.NextCommand;
-            MaintenanceButtonsControl.CloseButton.Click += (sender, args) => CloseWindow();
+            MaintenanceButtonsControl.CloseButton.Click += (_, _) => CloseWindow();
 
             Loaded += (sender, args) => ViewModel.OnViewLoaded(this);
             PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;

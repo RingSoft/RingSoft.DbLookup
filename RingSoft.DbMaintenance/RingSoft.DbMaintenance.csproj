@@ -25,4 +25,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="0.96.5" />
+  </ItemGroup>
+
 </Project>

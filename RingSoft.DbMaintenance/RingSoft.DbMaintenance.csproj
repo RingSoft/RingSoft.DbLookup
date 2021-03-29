@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>1.13.26</Version>
+    <Version>1.13.27</Version>
     <Authors>Peter Ringering</Authors>
     <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="0.96.5" />
+    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="0.96.6" />
   </ItemGroup>
 
 </Project>

@@ -172,6 +172,7 @@ namespace RingSoft.SimpleDemo.WPF
             orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.ExtendedPrice, extendedPriceFormula)
                 .HasNumberFormatString("c").HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
             orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.Discount, p => p.Discount);
+            orderDetailsLookupDefinition.InitialOrderByType = OrderByTypes.Descending;
 
             OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
 

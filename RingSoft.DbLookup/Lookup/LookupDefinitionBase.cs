@@ -137,6 +137,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             FilterDefinition.CopyFrom(source.FilterDefinition);
+            InitialOrderByType = source.InitialOrderByType;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

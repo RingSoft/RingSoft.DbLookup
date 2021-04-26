@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.QueryBuilder;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -514,7 +515,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var column = LookupGridView.Columns[sortColumnIndex];
                 var columnHeader = (GridViewColumnHeader)column.Header;
                 var glyphSize = GridViewSort.GetGlyphSize(columnHeader, ListSortDirection.Ascending, ListView);
-
+                
                 Style style = new Style();
                 style.TargetType = typeof(GridViewColumnHeader);
                 style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, GetHeaderHeight(header) + glyphSize.Height + 5));
@@ -615,7 +616,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             var sortColumn = LookupGridView.Columns[sortColumnIndex];
             _lastHeaderClicked = sortColumn.Header as GridViewColumnHeader;
+
             _lastDirection = ListSortDirection.Ascending;
+            if (LookupDefinition != null && LookupDefinition.InitialOrderByType == OrderByTypes.Descending)
+                _lastDirection = ListSortDirection.Descending;
+
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
         }
 

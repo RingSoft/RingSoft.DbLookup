@@ -148,14 +148,14 @@ namespace RingSoft.DbMaintenance
 
             base.InternalInitialize();
 
+            Initialize();
+
             if (LookupAddViewArgs != null)
             {
                 var filter = GetAddViewFilter();
                 if (filter != null)
                     _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
             }
-
-            Initialize();
         }
 
         protected virtual TableFilterDefinitionBase GetAddViewFilter()

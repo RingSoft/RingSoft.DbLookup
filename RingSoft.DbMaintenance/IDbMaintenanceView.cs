@@ -57,16 +57,18 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="text">The message box text.</param>
         /// <param name="caption">The message box caption.</param>
+        /// <param name="playSound"></param>
         /// <returns>The button that the user clicked.</returns>
-        MessageButtons ShowYesNoCancelMessage(string text, string caption);
+        MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false);
 
         /// <summary>
         /// Show a yes/no message box.
         /// </summary>
         /// <param name="text">The message box text.</param>
         /// <param name="caption">The message box caption.</param>
+        /// <param name="playSound"></param>
         /// <returns>True if the user clicked Yes, otherwise false.</returns>
-        bool ShowYesNoMessage(string text, string caption);
+        bool ShowYesNoMessage(string text, string caption, bool playSound = false);
 
         /// <summary>
         /// Show the record saved message.

@@ -22,13 +22,13 @@ namespace RingSoft.DbLookup.Tests
             Console.WriteLine(text);
         }
 
-        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption)
+        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             Console.WriteLine(text);
             return MessageBoxButtonsResult.Yes;
         }
 
-        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption)
+        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
             Console.WriteLine(text);
             return MessageBoxButtonsResult.Yes;

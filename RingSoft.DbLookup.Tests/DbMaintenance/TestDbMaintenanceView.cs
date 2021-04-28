@@ -34,12 +34,12 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
             Console.WriteLine($"{nameof(CloseWindow)} method running");
         }
 
-        public MessageButtons ShowYesNoCancelMessage(string text, string caption)
+        public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool ShowYesNoMessage(string text, string caption)
+        public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
             Console.WriteLine(text);
             return true;

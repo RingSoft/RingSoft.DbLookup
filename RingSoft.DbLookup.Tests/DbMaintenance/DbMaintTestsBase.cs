@@ -55,19 +55,19 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
             
         }
 
-        public MessageButtons ShowYesNoCancelMessage(string text, string caption)
+        public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
             return MessageButtons.Yes;
+        }
+
+        public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
+        {
+            return true;
         }
 
         public void ShowInformationMessage(string text, string caption)
         {
             
-        }
-
-        public bool ShowYesNoMessage(string text, string caption)
-        {
-            return true;
         }
 
         public void ShowRecordSavedMessage()

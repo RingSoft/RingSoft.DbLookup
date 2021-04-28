@@ -189,12 +189,12 @@ namespace RingSoft.DbLookup.App.WPFCore
             _splashWindow.ShowErrorMessageBox(text, caption);
         }
 
-        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption)
+        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }
 
-        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption)
+        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Cancel;
         }

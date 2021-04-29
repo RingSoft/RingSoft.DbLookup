@@ -121,6 +121,8 @@ namespace RingSoft.DbMaintenance
         /// </value>
         protected virtual string ConfirmDeleteCaption => "Confirm Delete";
 
+        protected TableFilterDefinition<TEntity> FilterDefinition { get; private set; }
+
         public event EventHandler<ViewModelOperationPreviewEventArgs<TEntity>> ViewModelOperationPreview;
 
         public bool ValidateAllAtOnce { get; set; }
@@ -148,14 +150,15 @@ namespace RingSoft.DbMaintenance
 
             base.InternalInitialize();
 
-            Initialize();
-
             if (LookupAddViewArgs != null)
             {
                 var filter = GetAddViewFilter();
                 if (filter != null)
                     _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
             }
+            FilterDefinition = _lookupData.LookupDefinition.FilterDefinition as TableFilterDefinition<TEntity>;
+
+            Initialize();
         }
 
         protected virtual TableFilterDefinitionBase GetAddViewFilter()

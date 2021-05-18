@@ -150,6 +150,13 @@ namespace RingSoft.DbLookup.Lookup
             base.CopyFrom(source);
         }
 
+        public LookupFormulaColumnDefinition UpdateFormula(string formula)
+        {
+            Formula = formula;
+            return this;
+        }
+
+
         /// <summary>
         /// Sets the number format string.
         /// </summary>

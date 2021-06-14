@@ -29,6 +29,7 @@ CREATE TABLE `items` (
   `Name` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
   `LocationID` int(11) NOT NULL,
   `ManufacturerID` int(11) NOT NULL,
+  `IconType` tinyint(3) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_Items` (`Name`),
   KEY `IX_Items_Location` (`LocationID`),

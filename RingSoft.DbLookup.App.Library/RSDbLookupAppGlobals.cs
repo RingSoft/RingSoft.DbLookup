@@ -20,6 +20,14 @@ namespace RingSoft.DbLookup.App.Library
         ConnectingToMegaDb
     }
 
+    public enum ItemIcons
+    {
+        Red = RsDbLookupAppGlobals.ItemIconRedId,
+        Green = RsDbLookupAppGlobals.ItemIconGreenId,
+        Blue = RsDbLookupAppGlobals.ItemIconBlueId,
+        Yellow = RsDbLookupAppGlobals.ItemIconYellowId
+    }
+
     public class AppStartProgressArgs
     {
         public string ProgressText { get; set; }
@@ -28,6 +36,11 @@ namespace RingSoft.DbLookup.App.Library
 
     public class RsDbLookupAppGlobals
     {
+        public const int ItemIconRedId = 0;
+        public const int ItemIconGreenId = 1;
+        public const int ItemIconBlueId = 2;
+        public const int ItemIconYellowId = 2;
+
         public static IEfProcessor EfProcessor { get; set; }
 
         public static string RegistryFileName { get; private set; }

@@ -93,6 +93,7 @@ CREATE TABLE [dbo].[Items](
 	[Name] [nvarchar](50) NOT NULL,
 	[LocationID] [int] NOT NULL,
 	[ManufacturerID] [int] NOT NULL,
+	[IconType] [tinyint] NOT NULL,
  CONSTRAINT [PK_Items] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

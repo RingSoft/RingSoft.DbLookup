@@ -13,5 +13,7 @@
         public int ManufacturerId { get; set; }
 
         public virtual Manufacturer Manufacturer { get; set; }
+
+        public byte IconType { get; set; }
     }
 }

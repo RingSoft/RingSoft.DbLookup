@@ -19,11 +19,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
                 var locationId = 1;
                 var manufacturerId = 1;
+                byte iconType = 0;
                 var base36CharArray = new[] { '0','1','2','3','4','5','6','7','8','9',
                     'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
                 for (int i = 0; i < maxRecords; i++)
                 {
-                    var item = ItemTableDbSeederCreateItem(base36CharArray, i, ref locationId, ref manufacturerId);
+                    var item = ItemTableDbSeederCreateItem(base36CharArray, i, ref locationId, ref manufacturerId, ref iconType);
 
                     context.AddItem(item);
 
@@ -53,7 +54,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             return result;
         }
 
-        public static Item ItemTableDbSeederCreateItem(char[] base36CharArray, int index, ref int locationId, ref int manufacturerId)
+        public static Item ItemTableDbSeederCreateItem(char[] base36CharArray, int index, ref int locationId, ref int manufacturerId, ref byte iconType)
         {
             var prefix = IntToString(index, base36CharArray);
             var itemName = $"{prefix}ITEM{index}";
@@ -61,7 +62,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             {
                 Name = itemName,
                 LocationId = locationId,
-                ManufacturerId = manufacturerId
+                ManufacturerId = manufacturerId,
+                IconType = iconType
             };
 
             locationId++;
@@ -71,6 +73,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             manufacturerId++;
             if (manufacturerId > 9)
                 manufacturerId = 1;
+
+            iconType++;
+            if (iconType > 3)
+                iconType = 0;
 
             return item;
         }

@@ -83,6 +83,22 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        private byte _iconType;
+
+        public byte IconType
+        {
+            get => _iconType;
+            set
+            {
+                if (_iconType == value)
+                    return;
+
+                _iconType = value;
+                OnPropertyChanged(nameof(IconType));
+            }
+        }
+
+
         private IMegaDbLookupContext _lookupContext;
         private MegaDbViewModelInput _viewModelInput;
 
@@ -127,6 +143,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(entity.Manufacturer),
                     entity.Manufacturer.Name);
 
+            IconType = entity.IconType;
+
             if (ReadOnlyMode)
                 ControlsGlobals.UserInterface.ShowMessageBox(
                     "This Item is being modified in another window.  Editing not allowed.", "Editing not allowed",
@@ -135,9 +153,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override Item GetEntityData()
         {
-            var item = new Item();
+            var item = new Item {Id = ItemId, IconType = IconType};
 
-            item.Id = ItemId;
 
             if (KeyAutoFillValue != null)
                 item.Name = KeyAutoFillValue.Text;
@@ -163,6 +180,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void ClearData()
         {
             ItemId = 0;
+            IconType = 0;
             LocationAutoFillValue = ManufacturerAutoFillValue = null;
             if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
             {

@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.App.Library
         public const int ItemIconRedId = 0;
         public const int ItemIconGreenId = 1;
         public const int ItemIconBlueId = 2;
-        public const int ItemIconYellowId = 2;
+        public const int ItemIconYellowId = 3;
 
         public static IEfProcessor EfProcessor { get; set; }
 

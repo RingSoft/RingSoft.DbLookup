@@ -1,7 +1,8 @@
 ﻿<Application x:Class="RingSoft.DbLookup.App.WPFCore.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF">
+             xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+             xmlns:lib="clr-namespace:RingSoft.DbLookup.App.Library;assembly=RingSoft.DbLookup.App.Library">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,6 +27,53 @@
                 <Setter Property="IsEditable" Value="True" />
             </Style>
 
+            <dec:DataEntryCustomContentTemplate x:Key="IconTypeCustomContent">
+
+                <dec:DataEntryCustomContentTemplateItem ItemId="{x:Static lib:RsDbLookupAppGlobals.ItemIconRedId}" HotKey="R">
+                    <dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/bullet_red.png" Width="16" Height="16"/>
+                                <TextBlock Text="Red"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                </dec:DataEntryCustomContentTemplateItem>
+
+                <dec:DataEntryCustomContentTemplateItem ItemId="{x:Static lib:RsDbLookupAppGlobals.ItemIconGreenId}" HotKey="G">
+                    <dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/bullet_green.png" Width="16" Height="16"/>
+                                <TextBlock Text="Green"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                </dec:DataEntryCustomContentTemplateItem>
+
+                <dec:DataEntryCustomContentTemplateItem ItemId="{x:Static lib:RsDbLookupAppGlobals.ItemIconBlueId}" HotKey="B">
+                    <dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/bullet_blue.png" Width="16" Height="16"/>
+                                <TextBlock Text="Blue"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                </dec:DataEntryCustomContentTemplateItem>
+
+                <dec:DataEntryCustomContentTemplateItem ItemId="{x:Static lib:RsDbLookupAppGlobals.ItemIconYellowId}" HotKey="Y">
+                    <dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/bullet_yellow.png" Width="16" Height="16"/>
+                                <TextBlock Text="Yellow"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dec:DataEntryCustomContentTemplateItem.DataTemplate>
+                </dec:DataEntryCustomContentTemplateItem>
+
+            </dec:DataEntryCustomContentTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

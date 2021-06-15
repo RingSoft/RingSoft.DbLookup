@@ -9,7 +9,7 @@
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Items" Height="175" Width="500">
+        Title="Items" SizeToContent="Height" Width="500">
     <Window.DataContext>
         <vmlib:ItemViewModel x:Name="ItemsViewModel"/>
     </Window.DataContext>
@@ -17,6 +17,7 @@
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
         <Grid Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -36,6 +37,11 @@
             <lc:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Manufacturer"/>
             <lc:AutoFillControl x:Name="ManufacturerControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Icon"/>
+
+            <dec:ContentComboBoxControl Grid.Row="2" Grid.Column="1" ContentTemplate="{StaticResource IconTypeCustomContent}" SelectedItemId="{Binding IconType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
+
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

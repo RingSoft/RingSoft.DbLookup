@@ -9,5 +9,7 @@
         public string Location { get; set; }
 
         public string Manufacturer { get; set; }
+
+        public string IconType { get; set; }
     }
 }

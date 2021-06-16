@@ -273,34 +273,6 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> entityProperty,
-            Conditions condition, Enum value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
-            return AddFixedFilter(fieldDefinition, condition, value);
-        }
-
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, Enum>> entityProperty,
-            Conditions condition, string value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
-            return AddFixedFilter(fieldDefinition, condition, value);
-        }
-
-        /// <summary>
         /// Includes the specified related property.
         /// </summary>
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>

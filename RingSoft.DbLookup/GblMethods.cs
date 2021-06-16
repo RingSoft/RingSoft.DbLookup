@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup
         String = 0,
         Integer = 1,
         Decimal = 2,
-        Enum = 3,
+        //Enum = 3,
         DateTime = 4,
         Bool = 5
     }
@@ -139,8 +139,6 @@ namespace RingSoft.DbLookup
                         value = "0";
                     if (Decimal.TryParse(value, out var decimalValue))
                         return decimalValue.ToString(formatString, culture.NumberFormat);
-                    break;
-                case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.DateTime:
                     if (culture == null)
@@ -280,10 +278,6 @@ namespace RingSoft.DbLookup
             {
                 return FieldDataTypes.DateTime;
             }
-            else if (type.BaseType == typeof(Enum))
-            {
-                return FieldDataTypes.Enum;
-            }
             else if (type == typeof(decimal)
                      || type == typeof(decimal?)
                      || type == typeof(double)
@@ -320,7 +314,6 @@ namespace RingSoft.DbLookup
                     return ValueTypes.String;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                case FieldDataTypes.Enum:
                     return ValueTypes.Numeric;
                 case FieldDataTypes.DateTime:
                     return ValueTypes.DateTime;

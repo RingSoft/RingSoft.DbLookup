@@ -65,12 +65,12 @@ namespace RingSoft.DbLookup.Tests
                 Server = "localhost",
                 Database = "devlogix",
                 UserName = "root",
-                Password = "ring203301971"
+                Password = "R6~4E]{F=t.]ej<]"
             };
 
             _sqliteDataProcessor = new SqliteDataProcessor()
             {
-                FilePath = "C:\\Users\\petem\\source\\repos\\RSDbLookup\\RSDbLookupApp.Library\\DevLogix",
+                FilePath = "C:\\Users\\petem\\source\\repos\\RingSoft.DbLookup\\RingSoft.DbLookup.App.Library\\DevLogix",
                 FileName = "DevLogix.sqlite"
             };
         }
@@ -294,68 +294,68 @@ namespace RingSoft.DbLookup.Tests
 
         //MySQL-------------------------------------------------------------------------------------------------------------------------------------
 
-        [TestMethod]
-        public void GetData_MySqlComplexSqlStatement_ReturnsSuccess()
-        {
-            //Arrange
+        //[TestMethod]
+        //public void GetData_MySqlComplexSqlStatement_ReturnsSuccess()
+        //{
+        //    //Arrange
 
-            //Act
-            var actualResult = _mySqlDataProcessor.GetData(_complexQuery);
+        //    //Act
+        //    var actualResult = _mySqlDataProcessor.GetData(_complexQuery);
 
-            //Assert
-            Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
+        //    //Assert
+        //    Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
 
-            Assert.AreEqual(10, actualResult.DataSet.Tables[0].Rows.Count);
-        }
+        //    Assert.AreEqual(10, actualResult.DataSet.Tables[0].Rows.Count);
+        //}
 
-        [TestMethod]
-        public void GetData_MySqlMultiLevelJoinAliases_ReturnsSuccess()
-        {
-            //Arrange
+        //[TestMethod]
+        //public void GetData_MySqlMultiLevelJoinAliases_ReturnsSuccess()
+        //{
+        //    //Arrange
 
-            //Act
-            var actualResult = _mySqlDataProcessor.GetData(_multiLevelJoinAliasesQuery);
+        //    //Act
+        //    var actualResult = _mySqlDataProcessor.GetData(_multiLevelJoinAliasesQuery);
 
-            //Assert
-            Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
-        }
+        //    //Assert
+        //    Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
+        //}
 
-        [TestMethod]
-        public void GetData_MySqlEnumQuery_ReturnsSuccess()
-        {
-            //Arrange
+        //[TestMethod]
+        //public void GetData_MySqlEnumQuery_ReturnsSuccess()
+        //{
+        //    //Arrange
 
-            //Act
-            var actualResult = _mySqlDataProcessor.GetData(_enumQuery);
+        //    //Act
+        //    var actualResult = _mySqlDataProcessor.GetData(_enumQuery);
 
-            //Assert
-            Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
+        //    //Assert
+        //    Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
 
-            Assert.AreEqual(2, actualResult.DataSet.Tables[0].Rows.Count);
-        }
+        //    Assert.AreEqual(2, actualResult.DataSet.Tables[0].Rows.Count);
+        //}
 
-        [TestMethod]
-        public void GetData_MySqlCaseSensitiveQuery_ReturnsSuccess()
-        {
-            //Arrange
+        //[TestMethod]
+        //public void GetData_MySqlCaseSensitiveQuery_ReturnsSuccess()
+        //{
+        //    //Arrange
 
-            //Act
-            var actualResult = _mySqlDataProcessor.GetData(_caseSensitiveQuery);
+        //    //Act
+        //    var actualResult = _mySqlDataProcessor.GetData(_caseSensitiveQuery);
 
-            //Assert
-            Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
+        //    //Assert
+        //    Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
 
-            var currentCaseSensitiveResult = GetCaseSensitiveTopRowValue(actualResult);
+        //    var currentCaseSensitiveResult = GetCaseSensitiveTopRowValue(actualResult);
 
-            Assert.AreEqual(ValidCaseSensitiveResult, currentCaseSensitiveResult);
-        }
+        //    Assert.AreEqual(ValidCaseSensitiveResult, currentCaseSensitiveResult);
+        //}
 
-        [TestMethod]
-        public void GetData_MySqlDistinctQuery_ReturnsSuccess()
-        {
-            var actualResult = _mySqlDataProcessor.GetData(_distinctQuery);
-            Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
-        }
+        //[TestMethod]
+        //public void GetData_MySqlDistinctQuery_ReturnsSuccess()
+        //{
+        //    var actualResult = _mySqlDataProcessor.GetData(_distinctQuery);
+        //    Assert.AreEqual(GetDataResultCodes.Success, actualResult.ResultCode);
+        //}
 
         //Sqlite-------------------------------------------------------------------------------------------------------------------------------------
 

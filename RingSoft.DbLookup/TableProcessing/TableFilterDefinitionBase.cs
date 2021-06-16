@@ -197,21 +197,6 @@ namespace RingSoft.DbLookup.TableProcessing
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
-        internal FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
-            Enum value)
-        {
-            var numValue = Convert.ToInt32(value);
-            return CreateAddFixedFilter(fieldDefinition, condition, numValue.ToString());
-        }
-
-        internal FieldFilterDefinition AddFixedFilter(EnumFieldDefinition fieldDefinition, Conditions condition,
-            string value)
-        {
-            var result = CreateAddFixedFilter(fieldDefinition, condition, value);
-            result.CastEnumValueAsInt = false;
-            return result;
-        }
-
         public FormulaFilterDefinition AddFixedFilter(string formula)
         {
             return CreateAddFixedFilter(formula);
@@ -254,7 +239,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 {
                     case FilterItemTypes.Field:
                         var fieldFilterDefinition = (FieldFilterDefinition) filterDefinition;
-                        lastWhere = ProcessFieldFilter(query, fieldFilterDefinition, lastWhere);
+                        lastWhere = ProcessFieldFilter(query, fieldFilterDefinition);
                         break;
                     case FilterItemTypes.Formula:
                         var formulaFilter = (FormulaFilterDefinition) filterDefinition;
@@ -285,8 +270,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        private WhereItem ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition,
-            WhereItem lastWhere)
+        private WhereItem ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
         {
             var value = fieldFilterDefinition.Value;
             var queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
@@ -299,24 +283,11 @@ namespace RingSoft.DbLookup.TableProcessing
                     dateType = dateField.DateType;
             }
 
-            if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.Enum &&
-                !fieldFilterDefinition.CastEnumValueAsInt)
-            {
-                var enumField = fieldFilterDefinition.FieldDefinition as EnumFieldDefinition;
-                if (enumField != null)
-                    lastWhere = query.AddWhereItemEnum(queryTable, enumField.FieldName,
-                        fieldFilterDefinition.Condition, value, enumField.EnumTranslation);
-            }
-            else
-            {
-                lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
-                    fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
-            }
+            var lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
+                fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
 
-            if (lastWhere != null)
-            {
-                lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
-            }
+            lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
+
             return lastWhere;
         }
 

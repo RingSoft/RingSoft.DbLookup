@@ -396,17 +396,19 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         switch (lookupFieldColumn.FieldDefinition.FieldDataType)
                         {
-                            case FieldDataTypes.Enum:
-                                if (hiddenColumn)
+                            case FieldDataTypes.Integer:
+                                if (lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition)
                                 {
-                                    query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName, queryTable,
-                                        sqlFieldName, lookupFieldColumn.Distinct);
-                                }
-                                else
-                                {
-                                    if (lookupFieldColumn.FieldDefinition is EnumFieldDefinition enumField)
-                                        query.AddSelectEnumColumn(queryTable, enumField.FieldName, sqlFieldName,
-                                            enumField.EnumTranslation);
+                                    if (hiddenColumn || integerFieldDefinition.EnumTranslation == null)
+                                    {
+                                        query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName, queryTable,
+                                            sqlFieldName, lookupFieldColumn.Distinct);
+                                    }
+                                    else
+                                    {
+                                        query.AddSelectEnumColumn(queryTable, integerFieldDefinition.FieldName, sqlFieldName,
+                                            integerFieldDefinition.EnumTranslation);
+                                    }
                                 }
                                 break;
                             case FieldDataTypes.Bool:
@@ -478,12 +480,19 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         switch (fieldColumnDefinition.FieldDefinition.FieldDataType)
                         {
-                            case FieldDataTypes.Enum:
-                                if (fieldColumnDefinition.FieldDefinition is EnumFieldDefinition enumFieldDefinition)
+                            case FieldDataTypes.Integer:
+                                if (fieldColumnDefinition.FieldDefinition is IntegerFieldDefinition
+                                        integerFieldDefinition
+                                    && integerFieldDefinition.EnumTranslation != null)
                                 {
                                     query.AddOrderByEnumSegment(GetQueryTableForColumn(query, fieldColumnDefinition),
                                         fieldColumnDefinition.FieldDefinition.FieldName, orderBy,
-                                        enumFieldDefinition.EnumTranslation, false);
+                                        integerFieldDefinition.EnumTranslation, false);
+                                }
+                                else
+                                {
+                                    query.AddOrderBySegment(GetQueryTableForColumn(query, fieldColumnDefinition),
+                                        fieldColumnDefinition.FieldDefinition.FieldName, orderBy);
                                 }
                                 break;
                             case FieldDataTypes.Bool:
@@ -912,11 +921,16 @@ namespace RingSoft.DbLookup.Lookup
 
             switch (fieldDefinition.FieldDataType)
             {
-                case FieldDataTypes.Enum:
-                    if (fieldDefinition is EnumFieldDefinition enumFieldDefinition)
+                case FieldDataTypes.Integer:
+                    if (fieldDefinition is IntegerFieldDefinition integerFieldDefinition && integerFieldDefinition.EnumTranslation != null)
                     {
                         query.AddWhereItemEnum(queryTable, fieldDefinition.FieldName, Conditions.Equals, searchValue,
-                            enumFieldDefinition.EnumTranslation);
+                            integerFieldDefinition.EnumTranslation);
+                    }
+                    else
+                    {
+                        query.AddWhereItem(queryTable, fieldDefinition.FieldName, Conditions.Equals,
+                            searchValue, fieldDefinition.ValueType, dateType);
                     }
                     break;
                 case FieldDataTypes.Bool:
@@ -1193,9 +1207,14 @@ namespace RingSoft.DbLookup.Lookup
             switch (SortColumnDefinition.DataType)
             {
                 case FieldDataTypes.String:
-                case FieldDataTypes.Enum:
                     break;
                 case FieldDataTypes.Integer:
+                    if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn
+                        && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition
+                        && integerFieldDefinition.EnumTranslation == null
+                        && !int.TryParse(searchText, out _))
+                        return false;
+                    break;
                 case FieldDataTypes.Decimal:
                     if (!double.TryParse(searchText, out _))
                         return false;
@@ -1219,13 +1238,16 @@ namespace RingSoft.DbLookup.Lookup
                 case LookupColumnTypes.Field:
                     if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                     {
+                        var processDefault = true;
                         switch (lookupFieldColumn.FieldDefinition.FieldDataType)
                         {
-                            case FieldDataTypes.Enum:
-                                if (lookupFieldColumn.FieldDefinition is EnumFieldDefinition enumFieldDefinition)
+                            case FieldDataTypes.Integer:
+                                if (lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition
+                                    && integerFieldDefinition.EnumTranslation != null)
                                 {
                                     query.AddWhereItemEnum(queryTable, lookupFieldColumn.FieldDefinition.FieldName, condition,
-                                        searchText, enumFieldDefinition.EnumTranslation);
+                                        searchText, integerFieldDefinition.EnumTranslation);
+                                    processDefault = false;
                                 }
 
                                 break;
@@ -1235,20 +1257,23 @@ namespace RingSoft.DbLookup.Lookup
                                     query.AddWhereItemBoolText(queryTable, lookupFieldColumn.FieldDefinition.FieldName,
                                         condition, searchText, boolFieldDefinition.TrueText,
                                         boolFieldDefinition.FalseText);
+                                    processDefault = false;
                                 }
 
                                 break;
-                            default:
-                                var dateType = DbDateTypes.DateOnly;
-                                if (lookupFieldColumn.FieldDefinition.ValueType == ValueTypes.DateTime)
-                                {
-                                    if (lookupFieldColumn.FieldDefinition is DateFieldDefinition dateField)
-                                        dateType = dateField.DateType;
-                                }
+                        }
 
-                                query.AddWhereItem(queryTable, lookupFieldColumn.FieldDefinition.FieldName, condition,
-                                    searchText, lookupFieldColumn.FieldDefinition.ValueType, dateType);
-                                break;
+                        if (processDefault)
+                        {
+                            var dateType = DbDateTypes.DateOnly;
+                            if (lookupFieldColumn.FieldDefinition.ValueType == ValueTypes.DateTime)
+                            {
+                                if (lookupFieldColumn.FieldDefinition is DateFieldDefinition dateField)
+                                    dateType = dateField.DateType;
+                            }
+
+                            query.AddWhereItem(queryTable, lookupFieldColumn.FieldDefinition.FieldName, condition,
+                                searchText, lookupFieldColumn.FieldDefinition.ValueType, dateType);
                         }
                     }
 

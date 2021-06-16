@@ -60,9 +60,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             ItemsLookup.AddVisibleColumnDefinition(p => p.Name, "Item Name", p => p.Name, 24);
             ItemsLookup.AddVisibleColumnDefinition(p => p.ItemId, "Item Id", p => p.Id, 20);
             ItemsLookup.Include(p => p.Location)
-                .AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Name, 28);
+                .AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Name, 20);
             ItemsLookup.Include(p => p.Manufacturer)
-                .AddVisibleColumnDefinition(p => p.Manufacturer, "Manufacturer", p => p.Name, 28);
+                .AddVisibleColumnDefinition(p => p.Manufacturer, "Manufacturer", 
+                    p => p.Name, 20);
+            ItemsLookup.AddVisibleColumnDefinition(p => p.IconType, "Icon",
+                p => p.IconType, 16);
 
             _lookupContext.Items.HasLookupDefinition(ItemsLookup);
 
@@ -117,6 +120,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public void InitializeModel()
         {
             _lookupContext.Items.HasDescription("Items");
+            _lookupContext.Items.GetFieldDefinition(p => p.IconType).IsEnum<ItemIcons>();
+
             _lookupContext.Locations.HasDescription("Locations");
             _lookupContext.Manufacturers.HasDescription("Manufacturers");
 

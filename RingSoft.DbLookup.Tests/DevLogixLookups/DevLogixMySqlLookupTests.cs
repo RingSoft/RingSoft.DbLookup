@@ -7,7 +7,7 @@ using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Tests.DevLogixLookups
 {
-    [TestClass]
+    //[TestClass]
     public class DevLogixMySqlLookupTests : DevLogixLookupTestsBase
     {
         protected override IDevLogixLookupContext LookupContext => _context;

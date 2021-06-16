@@ -29,6 +29,14 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
+        /// <summary>
+        /// Gets the enum translation object which maps an enumerator value to its associated description.
+        /// </summary>
+        /// <value>
+        /// The enum translation.
+        /// </value>
+        public EnumFieldTranslation EnumTranslation { get; private set; }
+
         internal IntegerFieldDefinition()
         {
             //var unused = HasNumberFormatString(GblMethods.GetNumFormat(0, false));
@@ -104,6 +112,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
 
             return base.ValidateValueForSavingToDb(value);
+        }
+
+        public IntegerFieldDefinition IsEnum<T>() where T : Enum
+        {
+            EnumTranslation = new EnumFieldTranslation();
+            EnumTranslation.LoadFromEnum<T>();
+            return this;
+        }
+
+        internal void SetEnumTranslation(EnumFieldTranslation enumFieldTranslation)
+        {
+            EnumTranslation = enumFieldTranslation;
         }
     }
 }

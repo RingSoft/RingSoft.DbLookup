@@ -127,29 +127,6 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Adds an enumerator field.
-        /// </summary>
-        /// <typeparam name="T">An enumerator class.</typeparam>
-        /// <param name="fieldName">Name of the field.</param>
-        /// <returns>The added enum field definition.</returns>
-        public EnumFieldDefinition AddEnumField<T>(string fieldName) where T : Enum
-        {
-            var enumFieldTranslation = new EnumFieldTranslation();
-            enumFieldTranslation.LoadFromEnum<T>();
-            return AddEnumField(fieldName, enumFieldTranslation);
-        }
-
-        internal EnumFieldDefinition AddEnumField(string fieldName, EnumFieldTranslation translation)
-        {
-            var field = new EnumFieldDefinition
-            {
-                EnumTranslation = translation
-            };
-            AddField(field, fieldName);
-            return field;
-        }
-
-        /// <summary>
         /// Adds an integer (whole number) field.
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>

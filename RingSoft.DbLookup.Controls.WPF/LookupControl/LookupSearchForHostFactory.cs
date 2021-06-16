@@ -1,5 +1,6 @@
 ﻿using System;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -15,7 +16,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var hostId = columnDefinition.SearchForHostId;
             if (hostId == null)
+            {
                 hostId = ConvertFieldDataTypeToSearchForHostId(columnDefinition.DataType);
+                if (columnDefinition is LookupFieldColumnDefinition lookupFieldColumn
+                    && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition
+                    && integerFieldDefinition.EnumTranslation != null)
+                    hostId = SearchForStringHostId;
+            }
 
             var searchForHost = CreateSearchForHost(hostId);
             searchForHost.InternalInitialize(columnDefinition);
@@ -28,7 +35,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (dataType)
             {
                 case FieldDataTypes.String:
-                case FieldDataTypes.Enum:
                 case FieldDataTypes.Bool:
                     return SearchForStringHostId;
                 case FieldDataTypes.Integer:

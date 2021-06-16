@@ -356,37 +356,5 @@ namespace RingSoft.DbLookup.TableProcessing
             ConfigureFieldFilterDefinition(result);
             return result;
         }
-
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TRelatedEntity, Enum>> propertyExpression,
-            Conditions condition, Enum value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
-            var result = TableFilterDefinition.AddFixedFilter(fieldDefinition, condition, value);
-            ConfigureFieldFilterDefinition(result);
-            return result;
-        }
-
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TRelatedEntity, Enum>> propertyExpression,
-            Conditions condition, string value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(propertyExpression);
-            var result = TableFilterDefinition.AddFixedFilter(fieldDefinition, condition, value);
-            ConfigureFieldFilterDefinition(result);
-            return result;
-        }
     }
 }

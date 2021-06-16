@@ -231,8 +231,6 @@ namespace RingSoft.DbLookup.Lookup
                 case FieldDataTypes.Decimal:
                     return DecimalFieldDefinition.FormatNumericValue(value, NumberFormatString, DecimalFieldType,
                         DecimalCount, ColumnCulture);
-                case FieldDataTypes.Enum:
-                    break;
                 case FieldDataTypes.DateTime:
                     return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture);
                 case FieldDataTypes.Bool:

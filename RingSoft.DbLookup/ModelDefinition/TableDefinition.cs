@@ -42,7 +42,9 @@ namespace RingSoft.DbLookup.ModelDefinition
                 {
                     var enumFieldTranslation = new EnumFieldTranslation();
                     enumFieldTranslation.LoadFromEnum(propertyInfo.PropertyType);
-                    field = AddEnumField(fieldName, enumFieldTranslation);
+                    var integerField = AddIntegerField(fieldName);
+                    integerField.SetEnumTranslation(enumFieldTranslation);
+                    field = integerField;
                 }
                 else if (propertyInfo.PropertyType == typeof(string))
                 {
@@ -143,16 +145,6 @@ namespace RingSoft.DbLookup.ModelDefinition
         public DateFieldDefinition GetFieldDefinition(Expression<Func<TEntity, DateTime?>> entityProperty)
         {
             return GetPropertyField(entityProperty.GetFullPropertyName()) as DateFieldDefinition;
-        }
-
-        /// <summary>
-        /// Gets the enumerator field definition for the property.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <returns>The enumerator field definition of the property.</returns>
-        public EnumFieldDefinition GetFieldDefinition(Expression<Func<TEntity, Enum>> entityProperty)
-        {
-            return GetPropertyField(entityProperty.GetFullPropertyName()) as EnumFieldDefinition;
         }
 
         /// <summary>

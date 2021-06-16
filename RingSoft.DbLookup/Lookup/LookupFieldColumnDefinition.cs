@@ -149,8 +149,14 @@ namespace RingSoft.DbLookup.Lookup
         protected override LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
         {
             if (DataType == FieldDataTypes.Integer)
+            {
                 if (FieldDefinition.TableDefinition.PrimaryKeyFields.Contains(FieldDefinition))
                     return LookupColumnAlignmentTypes.Left;
+
+                if (FieldDefinition is IntegerFieldDefinition integerFieldDefinition &&
+                    integerFieldDefinition.EnumTranslation != null)
+                    return LookupColumnAlignmentTypes.Left;
+            }
 
             return base.SetupDefaultHorizontalAlignment();
         }

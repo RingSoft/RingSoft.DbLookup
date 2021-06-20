@@ -1,7 +1,11 @@
-﻿using RingSoft.DbLookup.Controls.WPF.Properties;
+﻿using System;
+using RingSoft.DbLookup.Controls.WPF.Properties;
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -10,7 +14,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// A column in a LookupControl's ListView control.
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public class LookupColumn : INotifyPropertyChanged
+    public abstract class LookupColumnBase : INotifyPropertyChanged
     {
         private string _header;
         /// <summary>
@@ -75,6 +79,50 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the property.  This is used to map this column to a visible LookupColumnDefinition in the LookupDefintion.  Use the NameOfExtension to make sure this value is correct.
+        /// </summary>
+        /// <value>
+        /// The name of the property.
+        /// </value>
+        public string PropertyName { get; set; }
+
+        public string DataColumnName { get; internal set; }
+
+        public LookupColumnDefinitionBase LookupColumnDefinition { get; internal set; }
+
+        internal abstract DataTemplate GetCellDataTemplate(string dataColumnName);
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public abstract class LookupColumn<TControl> : LookupColumnBase
+        where TControl : FrameworkElement
+    {
+        internal override DataTemplate GetCellDataTemplate(string dataColumnName)
+        {
+            var template = new DataTemplate();
+            var factory = new FrameworkElementFactory(typeof(TControl));
+            ProcessFrameworkElementFactory(factory, dataColumnName, LookupColumnDefinition);
+
+            template.VisualTree = factory;
+
+            return template;
+        }
+
+        protected abstract void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+            LookupColumnDefinitionBase lookupColumnDefinition);
+    }
+
+    public class LookupColumn : LookupColumn<TextBlock>
+    {
         private LookupColumnAlignmentTypes _textAlignment = LookupColumnAlignmentTypes.Left;
 
         /// <summary>
@@ -99,24 +147,26 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool TextAlignmentChanged { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the name of the property.  This is used to map this column to a visible LookupColumnDefinition in the LookupDefintion.  Use the NameOfExtension to make sure this value is correct.
-        /// </summary>
-        /// <value>
-        /// The name of the property.
-        /// </value>
-        public string PropertyName { get; set; }
-
-        public string DataColumnName { get; internal set; }
-
-        public LookupColumnDefinitionBase LookupColumnDefinition { get; internal set; }
-            
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+            LookupColumnDefinitionBase lookupColumnDefinition)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            TextAlignment gridTextAlignment;
+            switch (TextAlignment)
+            {
+                case LookupColumnAlignmentTypes.Left:
+                    gridTextAlignment = System.Windows.TextAlignment.Left;
+                    break;
+                case LookupColumnAlignmentTypes.Center:
+                    gridTextAlignment = System.Windows.TextAlignment.Center;
+                    break;
+                case LookupColumnAlignmentTypes.Right:
+                    gridTextAlignment = System.Windows.TextAlignment.Right;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            factory.SetValue(TextBlock.TextAlignmentProperty, gridTextAlignment);
+            factory.SetBinding(TextBlock.TextProperty, new Binding(dataColumnName));
         }
     }
 }

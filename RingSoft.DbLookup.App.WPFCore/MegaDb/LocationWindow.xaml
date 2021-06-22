@@ -40,7 +40,7 @@
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
                     <lc:LookupColumn PropertyName="{lc:NameOf Manufacturer, Type={x:Type lm:ItemLookup}}" Width="150" Header="Manufacturer" DesignText="Western Family"/>
-                    <lc:LookupColumn PropertyName="{lc:NameOf IconType, Type={x:Type lm:ItemLookup}}" Width="100" Header="Icon" DesignText="Yellow"/>
+                    <lc:LookupCustomContentColumn PropertyName="{lc:NameOf IconType, Type={x:Type lm:ItemLookup}}" ContentTemplate="{StaticResource IconTypeCustomContent}" Width="100" Header="Icon" DesignerSelectedId="3"/>
                 </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
         </Grid>

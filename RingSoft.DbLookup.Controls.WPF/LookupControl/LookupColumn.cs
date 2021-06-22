@@ -91,7 +91,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupColumnDefinitionBase LookupColumnDefinition { get; internal set; }
 
-        internal abstract DataTemplate GetCellDataTemplate(string dataColumnName);
+        internal abstract DataTemplate GetCellDataTemplate(string dataColumnName, bool designMode);
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -106,11 +106,11 @@ namespace RingSoft.DbLookup.Controls.WPF
     public abstract class LookupColumn<TControl> : LookupColumnBase
         where TControl : FrameworkElement
     {
-        internal override DataTemplate GetCellDataTemplate(string dataColumnName)
+        internal override DataTemplate GetCellDataTemplate(string dataColumnName, bool designMode)
         {
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(TControl));
-            ProcessFrameworkElementFactory(factory, dataColumnName, LookupColumnDefinition);
+            ProcessFrameworkElementFactory(factory, dataColumnName, LookupColumnDefinition, designMode);
 
             template.VisualTree = factory;
 
@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         protected abstract void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
-            LookupColumnDefinitionBase lookupColumnDefinition);
+            LookupColumnDefinitionBase lookupColumnDefinition, bool designMode);
     }
 
     public class LookupColumn : LookupColumn<TextBlock>
@@ -148,7 +148,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public bool TextAlignmentChanged { get; private set; }
 
         protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
-            LookupColumnDefinitionBase lookupColumnDefinition)
+            LookupColumnDefinitionBase lookupColumnDefinition, bool designMode)
         {
             TextAlignment gridTextAlignment;
             switch (TextAlignment)

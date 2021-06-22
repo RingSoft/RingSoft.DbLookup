@@ -1,6 +1,9 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -24,19 +27,47 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
-            LookupColumnDefinitionBase lookupColumnDefinition)
+        private int _designerSelectedId;
+
+        public int DesignerSelectedId
         {
-            if (lookupColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn
-                && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerField
-                && integerField.EnumTranslation != null)
+            get => _designerSelectedId;
+            set
             {
-                factory.SetValue(LookupCustomContentControl.EnumFieldTranslationProperty, integerField.EnumTranslation);
+                if (_designerSelectedId == value)
+                    return;
+
+                _designerSelectedId = value;
+                OnPropertyChanged();
             }
+        }
+
+        protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+            LookupColumnDefinitionBase lookupColumnDefinition, bool designMode)
+        {
+            if (ContentTemplate == null)
+                throw new Exception($"The {nameof(ContentTemplate)} Property has not been set.");
+
             factory.SetValue(CustomContentControl.ContentTemplateProperty, ContentTemplate);
+
+            if (lookupColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn
+                && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerField)
+            {
+                if (integerField.EnumTranslation != null)
+                {
+                    factory.SetValue(LookupCustomContentControl.EnumFieldTranslationProperty, integerField.EnumTranslation);
+                }
+            }
+            if (designMode)
+            {
+                factory.SetValue(LookupCustomContentControl.DesignerValueProperty, DesignerSelectedId);
+            }
+            else
+            {
+                factory.SetBinding(LookupCustomContentControl.DataTextProperty, new Binding(dataColumnName));
+            }
             factory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
             factory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
-            factory.SetBinding(LookupCustomContentControl.EnumTextProperty, new Binding(dataColumnName));
         }
     }
 
@@ -80,21 +111,38 @@ namespace RingSoft.DbLookup.Controls.WPF
             set { SetValue(EnumFieldTranslationProperty, value); }
         }
 
-        public static readonly DependencyProperty EnumTextProperty =
-            DependencyProperty.Register(nameof(EnumText), typeof(string), typeof(LookupCustomContentControl),
-                new FrameworkPropertyMetadata(EnumTextChangedCallback));
+        public static readonly DependencyProperty DataTextProperty =
+            DependencyProperty.Register(nameof(DataText), typeof(string), typeof(LookupCustomContentControl),
+                new FrameworkPropertyMetadata(DataTextChangedCallback));
 
-        public string EnumText
+        public string DataText
         {
-            get { return (string)GetValue(EnumTextProperty); }
-            set { SetValue(EnumTextProperty, value); }
+            get { return (string)GetValue(DataTextProperty); }
+            set { SetValue(DataTextProperty, value); }
         }
 
-        private static void EnumTextChangedCallback(DependencyObject obj,
+        private static void DataTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
             var customControl = (LookupCustomContentControl)obj;
-            customControl.SetEnumText();
+            customControl.SetDataText();
+        }
+
+        public static readonly DependencyProperty DesignerValueProperty =
+            DependencyProperty.Register(nameof(DesignerValue), typeof(int), typeof(LookupCustomContentControl),
+                new FrameworkPropertyMetadata(DesignerValueChangedCallback));
+
+        public int DesignerValue
+        {
+            get { return (int)GetValue(DesignerValueProperty); }
+            set { SetValue(DesignerValueProperty, value); }
+        }
+
+        private static void DesignerValueChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var customControl = (LookupCustomContentControl)obj;
+            customControl.SelectedItemId = customControl.DesignerValue;
         }
 
         static LookupCustomContentControl()
@@ -102,9 +150,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupCustomContentControl), new FrameworkPropertyMetadata(typeof(LookupCustomContentControl)));
         }
 
-        private void SetEnumText()
+        public override void OnApplyTemplate()
         {
+            base.OnApplyTemplate();
+            if (!DataText.IsNullOrEmpty())
+                SetDataText();
+        }
 
+        protected virtual void SetDataText()
+        {
+            if (EnumFieldTranslation == null)
+            {
+                SelectItem(DataText.ToInt());
+            }
+            else
+            {
+                var typeTranslation =
+                    EnumFieldTranslation.TypeTranslations.FirstOrDefault(f => f.TextValue == DataText);
+                if (typeTranslation != null)
+                    SelectItem(typeTranslation.NumericValue);
+            }
         }
     }
 }

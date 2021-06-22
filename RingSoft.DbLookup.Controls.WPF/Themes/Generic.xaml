@@ -6,4 +6,5 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupControlTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
 </ResourceDictionary>

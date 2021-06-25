@@ -10,7 +10,7 @@
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Manufacturers" Height="400" Width="500">
+        Title="Manufacturers" Height="400" Width="600">
     <Window.DataContext>
         <vmlib:ManufacturerViewModel x:Name="ManufacturerViewModel"/>
     </Window.DataContext>
@@ -40,6 +40,7 @@
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
                     <lc:LookupColumn PropertyName="{lc:NameOf Location, Type={x:Type lm:ItemLookup}}" Width="140" Header="Location" DesignText="Produce"/>
+                    <lc:LookupCustomContentColumn PropertyName="{lc:NameOf IconType, Type={x:Type lm:ItemLookup}}" ContentTemplate="{StaticResource IconTypeCustomContent}" Width="100" Header="Icon" DesignerSelectedId="3"/>
                 </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
         </Grid>

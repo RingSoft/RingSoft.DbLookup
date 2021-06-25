@@ -78,6 +78,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             itemsLookup.AddVisibleColumnDefinition(p => p.Name, p => p.Name);
             itemsLookup.Include(p => p.Location)
                 .AddVisibleColumnDefinition(p => p.Location, p => p.Name);
+            itemsLookup.AddVisibleColumnDefinition(p => p.IconType, p => p.IconType);
 
             ItemsLookupDefinition = itemsLookup;
 

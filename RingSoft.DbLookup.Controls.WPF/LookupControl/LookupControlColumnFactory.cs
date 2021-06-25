@@ -15,10 +15,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var customContentColumn = new LookupCustomContentColumn();
                 if (columnDefinition.ContentTemplateId == null)
                 {
-                    if (LookupControlsGlobals.LookupControlContentTemplateFactory == null)
-                        throw new Exception(
-                            $"{nameof(ILookupControlContentTemplateFactory)} must be implemented and set to the {LookupControlsGlobals.LookupControlContentTemplateFactory} static property in order to use CustomContent.");
-
                     var contentTemplateId = columnDefinition.ContentTemplateId;
                     if (contentTemplateId == null && columnDefinition is LookupFieldColumnDefinition lookupFieldColumn
                                                   && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition

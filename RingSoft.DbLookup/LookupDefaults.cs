@@ -7,6 +7,9 @@ namespace RingSoft.DbLookup
     /// </summary>
     public static class LookupDefaults
     {
+        public const int TextColumnId = 0;
+        public const int CustomContentColumnId = 1;
+
         /// <summary>
         /// Gets the default number culture.
         /// </summary>

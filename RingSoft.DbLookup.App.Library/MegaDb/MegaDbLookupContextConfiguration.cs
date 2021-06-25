@@ -120,7 +120,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public void InitializeModel()
         {
             _lookupContext.Items.HasDescription("Items");
-            _lookupContext.Items.GetFieldDefinition(p => p.IconType).IsEnum<ItemIcons>();
+            _lookupContext.Items.GetFieldDefinition(p => p.IconType).IsEnum<ItemIcons>()
+                .HasContentTemplateId(RsDbLookupAppGlobals.IconTypeTemplateId);
 
             _lookupContext.Locations.HasDescription("Locations");
             _lookupContext.Manufacturers.HasDescription("Manufacturers");

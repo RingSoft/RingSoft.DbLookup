@@ -50,5 +50,11 @@
             base.HasSearchForHostId(hostId);
             return (TFieldDefinition)this;
         }
+
+        public new TFieldDefinition HasLookupControlColumnId(int lookupControlColumnId)
+        {
+            base.HasLookupControlColumnId(lookupControlColumnId);
+            return (TFieldDefinition) this;
+        }
     }
 }

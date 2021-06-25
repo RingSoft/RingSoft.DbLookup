@@ -20,5 +20,17 @@
             base.HasSearchForHostId(hostId);
             return (TColumnDefinition) this;
         }
+
+        public new TColumnDefinition HasLookupControlColumnId(int lookupControlColumnId)
+        {
+            base.HasLookupControlColumnId(lookupControlColumnId);
+            return (TColumnDefinition) this;
+        }
+
+        public new TColumnDefinition HasContentTemplateId(int contentTemplateId)
+        {
+            base.HasContentTemplateId(contentTemplateId);
+            return (TColumnDefinition) this;
+        }
     }
 }

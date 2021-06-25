@@ -37,6 +37,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public EnumFieldTranslation EnumTranslation { get; private set; }
 
+        public int ContentTemplateId { get; private set; }
+
         internal IntegerFieldDefinition()
         {
             //var unused = HasNumberFormatString(GblMethods.GetNumFormat(0, false));
@@ -124,6 +126,15 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         internal void SetEnumTranslation(EnumFieldTranslation enumFieldTranslation)
         {
             EnumTranslation = enumFieldTranslation;
+        }
+
+        public IntegerFieldDefinition HasContentTemplateId(int contentTemplateId)
+        {
+            ContentTemplateId = contentTemplateId;
+            if (LookupControlColumnId == LookupDefaults.TextColumnId)
+                LookupControlColumnId = LookupDefaults.CustomContentColumnId;
+
+            return this;
         }
     }
 }

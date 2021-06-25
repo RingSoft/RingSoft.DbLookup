@@ -462,15 +462,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (ListView != null)
                     columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
 
-                var lookupColumn = new LookupColumn
-                {
-                    DataColumnName = column.SelectSqlAlias,
-                    Header = column.Caption,
-                    LookupColumnDefinition = column,
-                    PropertyName = column.PropertyName,
-                    TextAlignment = column.HorizontalAlignment,
-                    Width = columnWidth
-                };
+                var lookupColumn = LookupControlsGlobals.LookupControlColumnFactory.CreateLookupColumn(column);
+
+                lookupColumn.DataColumnName = column.SelectSqlAlias;
+                lookupColumn.Header = column.Caption;
+                lookupColumn.LookupColumnDefinition = column;
+                lookupColumn.PropertyName = column.PropertyName;
+                lookupColumn.Width = columnWidth;
+
                 LookupColumns.Add(lookupColumn);
                 AddColumnToGrid(lookupColumn);
             }

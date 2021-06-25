@@ -76,6 +76,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public virtual int? SearchForHostId { get; private set; }
 
+        public int LookupControlColumnId { get; internal set; }
+
         internal FieldDefinition()
         {
             AllowNulls = true;
@@ -181,6 +183,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public void HasSearchForHostId(int hostId)
         {
             SearchForHostId = hostId;
+        }
+
+        public void HasLookupControlColumnId(int lookupControlColumnId)
+        {
+            LookupControlColumnId = lookupControlColumnId;
         }
     }
 }

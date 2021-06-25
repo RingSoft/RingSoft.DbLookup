@@ -36,6 +36,8 @@ namespace RingSoft.DbLookup.App.Library
 
     public class RsDbLookupAppGlobals
     {
+        public const int IconTypeTemplateId = 100;
+
         public const int ItemIconRedId = 0;
         public const int ItemIconGreenId = 1;
         public const int ItemIconBlueId = 2;

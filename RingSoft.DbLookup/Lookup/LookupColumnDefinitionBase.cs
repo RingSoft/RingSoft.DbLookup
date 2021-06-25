@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.Lookup
+﻿using System;
+
+namespace RingSoft.DbLookup.Lookup
 {
     public enum LookupColumnTypes
     {
@@ -75,6 +77,10 @@
         /// </value>
         public double PercentWidth { get; internal set; }
 
+        public int LookupControlColumnId { get; internal set; }
+
+        public int? ContentTemplateId { get; internal set; }
+
         /// <summary>
         /// Gets the horizontal alignment type.
         /// </summary>
@@ -108,6 +114,7 @@
             PercentWidth = source.PercentWidth;
             HorizontalAlignment = source.HorizontalAlignment;
             SearchForHostId = source.SearchForHostId;
+            LookupControlColumnId = source.LookupControlColumnId;
         }
 
         /// <summary>
@@ -129,6 +136,21 @@
         public void HasSearchForHostId(int hostId)
         {
             SearchForHostId = hostId;
+        }
+
+        public void HasLookupControlColumnId(int lookupControlColumnId)
+        {
+            LookupControlColumnId = lookupControlColumnId;
+        }
+
+        public void HasContentTemplateId(int contentTemplateId)
+        {
+            if (DataType != FieldDataTypes.Integer)
+                throw new Exception("Custom Content Template can only be set on Integer fields.");
+
+            ContentTemplateId = contentTemplateId;
+            if (LookupControlColumnId == LookupDefaults.TextColumnId)
+                LookupControlColumnId = LookupDefaults.CustomContentColumnId;
         }
     }
 }

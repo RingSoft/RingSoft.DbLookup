@@ -106,6 +106,8 @@ namespace RingSoft.DbLookup.Lookup
         {
             FieldDefinition = fieldDefinition;
             _selectSqlAlias = $"{fieldDefinition.FieldName}_{Guid.NewGuid().ToString().Replace("-", "").ToUpper()}";
+            if (LookupControlColumnId == 0 && fieldDefinition.LookupControlColumnId != 0)
+                LookupControlColumnId = fieldDefinition.LookupControlColumnId;
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RingSoft WPF Database Lookup Demo"
-#define MyAppVersion "1.13.22"
+#define MyAppVersion "2.00.00"
 #define MyAppPublisher "RingSoft"
 #define MyAppURL "http://www.ringsoft.site/"
 #define MyAppExeName "RingSoft.DbLookup.App.WPFCore.exe"
@@ -25,7 +25,7 @@ DisableProgramGroupPage=no
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Inno Install Output
-OutputBaseFilename=RingSoft.WPFDbLookupDemoApp
+OutputBaseFilename=RingSoft.WPFDbLookupDemoApp.2.00.00
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

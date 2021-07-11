@@ -1,11 +1,13 @@
-﻿using System;
-using RingSoft.DbLookup.Controls.WPF.Properties;
+﻿using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -96,7 +98,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
+        [Properties.NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -167,6 +169,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             factory.SetValue(TextBlock.TextAlignmentProperty, gridTextAlignment);
             factory.SetBinding(TextBlock.TextProperty, new Binding(dataColumnName));
+
+            var setNegativeValuesInRed = false;
+            if (lookupColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumnDefinition)
+            {
+                setNegativeValuesInRed = lookupFormulaColumnDefinition.ShowNegativeValuesInRed;
+            }
+            else if (lookupColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn
+                     && lookupFieldColumn.FieldDefinition is DecimalFieldDefinition decimalField)
+            {
+                setNegativeValuesInRed = decimalField.ShowNegativeValuesInRed;
+            }
+
+            if (setNegativeValuesInRed)
+            {
+                var binding = new Binding(dataColumnName);
+                binding.Converter = new ValueToForegroundColorConverter();
+                factory.SetBinding(TextBlock.ForegroundProperty, binding);
+            }
+            else
+            {
+                factory.SetValue(TextBlock.ForegroundProperty, new SolidColorBrush(Colors.Black));
+            }
         }
     }
 }

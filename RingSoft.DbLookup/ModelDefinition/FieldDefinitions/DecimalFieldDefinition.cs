@@ -51,9 +51,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
+        public bool ShowNegativeValuesInRed { get; private set; }
+
         internal DecimalFieldDefinition()
         {
             DecimalCount = LookupDefaults.DefaultDecimalCount;
+            FormatCulture(Culture);
         }
 
         /// <summary>
@@ -109,7 +112,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public DecimalFieldDefinition HasCultureId(string cultureId)
         {
             Culture = new CultureInfo(cultureId);
+            FormatCulture(Culture);
             return this;
+        }
+
+        public static void FormatCulture(CultureInfo culture)
+        {
+            DecimalEditControlSetup.FormatCulture(culture);
         }
 
         /// <summary>
@@ -148,6 +157,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
 
             return GblMethods.FormatValue(FieldDataTypes.Decimal, numericValue, formatString, culture);
+        }
+
+        public DecimalFieldDefinition DoShowNegativeValuesInRed(bool value = true)
+        {
+            ShowNegativeValuesInRed = value;
+            return this;
         }
     }
 }

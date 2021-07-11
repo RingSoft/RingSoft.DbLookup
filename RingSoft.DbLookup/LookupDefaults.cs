@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup
 {
@@ -30,7 +31,8 @@ namespace RingSoft.DbLookup
 
         static LookupDefaults()
         {
-            DefaultNumberCulture = DefaultDateCulture = CultureInfo.CurrentCulture;
+            DefaultNumberCulture = DefaultDateCulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
+            DecimalFieldDefinition.FormatCulture(DefaultNumberCulture);
         }
 
         /// <summary>

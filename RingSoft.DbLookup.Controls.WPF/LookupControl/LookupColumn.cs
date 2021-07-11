@@ -3,6 +3,7 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,7 +94,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupColumnDefinitionBase LookupColumnDefinition { get; internal set; }
 
-        internal abstract DataTemplate GetCellDataTemplate(string dataColumnName, bool designMode);
+        internal abstract DataTemplate GetCellDataTemplate(LookupControl lookupControl, string dataColumnName,
+            bool designMode);
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -108,18 +110,20 @@ namespace RingSoft.DbLookup.Controls.WPF
     public abstract class LookupColumn<TControl> : LookupColumnBase
         where TControl : FrameworkElement
     {
-        internal override DataTemplate GetCellDataTemplate(string dataColumnName, bool designMode)
+        internal override DataTemplate GetCellDataTemplate(LookupControl lookupControl, string dataColumnName,
+            bool designMode)
         {
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(TControl));
-            ProcessFrameworkElementFactory(factory, dataColumnName, LookupColumnDefinition, designMode);
+            ProcessFrameworkElementFactory(lookupControl, factory, dataColumnName, LookupColumnDefinition, designMode);
 
             template.VisualTree = factory;
 
             return template;
         }
 
-        protected abstract void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+        protected abstract void ProcessFrameworkElementFactory(LookupControl lookupControl,
+            FrameworkElementFactory factory, string dataColumnName,
             LookupColumnDefinitionBase lookupColumnDefinition, bool designMode);
     }
 
@@ -149,7 +153,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool TextAlignmentChanged { get; private set; }
 
-        protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+        protected override void ProcessFrameworkElementFactory(LookupControl lookupControl,
+            FrameworkElementFactory factory, string dataColumnName,
             LookupColumnDefinitionBase lookupColumnDefinition, bool designMode)
         {
             TextAlignment gridTextAlignment;
@@ -185,11 +190,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 var binding = new Binding(dataColumnName);
                 binding.Converter = new ValueToForegroundColorConverter();
+                binding.ConverterParameter = lookupControl?.ListView?.Foreground;
                 factory.SetBinding(TextBlock.ForegroundProperty, binding);
-            }
-            else
-            {
-                factory.SetValue(TextBlock.ForegroundProperty, new SolidColorBrush(Colors.Black));
             }
         }
     }

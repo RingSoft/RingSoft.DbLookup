@@ -490,7 +490,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 Header = columnHeader,
                 Width = width,
-                CellTemplate = lookupColumn.GetCellDataTemplate(dataColumnName, this.IsDesignMode())
+                CellTemplate = lookupColumn.GetCellDataTemplate(this, dataColumnName, this.IsDesignMode())
             };
             LookupGridView?.Columns.Add(gridColumn);
             _dataSource.Columns.Add(dataColumnName);

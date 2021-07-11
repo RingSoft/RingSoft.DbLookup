@@ -42,7 +42,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        protected override void ProcessFrameworkElementFactory(FrameworkElementFactory factory, string dataColumnName,
+        protected override void ProcessFrameworkElementFactory(LookupControl lookupControl,
+            FrameworkElementFactory factory, string dataColumnName,
             LookupColumnDefinitionBase lookupColumnDefinition, bool designMode)
         {
             if (ContentTemplate == null)

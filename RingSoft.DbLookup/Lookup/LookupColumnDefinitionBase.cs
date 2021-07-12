@@ -81,6 +81,9 @@ namespace RingSoft.DbLookup.Lookup
 
         public int? ContentTemplateId { get; internal set; }
 
+        public bool KeepNullEmpty { get; internal set; }
+
+
         /// <summary>
         /// Gets the horizontal alignment type.
         /// </summary>
@@ -151,6 +154,11 @@ namespace RingSoft.DbLookup.Lookup
             ContentTemplateId = contentTemplateId;
             if (LookupControlColumnId == LookupDefaults.TextColumnId)
                 LookupControlColumnId = LookupDefaults.CustomContentColumnId;
+        }
+
+        public void HasKeepNullEmpty(bool value = true)
+        {
+            KeepNullEmpty = value;
         }
     }
 }

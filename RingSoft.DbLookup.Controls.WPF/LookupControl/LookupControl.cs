@@ -953,7 +953,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 foreach (var lookupColumn in LookupColumns)
                 {
                     var cellValue = dataRow.GetRowValue(lookupColumn.DataColumnName);
-                    cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                    if (cellValue.IsNullOrEmpty() &&
+                        (lookupColumn.KeepNullEmpty || lookupColumn.LookupColumnDefinition.KeepNullEmpty))
+                    {
+                    }
+                    else
+                    {
+                        cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                    }
+                    
                     newDataRow[lookupColumn.DataColumnName] = cellValue;
                 }
 

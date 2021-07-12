@@ -32,5 +32,11 @@
             base.HasContentTemplateId(contentTemplateId);
             return (TColumnDefinition) this;
         }
+
+        public new TColumnDefinition HasKeepNullEmpty(bool value = true)
+        {
+            base.HasKeepNullEmpty(value);
+            return (TColumnDefinition)this;
+        }
     }
 }

@@ -82,6 +82,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        private bool _keepNullEmpty;
+
+        public bool KeepNullEmpty
+        {
+            get => _keepNullEmpty;
+            set
+            {
+                if (_keepNullEmpty == value)
+                    return;
+
+                _keepNullEmpty = value;
+                OnPropertyChanged(nameof(KeepNullEmpty));
+            }
+        }
+
+
         /// <summary>
         /// Gets or sets the name of the property.  This is used to map this column to a visible LookupColumnDefinition in the LookupDefintion.  Use the NameOfExtension to make sure this value is correct.
         /// </summary>

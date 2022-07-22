@@ -244,6 +244,10 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <returns></returns>
         protected virtual string GenerateFromClause(SelectQuery query)
         {
+            if (!query.BaseTable.Formula.IsNullOrEmpty())
+            {
+                return $"{SqlLinePrefix} FROM (\r\n{query.BaseTable.Formula}\r\n) AS {FormatSqlObject(query.BaseTable.GetTableName())}";
+            }
             return $"{SqlLinePrefix}FROM {FormatSqlObject(query.BaseTable.Name)}";
 
         }

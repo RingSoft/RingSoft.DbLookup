@@ -17,6 +17,8 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <value>  This value appears after the "AS" keyword in a JOIN clause.</value>
         public string Alias { get; internal protected set; }
 
+        public string Formula { get; internal set; }
+
         internal QueryTable()
         {
             

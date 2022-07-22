@@ -240,6 +240,7 @@ namespace RingSoft.DbLookup.Lookup
                 RecordCount = 0;
 
             var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
+            query.BaseTable.Formula = LookupDefinition.FromFormula;
 
             SetupBaseQuery(query, false);
 

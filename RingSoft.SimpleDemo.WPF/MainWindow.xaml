@@ -40,7 +40,7 @@
 <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Content="Order Details"/>
         <lc:LookupControl Grid.Row="4" Grid.Column="1" x:Name="OrderDetailsControl" Grid.ColumnSpan="2" LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsCommand}" DesignText="Chef Anton's Cajun Seasoning">
             <lc:LookupControl.LookupColumns>
-                <lc:LookupColumn  PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="300" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
+                <!--<lc:LookupColumn  PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="300" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>-->
                 <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>
                 <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="100" Header="Price" TextAlignment="Right" DesignText="$100,000.00"/>
                 <lc:LookupColumn PropertyName="{lc:NameOf ExtendedPrice, Type={x:Type lm:OrderDetailLookup}}" Width="100" Header="Extended&#10;Price" TextAlignment="Right" DesignText="$100,000.00"/>

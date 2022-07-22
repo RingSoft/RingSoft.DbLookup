@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>2.00.03</Version>
+    <Version>2.00.05</Version>
     <Authors>Peter Ringering</Authors>
     <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -15,14 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="database_3.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
   </ItemGroup>
 
 </Project>

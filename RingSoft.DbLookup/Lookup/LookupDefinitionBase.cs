@@ -97,6 +97,15 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Title { get; set; }
 
+        public string FromFormula { get; internal set; }
+
+        public LookupDefinitionBase HasFromFormula(string value)
+        {
+            FromFormula = value;
+            return this;
+        }
+
+
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
@@ -138,6 +147,7 @@ namespace RingSoft.DbLookup.Lookup
 
             FilterDefinition.CopyFrom(source.FilterDefinition);
             InitialOrderByType = source.InitialOrderByType;
+            FromFormula = source.FromFormula;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

@@ -135,7 +135,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        protected internal FormulaFilterDefinition CreateFormulaFilter(string formula)
+        public  FormulaFilterDefinition CreateFormulaFilter(string formula)
         {
             var formulaFilter = new FormulaFilterDefinition
             {
@@ -143,6 +143,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 Formula = formula,
             };
 
+            _fixedFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
 

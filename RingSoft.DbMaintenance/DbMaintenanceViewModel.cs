@@ -6,6 +6,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance

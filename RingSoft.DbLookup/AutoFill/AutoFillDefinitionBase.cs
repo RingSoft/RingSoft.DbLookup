@@ -50,6 +50,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// </value>
         public TableFilterDefinitionBase FilterDefinition { get; internal set; }
 
+        public string FromFormula { get; internal set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFillDefinitionBase"/> class.
         /// </summary>

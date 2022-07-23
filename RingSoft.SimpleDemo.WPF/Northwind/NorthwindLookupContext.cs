@@ -84,6 +84,9 @@ namespace RingSoft.SimpleDemo.WPF.Northwind
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
             CustomerIdLookup.TopHeader = "Use this window to select a Customer.";
 
+            var formula = "SELECT Customers.CustomerId, Customers.CompanyName, Customers.ContactName FROM Customers";
+            CustomerIdLookup.HasFromFormula(formula);
+
             CustomerIdLookup = CustomerIdLookup.Clone();
             Customers.HasLookupDefinition(CustomerIdLookup);
 

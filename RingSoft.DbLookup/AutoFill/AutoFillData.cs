@@ -110,6 +110,9 @@ namespace RingSoft.DbLookup.AutoFill
             };
             autoFillDefinition?.FilterDefinition.CopyFrom(lookupDefinition.FilterDefinition);
 
+            if (autoFillDefinition != null)
+                autoFillDefinition.FromFormula = lookupDefinition.FromFormula;
+
             Initialize(autoFillDefinition);
         }
 
@@ -277,6 +280,7 @@ namespace RingSoft.DbLookup.AutoFill
         {
             var newText = string.Empty;
             var autoFillQuery = GetBaseQuery().SetMaxRecords(1);
+            autoFillQuery.BaseTable.Formula = AutoFillDefinition.FromFormula;
 
             switch (AutoFillDefinition.Type)
             {
@@ -331,6 +335,8 @@ namespace RingSoft.DbLookup.AutoFill
         private SelectQuery GetBaseQuery()
         {
             var query = new SelectQuery(AutoFillDefinition.TableDefinition.TableName);
+            query.BaseTable.Formula = AutoFillDefinition.FromFormula;
+
             AutoFillFieldDefinition autoFillField = null;
             switch (AutoFillDefinition.Type)
             {

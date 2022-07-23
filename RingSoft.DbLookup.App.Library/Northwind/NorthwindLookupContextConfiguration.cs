@@ -157,6 +157,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 40);
             CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
+            //var formula = "SELECT Customers.CustomerId, Customers.CompanyName, Customers.ContactName FROM Customers WHERE Customers.CustomerId = 'ALFKI'";
+            //CustomerIdLookup.HasFromFormula(formula);
+
             _lookupContext.Customers.HasLookupDefinition(CustomerIdLookup);
 
             CustomerNameLookup = new LookupDefinition<CustomerLookup, Customer>(_lookupContext.Customers);

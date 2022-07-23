@@ -310,6 +310,7 @@ namespace RingSoft.DbLookup.Lookup
 
         private void SetupBaseQuery(SelectQuery query, bool reverseOrderBy, bool addSortColumnToQueryWhere = true)
         {
+            query.BaseTable.Formula = LookupDefinition.FromFormula;
             TableFilterDefinitionBase.ProcessFieldJoins(query, LookupDefinition.Joins);
 
             var distinctColumns = LookupDefinition.GetDistinctColumns();

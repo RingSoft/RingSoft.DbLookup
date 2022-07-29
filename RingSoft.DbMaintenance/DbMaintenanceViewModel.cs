@@ -131,6 +131,7 @@ namespace RingSoft.DbMaintenance
         private AutoFillValue _savedKeyAutoFillValue;
         private bool _selectingRecord;
         private bool _savingRecord;
+        private bool _lookupReadOnlyMode;
 
         protected internal override void InternalInitialize()
         {
@@ -189,6 +190,13 @@ namespace RingSoft.DbMaintenance
 
                 if (primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
+
+                if (LookupAddViewArgs.LookupReadOnlyMode)
+                {
+                    SelectButtonEnabled = false;
+                    DeleteButtonEnabled = false;
+                    _lookupReadOnlyMode = true;
+                }
             }
             else
             {
@@ -258,7 +266,7 @@ namespace RingSoft.DbMaintenance
         private void OnLookupDataChanged()
         {
             DeleteButtonEnabled = SaveButtonEnabled;
-            SelectButtonEnabled = _fromLookupFormAddView;
+            SelectButtonEnabled = _fromLookupFormAddView && !_lookupReadOnlyMode;
             PrimaryKeyControlsEnabled = false;
             RecordDirty = false;
             _savedKeyAutoFillValue = KeyAutoFillValue;

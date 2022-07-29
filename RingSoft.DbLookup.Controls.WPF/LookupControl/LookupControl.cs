@@ -1435,7 +1435,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool OnEnter()
         {
-            if (ListView == null || _readOnlyMode)
+            if (ListView == null)
             {
                 SystemSounds.Exclamation.Play();
             }
@@ -1444,7 +1444,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var selectedIndex = ListView.SelectedIndex;
                 if (selectedIndex >= 0)
                 {
-                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter);
+                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter, _readOnlyMode);
                     return true;
                 }
             }

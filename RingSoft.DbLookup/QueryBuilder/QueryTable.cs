@@ -42,5 +42,11 @@ namespace RingSoft.DbLookup.QueryBuilder
 
             return Name;
         }
+
+        public QueryTable HasFormula(string formula)
+        {
+            Formula = formula;
+            return this;
+        }
     }
 }

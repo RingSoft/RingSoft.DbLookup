@@ -158,6 +158,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private string _initialSearchFor;
 
+        private bool _readOnlyMode;
+
         static LookupWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(typeof(LookupWindow)));
@@ -184,7 +186,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 if (AddButton != null)
-                    AddButton.IsEnabled = allowAdd;
+                    AddButton.IsEnabled = allowAdd && !_readOnlyMode;
 
                 LookupControl?.Focus();
             };
@@ -206,6 +208,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ViewButton = GetTemplateChild("ViewButton") as Button;
             CloseButton = GetTemplateChild("CloseButton") as Button;
 
+            SetReadOnlyMode(_readOnlyMode);
             base.OnApplyTemplate();
         }
 
@@ -222,8 +225,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this)
             {
                 InputParameter = AddViewParameter,
-                AllowEdit = AddButton.IsEnabled
+                AllowEdit = AddButton.IsEnabled,
+                LookupReadOnlyMode = _readOnlyMode
             };
+
+            if (_readOnlyMode)
+                args.AllowEdit = true;
+
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 
             LookupView?.Invoke(this, args);
@@ -268,7 +276,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.NewIndex >= 0)
             {
                 ViewButton.IsEnabled = _allowView;
-                SelectButton.IsEnabled = true;
+                SelectButton.IsEnabled = !_readOnlyMode;
             }
             else
             {
@@ -296,6 +304,49 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected override void OnReadOnlyModeSet(bool readOnlyValue)
+        {
+            _readOnlyMode = readOnlyValue;
+            
+            base.OnReadOnlyModeSet(readOnlyValue);
+        }
+
+        public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (readOnlyValue)
+            {
+                if (control == CloseButton)
+                {
+                    CloseButton.IsEnabled = true;
+                    return;
+                }
+
+                if (control == SelectButton)
+                {
+                    SelectButton.IsEnabled = false;
+                    return;
+                }
+
+                if (control == AddButton)
+                {
+                    AddButton.IsEnabled = false;
+                    return;
+                }
+
+                if (control == ViewButton)
+                {
+                    ViewButton.IsEnabled = _allowView;
+                    if (LookupControl.ListView != null)
+                        if (LookupControl.ListView.SelectedIndex >= 0)
+                            ViewButton.IsEnabled = true;
+
+                    return;
+                }
+            }
+
+            base.SetControlReadOnlyMode(control, readOnlyValue);
         }
     }
 }

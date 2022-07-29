@@ -11,6 +11,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DataEntryGridAutoFillCellProps AutoFillCellProps { get; private set; }
 
+        private bool _gridReadOnlyMode;
+
         public DataEntryGridAutoFillHost(DataEntryGrid grid) : base(grid)
         {
         }
@@ -71,6 +73,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Control.SelectionBrush = displayStyle.SelectionBrush;
 
             Control.ControlDirty += (sender, args) => OnControlDirty();
+
+            Control.SetReadOnlyMode(_gridReadOnlyMode);
         }
 
         public override bool CanGridProcessKey(Key key)
@@ -85,6 +89,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                     break;
             }
             return base.CanGridProcessKey(key);
+        }
+
+        public override bool SetReadOnlyMode(bool readOnlyMode)
+        {
+            _gridReadOnlyMode = readOnlyMode;
+            
+            if (readOnlyMode)
+                return true;
+
+            return base.SetReadOnlyMode(readOnlyMode);
         }
     }
 }

@@ -1301,7 +1301,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="selectedIndex">Index of the selected row.</param>
         /// <param name="ownerWindow">The owner window.</param>
         /// <param name="inputParameter">The input parameter.</param>
-        public void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter = null)
+        public void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter = null, bool lookupReadOnlyMode = false)
         {
             if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
             {
@@ -1309,7 +1309,8 @@ namespace RingSoft.DbLookup.Lookup
                 var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
                 {
                     ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
-                    InputParameter = inputParameter
+                    InputParameter = inputParameter,
+                    LookupReadOnlyMode = lookupReadOnlyMode 
                 };
                 OnLookupView(args);
                 if (!args.Handled)

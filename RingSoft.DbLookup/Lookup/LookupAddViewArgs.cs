@@ -87,6 +87,8 @@
 
         public bool AllowEdit { get; set; } = true;
 
+        public bool LookupReadOnlyMode { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

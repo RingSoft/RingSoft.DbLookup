@@ -246,7 +246,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         {
             if (!query.BaseTable.Formula.IsNullOrEmpty())
             {
-                return $"{SqlLinePrefix} FROM (\r\n{query.BaseTable.Formula}\r\n) AS {FormatSqlObject(query.BaseTable.GetTableName())}";
+                return $"{SqlLinePrefix} FROM (\r\n{query.BaseTable.Formula})\r\n AS {FormatSqlObject(query.BaseTable.GetTableName())}";
             }
             return $"{SqlLinePrefix}FROM {FormatSqlObject(query.BaseTable.Name)}";
 
@@ -269,7 +269,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             sqlStringBuilder.AppendLine(GenerateSelectQueryStatement(nestedQuery));
             SqlLinePrefix = SqlLinePrefix.TrimRight("\t");
 
-            sqlStringBuilder.AppendLine($"{SqlLinePrefix}){FormatSqlObject(query.BaseTable.Name)}");
+            sqlStringBuilder.AppendLine($"{SqlLinePrefix}) AS {FormatSqlObject(query.BaseTable.Name)}");
 
             return sqlStringBuilder.ToString();
         }

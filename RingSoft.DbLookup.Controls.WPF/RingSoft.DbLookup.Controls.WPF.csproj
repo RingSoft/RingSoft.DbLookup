@@ -4,7 +4,7 @@
     <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.00.06</Version>
+    <Version>2.00.09</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -13,6 +13,7 @@
     <PackageTags>Database Paging, Entity Framework 6, Entity Framework Core, WPF</PackageTags>
     <PackageReleaseNotes>Split DbMaintenance.LoadFromEntity.  Added PopulatePrimaryKeyControls which runs in Save and Load operations.  LoadFromEntity only runs during Load operations.</PackageReleaseNotes>
     <PackageIcon>magnify.png</PackageIcon>
+    <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="2.0.2" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="2.0.9" />
   </ItemGroup>
 
   <ItemGroup>

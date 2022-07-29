@@ -7,6 +7,7 @@ using RingSoft.SimpleDemo.WPF.Properties;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.SimpleDemo.WPF
 {
@@ -175,6 +176,22 @@ namespace RingSoft.SimpleDemo.WPF
             orderDetailsLookupDefinition.InitialOrderByType = OrderByTypes.Descending;
 
             var formula = $"SELECT OrderID, ProductID, Quantity, UnitPrice, Discount FROM [{ orderDetailsLookupDefinition.TableDefinition.TableName}] ";
+
+            var query = new SelectQuery(orderDetailsLookupDefinition.TableDefinition.TableName);
+            query.AddWhereItemFormula("OrderId > 1000");
+            query.BaseTable.HasFormula(formula);
+
+            var outerQuery = new SelectQuery("Inner", query);
+            outerQuery.AddSelectColumn("OrderID");
+            outerQuery.AddSelectColumn("ProductID");
+            outerQuery.AddSelectColumn("Quantity");
+            outerQuery.AddSelectColumn("UnitPrice");
+            outerQuery.AddSelectColumn("Discount");
+
+            DbDataProcessor.ShowSqlStatementWindow();
+
+            var sqlDataProcessor = new SqliteDataProcessor();
+            formula = sqlDataProcessor.SqlGenerator.GenerateSelectStatement(outerQuery);
             orderDetailsLookupDefinition.HasFromFormula(formula);
 
             OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
@@ -193,6 +210,9 @@ namespace RingSoft.SimpleDemo.WPF
                     OrderDetailsControl.Visibility = Visibility.Collapsed;
                 }
             };
+
+            CustomerControl.SetReadOnlyMode(true);
+            CustomerLabel.IsEnabled = false;
         }
 
         private void OrdersLookupButton_Click(object sender, RoutedEventArgs e)

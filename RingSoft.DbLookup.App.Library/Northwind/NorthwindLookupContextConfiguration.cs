@@ -160,6 +160,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             //var formula = "SELECT Customers.CustomerId, Customers.CompanyName, Customers.ContactName FROM Customers WHERE Customers.CustomerId = 'ALFKI'";
             //CustomerIdLookup.HasFromFormula(formula);
 
+            //DbDataProcessor.ShowSqlStatementWindow();
+
             _lookupContext.Customers.HasLookupDefinition(CustomerIdLookup);
 
             CustomerNameLookup = new LookupDefinition<CustomerLookup, Customer>(_lookupContext.Customers);

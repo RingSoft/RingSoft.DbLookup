@@ -67,14 +67,6 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Gets the add-on-the fly arguments sent by the LookupControl or the LookupWindow.
-        /// </summary>
-        /// <value>
-        /// The lookup add on the fly arguments.
-        /// </value>
-        public LookupAddViewArgs LookupAddViewArgs { get; private set; }
-
-        /// <summary>
         /// Gets a value indicating whether this process has changed the data source.
         /// </summary>
         /// <value>

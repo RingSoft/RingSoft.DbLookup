@@ -209,6 +209,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             CloseButton = GetTemplateChild("CloseButton") as Button;
 
             SetReadOnlyMode(_readOnlyMode);
+
             base.OnApplyTemplate();
         }
 
@@ -276,7 +277,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.NewIndex >= 0)
             {
                 ViewButton.IsEnabled = _allowView;
-                SelectButton.IsEnabled = !_readOnlyMode;
+                SelectButton.IsEnabled = !LookupDefinition.ReadOnlyMode;
             }
             else
             {
@@ -308,7 +309,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
-            _readOnlyMode = readOnlyValue;
+            _readOnlyMode = readOnlyValue || LookupDefinition.ReadOnlyMode;
             
             base.OnReadOnlyModeSet(readOnlyValue);
         }
@@ -325,7 +326,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (control == SelectButton)
                 {
-                    SelectButton.IsEnabled = false;
+                    SelectButton.IsEnabled = !LookupDefinition.ReadOnlyMode;
                     return;
                 }
 

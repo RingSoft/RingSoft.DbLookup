@@ -54,6 +54,14 @@ namespace RingSoft.DbMaintenance
         protected IDbMaintenanceView View { get; private set; }
 
         /// <summary>
+        /// Gets the add-on-the fly arguments sent by the LookupControl or the LookupWindow.
+        /// </summary>
+        /// <value>
+        /// The lookup add on the fly arguments.
+        /// </value>
+        public LookupAddViewArgs LookupAddViewArgs { get; internal set; }
+
+        /// <summary>
         /// Gets the initial search for text when the Find button is clicked.  By default it is the key auto fill text.
         /// </summary>
         /// <value>

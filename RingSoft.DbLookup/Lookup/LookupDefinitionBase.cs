@@ -97,6 +97,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public string Title { get; set; }
 
+        public bool ReadOnlyMode { get; set; }
+
         public string FromFormula { get; internal set; }
 
         public LookupDefinitionBase HasFromFormula(string value)
@@ -148,6 +150,7 @@ namespace RingSoft.DbLookup.Lookup
             FilterDefinition.CopyFrom(source.FilterDefinition);
             InitialOrderByType = source.InitialOrderByType;
             FromFormula = source.FromFormula;
+            ReadOnlyMode = source.ReadOnlyMode;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

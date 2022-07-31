@@ -162,37 +162,37 @@ namespace RingSoft.DbLookup.TableProcessing
             return formulaFilter;
         }
 
-        internal FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value);
         }
 
-        internal FieldFilterDefinition AddFixedFilter(IntegerFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(IntegerFieldDefinition fieldDefinition, Conditions condition,
             int value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString());
         }
 
-        internal FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
             double value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        internal FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
             decimal value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        internal FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
             DateTime value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
-        internal FieldFilterDefinition AddFixedFilter(BoolFieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddFixedFilter(BoolFieldDefinition fieldDefinition, Conditions condition,
             bool value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));

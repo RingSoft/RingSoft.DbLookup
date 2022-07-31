@@ -240,6 +240,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupDataBase LookupData { get; private set; }
 
+        public bool LookupWindowReadOnlyMode { get; internal set; }
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -263,7 +265,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
         private object _addViewParameter;
-
+        
         static LookupControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
@@ -1435,7 +1437,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool OnEnter()
         {
-            if (ListView == null)
+            if (ListView == null || LookupDefinition.ReadOnlyMode)
             {
                 SystemSounds.Exclamation.Play();
             }

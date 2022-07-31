@@ -12,6 +12,9 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using RingSoft.DbLookup;
+using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -454,6 +457,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 ViewModelInput = new NorthwindViewModelInput();
             }
+
+
             ViewModelInput.OrderViewModels.Add(this);
             ViewModelInput.OrderInput ??= new OrderInput {GridMode = GridMode};
 

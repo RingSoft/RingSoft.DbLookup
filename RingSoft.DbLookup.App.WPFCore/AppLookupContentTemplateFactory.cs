@@ -1,4 +1,6 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿
+
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.Controls.WPF;
 using System.Windows;

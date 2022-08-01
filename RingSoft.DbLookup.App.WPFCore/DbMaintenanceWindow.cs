@@ -18,6 +18,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public abstract DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
 
+        public AutoFillControl KeyAutoFillControl { get; private set; }
+
 
         public event EventHandler<LookupSelectArgs> LookupFormReturn;
 
@@ -47,6 +49,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
         {
+            KeyAutoFillControl = keyAutoFillControl;
             BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.IsDirtyProperty, new Binding
             {
                 Source = ViewModel,
@@ -178,6 +181,15 @@ namespace RingSoft.DbLookup.App.WPFCore
                 WPFControlsGlobals.SendKey(Key.Tab);
             }
 
+        }
+
+        public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (control == KeyAutoFillControl)
+            {
+                return;
+            }
+            base.SetControlReadOnlyMode(control, readOnlyValue);
         }
     }
 }

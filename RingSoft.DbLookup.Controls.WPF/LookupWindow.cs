@@ -277,7 +277,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.NewIndex >= 0)
             {
                 ViewButton.IsEnabled = _allowView;
-                SelectButton.IsEnabled = !LookupDefinition.ReadOnlyMode;
+                SelectButton.IsEnabled = !_readOnlyMode;
             }
             else
             {
@@ -326,7 +326,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (control == SelectButton)
                 {
-                    SelectButton.IsEnabled = !LookupDefinition.ReadOnlyMode;
+                    SelectButton.IsEnabled = !_readOnlyMode;
                     return;
                 }
 

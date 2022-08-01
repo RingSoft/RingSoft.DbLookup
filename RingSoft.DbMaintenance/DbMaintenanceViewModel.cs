@@ -518,6 +518,9 @@ namespace RingSoft.DbMaintenance
 
         private bool CheckDirty()
         {
+            if (ReadOnlyMode)
+                return true;
+
             if (RecordDirty && SaveButtonEnabled)
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue.IsValid())

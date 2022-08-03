@@ -118,8 +118,6 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public DbDateTypes DateType { get; private set; }
 
-        public bool ShowNegativeValuesInRed { get; private set; }
-
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 
@@ -150,7 +148,6 @@ namespace RingSoft.DbLookup.Lookup
                 DecimalCount = formulaSource.DecimalCount;
                 DecimalFieldType = formulaSource.DecimalFieldType;
                 DateType = formulaSource.DateType;
-                ShowNegativeValuesInRed = formulaSource.ShowNegativeValuesInRed;
             }
             base.CopyFrom(source);
         }
@@ -278,12 +275,6 @@ namespace RingSoft.DbLookup.Lookup
         public LookupFormulaColumnDefinition HasDateType(DbDateTypes value)
         {
             DateType = value;
-            return this;
-        }
-
-        public LookupFormulaColumnDefinition DoShowNegativeValuesInRed(bool value = true)
-        {
-            ShowNegativeValuesInRed = value;
             return this;
         }
     }

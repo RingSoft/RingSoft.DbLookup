@@ -92,7 +92,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.PurchasedDate, "Purchased Date",
                 p => p.PurchasedDateTime, 20);
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
-            StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Cost, "Cost", p => p.Cost, 15);
+            StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Cost, "Cost", 
+                p => p.Cost, 15).DoShowNegativeValuesInRed();
 
             _lookupContext.StockCostQuantities.HasLookupDefinition(StockCostQuantityLookup);
 
@@ -101,7 +102,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.PurchasedDate, "Purchase Date",
                 p => p.PurchasedDateTime, 50);
             StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 25);
-            StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Cost, "Cost", p => p.Cost, 25);
+            StockCostQuantityLookupFiltered.AddVisibleColumnDefinition(p => p.Cost, 
+                "Cost", p => p.Cost, 25).DoShowNegativeValuesInRed().DoShowPositiveValuesInGreen();
         }
 
         public override bool TestConnection()
@@ -133,7 +135,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             _lookupContext.StockCostQuantities.HasDescription("Stock Purchases");
             _lookupContext.StockCostQuantities.GetFieldDefinition(p => p.Quantity).HasDecimalCount(2);
             _lookupContext.StockCostQuantities.GetFieldDefinition(p => p.Cost)
-                .HasDecimalFieldType(DecimalFieldTypes.Currency);
+                .HasDecimalFieldType(DecimalFieldTypes.Currency).DoShowNegativeValuesInRed().DoShowPositiveValuesInGreen();
         }
 
         public int PageSize { get; } = 15;

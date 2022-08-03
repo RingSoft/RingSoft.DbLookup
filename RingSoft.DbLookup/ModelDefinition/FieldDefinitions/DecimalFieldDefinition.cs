@@ -53,6 +53,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public bool ShowNegativeValuesInRed { get; private set; }
 
+        public bool ShowPositiveValuesInGreen { get; private set; }
+
         internal DecimalFieldDefinition()
         {
             DecimalCount = LookupDefaults.DefaultDecimalCount;
@@ -164,5 +166,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             ShowNegativeValuesInRed = value;
             return this;
         }
+
+        public DecimalFieldDefinition DoShowPositiveValuesInGreen(bool value = true)
+        {
+            ShowPositiveValuesInGreen = value;
+            return this;
+        }
+
     }
 }

@@ -191,24 +191,42 @@ namespace RingSoft.DbLookup.Controls.WPF
             factory.SetValue(TextBlock.TextAlignmentProperty, gridTextAlignment);
             factory.SetBinding(TextBlock.TextProperty, new Binding(dataColumnName));
 
+            var setPositiveValuesInGreen = false;
             var setNegativeValuesInRed = false;
-            if (lookupColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumnDefinition)
+
+            if (lookupColumnDefinition is LookupColumnDefinitionBase lookupColumnBase)
             {
-                setNegativeValuesInRed = lookupFormulaColumnDefinition.ShowNegativeValuesInRed;
+                setNegativeValuesInRed = lookupColumnBase.ShowNegativeValuesInRed;
+                setPositiveValuesInGreen = lookupColumnBase.ShowPositiveValuesInGreen;
             }
             else if (lookupColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn
                      && lookupFieldColumn.FieldDefinition is DecimalFieldDefinition decimalField)
             {
                 setNegativeValuesInRed = decimalField.ShowNegativeValuesInRed;
+                setPositiveValuesInGreen = decimalField.ShowPositiveValuesInGreen;
             }
 
-            if (setNegativeValuesInRed)
+            var converterParameter = new ValueToForegroundParameter();
+            converterParameter.ShowNegativeValuesInRed = setNegativeValuesInRed;
+            converterParameter.ShowPositiveValuesInGreen = setPositiveValuesInGreen;
+            converterParameter.Parameter = lookupControl?.ListView?.Foreground;
+
+            if (setNegativeValuesInRed || setPositiveValuesInGreen)
             {
                 var binding = new Binding(dataColumnName);
-                binding.Converter = new ValueToForegroundColorConverter();
-                binding.ConverterParameter = lookupControl?.ListView?.Foreground;
+                binding.Converter = new ValueToForegroundConverter();
+                binding.ConverterParameter = converterParameter;
                 factory.SetBinding(TextBlock.ForegroundProperty, binding);
             }
+
+            //if (setPositiveValuesInGreen)
+            //{
+            //    var binding = new Binding(dataColumnName);
+            //    binding.Converter = new ValueToForegroundColorConverterGreen();
+            //    binding.ConverterParameter = lookupControl?.ListView?.Foreground;
+            //    factory.SetBinding(TextBlock.ForegroundProperty, binding);
+
+            //}
         }
     }
 }

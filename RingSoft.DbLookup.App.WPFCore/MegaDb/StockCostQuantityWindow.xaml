@@ -45,7 +45,7 @@
 
             <Label Grid.Row="3" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Cost"/>
 
-            <dec:DecimalEditControl Grid.Row="3" Grid.Column="3" FormatType="Currency" Value="{Binding Path=Cost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left"/>
+            <dec:DecimalEditControl Grid.Row="3" Grid.Column="3" FormatType="Currency" Value="{Binding Path=Cost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}, ConverterParameter={StaticResource NegativeRedPositiveGreen}}"/>
 
         </Grid>
     </DockPanel>

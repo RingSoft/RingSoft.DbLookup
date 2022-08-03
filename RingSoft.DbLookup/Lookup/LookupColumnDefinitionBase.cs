@@ -94,6 +94,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public virtual int? SearchForHostId { get; internal set; }
 
+        public bool ShowNegativeValuesInRed { get; internal set; }
+
+        public bool ShowPositiveValuesInGreen { get; internal set; }
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
@@ -118,6 +122,9 @@ namespace RingSoft.DbLookup.Lookup
             HorizontalAlignment = source.HorizontalAlignment;
             SearchForHostId = source.SearchForHostId;
             LookupControlColumnId = source.LookupControlColumnId;
+            ShowNegativeValuesInRed = source.ShowNegativeValuesInRed;
+            ShowPositiveValuesInGreen = source.ShowPositiveValuesInGreen;
+            ContentTemplateId = source.ContentTemplateId;
         }
 
         /// <summary>
@@ -159,6 +166,16 @@ namespace RingSoft.DbLookup.Lookup
         public void HasKeepNullEmpty(bool value = true)
         {
             KeepNullEmpty = value;
+        }
+
+        public void DoShowNegativeValuesInRed(bool value = true)
+        {
+            ShowNegativeValuesInRed = value;
+        }
+
+        public void DoShowPositiveValuesInGreen(bool value = true)
+        {
+            ShowPositiveValuesInGreen = value;
         }
     }
 }

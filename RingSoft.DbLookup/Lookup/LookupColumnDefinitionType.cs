@@ -38,5 +38,17 @@
             base.HasKeepNullEmpty(value);
             return (TColumnDefinition)this;
         }
+
+        public new TColumnDefinition DoShowNegativeValuesInRed(bool value = true)
+        {
+            base.DoShowNegativeValuesInRed(value);
+            return (TColumnDefinition)this;
+        }
+
+        public new TColumnDefinition DoShowPositiveValuesInGreen(bool value = true)
+        {
+            base.DoShowPositiveValuesInGreen(value);
+            return (TColumnDefinition) this;
+        }
     }
 }

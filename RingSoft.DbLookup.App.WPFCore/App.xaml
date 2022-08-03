@@ -28,12 +28,12 @@
             </Style>
 
             <Style TargetType="dec:DecimalEditControl" x:Key="{x:Type dec:DecimalEditControl}">
-                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}}"/>
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}, ConverterParameter={StaticResource ShowNegativeValuesInRed}}"/>
             </Style>
 
             <Style TargetType="dec:DecimalReadOnlyBox" x:Key="{x:Type dec:DecimalReadOnlyBox}"
                    BasedOn="{StaticResource {x:Type dec:ReadOnlyBox}}">
-                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}}"/>
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}, ConverterParameter={StaticResource ShowNegativeValuesInRed}}"/>
             </Style>
 
             <dec:DataEntryCustomContentTemplate x:Key="IconTypeCustomContent">

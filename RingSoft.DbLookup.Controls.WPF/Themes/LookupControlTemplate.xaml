@@ -33,11 +33,27 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" AlternationCount="2">
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListViewItem}">
                                             <Setter Property="IsTabStop" Value="False" />
                                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                                    <Setter Property="Background" Value="SkyBlue" />
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Background" Value= "DarkGray"/>
+                                                    <Setter Property="BorderBrush" Value= "DarkGray"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#FFbbe9fd" />
+                                                </Trigger>
+                                            </Style.Triggers>
                                         </Style>
                                     </ListView.ItemContainerStyle>
                                     <ListView.View>

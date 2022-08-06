@@ -47,7 +47,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupColumnDefinitionBase lookupColumnDefinition, bool designMode)
         {
             if (ContentTemplate == null)
-                throw new Exception($"The {nameof(ContentTemplate)} Property has not been set.");
+                return;// throw new Exception($"The {nameof(ContentTemplate)} Property has not been set.");
 
             factory.SetValue(CustomContentControl.ContentTemplateProperty, ContentTemplate);
 

@@ -1,12 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
+using RingSoft.DbLookup.EfCore;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
-    public class NorthwindDbContextEfCore : DbContext
+    public class NorthwindDbContextEfCore : DbContext, IAdvancedFindDbContextEfCore
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -20,6 +22,14 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Territory> Territories { get; set; }
 
+        public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
+        public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
+        public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+        public IAdvancedFindDbContextEfCore GetNewDbContext()
+        {
+            return new NorthwindDbContextEfCore();
+        }
+
         private static NorthwindLookupContextEfCore _lookupContext;
 
         public NorthwindDbContextEfCore(NorthwindLookupContextEfCore lookupContext)
@@ -29,7 +39,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public NorthwindDbContextEfCore()
         {
-            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -67,6 +76,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             modelBuilder.Entity<Employee>().HasOne(p => p.Employee1)
                 .WithMany(p => p.Employees1)
                 .HasForeignKey(p => p.ReportsTo);
+
+            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

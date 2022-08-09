@@ -153,5 +153,9 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
             var product = context.Products.FirstOrDefault(f => f.ProductID == productId);
             return context.DeleteEntity(context.Products, product, "Deleting Product.");
         }
+
+        public void SetAdvancedFindDbContext()
+        {
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.EfCore;
@@ -170,6 +171,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var context = new NorthwindDbContextEfCore();
             var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
             return context.DeleteEntity(context.Products, product, "Deleting Product");
+        }
+
+        public void SetAdvancedFindDbContext()
+        {
+            EfCoreGlobals.DbAdvancedFindContextCore = new NorthwindDbContextEfCore();
+            SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
         }
     }
 }

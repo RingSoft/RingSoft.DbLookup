@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb;
+﻿using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.Northwind;
 
 namespace RingSoft.DbLookup.App.Library

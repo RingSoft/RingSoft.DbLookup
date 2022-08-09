@@ -206,6 +206,7 @@ namespace RingSoft.DbLookup.App.Library
             INorthwindLookupContext lookupContext)
         {
             processor.GetProduct(1);
+            processor.SetAdvancedFindDbContext();
         }
 
         public static void ConnectToMegaDb(IMegaDbEfDataProcessor processor, IMegaDbLookupContext lookupContext)

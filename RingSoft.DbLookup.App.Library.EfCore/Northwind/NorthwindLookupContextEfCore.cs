@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
@@ -6,7 +7,7 @@ using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
-    public class NorthwindLookupContextEfCore : AppLookupContextEfCore, INorthwindLookupContext
+    public class NorthwindLookupContextEfCore : AppLookupContextEfCore, INorthwindLookupContext, IAdvancedFindLookupContext
     {
         public override AppLookupContextConfiguration LookupContextConfiguration => NorthwindContextConfiguration;
         public NorthwindLookupContextConfiguration NorthwindContextConfiguration { get; }
@@ -24,6 +25,10 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public TableDefinition<Shipper> Shippers { get; set; }
         public TableDefinition<Supplier> Suppliers { get; set; }
         public TableDefinition<Territory> Territories { get; set; }
+        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
+        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
+        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+
 
         public NorthwindLookupContextEfCore()
         {

@@ -142,6 +142,43 @@ CREATE TABLE [Order Details] (
 , FOREIGN KEY ([OrderID]) REFERENCES [Orders] ([OrderID]) ON DELETE NO ACTION ON UPDATE NO ACTION
 , FOREIGN KEY ([ProductID]) REFERENCES [Products] ([ProductID]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+CREATE TABLE [AdvancedFinds] (
+  [Id] int NOT NULL
+, [Name] nvarchar(50) NOT NULL
+, [Table] nvarchar(50) NOT NULL
+, CONSTRAINT [PK_AdvancedFinds] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [AdvancedFindColumns] (
+  [AdvancedFindId] int NOT NULL
+, [ColumnId] int NOT NULL
+, [TableName] nvarchar(50) NOT NULL
+, [FieldName] nvarchar(50) NOT NULL
+, [Caption] nvarchar(50) NOT NULL
+, [PercentWidth] [decimal](18, 4) NOT NULL
+, CONSTRAINT [PK_AdvancedFindColumns] PRIMARY KEY ([AdvancedFindId],[ColumnId])
+, FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+CREATE TABLE [AdvancedFindFilters] (
+  [AdvancedFindId] int NOT NULL
+, [FilterId] int NOT NULL
+, [LeftParentheses] [tinyint] NULL
+, [TableName] nvarchar(50) NOT NULL
+, [FieldName] nvarchar(50) NOT NULL
+, [Operand] [tinyint] NOT NULL
+, [SearchForValue] nvarchar(50) NOT NULL
+, [DisplayValue] nvarchar(50) NOT NULL
+, [Formula] nvarchar(50) NULL
+, [SearchForAdvancedFindId] int NULL
+, [CustomDate] bit NULL
+, [RightParentheses] [tinyint] NULL
+, [EndLogic] [tinyint] NULL
+, CONSTRAINT [PK_AdvancedFindFilters] PRIMARY KEY ([AdvancedFindId],[FilterId])
+, FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
+, FOREIGN KEY ([SearchForAdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
 INSERT INTO [Suppliers] ([SupplierID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax],[HomePage]) VALUES (
 1,'Exotic Liquids','Charlotte Cooper','Purchasing Manager','49 Gilbert St.','London',NULL,'EC1 4SD','UK','(171) 555-2222',NULL,NULL);
 INSERT INTO [Suppliers] ([SupplierID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax],[HomePage]) VALUES (

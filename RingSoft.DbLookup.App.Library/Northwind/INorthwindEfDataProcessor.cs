@@ -38,5 +38,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         bool DeleteProduct(int productId);
 
         void SetAdvancedFindDbContext();
+
+        void SetAdvancedFindLookupContext();
     }
 }

@@ -82,6 +82,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
 
             LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
+            LookupControlsGlobals.DbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
 
             _application.MainWindow = _mainWindow;
             _mainWindow.Show();

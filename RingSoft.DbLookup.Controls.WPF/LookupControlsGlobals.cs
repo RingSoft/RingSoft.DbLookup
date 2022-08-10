@@ -31,6 +31,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 
+        public static DbMaintenanceButtonsFactory DbMaintenanceButtonsFactory { get; set; } = new DbMaintenanceButtonsFactory();
+
         public static void InitUi()
         {
             DbDataProcessor.UserInterface = _userInterface;

@@ -7,6 +7,11 @@ using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbMaintenance
 {
+    public class SelectArgs
+    {
+        public bool Cancel { get; set; }
+    }
+
     public enum DbMaintenanceResults
     {
         Success,
@@ -289,6 +294,16 @@ namespace RingSoft.DbMaintenance
         public RelayCommand SelectCommand { get; private set; }
 
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
+        public event EventHandler InitializeEvent;
+        public event EventHandler SaveEvent;
+        public event EventHandler<SelectArgs> SelectEvent;
+        public event EventHandler DeleteEvent;
+        public event EventHandler FindEvent;
+        public event EventHandler NewEvent;
+        public event EventHandler CloseEvent;
+        public event EventHandler NextEvent;
+        public event EventHandler PreviousEvent;
+
 
         public DbMaintenanceViewModelBase()
         {
@@ -396,6 +411,53 @@ namespace RingSoft.DbMaintenance
 
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
+        }
+
+        protected void FireInitializeEvent()
+        {
+            InitializeEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FirePreviousEvent()
+        {
+            PreviousEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireNextEvent()
+        {
+            NextEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireFindEvent()
+        {
+            FindEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected SelectArgs FireSelectEvent()
+        {
+            var selectArgs = new SelectArgs();
+            SelectEvent?.Invoke(this, selectArgs);
+            return selectArgs;
+        }
+
+        protected void FireNewEvent()
+        {
+            NewEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireSaveEvent()
+        {
+            SaveEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireDeleteEvent()
+        {
+            DeleteEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireCloseEvent()
+        {
+            CloseEvent?.Invoke(this, new EventArgs());
         }
 
         protected virtual void OnReadOnlyModeChanged(bool newValue)

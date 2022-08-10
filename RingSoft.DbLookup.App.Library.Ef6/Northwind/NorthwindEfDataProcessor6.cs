@@ -157,5 +157,10 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
         public void SetAdvancedFindDbContext()
         {
         }
+
+        public void SetAdvancedFindLookupContext()
+        {
+            
+        }
     }
 }

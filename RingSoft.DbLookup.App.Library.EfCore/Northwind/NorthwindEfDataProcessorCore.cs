@@ -177,6 +177,14 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             EfCoreGlobals.DbAdvancedFindContextCore = new NorthwindDbContextEfCore();
             SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
+            }
+
+        public void SetAdvancedFindLookupContext()
+        {
+            SystemGlobals.AdvancedFindLookupContext = new NorthwindLookupContextEfCore();
+            var configuration = new AdvancedFindLookupConfiguration(SystemGlobals.AdvancedFindLookupContext);
+            configuration.InitializeModel();
+            configuration.ConfigureLookups();
         }
     }
 }

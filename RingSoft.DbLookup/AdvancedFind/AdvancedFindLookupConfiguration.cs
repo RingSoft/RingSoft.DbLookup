@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.AdvancedFind
+﻿using RingSoft.DbLookup.Lookup;
+
+namespace RingSoft.DbLookup.AdvancedFind
 {
     public class AdvancedFindLookupConfiguration
     {
@@ -11,7 +13,13 @@
 
         public void ConfigureLookups()
         {
+            var advancedFindLookup = new LookupDefinition<AdvancedFindLookup, AdvancedFind>(_lookupContext.AdvancedFinds);
+            advancedFindLookup.AddVisibleColumnDefinition(p => p.Name, "Name"
+                , p => p.Name, 95);
 
+            _lookupContext.AdvancedFindLookup = advancedFindLookup;
+
+            _lookupContext.AdvancedFinds.HasLookupDefinition(advancedFindLookup);
         }
 
         public void InitializeModel()

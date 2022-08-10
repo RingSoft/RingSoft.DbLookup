@@ -195,6 +195,8 @@ namespace RingSoft.DbMaintenance
             }
 
             RecordDirty = false;
+
+            FireInitializeEvent();
         }
 
         protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
@@ -268,6 +270,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnGotoPreviousButton()
         {
+            FirePreviousEvent();
             if (!PreviousCommand.IsEnabled)
                 return;
 
@@ -294,6 +297,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnGotoNextButton()
         {
+            FireNextEvent();
             if (!NextCommand.IsEnabled)
                 return;
 
@@ -320,6 +324,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnFindButton()
         {
+            FireFindEvent();
             if (!FindCommand.IsEnabled)
                 return;
 
@@ -340,16 +345,21 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnSelectButton()
         {
-            if (!SelectCommand.IsEnabled)
-                return;
+            var args = FireSelectEvent();
+            
+            if (!args.Cancel)
+            {
+                if (!SelectCommand.IsEnabled)
+                    return;
 
-            if (!CheckDirty())
-                return;
+                if (!CheckDirty())
+                    return;
 
-            _selectingRecord = true;
-            LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
-            View.CloseWindow();
-            LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
+                _selectingRecord = true;
+                LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
+                View.CloseWindow();
+                LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
+            }
         }
 
         /// <summary>
@@ -357,6 +367,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnNewButton()
         {
+            FireNewEvent();
             if (!CheckDirty())
                 return;
 
@@ -385,6 +396,7 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoSave(bool unitTestMode = false)
         {
+            FireSaveEvent();
             if (!SaveCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
@@ -554,6 +566,7 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoDelete()
         {
+            FireDeleteEvent();
             if (!DeleteCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
@@ -600,6 +613,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
         public override void OnWindowClosing(CancelEventArgs e)
         {
+            FireCloseEvent();
             if (!CheckDirty())
             {
                 e.Cancel = true;

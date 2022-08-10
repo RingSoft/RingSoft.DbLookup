@@ -155,6 +155,8 @@ CREATE TABLE [AdvancedFindColumns] (
 , [ColumnId] int NOT NULL
 , [TableName] nvarchar(50) NOT NULL
 , [FieldName] nvarchar(50) NOT NULL
+, [PrimaryTableName] nvarchar(50) NULL
+, [PrimaryFieldName] nvarchar(50) NULL
 , [Caption] nvarchar(50) NOT NULL
 , [PercentWidth] [decimal](18, 4) NOT NULL
 , CONSTRAINT [PK_AdvancedFindColumns] PRIMARY KEY ([AdvancedFindId],[ColumnId])
@@ -167,6 +169,8 @@ CREATE TABLE [AdvancedFindFilters] (
 , [LeftParentheses] [tinyint] NULL
 , [TableName] nvarchar(50) NOT NULL
 , [FieldName] nvarchar(50) NOT NULL
+, [PrimaryTableName] nvarchar(50) NULL
+, [PrimaryFieldName] nvarchar(50) NULL
 , [Operand] [tinyint] NOT NULL
 , [SearchForValue] nvarchar(50) NOT NULL
 , [DisplayValue] nvarchar(50) NOT NULL

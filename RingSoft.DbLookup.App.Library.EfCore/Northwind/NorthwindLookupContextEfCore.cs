@@ -3,6 +3,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
@@ -28,6 +29,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
 
 
         public NorthwindLookupContextEfCore()

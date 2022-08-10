@@ -20,6 +20,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public AutoFillControl KeyAutoFillControl { get; private set; }
 
+        public IDbMaintenanceProcessor Processor { get; set; }
 
         public event EventHandler<LookupSelectArgs> LookupFormReturn;
 
@@ -27,78 +28,27 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             EnterToTab = true;
         }
-        protected void Initialize()
+        public void Initialize()
         {
-            ShowInTaskbar = false;
-            MaintenanceButtonsControl.Margin = new Thickness(0, 0, 0, 2.5);
+            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            Processor.Initialize(this, MaintenanceButtonsControl, ViewModel, this);
 
-            MaintenanceButtonsControl.PreviousButton.Command = ViewModel.PreviousCommand;
-            MaintenanceButtonsControl.NewButton.Command = ViewModel.NewCommand;
-            MaintenanceButtonsControl.SaveButton.Command = ViewModel.SaveCommand;
-            MaintenanceButtonsControl.DeleteButton.Command = ViewModel.DeleteCommand;
-            MaintenanceButtonsControl.FindButton.Command = ViewModel.FindCommand;
-            MaintenanceButtonsControl.SelectButton.Command = ViewModel.SelectCommand;
-            MaintenanceButtonsControl.NextButton.Command = ViewModel.NextCommand;
-            MaintenanceButtonsControl.CloseButton.Click += (_, _) => CloseWindow();
-
-            Loaded += (sender, args) => ViewModel.OnViewLoaded(this);
-            PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
-
-            Closing += (sender, args) => ViewModel.OnWindowClosing(args);
-        }
+       }
 
         protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
         {
-            KeyAutoFillControl = keyAutoFillControl;
-            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.IsDirtyProperty, new Binding
-            {
-                Source = ViewModel,
-                Path = new PropertyPath(nameof(ViewModel.KeyValueDirty)),
-                Mode = BindingMode.TwoWay
-            });
-
-            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.SetupProperty, new Binding
-            {
-                Source = ViewModel,
-                Path = new PropertyPath(nameof(ViewModel.KeyAutoFillSetup))
-            });
-
-            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.ValueProperty, new Binding
-            {
-                Source = ViewModel,
-                Path = new PropertyPath(nameof(ViewModel.KeyAutoFillValue)),
-                Mode = BindingMode.TwoWay
-            });
-
-            keyAutoFillControl.LostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
+            Processor.RegisterFormKeyControl(keyAutoFillControl);
         }
 
-        private void DbMaintenanceWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                switch (e.Key)
-                {
-                    case Key.Left:
-                        ViewModel.OnGotoPreviousButton();
-                        e.Handled = true;
-                        break;
-                    case Key.Right:
-                        ViewModel.OnGotoNextButton();
-                        e.Handled = true;
-                        break;
-                }
-            }
-        }
 
         public void InitializeFromLookupData(LookupAddViewArgs e)
         {
-            ViewModel.InitializeFromLookupData(e);
+            Processor.InitializeFromLookupData(e);
         }
 
         public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
-            MessageBox.Show(text, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            Processor.OnValidationFail(fieldDefinition, text, caption);
         }
 
         public virtual void ResetViewForNewRecord()
@@ -107,89 +57,45 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public void OnRecordSelected()
         {
-            if (FocusManager.GetFocusedElement(this) is TextBox textBox)
-            {
-                var lookupControl = textBox.GetParentOfType<LookupControl>();
-                if (lookupControl == null)
-                    textBox.SelectAll();
-            }
+            Processor.OnRecordSelected();
         }
 
         public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView,
             string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey)
         {
-            var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(lookupDefinition,
-                allowAdd, allowView, initialSearchFor, initialSearchForPrimaryKey);
-
-            lookupWindow.LookupSelect += (sender, args) =>
-            {
-                LookupFormReturn?.Invoke(this, args);
-            };
-            lookupWindow.Owner = this;
-            lookupWindow.ShowDialog();
+            Processor.ShowFindLookupWindow(lookupDefinition, allowAdd, allowView, initialSearchFor,
+                initialSearchForPrimaryKey);
         }
 
         public void CloseWindow()
         {
-            Close();
+            Processor.CloseWindow();
         }
 
         public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
-            if (playSound)
-                SystemSounds.Exclamation.Play();
-
-            var result = MessageBox.Show(text, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    return MessageButtons.Yes;
-                case MessageBoxResult.No:
-                    return MessageButtons.No;
-            }
-
-            return MessageButtons.Cancel;
+            return Processor.ShowYesNoCancelMessage(text, caption, playSound);
         }
 
         public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
-            if (playSound)
-                SystemSounds.Exclamation.Play();
-
-            if (MessageBox.Show(text, caption, MessageBoxButton.YesNo, MessageBoxImage.Question) ==
-                MessageBoxResult.Yes)
-                return true;
-
-            return false;
+            return Processor.ShowYesNoMessage(text, caption, playSound);
         }
 
         public void ShowRecordSavedMessage()
         {
-            MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+            Processor.ShowRecordSavedMessage();
         }
 
         protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
-            if (readOnlyValue)
-            {
-                var focusedElement = FocusManager.GetFocusedElement(this);
-                if (focusedElement == null || !focusedElement.IsEnabled)
-                    MaintenanceButtonsControl.NextButton.Focus();
-            }
-            else if (MaintenanceButtonsControl.IsKeyboardFocusWithin)
-            {
-                WPFControlsGlobals.SendKey(Key.Tab);
-            }
-
+            Processor.OnReadOnlyModeSet(readOnlyValue);
         }
 
         public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
         {
-            if (control == KeyAutoFillControl)
-            {
-                return;
-            }
-            base.SetControlReadOnlyMode(control, readOnlyValue);
+            if (Processor.SetControlReadOnlyMode(control, readOnlyValue))
+                base.SetControlReadOnlyMode(control, readOnlyValue);
         }
     }
 }

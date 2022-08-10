@@ -14,7 +14,7 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Tests.DbMaintenance
 {
-    public abstract class DbMaintTestsBase : IOrderView
+    public abstract class DbMaintTestsBase : IOrderView, IDbMaintenanceView
     {
         protected static void SetupConfigurations()
         {
@@ -76,6 +76,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         }
 
         public void SetReadOnlyMode(bool readOnlyValue)
+        {
+            
+        }
+
+        public void OnRecordSelect(LookupSelectArgs args)
         {
             
         }

@@ -138,8 +138,6 @@ namespace RingSoft.DbMaintenance
             _lookupData.LookupDataChanged += _lookupData_LookupDataChanged;
             FindButtonLookupDefinition = ViewLookupDefinition;
 
-            View.LookupFormReturn += View_LookupFormReturn;
-
             base.InternalInitialize();
 
             if (LookupAddViewArgs != null)
@@ -329,7 +327,7 @@ namespace RingSoft.DbMaintenance
                 _lookupData.SelectedPrimaryKeyValue);
         }
 
-        private void View_LookupFormReturn(object sender, LookupSelectArgs e)
+        public override void OnRecordSelected(LookupSelectArgs e)
         {
             if (!CheckDirty())
                 return;

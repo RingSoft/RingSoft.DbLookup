@@ -54,5 +54,10 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         {
             Console.WriteLine($"{nameof(SetReadOnlyMode)} method running");
         }
+
+        public void OnRecordSelect(LookupSelectArgs args)
+        {
+            
+        }
     }
 }

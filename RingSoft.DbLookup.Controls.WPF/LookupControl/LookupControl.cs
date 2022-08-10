@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.QueryBuilder;
 
 // ReSharper disable once CheckNamespace
@@ -58,6 +59,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "RecordCountStackPanel", Type = typeof(StackPanel))]
     [TemplatePart(Name = "RecordCountControl", Type = typeof(StringReadOnlyBox))]
     [TemplatePart(Name = "Spinner", Type = typeof(Control))]
+    [TemplatePart(Name = "AdvancedFindButton", Type = typeof(Button))]
     public class LookupControl : Control, ILookupControl, IReadOnlyControl
     {
         private class RefreshPendingData
@@ -94,6 +96,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public StringReadOnlyBox RecordCountControl { get; set; }
 
         public Control Spinner { get; set; }
+
+        public Button AdvancedFindButton { get; set; }
 
         //--------------------------------------------------------------
 
@@ -306,6 +310,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountStackPanel = GetTemplateChild(nameof(RecordCountStackPanel)) as StackPanel;
             RecordCountControl = GetTemplateChild(nameof(RecordCountControl)) as StringReadOnlyBox;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
+            AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
 
             base.OnApplyTemplate();
         }
@@ -383,6 +388,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (GetRecordCountButton != null)
                     GetRecordCountButton.Click += (sender, args) => { GetRecordCountButtonClick(); };
+
+                if (AdvancedFindButton != null)
+                    AdvancedFindButton.Click += (sender, args) => { ShowAdvancedFind(); };
 
                 if (ScrollBar != null)
                 {
@@ -1396,6 +1404,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (!GetRecordCountButton.IsVisible)
                     SetupRecordCount();
             }
+        }
+
+        private void ShowAdvancedFind()
+        {
+            var advancedFindWindow = new AdvancedFindWindow();
+            advancedFindWindow.Owner = Window.GetWindow(this);
+            advancedFindWindow.ShowDialog();
         }
 
         private void SetupRecordCount()

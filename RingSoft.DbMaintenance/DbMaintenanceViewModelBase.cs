@@ -392,6 +392,8 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The e.</param>
         public abstract void InitializeFromLookupData(LookupAddViewArgs e);
 
+        public abstract void OnRecordSelected(LookupSelectArgs e);
+
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
         }

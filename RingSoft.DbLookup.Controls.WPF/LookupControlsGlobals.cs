@@ -27,6 +27,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public static LookupControlContentTemplateFactory LookupControlContentTemplateFactory { get; set; } =
             new LookupControlContentTemplateFactory();
 
+        public static DbMaintenanceProcessorFactory DbMaintenanceProcessorFactory { get; set; }
+
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 
         public static void InitUi()
@@ -35,5 +37,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             WPFControlsGlobals.InitUi();
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
+
     }
 }

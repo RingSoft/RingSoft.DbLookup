@@ -7,7 +7,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:LookupWindow}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}">
                         <Grid Margin="5" Background="{TemplateBinding Background}" Height="450" Width="700">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>

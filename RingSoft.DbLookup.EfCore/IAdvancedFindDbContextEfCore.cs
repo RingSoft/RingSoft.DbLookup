@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.EfCore
 {
-    public interface IAdvancedFindDbContextEfCore
+    public interface IAdvancedFindDbContextEfCore : IDisposable
     {
         DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
 

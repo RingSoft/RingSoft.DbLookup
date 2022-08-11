@@ -34,7 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\RingSoft.DataEntryControls\RingSoft.DataEntryControls.WPF\RingSoft.DataEntryControls.WPF.csproj" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="2.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>

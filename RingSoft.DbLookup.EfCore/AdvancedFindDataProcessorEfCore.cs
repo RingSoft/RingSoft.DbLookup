@@ -44,10 +44,12 @@ namespace RingSoft.DbLookup.EfCore
                 dbContext.AddNewNoCommitEntity(context.AdvancedFinds, advancedFind, "Adding New Advanced Find");
             else
             {
+                context.Dispose();
                 context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
                 dbContext = context.GetDbContextEf();
                 if (!dbContext.SaveNoCommitEntity(context.AdvancedFinds, advancedFind, "Saving Advanced Find"))
                 {
+                    context.Dispose();
                     return false;
                 }
             }
@@ -57,7 +59,10 @@ namespace RingSoft.DbLookup.EfCore
 
             context.AdvancedFindFilters.RemoveRange(context.AdvancedFindFilters.Where(p => p.AdvancedFindId == advancedFind.Id));
             context.AdvancedFindFilters.AddRange(filters);
-            return dbContext.SaveEfChanges("Commiting Advanced Find");
+            var result = dbContext.SaveEfChanges("Commiting Advanced Find");
+
+            context.Dispose();
+            return result;
         }
     }
 }

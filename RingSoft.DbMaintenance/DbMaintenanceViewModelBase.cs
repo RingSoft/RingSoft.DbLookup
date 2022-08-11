@@ -284,6 +284,7 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public IDbMaintenanceDataProcessor Processor { get; set; }
 
         public RelayCommand PreviousCommand { get; private set; }
         public RelayCommand NextCommand { get; private set; }

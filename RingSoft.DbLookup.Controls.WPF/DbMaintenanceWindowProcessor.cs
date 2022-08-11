@@ -35,6 +35,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void SetupControl(IDbMaintenanceView view)
         {
+            ViewModel.Processor = this;
+
             View = view;
             PreviousButton.Command = ViewModel.PreviousCommand;
             NewButton.Command = ViewModel.NewCommand;

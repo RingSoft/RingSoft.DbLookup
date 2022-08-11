@@ -222,7 +222,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             {
                 var message =
                     $"'{LocationAutoFillValue.Text}' was not found in the database.  Would you like to add it?";
-                if (!View.ShowYesNoMessage(message, "Invalid Location"))
+                if (!Processor.ShowYesNoMessage(message, "Invalid Location"))
                     return false;
 
                 var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.ShowAddOnTheFlyWindow(
@@ -244,7 +244,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             {
                 var message =
                     $"'{ManufacturerAutoFillValue.Text}' was not found in the database.  Would you like to add it?";
-                if (!View.ShowYesNoMessage(message, "Invalid Manufacturer"))
+                if (!Processor.ShowYesNoMessage(message, "Invalid Manufacturer"))
                     return false;
 
                 var newRecord =

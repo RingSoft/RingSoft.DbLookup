@@ -246,7 +246,7 @@ namespace RingSoft.DbMaintenance
                 if (!_savingRecord)
                 {
                     LoadFromEntity(entity);
-                    View.OnRecordSelected();
+                    Processor?.OnRecordSelected();
                 }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;
@@ -328,7 +328,7 @@ namespace RingSoft.DbMaintenance
             if (!FindCommand.IsEnabled)
                 return;
 
-            View.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
+            Processor.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
                 _lookupData.SelectedPrimaryKeyValue);
         }
 
@@ -357,7 +357,7 @@ namespace RingSoft.DbMaintenance
 
                 _selectingRecord = true;
                 LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
-                View.CloseWindow();
+                Processor.CloseWindow();
                 LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
             }
         }
@@ -445,7 +445,7 @@ namespace RingSoft.DbMaintenance
 
             _savingRecord = false;
 
-            View?.ShowRecordSavedMessage();
+            Processor?.ShowRecordSavedMessage();
             RecordsChanged = true;
 
             return DbMaintenanceResults.Success;
@@ -469,7 +469,7 @@ namespace RingSoft.DbMaintenance
 
                 var message = RenameKeyAutoFillValueMessage(recordDescription, fieldDescription);
 
-                if (!View.ShowYesNoMessage(message, RenameKeyAutoFillValueCaption))
+                if (!Processor.ShowYesNoMessage(message, RenameKeyAutoFillValueCaption))
                 {
                     return false;
                 }
@@ -537,7 +537,7 @@ namespace RingSoft.DbMaintenance
                     return true;
 
                 var message = SaveChangesMessage;
-                var result = View.ShowYesNoCancelMessage(message, TableDefinition.ToString());
+                var result = Processor.ShowYesNoCancelMessage(message, TableDefinition.ToString());
                 OnCheckDirtyFlagMessageShown(new CheckDirtyResultArgs(result));
                 switch (result)
                 {
@@ -575,7 +575,7 @@ namespace RingSoft.DbMaintenance
                 description = TableDefinition.ToString();
 
             var message = ConfirmDeleteMessage(description);
-            if (View.ShowYesNoMessage(message, ConfirmDeleteCaption))
+            if (Processor.ShowYesNoMessage(message, ConfirmDeleteCaption))
             {
                 var operationArgs = new ViewModelOperationPreviewEventArgs<TEntity>
                 {

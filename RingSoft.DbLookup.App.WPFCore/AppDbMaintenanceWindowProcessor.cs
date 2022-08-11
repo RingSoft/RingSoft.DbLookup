@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             MaintenanceWindow = window;
             ViewModel = viewModel;
             MaintenanceButtonsControl = buttonsControl;
-
+            
             var dbMaintenanceButtons = (DbMaintenanceButtonsControl) buttonsControl;
             SaveButton = dbMaintenanceButtons.SaveButton;
             SelectButton = dbMaintenanceButtons.SelectButton;

@@ -10,5 +10,6 @@ namespace RingSoft.DbLookup.AdvancedFind
         bool SaveAdvancedFind(DbLookup.AdvancedFind.AdvancedFind advancedFind, List<AdvancedFindColumn> columns,
             List<AdvancedFindFilter> filters);
 
+        bool DeleteAdvancedFind(int advancedFindId);
     }
 }

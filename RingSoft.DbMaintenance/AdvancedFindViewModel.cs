@@ -132,7 +132,7 @@ namespace RingSoft.DbMaintenance
 
         protected override bool DeleteEntity()
         {
-            return true;
+            return SystemGlobals.AdvancedFindDbProcessor.DeleteAdvancedFind(AdvancedFindId);
         }
     }
 }

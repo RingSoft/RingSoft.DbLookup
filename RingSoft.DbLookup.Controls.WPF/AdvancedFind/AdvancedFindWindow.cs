@@ -83,7 +83,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnApplyTemplate();
         }
 
-        public event EventHandler<LookupSelectArgs> LookupFormReturn;
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             Processor.OnValidationFail(fieldDefinition, text, caption);
@@ -91,38 +90,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void ResetViewForNewRecord()
         {
-            
-        }
-
-        public void OnRecordSelected()
-        {
-            Processor.OnRecordSelected();
-        }
-
-        public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor,
-            PrimaryKeyValue initialSearchForPrimaryKey)
-        {
-            Processor.ShowFindLookupWindow(lookupDefinition, allowAdd, allowView, initialSearchFor, initialSearchForPrimaryKey);
-        }
-
-        public void CloseWindow()
-        {
-            Processor.CloseWindow();
-        }
-
-        public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
-        {
-            return Processor.ShowYesNoCancelMessage(text, caption, playSound);
-        }
-
-        public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
-        {
-            return Processor.ShowYesNoMessage(text, caption, playSound);
-        }
-
-        public void ShowRecordSavedMessage()
-        {
-            Processor.ShowRecordSavedMessage();
+            NameAutoFillControl?.Focus();
         }
     }
 }

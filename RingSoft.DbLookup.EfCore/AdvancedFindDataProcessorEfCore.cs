@@ -64,5 +64,20 @@ namespace RingSoft.DbLookup.EfCore
             context.Dispose();
             return result;
         }
+
+        public bool DeleteAdvancedFind(int advancedFindId)
+        {
+            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
+            var dbContext = context.GetDbContextEf();
+            var advancedFind = context.AdvancedFinds.FirstOrDefault(p => p.Id == advancedFindId);
+
+            context.AdvancedFindColumns.RemoveRange(
+                context.AdvancedFindColumns.Where(p => p.AdvancedFindId == advancedFindId));
+            context.AdvancedFindFilters.RemoveRange(
+                context.AdvancedFindFilters.Where(p => p.AdvancedFindId == advancedFindId));
+
+            return dbContext.DeleteEntity(context.AdvancedFinds, advancedFind, "Deleting Customer");
+
+        }
     }
 }

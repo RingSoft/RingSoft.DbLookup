@@ -51,6 +51,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
         public StackPanel ButtonsPanel { get; set; }
         public Border Border { get; set; }
+        public AutoFillControl NameAutoFillControl { get; set; }
 
         public IDbMaintenanceProcessor Processor { get; set; }
 
@@ -63,6 +64,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
+            NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
             
             var advancedFindViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
 
@@ -75,6 +77,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
             Processor.Initialize(this, buttonsControl, advancedFindViewModel, this);
+
+            Processor.RegisterFormKeyControl(NameAutoFillControl);
 
             base.OnApplyTemplate();
         }

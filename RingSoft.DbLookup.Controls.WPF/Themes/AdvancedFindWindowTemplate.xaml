@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
                     xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
-                    xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance">
+                    xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance"
+                    xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
     <Style TargetType="{x:Type local:AdvancedFindWindow}" BasedOn="{StaticResource {x:Type Window}}" >
         <Setter Property="Template">
@@ -17,7 +18,28 @@
                         <DockPanel DataContext="{DynamicResource AdvancedFindViewModel}">
                             <StackPanel x:Name="ButtonsPanel" DockPanel.Dock="Top"/>
                             <Grid Background="{TemplateBinding Background}">
-                                <TextBox Width="100" Height="50" ></TextBox>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Row="0" Grid.Column="0" Content="Advanced Find ID"/>
+
+                                <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFindId, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+
+                                <Label Grid.Row="0" Grid.Column="2" Content="Name"/>
+
+                                <lc:AutoFillControl Grid.Row="0" Grid.Column="3" x:Name="NameAutoFillControl" Width="200"/>
+
+                                <Label Grid.Row="1" Grid.Column="0" Content="Table"/>
+
+                                <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxIte, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                             </Grid>
                         </DockPanel>

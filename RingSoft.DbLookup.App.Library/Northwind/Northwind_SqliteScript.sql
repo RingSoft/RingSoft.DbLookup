@@ -144,7 +144,7 @@ CREATE TABLE [Order Details] (
 );
 
 CREATE TABLE [AdvancedFinds] (
-  [Id] int NOT NULL
+  [Id] INTEGER NOT NULL
 , [Name] nvarchar(50) NOT NULL
 , [Table] nvarchar(50) NOT NULL
 , CONSTRAINT [PK_AdvancedFinds] PRIMARY KEY ([Id])

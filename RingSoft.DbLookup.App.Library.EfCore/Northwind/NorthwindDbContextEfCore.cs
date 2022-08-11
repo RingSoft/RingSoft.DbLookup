@@ -25,6 +25,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+
+        public DbContext GetDbContextEf()
+        {
+            return this;
+        }
+
         public IAdvancedFindDbContextEfCore GetNewDbContext()
         {
             return new NorthwindDbContextEfCore();

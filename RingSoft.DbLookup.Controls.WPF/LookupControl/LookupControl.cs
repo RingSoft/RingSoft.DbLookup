@@ -529,7 +529,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 
                 Style style = new Style();
                 style.TargetType = typeof(GridViewColumnHeader);
-                style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, GetHeaderHeight(header) + glyphSize.Height + 5));
+                var height = GetHeaderHeight(header);
+                style.Setters.Add(new Setter(GridViewColumnHeader.HeightProperty, height + glyphSize.Height + 5));
                 style.Setters.Add(new Setter(GridViewColumnHeader.VerticalContentAlignmentProperty, VerticalAlignment.Bottom));
 
                 LookupGridView.ColumnHeaderContainerStyle = style;
@@ -561,10 +562,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double GetHeaderHeight(GridViewHeaderRowPresenter header)
         {
             var height = header.ActualHeight;
+            var lineFeedCount = 0;
+            var startIndex = 0;
+
             if (DesignerProperties.GetIsInDesignMode(this))
             {
-                var lineFeedCount = 0;
-                var startIndex = 0;
                 foreach (var column in LookupColumns)
                 {
                     if (!column.Header.IsNullOrEmpty())
@@ -584,6 +586,29 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
 
                 height = _designModeHeaderLineHeight * (lineFeedCount + 1);
+            }
+            else
+            {
+                foreach (var column in LookupColumns)
+                {
+                    if (!column.Header.IsNullOrEmpty())
+                    {
+                        while (startIndex >= 0)
+                        {
+                            startIndex = column.Header.IndexOf('\n', startIndex);
+                            if (startIndex >= 0)
+                            {
+                                lineFeedCount++;
+                                startIndex++;
+                            }
+                        }
+
+                        startIndex = 0;
+                    }
+                }
+
+                height = 20 * (lineFeedCount + 1);
+
             }
             return height;
         }

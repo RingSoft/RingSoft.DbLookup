@@ -354,9 +354,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
-            if (LookupDefinition.InitialSortColumnDefinition == null)
-                throw new ArgumentException(
-                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+            //if (LookupDefinition.InitialSortColumnDefinition == null)
+            //    throw new ArgumentException(
+            //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             if (LookupData != null)
             {
@@ -412,7 +412,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 GetIndexOfVisibleColumnDefinition(LookupDefinition.InitialSortColumnDefinition);
 
             InitializeHeader(sortColumnIndex);
-            SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
+            if (LookupDefinition.InitialSortColumnDefinition != null)
+                SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
 
             if (_refreshPendingData != null)
             {
@@ -1045,7 +1046,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false,
             PrimaryKeyValue initialSearchForPrimaryKeyValue = null)
         {
-            if (LookupData == null || ListView == null)
+            if (LookupData == null || ListView == null || !LookupData.LookupDefinition.VisibleColumns.Any())
             {
                 _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
                 return;
@@ -1493,6 +1494,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
                         else
                             LookupData.AddNewRow(Window.GetWindow(this), addViewParameter);
+                        break;
+                    case LookupCommands.Reset:
+                        ClearLookupControl();
+                        SetupControl();
+                        _currentPageSize = GetPageSize();
+                        LookupData.GetInitData();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

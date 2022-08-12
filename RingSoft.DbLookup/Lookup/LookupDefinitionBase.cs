@@ -4,6 +4,7 @@ using RingSoft.DbLookup.TableProcessing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
@@ -19,7 +20,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The table definition.
         /// </value>
-        public TableDefinitionBase TableDefinition { get; }
+        public TableDefinitionBase TableDefinition { get; set; }
 
         /// <summary>
         /// Gets the visible columns.
@@ -28,7 +29,7 @@ namespace RingSoft.DbLookup.Lookup
         /// The visible columns.
         /// </value>
         public IReadOnlyList<LookupColumnDefinitionBase> VisibleColumns => _visibleColumns;
-
+        
         /// <summary>
         /// Gets the hidden columns.
         /// </summary>
@@ -107,12 +108,17 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
+        public void ClearVisibleColumns()
+        {
+            _visibleColumns.Clear();            
+        }
+
 
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
 
-        internal LookupDefinitionBase(TableDefinitionBase tableDefinition)
+        public LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {
             tableDefinition.Context.Initialize();
             TableDefinition = tableDefinition;
@@ -229,7 +235,7 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        internal LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth)
+        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)

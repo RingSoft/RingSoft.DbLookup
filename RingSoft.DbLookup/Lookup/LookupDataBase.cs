@@ -215,9 +215,9 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="userInterface">The user interface.</param>
         public LookupDataBase(LookupDefinitionBase lookupDefinition, ILookupControl userInterface)
         {
-            if (lookupDefinition.InitialSortColumnDefinition == null)
-                throw new ArgumentException(
-                    "Lookup definition does not have any visible columns defined or its initial sort column is null.");
+            //if (lookupDefinition.InitialSortColumnDefinition == null)
+            //    throw new ArgumentException(
+            //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             LookupDefinition = lookupDefinition;
             LookupControl = userInterface;
@@ -453,8 +453,11 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            AddColumnToQueryOrderBy(SortColumnDefinition, query, orderBy);
-
+            if (SortColumnDefinition != null)
+            {
+                AddColumnToQueryOrderBy(SortColumnDefinition, query, orderBy);
+            }
+            
             foreach (var lookupColumnDefinition in _orderByList)
             {
                 AddColumnToQueryOrderBy(lookupColumnDefinition, query, orderBy);

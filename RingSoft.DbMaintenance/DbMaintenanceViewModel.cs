@@ -666,6 +666,7 @@ namespace RingSoft.DbMaintenance
             {
                 case LookupCommands.Clear:
                 case LookupCommands.AddModify:
+                case LookupCommands.Reset:
                     break;
                 case LookupCommands.Refresh:
                     if (primaryKeyValue == null)

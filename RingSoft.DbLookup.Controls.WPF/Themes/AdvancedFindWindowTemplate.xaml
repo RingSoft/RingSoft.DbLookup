@@ -3,7 +3,8 @@
                     xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
                     xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                     xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance"
-                    xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF">
+                    xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF"
+                    xmlns:deg="clr-namespace:RingSoft.DataEntryControls.WPF.DataEntryGrid;assembly=RingSoft.DataEntryControls.WPF">
 
     <Style TargetType="{x:Type local:AdvancedFindWindow}" BasedOn="{StaticResource {x:Type Window}}" >
         <Setter Property="Template">
@@ -15,20 +16,25 @@
 
                         <Border.Resources>
                             <dbm:AdvancedFindViewModel x:Key="AdvancedFindViewModel"/>
+                            <Style TargetType="{x:Type local:AdvancedFindWindow}">
+                                <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                            </Style>
                         </Border.Resources>
-                        <DockPanel DataContext="{DynamicResource AdvancedFindViewModel}">
+                        <DockPanel DataContext="{DynamicResource AdvancedFindViewModel}" Margin="5">
                             <StackPanel x:Name="ButtonsPanel" DockPanel.Dock="Top"/>
                             <Grid Background="{TemplateBinding Background}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Label Grid.Row="0" Grid.Column="0" Content="Advanced Find ID" HorizontalAlignment="Right"/>
@@ -53,7 +59,24 @@
                                         </HierarchicalDataTemplate>
 
                                     </TreeView.ItemTemplate>
+
+                                    <TreeView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </TreeView.ItemContainerStyle>
                                 </TreeView>
+
+                                <StackPanel Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Orientation="Vertical">
+
+                                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add _Column" Command="{Binding AddColumnCommand}"/>
+
+                                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add _Filter"/>
+
+                                </StackPanel>
+                                
+
+                                <lc:LookupControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800"/>
                             </Grid>
                         </DockPanel>
                     </Border>

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -18,12 +21,60 @@ namespace RingSoft.DbMaintenance
         ForeignTable = 3
     }
 
-    public class TreeViewItem
+    public class TreeViewItem : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public TreeViewType Type { get; set; }
         public FieldDefinition FieldDefinition { get; set; }
         public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
+
+        public AdvancedFindViewModel ViewModel { get; set; }
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged("IsSelected");
+                    if (_isSelected)
+                    {
+                        SelectedTreeItem = this;
+                    }
+                }
+            }
+        }
+
+        private TreeViewItem _selectedTreeItem;
+
+        public TreeViewItem SelectedTreeItem
+        {
+            get => _selectedTreeItem;
+            set
+            {
+                if (_selectedTreeItem == value)
+                {
+                    return;
+                }
+                _selectedTreeItem = value;
+                ViewModel.OnTreeViewItemSelected(this);
+            }
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class TreeViewItems : List<TreeViewItem>
@@ -82,7 +133,6 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
                 _tableIndex = value;
-                LoadTree();
                 OnPropertyChanged();
             }
         }
@@ -99,26 +149,10 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
                 _selectedTableBoxItem = value;
+                LoadTree();
                 OnPropertyChanged();
             }
         }
-
-
-        //private ObservableCollection<TreeViewItem> _treeViewItems;
-
-        //public ObservableCollection<TreeViewItem> TreeViewItems
-        //{
-        //    get => _treeViewItems;
-        //    set
-        //    {
-        //        if (_treeViewItems == value)
-        //        {
-        //            return;
-        //        }
-        //        _treeViewItems = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
 
         private ObservableCollection<TreeViewItem> _treeRoot;
 
@@ -136,9 +170,46 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private LookupDefinitionBase _lookupDefinition;
+
+        public LookupDefinitionBase LookupDefinition
+        {
+            get => _lookupDefinition;
+            set
+            {
+                if (_lookupDefinition == value)
+                    return;
+
+                _lookupDefinition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private LookupCommand _lookupCommand;
+
+        public LookupCommand LookupCommand
+        {
+            get => _lookupCommand;
+            set
+            {
+                if (value == _lookupCommand)
+                    return;
+
+                _lookupCommand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand AddColumnCommand { get; set; }
+
+        public RelayCommand AddFilterCommand { get; set; }
+
+        public TreeViewItem SelectedTreeViewItem { get; set; }
 
         protected override void Initialize()
         {
+            AddColumnCommand = new RelayCommand(AddColumn);
+
             TableComboBoxSetup = new TextComboBoxControlSetup();
             var index = 0;
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context
@@ -169,6 +240,16 @@ namespace RingSoft.DbMaintenance
 
         private void LoadTree()
         {
+            if (SelectedTableBoxItem != null)
+            {
+                var tableDefinition =
+                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.EntityName == SelectedTableBoxItem.TextValue);
+
+                LookupDefinition = new LookupDefinitionBase(tableDefinition);
+
+            }
+
             var treeItems = new ObservableCollection<TreeViewItem>();
             if (TableIndex >= 0)
             {
@@ -182,10 +263,14 @@ namespace RingSoft.DbMaintenance
                     var treeRoot = new TreeViewItem();
                     treeRoot.Name = field.FieldName;
                     treeRoot.Type = TreeViewType.Field;
+                    treeRoot.FieldDefinition = field;
+                    treeRoot.ViewModel = this;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null && field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items);
                 }
+
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
 
             }
             TreeRoot = treeItems;
@@ -200,6 +285,8 @@ namespace RingSoft.DbMaintenance
                 var treeChildItem = new TreeViewItem();
                 treeChildItem.Name = tableFieldDefinition.FieldName;
                 treeChildItem.Type = TreeViewType.Field;
+                treeChildItem.FieldDefinition = tableFieldDefinition;
+                treeChildItem.ViewModel = this;
                 treeItems.Add(treeChildItem);
 
                 if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
@@ -210,6 +297,12 @@ namespace RingSoft.DbMaintenance
                 }
             }
         }
+
+        public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
+        {
+            SelectedTreeViewItem = treeViewItem;
+        }
+
 
         protected override AdvancedFind GetEntityData()
         {
@@ -235,6 +328,15 @@ namespace RingSoft.DbMaintenance
         protected override bool DeleteEntity()
         {
             return SystemGlobals.AdvancedFindDbProcessor.DeleteAdvancedFind(AdvancedFindId);
+        }
+
+        private void AddColumn()
+        {
+
+            LookupDefinition.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, SelectedTreeViewItem.FieldDefinition,
+                20);
+
+            LookupCommand = GetLookupCommand(LookupCommands.Reset);
         }
     }
 }

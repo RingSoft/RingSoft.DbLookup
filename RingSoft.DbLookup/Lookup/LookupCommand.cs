@@ -4,7 +4,8 @@
     {
         Clear = 0,
         Refresh = 1,
-        AddModify = 2
+        AddModify = 2,
+        Reset = 3
     }
 
     /// <summary>

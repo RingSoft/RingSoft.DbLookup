@@ -12,6 +12,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             x:Name="Border">
+
                         <Border.Resources>
                             <dbm:AdvancedFindViewModel x:Key="AdvancedFindViewModel"/>
                         </Border.Resources>
@@ -30,18 +31,29 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Grid.Row="0" Grid.Column="0" Content="Advanced Find ID"/>
+                                <Label Grid.Row="0" Grid.Column="0" Content="Advanced Find ID" HorizontalAlignment="Right"/>
 
-                                <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFindId, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFindId, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
 
                                 <Label Grid.Row="0" Grid.Column="2" Content="Name"/>
 
                                 <lc:AutoFillControl Grid.Row="0" Grid.Column="3" x:Name="NameAutoFillControl" Width="200"/>
 
-                                <Label Grid.Row="1" Grid.Column="0" Content="Table"/>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Table" HorizontalAlignment="Right"/>
 
-                                <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxIte, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>
 
+                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TreeRoot}">
+                                    <TreeView.ItemTemplate>
+
+                                        <HierarchicalDataTemplate DataType="dbm:TreeViewItems" ItemsSource="{Binding Items}">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
                             </Grid>
                         </DockPanel>
                     </Border>

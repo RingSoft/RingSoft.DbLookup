@@ -1,13 +1,38 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbMaintenance
 {
+    public enum TreeViewType
+    {
+        Field = 0,
+        AdvancedFind = 1,
+        Formula = 2,
+        ForeignTable = 3
+    }
+
+    public class TreeViewItem
+    {
+        public string Name { get; set; }
+        public TreeViewType Type { get; set; }
+        public FieldDefinition FieldDefinition { get; set; }
+        public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
+    }
+
+    public class TreeViewItems : List<TreeViewItem>
+    {
+        public string Name { get; set; }
+        public TreeViewType Type { get; set; }
+        public FieldDefinition FieldDefinition { get; set; }
+        public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
+    }
     public class AdvancedFindViewModel : DbMaintenanceViewModel<AdvancedFind>
     {
         public override TableDefinition<AdvancedFind> TableDefinition =>
@@ -45,6 +70,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private int _tableIndex;
+
+        public int TableIndex
+        {
+            get => _tableIndex;
+            set
+            {
+                if (_tableIndex == value)
+                {
+                    return;
+                }
+                _tableIndex = value;
+                LoadTree();
+                OnPropertyChanged();
+            }
+        }
+
         private TextComboBoxItem _selectedTableBoxItem;
 
         public TextComboBoxItem SelectedTableBoxItem
@@ -61,22 +103,38 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private int _tableIndex;
 
-        public int TableIndex
+        //private ObservableCollection<TreeViewItem> _treeViewItems;
+
+        //public ObservableCollection<TreeViewItem> TreeViewItems
+        //{
+        //    get => _treeViewItems;
+        //    set
+        //    {
+        //        if (_treeViewItems == value)
+        //        {
+        //            return;
+        //        }
+        //        _treeViewItems = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+        private ObservableCollection<TreeViewItem> _treeRoot;
+
+        public ObservableCollection<TreeViewItem> TreeRoot
         {
-            get => _tableIndex;
+            get => _treeRoot;
             set
             {
-                if (_tableIndex == value)
+                if (_treeRoot == value)
                 {
                     return;
                 }
-                _tableIndex = value;
+                _treeRoot = value;
                 OnPropertyChanged();
             }
         }
-
 
 
         protected override void Initialize()
@@ -107,6 +165,50 @@ namespace RingSoft.DbMaintenance
             TableIndex =
                 TableComboBoxSetup.Items.IndexOf(
                     TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == entity.Table));
+        }
+
+        private void LoadTree()
+        {
+            var treeItems = new ObservableCollection<TreeViewItem>();
+            if (TableIndex >= 0)
+            {
+                var table = SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions
+                    .FirstOrDefault(
+                        f => f.EntityName == TableComboBoxSetup.Items[TableIndex].TextValue);
+                var fields = table.FieldDefinitions;
+
+                foreach (var field in fields)
+                {
+                    var treeRoot = new TreeViewItem();
+                    treeRoot.Name = field.FieldName;
+                    treeRoot.Type = TreeViewType.Field;
+                    treeItems.Add(treeRoot);
+                    if (field.ParentJoinForeignKeyDefinition != null && field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                        AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items);
+                }
+
+            }
+            TreeRoot = treeItems;
+        }
+
+        private void AddTreeItem(TableDefinitionBase table,
+            ObservableCollection<TreeViewItem> treeItems)
+        {
+
+            foreach (var tableFieldDefinition in table.FieldDefinitions)
+            {
+                var treeChildItem = new TreeViewItem();
+                treeChildItem.Name = tableFieldDefinition.FieldName;
+                treeChildItem.Type = TreeViewType.Field;
+                treeItems.Add(treeChildItem);
+
+                if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
+                    tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                {
+                    if(tableFieldDefinition.AllowRecursion)
+                        AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, treeChildItem.Items);
+                }
+            }
         }
 
         protected override AdvancedFind GetEntityData()

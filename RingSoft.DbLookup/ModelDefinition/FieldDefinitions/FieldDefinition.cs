@@ -78,6 +78,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public int LookupControlColumnId { get; internal set; }
 
+        public bool AllowRecursion { get; private set; } = true;
+
+
         internal FieldDefinition()
         {
             AllowNulls = true;
@@ -188,6 +191,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public void HasLookupControlColumnId(int lookupControlColumnId)
         {
             LookupControlColumnId = lookupControlColumnId;
+        }
+
+        public FieldDefinition DoesAllowRecursion(bool value = true)
+        {
+            AllowRecursion = value;
+            return this;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace RingSoft.DbMaintenance
         public TreeViewType Type { get; set; }
         public FieldDefinition FieldDefinition { get; set; }
         public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
-
+        public FieldDefinition PrimaryFieldDefinition { get; set; }
         public AdvancedFindViewModel ViewModel { get; set; }
 
         private bool _isSelected;
@@ -292,7 +292,10 @@ namespace RingSoft.DbMaintenance
                 if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
                     tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
                 {
-                    if(tableFieldDefinition.AllowRecursion)
+                    treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
+                        .FieldJoins[0].PrimaryField;
+
+                    if (tableFieldDefinition.AllowRecursion)
                         AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, treeChildItem.Items);
                 }
             }

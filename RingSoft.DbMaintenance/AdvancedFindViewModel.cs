@@ -374,7 +374,10 @@ namespace RingSoft.DbMaintenance
             if (childNodes.Any() == false)
             {
                 if (createColumn)
-                    includeJoin = SelectColumnDescription(SelectedTreeViewItem, null);
+                {
+                    var newInclude = SelectColumnDescription(SelectedTreeViewItem, null);
+                    includeJoin = ProcessInclude(includeJoin, newInclude);
+                }
             }
 
             foreach (var child in childNodes)
@@ -382,7 +385,7 @@ namespace RingSoft.DbMaintenance
                 if (childNodes.IndexOf(child) == 0)
                 {
                     var newInclude = LookupDefinition.Include(child.FieldDefinition);
-                    includeJoin = ProcessInclude(child, includeJoin, newInclude);
+                    includeJoin = ProcessInclude(includeJoin, newInclude);
                 }
 
                 if (childNodes.IndexOf(child) == childNodes.Count - 1)
@@ -390,7 +393,7 @@ namespace RingSoft.DbMaintenance
                     if (childNodes.Count > 1)
                     {
                         var newInclude = includeJoin.Include(child.FieldDefinition);
-                        includeJoin = ProcessInclude(child, includeJoin, newInclude);
+                        includeJoin = ProcessInclude(includeJoin, newInclude);
                     }
 
                     if (createColumn)
@@ -405,7 +408,7 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private LookupJoin ProcessInclude(TreeViewItem child, LookupJoin includeJoin, LookupJoin newInclude)
+        private LookupJoin ProcessInclude(LookupJoin includeJoin, LookupJoin newInclude)
         {
             if (newInclude != null)
             {

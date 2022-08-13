@@ -138,8 +138,6 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public DbDateTypes DateType { get; private set; }
 
-        public FieldDefinition FieldDefinition { get; internal set; }
-
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 

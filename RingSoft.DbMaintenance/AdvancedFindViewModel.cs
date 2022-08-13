@@ -371,8 +371,6 @@ namespace RingSoft.DbMaintenance
                 childNodes.Insert(0, parentTreeItem);
             }
 
-            LookupJoin newInclude = null;
-
             if (childNodes.Any() == false)
             {
                 if (createColumn)
@@ -383,28 +381,16 @@ namespace RingSoft.DbMaintenance
             {
                 if (childNodes.IndexOf(child) == 0)
                 {
-                    newInclude = LookupDefinition.Include(child.FieldDefinition);
-
-                    if (newInclude != null)
-                    {
-                        if (_includes.FirstOrDefault(p => p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias) == null)
-                        {
-                            _includes.Add(newInclude);
-                            includeJoin = newInclude;
-                        }
-                        else
-                        {
-                            includeJoin = _includes.FirstOrDefault(p =>
-                                p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias);
-                        }
-                    }
+                    var newInclude = LookupDefinition.Include(child.FieldDefinition);
+                    includeJoin = ProcessInclude(child, includeJoin, newInclude);
                 }
 
                 if (childNodes.IndexOf(child) == childNodes.Count - 1)
                 {
                     if (childNodes.Count > 1)
                     {
-                        includeJoin = includeJoin.Include(child.FieldDefinition);
+                        var newInclude = includeJoin.Include(child.FieldDefinition);
+                        includeJoin = ProcessInclude(child, includeJoin, newInclude);
                     }
 
                     if (createColumn)
@@ -417,6 +403,25 @@ namespace RingSoft.DbMaintenance
                     includeJoin = includeJoin.Include(child.FieldDefinition);
                 }
             }
+        }
+
+        private LookupJoin ProcessInclude(TreeViewItem child, LookupJoin includeJoin, LookupJoin newInclude)
+        {
+            if (newInclude != null)
+            {
+                if (_includes.FirstOrDefault(p => p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias) == null)
+                {
+                    _includes.Add(newInclude);
+                    includeJoin = newInclude;
+                }
+                else
+                {
+                    includeJoin = _includes.FirstOrDefault(p =>
+                        p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias);
+                }
+            }
+
+            return includeJoin;
         }
 
         private LookupJoin CreateColumnForJoin(List<TreeViewItem> childNodes, LookupJoin includeJoin, bool createColumn = true)

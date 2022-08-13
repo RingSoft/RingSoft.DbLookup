@@ -21,6 +21,14 @@ namespace RingSoft.DbLookup.Lookup
     public abstract class LookupColumnDefinitionBase
     {
         /// <summary>
+        /// Gets the join query table alias.
+        /// </summary>
+        /// <value>
+        /// The join query table alias.
+        /// </value>
+        public string JoinQueryTableAlias { get; set; }
+
+        /// <summary>
         /// Gets the type of the column.
         /// </summary>
         /// <value>
@@ -125,6 +133,7 @@ namespace RingSoft.DbLookup.Lookup
             ShowNegativeValuesInRed = source.ShowNegativeValuesInRed;
             ShowPositiveValuesInGreen = source.ShowPositiveValuesInGreen;
             ContentTemplateId = source.ContentTemplateId;
+            JoinQueryTableAlias = source.JoinQueryTableAlias;
         }
 
         /// <summary>

@@ -88,23 +88,24 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public void ConfigureLookups()
         {
-            var employeeNameFormula = "[Employees].[FirstName] + ' ' + [Employees].[LastName]";
-            var employeeSupervisorFormula = "[Employees_Employees_ReportsTo].[FirstName] + ' ' + [Employees_Employees_ReportsTo].[LastName]";
-            var orderEmployeeNameFormula = GetOrdersEmployeeNameFormula();
-            var extendedPriceFormula = "([Order Details].[Quantity] * 1.0) * [Order Details].[UnitPrice]";
+            var employeeNameFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
+            //var employeeSupervisorFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
+            var employeeSupervisorFormula = employeeNameFormula;
+            var orderEmployeeNameFormula = employeeNameFormula;
+            var extendedPriceFormula = "([{Alias}].[Quantity] * 1.0) * [{Alias}].[UnitPrice]";
 
             switch (DataProcessorType)
             {
                 case DataProcessorTypes.Sqlite:
-                    employeeNameFormula = "[Employees].[FirstName] || ' ' || [Employees].[LastName]";
-                    employeeSupervisorFormula = "[Employees_Employees_ReportsTo].[FirstName] || ' ' || [Employees_Employees_ReportsTo].[LastName]";
+                    employeeNameFormula = "[{Alias}].[FirstName] || ' ' || [{Alias}].[LastName]";
+                    employeeSupervisorFormula = "[{Alias}].[FirstName] || ' ' || [{Alias}].[LastName]";
                     break;
                 case DataProcessorTypes.SqlServer:
                     break;
                 case DataProcessorTypes.MySql:
-                    employeeNameFormula = "CONCAT(`Employees`.`FirstName`, ' ', `Employees`.`LastName`)";
-                    employeeSupervisorFormula = "CONCAT(`Employees_Employees_ReportsTo`.`FirstName`, ' ', `Employees_Employees_ReportsTo`.`LastName`)";
-                    extendedPriceFormula = "(`order details`.`Quantity` * 1.0) * `order details`.`UnitPrice`";
+                    employeeNameFormula = "CONCAT(`{Alias}`.`FirstName`, ' ', `{Alias}`.`LastName`)";
+                    employeeSupervisorFormula = "CONCAT(`{Alias}`.`FirstName`, ' ', `{Alias}`.`LastName`)";
+                    extendedPriceFormula = "(`{Alias}`.`Quantity` * 1.0) * `{Alias}`.`UnitPrice`";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -115,8 +116,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             OrdersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 20);
             OrdersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 50);
-            OrdersLookup.Include(p => p.Employee);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", orderEmployeeNameFormula, 30);
+            var join = OrdersLookup.Include(p => p.Employee);
+            OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", 
+                orderEmployeeNameFormula, 30, join.JoinDefinition.Alias);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
 
@@ -137,7 +139,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 15);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice", extendedPriceFormula, 15)
+            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice", extendedPriceFormula, 15, "")
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right)
                 .DoShowNegativeValuesInRed();
@@ -169,10 +171,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             CustomerNameLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
             EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(_lookupContext.Employees);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40);
+            EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40, "");
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
-            EmployeesLookup.Include(p => p.Employee1);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40);
+            var employeeJoin = EmployeesLookup.Include(p => p.Employee1);
+            EmployeesLookup.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40, employeeJoin.JoinDefinition.Alias);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
 

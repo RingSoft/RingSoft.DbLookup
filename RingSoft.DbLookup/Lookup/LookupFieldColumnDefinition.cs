@@ -42,13 +42,6 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public FieldDefinition FieldDefinition { get; private set; }
 
-        /// <summary>
-        /// Gets the join query table alias.
-        /// </summary>
-        /// <value>
-        /// The join query table alias.
-        /// </value>
-        public string JoinQueryTableAlias { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether this column is distinct.

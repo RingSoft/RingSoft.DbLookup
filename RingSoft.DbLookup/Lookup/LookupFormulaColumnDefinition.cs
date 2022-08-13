@@ -1,6 +1,7 @@
 ﻿using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Globalization;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
@@ -65,7 +66,26 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The formula.
         /// </value>
-        public string Formula { get; internal set; }
+
+        private string _formula;
+
+        public string Formula
+        {
+            get
+            {
+                var alias = JoinQueryTableAlias;
+                if (alias.IsNullOrEmpty())
+                {
+                    alias = LookupDefinition.TableDefinition.TableName;
+                }
+
+                return _formula.Replace("{Alias}", alias);
+            }
+            set
+            {
+                _formula = value;
+            }
+        }
 
         private CultureInfo _columnCulture;
 
@@ -118,6 +138,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public DbDateTypes DateType { get; private set; }
 
+        public FieldDefinition FieldDefinition { get; internal set; }
+
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 
@@ -142,12 +164,14 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (source is LookupFormulaColumnDefinition formulaSource)
             {
+                Formula = formulaSource._formula;
                 NumberFormatString = formulaSource.NumberFormatString;
                 DateFormatString = formulaSource.DateFormatString;
                 ColumnCulture = formulaSource.ColumnCulture;
                 DecimalCount = formulaSource.DecimalCount;
                 DecimalFieldType = formulaSource.DecimalFieldType;
                 DateType = formulaSource.DateType;
+                JoinQueryTableAlias = formulaSource.JoinQueryTableAlias;
             }
             base.CopyFrom(source);
         }

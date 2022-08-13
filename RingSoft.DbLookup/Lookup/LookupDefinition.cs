@@ -73,6 +73,13 @@ namespace RingSoft.DbLookup.Lookup
             return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, entityProperty, 0);
         }
 
+        public LookupFieldColumnDefinition AddVisibleColumnDefinition(
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty,
+            string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth)
+        {
+            return AddVisibleColumnDefinition(lookupEntityProperty, caption, entityProperty, percentWidth, "");
+        }
+
         /// <summary>
         /// Adds the visible column definition.
         /// </summary>
@@ -82,10 +89,10 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
         /// <returns></returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth)
+            string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth, string alias)
         {
             var field = TableDefinition.GetPropertyField(entityProperty.GetFullPropertyName());
-            return AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth);
+            return AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth, alias);
         }
 
         /// <summary>
@@ -95,9 +102,9 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="formula">The formula.</param>
         /// <returns></returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
-            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula)
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula, string alias)
         {
-            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, formula, 0);
+            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, formula, 0, alias);
         }
 
         /// <summary>
@@ -110,7 +117,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns></returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption, string formula,
-            double percentWidth)
+            double percentWidth, string alias)
         {
             var columnName = caption;
             if (columnName.IsNullOrEmpty())
@@ -118,7 +125,7 @@ namespace RingSoft.DbLookup.Lookup
 
             ValidateProperty(lookupEntityProperty, false, columnName);
             var column = base.AddVisibleColumnDefinition(caption, formula, percentWidth,
-                GetFieldDataTypeForProperty(lookupEntityProperty));
+                GetFieldDataTypeForProperty(lookupEntityProperty), alias);
             column.PropertyName = lookupEntityProperty.GetFullPropertyName();
             return column;
         }
@@ -129,11 +136,14 @@ namespace RingSoft.DbLookup.Lookup
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
         /// <returns></returns>
-        public LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity> Include<TRelatedEntity>(Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
+        public LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity> Include<TRelatedEntity>(
+            Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
             where TRelatedEntity : class
 
         {
-            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>(this, ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(), relatedProperty.ReturnType.Name);
+            var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>(this,
+                ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(),
+                relatedProperty.ReturnType.Name);
             return returnEntity;
         }
 
@@ -191,14 +201,14 @@ namespace RingSoft.DbLookup.Lookup
         private LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
             FieldDefinition fieldDefinition,
-            double percentWidth)
+            double percentWidth, string alias)
         {
             var columnName = caption;
             if (columnName.IsNullOrEmpty())
                 columnName = lookupEntityProperty.GetFullPropertyName();
 
             ValidateProperty(lookupEntityProperty, false, columnName);
-            var column = base.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
+            var column = base.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth, alias);
             column.PropertyName = lookupEntityProperty.GetFullPropertyName();
             return column;
         }

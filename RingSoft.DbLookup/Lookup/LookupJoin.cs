@@ -92,7 +92,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             ValidateFieldDefinition(fieldDefinition);
 
-            var columnDefinition = LookupDefinition.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
+            var columnDefinition = LookupDefinition.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth, "");
             columnDefinition.JoinQueryTableAlias = JoinDefinition.Alias;
             return columnDefinition;
         }
@@ -103,6 +103,15 @@ namespace RingSoft.DbLookup.Lookup
                 throw new ArgumentException(
                     $"Field Definition table definition '{fieldDefinition.TableDefinition}' doesn't match {JoinDefinition.ForeignKeyDefinition.PrimaryTable}");
         }
+
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
+            double percentWidth, FieldDataTypes fieldDataType)
+        {
+            var column = LookupDefinition.AddVisibleColumnDefinition(caption, formula, percentWidth, fieldDataType, JoinDefinition.Alias);
+            column.JoinQueryTableAlias = JoinDefinition.Alias;
+            return column;
+        }
+
 
         /// <summary>
         /// Adds the hidden column.

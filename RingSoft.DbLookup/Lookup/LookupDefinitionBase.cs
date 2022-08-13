@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
@@ -177,7 +178,8 @@ namespace RingSoft.DbLookup.Lookup
                             {
                                 var newColumn = AddVisibleColumnDefinition(fieldColumn.Caption,
                                     fieldColumn.FieldDefinition,
-                                    columnType.PercentWidth);
+                                    columnType.PercentWidth,
+                                    fieldColumn.JoinQueryTableAlias);
                                 newColumn.CopyFrom(columnType);
                             }
                         }
@@ -194,7 +196,7 @@ namespace RingSoft.DbLookup.Lookup
                             else
                             {
                                 var newColumn = AddVisibleColumnDefinition(formulaColumn.Caption, formulaColumn.Formula,
-                                    formulaColumn.PercentWidth, formulaColumn.DataType);
+                                    formulaColumn.PercentWidth, formulaColumn.DataType, formulaColumn.JoinQueryTableAlias);
                                 newColumn.CopyFrom(columnType);
                             }
                         }
@@ -235,7 +237,7 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth)
+        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth, string alias)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -246,7 +248,8 @@ namespace RingSoft.DbLookup.Lookup
             {
                 Caption = caption,
                 LookupDefinition = this,
-                PercentWidth = percentWidth
+                PercentWidth = percentWidth,
+                JoinQueryTableAlias = alias
             };
 
             ProcessVisibleColumnDefinition(column);
@@ -303,7 +306,8 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        internal LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula, double percentWidth, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
+            double percentWidth, FieldDataTypes dataType, string alias)
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
@@ -314,7 +318,17 @@ namespace RingSoft.DbLookup.Lookup
                 PercentWidth = percentWidth
             };
 
+            //if (fieldDefinition != null)
+            {
+                //column.FieldDefinition = fieldDefinition;
+                //column.JoinQueryTableAlias = fieldDefinition.ParentJoinForeignKeyDefinition.Alias;
+
+                column.JoinQueryTableAlias = alias;
+            }
             ProcessVisibleColumnDefinition(column);
+
+            //if (join != null)
+            //    column.JoinQueryTableAlias = join.Alias;
             _visibleColumns.Add(column);
             return column;
         }
@@ -329,6 +343,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (_joinsList.All(p => p.ForeignKeyDefinition.Alias != lookupFieldJoin.ForeignKeyDefinition.Alias))
                 _joinsList.Add(lookupFieldJoin);
+
+            foreach (var column in VisibleColumns)
+            {
+                //column.JoinQueryTableAlias = lookupFieldJoin.Alias;
+            }
         }
 
         /// <summary>
@@ -341,7 +360,7 @@ namespace RingSoft.DbLookup.Lookup
             return _visibleColumns.IndexOf(visibleColumnDefinition);
         }
 
-        internal LookupJoin Include(FieldDefinition foreignFieldDefinition)
+        public LookupJoin Include(FieldDefinition foreignFieldDefinition)
         {
             var lookupJoin = new LookupJoin(this, foreignFieldDefinition);
             return lookupJoin;

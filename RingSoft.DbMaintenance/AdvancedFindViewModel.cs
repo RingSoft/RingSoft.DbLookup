@@ -11,6 +11,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -254,7 +255,7 @@ namespace RingSoft.DbMaintenance
                         p.EntityName == SelectedTableBoxItem.TextValue);
 
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
-
+                _includes.Clear();
             }
             else
             {
@@ -354,6 +355,12 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
+            MakeIncludes();
+            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+        }
+
+        private void MakeIncludes(bool createColumn = true)
+        {
             var childNodes = new List<TreeViewItem>();
 
             LookupJoin includeJoin = null;
@@ -364,17 +371,33 @@ namespace RingSoft.DbMaintenance
                 childNodes.Insert(0, parentTreeItem);
             }
 
+            LookupJoin newInclude = null;
+
             if (childNodes.Any() == false)
             {
-                includeJoin = SelectColumnDescription(SelectedTreeViewItem, null);
+                if (createColumn)
+                    includeJoin = SelectColumnDescription(SelectedTreeViewItem, null);
             }
 
             foreach (var child in childNodes)
             {
                 if (childNodes.IndexOf(child) == 0)
                 {
-                    includeJoin = LookupDefinition.Include(child.FieldDefinition);
+                    newInclude = LookupDefinition.Include(child.FieldDefinition);
 
+                    if (newInclude != null)
+                    {
+                        if (_includes.FirstOrDefault(p => p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias) == null)
+                        {
+                            _includes.Add(newInclude);
+                            includeJoin = newInclude;
+                        }
+                        else
+                        {
+                            includeJoin = _includes.FirstOrDefault(p =>
+                                p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias);
+                        }
+                    }
                 }
 
                 if (childNodes.IndexOf(child) == childNodes.Count - 1)
@@ -384,14 +407,21 @@ namespace RingSoft.DbMaintenance
                         includeJoin = includeJoin.Include(child.FieldDefinition);
                     }
 
-                    includeJoin = SelectColumnDescription(child, includeJoin);
+                    if (createColumn)
+                    {
+                        includeJoin = SelectColumnDescription(child, includeJoin);
+                    }
                 }
                 else if (childNodes.IndexOf(child) != 0)
                 {
                     includeJoin = includeJoin.Include(child.FieldDefinition);
                 }
             }
-            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+        }
+
+        private LookupJoin CreateColumnForJoin(List<TreeViewItem> childNodes, LookupJoin includeJoin, bool createColumn = true)
+        {
+            return includeJoin;
         }
 
         private LookupJoin SelectColumnDescription(TreeViewItem child, LookupJoin includeJoin)

@@ -398,12 +398,14 @@ namespace RingSoft.DbMaintenance
 
                     if (createColumn)
                     {
-                        includeJoin = SelectColumnDescription(child, includeJoin);
+                        var newInclude = SelectColumnDescription(child, includeJoin);
+                        includeJoin = ProcessInclude(includeJoin, newInclude);
                     }
                 }
                 else if (childNodes.IndexOf(child) != 0)
                 {
-                    includeJoin = includeJoin.Include(child.FieldDefinition);
+                    var newInclude = includeJoin.Include(child.FieldDefinition);
+                    includeJoin = ProcessInclude(includeJoin, newInclude);
                 }
             }
         }

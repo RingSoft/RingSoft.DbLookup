@@ -16,6 +16,7 @@ using System.Windows.Media;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbMaintenance;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -1434,8 +1435,22 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ShowAdvancedFind()
         {
-            var advancedFindWindow = new AdvancedFindWindow();
-            advancedFindWindow.Owner = Window.GetWindow(this);
+            //advancedFindWindow.Owner = Window.GetWindow(this);
+            var lookupData =
+                new LookupDataBase(new LookupDefinitionBase(SystemGlobals.AdvancedFindLookupContext.AdvancedFinds),
+                    this);
+
+            var addViewArgs = new LookupAddViewArgs(lookupData, true, LookupFormModes.View, 
+                "", Window.GetWindow(this));
+
+            addViewArgs.InputParameter = new AdvancedFindInput
+            {
+                InputParameter = _addViewParameter,
+                LockTable = LookupDefinition.TableDefinition
+            };
+
+            var advancedFindWindow = new AdvancedFindWindow(addViewArgs);
+            
             advancedFindWindow.ShowDialog();
         }
 

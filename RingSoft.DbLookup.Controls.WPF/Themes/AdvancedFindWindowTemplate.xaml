@@ -47,7 +47,7 @@
 
                                 <Label Grid.Row="1" Grid.Column="0" Content="Table" HorizontalAlignment="Right"/>
 
-                                <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>
+                                <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="TableComboBoxControl" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>
 
                                 <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TreeRoot}">
                                     <TreeView.ItemTemplate>

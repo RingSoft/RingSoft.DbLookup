@@ -11,6 +11,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
@@ -21,6 +22,12 @@ namespace RingSoft.DbMaintenance
         AdvancedFind = 1,
         Formula = 2,
         ForeignTable = 3
+    }
+
+    public class AdvancedFindInput
+    {
+        public object InputParameter { get; set; }
+        public TableDefinitionBase LockTable { get; set; }
     }
 
 
@@ -216,18 +223,35 @@ namespace RingSoft.DbMaintenance
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         private List<LookupJoin> _includes = new List<LookupJoin>();
+        private AdvancedFindInput _input = null;
 
         protected override void Initialize()
         {
+            if (LookupAddViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+            {
+                _input = advancedFindInput;
+            }
             AddColumnCommand = new RelayCommand(AddColumn);
 
             TableComboBoxSetup = new TextComboBoxControlSetup();
             var index = 0;
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context
-                         .TableDefinitions.OrderBy(p => p.EntityName))
+                         .TableDefinitions.OrderBy(p => p.Description))
             {
-                TableComboBoxSetup.Items.Add(new TextComboBoxItem(){NumericValue = index, TextValue = contextTableDefinition.EntityName});
+                if (!contextTableDefinition.Description.IsNullOrEmpty())
+                {
+                    TableComboBoxSetup.Items.Add(new TextComboBoxItem() { NumericValue = index, TextValue = contextTableDefinition.Description });
+                }
                 index++;
+            }
+
+            if (_input != null)
+            {
+                TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == _input.LockTable.Description);
+                ViewLookupDefinition.FilterDefinition.AddFixedFilter(
+                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p =>
+                        p.Table), Conditions.Equals,
+                    _input.LockTable.EntityName);
             }
             base.Initialize();
         }
@@ -255,7 +279,7 @@ namespace RingSoft.DbMaintenance
             {
                 var tableDefinition =
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.EntityName == SelectedTableBoxItem.TextValue);
+                        p.Description == SelectedTableBoxItem.TextValue);
 
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
                 _includes.Clear();
@@ -270,7 +294,7 @@ namespace RingSoft.DbMaintenance
             {
                 var table = SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions
                     .FirstOrDefault(
-                        f => f.EntityName == TableComboBoxSetup.Items[TableIndex].TextValue);
+                        f => f.Description == TableComboBoxSetup.Items[TableIndex].TextValue);
                 var fields = table.FieldDefinitions;
 
                 foreach (var field in fields)
@@ -285,7 +309,7 @@ namespace RingSoft.DbMaintenance
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items, field.ParentJoinForeignKeyDefinition, treeRoot);
                 }
 
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                LookupCommand = GetLookupCommand(LookupCommands.Clear);
 
             }
             TreeRoot = treeItems;
@@ -334,17 +358,24 @@ namespace RingSoft.DbMaintenance
             var advancedFind = new AdvancedFind();
             advancedFind.Id = AdvancedFindId;
             advancedFind.Name = KeyAutoFillValue.Text;
-            advancedFind.Table = TableComboBoxSetup.Items[TableIndex].TextValue;
+            advancedFind.Table = TableDefinition.Context.TableDefinitions
+                .FirstOrDefault(p => p.Description == TableComboBoxSetup.Items[TableIndex].TextValue)
+                ?.EntityName;
             return advancedFind;
         }
 
         protected override void ClearData()
         {
             AdvancedFindId = 0;
-            TableIndex = -1;
-            SelectedTableBoxItem = null;
-            SelectedTreeViewItem = null;
-            TreeRoot?.Clear();
+            if (_input == null || _input.LockTable == null)
+            {
+                TableIndex = -1;
+                SelectedTableBoxItem = null;
+                SelectedTreeViewItem = null;
+                TreeRoot?.Clear();
+            }
+
+            
             //LoadTree();
         }
 

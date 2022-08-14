@@ -794,9 +794,16 @@ namespace RingSoft.DbLookup.Lookup
         {
             var lastWhereIndex = 0;
 
-            var searchValue = startRow.GetRowValue(SortColumnDefinition.SelectSqlAlias);
-            var hasMoreThan1Record = HasMoreThan1Record(searchValue, SortColumnDefinition, query,
-                GetQueryTableForColumn(query, SortColumnDefinition), $"{debugMessage}.GetLastWhereIndex");
+            var hasMoreThan1Record = false;
+            var searchValue = string.Empty;
+            if (SortColumnDefinition != null)
+            {
+                searchValue = startRow.GetRowValue(SortColumnDefinition.SelectSqlAlias);
+                hasMoreThan1Record = HasMoreThan1Record(searchValue, SortColumnDefinition, query,
+                    GetQueryTableForColumn(query, SortColumnDefinition), $"{debugMessage}.GetLastWhereIndex");
+
+            }
+
 
             if (hasMoreThan1Record)
             {

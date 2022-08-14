@@ -3,6 +3,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -41,6 +42,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public StackPanel ButtonsPanel { get; set; }
         public Border Border { get; set; }
         public AutoFillControl NameAutoFillControl { get; set; }
+        public TextComboBoxControl TableComboBoxControl { get; set; }
+
+        private Control _buttonsControl;
+        private LookupAddViewArgs _addViewArgs;
 
         public IDbMaintenanceProcessor Processor { get; set; }
 
@@ -49,24 +54,39 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFindWindow), new FrameworkPropertyMetadata(typeof(AdvancedFindWindow)));
         }
 
+        public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
+        {
+            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetButtonsControl();
+            _addViewArgs = addViewArgs;
+
+        }
+
+        public void Initialize()
+        {
+            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            var advancedFindViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
+            Processor.Initialize(this, _buttonsControl, advancedFindViewModel, this);
+            Processor.InitializeFromLookupData(_addViewArgs);
+            if (_addViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+            {
+                TableComboBoxControl.IsEnabled = false;
+            }
+        }
+
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
+            TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
             
-            var advancedFindViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
-
-            var buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetButtonsControl();
             if (ButtonsPanel != null)
             {
-                ButtonsPanel.Children.Add(buttonsControl);
+                ButtonsPanel.Children.Add(_buttonsControl);
                 ButtonsPanel.UpdateLayout();
             }
 
-            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
-            Processor.Initialize(this, buttonsControl, advancedFindViewModel, this);
-
+            Initialize();
             if (NameAutoFillControl != null)
             {
                 Processor.RegisterFormKeyControl(NameAutoFillControl);

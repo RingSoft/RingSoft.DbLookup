@@ -116,7 +116,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)
         {
-            ViewModel.InitializeFromLookupData(e);
+            if (ViewModel != null)
+            {
+                ViewModel.InitializeFromLookupData(e);
+            }
         }
 
         public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)

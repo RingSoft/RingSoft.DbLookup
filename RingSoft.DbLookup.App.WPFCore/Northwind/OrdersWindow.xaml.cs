@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
@@ -30,6 +31,8 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                     if (!OrdersViewModel.ValidateCustomer())
                         args.Handled = true;
             };
+
+            AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
         }
 
         public override void ResetViewForNewRecord()
@@ -59,6 +62,13 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
         public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
         {
+        }
+
+        private void ShowAdvancedFind()
+        {
+            var advancedFindWindow = new AdvancedFindWindow();
+            advancedFindWindow.Owner = this;
+            advancedFindWindow.ShowDialog();
         }
     }
 }

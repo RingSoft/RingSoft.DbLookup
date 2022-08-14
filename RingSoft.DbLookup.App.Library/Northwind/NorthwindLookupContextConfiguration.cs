@@ -142,7 +142,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice", extendedPriceFormula, 15, "")
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right)
-                .DoShowNegativeValuesInRed();
+                .DoShowNegativeValuesInRed().HasDescription("Extended Price");
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Discount, "Discount", p => p.Discount, 15);
             
             ProductsLookup = new LookupDefinition<ProductLookup, Product>(_lookupContext.Products);
@@ -216,10 +216,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             _lookupContext.OrderDetails.HasDescription("Order Details");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).HasDescription("Product");
-            _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Quantity).HasDescription("Quantity");
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice).HasDescription("Unit Price")
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();
-            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount)
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount).HasDescription("Discount")
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
             _lookupContext.Employees.HasDescription("Employees");

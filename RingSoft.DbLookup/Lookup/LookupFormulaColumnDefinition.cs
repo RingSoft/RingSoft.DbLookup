@@ -1,5 +1,6 @@
 ﻿using RingSoft.DbLookup.QueryBuilder;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -137,6 +138,8 @@ namespace RingSoft.DbLookup.Lookup
         /// The type of the date.
         /// </value>
         public DbDateTypes DateType { get; private set; }
+
+        public string Description { get; private set; }
 
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
@@ -297,6 +300,12 @@ namespace RingSoft.DbLookup.Lookup
         public LookupFormulaColumnDefinition HasDateType(DbDateTypes value)
         {
             DateType = value;
+            return this;
+        }
+
+        public LookupFormulaColumnDefinition HasDescription(string value)
+        {
+            Description = value;
             return this;
         }
     }

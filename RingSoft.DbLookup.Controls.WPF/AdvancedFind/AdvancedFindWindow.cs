@@ -61,15 +61,24 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         }
 
+        public AdvancedFindWindow()
+        {
+            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetButtonsControl();
+        }
+
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
             var advancedFindViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
             Processor.Initialize(this, _buttonsControl, advancedFindViewModel, this);
-            Processor.InitializeFromLookupData(_addViewArgs);
-            if (_addViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+            if (_addViewArgs != null)
             {
-                TableComboBoxControl.IsEnabled = false;
+                Processor.InitializeFromLookupData(_addViewArgs);
+                if (_addViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+                {
+                    TableComboBoxControl.IsEnabled = false;
+                }
+
             }
         }
 

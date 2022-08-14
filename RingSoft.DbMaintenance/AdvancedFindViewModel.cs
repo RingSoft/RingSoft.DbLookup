@@ -227,9 +227,12 @@ namespace RingSoft.DbMaintenance
 
         protected override void Initialize()
         {
-            if (LookupAddViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+            if (LookupAddViewArgs != null)
             {
-                _input = advancedFindInput;
+                if (LookupAddViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+                {
+                    _input = advancedFindInput;
+                }
             }
             AddColumnCommand = new RelayCommand(AddColumn);
 
@@ -268,9 +271,11 @@ namespace RingSoft.DbMaintenance
         protected override void LoadFromEntity(AdvancedFind entity)
         {
             AdvancedFindId = entity.Id;
-            TableIndex =
-                TableComboBoxSetup.Items.IndexOf(
-                    TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == entity.Table));
+            
+            var tableDefinition =
+                TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.EntityName == entity.Table);
+            var comboItem = TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == tableDefinition.Description);
+            TableIndex = TableComboBoxSetup.Items.IndexOf(comboItem);
         }
 
         private void LoadTree()

@@ -108,6 +108,10 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                <Button x:Name="AdvancedFindButton" Content="_Advanced Find" />
+
+            </StackPanel>
             <Grid Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

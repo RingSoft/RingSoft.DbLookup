@@ -155,7 +155,10 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
                 _selectedTableBoxItem = value;
-                LoadTree();
+                if (_selectedTableBoxItem != null)
+                {
+                    LoadTree();
+                }
                 OnPropertyChanged();
             }
         }
@@ -339,7 +342,10 @@ namespace RingSoft.DbMaintenance
         {
             AdvancedFindId = 0;
             TableIndex = -1;
-            LoadTree();
+            SelectedTableBoxItem = null;
+            SelectedTreeViewItem = null;
+            TreeRoot?.Clear();
+            //LoadTree();
         }
 
         protected override bool SaveEntity(AdvancedFind entity)

@@ -148,6 +148,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.OnRecordSelected(args);
             };
             lookupWindow.Owner = MaintenanceWindow;
+            lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ShowDialog();
         }
 
@@ -207,7 +208,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 WPFControlsGlobals.SendKey(Key.Tab);
             }
-
         }
 
         public virtual bool SetControlReadOnlyMode(Control control, bool readOnlyValue)

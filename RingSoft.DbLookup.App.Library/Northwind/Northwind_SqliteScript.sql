@@ -159,6 +159,7 @@ CREATE TABLE [AdvancedFindColumns] (
 , [PrimaryFieldName] nvarchar(50) NULL
 , [Caption] nvarchar(50) NOT NULL
 , [PercentWidth] [decimal](18, 4) NOT NULL
+, [Formula] ntext NULL
 , CONSTRAINT [PK_AdvancedFindColumns] PRIMARY KEY ([AdvancedFindId],[ColumnId])
 , FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
@@ -174,7 +175,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [Operand] [tinyint] NOT NULL
 , [SearchForValue] nvarchar(50) NOT NULL
 , [DisplayValue] nvarchar(50) NOT NULL
-, [Formula] nvarchar(50) NULL
+, [Formula] ntext NULL
 , [SearchForAdvancedFindId] int NULL
 , [CustomDate] bit NULL
 , [RightParentheses] [tinyint] NULL

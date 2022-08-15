@@ -24,6 +24,10 @@ namespace RingSoft.DbLookup.App.Library.Ef6.Northwind
         public TableDefinition<Shipper> Shippers { get; set; }
         public TableDefinition<Supplier> Suppliers { get; set; }
         public TableDefinition<Territory> Territories { get; set; }
+        public void SetAdvancedFind()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public NorthwindLookupContextEf6()
         {

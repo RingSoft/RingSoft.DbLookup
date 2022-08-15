@@ -1,4 +1,5 @@
 ﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -427,7 +428,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public int GotoProductId { get; private set; }
 
-        internal NorthwindViewModelInput ViewModelInput { get; private set; }
+        public NorthwindViewModelInput ViewModelInput { get; private set; }
 
         private readonly DateTime _newDateTime = DateTime.Today;
 
@@ -458,6 +459,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ViewModelInput = new NorthwindViewModelInput();
             }
 
+            InputParameter = ViewModelInput;
 
             ViewModelInput.OrderViewModels.Add(this);
             ViewModelInput.OrderInput ??= new OrderInput {GridMode = GridMode};

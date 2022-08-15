@@ -48,6 +48,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
             Processor.OnReadOnlyModeSet(readOnlyValue);
+            base.OnReadOnlyModeSet(readOnlyValue);
         }
 
         public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)

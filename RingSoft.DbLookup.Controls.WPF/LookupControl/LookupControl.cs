@@ -247,6 +247,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool LookupWindowReadOnlyMode { get; internal set; }
 
+        public object AddViewParameter { get; internal set; }
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -269,8 +271,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
-        private object _addViewParameter;
-        
+
         static LookupControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupControl), new FrameworkPropertyMetadata(typeof(LookupControl)));
@@ -1445,11 +1446,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             addViewArgs.InputParameter = new AdvancedFindInput
             {
-                InputParameter = _addViewParameter,
-                LockTable = LookupDefinition.TableDefinition
+                InputParameter = AddViewParameter,
+                LockTable = LookupDefinition.TableDefinition,
+                LookupDefinition = LookupDefinition
             };
 
             var advancedFindWindow = new AdvancedFindWindow(addViewArgs);
+            advancedFindWindow.Owner = Window.GetWindow(this);
+            advancedFindWindow.ShowInTaskbar = false;
             
             advancedFindWindow.ShowDialog();
         }
@@ -1502,7 +1506,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var selectedIndex = ListView.SelectedIndex;
                 if (selectedIndex >= 0)
                 {
-                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), _addViewParameter, _readOnlyMode);
+                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), AddViewParameter, _readOnlyMode);
                     return true;
                 }
             }
@@ -1521,13 +1525,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                         ClearLookupControl();
                         break;
                     case LookupCommands.Refresh:
-                        _addViewParameter = command.AddViewParameter;
+                        this.AddViewParameter = command.AddViewParameter;
                         RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.AddModify:
                         var addViewParameter = command.AddViewParameter;
                         if (addViewParameter == null)
-                            addViewParameter = _addViewParameter;
+                            addViewParameter = this.AddViewParameter;
 
                         var selectedIndex = ListView?.SelectedIndex ?? 0;
                         if (selectedIndex >= 0)
@@ -1538,8 +1542,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.Reset:
                         ClearLookupControl();
                         SetupControl();
+                        this.AddViewParameter = command.AddViewParameter;
                         _currentPageSize = GetPageSize();
-                        LookupData.GetInitData();
+                        RefreshData(true);
+                        //LookupData.GetInitData();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

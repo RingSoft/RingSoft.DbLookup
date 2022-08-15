@@ -14,7 +14,6 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public void SetReadOnlyMode(bool readOnlyValue)
         {
-            
         }
     }
 }

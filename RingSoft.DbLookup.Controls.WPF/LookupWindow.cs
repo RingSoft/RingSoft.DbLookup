@@ -198,6 +198,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupControl.LookupData.LookupView += LookupData_LookupView;
             LookupControl.RefreshData(false, _initialSearchFor, null, 
                 true, InitialSearchForPrimaryKeyValue);
+            LookupControl.AddViewParameter = AddViewParameter;
         }
 
         public override void OnApplyTemplate()

@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
+﻿using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.ModelDefinition;
 
@@ -19,5 +20,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         TableDefinition<Shipper> Shippers { get; set; }
         TableDefinition<Supplier> Suppliers { get; set; }
         TableDefinition<Territory> Territories { get; set; }
+        public void SetAdvancedFind();
+
     }
 }

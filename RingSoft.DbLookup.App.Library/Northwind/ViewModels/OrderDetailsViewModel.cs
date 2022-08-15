@@ -262,6 +262,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ViewModelInput.OrderDetailsViewModels.Any(
                     a => a != this && a.OrderId == OrderId && a.ProductId == ProductId);
 
+            if (LookupAddViewArgs != null)
+            {
+                if (LookupAddViewArgs.LookupReadOnlyMode)
+                {
+                    ReadOnlyMode = true;
+                    NewButtonEnabled = false;
+                }
+
+            }
+
             return orderDetail;
         }
 

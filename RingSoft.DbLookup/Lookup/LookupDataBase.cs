@@ -741,49 +741,58 @@ namespace RingSoft.DbLookup.Lookup
             var checkNull = false;
             var recordsFound = 0;
             var originalRecordsCount = recordCount;
-            while (lastWhereIndex >= 0 && recordCount > 0)
+            if (query.WhereItems.Any())
             {
-                var lastWhereItem = query.WhereItems[query.WhereItems.Count - 1];
-                if (lastWhereItem.Value.IsNullOrEmpty() && lastWhereIndex == 0 && recordsFound < originalRecordsCount
-                    && OrderByType == OrderByTypes.Descending)
-                    break;
+                while (lastWhereIndex >= 0 && recordCount > 0)
+                {
+                    {
+                        var lastWhereItem = query.WhereItems[query.WhereItems.Count - 1];
+                        if (lastWhereItem.Value.IsNullOrEmpty() && lastWhereIndex == 0 &&
+                            recordsFound < originalRecordsCount
+                            && OrderByType == OrderByTypes.Descending)
+                            break;
 
-                if (checkNull)
-                {
-                    lastWhereItem.UpdateCondition(Conditions.EqualsNull);
-                }
-                else
-                {
-                    if (OrderByType == OrderByTypes.Ascending)
-                    {
-                        lastWhereItem.UpdateCondition(Conditions.GreaterThan);
-                    }
-                    else
-                    {
-                        lastWhereItem.UpdateCondition(Conditions.LessThan);
-                    }
-                }
+                        if (checkNull)
+                        {
+                            lastWhereItem.UpdateCondition(Conditions.EqualsNull);
+                        }
+                        else
+                        {
+                            if (OrderByType == OrderByTypes.Ascending)
+                            {
+                                lastWhereItem.UpdateCondition(Conditions.GreaterThan);
+                            }
+                            else
+                            {
+                                lastWhereItem.UpdateCondition(Conditions.LessThan);
+                            }
+                        }
 
-                query.SetMaxRecords(recordCount);
-                query.DebugMessage = $"LookupData.{debugMessage}.GetNextRecords";
-                var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
-                if (result.ResultCode == GetDataResultCodes.Success)
-                {
-                    foreach (DataRow dataRow in result.DataSet.Tables[0].Rows)
-                    {
-                        resultsTable.ImportRow(dataRow);
+                        query.SetMaxRecords(recordCount);
+                        query.DebugMessage = $"LookupData.{debugMessage}.GetNextRecords";
+                        var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+                        if (result.ResultCode == GetDataResultCodes.Success)
+                        {
+                            foreach (DataRow dataRow in result.DataSet.Tables[0].Rows)
+                            {
+                                resultsTable.ImportRow(dataRow);
+                            }
+
+                            recordsFound += result.DataSet.Tables[0].Rows.Count;
+                            recordCount -= result.DataSet.Tables[0].Rows.Count;
+                        }
+
+                        if (lastWhereIndex == 0 && recordCount > 0 && !checkNull &&
+                            OrderByType == OrderByTypes.Descending)
+                        {
+                            checkNull = true;
+                        }
+                        else
+                        {
+                            query.RemoveWhereItem(lastWhereItem);
+                            lastWhereIndex--;
+                        }
                     }
-                    recordsFound += result.DataSet.Tables[0].Rows.Count;
-                    recordCount -= result.DataSet.Tables[0].Rows.Count;
-                }
-                if (lastWhereIndex == 0 && recordCount > 0 && !checkNull && OrderByType == OrderByTypes.Descending)
-                {
-                    checkNull = true;
-                }
-                else
-                {
-                    query.RemoveWhereItem(lastWhereItem);
-                    lastWhereIndex--;
                 }
             }
 

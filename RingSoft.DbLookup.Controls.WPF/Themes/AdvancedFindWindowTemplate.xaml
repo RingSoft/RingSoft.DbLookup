@@ -27,6 +27,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
@@ -49,7 +50,7 @@
 
                                 <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="TableComboBoxControl" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>
 
-                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TreeRoot}">
+                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding TreeRoot}">
                                     <TreeView.ItemTemplate>
 
                                         <HierarchicalDataTemplate DataType="dbm:TreeViewItems" ItemsSource="{Binding Items}">
@@ -67,16 +68,32 @@
                                     </TreeView.ItemContainerStyle>
                                 </TreeView>
 
-                                <StackPanel Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Orientation="Vertical">
+                                <StackPanel Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" VerticalAlignment="Center" Orientation="Vertical">
 
                                     <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add _Column" Command="{Binding AddColumnCommand}"/>
 
                                     <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add _Filter"/>
 
                                 </StackPanel>
-                                
 
-                                <lc:LookupControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800"/>
+                                <deg:DataEntryGrid Grid.Row="2" Grid.Column="4" Manager="{Binding ColumnsManager}" DataEntryCanUserAddRows="False">
+                                    <deg:DataEntryGrid.Columns>
+
+                                        <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>
+
+                                        <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindColumnRow.FieldColumnId}" Width="150"/>
+
+                                        <deg:DataEntryGridTextColumn Header="Caption" ColumnId="{x:Static dbm:AdvancedFindColumnRow.NameColumnId}" Width="400"/>
+
+                                        <deg:DataEntryGridTextColumn Header="Percent Width" ColumnId="{x:Static 
+                                            dbm:AdvancedFindColumnRow.PercentColumnId}" Width="100"/>
+
+                                    </deg:DataEntryGrid.Columns>
+                                </deg:DataEntryGrid>
+
+                                <deg:DataEntryGrid Grid.Row="3" Grid.Column="4"></deg:DataEntryGrid>
+
+                                <lc:LookupControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800"/>
                             </Grid>
                         </DockPanel>
                     </Border>

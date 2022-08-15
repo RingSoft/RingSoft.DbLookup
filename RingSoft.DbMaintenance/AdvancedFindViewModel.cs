@@ -28,6 +28,7 @@ namespace RingSoft.DbMaintenance
     {
         public object InputParameter { get; set; }
         public TableDefinitionBase LockTable { get; set; }
+        public LookupDefinitionBase LookupDefinition { get; set; }
     }
 
 
@@ -216,6 +217,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private AdvancedFindColumnsManager _columnsManager;
+
+        public AdvancedFindColumnsManager ColumnsManager
+        {
+            get => _columnsManager;
+            set
+            {
+                if (_columnsManager == value)
+                {
+                    return;
+                }
+                _columnsManager = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public RelayCommand AddColumnCommand { get; set; }
 
         public RelayCommand AddFilterCommand { get; set; }
@@ -256,12 +274,15 @@ namespace RingSoft.DbMaintenance
                         p.Table), Conditions.Equals,
                     _input.LockTable.EntityName);
             }
+
+            ColumnsManager = new AdvancedFindColumnsManager(this);
             base.Initialize();
         }
 
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(newEntity.Id);
+            AdvancedFindId = advancedFind.Id;
 
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, advancedFind.Name);
 
@@ -398,7 +419,7 @@ namespace RingSoft.DbMaintenance
         private void AddColumn()
         {
             MakeIncludes();
-            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+            LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 
         private void MakeIncludes(bool createColumn = true)

@@ -39,6 +39,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             Initialize();
         }
 
+        public void LaunchAddOnTheFly(LookupAddViewArgs args)
+        {
+            OnAddViewLookup(args);
+        }
+
         protected override void SetupModel()
         {
             NorthwindContextConfiguration.InitializeModel();
@@ -52,6 +57,15 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         protected override void InitializeLookupDefinitions()
         {
             NorthwindContextConfiguration.ConfigureLookups();
+        }
+
+        public void SetAdvancedFind()
+        {
+            SystemGlobals.AdvancedFindLookupContext = this;
+            var configuration = new AdvancedFindLookupConfiguration(SystemGlobals.AdvancedFindLookupContext);
+            configuration.InitializeModel();
+            configuration.ConfigureLookups();
+
         }
     }
 }

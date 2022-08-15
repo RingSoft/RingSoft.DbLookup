@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.EfCore.MegaDb;
+﻿using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.App.Library.EfCore.MegaDb;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.Northwind;
@@ -17,6 +18,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
         {
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitNorthwind);
             NorthwindLookupContext = new NorthwindLookupContextEfCore();
+            NorthwindLookupContext.SetAdvancedFind();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
 
             if (!RsDbLookupAppGlobals.UnitTest)

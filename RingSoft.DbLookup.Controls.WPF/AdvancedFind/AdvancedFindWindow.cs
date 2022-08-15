@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using System.Linq;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows;
@@ -43,6 +44,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public Border Border { get; set; }
         public AutoFillControl NameAutoFillControl { get; set; }
         public TextComboBoxControl TableComboBoxControl { get; set; }
+        public LookupControl LookupControl { get; set; }
+
+        public AdvancedFindViewModel ViewModel { get; set; }
 
         private Control _buttonsControl;
         private LookupAddViewArgs _addViewArgs;
@@ -69,8 +73,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
-            var advancedFindViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
-            Processor.Initialize(this, _buttonsControl, advancedFindViewModel, this);
+            ViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
+            Processor.Initialize(this, _buttonsControl, ViewModel, this);
             if (_addViewArgs != null)
             {
                 Processor.InitializeFromLookupData(_addViewArgs);
@@ -88,11 +92,23 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
             TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
+            LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
             
             if (ButtonsPanel != null)
             {
                 ButtonsPanel.Children.Add(_buttonsControl);
                 ButtonsPanel.UpdateLayout();
+            }
+
+            if (LookupControl != null)
+            {
+                LookupControl.ColumnWidthChanged += (sender, args) =>
+                {
+                    if (ViewModel.LookupDefinition.VisibleColumns.Contains(args.ColumnDefinition))
+                    {
+                        
+                    }
+                };
             }
 
             Initialize();

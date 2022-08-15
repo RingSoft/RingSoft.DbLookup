@@ -24,6 +24,11 @@ namespace RingSoft.DbMaintenance
         ForeignTable = 3
     }
 
+    public class ProcessIncludeResult
+    {
+        public LookupJoin LookupJoin { get; set; }
+        public LookupColumnDefinitionBase ColumnDefinition { get; set; }
+    }
     public class AdvancedFindInput
     {
         public object InputParameter { get; set; }
@@ -273,6 +278,7 @@ namespace RingSoft.DbMaintenance
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p =>
                         p.Table), Conditions.Equals,
                     _input.LockTable.EntityName);
+                LoadFromLookupDefinition(_input.LookupDefinition);
             }
 
             ColumnsManager = new AdvancedFindColumnsManager(this);
@@ -422,8 +428,9 @@ namespace RingSoft.DbMaintenance
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 
-        private void MakeIncludes(bool createColumn = true)
+        private LookupColumnDefinitionBase MakeIncludes(bool createColumn = true)
         {
+            LookupColumnDefinitionBase column = null;
             var childNodes = new List<TreeViewItem>();
 
             LookupJoin includeJoin = null;
@@ -438,8 +445,8 @@ namespace RingSoft.DbMaintenance
             {
                 if (createColumn)
                 {
-                    var newInclude = SelectColumnDescription(SelectedTreeViewItem, null);
-                    includeJoin = ProcessInclude(includeJoin, newInclude);
+                    var processResult = SelectColumnDescription(SelectedTreeViewItem, null);
+                    includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                 }
             }
 
@@ -461,8 +468,8 @@ namespace RingSoft.DbMaintenance
 
                     if (createColumn)
                     {
-                        var newInclude = SelectColumnDescription(child, includeJoin);
-                        includeJoin = ProcessInclude(includeJoin, newInclude);
+                        var processResult = SelectColumnDescription(child, includeJoin);
+                        includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                     }
                 }
                 else if (childNodes.IndexOf(child) != 0)
@@ -471,6 +478,8 @@ namespace RingSoft.DbMaintenance
                     includeJoin = ProcessInclude(includeJoin, newInclude);
                 }
             }
+
+            return column;
         }
 
         private LookupJoin ProcessInclude(LookupJoin includeJoin, LookupJoin newInclude)
@@ -492,13 +501,9 @@ namespace RingSoft.DbMaintenance
             return includeJoin;
         }
 
-        private LookupJoin CreateColumnForJoin(List<TreeViewItem> childNodes, LookupJoin includeJoin, bool createColumn = true)
+        private ProcessIncludeResult SelectColumnDescription(TreeViewItem child, LookupJoin includeJoin)
         {
-            return includeJoin;
-        }
-
-        private LookupJoin SelectColumnDescription(TreeViewItem child, LookupJoin includeJoin)
-        {
+            LookupColumnDefinitionBase column = null;
             if (SelectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 var textField = SelectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition
@@ -516,7 +521,7 @@ namespace RingSoft.DbMaintenance
                         .InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                 {
                     textField = lookupFieldColumn.FieldDefinition;
-                    var column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, textField, 20);
+                    column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, textField, 20);
                 }
                 else if (SelectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
                              .PrimaryField.TableDefinition.LookupDefinition
@@ -524,7 +529,7 @@ namespace RingSoft.DbMaintenance
                 {
                     lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
                     var formula = lookupFormulaColumn.Formula;
-                    var column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name,
+                    column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name,
                         formula, 20, lookupFormulaColumn.DataType);
                 }
             }
@@ -532,7 +537,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (includeJoin != null)
                 {
-                    var column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name,
+                    column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name,
                         SelectedTreeViewItem.FieldDefinition,
                         20);
                 }
@@ -542,16 +547,27 @@ namespace RingSoft.DbMaintenance
                     {
                         includeJoin = LookupDefinition.Include(child.FieldDefinition.ParentJoinForeignKeyDefinition
                             .FieldJoins[0].ForeignField);
-                        includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, SelectedTreeViewItem.FieldDefinition, 20);
+                        column = includeJoin.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, SelectedTreeViewItem.FieldDefinition, 20);
                     }
                     else
                     {
-                        LookupDefinition.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, child.FieldDefinition, 20, "");
+                        column = LookupDefinition.AddVisibleColumnDefinition(SelectedTreeViewItem.Name, child.FieldDefinition, 20, "");
                     }
                 }
             }
 
-            return includeJoin;
+            var processResult = new ProcessIncludeResult
+            {
+                ColumnDefinition = column,
+                LookupJoin = includeJoin
+            };
+            return processResult;
         }
+
+        public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
+        {
+
+        }
+
     }
 }

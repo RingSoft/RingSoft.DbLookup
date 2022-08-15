@@ -50,6 +50,12 @@ namespace RingSoft.DbLookup.Controls.WPF
     ///     <MyNamespace:NewLookupControl/>
     ///
     /// </summary>
+    public class LookupColumnWidthChangedArgs
+    {
+        public LookupColumnDefinitionBase ColumnDefinition { get; set; }
+        public SizeChangedEventArgs SizeChangedEventArgs { get; set; }
+    }
+
     [TemplatePart(Name = "SearchForLabel", Type = typeof(Label))]
     [TemplatePart(Name = "EqualsRadioButton", Type = typeof(RadioButton))]
     [TemplatePart(Name = "ContainsRadioButton", Type = typeof(RadioButton))]
@@ -254,6 +260,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupView;
 
+        public event EventHandler<LookupColumnWidthChangedArgs> ColumnWidthChanged;
+
         private bool _controlLoaded;
         private bool _onLoadRan;
         private bool _setupRan;
@@ -313,7 +321,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountControl = GetTemplateChild(nameof(RecordCountControl)) as StringReadOnlyBox;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
             AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
-
             base.OnApplyTemplate();
         }
 
@@ -507,6 +514,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
             LookupGridView?.Columns.Add(gridColumn);
             _dataSource.Columns.Add(dataColumnName);
+
+            if (LookupGridView != null && ListView != null)
+            {
+                columnHeader.SizeChanged += (sender, args) =>
+                {
+                    if (args.WidthChanged)
+                    {
+                        var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
+                            .ElementAt(LookupGridView.Columns.IndexOf(gridColumn));
+                        lookupColumnDefinition.UpdatePercentWidth(args.NewSize.Width / ListView.ActualWidth * 100);
+                        ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
+                        {
+                            ColumnDefinition = lookupColumnDefinition,
+                            SizeChangedEventArgs = args
+                        });
+                    }
+                };
+            }
 
             return gridColumn;
         }

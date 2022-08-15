@@ -186,5 +186,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             ShowPositiveValuesInGreen = value;
         }
+
+        public void UpdatePercentWidth(double newValue)
+        {
+            PercentWidth = newValue;
+        }
     }
 }

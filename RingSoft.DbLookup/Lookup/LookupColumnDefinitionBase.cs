@@ -191,5 +191,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             PercentWidth = newValue;
         }
+
+        public LookupColumnDefinitionBase UpdateCaption(string value)
+        {
+            Caption = value;
+            return this;
+        }
     }
 }

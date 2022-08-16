@@ -31,7 +31,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <value>
         /// The field joins.
         /// </value>
-        public IReadOnlyList<ForeignKeyFieldJoin> FieldJoins => _foreignKeyFieldJoins;
+        public IReadOnlyList<ForeignKeyFieldJoin> FieldJoins => ForeignKeyFieldJoins;
 
         /// <summary>
         /// Gets the alias used in the SQL statement.
@@ -50,7 +50,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </value>
         public string ForeignObjectPropertyName { get; internal set; }
 
-        private readonly List<ForeignKeyFieldJoin> _foreignKeyFieldJoins = new List<ForeignKeyFieldJoin>();
+        public List<ForeignKeyFieldJoin> ForeignKeyFieldJoins { get; internal set; } = new List<ForeignKeyFieldJoin>();
 
         internal ForeignKeyDefinition()
         {
@@ -69,7 +69,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 PrimaryField = primaryField,
                 ForeignField = foreignField
             };
-            _foreignKeyFieldJoins.Add(foreignKeyFieldJoin);
+            ForeignKeyFieldJoins.Add(foreignKeyFieldJoin);
 
             return this;
         }

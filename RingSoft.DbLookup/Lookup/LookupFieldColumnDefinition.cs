@@ -40,8 +40,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The field definition.
         /// </value>
-        public FieldDefinition FieldDefinition { get; private set; }
-
+        public FieldDefinition FieldDefinition { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether this column is distinct.

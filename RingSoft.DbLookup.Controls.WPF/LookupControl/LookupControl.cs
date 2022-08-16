@@ -470,6 +470,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     if (!lookupColumn.TextAlignmentChanged)
                         lookupColumn.TextAlignment = lookupColumnDefinition.HorizontalAlignment;
 
+                lookupColumnDefinition.UpdateCaption(lookupColumnBase.Header);
                 AddColumnToGrid(lookupColumnBase);
             }
         }

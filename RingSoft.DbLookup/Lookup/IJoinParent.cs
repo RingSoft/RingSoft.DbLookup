@@ -12,6 +12,11 @@ namespace RingSoft.DbLookup.Lookup
 
         FieldDefinition ChildField { get; set; }
 
-        LookupJoin MakeInclude();
+        FieldDefinition ParentField { get; set; }
+
+        LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null);
+
+        LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
+            double percentWidth);
     }
 }

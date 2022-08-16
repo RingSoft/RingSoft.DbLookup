@@ -94,6 +94,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var columnDefinition = LookupDefinition.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth, "");
             columnDefinition.ParentObject = this;
+            columnDefinition.ParentField = ParentField;
             columnDefinition.JoinQueryTableAlias = JoinDefinition.Alias;
             return columnDefinition;
         }
@@ -143,9 +144,17 @@ namespace RingSoft.DbLookup.Lookup
 
         public IJoinParent ParentObject { get; set; }
         public FieldDefinition ChildField { get; set; }
-        public LookupJoin MakeInclude()
+        public FieldDefinition ParentField { get; set; }
+
+        public LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null)
         {
-            throw new NotImplementedException();
+            return new LookupJoin(lookupDefinition, ChildField);
+        }
+
+        public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
+            double percentWidth)
+        {
+            return AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
         }
     }
 }

@@ -138,6 +138,7 @@ namespace RingSoft.DbLookup.Lookup
             JoinQueryTableAlias = source.JoinQueryTableAlias;
             ParentObject = source.ParentObject;
             ChildField = source.ChildField;
+            ParentField = source.ParentField;
         }
 
         /// <summary>
@@ -204,9 +205,17 @@ namespace RingSoft.DbLookup.Lookup
 
         public IJoinParent ParentObject { get; set; }
         public FieldDefinition ChildField { get; set; }
-        public LookupJoin MakeInclude()
+        public FieldDefinition ParentField { get; set; }
+
+        public LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null)
         {
             throw new NotImplementedException();
+        }
+
+        public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
+            double percentWidth)
+        {
+            return null;
         }
     }
 }

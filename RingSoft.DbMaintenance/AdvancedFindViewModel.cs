@@ -577,26 +577,66 @@ namespace RingSoft.DbMaintenance
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 var parent = visibleColumn.ParentObject;
-                
-                while (parent != null)
-                {
-                    parentObjects.Insert(0, parent);
-                    parent = parent.ParentObject;
-                }
-                foreach (var parentObject in parentObjects)
-                {
-                    if (parentObjects.IndexOf(parent) == parentObjects.Count - 1)
-                    {
 
-                    }
-                    else
+                if (parent == null)
+                {
+                    if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
                     {
-                        parentObject.MakeInclude();
+                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
+                            lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth, "");
                     }
                 }
+                else
+                {
+                    while (parent != null)
+                    {
+                        parentObjects.Insert(0, parent);
+                        parent = parent.ParentObject;
+                    }
 
+                    LookupJoin include = null;
+                    var index = 0;
+                    foreach (var parentObject in parentObjects)
+                    {
+                        if (index == 0)
+                        {
+                            if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                            {
+                                include = LookupDefinition.MakeInclude(LookupDefinition,
+                                    lookupFieldColumn.ParentField);
+                            }
+                        }
+                        if (index == parentObjects.Count - 1)
+                        {
+                            if (visibleColumn is LookupFieldColumnDefinition visibleFieldColumnDefinition)
+                            {
+                                include.AddVisibleColumnDefinitionField(visibleColumn.Caption,
+                                    visibleFieldColumnDefinition.FieldDefinition, visibleColumn.PercentWidth);
+                            }
+                        }
+                        else if (index > 0)
+                        {
+                            if (include == null)
+                            {
+                                include = parentObject.MakeInclude(LookupDefinition);
+                            }
+                            else
+                            {
+                                include = include.MakeInclude(LookupDefinition);
+                            }
+                        }
+
+                        index++;
+                    }
+                }
             }
-            parentObjects.Clear();
+
+            foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
+            {
+                //LookupDefinition.FilterDefinition.AddFixedFilter(fixedFilter.)
+            }
+            //DbDataProcessor.ShowSqlStatementWindow();
+            LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 
     }

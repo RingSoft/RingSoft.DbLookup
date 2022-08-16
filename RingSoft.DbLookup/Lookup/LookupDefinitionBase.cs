@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// Contains all the data necessary for a lookup.
     /// </summary>
-    public class LookupDefinitionBase : IJoinParent
+    public class LookupDefinitionBase
     {
         /// <summary>
         /// Gets the table definition.
@@ -371,9 +371,19 @@ namespace RingSoft.DbLookup.Lookup
 
         public IJoinParent ParentObject { get; set; }
         public FieldDefinition ChildField { get; set; }
-        public LookupJoin MakeInclude()
+        public LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null)
         {
-            return Include(ChildField);
+            if (childField == null)
+            {
+                childField = ChildField;
+            }
+            return Include(childField);
+        }
+
+        public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
+            double percentWidth)
+        {
+            return AddVisibleColumnDefinitionField(caption, fieldDefinition, percentWidth);
         }
     }
 }

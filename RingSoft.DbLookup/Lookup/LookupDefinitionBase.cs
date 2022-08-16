@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// Contains all the data necessary for a lookup.
     /// </summary>
-    public class LookupDefinitionBase
+    public class LookupDefinitionBase : IJoinParent
     {
         /// <summary>
         /// Gets the table definition.
@@ -158,6 +158,8 @@ namespace RingSoft.DbLookup.Lookup
             InitialOrderByType = source.InitialOrderByType;
             FromFormula = source.FromFormula;
             ReadOnlyMode = source.ReadOnlyMode;
+            ParentObject = source.ParentObject;
+            ChildField = source.ChildField;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)
@@ -254,6 +256,7 @@ namespace RingSoft.DbLookup.Lookup
 
             ProcessVisibleColumnDefinition(column);
             _visibleColumns.Add(column);
+            column.ChildField = fieldDefinition.TableDefinition.PrimaryKeyFields[0];
             return column;
         }
 
@@ -364,6 +367,13 @@ namespace RingSoft.DbLookup.Lookup
         {
             var lookupJoin = new LookupJoin(this, foreignFieldDefinition);
             return lookupJoin;
+        }
+
+        public IJoinParent ParentObject { get; set; }
+        public FieldDefinition ChildField { get; set; }
+        public LookupJoin MakeInclude()
+        {
+            return Include(ChildField);
         }
     }
 }

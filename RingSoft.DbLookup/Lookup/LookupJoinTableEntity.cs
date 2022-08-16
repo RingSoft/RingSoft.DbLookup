@@ -77,6 +77,7 @@ namespace RingSoft.DbLookup.Lookup
             var relatedField = parentTable.FieldDefinitions.FirstOrDefault(f => f.PropertyName == relatedPropertyName);
 
             var columnDefinition = AddVisibleColumnDefinition(caption, relatedField, percentWidth);
+            columnDefinition.ChildField = relatedField;
             columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
 
             return columnDefinition;

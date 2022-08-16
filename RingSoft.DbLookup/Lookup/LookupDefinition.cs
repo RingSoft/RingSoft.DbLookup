@@ -144,6 +144,9 @@ namespace RingSoft.DbLookup.Lookup
             var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>(this,
                 ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(),
                 relatedProperty.ReturnType.Name);
+            returnEntity.ParentObject = this;
+            ChildField =
+                returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
             return returnEntity;
         }
 

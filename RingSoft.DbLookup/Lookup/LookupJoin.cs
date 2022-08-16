@@ -7,7 +7,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// A lookup table join definition.
     /// </summary>
-    public class LookupJoin
+    public class LookupJoin : IJoinParent
     {
         /// <summary>
         /// Gets the join definition.
@@ -93,6 +93,7 @@ namespace RingSoft.DbLookup.Lookup
             ValidateFieldDefinition(fieldDefinition);
 
             var columnDefinition = LookupDefinition.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth, "");
+            columnDefinition.ParentObject = this;
             columnDefinition.JoinQueryTableAlias = JoinDefinition.Alias;
             return columnDefinition;
         }
@@ -138,6 +139,13 @@ namespace RingSoft.DbLookup.Lookup
             lookupJoin.JoinDefinition = JoinDefinition;
             lookupJoin.SetJoinDefinition(foreignFieldDefinition);
             return lookupJoin;
+        }
+
+        public IJoinParent ParentObject { get; set; }
+        public FieldDefinition ChildField { get; set; }
+        public LookupJoin MakeInclude()
+        {
+            throw new NotImplementedException();
         }
     }
 }

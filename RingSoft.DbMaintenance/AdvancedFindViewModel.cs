@@ -573,11 +573,30 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
+            var parentObjects = new List<IJoinParent>();
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
+                var parent = visibleColumn.ParentObject;
+                
+                while (parent != null)
+                {
+                    parentObjects.Insert(0, parent);
+                    parent = parent.ParentObject;
+                }
+                foreach (var parentObject in parentObjects)
+                {
+                    if (parentObjects.IndexOf(parent) == parentObjects.Count - 1)
+                    {
 
+                    }
+                    else
+                    {
+                        parentObject.MakeInclude();
+                    }
+                }
 
             }
+            parentObjects.Clear();
         }
 
     }

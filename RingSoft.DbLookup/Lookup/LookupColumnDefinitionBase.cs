@@ -1,4 +1,6 @@
 ﻿using System;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -18,7 +20,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// The lookup column definition base class.
     /// </summary>
-    public abstract class LookupColumnDefinitionBase
+    public abstract class LookupColumnDefinitionBase : IJoinParent
     {
         /// <summary>
         /// Gets the join query table alias.
@@ -134,6 +136,8 @@ namespace RingSoft.DbLookup.Lookup
             ShowPositiveValuesInGreen = source.ShowPositiveValuesInGreen;
             ContentTemplateId = source.ContentTemplateId;
             JoinQueryTableAlias = source.JoinQueryTableAlias;
+            ParentObject = source.ParentObject;
+            ChildField = source.ChildField;
         }
 
         /// <summary>
@@ -196,6 +200,13 @@ namespace RingSoft.DbLookup.Lookup
         {
             Caption = value;
             return this;
+        }
+
+        public IJoinParent ParentObject { get; set; }
+        public FieldDefinition ChildField { get; set; }
+        public LookupJoin MakeInclude()
+        {
+            throw new NotImplementedException();
         }
     }
 }

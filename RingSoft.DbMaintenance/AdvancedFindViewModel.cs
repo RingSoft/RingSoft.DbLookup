@@ -578,13 +578,20 @@ namespace RingSoft.DbMaintenance
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 var parent = visibleColumn.ParentObject;
+                var lookupFieldColumn = visibleColumn as LookupFieldColumnDefinition;
+                var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
 
                 if (parent == null)
                 {
-                    if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                    if (lookupFieldColumn != null)
                     {
                         LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
                             lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth, "");
+                    }
+                    else if (lookupFormulaColumn != null)
+                    {
+                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.Formula,
+                            visibleColumn.PercentWidth, lookupFormulaColumn.DataType, lookupFormulaColumn.JoinQueryTableAlias);
                     }
                 }
                 else
@@ -606,11 +613,17 @@ namespace RingSoft.DbMaintenance
                         }
                         if (index == parentObjects.Count - 1)
                         {
-                            if (visibleColumn is LookupFieldColumnDefinition visibleFieldColumnDefinition)
+                            if (lookupFieldColumn != null)
                             {
                                 include.AddVisibleColumnDefinitionField(visibleColumn.Caption,
-                                    visibleFieldColumnDefinition.FieldDefinition, visibleColumn.PercentWidth);
+                                    lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth);
                             }
+                            else if (lookupFormulaColumn != null)
+                            {
+                                include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.Formula,
+                                    visibleColumn.PercentWidth, lookupFormulaColumn.DataType);
+                            }
+
                         }
                         else if (index > 0)
                         {

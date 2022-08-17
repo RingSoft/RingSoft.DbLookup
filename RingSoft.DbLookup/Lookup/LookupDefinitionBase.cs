@@ -309,7 +309,7 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        internal LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
             double percentWidth, FieldDataTypes dataType, string alias)
         {
             ValidateNonPrimaryKeyDistinctColumns();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -600,11 +601,8 @@ namespace RingSoft.DbMaintenance
                     {
                         if (index == 0)
                         {
-                            if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
-                            {
-                                include = LookupDefinition.MakeInclude(LookupDefinition,
-                                    lookupFieldColumn.ParentField);
-                            }
+                            include = LookupDefinition.MakeInclude(LookupDefinition,
+                                visibleColumn.ParentField);
                         }
                         if (index == parentObjects.Count - 1)
                         {
@@ -633,7 +631,30 @@ namespace RingSoft.DbMaintenance
 
             foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
             {
-                //LookupDefinition.FilterDefinition.AddFixedFilter(fixedFilter.)
+                if (fixedFilter is FieldFilterDefinition fieldFilter)
+                {
+                    switch (fieldFilter.FieldDefinition.FieldDataType)
+                    {
+                        case FieldDataTypes.String:
+                            if (fieldFilter.FieldDefinition is StringFieldDefinition stringField)
+                                LookupDefinition.FilterDefinition.AddFixedFilter(stringField, fieldFilter.Condition,
+                                    fieldFilter.Value);
+                            break;
+                        case FieldDataTypes.Integer:
+                            if (fieldFilter.FieldDefinition is IntegerFieldDefinition integerField)
+                                LookupDefinition.FilterDefinition.AddFixedFilter(integerField, fieldFilter.Condition,
+                                    fieldFilter.Value.ToInt());
+                            break;
+                        case FieldDataTypes.Decimal:
+                        case FieldDataTypes.DateTime:
+                        case FieldDataTypes.Bool:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    //LookupDefinition.FilterDefinition.AddFixedFilter(fieldFilter.FieldDefinition, fieldFilter.Condition,
+                    //value);
+                }
             }
             //DbDataProcessor.ShowSqlStatementWindow();
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);

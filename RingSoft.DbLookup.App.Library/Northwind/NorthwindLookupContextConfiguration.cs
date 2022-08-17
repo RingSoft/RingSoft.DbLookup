@@ -174,7 +174,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40, "");
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
             var employeeJoin = EmployeesLookup.Include(p => p.Employee1);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40, employeeJoin.JoinDefinition.Alias);
+            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40, FieldDataTypes.String);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
 

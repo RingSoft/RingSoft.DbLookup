@@ -113,5 +113,29 @@ namespace RingSoft.DbLookup
         {
             return autoFillValue?.PrimaryKeyValue != null && autoFillValue.PrimaryKeyValue.IsValid;
         }
+
+        public static string ConvertPropertyNameToDescription(this string propertyName)
+        {
+            var newDescription = propertyName;
+            var index = 0;
+            var propertyNameCharArry = propertyName.ToCharArray();
+            foreach (var c in propertyNameCharArry)
+            {
+                if (char.IsUpper(c) && index > 0)
+                {
+                    if (index < propertyNameCharArry.Length - 1)
+                    {
+                        if (propertyNameCharArry[index - 1] != ' ')
+                        {
+                            newDescription = newDescription.Replace(c.ToString(), " " + c);
+                        }
+                    }
+                }
+                index++;
+            }
+
+            return newDescription;
+        }
+
     }
 }

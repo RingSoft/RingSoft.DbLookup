@@ -211,18 +211,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         
         public void InitializeModel()
         {
-            _lookupContext.Orders.HasDescription("Orders");
-            _lookupContext.Customers.HasDescription("Customers");
+            _lookupContext.Orders.GetFieldDefinition(p => p.CustomerID).HasDescription("Customer");
+            _lookupContext.Orders.GetFieldDefinition(p => p.EmployeeID).HasDescription("Employee");
 
-            _lookupContext.OrderDetails.HasDescription("Order Details");
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID).HasDescription("Order");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).HasDescription("Product");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();
-            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount).HasDescription("Discount")
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
-            _lookupContext.Employees.HasDescription("Employees");
             _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor")
                 .DoesAllowRecursion(false);
 

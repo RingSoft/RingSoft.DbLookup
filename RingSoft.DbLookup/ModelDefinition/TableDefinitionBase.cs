@@ -73,7 +73,23 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <value>
         /// The description.
         /// </value>
-        public string Description { get; internal set; }
+        private string _description;
+        public string Description
+        {
+            get
+            {
+                if (_description.IsNullOrEmpty())
+                {
+                    var newDescription = TableName.ConvertPropertyNameToDescription();
+                    return newDescription;
+                }
+                return _description;
+            }
+            internal set
+            {
+                _description = value;
+            }
+        }
 
         /// <summary>
         /// Gets the record description.

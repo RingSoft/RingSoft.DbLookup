@@ -330,7 +330,7 @@ namespace RingSoft.DbMaintenance
                         f => f.Description == TableComboBoxSetup.Items[TableIndex].TextValue);
                 var fields = table.FieldDefinitions;
 
-                foreach (var field in fields)
+                foreach (var field in fields.OrderBy(p => p.Description))
                 {
                     var treeRoot = new TreeViewItem();
                     treeRoot.Name = field.Description;
@@ -352,7 +352,7 @@ namespace RingSoft.DbMaintenance
             ObservableCollection<TreeViewItem> treeItems,
             ForeignKeyDefinition join, TreeViewItem parent)
         {
-            foreach (var tableFieldDefinition in table.FieldDefinitions)
+            foreach (var tableFieldDefinition in table.FieldDefinitions.OrderBy(p => p.Description))
             {
                 var treeChildItem = new TreeViewItem();
                 treeChildItem.Name = tableFieldDefinition.Description;

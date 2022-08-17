@@ -79,17 +79,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             {
                 if (_description.IsNullOrEmpty())
                 {
-                    var newDescription = PropertyName;
-                    var index = 0;
-                    foreach (var c in PropertyName.ToCharArray())
-                    {
-                        if (char.IsUpper(c) && index > 0)
-                        {
-                            newDescription = newDescription.Replace(c.ToString(), " " + c);
-                        }
-                        index++;
-                    }
-
+                    var newDescription = PropertyName.ConvertPropertyNameToDescription();
                     return newDescription;
                 }
                 return _description;

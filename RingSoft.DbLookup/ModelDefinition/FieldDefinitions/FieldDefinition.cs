@@ -72,7 +72,33 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The description.
         /// </value>
-        public string Description { get; internal set; }
+        private string _description;
+        public string Description
+        {
+            get
+            {
+                if (_description.IsNullOrEmpty())
+                {
+                    var newDescription = PropertyName;
+                    var index = 0;
+                    foreach (var c in PropertyName.ToCharArray())
+                    {
+                        if (char.IsUpper(c) && index > 0)
+                        {
+                            newDescription = newDescription.Replace(c.ToString(), " " + c);
+                        }
+                        index++;
+                    }
+
+                    return newDescription;
+                }
+                return _description;
+            }
+            internal set
+            {
+                _description = value;
+            }
+        }
 
         public virtual int? SearchForHostId { get; private set; }
 

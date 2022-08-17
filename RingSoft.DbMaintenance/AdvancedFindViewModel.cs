@@ -333,7 +333,7 @@ namespace RingSoft.DbMaintenance
                 foreach (var field in fields)
                 {
                     var treeRoot = new TreeViewItem();
-                    treeRoot.Name = field.FieldName;
+                    treeRoot.Name = field.Description;
                     treeRoot.Type = TreeViewType.Field;
                     treeRoot.FieldDefinition = field;
                     treeRoot.ViewModel = this;
@@ -355,7 +355,7 @@ namespace RingSoft.DbMaintenance
             foreach (var tableFieldDefinition in table.FieldDefinitions)
             {
                 var treeChildItem = new TreeViewItem();
-                treeChildItem.Name = tableFieldDefinition.FieldName;
+                treeChildItem.Name = tableFieldDefinition.Description;
                 treeChildItem.Type = TreeViewType.Field;
                 treeChildItem.FieldDefinition = tableFieldDefinition;
                 treeChildItem.ViewModel = this;

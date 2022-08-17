@@ -68,16 +68,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public string GetOrdersEmployeeNameFormula()
         {
-            var orderEmployeeNameFormula = "[Orders_Employees_EmployeeID].[FirstName] + ' ' + [Orders_Employees_EmployeeID].[LastName]";
+            var orderEmployeeNameFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
             switch (DataProcessorType)
             {
                 case DataProcessorTypes.Sqlite:
-                    orderEmployeeNameFormula = "[Orders_Employees_EmployeeID].[FirstName] || ' ' || [Orders_Employees_EmployeeID].[LastName]";
+                    orderEmployeeNameFormula = "[{Alias}].[FirstName] || ' ' || [{Alias}].[LastName]";
                     break;
                 case DataProcessorTypes.SqlServer:
                     break;
                 case DataProcessorTypes.MySql:
-                    orderEmployeeNameFormula = "CONCAT(`Orders_Employees_EmployeeID`.`FirstName`, ' ', `Orders_Employees_EmployeeID`.`LastName`)";
+                    orderEmployeeNameFormula = "CONCAT(`{Alias}`.`FirstName`, ' ', `{Alias}`.`LastName`)";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -91,7 +91,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             var employeeNameFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
             //var employeeSupervisorFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
             var employeeSupervisorFormula = employeeNameFormula;
-            var orderEmployeeNameFormula = employeeNameFormula;
+            var orderEmployeeNameFormula = GetOrdersEmployeeNameFormula();
             var extendedPriceFormula = "([{Alias}].[Quantity] * 1.0) * [{Alias}].[UnitPrice]";
 
             switch (DataProcessorType)
@@ -117,8 +117,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             OrdersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 50);
             var join = OrdersLookup.Include(p => p.Employee);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.Employee, "Employee", 
-                orderEmployeeNameFormula, 30, join.JoinDefinition.Alias);
+            join.AddVisibleColumnDefinition(p => p.Employee, "Employee", 
+                orderEmployeeNameFormula, 30, FieldDataTypes.String);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
 
@@ -216,8 +216,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             _lookupContext.OrderDetails.HasDescription("Order Details");
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).HasDescription("Product");
-            _lookupContext.OrderDetails.GetFieldDefinition(p => p.Quantity).HasDescription("Quantity");
-            _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice).HasDescription("Unit Price")
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount).HasDescription("Discount")

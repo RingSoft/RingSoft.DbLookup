@@ -506,18 +506,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Order entity)
         {
-            Customer = new AutoFillValue(_lookupContext.Customers.GetPrimaryKeyValueFromEntity(entity.Customer),
-                entity.CustomerID);
+            Customer = CustomersAutoFillSetup.GetAutoFillValueForIdValue(entity.CustomerID);
 
             if (entity.Customer != null)
                 CompanyName = entity.Customer.CompanyName;
 
-            var employeeName = string.Empty;
-            if (entity.Employee != null)
-                employeeName = GetEmployeeAutoFillValueText(entity.Employee);
-
-            Employee = new AutoFillValue(_lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity.Employee),
-                employeeName);
+            Employee = EmployeeAutoFillSetup.GetAutoFillValueForIdValue(entity.EmployeeID);
 
             RequiredDate = entity.RequiredDate;
             if (entity.OrderDate == null)
@@ -529,12 +523,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             ShippedDate = entity.ShippedDate;
 
-            var shipCompanyName = string.Empty;
-            if (entity.Shipper != null)
-                shipCompanyName = entity.Shipper.CompanyName;
-
-            ShipVia = new AutoFillValue(_lookupContext.Shippers.GetPrimaryKeyValueFromEntity(entity.Shipper),
-                shipCompanyName);
+            ShipVia = ShipViaAutoFillSetup.GetAutoFillValueForIdValue(entity.ShipVia);
 
             Freight = entity.Freight;
             ShipName = entity.ShipName;
@@ -590,11 +579,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Total = (SubTotal - TotalDiscount) + freight;
         }
         
-        private string GetEmployeeAutoFillValueText(Employee employee)
-        {
-            return $"{employee.FirstName} {employee.LastName}";
-        }
-
         protected override bool ValidateEntity(Order entity)
         {
             var result = base.ValidateEntity(entity);
@@ -674,10 +658,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                         var employee =
                             _lookupContext.Employees.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                                 .ParentWindowPrimaryKeyValue);
-                        employee =
-                            RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(employee.EmployeeID);
-                        Employee = new AutoFillValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue,
-                            GetEmployeeAutoFillValueText(employee));
+                        Employee = EmployeeAutoFillSetup.GetAutoFillValueForIdValue(employee.EmployeeID);
                     }
                 }
             }

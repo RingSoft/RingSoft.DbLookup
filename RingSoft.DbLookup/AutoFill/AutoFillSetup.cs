@@ -71,5 +71,20 @@ namespace RingSoft.DbLookup.AutoFill
         {
             LookupDefinition = lookupDefinition;
         }
+
+        public AutoFillValue GetAutoFillValueForIdValue(string idValue)
+        {
+            return LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(LookupDefinition.TableDefinition, idValue);
+        }
+        public AutoFillValue GetAutoFillValueForIdValue(int idValue)
+        {
+            return GetAutoFillValueForIdValue(idValue.ToString());
+        }
+
+        public AutoFillValue GetAutoFillValueForIdValue(int? idValue)
+        {
+            return GetAutoFillValueForIdValue(idValue?.ToString());
+        }
+
     }
 }

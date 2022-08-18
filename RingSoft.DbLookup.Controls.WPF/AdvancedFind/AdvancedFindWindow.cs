@@ -81,8 +81,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 if (_addViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
                 {
                     TableComboBoxControl.IsEnabled = false;
+                    LookupControl.Width = advancedFindInput.LookupWidth;
                 }
-
             }
         }
 

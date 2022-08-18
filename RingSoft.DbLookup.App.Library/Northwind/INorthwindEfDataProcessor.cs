@@ -40,5 +40,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         void SetAdvancedFindDbContext();
 
         void SetAdvancedFindLookupContext();
+
+        Shipper GetShipper(int shipperId);
     }
 }

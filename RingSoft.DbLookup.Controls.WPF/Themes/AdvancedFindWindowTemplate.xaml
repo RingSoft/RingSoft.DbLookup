@@ -93,7 +93,7 @@
 
                                 <deg:DataEntryGrid Grid.Row="3" Grid.Column="4"></deg:DataEntryGrid>
 
-                                <lc:LookupControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800"/>
+                                <lc:LookupControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" HorizontalAlignment="Left"/>
                             </Grid>
                         </DockPanel>
                     </Border>

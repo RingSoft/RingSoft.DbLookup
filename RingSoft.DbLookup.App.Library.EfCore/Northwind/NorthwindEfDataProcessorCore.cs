@@ -183,5 +183,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             
         }
+
+        public Shipper GetShipper(int shipperId)
+        {
+            var context = new NorthwindDbContextEfCore();
+            return context.Shippers.FirstOrDefault(f => f.ShipperID == shipperId);
+
+        }
     }
 }

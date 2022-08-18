@@ -35,6 +35,7 @@ namespace RingSoft.DbMaintenance
         public object InputParameter { get; set; }
         public TableDefinitionBase LockTable { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
+        public double LookupWidth { get; set; }
     }
 
 

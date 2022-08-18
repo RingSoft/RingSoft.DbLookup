@@ -1474,7 +1474,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 InputParameter = AddViewParameter,
                 LockTable = LookupDefinition.TableDefinition,
-                LookupDefinition = LookupDefinition
+                LookupDefinition = LookupDefinition,
+                LookupWidth = ActualWidth
             };
 
             var advancedFindWindow = new AdvancedFindWindow(addViewArgs);

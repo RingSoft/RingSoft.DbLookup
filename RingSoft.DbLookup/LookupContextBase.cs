@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -7,6 +8,14 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup
 {
+    public class TableDefinitionValue
+    {
+        public AutoFillValue ReturnValue { get; set; }
+
+        public TableDefinitionBase TableDefinition { get; set; }
+
+        public string IdValue { get; set; }
+    }
 
     // ReSharper disable once InconsistentNaming
     /// <summary>
@@ -50,6 +59,8 @@ namespace RingSoft.DbLookup
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
+
+        public event EventHandler<TableDefinitionValue> GetAutoFillText;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 
@@ -126,6 +137,18 @@ namespace RingSoft.DbLookup
         {
             var message = $"{fieldDefinition} has an invalid value.  Please correct the value.";
             return message;
+        }
+
+        public virtual AutoFillValue OnAutoFillTextRequest(TableDefinitionBase tableDefinition, string idValue)
+        {
+            var request = new TableDefinitionValue
+            {
+                TableDefinition = tableDefinition,
+                IdValue = idValue
+            };
+            GetAutoFillText.Invoke(this, request);
+
+            return request.ReturnValue;
         }
     }
 }

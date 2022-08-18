@@ -272,6 +272,8 @@ namespace RingSoft.DbMaintenance
                 index++;
             }
 
+            ColumnsManager = new AdvancedFindColumnsManager(this);
+
             if (_input != null)
             {
                 TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == _input.LockTable.Description);
@@ -282,7 +284,6 @@ namespace RingSoft.DbMaintenance
                 LoadFromLookupDefinition(_input.LookupDefinition);
             }
 
-            ColumnsManager = new AdvancedFindColumnsManager(this);
             base.Initialize();
         }
 
@@ -669,7 +670,7 @@ namespace RingSoft.DbMaintenance
                     //value);
                 }
             }
-            //DbDataProcessor.ShowSqlStatementWindow();
+            ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 

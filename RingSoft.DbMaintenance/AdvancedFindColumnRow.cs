@@ -50,15 +50,15 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindColumnColumns.Name:
                     return new DataEntryGridTextCellProps(this, columnId, Name);
                 case AdvancedFindColumnColumns.PercentWidth:
-                    return new DataEntryGridDecimalCellProps(this, columnId, 
+                    return new DataEntryGridDecimalCellProps(this, columnId,
                         new DecimalEditControlSetup
-                    {
-                        AllowNullValue = false,
-                        FormatType = DecimalEditFormatTypes.Percent,
-                        MaximumValue = 100,
-                        MinimumValue = 0
+                        {
+                            AllowNullValue = false,
+                            FormatType = DecimalEditFormatTypes.Percent,
+                            MaximumValue = 100,
+                            MinimumValue = 0
 
-                    }, PercentWidth);
+                        }, PercentWidth);
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -83,6 +83,7 @@ namespace RingSoft.DbMaintenance
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             return base.GetCellStyle(columnId);
         }
 
@@ -92,23 +93,25 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindColumnColumns.Name:
-                    var props = (DataEntryGridTextCellProps)value;
+                    var props = (DataEntryGridTextCellProps) value;
                     Name = props.Text;
                     break;
                 case AdvancedFindColumnColumns.PercentWidth:
                     var decimalProps = (DataEntryGridDecimalCellProps) value;
-                    PercentWidth = (decimal)decimalProps.Value;
+                    PercentWidth = (decimal) decimalProps.Value;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             base.SetCellValue(value);
         }
 
         public override void LoadFromEntity(AdvancedFindColumn entity)
         {
             var tableDefinition =
-                Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.EntityName == entity.TableName);
+                Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.TableName);
             Table = tableDefinition.Description;
             Field = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName).Description;
             Name = entity.Caption;
@@ -133,6 +136,34 @@ namespace RingSoft.DbMaintenance
             if (LookupFormulaColumnDefinition != null)
             {
                 entity.Formula = LookupFormulaColumnDefinition.Formula;
+            }
+        }
+
+        public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
+        {
+            LookupFieldColumnDefinition = column as LookupFieldColumnDefinition;
+            LookupFormulaColumnDefinition = column as LookupFormulaColumnDefinition;
+
+            if (column.ParentObject == null)
+            {
+                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            }
+            else
+            {
+                var lookupJoin = column.ParentObject as LookupJoin;
+                Table = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable.Description;
+            }
+
+            Name = column.Caption;
+            PercentWidth = (decimal) column.PercentWidth/100;
+            if (LookupFormulaColumnDefinition != null)
+            {
+                Field = "<Formula>";
+            }
+
+            if (LookupFieldColumnDefinition != null)
+            {
+                Field = LookupFieldColumnDefinition.FieldDefinition.Description;
             }
         }
     }

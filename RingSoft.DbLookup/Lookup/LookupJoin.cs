@@ -113,6 +113,7 @@ namespace RingSoft.DbLookup.Lookup
             column.JoinQueryTableAlias = JoinDefinition.Alias;
             column.ParentObject = this;
             column.ParentField = ParentField;
+            column.ChildField = ChildField;
             return column;
         }
 

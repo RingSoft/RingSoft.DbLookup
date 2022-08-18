@@ -22,5 +22,15 @@ namespace RingSoft.DbMaintenance
         {
             return new AdvancedFindColumnRow(this);
         }
+
+        public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
+        {
+            foreach (var column in lookupDefinition.VisibleColumns)
+            {
+                var newRow = new AdvancedFindColumnRow(this);
+                newRow.LoadFromColumnDefinition(column);
+                AddRow(newRow);
+            }
+        }
     }
 }

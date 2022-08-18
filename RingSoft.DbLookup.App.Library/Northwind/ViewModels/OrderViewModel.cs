@@ -39,6 +39,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public override TableDefinition<Order> TableDefinition =>
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
 
+        #region Properties
+
+        
         private int _orderId;
         public int OrderId
         {
@@ -421,7 +424,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 OnPropertyChanged(nameof(DetailsGridManager));
             }
         }
-
+        #endregion
         public bool GridMode { get; set; }
 
         public bool SetInitialFocusToGrid { get; internal set; }

@@ -154,7 +154,7 @@ CREATE TABLE [AdvancedFindColumns] (
   [AdvancedFindId] int NOT NULL
 , [ColumnId] int NOT NULL
 , [TableName] nvarchar(50) NOT NULL
-, [FieldName] nvarchar(50) NOT NULL
+, [FieldName] nvarchar(50) NULL
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
 , [Caption] nvarchar(50) NOT NULL
@@ -169,7 +169,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [FilterId] int NOT NULL
 , [LeftParentheses] [tinyint] NULL
 , [TableName] nvarchar(50) NOT NULL
-, [FieldName] nvarchar(50) NOT NULL
+, [FieldName] nvarchar(50) NULL
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
 , [Operand] [tinyint] NOT NULL

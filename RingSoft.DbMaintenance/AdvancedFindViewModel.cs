@@ -387,12 +387,20 @@ namespace RingSoft.DbMaintenance
             SelectedTreeViewItem = treeViewItem;
         }
 
+        protected override bool ValidateEntity(AdvancedFind entity)
+        {
+            return base.ValidateEntity(entity);
+        }
 
         protected override AdvancedFind GetEntityData()
         {
             var advancedFind = new AdvancedFind();
             advancedFind.Id = AdvancedFindId;
-            advancedFind.Name = KeyAutoFillValue.Text;
+            if (KeyAutoFillValue != null)
+            {
+                advancedFind.Name = KeyAutoFillValue.Text;
+            }
+            
             advancedFind.Table = TableDefinition.Context.TableDefinitions
                 .FirstOrDefault(p => p.Description == TableComboBoxSetup.Items[TableIndex].TextValue)
                 ?.EntityName;
@@ -410,13 +418,16 @@ namespace RingSoft.DbMaintenance
                 TreeRoot?.Clear();
             }
 
-            
+            LookupCommand = GetLookupCommand(LookupCommands.Clear);
+            ColumnsManager.SetupForNewRecord();
+
+
             //LoadTree();
         }
 
         protected override bool SaveEntity(AdvancedFind entity)
         {
-            return SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, new List<AdvancedFindColumn>(),
+            return SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
                 new List<AdvancedFindFilter>());
         }
 

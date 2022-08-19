@@ -142,12 +142,29 @@ namespace RingSoft.DbMaintenance
             var tableDefinition =
                 Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.Description == Table);
             entity.TableName = tableDefinition.EntityName;
-            entity.FieldName = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.Description == Field).FieldName;
+            
+            if (LookupColumnDefinition.ParentObject != null)
+            {
+                var lookupJoin = LookupColumnDefinition.ParentObject as LookupJoin;
+                var primaryTableDefinition = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable;
+                entity.PrimaryTableName = primaryTableDefinition.TableName;
+                var primaryField = lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                if (primaryField != null)
+                {
+                    entity.PrimaryFieldName = primaryField.FieldName;
+                }
+                
+            }
             entity.Caption = Name;
             entity.PercentWidth = PercentWidth;
             if (LookupFormulaColumnDefinition != null)
             {
                 entity.Formula = LookupFormulaColumnDefinition.Formula;
+            }
+            else
+            {
+                entity.FieldName = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.Description == Field)
+                    .FieldName;
             }
         }
 
@@ -183,7 +200,8 @@ namespace RingSoft.DbMaintenance
         public void UpdatePercentWidth()
         {
             PercentWidth = (decimal)LookupColumnDefinition.PercentWidth / 100;
-            Manager?.Grid.UpdateRow(this);
+            if (Manager.Grid != null) 
+                Manager.Grid.UpdateRow(this);
         }
     }
 }

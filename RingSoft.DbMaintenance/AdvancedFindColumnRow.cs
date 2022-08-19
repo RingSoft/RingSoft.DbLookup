@@ -30,7 +30,7 @@ namespace RingSoft.DbMaintenance
         public decimal PercentWidth { get; set; }
         public LookupFieldColumnDefinition LookupFieldColumnDefinition { get; set; }
         public LookupFormulaColumnDefinition LookupFormulaColumnDefinition { get; set; }
-
+        public LookupColumnDefinitionBase LookupColumnDefinition { get; set; }
         public new AdvancedFindColumnsManager Manager { get; set; }
 
         public AdvancedFindColumnRow(AdvancedFindColumnsManager manager) : base(manager)
@@ -113,9 +113,21 @@ namespace RingSoft.DbMaintenance
                 Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
                     p.EntityName == entity.TableName);
             Table = tableDefinition.Description;
-            Field = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName).Description;
             Name = entity.Caption;
             PercentWidth = entity.PercentWidth;
+
+            if (entity.Formula != null)
+            {
+                var fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+                LookupColumnDefinition =
+                    Manager.ViewModel.LookupDefinition.AddVisibleColumnDefinition(Name, fieldDefinition,
+                        (double) PercentWidth * 100, "");
+                LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
+            }
+            else
+            {
+                //LookupColumnDefinition = Manager.ViewModel.LookupDefinition;
+            }
         }
 
         public override bool ValidateRow()
@@ -141,6 +153,7 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
+            LookupColumnDefinition = column;
             LookupFieldColumnDefinition = column as LookupFieldColumnDefinition;
             LookupFormulaColumnDefinition = column as LookupFormulaColumnDefinition;
 
@@ -165,6 +178,12 @@ namespace RingSoft.DbMaintenance
             {
                 Field = LookupFieldColumnDefinition.FieldDefinition.Description;
             }
+        }
+
+        public void UpdatePercentWidth()
+        {
+            PercentWidth = (decimal)LookupColumnDefinition.PercentWidth / 100;
+            Manager?.Grid.UpdateRow(this);
         }
     }
 }

@@ -106,7 +106,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     if (ViewModel.LookupDefinition.VisibleColumns.Contains(args.ColumnDefinition))
                     {
-                        
+                        ViewModel.ColumnsManager.UpdateColumnWidth(args.ColumnDefinition);
                     }
                 };
             }

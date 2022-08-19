@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+﻿using System.Linq;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 
@@ -31,6 +32,13 @@ namespace RingSoft.DbMaintenance
                 newRow.LoadFromColumnDefinition(column);
                 AddRow(newRow);
             }
+        }
+
+        public void UpdateColumnWidth(LookupColumnDefinitionBase column)
+        {
+            var columnRow = Rows.OfType<AdvancedFindColumnRow>()
+                .FirstOrDefault(p => p.LookupColumnDefinition == column);
+            columnRow.UpdatePercentWidth();
         }
     }
 }

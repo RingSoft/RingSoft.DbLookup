@@ -373,10 +373,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupColumns.Clear();
             }
 
-            LookupData = new LookupDataBase(LookupDefinition, this);
-            LookupData.LookupDataChanged += LookupData_LookupDataChanged;
-            LookupData.DataSourceChanged += LookupData_DataSourceChanged;
-            LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
+            if (LookupDefinition != null)
+            {
+
+                LookupData = new LookupDataBase(LookupDefinition, this);
+                LookupData.LookupDataChanged += LookupData_LookupDataChanged;
+                LookupData.DataSourceChanged += LookupData_DataSourceChanged;
+                LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
+            }
 
             if (!_setupRan)
             {
@@ -418,10 +422,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ImportLookupDefinition();
 
             var sortColumnIndex =
-                GetIndexOfVisibleColumnDefinition(LookupDefinition.InitialSortColumnDefinition);
+                GetIndexOfVisibleColumnDefinition(LookupDefinition?.InitialSortColumnDefinition);
 
             InitializeHeader(sortColumnIndex);
-            if (LookupDefinition.InitialSortColumnDefinition != null)
+            if (LookupDefinition?.InitialSortColumnDefinition != null)
                 SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
 
             if (_refreshPendingData != null)
@@ -477,22 +481,25 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ImportLookupDefinition()
         {
-            foreach (var column in LookupDefinition.VisibleColumns)
+            if (LookupDefinition!= null)
             {
-                double columnWidth = 100;
-                if (ListView != null)
-                    columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
+                foreach (var column in LookupDefinition.VisibleColumns)
+                {
+                    double columnWidth = 100;
+                    if (ListView != null)
+                        columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
 
-                var lookupColumn = LookupControlsGlobals.LookupControlColumnFactory.CreateLookupColumn(column);
+                    var lookupColumn = LookupControlsGlobals.LookupControlColumnFactory.CreateLookupColumn(column);
 
-                lookupColumn.DataColumnName = column.SelectSqlAlias;
-                lookupColumn.Header = column.Caption;
-                lookupColumn.LookupColumnDefinition = column;
-                lookupColumn.PropertyName = column.PropertyName;
-                lookupColumn.Width = columnWidth;
+                    lookupColumn.DataColumnName = column.SelectSqlAlias;
+                    lookupColumn.Header = column.Caption;
+                    lookupColumn.LookupColumnDefinition = column;
+                    lookupColumn.PropertyName = column.PropertyName;
+                    lookupColumn.Width = columnWidth;
 
-                LookupColumns.Add(lookupColumn);
-                AddColumnToGrid(lookupColumn);
+                    LookupColumns.Add(lookupColumn);
+                    AddColumnToGrid(lookupColumn);
+                }
             }
         }
 

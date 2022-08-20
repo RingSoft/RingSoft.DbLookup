@@ -99,6 +99,8 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </value>
         public string RecordDescription { get; internal set; }
 
+        public List<FieldDefinition> ChildFields { get; set; } = new List<FieldDefinition>();
+
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();

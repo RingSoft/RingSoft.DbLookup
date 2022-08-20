@@ -25,5 +25,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public decimal PercentWidth { get; set; }
 
         public string Formula { get; set; }
+
+        public byte FieldDataType { get; set; }
     }
 }

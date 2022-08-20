@@ -38,7 +38,14 @@ namespace RingSoft.DbMaintenance
         {
             var columnRow = Rows.OfType<AdvancedFindColumnRow>()
                 .FirstOrDefault(p => p.LookupColumnDefinition == column);
-            columnRow.UpdatePercentWidth();
+            columnRow?.UpdatePercentWidth();
+        }
+
+        public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
+        {
+            var columnRow = GetNewRow() as AdvancedFindColumnRow;
+            columnRow?.LoadFromColumnDefinition(column);
+            AddRow(columnRow);
         }
     }
 }

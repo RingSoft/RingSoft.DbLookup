@@ -70,6 +70,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 ForeignField = foreignField
             };
             ForeignKeyFieldJoins.Add(foreignKeyFieldJoin);
+            primaryField.TableDefinition.ChildFields.Add(foreignField);
 
             return this;
         }

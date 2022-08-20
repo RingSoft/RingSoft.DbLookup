@@ -531,7 +531,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
                             .ElementAt(LookupGridView.Columns.IndexOf(gridColumn));
-                        lookupColumnDefinition.UpdatePercentWidth(args.NewSize.Width / ListView.ActualWidth * 100);
+                        lookupColumnDefinition.UpdatePercentWidth(Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
                         ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
                         {
                             ColumnDefinition = lookupColumnDefinition,

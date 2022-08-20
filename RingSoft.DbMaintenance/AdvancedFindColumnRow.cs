@@ -31,7 +31,7 @@ namespace RingSoft.DbMaintenance
         public string Table { get; set; }
         public string Field { get; set; }
         public string Name { get; set; }
-        public decimal PercentWidth { get; set; }
+        public double PercentWidth { get; set; }
         public LookupFieldColumnDefinition LookupFieldColumnDefinition { get; set; }
         public LookupFormulaColumnDefinition LookupFormulaColumnDefinition { get; set; }
         public LookupColumnDefinitionBase LookupColumnDefinition { get; set; }
@@ -60,8 +60,8 @@ namespace RingSoft.DbMaintenance
                             AllowNullValue = false,
                             FormatType = DecimalEditFormatTypes.Percent,
                             MaximumValue = 100,
-                            MinimumValue = 0
-                        }, PercentWidth);
+                            MinimumValue = 0},
+                        PercentWidth.ToString().ToDecimal());
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -101,7 +101,16 @@ namespace RingSoft.DbMaintenance
                     break;
                 case AdvancedFindColumnColumns.PercentWidth:
                     var decimalProps = (DataEntryGridDecimalCellProps) value;
-                    PercentWidth = (decimal) decimalProps.Value;
+                    if (decimalProps.Value == null)
+                    {
+                        PercentWidth = 0;
+                    }
+                    else
+                    {
+                        var percentWidth = (decimal) decimalProps.Value;
+                        PercentWidth = Decimal.ToDouble(percentWidth);
+
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -140,7 +149,7 @@ namespace RingSoft.DbMaintenance
             Name = entity.Caption;
             var percentWidth = (double) entity.PercentWidth * 100;
 
-            PercentWidth = (decimal) percentWidth / 100;
+            PercentWidth = percentWidth / 100;
 
             if (fieldDefinition == null)
             {
@@ -242,7 +251,7 @@ namespace RingSoft.DbMaintenance
             }
 
             Name = column.Caption;
-            PercentWidth = (decimal) column.PercentWidth / 100;
+            PercentWidth = column.PercentWidth / 100;
             if (LookupFormulaColumnDefinition != null)
             {
                 Field = "<Formula>";
@@ -256,7 +265,7 @@ namespace RingSoft.DbMaintenance
 
         public void UpdatePercentWidth()
         {
-            PercentWidth = (decimal) LookupColumnDefinition.PercentWidth / 100;
+            PercentWidth = LookupColumnDefinition.PercentWidth / 100;
             if (Manager.Grid != null)
                 Manager.Grid.UpdateRow(this);
         }

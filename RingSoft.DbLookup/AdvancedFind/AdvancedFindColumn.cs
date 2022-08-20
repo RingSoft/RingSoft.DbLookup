@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public string Caption { get; set; }
 
-        public decimal PercentWidth { get; set; }
+        public double PercentWidth { get; set; }
 
         public string Formula { get; set; }
 

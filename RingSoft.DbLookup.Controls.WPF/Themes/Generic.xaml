@@ -1,12 +1,17 @@
 <ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:markup="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/DbLookupControlsStyles.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupControlTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFindWindowTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillFormulaCellTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+
 
 
 </ResourceDictionary>

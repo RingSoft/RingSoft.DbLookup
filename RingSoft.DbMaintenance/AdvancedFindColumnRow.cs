@@ -50,6 +50,10 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindColumnColumns.Table:
                     return new DataEntryGridTextCellProps(this, columnId, Table);
                 case AdvancedFindColumnColumns.Field:
+                    if (LookupFormulaColumnDefinition != null)
+                    {
+                        return new AdvancedFindFormulaCellProps(this, columnId, LookupFormulaColumnDefinition.OriginalFormula);
+                    }
                     return new DataEntryGridTextCellProps(this, columnId, Field);
                 case AdvancedFindColumnColumns.Name:
                     return new DataEntryGridTextCellProps(this, columnId, Name);
@@ -75,7 +79,19 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindColumnColumns.Table:
+                    return new DataEntryGridCellStyle
+                    {
+                        State = DataEntryGridCellStates.Disabled
+                    };
                 case AdvancedFindColumnColumns.Field:
+                    if (LookupFormulaColumnDefinition != null)
+                    {
+                        return new DataEntryGridCellStyle
+                        {
+                            State = DataEntryGridCellStates.Enabled
+                        };
+
+                    }
                     return new DataEntryGridCellStyle
                     {
                         State = DataEntryGridCellStates.Disabled
@@ -224,7 +240,7 @@ namespace RingSoft.DbMaintenance
             entity.PercentWidth = PercentWidth;
             if (LookupFormulaColumnDefinition != null)
             {
-                entity.Formula = LookupFormulaColumnDefinition.Formula;
+                entity.Formula = LookupFormulaColumnDefinition.OriginalFormula;
                 entity.FieldDataType = (byte) LookupFormulaColumnDefinition.DataType;
             }
             else

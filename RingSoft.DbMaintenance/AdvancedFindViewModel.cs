@@ -563,7 +563,7 @@ namespace RingSoft.DbMaintenance
                              .InitialSortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
                 {
                     lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
-                    var formula = lookupFormulaColumn.Formula;
+                    var formula = lookupFormulaColumn.OriginalFormula;
                     column = includeJoin.AddVisibleColumnDefinition(caption,
                         formula, 20, lookupFormulaColumn.DataType);
                 }
@@ -617,7 +617,7 @@ namespace RingSoft.DbMaintenance
                     }
                     else if (lookupFormulaColumn != null)
                     {
-                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.Formula,
+                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                             visibleColumn.PercentWidth, lookupFormulaColumn.DataType, lookupFormulaColumn.JoinQueryTableAlias);
                     }
                 }
@@ -647,7 +647,7 @@ namespace RingSoft.DbMaintenance
                             }
                             else if (lookupFormulaColumn != null)
                             {
-                                include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.Formula,
+                                include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                                     visibleColumn.PercentWidth, lookupFormulaColumn.DataType);
                             }
 

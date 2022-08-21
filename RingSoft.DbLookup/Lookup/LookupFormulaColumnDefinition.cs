@@ -85,8 +85,11 @@ namespace RingSoft.DbLookup.Lookup
             set
             {
                 _formula = value;
+                OriginalFormula = value;
             }
         }
+
+        public string OriginalFormula { get; private set; }
 
         private CultureInfo _columnCulture;
 

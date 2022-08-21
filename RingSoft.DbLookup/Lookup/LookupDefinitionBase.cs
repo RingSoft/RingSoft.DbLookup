@@ -197,7 +197,7 @@ namespace RingSoft.DbLookup.Lookup
                             }
                             else
                             {
-                                var newColumn = AddVisibleColumnDefinition(formulaColumn.Caption, formulaColumn.Formula,
+                                var newColumn = AddVisibleColumnDefinition(formulaColumn.Caption, formulaColumn.OriginalFormula,
                                     formulaColumn.PercentWidth, formulaColumn.DataType, formulaColumn.JoinQueryTableAlias);
                                 newColumn.CopyFrom(columnType);
                             }

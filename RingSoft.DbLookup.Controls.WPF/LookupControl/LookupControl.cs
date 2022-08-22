@@ -255,6 +255,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public object AddViewParameter { get; internal set; }
 
+        public bool ShowAdvancedFindButton { get; internal set; } = true;
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -321,6 +323,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountControl = GetTemplateChild(nameof(RecordCountControl)) as StringReadOnlyBox;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
             AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
+
+            if (!ShowAdvancedFindButton)
+            {
+                if (AdvancedFindButton != null) 
+                    AdvancedFindButton.Visibility = Visibility.Collapsed;
+            }
             base.OnApplyTemplate();
         }
 
@@ -604,6 +612,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 foreach (var column in LookupColumns)
                 {
+                    var columnLineCount = 0;
                     if (!column.Header.IsNullOrEmpty())
                     {
                         while (startIndex >= 0)
@@ -611,12 +620,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                             startIndex = column.Header.IndexOf('\n', startIndex);
                             if (startIndex >= 0)
                             {
-                                lineFeedCount++;
+                                columnLineCount++;
                                 startIndex++;
                             }
                         }
 
                         startIndex = 0;
+                        if (lineFeedCount < columnLineCount)
+                            lineFeedCount = columnLineCount;
+
                     }
                 }
 
@@ -626,6 +638,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 foreach (var column in LookupColumns)
                 {
+                    var columnLineCount = 0;
                     if (!column.Header.IsNullOrEmpty())
                     {
                         while (startIndex >= 0)
@@ -633,13 +646,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                             startIndex = column.Header.IndexOf('\n', startIndex);
                             if (startIndex >= 0)
                             {
-                                lineFeedCount++;
+                                columnLineCount++;
                                 startIndex++;
                             }
                         }
 
                         startIndex = 0;
                     }
+
+                    if (lineFeedCount < columnLineCount)
+                        lineFeedCount = columnLineCount;
                 }
 
                 height = 20 * (lineFeedCount + 1);

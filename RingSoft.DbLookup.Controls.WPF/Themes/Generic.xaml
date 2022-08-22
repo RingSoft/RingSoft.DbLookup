@@ -8,7 +8,7 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/LookupControlTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFindWindowTemplate.xaml"/>
-        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillFormulaCellTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFindMemoCellTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 

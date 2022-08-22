@@ -5,10 +5,10 @@
                         xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
                         xmlns:advancedFind="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind">
 
-    <Style TargetType="{x:Type advancedFind:AutoFillFormulaCellControl}">
+    <Style TargetType="{x:Type advancedFind:AutoFillMemoCellControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type advancedFind:AutoFillFormulaCellControl}">
+                <ControlTemplate TargetType="{x:Type advancedFind:AutoFillMemoCellControl}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"

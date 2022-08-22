@@ -46,12 +46,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     /// </summary>
     [TemplatePart(Name = "TextBox", Type = typeof(StringEditControl))]
     [TemplatePart(Name = "Button", Type = typeof(Button))]
-    public class AutoFillFormulaCellControl : Control
+    public class AutoFillMemoCellControl : Control
     {
         private static void BackgroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var formulaAutoFillControl = (AutoFillFormulaCellControl)obj;
+            var formulaAutoFillControl = (AutoFillMemoCellControl)obj;
             if (formulaAutoFillControl.TextBox != null)
             {
                 formulaAutoFillControl.TextBox.Background = formulaAutoFillControl.Background;
@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var formulaAutoFillControl = (AutoFillFormulaCellControl)obj;
+            var formulaAutoFillControl = (AutoFillMemoCellControl)obj;
             if (formulaAutoFillControl.TextBox != null)
             {
                 formulaAutoFillControl.TextBox.Height = formulaAutoFillControl.ActualHeight;
@@ -71,7 +71,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private static void IsFocusedChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var formulaAutoFillControl = (AutoFillFormulaCellControl)obj;
+            var formulaAutoFillControl = (AutoFillMemoCellControl)obj;
             if (formulaAutoFillControl.TextBox != null)
             {
                 if (formulaAutoFillControl.IsFocused)
@@ -79,22 +79,23 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        public event EventHandler MemoChanged;
 
         public StringEditControl TextBox { get; set; }
 
         public Button Button { get; set; }
 
-        public string Formula { get; set; }
+        public string Text { get; set; }
 
         public string OriginalFormula { get; set; }
-        static AutoFillFormulaCellControl()
+        static AutoFillMemoCellControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillFormulaCellControl), new FrameworkPropertyMetadata(typeof(AutoFillFormulaCellControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillMemoCellControl), new FrameworkPropertyMetadata(typeof(AutoFillMemoCellControl)));
 
-            BackgroundProperty.OverrideMetadata(typeof(AutoFillFormulaCellControl),
+            BackgroundProperty.OverrideMetadata(typeof(AutoFillMemoCellControl),
                 new FrameworkPropertyMetadata(BackgroundChangedCallback));
 
-            HeightProperty.OverrideMetadata(typeof(AutoFillFormulaCellControl),
+            HeightProperty.OverrideMetadata(typeof(AutoFillMemoCellControl),
                 new FrameworkPropertyMetadata(HeightChangedCallback));
 
             //VerticalAlignmentProperty.OverrideMetadata(typeof(AutoFillFormulaCellControl), new FrameworkPropertyMetadata(System.Windows.VerticalAlignment.Center));
@@ -106,7 +107,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         }
 
-        public AutoFillFormulaCellControl()
+        public AutoFillMemoCellControl()
         {
             GotFocus += (sender, args) =>
             {
@@ -130,15 +131,24 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (Button != null) 
                 Button.Click += (sender, args) => ShowMemoEditor();
 
+            if (TextBox != null)
+                TextBox.TextChanged += (sender, args) =>
+                {
+                    if(!TextBox.IsReadOnly)
+                        Text = TextBox.Text;
+                };
+
             base.OnApplyTemplate();
         }
 
         private void ShowMemoEditor()
         {
-            var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0){Text = Formula});
+            var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0){Text = Text});
             memoEditor.Owner = Window.GetWindow(this);
             memoEditor.ShowInTaskbar = false;
             memoEditor.ShowDialog();
+            Text = memoEditor.MemoEditor.Text;
+            MemoChanged.Invoke(this, new EventArgs());
         }
     }
 }

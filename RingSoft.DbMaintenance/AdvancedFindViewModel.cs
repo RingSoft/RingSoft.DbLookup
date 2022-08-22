@@ -700,5 +700,9 @@ namespace RingSoft.DbMaintenance
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 
+        public void ResetLookup()
+        {
+            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+        }
     }
 }

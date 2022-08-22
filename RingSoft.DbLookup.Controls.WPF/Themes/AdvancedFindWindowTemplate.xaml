@@ -26,7 +26,9 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
@@ -50,7 +52,7 @@
 
                                 <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="TableComboBoxControl" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>
 
-                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding TreeRoot}">
+                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" ItemsSource="{Binding TreeRoot}">
                                     <TreeView.ItemTemplate>
 
                                         <HierarchicalDataTemplate DataType="dbm:TreeViewItems" ItemsSource="{Binding Items}">
@@ -76,7 +78,9 @@
 
                                 </StackPanel>
 
-                                <deg:DataEntryGrid Grid.Row="2" Grid.Column="4" Manager="{Binding ColumnsManager}" DataEntryCanUserAddRows="False">
+                                <Label Grid.Row="2" Grid.Column="4" Content="Columns"/>
+
+                                <deg:DataEntryGrid Grid.Row="3" Grid.Column="4" Manager="{Binding ColumnsManager}" DataEntryCanUserAddRows="False">
                                     <deg:DataEntryGrid.Columns>
 
                                         <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>
@@ -91,9 +95,11 @@
                                     </deg:DataEntryGrid.Columns>
                                 </deg:DataEntryGrid>
 
-                                <deg:DataEntryGrid Grid.Row="3" Grid.Column="4"></deg:DataEntryGrid>
+                                <Label Grid.Row="4" Grid.Column="4" Content="Filters"/>
 
-                                <lc:LookupControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800"/>
+                                <deg:DataEntryGrid Grid.Row="5" Grid.Column="4"></deg:DataEntryGrid>
+
+                                <lc:LookupControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5" x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800" ShowAdvancedFindButton="False"/>
                             </Grid>
                         </DockPanel>
                     </Border>

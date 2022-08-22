@@ -11,6 +11,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             Application.Current.Dispatcher.Invoke(() =>
             {
                 var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
+                dataProcessResultWindow.Owner = Application.Current.MainWindow;
+                dataProcessResultWindow.ShowInTaskbar = false;
                 dataProcessResultWindow.ShowDialog();
             });
         }

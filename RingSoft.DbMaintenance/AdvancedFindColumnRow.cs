@@ -52,11 +52,11 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindColumnColumns.Field:
                     if (LookupFormulaColumnDefinition != null)
                     {
-                        return new AdvancedFindFormulaCellProps(this, columnId, LookupFormulaColumnDefinition.OriginalFormula);
+                        return new AdvancedFindMemoCellProps(this, columnId, LookupFormulaColumnDefinition.OriginalFormula);
                     }
                     return new DataEntryGridTextCellProps(this, columnId, Field);
                 case AdvancedFindColumnColumns.Name:
-                    return new DataEntryGridTextCellProps(this, columnId, Name);
+                    return new AdvancedFindMemoCellProps(this, columnId, Name){FormMode = AdvancedFindMemoCellProps.MemoFormMode.Caption, ReadOnlyMode = false};
                 case AdvancedFindColumnColumns.PercentWidth:
                     return new DataEntryGridDecimalCellProps(this, columnId,
                         new DecimalEditControlSetup
@@ -112,8 +112,10 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindColumnColumns.Name:
-                    var props = (DataEntryGridTextCellProps) value;
+                    var props = (AdvancedFindMemoCellProps) value;
                     Name = props.Text;
+                    LookupColumnDefinition.UpdateCaption(Name);
+                    Manager.ViewModel.ResetLookup();
                     break;
                 case AdvancedFindColumnColumns.PercentWidth:
                     var decimalProps = (DataEntryGridDecimalCellProps) value;
@@ -125,8 +127,14 @@ namespace RingSoft.DbMaintenance
                     {
                         var percentWidth = (decimal) decimalProps.Value;
                         PercentWidth = Decimal.ToDouble(percentWidth);
-
                     }
+                    LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
+                    Manager.ViewModel.ResetLookup();
+                    break;
+                case AdvancedFindColumnColumns.Field:
+                    var fieldProps = (AdvancedFindMemoCellProps)value;
+                    LookupFormulaColumnDefinition.UpdateFormula(fieldProps.Text);
+                    Manager.ViewModel.ResetLookup();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -181,7 +189,7 @@ namespace RingSoft.DbMaintenance
             if (!entity.Formula.IsNullOrEmpty())
             {
                LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
-                Field = "<Formula>";
+               Field = "<Formula>";
             }
             else
             {
@@ -235,7 +243,6 @@ namespace RingSoft.DbMaintenance
                     entity.PrimaryFieldName = primaryField.FieldName;
                 }
             }
-
             entity.Caption = Name;
             entity.PercentWidth = PercentWidth;
             if (LookupFormulaColumnDefinition != null)

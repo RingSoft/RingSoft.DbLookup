@@ -12,9 +12,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (editingControlHostId == DataEntryGridAutoFillCellProps.AutoFillControlHostId)
                 return new DataEntryGridAutoFillHost(grid);
 
-            if (editingControlHostId == AdvancedFindFormulaCellProps.AdvancedFindFormulaHostId)
+            if (editingControlHostId == AdvancedFindMemoCellProps.AdvancedFindMemoHostId)
             {
-                return new DataEntryGridFormulaHost(grid);
+                return new DataEntryGridAdvancedFindMemoHost(grid);
             }
             
             return base.GetControlHost(grid, editingControlHostId);

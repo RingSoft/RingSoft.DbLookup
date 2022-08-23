@@ -74,13 +74,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     ParentTable = LookupFormulaColumnDefinition.PrimaryTable.Description
                 };
-                if (LookupFormulaColumnDefinition.ParentField == null)
+                if (LookupFormulaColumnDefinition.PrimaryField == null)
                 {
                     memoEditor.ParentField = "<Lookup Root>";
                 }
                 else
                 {
-                    memoEditor.ParentField = LookupFormulaColumnDefinition.ParentField.Description;
+                    memoEditor.ParentField = LookupFormulaColumnDefinition.PrimaryField.Description;
                 }
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;

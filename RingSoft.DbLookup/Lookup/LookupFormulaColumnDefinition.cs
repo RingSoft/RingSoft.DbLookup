@@ -181,6 +181,8 @@ namespace RingSoft.DbLookup.Lookup
                 DecimalFieldType = formulaSource.DecimalFieldType;
                 DateType = formulaSource.DateType;
                 JoinQueryTableAlias = formulaSource.JoinQueryTableAlias;
+                PrimaryTable = formulaSource.PrimaryTable;
+                PrimaryField = formulaSource.PrimaryField;
             }
             base.CopyFrom(source);
         }

@@ -337,6 +337,7 @@ namespace RingSoft.DbMaintenance
                     if (field.ParentJoinForeignKeyDefinition != null && field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items, field.ParentJoinForeignKeyDefinition, treeRoot);
                 }
+                AddFormulaToTree(treeItems, null);
 
                 LookupCommand = GetLookupCommand(LookupCommands.Clear);
 
@@ -374,6 +375,20 @@ namespace RingSoft.DbMaintenance
                             treeChildItem.Items, join, treeChildItem);
                 }
             }
+
+            AddFormulaToTree(treeItems, parent);
+        }
+
+        private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
+        {
+            var formulaTreeItem = new TreeViewItem
+            {
+                Name = "<Formula>",
+                Type = TreeViewType.Formula,
+                ViewModel = this,
+                Parent = parent
+            };
+            treeItems.Add(formulaTreeItem);
         }
 
         public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
@@ -481,6 +496,16 @@ namespace RingSoft.DbMaintenance
                     var processResult = SelectColumnDescription(selectedItem, selectedItem, null, columnCaption);
                     includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                     column = processResult.ColumnDefinition;
+
+                    if (column is LookupFormulaColumnDefinition formulaColumn)
+                    {
+                        formulaColumn.PrimaryTable =
+                            includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
+
+                        formulaColumn.PrimaryField =
+                            includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
+
+                    }
                 }
             }
 
@@ -505,6 +530,14 @@ namespace RingSoft.DbMaintenance
                         var processResult = SelectColumnDescription(selectedItem, child, includeJoin, columnCaption);
                         includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                         column = processResult.ColumnDefinition;
+                        if (column is LookupFormulaColumnDefinition formulaColumn)
+                        {
+                            formulaColumn.PrimaryTable =
+                                includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
+
+                            formulaColumn.PrimaryField =
+                                includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
+                        }
                     }
                 }
                 else if (childNodes.IndexOf(child) != 0)
@@ -656,10 +689,10 @@ namespace RingSoft.DbMaintenance
                                     visibleColumn.PercentWidth, lookupFormulaColumn.DataType);
 
                                 newLookupFormulaColumnDefinition.PrimaryTable =
-                                    include.JoinDefinition.ForeignKeyDefinition.PrimaryTable;
+                                    include.JoinDefinition.ForeignKeyDefinition.ForeignTable;
 
                                 newLookupFormulaColumnDefinition.PrimaryField =
-                                    include.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                                    include.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
 
                             }
 

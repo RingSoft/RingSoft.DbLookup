@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
@@ -54,6 +55,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public Border Border { get; set; }
         public string ParentTable { get; set; }
         public string ParentField { get; set; }
+        public FieldDataTypes DataType { get; set; }
+        public DecimalEditFormatTypes DecimalFormat { get; set; }
         public AdvancedFindFormulaColumnViewModel ViewModel { get; set; }
 
         static AdvancedFindFormulaColumnWindow()
@@ -71,8 +74,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnApplyTemplate();
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFindFormulaColumnViewModel;
+            ViewModel.Initialize();
             ViewModel.Table = ParentTable;
             ViewModel.Field = ParentField;
+            ViewModel.DataType = DataType;
         }
     }
 }

@@ -318,5 +318,11 @@ namespace RingSoft.DbLookup.Lookup
             Description = value;
             return this;
         }
+
+        public LookupFormulaColumnDefinition HasDataType(FieldDataTypes value)
+        {
+            _dataType = value;
+            return this;
+        }
     }
 }

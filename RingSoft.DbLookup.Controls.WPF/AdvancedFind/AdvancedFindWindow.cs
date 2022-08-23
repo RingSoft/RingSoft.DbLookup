@@ -4,7 +4,9 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.Lookup;
+using TreeViewItem = RingSoft.DbMaintenance.TreeViewItem;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -38,7 +40,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     ///
     /// </summary>
     [TemplatePart(Name = "ButtonsPanel", Type = typeof(StackPanel))]
-    public class AdvancedFindWindow : BaseWindow, IDbMaintenanceView
+    public class AdvancedFindWindow : BaseWindow, IAdvancedFindView
     {
         public StackPanel ButtonsPanel { get; set; }
         public Border Border { get; set; }
@@ -74,6 +76,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
             ViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
+            ViewModel.View = this;
             Processor.Initialize(this, _buttonsControl, ViewModel, this);
             if (_addViewArgs != null)
             {
@@ -133,6 +136,36 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public void ResetViewForNewRecord()
         {
             NameAutoFillControl?.Focus();
+        }
+
+        public void ShowFormulaEditor(TreeViewItem formulaTreeViewItem)
+        {
+            var editor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0));
+            if (formulaTreeViewItem.Parent != null)
+            {
+                editor.ParentTable = formulaTreeViewItem.Parent.FieldDefinition.ParentJoinForeignKeyDefinition
+                    .ForeignTable.Description;
+                editor.ParentField = formulaTreeViewItem.Parent.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
+                    .ForeignField.Description;
+            }
+            else
+            {
+                editor.ParentTable = formulaTreeViewItem.ViewModel.LookupDefinition.TableDefinition.Description;
+                editor.ParentField = "<Lookup Root>";
+            }
+
+            if (formulaTreeViewItem.FormulaData != null)
+            {
+                editor.DataType = formulaTreeViewItem.FormulaData.DataType;
+            }
+            editor.Owner =this;
+            editor.ShowInTaskbar = false;
+            if (editor.ShowDialog())
+            {
+                formulaTreeViewItem.FormulaData = new TreeViewFormulaData();
+                formulaTreeViewItem.FormulaData.DataType = editor.DataType;
+                formulaTreeViewItem.FormulaData.Formula = editor.MemoEditor.Text;
+            }
         }
     }
 }

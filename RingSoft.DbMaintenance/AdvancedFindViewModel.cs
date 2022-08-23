@@ -17,6 +17,10 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
+    public interface IAdvancedFindView : IDbMaintenanceView
+    {
+        void ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
+    }
     public enum TreeViewType
     {
         Field = 0,
@@ -25,6 +29,14 @@ namespace RingSoft.DbMaintenance
         ForeignTable = 3
     }
 
+    public class TreeViewFormulaData
+    {
+        public string Formula { get; set; }
+
+        public FieldDataTypes DataType { get; set; }
+
+        public DecimalEditFormatTypes DecimalFormatType { get; set; }
+    }
     public class ProcessIncludeResult
     {
         public LookupJoin LookupJoin { get; set; }
@@ -49,6 +61,7 @@ namespace RingSoft.DbMaintenance
         public AdvancedFindViewModel ViewModel { get; set; }
         public LookupJoin Include { get; set; }
         public TreeViewItem Parent { get; set; }
+        public  TreeViewFormulaData FormulaData { get; set; }
 
         private bool _isSelected;
         public bool IsSelected
@@ -246,6 +259,8 @@ namespace RingSoft.DbMaintenance
         public RelayCommand AddFilterCommand { get; set; }
 
         public TreeViewItem SelectedTreeViewItem { get; set; }
+
+        public IAdvancedFindView View { get; set; }
 
         private List<LookupJoin> _includes = new List<LookupJoin>();
         private AdvancedFindInput _input = null;
@@ -470,8 +485,22 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
-            var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name);
-            ColumnsManager.LoadFromColumnDefinition(column);
+            switch (SelectedTreeViewItem.Type)
+            {
+                case TreeViewType.Field:
+                    var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name);
+                    ColumnsManager.LoadFromColumnDefinition(column);
+                    break;
+                case TreeViewType.AdvancedFind:
+                    break;
+                case TreeViewType.Formula:
+                    View.ShowFormulaEditor(SelectedTreeViewItem);
+                    break;
+                case TreeViewType.ForeignTable:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }

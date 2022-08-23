@@ -82,11 +82,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     memoEditor.ParentField = LookupFormulaColumnDefinition.PrimaryField.Description;
                 }
+
+                memoEditor.DataType = LookupFormulaColumnDefinition.DataType;
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;
                 if (memoEditor.ShowDialog())
                 {
                     LookupFormulaColumnDefinition.UpdateFormula(memoEditor.MemoEditor.Text);
+                    LookupFormulaColumnDefinition.HasDataType(memoEditor.DataType);
                     Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
                 }
 

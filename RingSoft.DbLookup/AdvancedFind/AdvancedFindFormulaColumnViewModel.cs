@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -37,6 +38,50 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        private TextComboBoxControlSetup _dataTypeComboBoxControlSetup;
+
+        public TextComboBoxControlSetup DataTypeComboBoxControlSetup
+        {
+            get => _dataTypeComboBoxControlSetup;
+            set
+            {
+                if (_dataTypeComboBoxControlSetup == value)
+                {
+                    return;
+                }
+                _dataTypeComboBoxControlSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TextComboBoxItem _dataTypeComboBoxItem;
+
+        public TextComboBoxItem DataTypeComboBoxItem
+        {
+            get => _dataTypeComboBoxItem;
+            set
+            {
+                if (_dataTypeComboBoxItem == value)
+                {
+                    return;
+                }
+                _dataTypeComboBoxItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public FieldDataTypes DataType
+        {
+            get => (FieldDataTypes)DataTypeComboBoxItem.NumericValue;
+            set => DataTypeComboBoxItem = DataTypeComboBoxControlSetup.GetItem((int) value);
+        }
+
+        public void Initialize()
+        {
+            DataTypeComboBoxControlSetup = new TextComboBoxControlSetup();
+            DataTypeComboBoxControlSetup.LoadFromEnum<FieldDataTypes>();
+            DataType = FieldDataTypes.String;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

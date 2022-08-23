@@ -89,7 +89,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 if (memoEditor.ShowDialog())
                 {
                     LookupFormulaColumnDefinition.UpdateFormula(memoEditor.MemoEditor.Text);
-                    LookupFormulaColumnDefinition.HasDataType(memoEditor.DataType);
+                    LookupFormulaColumnDefinition.HasDataType(memoEditor.ViewModel.DataType);
                     Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
                 }
 

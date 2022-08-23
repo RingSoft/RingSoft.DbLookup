@@ -19,7 +19,7 @@ namespace RingSoft.DbMaintenance
 {
     public interface IAdvancedFindView : IDbMaintenanceView
     {
-        void ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
+        bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
     }
     public enum TreeViewType
     {
@@ -491,12 +491,14 @@ namespace RingSoft.DbMaintenance
                     var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name);
                     ColumnsManager.LoadFromColumnDefinition(column);
                     break;
-                case TreeViewType.AdvancedFind:
-                    break;
                 case TreeViewType.Formula:
-                    View.ShowFormulaEditor(SelectedTreeViewItem);
-                    break;
-                case TreeViewType.ForeignTable:
+                    if (View.ShowFormulaEditor(SelectedTreeViewItem))
+                    {
+                        var formulaColumn = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name) as LookupFormulaColumnDefinition;
+                        formulaColumn.UpdateCaption("<No Caption>");
+                        formulaColumn.HasDataType(SelectedTreeViewItem.FormulaData.DataType);
+                        ColumnsManager.LoadFromColumnDefinition(formulaColumn);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -522,18 +524,36 @@ namespace RingSoft.DbMaintenance
             {
                 if (createColumn)
                 {
-                    var processResult = SelectColumnDescription(selectedItem, selectedItem, null, columnCaption);
-                    includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                    column = processResult.ColumnDefinition;
+                    switch (selectedItem.Type)
+                    {
+                        case TreeViewType.Field:
+                            var processResult = SelectColumnDescription(selectedItem, selectedItem, null, columnCaption);
+                            includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
+                            column = processResult.ColumnDefinition;
+                            break;
+                        case TreeViewType.Formula:
+                            column = LookupDefinition.AddVisibleColumnDefinition(selectedItem.Name,
+                                selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType, "");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
 
                     if (column is LookupFormulaColumnDefinition formulaColumn)
                     {
-                        formulaColumn.PrimaryTable =
-                            includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
+                        if (includeJoin == null)
+                        {
+                            formulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
+                        }
+                        else
+                        {
+                            formulaColumn.PrimaryTable =
+                                includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
 
-                        formulaColumn.PrimaryField =
-                            includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-
+                            formulaColumn.PrimaryField =
+                                includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
+                        }
                     }
                 }
             }
@@ -556,9 +576,20 @@ namespace RingSoft.DbMaintenance
 
                     if (createColumn)
                     {
-                        var processResult = SelectColumnDescription(selectedItem, child, includeJoin, columnCaption);
-                        includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                        column = processResult.ColumnDefinition;
+                        switch (selectedItem.Type)
+                        {
+                            case TreeViewType.Field:
+                                var processResult = SelectColumnDescription(selectedItem, child, includeJoin, columnCaption);
+                                includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
+                                column = processResult.ColumnDefinition;
+                                break;
+                            case TreeViewType.Formula:
+                                column = includeJoin.AddVisibleColumnDefinition(selectedItem.Name,
+                                    selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                         if (column is LookupFormulaColumnDefinition formulaColumn)
                         {
                             formulaColumn.PrimaryTable =

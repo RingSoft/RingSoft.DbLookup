@@ -138,7 +138,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             NameAutoFillControl?.Focus();
         }
 
-        public void ShowFormulaEditor(TreeViewItem formulaTreeViewItem)
+        public bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem)
         {
             var editor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0));
             if (formulaTreeViewItem.Parent != null)
@@ -163,9 +163,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (editor.ShowDialog())
             {
                 formulaTreeViewItem.FormulaData = new TreeViewFormulaData();
-                formulaTreeViewItem.FormulaData.DataType = editor.DataType;
+                formulaTreeViewItem.FormulaData.DataType = editor.ViewModel.DataType;
                 formulaTreeViewItem.FormulaData.Formula = editor.MemoEditor.Text;
+                return true;
             }
+            return false;
         }
     }
 }

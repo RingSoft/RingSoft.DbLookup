@@ -621,7 +621,7 @@ namespace RingSoft.DbMaintenance
                         newLookupFormulaColumnDefinition = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                             visibleColumn.PercentWidth, lookupFormulaColumn.DataType, lookupFormulaColumn.JoinQueryTableAlias);
 
-                        newLookupFormulaColumnDefinition.ParentTable = LookupDefinition.TableDefinition;
+                        newLookupFormulaColumnDefinition.PrimaryTable = LookupDefinition.TableDefinition;
 
                     }
                 }
@@ -655,8 +655,11 @@ namespace RingSoft.DbMaintenance
                                 newLookupFormulaColumnDefinition = include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                                     visibleColumn.PercentWidth, lookupFormulaColumn.DataType);
 
-                                newLookupFormulaColumnDefinition.ParentTable =
+                                newLookupFormulaColumnDefinition.PrimaryTable =
                                     include.JoinDefinition.ForeignKeyDefinition.PrimaryTable;
+
+                                newLookupFormulaColumnDefinition.PrimaryField =
+                                    include.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;
 
                             }
 

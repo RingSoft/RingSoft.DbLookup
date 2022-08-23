@@ -145,7 +145,9 @@ namespace RingSoft.DbLookup.Lookup
 
         public string Description { get; private set; }
 
-        public TableDefinitionBase ParentTable { get; set; }
+        public TableDefinitionBase PrimaryTable { get; set; }
+
+        public FieldDefinition PrimaryField { get; set; }
 
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;

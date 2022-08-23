@@ -53,6 +53,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public Border Border { get; set; }
         public string ParentTable { get; set; }
+        public string ParentField { get; set; }
         public AdvancedFindFormulaColumnViewModel ViewModel { get; set; }
 
         static AdvancedFindFormulaColumnWindow()
@@ -71,6 +72,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFindFormulaColumnViewModel;
             ViewModel.Table = ParentTable;
+            ViewModel.Field = ParentField;
         }
     }
 }

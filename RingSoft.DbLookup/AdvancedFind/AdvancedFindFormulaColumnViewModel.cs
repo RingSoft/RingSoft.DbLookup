@@ -21,6 +21,23 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        private string _field;
+
+        public string Field
+        {
+            get => _field;
+            set
+            {
+                if (_field == value)
+                {
+                    return;
+                }
+                _field = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -16,10 +16,14 @@
                             x:Name="Border">
                         <Border.Resources>
                             <dbla:AdvancedFindFormulaColumnViewModel x:Key="ViewModel"/>
+                            <Style TargetType="Label">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
                         </Border.Resources>
 
                         <Grid DataContext="{DynamicResource ViewModel}" Margin="5" Background="{TemplateBinding Background}" Height="300" Width="400">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -37,19 +41,24 @@
 
                             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" x:Name="TableReadOnlyBox" Width="200" HorizontalAlignment="Left" Text="{Binding Table, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Field Data Type"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Field"/>
 
-                            <dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="FieldDataTypeComboBox" HorizontalAlignment="Left" Width="200"/>
+                            <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" x:Name="FieldReadOnlyBox" Width="200" HorizontalAlignment="Left" Text="{Binding Field, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="Data Format Type"/>
 
-                            <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" x:Name="FormatTypeComboBox" HorizontalAlignment="Left" Width="200"/>
+                            <Label Grid.Row="2" Grid.Column="0" Content="Field Data Type"/>
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Formula"/>
+                            <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" x:Name="FieldDataTypeComboBox" HorizontalAlignment="Left" Width="200"/>
 
-                            <dec:DataEntryMemoEditor Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" x:Name="MemoEditor" Margin="0,0,0,5" />
+                            <Label Grid.Row="3" Grid.Column="0" Content="Data Format Type"/>
 
-                            <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <dec:TextComboBoxControl Grid.Row="3" Grid.Column="1" x:Name="FormatTypeComboBox" HorizontalAlignment="Left" Width="200"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Content="Formula" HorizontalAlignment="Left"/>
+
+                            <dec:DataEntryMemoEditor Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" x:Name="MemoEditor" Margin="0,0,0,5" />
+
+                            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OkButton" Content="_OK" Width="100" Margin="0,0,5,0"/>
 

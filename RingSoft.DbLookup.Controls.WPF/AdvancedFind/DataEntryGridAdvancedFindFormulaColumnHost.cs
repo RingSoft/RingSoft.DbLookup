@@ -70,7 +70,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             Control.ShowMemoEditorWindow += (sender, args) =>
             {
-                var memoEditor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0){Text = LookupFormulaColumnDefinition.OriginalFormula }){ParentTable = LookupFormulaColumnDefinition.ParentTable.Description};
+                var memoEditor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0){Text = LookupFormulaColumnDefinition.OriginalFormula })
+                {
+                    ParentTable = LookupFormulaColumnDefinition.PrimaryTable.Description
+                };
+                if (LookupFormulaColumnDefinition.ParentField == null)
+                {
+                    memoEditor.ParentField = "<Lookup Root>";
+                }
+                else
+                {
+                    memoEditor.ParentField = LookupFormulaColumnDefinition.ParentField.Description;
+                }
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;
                 if (memoEditor.ShowDialog())

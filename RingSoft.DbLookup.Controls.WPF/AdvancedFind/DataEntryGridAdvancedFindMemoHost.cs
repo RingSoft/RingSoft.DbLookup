@@ -9,7 +9,7 @@ using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
-    internal class DataEntryGridAdvancedFindMemoHost : DataEntryGridEditingControlHost<AutoFillMemoCellControl>
+    public class DataEntryGridAdvancedFindMemoHost : DataEntryGridEditingControlHost<AutoFillMemoCellControl>
     {
         public AdvancedFindMemoCellProps OriginalCellProps { get; set; }
 
@@ -21,25 +21,31 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public override DataEntryGridEditingCellProps GetCellValue()
         {
-            return new AdvancedFindMemoCellProps(Row, ColumnId, Control.Text)
+            return GetNewCellProps(Control.Text);
+        }
+
+        private AdvancedFindMemoCellProps GetNewCellProps(string text)
+        {
+            return new AdvancedFindMemoCellProps(Row, ColumnId, text)
             {
                 FormMode = OriginalCellProps.FormMode,
                 ControlMode = OriginalCellProps.ControlMode,
                 ReadOnlyMode = OriginalCellProps.ReadOnlyMode,
                 CellLostFocusType = OriginalCellProps.CellLostFocusType
             };
+
         }
 
         public override bool HasDataChanged()
         {
-            return _dataChanged || Control.Text != Control.OriginalFormula;
+            return _dataChanged || Control.Text != Control.OriginalText;
         }
 
         public override void UpdateFromCellProps(DataEntryGridCellProps cellProps)
         {
-            if (cellProps is AdvancedFindMemoCellProps advancedFindFormulaCellProps)
+            if (cellProps is AdvancedFindMemoCellProps advancedFindMemoCellProps)
             {
-                Control.Text = advancedFindFormulaCellProps.Text;
+                Control.Text = advancedFindMemoCellProps.Text;
             }
         }
 
@@ -52,12 +58,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             OriginalCellProps = advancedFindCellProps;
             SetCellText(advancedFindCellProps);
 
-            Control.MemoChanged += (sender, args) =>
+            Control.ShowMemoEditorWindow += (sender, args) =>
             {
-                _dataChanged = true;
-                SetCellText(GetCellValue() as AdvancedFindMemoCellProps);
-                Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
+                var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = control.Text});
+                memoEditor.Owner = Window.GetWindow(control);
+                memoEditor.ShowInTaskbar = false;
+                if (memoEditor.ShowDialog())
+                {
+                    _dataChanged = OriginalCellProps.Text != memoEditor.MemoEditor.Text;
+                    var advancedFindCellProps = GetNewCellProps(memoEditor.MemoEditor.Text);
+                    SetCellText(advancedFindCellProps);
+                    Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
+                }
+
                 Control.Focus();
+
             };
 
         }
@@ -65,29 +80,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private void SetCellText(AdvancedFindMemoCellProps cellProps)
         {
             {
-                Control.OriginalFormula = Control.Text = cellProps.Text;
+                Control.OriginalText = Control.Text = cellProps.Text;
 
-                switch (cellProps.FormMode)
+                if (cellProps.Text.Contains('\n'))
                 {
-                    case AdvancedFindMemoCellProps.MemoFormMode.Formula:
-                        Control.TextBox.IsReadOnly = true;
-                        Control.TextBox.Text = "<Formula>";
-                        break;
-                    case AdvancedFindMemoCellProps.MemoFormMode.Caption:
-                        if (cellProps.Text.Contains('\n'))
-                        {
-                            Control.TextBox.IsReadOnly = true;
-                            Control.TextBox.Text = "<Multi-Line Caption>";
-                        }
-                        else
-                        {
-                            Control.TextBox.Text = cellProps.Text;
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    Control.TextBox.IsReadOnly = true;
+                    Control.TextBox.Text = "<Multi-Line Caption>";
                 }
+                else
+                {
+                    Control.TextBox.Text = cellProps.Text;
+                }
+
 
             }
         }

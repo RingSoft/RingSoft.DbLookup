@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
@@ -132,7 +133,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The type of the decimal field.
         /// </value>
-        public DecimalFieldTypes DecimalFieldType { get; internal set; }
+        public DecimalFieldTypes DecimalFieldType { get; set; }
 
         /// <summary>
         /// Gets the type of the date.
@@ -140,9 +141,11 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The type of the date.
         /// </value>
-        public DbDateTypes DateType { get; private set; }
+        public DbDateTypes DateType { get; set; }
 
         public string Description { get; private set; }
+
+        public TableDefinitionBase ParentTable { get; set; }
 
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;

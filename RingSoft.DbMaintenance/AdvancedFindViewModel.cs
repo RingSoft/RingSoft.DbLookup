@@ -607,6 +607,7 @@ namespace RingSoft.DbMaintenance
                 var parent = visibleColumn.ParentObject;
                 var lookupFieldColumn = visibleColumn as LookupFieldColumnDefinition;
                 var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
+                LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
 
                 if (parent == null)
                 {
@@ -617,8 +618,11 @@ namespace RingSoft.DbMaintenance
                     }
                     else if (lookupFormulaColumn != null)
                     {
-                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
+                        newLookupFormulaColumnDefinition = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                             visibleColumn.PercentWidth, lookupFormulaColumn.DataType, lookupFormulaColumn.JoinQueryTableAlias);
+
+                        newLookupFormulaColumnDefinition.ParentTable = LookupDefinition.TableDefinition;
+
                     }
                 }
                 else
@@ -644,11 +648,16 @@ namespace RingSoft.DbMaintenance
                             {
                                 include.AddVisibleColumnDefinitionField(visibleColumn.Caption,
                                     lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth);
+                                
                             }
                             else if (lookupFormulaColumn != null)
-                            {
-                                include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
+                            { 
+                                newLookupFormulaColumnDefinition = include.AddVisibleColumnDefinition(visibleColumn.Caption, lookupFormulaColumn.OriginalFormula,
                                     visibleColumn.PercentWidth, lookupFormulaColumn.DataType);
+
+                                newLookupFormulaColumnDefinition.ParentTable =
+                                    include.JoinDefinition.ForeignKeyDefinition.PrimaryTable;
+
                             }
 
                         }
@@ -666,6 +675,11 @@ namespace RingSoft.DbMaintenance
 
                         index++;
                     }
+                }
+
+                if (newLookupFormulaColumnDefinition != null && lookupFormulaColumn != null)
+                {
+                    newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
                 }
             }
 

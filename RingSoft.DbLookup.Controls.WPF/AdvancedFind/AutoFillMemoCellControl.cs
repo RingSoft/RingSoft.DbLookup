@@ -79,7 +79,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
-        public event EventHandler MemoChanged;
+        public event EventHandler ShowMemoEditorWindow;
 
         public StringEditControl TextBox { get; set; }
 
@@ -87,7 +87,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public string Text { get; set; }
 
-        public string OriginalFormula { get; set; }
+        public string OriginalText { get; set; }
         static AutoFillMemoCellControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillMemoCellControl), new FrameworkPropertyMetadata(typeof(AutoFillMemoCellControl)));
@@ -143,12 +143,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private void ShowMemoEditor()
         {
-            var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0){Text = Text});
-            memoEditor.Owner = Window.GetWindow(this);
-            memoEditor.ShowInTaskbar = false;
-            memoEditor.ShowDialog();
-            Text = memoEditor.MemoEditor.Text;
-            MemoChanged.Invoke(this, new EventArgs());
+            ShowMemoEditorWindow?.Invoke(this, EventArgs.Empty);
         }
     }
 }

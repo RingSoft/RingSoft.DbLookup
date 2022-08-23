@@ -52,7 +52,7 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindColumnColumns.Field:
                     if (LookupFormulaColumnDefinition != null)
                     {
-                        return new AdvancedFindMemoCellProps(this, columnId, LookupFormulaColumnDefinition.OriginalFormula);
+                        return new AdvancedFindColumnFormulaCellProps(this, columnId, LookupFormulaColumnDefinition);
                     }
                     return new DataEntryGridTextCellProps(this, columnId, Field);
                 case AdvancedFindColumnColumns.Name:
@@ -132,8 +132,8 @@ namespace RingSoft.DbMaintenance
                     Manager.ViewModel.ResetLookup();
                     break;
                 case AdvancedFindColumnColumns.Field:
-                    var fieldProps = (AdvancedFindMemoCellProps)value;
-                    LookupFormulaColumnDefinition.UpdateFormula(fieldProps.Text);
+                    var fieldProps = (AdvancedFindColumnFormulaCellProps)value;
+                    LookupFormulaColumnDefinition = fieldProps.LookupFormulaColumn;
                     Manager.ViewModel.ResetLookup();
                     break;
                 default:

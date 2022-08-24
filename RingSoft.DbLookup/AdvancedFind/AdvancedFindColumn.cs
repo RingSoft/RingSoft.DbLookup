@@ -27,5 +27,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public string Formula { get; set; }
 
         public byte FieldDataType { get; set; }
+
+        public byte DecimalFormatType { get; set; }
     }
 }

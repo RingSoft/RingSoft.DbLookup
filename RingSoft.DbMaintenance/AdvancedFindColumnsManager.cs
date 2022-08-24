@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Specialized;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
@@ -46,6 +47,13 @@ namespace RingSoft.DbMaintenance
             var columnRow = GetNewRow() as AdvancedFindColumnRow;
             columnRow?.LoadFromColumnDefinition(column);
             AddRow(columnRow);
+        }
+
+        public override void RemoveRow(DataEntryGridRow rowToDelete)
+        {
+            var advancedFindColumnRow = rowToDelete as AdvancedFindColumnRow; 
+            advancedFindColumnRow.Dispose();
+            base.RemoveRow(rowToDelete);
         }
     }
 }

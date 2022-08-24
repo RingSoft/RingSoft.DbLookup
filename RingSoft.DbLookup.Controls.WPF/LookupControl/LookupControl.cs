@@ -429,9 +429,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             else
                 ImportLookupDefinition();
 
+            if (!LookupDefinition.VisibleColumns.Any())
+            {
+                SetActiveColumn(0, FieldDataTypes.String);
+                return;
+            }
+            //LookupDefinition.InitialSortColumnDefinition = LookupDefinition.VisibleColumns[0];
             var sortColumnIndex =
                 GetIndexOfVisibleColumnDefinition(LookupDefinition?.InitialSortColumnDefinition);
 
+            if (sortColumnIndex < 0)
+                sortColumnIndex = 0;
             InitializeHeader(sortColumnIndex);
             if (LookupDefinition?.InitialSortColumnDefinition != null)
                 SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
@@ -954,7 +962,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void SetActiveColumn(int sortColumnIndex, FieldDataTypes datatype)
         {
             if (!LookupColumns.Any())
+            {
+                SearchForStackPanel.Children.Clear();
+                SearchForLabel.Content = "Search For";
+                UpdateLayout();
                 return;
+            }
 
             if (SearchForStackPanel != null)
             {
@@ -1592,9 +1605,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.Reset:
                         ClearLookupControl();
                         SetupControl();
-                        this.AddViewParameter = command.AddViewParameter;
-                        _currentPageSize = GetPageSize();
-                        RefreshData(true);
+                        if (LookupDefinition.VisibleColumns.Any())
+                        {
+                            _resettingSearchFor = true;
+                            this.AddViewParameter = command.AddViewParameter;
+                            _currentPageSize = GetPageSize();
+                            RefreshData(true);
+                            _resettingSearchFor = false;
+                        }
+
                         //LookupData.GetInitData();
                         break;
                     default:

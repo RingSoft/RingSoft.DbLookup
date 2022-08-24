@@ -1,23 +1,10 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbMaintenance;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -91,6 +78,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 ViewModel.DecimalFormatType = DecimalFormat;
             }
             FieldDataTypeComboBox.SelectionChanged += FieldDataTypeComboBox_SelectionChanged;
+            MemoEditor.CollapseDateButton();
         }
 
         private void FieldDataTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

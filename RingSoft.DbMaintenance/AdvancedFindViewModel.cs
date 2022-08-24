@@ -72,7 +72,7 @@ namespace RingSoft.DbMaintenance
                 if (_isSelected != value)
                 {
                     _isSelected = value;
-                    OnPropertyChanged("IsSelected");
+                    OnPropertyChanged();
                     if (_isSelected)
                     {
                         SelectedTreeItem = this;
@@ -88,10 +88,6 @@ namespace RingSoft.DbMaintenance
             get => _selectedTreeItem;
             set
             {
-                if (_selectedTreeItem == value)
-                {
-                    return;
-                }
                 _selectedTreeItem = value;
                 ViewModel.OnTreeViewItemSelected(_selectedTreeItem);
             }
@@ -455,7 +451,7 @@ namespace RingSoft.DbMaintenance
             //LoadTree();
         }
 
-        private void CreateLookupDefinition()
+        public void CreateLookupDefinition()
         {
             if (SelectedTableBoxItem != null)
             {
@@ -534,7 +530,7 @@ namespace RingSoft.DbMaintenance
                             column = processResult.ColumnDefinition;
                             break;
                         case TreeViewType.Formula:
-                            column = LookupDefinition.AddVisibleColumnDefinition(selectedItem.Name,
+                            column = LookupDefinition.AddVisibleColumnDefinition(columnCaption,
                                 selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType, "");
                             break;
                         default:
@@ -586,7 +582,7 @@ namespace RingSoft.DbMaintenance
                                 column = processResult.ColumnDefinition;
                                 break;
                             case TreeViewType.Formula:
-                                column = includeJoin.AddVisibleColumnDefinition(selectedItem.Name,
+                                column = includeJoin.AddVisibleColumnDefinition(columnCaption,
                                     selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType);
                                 break;
                             default:

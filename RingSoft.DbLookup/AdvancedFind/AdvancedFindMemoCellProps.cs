@@ -30,7 +30,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             switch (FormMode)
             {
                 case MemoFormMode.Caption:
-                    if (Text.Contains('\n'))
+                    if (!Text.IsNullOrEmpty() && Text.Contains('\n'))
                         return "<Multi-Line Caption>";
                     else
                         return Text;

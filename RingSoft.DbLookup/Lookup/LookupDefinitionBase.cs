@@ -385,5 +385,15 @@ namespace RingSoft.DbLookup.Lookup
         {
             return AddVisibleColumnDefinitionField(caption, fieldDefinition, percentWidth);
         }
+
+        public void DeleteVisibleColumn(LookupColumnDefinitionBase column)
+        {
+            _visibleColumns.Remove(column);
+            if (column == InitialSortColumnDefinition && VisibleColumns.Any())
+            {
+                InitialSortColumnDefinition = VisibleColumns[0];
+            }
+
+        }
     }
 }

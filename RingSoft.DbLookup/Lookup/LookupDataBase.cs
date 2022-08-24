@@ -77,7 +77,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The sort column definition.
         /// </value>
-        public LookupColumnDefinitionBase SortColumnDefinition { get; private set; }
+        public LookupColumnDefinitionBase SortColumnDefinition { get; set; }
 
         /// <summary>
         /// Gets the type of the order by.

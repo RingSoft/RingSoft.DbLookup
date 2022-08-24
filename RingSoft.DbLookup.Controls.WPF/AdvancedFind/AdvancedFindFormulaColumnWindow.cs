@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
@@ -53,6 +54,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
 
         public Border Border { get; set; }
+        public TextComboBoxControl FieldDataTypeComboBox { get; set; }
+        public TextComboBoxControl FormatTypeComboBox { get; set; }
+
         public string ParentTable { get; set; }
         public string ParentField { get; set; }
         public FieldDataTypes DataType { get; set; }
@@ -71,6 +75,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
+            FieldDataTypeComboBox = GetTemplateChild(nameof(FieldDataTypeComboBox)) as TextComboBoxControl;
+            FormatTypeComboBox = GetTemplateChild(nameof(FormatTypeComboBox)) as TextComboBoxControl;
+
             base.OnApplyTemplate();
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFindFormulaColumnViewModel;
@@ -78,6 +85,25 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ViewModel.Table = ParentTable;
             ViewModel.Field = ParentField;
             ViewModel.DataType = DataType;
+
+            if (DataType == FieldDataTypes.Decimal)
+            {
+                ViewModel.DecimalFormatType = DecimalFormat;
+            }
+            FieldDataTypeComboBox.SelectionChanged += FieldDataTypeComboBox_SelectionChanged;
+        }
+
+        private void FieldDataTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel.DataType == FieldDataTypes.Decimal)
+            {
+                FormatTypeComboBox.IsEnabled = true;
+            }
+            else
+            {
+                FormatTypeComboBox.IsEnabled = false;
+                FormatTypeComboBox.SelectedItem = null;
+            }
         }
     }
 }

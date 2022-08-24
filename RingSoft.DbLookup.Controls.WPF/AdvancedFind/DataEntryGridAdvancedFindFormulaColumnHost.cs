@@ -84,12 +84,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 }
 
                 memoEditor.DataType = LookupFormulaColumnDefinition.DataType;
+                memoEditor.DecimalFormat = LookupFormulaColumnDefinition.DecimalFieldType.ConvertDecimalFieldTypeToDecimalEditFormatType();
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;
                 if (memoEditor.ShowDialog())
                 {
                     LookupFormulaColumnDefinition.UpdateFormula(memoEditor.MemoEditor.Text);
                     LookupFormulaColumnDefinition.HasDataType(memoEditor.ViewModel.DataType);
+                    if (memoEditor.ViewModel.DataType == FieldDataTypes.Decimal)
+                    {
+                        if (memoEditor.ViewModel.DecimalFormatComboBoxItem != null)
+                        {
+                            LookupFormulaColumnDefinition.HasDecimalFieldType(
+                                (DecimalFieldTypes) (int) memoEditor.ViewModel.DecimalFormatType);
+                        }
+                    }
                     Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
                 }
 

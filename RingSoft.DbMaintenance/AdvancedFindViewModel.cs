@@ -497,6 +497,8 @@ namespace RingSoft.DbMaintenance
                         var formulaColumn = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name) as LookupFormulaColumnDefinition;
                         formulaColumn.UpdateCaption("<No Caption>");
                         formulaColumn.HasDataType(SelectedTreeViewItem.FormulaData.DataType);
+                        formulaColumn.HasDecimalFieldType(
+                            (DecimalFieldTypes) (int) SelectedTreeViewItem.FormulaData.DecimalFormatType);
                         ColumnsManager.LoadFromColumnDefinition(formulaColumn);
                     }
                     break;

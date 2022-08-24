@@ -52,7 +52,7 @@
 
                             <Label Grid.Row="3" Grid.Column="0" Content="Data Format Type"/>
 
-                            <dec:TextComboBoxControl Grid.Row="3" Grid.Column="1" x:Name="FormatTypeComboBox" HorizontalAlignment="Left" Width="200"/>
+                            <dec:TextComboBoxControl Grid.Row="3" Grid.Column="1" x:Name="FormatTypeComboBox" Setup="{Binding DecimalFormatComboSetup}" SelectedItem="{Binding DecimalFormatComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="200"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Formula" HorizontalAlignment="Left"/>
 

@@ -165,6 +165,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 formulaTreeViewItem.FormulaData = new TreeViewFormulaData();
                 formulaTreeViewItem.FormulaData.DataType = editor.ViewModel.DataType;
                 formulaTreeViewItem.FormulaData.Formula = editor.MemoEditor.Text;
+                if (formulaTreeViewItem.FormulaData.DataType == FieldDataTypes.Decimal)
+                {
+                    formulaTreeViewItem.FormulaData.DecimalFormatType = editor.ViewModel.DecimalFormatType;
+                }
                 return true;
             }
             return false;

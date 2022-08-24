@@ -73,13 +73,60 @@ namespace RingSoft.DbLookup.AdvancedFind
         public FieldDataTypes DataType
         {
             get => (FieldDataTypes)DataTypeComboBoxItem.NumericValue;
-            set => DataTypeComboBoxItem = DataTypeComboBoxControlSetup.GetItem((int) value);
+            set
+            {
+                DataTypeComboBoxItem = DataTypeComboBoxControlSetup.GetItem((int) value);
+                if (value == FieldDataTypes.Decimal)
+                {
+                    DecimalFormatType = DecimalEditFormatTypes.Number;
+                }
+            }
+        }
+
+        private TextComboBoxControlSetup _decimalFormatComboSetup;
+
+        public TextComboBoxControlSetup DecimalFormatComboSetup
+        {
+            get => _decimalFormatComboSetup;
+            set
+            {
+                if (_decimalFormatComboSetup == value)
+                {
+                    return;
+                }
+                _decimalFormatComboSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TextComboBoxItem _decimalFormatComboBoxItem;
+
+        public TextComboBoxItem DecimalFormatComboBoxItem
+        {
+            get => _decimalFormatComboBoxItem;
+            set
+            {
+                if (_decimalFormatComboBoxItem == value)
+                {
+                    return;
+                }
+                _decimalFormatComboBoxItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DecimalEditFormatTypes DecimalFormatType
+        {
+            get => (DecimalEditFormatTypes) DecimalFormatComboBoxItem.NumericValue;
+            set => DecimalFormatComboBoxItem = DecimalFormatComboSetup.GetItem((int) value);
         }
 
         public void Initialize()
         {
             DataTypeComboBoxControlSetup = new TextComboBoxControlSetup();
             DataTypeComboBoxControlSetup.LoadFromEnum<FieldDataTypes>();
+            DecimalFormatComboSetup = new TextComboBoxControlSetup();
+            DecimalFormatComboSetup.LoadFromEnum<DecimalEditFormatTypes>();
             DataType = FieldDataTypes.String;
         }
 

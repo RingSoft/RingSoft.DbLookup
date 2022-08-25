@@ -692,6 +692,11 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
+            if (!lookupDefinition.FromFormula.IsNullOrEmpty())
+            {
+                LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
+            }
+            
             var parentObjects = new List<IJoinParent>();
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
@@ -699,12 +704,13 @@ namespace RingSoft.DbMaintenance
                 var lookupFieldColumn = visibleColumn as LookupFieldColumnDefinition;
                 var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
                 LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
+                LookupColumnDefinitionBase newLookupColumnDefinition = null;
 
                 if (parent == null)
                 {
                     if (lookupFieldColumn != null)
                     {
-                        LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
+                        newLookupColumnDefinition = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
                             lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth, "");
                     }
                     else if (lookupFormulaColumn != null)
@@ -737,7 +743,7 @@ namespace RingSoft.DbMaintenance
                         {
                             if (lookupFieldColumn != null)
                             {
-                                include.AddVisibleColumnDefinitionField(visibleColumn.Caption,
+                                newLookupColumnDefinition = include.AddVisibleColumnDefinitionField(visibleColumn.Caption,
                                     lookupFieldColumn.FieldDefinition, visibleColumn.PercentWidth);
                                 
                             }
@@ -773,8 +779,11 @@ namespace RingSoft.DbMaintenance
 
                 if (newLookupFormulaColumnDefinition != null && lookupFormulaColumn != null)
                 {
+                    newLookupColumnDefinition = newLookupFormulaColumnDefinition;
                     newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
                 }
+                if (visibleColumn.ContentTemplateId != null)
+                    newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
             }
 
             foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)

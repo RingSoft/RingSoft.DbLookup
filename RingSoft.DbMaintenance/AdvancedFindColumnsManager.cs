@@ -51,8 +51,6 @@ namespace RingSoft.DbMaintenance
 
         public override void RemoveRow(DataEntryGridRow rowToDelete)
         {
-            var advancedFindColumnRow = rowToDelete as AdvancedFindColumnRow; 
-            advancedFindColumnRow.Dispose();
             base.RemoveRow(rowToDelete);
         }
     }

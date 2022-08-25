@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
 
@@ -491,6 +492,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         lookupColumn.TextAlignment = lookupColumnDefinition.HorizontalAlignment;
 
                 lookupColumnDefinition.UpdateCaption(lookupColumnBase.Header);
+
                 AddColumnToGrid(lookupColumnBase);
             }
         }
@@ -504,6 +506,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                     double columnWidth = 100;
                     if (ListView != null)
                         columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
+
+                    if (column is LookupFieldColumnDefinition lookupFieldColumn)
+                    {
+                        if (lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition)
+                        {
+                            //lookupFieldColumn.HasContentTemplateId(integerFieldDefinition.ContentTemplateId);
+                        }
+                    }
 
                     var lookupColumn = LookupControlsGlobals.LookupControlColumnFactory.CreateLookupColumn(column);
 

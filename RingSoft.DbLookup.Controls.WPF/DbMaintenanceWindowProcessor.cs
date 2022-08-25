@@ -38,6 +38,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ViewModel.Processor = this;
 
             View = view;
+
             PreviousButton.Command = ViewModel.PreviousCommand;
             NewButton.Command = ViewModel.NewCommand;
             SaveButton.Command = ViewModel.SaveCommand;
@@ -112,6 +113,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
 
             keyAutoFillControl.LostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
+            KeyAutoFillControl.SetReadOnlyMode(false);
         }
 
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)
@@ -198,15 +200,18 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void OnReadOnlyModeSet(bool readOnlyValue)
         {
-            if (readOnlyValue)
+            if (MaintenanceWindow != null && MaintenanceButtonsControl != null)
             {
-                var focusedElement = FocusManager.GetFocusedElement(MaintenanceWindow);
-                if (focusedElement == null || !focusedElement.IsEnabled)
-                    NextButton.Focus();
-            }
-            else if (MaintenanceButtonsControl.IsKeyboardFocusWithin)
-            {
-                WPFControlsGlobals.SendKey(Key.Tab);
+                if (readOnlyValue)
+                {
+                    var focusedElement = FocusManager.GetFocusedElement(MaintenanceWindow);
+                    if (focusedElement == null || !focusedElement.IsEnabled)
+                        NextButton.Focus();
+                }
+                else if (MaintenanceButtonsControl.IsKeyboardFocusWithin)
+                {
+                    WPFControlsGlobals.SendKey(Key.Tab);
+                }
             }
         }
 

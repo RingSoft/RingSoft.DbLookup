@@ -53,7 +53,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="lc:FromFormulaHasText" BasedOn="{StaticResource {x:Type Button}}"/>
+    <Style TargetType="dec:NotificationButton" BasedOn="{StaticResource {x:Type Button}}"/>
 
     <Style TargetType="TabControl">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>

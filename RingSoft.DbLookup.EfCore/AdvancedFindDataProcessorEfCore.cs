@@ -9,21 +9,10 @@ namespace RingSoft.DbLookup.EfCore
     {
         public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AdvancedFindColumn>().HasKey(p => new { p.AdvancedFindId, p.ColumnId });
+            modelBuilder.ApplyConfiguration(new AdvancedFindConfiguration());
+            modelBuilder.ApplyConfiguration(new AdvancedFindColumnConfiguration());
+            modelBuilder.ApplyConfiguration(new AdvancedFindFilterConfiguration());
 
-            modelBuilder.Entity<AdvancedFindColumn>().HasOne(p => p.AdvancedFind)
-                .WithMany(p => p.Columns).HasForeignKey(p => p.AdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<AdvancedFindFilter>().HasKey(p => new { p.AdvancedFindId, p.FilterId });
-
-            modelBuilder.Entity<AdvancedFindFilter>().HasOne(p => p.AdvancedFind)
-                .WithMany(p => p.Filters).HasForeignKey(p => p.AdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<AdvancedFindFilter>().HasOne(p => p.SearchForAdvancedFind)
-                .WithMany(p => p.SearchForAdvancedFindFilters).HasForeignKey(p => p.SearchForAdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public AdvancedFind.AdvancedFind GetAdvancedFind(int advancedFindId)

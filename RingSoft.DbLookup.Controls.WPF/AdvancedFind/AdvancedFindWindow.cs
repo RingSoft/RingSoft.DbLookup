@@ -47,6 +47,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AutoFillControl NameAutoFillControl { get; set; }
         public TextComboBoxControl TableComboBoxControl { get; set; }
         public LookupControl LookupControl { get; set; }
+        public NotificationButton NotificationButton { get; set; }
 
         public AdvancedFindViewModel ViewModel { get; set; }
 
@@ -54,6 +55,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private LookupAddViewArgs _addViewArgs;
 
         public IDbMaintenanceProcessor Processor { get; set; }
+
+        private bool _notifyFromFormulaExists;
+        public bool NotifyFromFormulaExists
+        {
+            get => _notifyFromFormulaExists;
+            set
+            {
+                _notifyFromFormulaExists = value;
+                NotificationButton.MemoHasText = value;
+            }
+        }
 
         static AdvancedFindWindow()
         {
@@ -101,7 +113,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
             TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
-            
+            NotificationButton = GetTemplateChild(nameof(NotificationButton)) as NotificationButton;
+
             if (ButtonsPanel != null)
             {
                 ButtonsPanel.Children.Add(_buttonsControl);

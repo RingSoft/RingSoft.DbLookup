@@ -20,6 +20,8 @@ namespace RingSoft.DbMaintenance
     public interface IAdvancedFindView : IDbMaintenanceView
     {
         bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
+
+        bool NotifyFromFormulaExists { get; set; }
     }
     public enum TreeViewType
     {
@@ -695,6 +697,11 @@ namespace RingSoft.DbMaintenance
             if (!lookupDefinition.FromFormula.IsNullOrEmpty())
             {
                 LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
+                View.NotifyFromFormulaExists = true;
+            }
+            else
+            {
+                View.NotifyFromFormulaExists = false;
             }
             
             var parentObjects = new List<IJoinParent>();

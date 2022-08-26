@@ -104,6 +104,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     }
                 }
             }
+            Processor.CheckAddOnFlyMode();
         }
 
         public override void OnApplyTemplate()

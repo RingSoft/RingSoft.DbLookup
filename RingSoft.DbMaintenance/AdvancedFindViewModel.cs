@@ -320,8 +320,18 @@ namespace RingSoft.DbMaintenance
                 TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.EntityName == entity.Table);
             var comboItem = TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == tableDefinition.Description);
             TableIndex = TableComboBoxSetup.Items.IndexOf(comboItem);
-
             CreateLookupDefinition();
+
+            if (!entity.FromFormula.IsNullOrEmpty())
+            {
+                LookupDefinition.HasFromFormula(entity.FromFormula);
+                View.NotifyFromFormulaExists = true;
+            }
+            else
+            {
+                View.NotifyFromFormulaExists = false;
+            }
+
             ColumnsManager.LoadGrid(entity.Columns);
 
             LookupCommand = GetLookupCommand(LookupCommands.Reset);
@@ -422,7 +432,9 @@ namespace RingSoft.DbMaintenance
             {
                 advancedFind.Name = KeyAutoFillValue.Text;
             }
-            
+
+            advancedFind.FromFormula = LookupDefinition.FromFormula;
+
             advancedFind.Table = TableDefinition.Context.TableDefinitions
                 .FirstOrDefault(p => p.Description == TableComboBoxSetup.Items[TableIndex].TextValue)
                 ?.EntityName;
@@ -441,6 +453,7 @@ namespace RingSoft.DbMaintenance
             }
 
             CreateLookupDefinition();
+            View.NotifyFromFormulaExists = false;
 
             if (LookupDefinition != null)
             {

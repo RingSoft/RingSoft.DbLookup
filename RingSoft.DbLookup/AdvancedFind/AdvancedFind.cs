@@ -20,6 +20,8 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public string Table { get; set; }
 
+        public string FromFormula { get; set; }
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<AdvancedFindColumn> Columns { get; set; }

@@ -14,5 +14,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         void RegisterFormKeyControl(AutoFillControl keyAutoFillControl);
 
         bool SetControlReadOnlyMode(Control control, bool readOnlyValue);
+
+        void CheckAddOnFlyMode();
     }
 }

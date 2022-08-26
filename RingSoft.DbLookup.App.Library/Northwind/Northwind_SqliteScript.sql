@@ -147,6 +147,7 @@ CREATE TABLE [AdvancedFinds] (
   [Id] INTEGER NOT NULL
 , [Name] nvarchar(50) NOT NULL
 , [Table] nvarchar(50) NOT NULL
+, [FromFormula] ntext NULL
 , CONSTRAINT [PK_AdvancedFinds] PRIMARY KEY ([Id])
 );
 
@@ -161,6 +162,7 @@ CREATE TABLE [AdvancedFindColumns] (
 , [PercentWidth] [decimal](18, 4) NOT NULL
 , [Formula] ntext NULL
 , [FieldDataType] tinyint NULL
+, [DecimalFormatType] tinyint NULL
 , CONSTRAINT [PK_AdvancedFindColumns] PRIMARY KEY ([AdvancedFindId],[ColumnId])
 , FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );

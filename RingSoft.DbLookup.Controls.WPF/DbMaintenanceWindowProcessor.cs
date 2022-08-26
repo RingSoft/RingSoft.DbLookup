@@ -225,5 +225,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             return true;
         }
 
+        public void CheckAddOnFlyMode()
+        {
+            
+        }
     }
 }

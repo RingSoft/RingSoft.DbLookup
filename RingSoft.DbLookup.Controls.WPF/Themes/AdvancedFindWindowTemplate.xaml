@@ -76,7 +76,7 @@
 
                                     <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add _Filter"/>
 
-                                    <dec:NotificationButton x:Name="NotificationButton" HorizontalAlignment="Left" Width="100" Height="50"  Margin="0, 50, 0, 0" Content="From Formula" />
+                                    <dec:NotificationButton x:Name="NotificationButton" HorizontalAlignment="Left" Width="100" Height="50"  Margin="0, 50, 0, 0" Content="From Formula" Command="{Binding FromFormulaCommand}"/>
 
                                 </StackPanel>
 

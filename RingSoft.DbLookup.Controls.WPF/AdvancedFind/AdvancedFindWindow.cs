@@ -5,6 +5,7 @@ using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.Lookup;
 using TreeViewItem = RingSoft.DbMaintenance.TreeViewItem;
 
@@ -57,6 +58,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public IDbMaintenanceProcessor Processor { get; set; }
 
         private bool _notifyFromFormulaExists;
+        public bool ShowFromFormulaEditor(ref string fromFormula)
+        {
+            var editor = new DataEntryGridMemoEditor(new DataEntryGridMemoValue(0){Text = fromFormula});
+            editor.Loaded += (sender, args) => editor.MemoEditor.CollapseDateButton();
+            editor.ShowInTaskbar = false;
+            editor.Owner = this;
+            if (editor.ShowDialog())
+            {
+                fromFormula = editor.GridMemoValue.Text;
+                return true;
+            }
+
+            return false;
+        }
+
         public bool NotifyFromFormulaExists
         {
             get => _notifyFromFormulaExists;

@@ -21,6 +21,8 @@ namespace RingSoft.DbMaintenance
     {
         bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
 
+        bool ShowFromFormulaEditor(ref string fromFormula);
+
         bool NotifyFromFormulaExists { get; set; }
     }
     public enum TreeViewType
@@ -256,6 +258,8 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand AddFilterCommand { get; set; }
 
+        public RelayCommand FromFormulaCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -273,6 +277,8 @@ namespace RingSoft.DbMaintenance
                 }
             }
             AddColumnCommand = new RelayCommand(AddColumn);
+
+            FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
 
             TableComboBoxSetup = new TextComboBoxControlSetup();
             var index = 0;
@@ -840,6 +846,17 @@ namespace RingSoft.DbMaintenance
         public void ResetLookup()
         {
             LookupCommand = GetLookupCommand(LookupCommands.Reset);
+        }
+
+        private void ShowFromFormulaEditor()
+        {
+            var fromFormula = LookupDefinition.FromFormula;
+            if (View.ShowFromFormulaEditor(ref fromFormula))
+            {
+                View.NotifyFromFormulaExists = !fromFormula.IsNullOrEmpty();
+                LookupDefinition.HasFromFormula(fromFormula);
+                ResetLookup();
+            }
         }
     }
 }

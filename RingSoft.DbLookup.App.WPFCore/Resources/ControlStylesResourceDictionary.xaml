@@ -24,6 +24,8 @@
 
     <Style TargetType="af:AdvancedFindFormulaColumnWindow" BasedOn="{StaticResource WindowStyle}"/>
 
+    <Style TargetType="af:AdvancedFilterWindow" BasedOn="{StaticResource WindowStyle}"/>
+
     <Style TargetType="ListView">
         <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
     </Style>

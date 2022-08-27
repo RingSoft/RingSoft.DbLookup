@@ -74,7 +74,7 @@
 
                                     <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add _Column" Command="{Binding AddColumnCommand}"/>
 
-                                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add _Filter"/>
+                                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add F_ilter" Command="{Binding AddFilterCommand}"/>
 
                                     <dec:NotificationButton x:Name="NotificationButton" HorizontalAlignment="Left" Width="100" Height="50"  Margin="0, 50, 0, 0" Content="From Formula" Command="{Binding FromFormulaCommand}"/>
 

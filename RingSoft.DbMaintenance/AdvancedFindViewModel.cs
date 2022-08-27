@@ -23,6 +23,8 @@ namespace RingSoft.DbMaintenance
 
         bool ShowFromFormulaEditor(ref string fromFormula);
 
+        bool ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition);
+
         bool NotifyFromFormulaExists { get; set; }
     }
     public enum TreeViewType
@@ -277,6 +279,8 @@ namespace RingSoft.DbMaintenance
                 }
             }
             AddColumnCommand = new RelayCommand(AddColumn);
+
+            AddFilterCommand = new RelayCommand(ShowFilterWindow);
 
             FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
 
@@ -857,6 +861,11 @@ namespace RingSoft.DbMaintenance
                 LookupDefinition.HasFromFormula(fromFormula);
                 ResetLookup();
             }
+        }
+
+        private void ShowFilterWindow()
+        {
+            View.ShowAdvancedFilterWindow(SelectedTreeViewItem, LookupDefinition);
         }
     }
 }

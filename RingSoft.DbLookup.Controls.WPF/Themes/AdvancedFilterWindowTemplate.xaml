@@ -1,0 +1,61 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
+                    xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+                    xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance">
+
+    <Style TargetType="{x:Type local:AdvancedFilterWindow}" BasedOn="{StaticResource {x:Type Window}}">
+        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AdvancedFilterWindow}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            x:Name="Border">
+                        <Border.Resources>
+                            <dbm:AdvancedFilterViewModel x:Key="ViewModel"/>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+                        </Border.Resources>
+
+                        <Grid x:Name="Grid" DataContext="{DynamicResource ViewModel}" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="Table"/>
+
+                            <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Table, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Field"/>
+
+                            <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" Text="{Binding Field, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
+
+                            <dec:DataEntryMemoEditor x:Name="MemoEditor" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Formula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="200" MaxWidth="500"/>
+
+                            <Label x:Name="DisplayLabel" Grid.Row="3" Grid.Column="0" Content="Display Value"/>
+
+                            <dec:StringEditControl x:Name="DisplayControl" Grid.Row="3" Grid.Column="1" Text="{Binding FormulaDisplayValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Content="Condition"/>
+
+                            <dec:TextComboBoxControl Grid.Row="4" Grid.Column="1" Setup="{Binding ConditionComboBoxSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ConditionComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                            </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

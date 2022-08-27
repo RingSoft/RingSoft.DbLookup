@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.QueryBuilder
+﻿using System.ComponentModel;
+
+namespace RingSoft.DbLookup.QueryBuilder
 {
     public enum WhereItemTypes
     {
@@ -9,17 +11,30 @@
 
     public enum Conditions
     {
+        [Description("Equals (=)")]
         Equals = 0,
+        [Description("Not Equals (<>)")]
         NotEquals = 1,
+        [Description("Greater Than (>)")]
         GreaterThan = 2,
+        [Description("Greater Than Or Equal To (>=)")]
         GreaterThanEquals = 3,
+        [Description("Less Than (<)")]
         LessThan = 4,
+        [Description("Less Than Or Equal To (<=)")]
         LessThanEquals = 5,
+        [Description("Contains")]
         Contains = 6,
+        [Description("Does Not Contain")]
         NotContains = 7,
+        [Description("Is NULL")]
         EqualsNull = 8,
+        [Description("Is Not NULL")]
         NotEqualsNull = 9,
-        BeginsWith
+        [Description("Begins With")]
+        BeginsWith = 10,
+        [Description("Ends With")]
+        EndsWith = 11,
     }
 
     public enum ValueTypes

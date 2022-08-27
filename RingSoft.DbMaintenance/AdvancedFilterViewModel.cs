@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -106,6 +107,55 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private string _stringSearchValue;
+
+        public string StringSearchValue
+        {
+            get => _stringSearchValue;
+            set
+            {
+                if (_stringSearchValue == value)
+                {
+                    return;
+                }
+                _stringSearchValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AutoFillSetup _searchValueAutoFillSetup;
+
+        public AutoFillSetup SearchValueAutoFillSetup
+        {
+            get => _searchValueAutoFillSetup;
+            set
+            {
+                if (_searchValueAutoFillSetup == value)
+                {
+                    return;
+                }
+                _searchValueAutoFillSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AutoFillValue _searchValueAutoFillValue;
+
+        public AutoFillValue SearchValueAutoFillValue
+        {
+            get => _searchValueAutoFillValue;
+            set
+            {
+                if (_searchValueAutoFillValue == value)
+                {
+                    return;
+                }
+                _searchValueAutoFillValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public Conditions Condition
         {
             get => (Conditions) ConditionComboBoxItem.NumericValue;
@@ -173,6 +223,12 @@ namespace RingSoft.DbMaintenance
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
+                    if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        SearchValueAutoFillSetup = new AutoFillSetup(TreeViewItem.FieldDefinition
+                            .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
+                    }
+
                     switch (TreeViewItem.FieldDefinition.FieldDataType)
                     {
                         case FieldDataTypes.String:

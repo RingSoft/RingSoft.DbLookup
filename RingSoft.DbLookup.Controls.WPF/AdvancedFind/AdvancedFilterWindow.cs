@@ -52,11 +52,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public DbMaintenance.TreeViewItem TreeViewItem { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
         public AdvancedFilterViewModel ViewModel { get; set; }
+
         public Label DisplayLabel { get; set; }
         public StringEditControl DisplayControl { get; set; }
-
         public Border Border { get; set; }
         public DataEntryMemoEditor MemoEditor { get; set; }
+        public StringEditControl SearchForStringControl { get; set; }
+        public AutoFillControl SearchForAutoFillControl { get; set; }
 
         static AdvancedFilterWindow()
         {
@@ -75,22 +77,50 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             MemoEditor = GetTemplateChild(nameof(MemoEditor)) as DataEntryMemoEditor;
             DisplayLabel = GetTemplateChild(nameof(DisplayLabel)) as Label;
             DisplayControl = GetTemplateChild(nameof(DisplayControl)) as StringEditControl;
+            SearchForStringControl = GetTemplateChild(nameof(SearchForStringControl)) as StringEditControl;
+            SearchForAutoFillControl = GetTemplateChild(nameof(SearchForAutoFillControl)) as AutoFillControl;
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
 
             ViewModel.Initialize(TreeViewItem, LookupDefinition);
             MemoEditor.CollapseDateButton();
 
+            SearchForStringControl.Visibility = Visibility.Collapsed;
+            SearchForAutoFillControl.Visibility = Visibility.Collapsed;
+
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
-                case TreeViewType.AdvancedFind:
-                case TreeViewType.ForeignTable:
+                    if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        SearchForAutoFillControl.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        switch (TreeViewItem.FieldDefinition.FieldDataType)
+                        {
+                            case FieldDataTypes.String:
+                                SearchForStringControl.Visibility = Visibility.Visible;
+                                break;
+                            case FieldDataTypes.Integer:
+                                break;
+                            case FieldDataTypes.Decimal:
+                                break;
+                            case FieldDataTypes.DateTime:
+                                break;
+                            case FieldDataTypes.Bool:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    }
                     MemoEditor.Visibility = Visibility.Collapsed;
                     DisplayLabel.Visibility = Visibility.Collapsed;
                     DisplayControl.Visibility = Visibility.Collapsed;
                     break;
                 case TreeViewType.Formula:
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
                     xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
-                    xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance">
+                    xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance"
+                    xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
     <Style TargetType="{x:Type local:AdvancedFilterWindow}" BasedOn="{StaticResource {x:Type Window}}">
         <Setter Property="SizeToContent" Value="WidthAndHeight"/>
@@ -22,6 +23,7 @@
 
                         <Grid x:Name="Grid" DataContext="{DynamicResource ViewModel}" Margin="5">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -51,7 +53,14 @@
                             <Label Grid.Row="4" Grid.Column="0" Content="Condition"/>
 
                             <dec:TextComboBoxControl Grid.Row="4" Grid.Column="1" Setup="{Binding ConditionComboBoxSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ConditionComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-                            </Grid>
+
+                            <Label Grid.Row="5" Grid.Column="0" Content="Search Value"/>
+
+                            <dec:StringEditControl Grid.Row="5" Grid.Column="1" x:Name="SearchForStringControl" Text="{Binding StringSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <lc:AutoFillControl Grid.Row="5" Grid.Column="1" x:Name="SearchForAutoFillControl" Setup="{Binding SearchValueAutoFillSetup}" Value="{Binding SearchValueAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

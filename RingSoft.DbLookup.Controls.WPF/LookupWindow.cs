@@ -186,7 +186,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 if (AddButton != null)
-                    AddButton.IsEnabled = allowAdd && !_readOnlyMode;
+                    AddButton.IsEnabled = allowAdd && LookupDefinition.AllowAddOnTheFly && !_readOnlyMode;
 
                 LookupControl?.Focus();
             };
@@ -277,7 +277,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (e.NewIndex >= 0)
             {
-                ViewButton.IsEnabled = _allowView;
+                ViewButton.IsEnabled = _allowView && LookupDefinition.AllowAddOnTheFly;
                 SelectButton.IsEnabled = !_readOnlyMode;
             }
             else

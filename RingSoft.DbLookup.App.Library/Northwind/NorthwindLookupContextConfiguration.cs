@@ -181,17 +181,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             ShippersLookup = new LookupDefinition<ShipperLookup, Shipper>(_lookupContext.Shippers);
             ShippersLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 75);
             ShippersLookup.AddVisibleColumnDefinition(p => p.Phone, "Phone", p => p.Phone, 25);
+            ShippersLookup.AllowAddOnTheFly = false;
 
             _lookupContext.Shippers.HasLookupDefinition(ShippersLookup);
 
             SuppliersLookup = new LookupDefinition<SupplierLookup, Supplier>(_lookupContext.Suppliers);
             SuppliersLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 60);
             SuppliersLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
+            SuppliersLookup.AllowAddOnTheFly = false;
             _lookupContext.Suppliers.HasLookupDefinition(SuppliersLookup);
 
             CategoriesLookup = new LookupDefinition<CategoryLookup, Category>(_lookupContext.Categories);
             CategoriesLookup.AddVisibleColumnDefinition(p => p.CategoryName, "Category Name", p => p.CategoryName, 40);
             CategoriesLookup.AddVisibleColumnDefinition(p => p.Description, "Description", p => p.Description, 60);
+            CategoriesLookup.AllowAddOnTheFly = false;
             _lookupContext.Categories.HasLookupDefinition(CategoriesLookup);
 
         }

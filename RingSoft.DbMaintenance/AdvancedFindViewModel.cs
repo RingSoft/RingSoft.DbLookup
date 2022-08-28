@@ -255,6 +255,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private AdvancedFindFiltersManager _filtersManager;
+
+        public AdvancedFindFiltersManager FiltersManager
+        {
+            get => _filtersManager;
+            set
+            {
+                if (_filtersManager == value)
+                {
+                    return;
+                }
+                _filtersManager = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
         public RelayCommand AddColumnCommand { get; set; }
 
@@ -297,6 +314,7 @@ namespace RingSoft.DbMaintenance
             }
 
             ColumnsManager = new AdvancedFindColumnsManager(this);
+            FiltersManager = new AdvancedFindFiltersManager(this);
 
             if (_input != null)
             {
@@ -343,6 +361,7 @@ namespace RingSoft.DbMaintenance
             }
 
             ColumnsManager.LoadGrid(entity.Columns);
+            FiltersManager.LoadGrid(entity.Filters);
 
             LookupCommand = GetLookupCommand(LookupCommands.Reset);
         }
@@ -471,7 +490,7 @@ namespace RingSoft.DbMaintenance
             }
             
             ColumnsManager.SetupForNewRecord();
-
+            FiltersManager.SetupForNewRecord();
 
             //LoadTree();
         }
@@ -496,7 +515,7 @@ namespace RingSoft.DbMaintenance
         protected override bool SaveEntity(AdvancedFind entity)
         {
             return SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
-                new List<AdvancedFindFilter>());
+                FiltersManager.GetEntityList());
         }
 
         protected override bool DeleteEntity()
@@ -816,33 +835,7 @@ namespace RingSoft.DbMaintenance
                     newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
             }
 
-            foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
-            {
-                if (fixedFilter is FieldFilterDefinition fieldFilter)
-                {
-                    switch (fieldFilter.FieldDefinition.FieldDataType)
-                    {
-                        case FieldDataTypes.String:
-                            if (fieldFilter.FieldDefinition is StringFieldDefinition stringField)
-                                LookupDefinition.FilterDefinition.AddFixedFilter(stringField, fieldFilter.Condition,
-                                    fieldFilter.Value);
-                            break;
-                        case FieldDataTypes.Integer:
-                            if (fieldFilter.FieldDefinition is IntegerFieldDefinition integerField)
-                                LookupDefinition.FilterDefinition.AddFixedFilter(integerField, fieldFilter.Condition,
-                                    fieldFilter.Value.ToInt());
-                            break;
-                        case FieldDataTypes.Decimal:
-                        case FieldDataTypes.DateTime:
-                        case FieldDataTypes.Bool:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    //LookupDefinition.FilterDefinition.AddFixedFilter(fieldFilter.FieldDefinition, fieldFilter.Condition,
-                    //value);
-                }
-            }
+            FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
             LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }

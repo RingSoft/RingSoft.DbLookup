@@ -79,10 +79,13 @@ namespace RingSoft.DbMaintenance
             {
                 if (dataEntryGridRow is DbMaintenanceDataEntryGridRow<TEntity> row && !row.IsNew)
                 {
-                    var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
-                    row.SaveToEntity(entity, rowIndex);
-                    result.Add(entity);
-                    rowIndex++;
+                    if (row.AllowSave)
+                    {
+                        var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
+                        row.SaveToEntity(entity, rowIndex);
+                        result.Add(entity);
+                        rowIndex++;
+                    }
                 }
             }
 

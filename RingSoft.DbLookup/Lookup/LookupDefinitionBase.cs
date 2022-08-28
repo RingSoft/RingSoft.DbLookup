@@ -101,6 +101,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool ReadOnlyMode { get; set; }
 
+        public bool AllowAddOnTheFly { get; set; } = true;
+
         public string FromFormula { get; internal set; }
 
         public LookupDefinitionBase HasFromFormula(string value)
@@ -160,6 +162,7 @@ namespace RingSoft.DbLookup.Lookup
             ReadOnlyMode = source.ReadOnlyMode;
             ParentObject = source.ParentObject;
             ChildField = source.ChildField;
+            AllowAddOnTheFly = source.AllowAddOnTheFly;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

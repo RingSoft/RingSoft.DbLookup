@@ -5,6 +5,7 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceDataEntryGridRow<TEntity> : DataEntryGridRow
         where TEntity : new()
     {
+        public bool AllowSave { get; protected set; } = true;
         //private DbMaintenanceDataEntryGridManager<TEntity> _dbMaintenanceDataEntryGridManager;
 
         protected DbMaintenanceDataEntryGridRow(DbMaintenanceDataEntryGridManager<TEntity> manager) : base(manager)

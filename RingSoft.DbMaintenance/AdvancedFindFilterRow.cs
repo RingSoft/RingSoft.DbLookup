@@ -338,9 +338,34 @@ namespace RingSoft.DbMaintenance
             if (advancedFilterReturn.Formula.IsNullOrEmpty())
             {
                 Field = fieldDefinition.Description;
+
+                fieldDefinition = foundTreeItem.FieldDefinition;
+                if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    switch (Condition)
+                    {
+                        case Conditions.Equals:
+                        case Conditions.NotEquals:
+                            break;
+                        default:
+                            if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                            {
+                                var initialSortColumnField = foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
+                                    LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
+                                if (initialSortColumnField != null)
+                                {
+                                    fieldDefinition = initialSortColumnField.FieldDefinition;
+                                    foundTreeItem =
+                                        Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
+                                    includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+                                }
+                            }
+                            break;
+                    }
+                }
                 FilterItemDefinition =
                     Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                        foundTreeItem.FieldDefinition, Condition, SearchValue);
+                        fieldDefinition, Condition, SearchValue);
                 if (includeResult.LookupJoin != null)
                 {
                     FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;

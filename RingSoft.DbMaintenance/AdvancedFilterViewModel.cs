@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
@@ -286,7 +287,17 @@ namespace RingSoft.DbMaintenance
                 {
                     if (SearchValueAutoFillValue != null)
                     {
-                        result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
+                        switch (Condition)
+                        {
+                            case Conditions.Equals:
+                            case Conditions.NotEquals:
+                                result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
+                                break;
+                            default:
+                                result.SearchValue = SearchValueAutoFillValue.Text;
+                                break;
+                        }
+
                     }
                 }
                 else

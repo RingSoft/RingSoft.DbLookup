@@ -53,6 +53,15 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public EndLogics EndLogic { get; internal set; }
 
+        /// <summary>
+        /// Gets the join definition.
+        /// </summary>
+        /// <value>
+        /// The join definition.
+        /// </value>
+        public TableFieldJoinDefinition JoinDefinition { get; set; }
+
+
         internal virtual void CopyFrom(FilterItemDefinition source)
         {
             LeftParenthesesCount = source.LeftParenthesesCount;

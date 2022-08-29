@@ -203,13 +203,13 @@ namespace RingSoft.DbLookup.TableProcessing
             return CreateAddFixedFilter(formula);
         }
 
-        internal void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
+        public void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
         {
             if (!_joinDefinitions.Contains(foreignKeyDefinition))
                 _joinDefinitions.Add(foreignKeyDefinition);
         }
 
-        internal FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
+        public FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
@@ -217,7 +217,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        internal FormulaFilterDefinition AddUserFilter(string formula)
+        public FormulaFilterDefinition AddUserFilter(string formula)
         {
             var formulaFilter = CreateFormulaFilter(formula);
             _userFilterDefinitions.Add(formulaFilter);

@@ -57,5 +57,21 @@ namespace RingSoft.DbMaintenance
                 rowIndex++;
             }
         }
+
+        public void LoadNewUserFilter(AdvancedFilterReturn filterReturn)
+        {
+            var row = GetNewRow() as AdvancedFindFilterRow;
+            if (filterReturn != null)
+                row.LoadFromFilterReturn(filterReturn);
+            if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any())
+            {
+                var lastFilterRow =
+                    Rows[ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count - 1] as AdvancedFindFilterRow;
+                lastFilterRow.FinishOffFilter(true, false);
+            }
+            AddRow(row);
+            row.FinishOffFilter(false, true);
+            Grid?.RefreshGridView();
+        }
     }
 }

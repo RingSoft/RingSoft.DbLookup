@@ -229,6 +229,10 @@ namespace RingSoft.DbMaintenance
             {
                 EndLogics = null;
             }
+            else
+            {
+                EndLogics = DbLookup.QueryBuilder.EndLogics.And;
+            }
         }
 
         public void MakeSearchValueText()
@@ -314,6 +318,37 @@ namespace RingSoft.DbMaintenance
             }
 
             return searchValue;
+        }
+
+        public void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
+        {
+            Condition = advancedFilterReturn.Condition;
+            SearchValue = advancedFilterReturn.SearchValue;
+            var fieldDefinition = advancedFilterReturn.FieldDefinition;
+            if (fieldDefinition == null)
+            {
+                fieldDefinition = advancedFilterReturn.FormulaParentFieldDefinition;
+            }
+
+            Table = fieldDefinition.TableDefinition.Description;
+            var foundTreeItem =
+                Manager.ViewModel.ProcessFoundTreeViewItem(advancedFilterReturn.Formula, fieldDefinition);
+            var includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+
+            if (advancedFilterReturn.Formula.IsNullOrEmpty())
+            {
+                Field = fieldDefinition.Description;
+                FilterItemDefinition =
+                    Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                        foundTreeItem.FieldDefinition, Condition, SearchValue);
+                if (includeResult.LookupJoin != null)
+                {
+                    FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                }
+            }
+
+            MakeSearchValueText();
+            Manager.ViewModel.ResetLookup();
         }
     }
 }

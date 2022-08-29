@@ -6,10 +6,20 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbMaintenance
 {
+    public class AdvancedFilterReturn
+    {
+        public FieldDefinition FieldDefinition { get; set; }
+        public FieldDefinition FormulaParentFieldDefinition { get; set; }
+        public Conditions Condition { get; set; }
+        public string SearchValue { get; set; }
+        public string Formula { get; set; }
+        public string FormulaDisplayValue { get; set; }
+    }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
         private string _table;
@@ -259,6 +269,52 @@ namespace RingSoft.DbMaintenance
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public AdvancedFilterReturn GetAdvancedFilterReturn()
+        {
+            var result = new AdvancedFilterReturn();
+            if (TreeViewItem.Parent != null)
+            {
+                result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
+            }
+            result.FieldDefinition = TreeViewItem.FieldDefinition;
+            result.Condition = Condition;
+            if (TreeViewItem.FieldDefinition != null)
+            {
+                if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    if (SearchValueAutoFillValue != null)
+                    {
+                        result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
+                    }
+                }
+                else
+                {
+                    switch (TreeViewItem.FieldDefinition.FieldDataType)
+                    {
+                        case FieldDataTypes.String:
+                            result.SearchValue = StringSearchValue;
+                            break;
+                        case FieldDataTypes.Integer:
+                            break;
+                        case FieldDataTypes.Decimal:
+                            break;
+                        case FieldDataTypes.DateTime:
+                            break;
+                        case FieldDataTypes.Bool:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+            }
+            else
+            {
+                result.Formula = Formula;
+                result.FormulaDisplayValue = FormulaDisplayValue;
+            }
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

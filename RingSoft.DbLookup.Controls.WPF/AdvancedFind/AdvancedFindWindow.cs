@@ -73,14 +73,19 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return false;
         }
 
-        public bool ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
+        public AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             var filterWindow = new AdvancedFilterWindow();
             filterWindow.Owner = this;
             filterWindow.ShowInTaskbar = false;
             filterWindow.Initialize(treeViewItem, lookupDefinition);
             var result = filterWindow.ShowDialog();
-            return (bool) result;
+            if (result != null && result == true)
+            {
+                return filterWindow.FilterReturn;
+            }
+
+            return null;
         }
 
         public bool NotifyFromFormulaExists

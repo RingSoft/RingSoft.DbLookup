@@ -181,35 +181,10 @@ namespace RingSoft.DbMaintenance
                 fieldDefinition = primaryField;
             }
 
-            var items = Manager.ViewModel.TreeRoot;
-            var foundTreeViewItem = FindFieldInTree(items, fieldDefinition);
-            var alreadySearchedRoot = false;
-            if (!entity.Formula.IsNullOrEmpty())
-            {
-                if (foundTreeViewItem == null)
-                {
-                    foundTreeViewItem = FindFieldInTree(items, fieldDefinition, true);
-                    alreadySearchedRoot = true;
-                }
-                foundTreeViewItem.FormulaData = new TreeViewFormulaData();
-                foundTreeViewItem.FormulaData.Formula = entity.Formula;
-                foundTreeViewItem.FormulaData.DataType = (FieldDataTypes) entity.FieldDataType;
-                foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes) entity.DecimalFormatType;
-            }
+            var foundTreeViewItem = Manager.ViewModel.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition,
+                (FieldDataTypes) entity.FieldDataType, (DecimalEditFormatTypes) entity.DecimalFormatType);
 
-            if (!entity.Formula.IsNullOrEmpty() && !alreadySearchedRoot)
-            {
-                foundTreeViewItem =
-                        FindFieldInTree(foundTreeViewItem.Items, fieldDefinition, true, foundTreeViewItem);
-                
-                foundTreeViewItem.FormulaData = new TreeViewFormulaData();
-                foundTreeViewItem.FormulaData.Formula = entity.Formula;
-                foundTreeViewItem.FormulaData.DataType = (FieldDataTypes)entity.FieldDataType;
-                foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes)entity.DecimalFormatType;
-
-            }
-
-            LookupColumnDefinition = Manager.ViewModel.MakeIncludes(foundTreeViewItem, Name);
+            LookupColumnDefinition = Manager.ViewModel.MakeIncludes(foundTreeViewItem, Name).ColumnDefinition;
             LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
 
             if (LookupColumnDefinition is LookupFormulaColumnDefinition)
@@ -227,40 +202,6 @@ namespace RingSoft.DbMaintenance
             {
                 LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
             }
-        }
-
-        public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
-            bool searchForRootFormula = false, TreeViewItem parentItem = null)
-        {
-            TreeViewItem foundTreeViewItem = null;
-            if (!items.Any())
-            {
-                return parentItem;
-            }
-            foreach (var treeViewItem in items)
-            {
-                if (treeViewItem.Type == TreeViewType.Field)
-                {
-                    if (treeViewItem.FieldDefinition == fieldDefinition)
-                    {
-                        return treeViewItem;
-                    }
-                    else
-                    {
-                        foundTreeViewItem = FindFieldInTree(treeViewItem.Items, fieldDefinition);
-                        if (foundTreeViewItem != null)
-                        {
-                            return foundTreeViewItem;
-                        }
-
-                    }
-                }
-                else if (treeViewItem.Type == TreeViewType.Formula && searchForRootFormula)
-                {
-                    return treeViewItem;
-                }
-            }
-            return foundTreeViewItem;
         }
 
         public override bool ValidateRow()

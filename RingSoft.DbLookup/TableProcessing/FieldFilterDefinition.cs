@@ -51,14 +51,6 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public bool CastEnumValueAsInt { get; internal set; } = true;
 
-        /// <summary>
-        /// Gets the join definition.
-        /// </summary>
-        /// <value>
-        /// The join definition.
-        /// </value>
-        public TableFieldJoinDefinition JoinDefinition { get; internal set; }
-
         internal FieldFilterDefinition()
         {
             

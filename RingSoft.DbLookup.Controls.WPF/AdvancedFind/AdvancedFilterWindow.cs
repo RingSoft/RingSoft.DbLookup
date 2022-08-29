@@ -57,8 +57,15 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public StringEditControl DisplayControl { get; set; }
         public Border Border { get; set; }
         public DataEntryMemoEditor MemoEditor { get; set; }
+        public Label ConditionLabel { get; set; }
+        public TextComboBoxControl ConditionComboBox { get; set; }
+        public  Label SearchForLabel { get; set; }
         public StringEditControl SearchForStringControl { get; set; }
         public AutoFillControl SearchForAutoFillControl { get; set; }
+        public Button OKButton { get; set; }
+        public Button CancelButton { get; set; }
+
+        public AdvancedFilterReturn FilterReturn { get; set; }
 
         static AdvancedFilterWindow()
         {
@@ -77,20 +84,40 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             MemoEditor = GetTemplateChild(nameof(MemoEditor)) as DataEntryMemoEditor;
             DisplayLabel = GetTemplateChild(nameof(DisplayLabel)) as Label;
             DisplayControl = GetTemplateChild(nameof(DisplayControl)) as StringEditControl;
+            ConditionLabel = GetTemplateChild(nameof(ConditionLabel)) as Label;
+            ConditionComboBox = GetTemplateChild(nameof(ConditionComboBox)) as TextComboBoxControl;
+            SearchForLabel = GetTemplateChild(nameof(SearchForLabel)) as Label;
             SearchForStringControl = GetTemplateChild(nameof(SearchForStringControl)) as StringEditControl;
             SearchForAutoFillControl = GetTemplateChild(nameof(SearchForAutoFillControl)) as AutoFillControl;
+            OKButton = GetTemplateChild(nameof(OKButton)) as Button;
+            CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
 
             ViewModel.Initialize(TreeViewItem, LookupDefinition);
             MemoEditor.CollapseDateButton();
 
+            OKButton.Click += (sender, args) =>
+            {
+                FilterReturn = ViewModel.GetAdvancedFilterReturn();
+                DialogResult = true;
+                Close();
+            };
+
+            CancelButton.Click += (sender, args) => Close();
+
+            SearchForLabel.Visibility = Visibility.Collapsed;
             SearchForStringControl.Visibility = Visibility.Collapsed;
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
+            ConditionLabel.Visibility = Visibility.Collapsed;
+            ConditionComboBox.Visibility = Visibility.Collapsed;
 
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
+                    ConditionLabel.Visibility = Visibility.Visible;
+                    ConditionComboBox.Visibility = Visibility.Visible;
+                    SearchForLabel.Visibility = Visibility.Visible;
                     if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
                         SearchForAutoFillControl.Visibility = Visibility.Visible;

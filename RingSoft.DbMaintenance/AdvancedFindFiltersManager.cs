@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+﻿using System.Linq;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 
@@ -42,11 +43,18 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
+            var rowIndex = 0;
             foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
             {
                 var row = GetNewRow() as AdvancedFindFilterRow;
-                row.LoadFromFilterDefinition(fixedFilter, true);
+                row.LoadFromFilterDefinition(fixedFilter, true, rowIndex);
                 AddRow(row);
+                if (rowIndex == lookupDefinition.FilterDefinition.FixedFilters.Count - 1)
+                {
+                    var theEnd = !lookupDefinition.FilterDefinition.UserFilters.Any();
+                    row.FinishOffFilter(true, theEnd);
+                }
+                rowIndex++;
             }
         }
     }

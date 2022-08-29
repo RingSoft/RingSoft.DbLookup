@@ -20,7 +20,7 @@ namespace RingSoft.DbMaintenance
         public string Field { get; private set; }
         public string SearchValueText { get; private set; }
         public byte RightParenthesesCount { get; private set; }
-        public EndLogics EndLogics { get; private set; }
+        public EndLogics? EndLogics { get; private set; }
 
         public Conditions Condition { get; private set; }
         public string SearchValue { get; private set; }
@@ -61,6 +61,10 @@ namespace RingSoft.DbMaintenance
                     return new DataEntryGridTextCellProps(this, columnId, ")".StringDuplicate(RightParenthesesCount));
 
                 case AdvancedFindFiltersManager.FilterColumns.EndLogic:
+                    if (EndLogics == null)
+                    {
+                        return new DataEntryGridTextCellProps(this, columnId);
+                    }
                     return new DataEntryGridTextComboBoxCellProps(this, columnId, EndLogicsSetup,
                         EndLogicsSetup.GetItem((int) EndLogics)) {ControlMode = true};
 
@@ -138,6 +142,7 @@ namespace RingSoft.DbMaintenance
             Formula = entity.Formula;
             PrimaryTable = entity.PrimaryTableName;
             PrimaryField = entity.PrimaryFieldName;
+            MakeSearchValueText();
         }
 
         public override bool ValidateRow()
@@ -147,6 +152,7 @@ namespace RingSoft.DbMaintenance
 
         public override void SaveToEntity(AdvancedFindFilter entity, int rowIndex)
         {
+            
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.FilterId = rowIndex;
             entity.LeftParentheses = LeftParenthesesCount;
@@ -163,9 +169,14 @@ namespace RingSoft.DbMaintenance
             entity.PrimaryFieldName = PrimaryField;
         }
 
-        public void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed)
+        public void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
         {
+            FilterItemDefinition = filter;
             LeftParenthesesCount = (byte) filter.LeftParenthesesCount;
+            if (isFixed && rowIndex == 0)
+            {
+                LeftParenthesesCount++;
+            }
             if (filter is FieldFilterDefinition fieldFilterDefinition)
             {
                 Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
@@ -194,6 +205,7 @@ namespace RingSoft.DbMaintenance
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                MakeSearchValueText();
 
             }
 
@@ -204,6 +216,104 @@ namespace RingSoft.DbMaintenance
             {
                 AllowSave = false;
             }
+        }
+
+        public void FinishOffFilter(bool isFixed, bool theEnd)
+        {
+            if (isFixed)
+            {
+                RightParenthesesCount++;
+            }
+
+            if (theEnd)
+            {
+                EndLogics = null;
+            }
+        }
+
+        public void MakeSearchValueText()
+        {
+            var searchValueText = MakeBeginSearchValueText();
+            if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+            {
+                if (fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    var tableToSearch = fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
+                    switch (Condition)
+                    {
+                        case Conditions.Equals:
+                        case Conditions.NotEquals:
+                            var searchAutoFillValue =
+                                Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, SearchValue);
+                            if (searchAutoFillValue != null)
+                                searchValueText += searchAutoFillValue.Text;
+                            break;
+                        default:
+                            searchValueText += MakeEndSearchValueText(fieldFilter);
+                            break;
+                    }
+                }
+                else
+                {
+                    searchValueText += MakeEndSearchValueText(fieldFilter);
+                }
+            }
+            SearchValueText = searchValueText;
+        }
+
+        private string MakeEndSearchValueText(FieldFilterDefinition fieldFilter)
+        {
+            var result = string.Empty;
+            result = fieldFilter.FieldDefinition.FormatValue(SearchValue);
+            return result;
+        }
+
+        private string MakeBeginSearchValueText()
+        {
+            var searchValue = string.Empty;
+            switch (Condition)
+            {
+                case Conditions.Equals:
+                    searchValue = "= ";
+                    break;
+                case Conditions.NotEquals:
+                    searchValue = "<> ";
+                    break;
+                case Conditions.GreaterThan:
+                    searchValue = "> ";
+                    break;
+                case Conditions.GreaterThanEquals:
+                    searchValue = ">= ";
+                    break;
+                case Conditions.LessThan:
+                    searchValue = "< ";
+                    break;
+                case Conditions.LessThanEquals:
+                    searchValue = "<= ";
+                    break;
+                case Conditions.Contains:
+                    searchValue = "Contains ";
+                    break;
+                case Conditions.NotContains:
+                    searchValue = "Does Not Contain ";
+                    break;
+                case Conditions.EqualsNull:
+                    searchValue = "Equals NULL";
+                    break;
+                case Conditions.NotEqualsNull:
+                    searchValue = "Does Not Equal NULL";
+                    break;
+                case Conditions.BeginsWith:
+                    searchValue = "Begins With ";
+                    break;
+                case Conditions.EndsWith:
+                    searchValue = "Ends With ";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return searchValue;
         }
     }
 }

@@ -146,7 +146,7 @@ namespace RingSoft.DbLookup
                 TableDefinition = tableDefinition,
                 IdValue = idValue
             };
-            GetAutoFillText.Invoke(this, request);
+            GetAutoFillText?.Invoke(this, request);
 
             return request.ReturnValue;
         }

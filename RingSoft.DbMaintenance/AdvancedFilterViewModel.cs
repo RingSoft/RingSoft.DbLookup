@@ -118,6 +118,51 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public Conditions Condition
+        {
+            get => (Conditions)ConditionComboBoxItem.NumericValue;
+            set => ConditionComboBoxItem = ConditionComboBoxSetup.GetItem((int)value);
+        }
+
+        private TextComboBoxControlSetup _formulaValueComboBoxSetup;
+
+        public TextComboBoxControlSetup FormulaValueComboBoxSetup
+        {
+            get => _formulaValueComboBoxSetup;
+            set
+            {
+                if (_formulaValueComboBoxSetup == value)
+                {
+                    return;
+                }
+                _formulaValueComboBoxSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TextComboBoxItem _formulaValueComboBoxItem;
+
+        public TextComboBoxItem FormulaValueComboBoxItem
+        {
+            get => _formulaValueComboBoxItem;
+            set
+            {
+                if (_formulaValueComboBoxItem == value)
+                {
+                    return;
+                }
+                _formulaValueComboBoxItem = value;
+                OnPropertyChanged();
+                SetupConditionForFormula();
+            }
+        }
+
+        public ValueTypes FormulaValueType
+        {
+            get => (ValueTypes)FormulaValueComboBoxItem.NumericValue;
+            set => FormulaValueComboBoxItem = FormulaValueComboBoxSetup.GetItem((int)value);
+        }
+
         private string _stringSearchValue;
 
         public string StringSearchValue
@@ -167,22 +212,18 @@ namespace RingSoft.DbMaintenance
         }
 
 
-        public Conditions Condition
-        {
-            get => (Conditions) ConditionComboBoxItem.NumericValue;
-            set => ConditionComboBoxSetup.GetItem((int) value);
-        }
-
         public TreeViewItem TreeViewItem { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
 
         private TextComboBoxControlSetup _stringFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
+        private TextComboBoxControlSetup _memoFieldComboBoxControlSetup = new TextComboBoxControlSetup();
 
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
             TreeViewItem = treeViewItem;
+            FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
 
             if (treeViewItem.Parent == null)
             {
@@ -212,6 +253,9 @@ namespace RingSoft.DbMaintenance
                 Field = treeViewItem.Name;
             }
 
+            FormulaValueComboBoxSetup.LoadFromEnum<ValueTypes>();
+            FormulaValueType = ValueTypes.String;
+
             _stringFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
             _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
             
@@ -231,6 +275,39 @@ namespace RingSoft.DbMaintenance
                 _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
                     p.NumericValue == (int)Conditions.NotContains));
 
+            _memoFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.Equals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.NotEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.GreaterThan));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.GreaterThanEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.LessThan));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.LessThanEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.BeginsWith));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.EndsWith));
+
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
@@ -239,7 +316,6 @@ namespace RingSoft.DbMaintenance
                         SearchValueAutoFillSetup = new AutoFillSetup(TreeViewItem.FieldDefinition
                             .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
                     }
-
                     switch (TreeViewItem.FieldDefinition.FieldDataType)
                     {
                         case FieldDataTypes.String:
@@ -266,6 +342,31 @@ namespace RingSoft.DbMaintenance
                     break;
                 case TreeViewType.Formula:
                     ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                    FormulaValueType = ValueTypes.String;
+                    if (FormulaValueComboBoxItem != null)
+                    {
+                        SetupConditionForFormula();
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SetupConditionForFormula()
+        {
+            switch (FormulaValueType)
+            {
+                case ValueTypes.String:
+                    ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                    break;
+                case ValueTypes.Numeric:
+                case ValueTypes.DateTime:
+                case ValueTypes.Bool:
+                    ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                    break;
+                case ValueTypes.Memo:
+                    ConditionComboBoxSetup = _memoFieldComboBoxControlSetup;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

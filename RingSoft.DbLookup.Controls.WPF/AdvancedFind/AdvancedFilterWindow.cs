@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
 using TreeViewItem = System.Windows.Controls.TreeViewItem;
 
@@ -57,6 +58,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public StringEditControl DisplayControl { get; set; }
         public Border Border { get; set; }
         public DataEntryMemoEditor MemoEditor { get; set; }
+        public Label FormulaValueTypeLabel { get; set; }
+        public TextComboBoxControl FormulaValueTypeComboBox { get; set; }
         public Label ConditionLabel { get; set; }
         public TextComboBoxControl ConditionComboBox { get; set; }
         public  Label SearchForLabel { get; set; }
@@ -84,6 +87,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             MemoEditor = GetTemplateChild(nameof(MemoEditor)) as DataEntryMemoEditor;
             DisplayLabel = GetTemplateChild(nameof(DisplayLabel)) as Label;
             DisplayControl = GetTemplateChild(nameof(DisplayControl)) as StringEditControl;
+            FormulaValueTypeLabel = GetTemplateChild(nameof(FormulaValueTypeLabel)) as Label;
+            FormulaValueTypeComboBox = GetTemplateChild(nameof(FormulaValueTypeComboBox)) as TextComboBoxControl;
             ConditionLabel = GetTemplateChild(nameof(ConditionLabel)) as Label;
             ConditionComboBox = GetTemplateChild(nameof(ConditionComboBox)) as TextComboBoxControl;
             SearchForLabel = GetTemplateChild(nameof(SearchForLabel)) as Label;
@@ -106,18 +111,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             CancelButton.Click += (sender, args) => Close();
 
-            SearchForLabel.Visibility = Visibility.Collapsed;
             SearchForStringControl.Visibility = Visibility.Collapsed;
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
-            ConditionLabel.Visibility = Visibility.Collapsed;
-            ConditionComboBox.Visibility = Visibility.Collapsed;
+            FormulaValueTypeLabel.Visibility = Visibility.Collapsed;
+            FormulaValueTypeComboBox.Visibility = Visibility.Collapsed;
 
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
-                    ConditionLabel.Visibility = Visibility.Visible;
-                    ConditionComboBox.Visibility = Visibility.Visible;
-                    SearchForLabel.Visibility = Visibility.Visible;
                     if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
                         SearchForAutoFillControl.Visibility = Visibility.Visible;
@@ -147,7 +148,23 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     DisplayControl.Visibility = Visibility.Collapsed;
                     break;
                 case TreeViewType.Formula:
-
+                    FormulaValueTypeLabel.Visibility = Visibility.Visible;
+                    FormulaValueTypeComboBox.Visibility = Visibility.Visible;
+                    switch (ViewModel.FormulaValueType)
+                    {
+                        case ValueTypes.String:
+                        case ValueTypes.Memo:
+                            SearchForStringControl.Visibility = Visibility.Visible;
+                            break;
+                        case ValueTypes.Numeric:
+                            break;
+                        case ValueTypes.DateTime:
+                            break;
+                        case ValueTypes.Bool:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

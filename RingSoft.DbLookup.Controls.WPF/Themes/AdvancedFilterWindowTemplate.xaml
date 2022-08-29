@@ -30,6 +30,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
 
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -51,17 +52,21 @@
 
                             <dec:StringEditControl x:Name="DisplayControl" Grid.Row="3" Grid.Column="1" Text="{Binding FormulaDisplayValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
 
-                            <Label Grid.Row="4" Grid.Column="0" x:Name="ConditionLabel" Content="Condition"/>
+                            <Label Grid.Row="4" Grid.Column="0" x:Name="FormulaValueTypeLabel" Content="Value Type"/>
 
-                            <dec:TextComboBoxControl Grid.Row="4" Grid.Column="1" x:Name="ConditionComboBox" Setup="{Binding ConditionComboBoxSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ConditionComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                            <dec:TextComboBoxControl Grid.Row="4" Grid.Column="1" x:Name="FormulaValueTypeComboBox" Setup="{Binding FormulaValueComboBoxSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding FormulaValueComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
 
-                            <Label Grid.Row="5" Grid.Column="0" x:Name="SearchForLabel" Content="Search Value"/>
+                            <Label Grid.Row="5" Grid.Column="0" x:Name="ConditionLabel" Content="Condition"/>
 
-                            <dec:StringEditControl Grid.Row="5" Grid.Column="1" x:Name="SearchForStringControl" Text="{Binding StringSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <dec:TextComboBoxControl Grid.Row="5" Grid.Column="1" x:Name="ConditionComboBox" Setup="{Binding ConditionComboBoxSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ConditionComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
 
-                            <lc:AutoFillControl Grid.Row="5" Grid.Column="1" x:Name="SearchForAutoFillControl" Setup="{Binding SearchValueAutoFillSetup}" Value="{Binding SearchValueAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Grid.Row="6" Grid.Column="0" x:Name="SearchForLabel" Content="Search Value"/>
 
-                            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <dec:StringEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForStringControl" Text="{Binding StringSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <lc:AutoFillControl Grid.Row="6" Grid.Column="1" x:Name="SearchForAutoFillControl" Setup="{Binding SearchValueAutoFillSetup}" Value="{Binding SearchValueAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OKButton" Content="_OK" Width="100"/>
 

@@ -262,6 +262,10 @@ namespace RingSoft.DbMaintenance
                     searchValueText += MakeEndSearchValueText(fieldFilter);
                 }
             }
+            else
+            {
+                searchValueText = $"{searchValueText} {SearchValue}";
+            }
             SearchValueText = searchValueText;
         }
 
@@ -350,25 +354,59 @@ namespace RingSoft.DbMaintenance
                         default:
                             if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                             {
-                                var initialSortColumnField = foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
-                                    LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
-                                if (initialSortColumnField != null)
+                                switch (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
+                                            LookupDefinition.InitialSortColumnDefinition.ColumnType)
                                 {
-                                    fieldDefinition = initialSortColumnField.FieldDefinition;
-                                    foundTreeItem =
-                                        Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
-                                    includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+                                    case LookupColumnTypes.Field:
+                                        var initialSortColumnField = foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
+                                            LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
+                                        if (initialSortColumnField != null)
+                                        {
+                                            fieldDefinition = initialSortColumnField.FieldDefinition;
+                                            foundTreeItem =
+                                                Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
+                                            includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+                                        }
+                                        FilterItemDefinition =
+                                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                                fieldDefinition, Condition, SearchValue);
+                                        
+                                        if (includeResult.LookupJoin != null)
+                                        {
+                                            FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                                        }
+                                        break;
+
+                                    case LookupColumnTypes.Formula:
+                                        var initialSortColumnFormula =
+                                            foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                                                .LookupDefinition
+                                                .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
+                                        if (foundTreeItem.Parent != null)
+                                        {
+                                            fieldDefinition = foundTreeItem.Parent.FieldDefinition;
+                                        }
+
+                                        if (includeResult.LookupJoin != null)
+                                        {
+                                            includeResult.LookupJoin = includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
+                                        }
+                                        else
+                                        {
+                                            includeResult.LookupJoin =
+                                                Manager.ViewModel.LookupDefinition.Include(
+                                                    foundTreeItem.FieldDefinition);
+                                        }
+
+                                        FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                            initialSortColumnFormula.OriginalFormula, Condition, SearchValue, includeResult.LookupJoin.JoinDefinition.Alias);
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
                                 }
                             }
                             break;
                     }
-                }
-                FilterItemDefinition =
-                    Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                        fieldDefinition, Condition, SearchValue);
-                if (includeResult.LookupJoin != null)
-                {
-                    FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
                 }
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -135,12 +136,19 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        public  FormulaFilterDefinition CreateFormulaFilter(string formula)
+        private FormulaFilterDefinition CreateFormulaFilter(string formula, Conditions? condition = null,
+            string value = "", string alias = "")
         {
+            if (!alias.IsNullOrEmpty())
+            {
+                formula = formula.Replace("{Alias}", alias);
+            }
             var formulaFilter = new FormulaFilterDefinition
             {
                 TableFilterDefinition = this,
                 Formula = formula,
+                Condition = condition,
+                FilterValue = value,
             };
 
             _fixedFilterDefinitions.Add(formulaFilter);
@@ -217,9 +225,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        public FormulaFilterDefinition AddUserFilter(string formula)
+        public FormulaFilterDefinition AddUserFilter(string formula, Conditions? condition = null, string value = "", string alias = "")
         {
-            var formulaFilter = CreateFormulaFilter(formula);
+            var formulaFilter = CreateFormulaFilter(formula,condition, value, alias);
             _userFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
@@ -244,7 +252,15 @@ namespace RingSoft.DbLookup.TableProcessing
                         break;
                     case FilterItemTypes.Formula:
                         var formulaFilter = (FormulaFilterDefinition) filterDefinition;
-                        lastWhere = query.AddWhereItemFormula(formulaFilter.Formula);
+                        if (formulaFilter.Condition != null && !formulaFilter.FilterValue.IsNullOrEmpty() )
+                        {
+                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula, (Conditions)formulaFilter.Condition, formulaFilter.FilterValue);
+                        }
+                        else
+                        {
+                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula);
+                        }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -450,17 +450,17 @@ namespace RingSoft.DbMaintenance
                                         fieldDefinition = foundTreeItem.Parent.FieldDefinition;
                                     }
 
-                                    if (includeResult.LookupJoin != null)
-                                    {
-                                        includeResult.LookupJoin =
-                                            includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
-                                    }
-                                    else
-                                    {
-                                        includeResult.LookupJoin =
-                                            Manager.ViewModel.LookupDefinition.Include(
-                                                foundTreeItem.FieldDefinition);
-                                    }
+                                    //if (includeResult.LookupJoin != null)
+                                    //{
+                                    //    includeResult.LookupJoin =
+                                    //        includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
+                                    //}
+                                    //else
+                                    //{
+                                    //    includeResult.LookupJoin =
+                                    //        Manager.ViewModel.LookupDefinition.Include(
+                                    //            foundTreeItem.FieldDefinition);
+                                    //}
 
                                     FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
                                         initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
@@ -480,15 +480,15 @@ namespace RingSoft.DbMaintenance
                     Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
                 includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
 
-                if (includeResult.LookupJoin != null)
-                {
-                    if (includeResult.LookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable !=
-                        foundTreeItem.Parent?.FieldDefinition.TableDefinition)
-                    {
-                        includeResult.LookupJoin =
-                            includeResult.LookupJoin.Include(foundTreeItem.Parent?.FieldDefinition);
-                    }
-                }
+                //if (includeResult.LookupJoin != null)
+                //{
+                //    if (includeResult.LookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable !=
+                //        foundTreeItem.Parent?.FieldDefinition.TableDefinition)
+                //    {
+                //        includeResult.LookupJoin =
+                //            includeResult.LookupJoin.Include(foundTreeItem.Parent?.FieldDefinition);
+                //    }
+                //}
 
                 FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(fieldDefinition, Condition,
                     SearchValue);

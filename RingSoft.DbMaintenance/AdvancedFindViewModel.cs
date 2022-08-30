@@ -645,6 +645,7 @@ namespace RingSoft.DbMaintenance
                     {
                         var newInclude = includeJoin.Include(child.FieldDefinition);
                         includeJoin = ProcessInclude(includeJoin, newInclude);
+                        result.LookupJoin = includeJoin;
                     }
 
                     if (createColumn)

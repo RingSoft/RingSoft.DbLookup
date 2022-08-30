@@ -588,6 +588,11 @@ namespace RingSoft.DbMaintenance
                 childNodes.Insert(0, parentTreeItem);
             }
 
+            if (childNodes.IndexOf(selectedItem) == -1 && selectedItem?.FieldDefinition?.ParentJoinForeignKeyDefinition != null)
+            {
+                childNodes.Add(selectedItem);
+            }
+            
             if (childNodes.Any() == false)
             {
                 if (createColumn)
@@ -718,12 +723,12 @@ namespace RingSoft.DbMaintenance
                 var textField = selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition
                     .FieldJoins[0].ForeignField;
 
-                if (includeJoin != null)
-                    includeJoin = includeJoin.Include(textField);
-                else
-                {
-                    includeJoin = LookupDefinition.Include(textField);
-                }
+                //if (includeJoin != null)
+                //    includeJoin = includeJoin.Include(textField);
+                //else
+                //{
+                //    includeJoin = LookupDefinition.Include(textField);
+                //}
 
                 if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
                         .PrimaryField.TableDefinition.LookupDefinition

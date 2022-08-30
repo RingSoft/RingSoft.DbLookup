@@ -135,7 +135,7 @@ namespace RingSoft.DbLookup.Lookup
             ShowNegativeValuesInRed = source.ShowNegativeValuesInRed;
             ShowPositiveValuesInGreen = source.ShowPositiveValuesInGreen;
             ContentTemplateId = source.ContentTemplateId;
-            JoinQueryTableAlias = source.JoinQueryTableAlias;
+            //JoinQueryTableAlias = source.JoinQueryTableAlias;
             ParentObject = source.ParentObject;
             ChildField = source.ChildField;
             ParentField = source.ParentField;

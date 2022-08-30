@@ -351,10 +351,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal bool HasFormulaFilters()
         {
-            if (_fixedFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula))
+            if (_fixedFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula || a.JoinDefinition != null))
                 return true;
 
-            if (_userFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula))
+            if (_userFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula || a.JoinDefinition != null))
                 return true;
 
             return false;

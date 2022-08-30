@@ -1434,6 +1434,11 @@ namespace RingSoft.DbLookup.Lookup
                     formulasFound = true;
                     joins = AddCountJoinDefinitions();
                 }
+                else if (LookupDefinition.FilterDefinition.HasFormulaFilters())
+                {
+                    formulasFound = true;
+                    joins = AddCountJoinDefinitions();
+                }
             }
 
             if (LookupDefinition.FilterDefinition.HasFormulaFilters() && !formulasFound)

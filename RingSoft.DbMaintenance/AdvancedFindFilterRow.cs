@@ -474,6 +474,27 @@ namespace RingSoft.DbMaintenance
                         break;
                 }
             }
+            else
+            {
+                foundTreeItem =
+                    Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
+                includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+
+                if (includeResult.LookupJoin != null)
+                {
+                    if (includeResult.LookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable !=
+                        foundTreeItem.Parent?.FieldDefinition.TableDefinition)
+                    {
+                        includeResult.LookupJoin =
+                            includeResult.LookupJoin.Include(foundTreeItem.Parent?.FieldDefinition);
+                    }
+                }
+
+                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(fieldDefinition, Condition,
+                    SearchValue);
+
+                FilterItemDefinition.JoinDefinition = includeResult.LookupJoin?.JoinDefinition;
+            }
         }
     }
 }

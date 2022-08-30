@@ -375,7 +375,7 @@ namespace RingSoft.DbMaintenance
                     alias = includeResult.LookupJoin.JoinDefinition.Alias;
                 }
 
-                if (foundTreeItem != null)
+                if (foundTreeItem != null && includeResult.LookupJoin == null)
                 {
                     includeResult.LookupJoin =
                         Manager.ViewModel.LookupDefinition.Include(foundTreeItem.FieldDefinition);

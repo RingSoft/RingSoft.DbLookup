@@ -118,6 +118,7 @@ namespace RingSoft.DbLookup.AutoFill
                 case LookupColumnTypes.Formula:
                     if (lookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
+                        lookupFormulaColumn.JoinQueryTableAlias = null;
                         autoFillDefinition = new AutoFillFormulaDefinition(lookupDefinition.TableDefinition,
                             lookupFormulaColumn.Formula);
                     }

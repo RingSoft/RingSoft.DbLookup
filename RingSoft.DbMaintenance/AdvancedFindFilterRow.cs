@@ -4,6 +4,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
@@ -236,7 +237,10 @@ namespace RingSoft.DbMaintenance
             if (theEnd)
             {
                 EndLogics = null;
-                FilterItemDefinition.EndLogic = DbLookup.QueryBuilder.EndLogics.And;
+                if (FilterItemDefinition != null)
+                {
+                    FilterItemDefinition.EndLogic = DbLookup.QueryBuilder.EndLogics.And;
+                }
             }
             else
             {
@@ -376,8 +380,8 @@ namespace RingSoft.DbMaintenance
                     alias = includeResult.LookupJoin.JoinDefinition.Alias;
                 }
 
-                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFilterReturn.Formula,
-                    Condition, SearchValue, alias);
+                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFilterReturn.Formula,
+                    Condition, SearchValue, alias, advancedFilterReturn.FormulaValueType);
             }
 
             MakeSearchValueText();

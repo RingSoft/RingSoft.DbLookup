@@ -65,6 +65,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public  Label SearchForLabel { get; set; }
         public StringEditControl SearchForStringControl { get; set; }
         public AutoFillControl SearchForAutoFillControl { get; set; }
+        public DecimalEditControl SearchForDecimalControl { get; set; }
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
 
@@ -94,12 +95,42 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForLabel = GetTemplateChild(nameof(SearchForLabel)) as Label;
             SearchForStringControl = GetTemplateChild(nameof(SearchForStringControl)) as StringEditControl;
             SearchForAutoFillControl = GetTemplateChild(nameof(SearchForAutoFillControl)) as AutoFillControl;
+            SearchForDecimalControl = GetTemplateChild(nameof(SearchForDecimalControl)) as DecimalEditControl;
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
 
             ViewModel.Initialize(TreeViewItem, LookupDefinition);
+            SearchForStringControl.Visibility = Visibility.Collapsed;
+            SearchForAutoFillControl.Visibility = Visibility.Collapsed;
+            SearchForDecimalControl.Visibility = Visibility.Collapsed;
+
+
+            FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
+            {
+                SearchForStringControl.Visibility = Visibility.Collapsed;
+                SearchForAutoFillControl.Visibility = Visibility.Collapsed;
+                SearchForDecimalControl.Visibility = Visibility.Collapsed;
+
+                switch (ViewModel.FormulaValueType)
+                {
+                    case FieldDataTypes.String:
+                    case FieldDataTypes.Memo:
+                        SearchForStringControl.Visibility = Visibility.Visible;
+                        break;
+                    case FieldDataTypes.Decimal:
+                        SearchForDecimalControl.Visibility = Visibility.Visible;
+                        break;
+                    case FieldDataTypes.DateTime:
+                        break;
+                    case FieldDataTypes.Bool:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+            };
             MemoEditor.CollapseDateButton();
 
             OKButton.Click += (sender, args) =>
@@ -111,8 +142,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             CancelButton.Click += (sender, args) => Close();
 
-            SearchForStringControl.Visibility = Visibility.Collapsed;
-            SearchForAutoFillControl.Visibility = Visibility.Collapsed;
             FormulaValueTypeLabel.Visibility = Visibility.Collapsed;
             FormulaValueTypeComboBox.Visibility = Visibility.Collapsed;
 
@@ -133,6 +162,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                             case FieldDataTypes.Integer:
                                 break;
                             case FieldDataTypes.Decimal:
+                                SearchForDecimalControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.DateTime:
                                 break;
@@ -150,21 +180,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 case TreeViewType.Formula:
                     FormulaValueTypeLabel.Visibility = Visibility.Visible;
                     FormulaValueTypeComboBox.Visibility = Visibility.Visible;
-                    switch (ViewModel.FormulaValueType)
-                    {
-                        case ValueTypes.String:
-                        case ValueTypes.Memo:
-                            SearchForStringControl.Visibility = Visibility.Visible;
-                            break;
-                        case ValueTypes.Numeric:
-                            break;
-                        case ValueTypes.DateTime:
-                            break;
-                        case ValueTypes.Bool:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    SearchForStringControl.Visibility = Visibility.Visible;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

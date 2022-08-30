@@ -20,7 +20,7 @@ namespace RingSoft.DbMaintenance
         public string SearchValue { get; set; }
         public string Formula { get; set; }
         public string FormulaDisplayValue { get; set; }
-        public ValueTypes FormulaValueType { get; set; }
+        public FieldDataTypes FormulaValueType { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
@@ -158,9 +158,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        public ValueTypes FormulaValueType
+        public FieldDataTypes FormulaValueType
         {
-            get => (ValueTypes)FormulaValueComboBoxItem.NumericValue;
+            get => (FieldDataTypes)FormulaValueComboBoxItem.NumericValue;
             set => FormulaValueComboBoxItem = FormulaValueComboBoxSetup.GetItem((int)value);
         }
 
@@ -212,6 +212,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private decimal _decimalSearchValueDecimal;
+
+        public decimal DecimalSearchValueDecimal
+        {
+            get => _decimalSearchValueDecimal;
+            set
+            {
+                if (_decimalSearchValueDecimal == value)
+                {
+                    return;
+                }
+                _decimalSearchValueDecimal = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
         public TreeViewItem TreeViewItem { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
@@ -254,8 +271,8 @@ namespace RingSoft.DbMaintenance
                 Field = treeViewItem.Name;
             }
 
-            FormulaValueComboBoxSetup.LoadFromEnum<ValueTypes>();
-            FormulaValueType = ValueTypes.String;
+            FormulaValueComboBoxSetup.LoadFromEnum<FieldDataTypes>();
+            FormulaValueType = FieldDataTypes.String;
 
             _stringFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
             _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
@@ -343,7 +360,7 @@ namespace RingSoft.DbMaintenance
                     break;
                 case TreeViewType.Formula:
                     ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
-                    FormulaValueType = ValueTypes.String;
+                    FormulaValueType = FieldDataTypes.String;
                     if (FormulaValueComboBoxItem != null)
                     {
                         SetupConditionForFormula();
@@ -358,15 +375,15 @@ namespace RingSoft.DbMaintenance
         {
             switch (FormulaValueType)
             {
-                case ValueTypes.String:
+                case FieldDataTypes.String:
                     ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
                     break;
-                case ValueTypes.Numeric:
-                case ValueTypes.DateTime:
-                case ValueTypes.Bool:
+                case FieldDataTypes.Decimal:
+                case FieldDataTypes.DateTime:
+                case FieldDataTypes.Bool:
                     ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
                     break;
-                case ValueTypes.Memo:
+                case FieldDataTypes.Memo:
                     ConditionComboBoxSetup = _memoFieldComboBoxControlSetup;
                     break;
                 default:
@@ -411,6 +428,7 @@ namespace RingSoft.DbMaintenance
                                 case FieldDataTypes.Integer:
                                     break;
                                 case FieldDataTypes.Decimal:
+                                    result.SearchValue = DecimalSearchValueDecimal.ToString();
                                     break;
                                 case FieldDataTypes.DateTime:
                                     break;
@@ -424,10 +442,28 @@ namespace RingSoft.DbMaintenance
 
                     break;
                 case TreeViewType.Formula:
-                    result.SearchValue = StringSearchValue;
+                    //result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
+                    switch (FormulaValueType)
+                    {
+                        case FieldDataTypes.String:
+                        case FieldDataTypes.Memo:
+                            result.SearchValue = StringSearchValue;
+                            break;
+                        case FieldDataTypes.Integer:
+                            break;
+                        case FieldDataTypes.Decimal:
+                            result.SearchValue = DecimalSearchValueDecimal.ToString();
+                            break;
+                        case FieldDataTypes.DateTime:
+                            break;
+                        case FieldDataTypes.Bool:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                     if (TreeViewItem.Parent != null)
                     {
-                        result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
+                        result.FormulaParentFieldDefinition = TreeViewItem?.Parent.FieldDefinition;
                     }
 
                     result.Formula = Formula;

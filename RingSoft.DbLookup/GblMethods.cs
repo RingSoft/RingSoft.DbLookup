@@ -15,7 +15,8 @@ namespace RingSoft.DbLookup
         Decimal = 2,
         //Enum = 3,
         DateTime = 4,
-        Bool = 5
+        Bool = 5,
+        Memo = 6
     }
 
     public static class GblMethods

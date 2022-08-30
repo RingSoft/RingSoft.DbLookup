@@ -66,6 +66,8 @@
 
                             <lc:AutoFillControl Grid.Row="6" Grid.Column="1" x:Name="SearchForAutoFillControl" Setup="{Binding SearchValueAutoFillSetup}" Value="{Binding SearchValueAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                            <dec:DecimalEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDecimalControl" Value="{Binding DecimalSearchValueDecimal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OKButton" Content="_OK" Width="100"/>

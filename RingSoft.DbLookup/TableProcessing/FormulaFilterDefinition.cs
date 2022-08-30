@@ -18,6 +18,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string FilterValue { get; internal set; }
 
+        public FieldDataTypes DataType { get; internal set; }
+
         internal FormulaFilterDefinition()
         {
             

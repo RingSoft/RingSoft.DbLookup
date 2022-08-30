@@ -139,7 +139,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        private FormulaFilterDefinition CreateFormulaFilter(string formula, Conditions? condition = null,
+        private FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition = null,
             string value = "", string alias = "")
         {
             if (!alias.IsNullOrEmpty())
@@ -153,9 +153,9 @@ namespace RingSoft.DbLookup.TableProcessing
                 Formula = formula,
                 Condition = condition,
                 FilterValue = value,
+                DataType = dataType
             };
 
-            _fixedFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
 
@@ -167,9 +167,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        private FormulaFilterDefinition CreateAddFixedFilter(string formula)
+        private FormulaFilterDefinition CreateAddFixedFilter(string formula, FieldDataTypes dataType)
         {
-            var formulaFilter = CreateFormulaFilter(formula);
+            var formulaFilter = CreateFormulaFilter(formula, dataType);
             _fixedFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
@@ -210,9 +210,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
-        public FormulaFilterDefinition AddFixedFilter(string formula)
+        public FormulaFilterDefinition AddFixedFilter(string formula, FieldDataTypes dataType = FieldDataTypes.String)
         {
-            return CreateAddFixedFilter(formula);
+            return CreateAddFixedFilter(formula, dataType);
         }
 
         public void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
@@ -230,9 +230,9 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public FormulaFilterDefinition AddUserFilter(string formula, Conditions? condition = null, string value = "",
-            string alias = "")
+            string alias = "", FieldDataTypes dataType = FieldDataTypes.String)
         {
-            var formulaFilter = CreateFormulaFilter(formula, condition, value, alias);
+            var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value, alias);
             _userFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
@@ -262,9 +262,23 @@ namespace RingSoft.DbLookup.TableProcessing
                         break;
                     case FilterItemTypes.Formula:
                         var formulaFilter = (FormulaFilterDefinition) filterDefinition;
+                        ValueTypes valueType = ValueTypes.String;
+                        switch (formulaFilter.DataType)
+                        {
+                            case FieldDataTypes.Integer:
+                            case FieldDataTypes.Decimal:
+                                valueType = ValueTypes.Numeric;
+                                break;
+                            case FieldDataTypes.DateTime:
+                                valueType = ValueTypes.DateTime;
+                                break;
+                            case FieldDataTypes.Bool:
+                                valueType = ValueTypes.Bool;
+                                break;
+                        }
                         if (formulaFilter.Condition != null && !formulaFilter.FilterValue.IsNullOrEmpty() )
                         {
-                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula, (Conditions)formulaFilter.Condition, formulaFilter.FilterValue);
+                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula, (Conditions)formulaFilter.Condition, formulaFilter.FilterValue, valueType);
                         }
                         else
                         {

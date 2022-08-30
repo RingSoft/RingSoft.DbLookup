@@ -87,10 +87,32 @@ namespace RingSoft.DbLookup.AutoFill
                 case LookupColumnTypes.Field:
                     if (lookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                     {
-                        var stringField = lookupFieldColumn.FieldDefinition as StringFieldDefinition;
-                        var autoFillFieldDefinition = new AutoFillFieldDefinition(stringField);
-                        autoFillFieldDefinition.IsDistinct(lookupFieldColumn.Distinct || isDistinct);
-                        autoFillDefinition = autoFillFieldDefinition;
+                        AutoFillFieldDefinition autoFillFieldDefinition = null;
+                        switch (lookupFieldColumn.FieldDefinition.FieldDataType)
+                        {
+                            case FieldDataTypes.String:
+                                var stringField = lookupFieldColumn.FieldDefinition as StringFieldDefinition;
+                                autoFillFieldDefinition = new AutoFillFieldDefinition(stringField);
+                                autoFillFieldDefinition.IsDistinct(lookupFieldColumn.Distinct || isDistinct);
+                                autoFillDefinition = autoFillFieldDefinition;
+                                break;
+                            case FieldDataTypes.Integer:
+                                break;
+                            case FieldDataTypes.Decimal:
+                                break;
+                            case FieldDataTypes.DateTime:
+                                var dateField = lookupFieldColumn.FieldDefinition as DateFieldDefinition;
+                                autoFillFieldDefinition = new AutoFillFieldDefinition(dateField);
+                                autoFillFieldDefinition.IsDistinct(lookupFieldColumn.Distinct || isDistinct);
+                                autoFillDefinition = autoFillFieldDefinition;
+
+                                break;
+                            case FieldDataTypes.Bool:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
                     }
                     break;
                 case LookupColumnTypes.Formula:
@@ -137,8 +159,11 @@ namespace RingSoft.DbLookup.AutoFill
                 case AutoFillTypes.Field:
                     if (autoFillDefinition is AutoFillFieldDefinition autoFillFieldDefinition)
                     {
-                        if (autoFillFieldDefinition.StringFieldDefinition.MemoField)
-                            throw new ArgumentException("AutoFill's Field definition cannot be a memo field.");
+                        if (autoFillFieldDefinition.FieldDefinition is StringFieldDefinition stringField)
+                        {
+                            if (stringField.MemoField)
+                                throw new ArgumentException("AutoFill's Field definition cannot be a memo field.");
+                        }
                     }
                     break;
                 case AutoFillTypes.Formula:
@@ -287,7 +312,7 @@ namespace RingSoft.DbLookup.AutoFill
                 case AutoFillTypes.Field:
                     if (AutoFillDefinition is AutoFillFieldDefinition autoFillField)
                     {
-                        autoFillQuery.AddWhereItem(autoFillField.StringFieldDefinition.FieldName, Conditions.BeginsWith, beginText);
+                        autoFillQuery.AddWhereItem(autoFillField.FieldDefinition.FieldName, Conditions.BeginsWith, beginText);
                     }
                     break;
                 case AutoFillTypes.Formula:
@@ -345,9 +370,9 @@ namespace RingSoft.DbLookup.AutoFill
                     {
                         autoFillField = AutoFillDefinition as AutoFillFieldDefinition;
                         if (autoFillField != null)
-                            query.AddSelectColumn(autoFillField.StringFieldDefinition.FieldName,
+                            query.AddSelectColumn(autoFillField.FieldDefinition.FieldName,
                                     autoFillField.SelectSqlAlias, autoFillField.Distinct)
-                                .AddOrderBySegment(autoFillField.StringFieldDefinition.FieldName,
+                                .AddOrderBySegment(autoFillField.FieldDefinition.FieldName,
                                     OrderByTypes.Ascending);
                     }
                     break;
@@ -368,7 +393,7 @@ namespace RingSoft.DbLookup.AutoFill
 
             if (distinct)
             {
-                query.AddSelectColumn(autoFillField.StringFieldDefinition.FieldName);
+                query.AddSelectColumn(autoFillField.FieldDefinition.FieldName);
             }
             else
             {
@@ -392,7 +417,7 @@ namespace RingSoft.DbLookup.AutoFill
                 case AutoFillTypes.Field:
                     if (AutoFillDefinition is AutoFillFieldDefinition autoFillField)
                     {
-                        autoFillQuery.AddWhereItem(autoFillField.StringFieldDefinition.FieldName, Conditions.Equals, text);
+                        autoFillQuery.AddWhereItem(autoFillField.FieldDefinition.FieldName, Conditions.Equals, text);
                     }
                     break;
                 case AutoFillTypes.Formula:
@@ -440,7 +465,7 @@ namespace RingSoft.DbLookup.AutoFill
                 case AutoFillTypes.Field:
                     if (AutoFillDefinition is AutoFillFieldDefinition autoFillField)
                     {
-                        query.AddWhereItem(autoFillField.StringFieldDefinition.FieldName, Conditions.Contains, text);
+                        query.AddWhereItem(autoFillField.FieldDefinition.FieldName, Conditions.Contains, text);
                     }
                     break;
                 case AutoFillTypes.Formula:

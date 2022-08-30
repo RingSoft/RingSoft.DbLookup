@@ -981,8 +981,11 @@ namespace RingSoft.DbMaintenance
 
                 foundTreeViewItem.FormulaData = new TreeViewFormulaData();
                 foundTreeViewItem.FormulaData.Formula = formula;
-                foundTreeViewItem.FormulaData.DataType = (FieldDataTypes) fieldDataType;
-                foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes) decimalEditFormat;
+                if (fieldDataType != null)
+                {
+                    foundTreeViewItem.FormulaData.DataType = (FieldDataTypes) fieldDataType;
+                    foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes) decimalEditFormat;
+                }
             }
 
             return foundTreeViewItem;

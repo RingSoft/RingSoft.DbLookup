@@ -86,6 +86,26 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             return orderEmployeeNameFormula;
         }
 
+        public string GetOrderFormula()
+        {
+            var result = string.Empty;
+            switch (DataProcessorType)
+            {
+                case DataProcessorTypes.Sqlite:
+                    result = "strftime('%m/%d/%Y', [{Alias}].[OrderDate]) || ' - ' || [{Alias}].[CustomerId]";
+                    break;
+                case DataProcessorTypes.SqlServer:
+                    break;
+                case DataProcessorTypes.MySql:
+                    result = "CONCAT(`{Alias}`.`OrderDate`, ' - ', `{Alias}`.`CustomerId`)";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return result;
+        }
+
         public void ConfigureLookups()
         {
             var employeeNameFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
@@ -113,7 +133,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             OrdersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             //OrdersLookup.AddVisibleColumnDefinition(p => p.OrderId, "Order ID", p => p.OrderID, 15);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.OrderDate, "Date", p => p.OrderDate, 20);
+            OrdersLookup.AddVisibleColumnDefinition(p => p.Order, "Order", GetOrderFormula(), 20, "");
             OrdersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, "Customer", p => p.CompanyName, 50);
             var join = OrdersLookup.Include(p => p.Employee);
@@ -124,7 +144,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             OrderDetailsLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(_lookupContext.OrderDetails);
             OrderDetailsLookup.Include(p => p.Order)
-                .AddVisibleColumnDefinition(p => p.OrderDate, "Order Date", p => p.OrderDate, 20);
+                .AddVisibleColumnDefinition(p => p.Order, "Order", GetOrderFormula(), 20, FieldDataTypes.String);
             OrderDetailsLookup.Include(p => p.Product)
                 .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
             OrderDetailsLookup.Include(p => p.Product).Include(p => p.Category)

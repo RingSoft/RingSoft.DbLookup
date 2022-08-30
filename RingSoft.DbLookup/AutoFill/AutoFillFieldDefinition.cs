@@ -24,7 +24,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <value>
         /// The string field definition.
         /// </value>
-        public StringFieldDefinition StringFieldDefinition { get; }
+        public FieldDefinition FieldDefinition { get; }
 
         /// <summary>
         /// Gets a value indicating whether this auto fill is distinct.
@@ -38,10 +38,10 @@ namespace RingSoft.DbLookup.AutoFill
         /// Initializes a new instance of the <see cref="AutoFillFieldDefinition"/> class.
         /// </summary>
         /// <param name="stringFieldDefinition">The string field definition.</param>
-        public AutoFillFieldDefinition(StringFieldDefinition stringFieldDefinition) 
-            : base(stringFieldDefinition.TableDefinition)
+        public AutoFillFieldDefinition(FieldDefinition fieldDefinition) 
+            : base(fieldDefinition.TableDefinition)
         {
-            StringFieldDefinition = stringFieldDefinition;
+            FieldDefinition = fieldDefinition;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// <returns>This object for fluent processing.</returns>
         public AutoFillFieldDefinition IsDistinct(bool value = true)
         {
-            var isPrimaryKey = StringFieldDefinition.TableDefinition.PrimaryKeyFields.Count > 1 &&
-                               StringFieldDefinition.TableDefinition.PrimaryKeyFields.Contains(StringFieldDefinition);
+            var isPrimaryKey = FieldDefinition.TableDefinition.PrimaryKeyFields.Count > 1 &&
+                               FieldDefinition.TableDefinition.PrimaryKeyFields.Contains(FieldDefinition);
             if (!isPrimaryKey && value)
                 throw new ArgumentException(
                     "The distinct value can only be set on primary key field auto fills where there are at least 2 fields in the primary key.");

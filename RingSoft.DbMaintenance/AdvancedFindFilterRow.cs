@@ -334,84 +334,146 @@ namespace RingSoft.DbMaintenance
                 fieldDefinition = advancedFilterReturn.FormulaParentFieldDefinition;
             }
 
-            Table = fieldDefinition.TableDefinition.Description;
+            if (fieldDefinition != null)
+            {
+                Table = fieldDefinition.TableDefinition.Description;
+            }
+            else
+            {
+                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            }
+
             var foundTreeItem =
-                Manager.ViewModel.ProcessFoundTreeViewItem(advancedFilterReturn.Formula, fieldDefinition);
-            var includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+                Manager.ViewModel.ProcessFoundTreeViewItem(string.Empty, fieldDefinition);
+
+            ProcessIncludeResult includeResult = null;
+            if (foundTreeItem != null)
+                includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
 
             if (advancedFilterReturn.Formula.IsNullOrEmpty())
             {
-                Field = fieldDefinition.Description;
-
-                fieldDefinition = foundTreeItem.FieldDefinition;
-                if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                LoadFromFilterResultField(fieldDefinition, foundTreeItem, includeResult);
+            }
+            else
+            {
+                Field = $"{advancedFilterReturn.FormulaDisplayValue} Formula";
+                var alias = Manager.ViewModel.LookupDefinition.TableDefinition.TableName;
+                if (includeResult?.LookupJoin != null)
                 {
-                    switch (Condition)
+                    if (includeResult.LookupJoin != null)
                     {
-                        case Conditions.Equals:
-                        case Conditions.NotEquals:
-                            break;
-                        default:
-                            if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                            {
-                                switch (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
-                                            LookupDefinition.InitialSortColumnDefinition.ColumnType)
-                                {
-                                    case LookupColumnTypes.Field:
-                                        var initialSortColumnField = foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.
-                                            LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
-                                        if (initialSortColumnField != null)
-                                        {
-                                            fieldDefinition = initialSortColumnField.FieldDefinition;
-                                            foundTreeItem =
-                                                Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
-                                            includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
-                                        }
-                                        FilterItemDefinition =
-                                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                                fieldDefinition, Condition, SearchValue);
-                                        
-                                        if (includeResult.LookupJoin != null)
-                                        {
-                                            FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-                                        }
-                                        break;
-
-                                    case LookupColumnTypes.Formula:
-                                        var initialSortColumnFormula =
-                                            foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
-                                                .LookupDefinition
-                                                .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
-                                        if (foundTreeItem.Parent != null)
-                                        {
-                                            fieldDefinition = foundTreeItem.Parent.FieldDefinition;
-                                        }
-
-                                        if (includeResult.LookupJoin != null)
-                                        {
-                                            includeResult.LookupJoin = includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
-                                        }
-                                        else
-                                        {
-                                            includeResult.LookupJoin =
-                                                Manager.ViewModel.LookupDefinition.Include(
-                                                    foundTreeItem.FieldDefinition);
-                                        }
-
-                                        FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                            initialSortColumnFormula.OriginalFormula, Condition, SearchValue, includeResult.LookupJoin.JoinDefinition.Alias);
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
-                            }
-                            break;
+                        includeResult.LookupJoin =
+                            includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
                     }
+                    else
+                    {
+                        includeResult.LookupJoin =
+                            Manager.ViewModel.LookupDefinition.Include(
+                                foundTreeItem.FieldDefinition);
+
+                    }
+                    alias = includeResult.LookupJoin.JoinDefinition.Alias;
                 }
+
+                if (foundTreeItem != null)
+                {
+                    includeResult.LookupJoin =
+                        Manager.ViewModel.LookupDefinition.Include(foundTreeItem.FieldDefinition);
+                    alias = includeResult.LookupJoin.JoinDefinition.Alias;
+                }
+                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFilterReturn.Formula,
+                    Condition, SearchValue, alias);
             }
 
             MakeSearchValueText();
             Manager.ViewModel.ResetLookup();
+        }
+
+        private void LoadFromFilterResultField(FieldDefinition fieldDefinition, TreeViewItem foundTreeItem,
+            ProcessIncludeResult includeResult)
+        {
+            Field = fieldDefinition.Description;
+
+            fieldDefinition = foundTreeItem.FieldDefinition;
+            if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                switch (Condition)
+                {
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        FilterItemDefinition =
+                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                fieldDefinition, Condition, SearchValue);
+
+                        if (includeResult.LookupJoin != null)
+                        {
+                            FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                        }
+
+                        break;
+                    default:
+                        if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        {
+                            switch (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
+                                        .InitialSortColumnDefinition.ColumnType)
+                            {
+                                case LookupColumnTypes.Field:
+                                    var initialSortColumnField =
+                                        foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                                            .LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
+                                    if (initialSortColumnField != null)
+                                    {
+                                        fieldDefinition = initialSortColumnField.FieldDefinition;
+                                        foundTreeItem =
+                                            Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
+                                        includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+                                    }
+
+                                    FilterItemDefinition =
+                                        Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                            fieldDefinition, Condition, SearchValue);
+
+                                    if (includeResult.LookupJoin != null)
+                                    {
+                                        FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                                    }
+
+                                    break;
+
+                                case LookupColumnTypes.Formula:
+                                    var initialSortColumnFormula =
+                                        foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                                            .LookupDefinition
+                                            .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
+                                    if (foundTreeItem.Parent != null)
+                                    {
+                                        fieldDefinition = foundTreeItem.Parent.FieldDefinition;
+                                    }
+
+                                    if (includeResult.LookupJoin != null)
+                                    {
+                                        includeResult.LookupJoin =
+                                            includeResult.LookupJoin.Include(foundTreeItem.FieldDefinition);
+                                    }
+                                    else
+                                    {
+                                        includeResult.LookupJoin =
+                                            Manager.ViewModel.LookupDefinition.Include(
+                                                foundTreeItem.FieldDefinition);
+                                    }
+
+                                    FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                        initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
+                                        includeResult.LookupJoin.JoinDefinition.Alias);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+
+                        break;
+                }
+            }
         }
     }
 }

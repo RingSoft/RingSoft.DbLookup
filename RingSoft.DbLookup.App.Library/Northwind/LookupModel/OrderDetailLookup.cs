@@ -2,7 +2,7 @@
 {
     public class OrderDetailLookup
     {
-        public string OrderDate { get; set; }
+        public string Order { get; set; }
 
         public string Customer { get; set; }
 

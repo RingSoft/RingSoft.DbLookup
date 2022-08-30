@@ -20,6 +20,7 @@ namespace RingSoft.DbMaintenance
         public string SearchValue { get; set; }
         public string Formula { get; set; }
         public string FormulaDisplayValue { get; set; }
+        public ValueTypes FormulaValueType { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
@@ -376,55 +377,66 @@ namespace RingSoft.DbMaintenance
         public AdvancedFilterReturn GetAdvancedFilterReturn()
         {
             var result = new AdvancedFilterReturn();
-            if (TreeViewItem.Parent != null)
-            {
-                result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
-            }
-            result.FieldDefinition = TreeViewItem.FieldDefinition;
             result.Condition = Condition;
-            if (TreeViewItem.FieldDefinition != null)
+            result.FieldDefinition = TreeViewItem.FieldDefinition;
+            switch (TreeViewItem.Type)
             {
-                if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                {
-                    if (SearchValueAutoFillValue != null)
+                case TreeViewType.Field:
+                    if (TreeViewItem.FieldDefinition != null)
                     {
-                        switch (Condition)
+                        if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
-                            case Conditions.Equals:
-                            case Conditions.NotEquals:
-                                result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
-                                break;
-                            default:
-                                result.SearchValue = SearchValueAutoFillValue.Text;
-                                break;
-                        }
+                            if (SearchValueAutoFillValue != null)
+                            {
+                                switch (Condition)
+                                {
+                                    case Conditions.Equals:
+                                    case Conditions.NotEquals:
+                                        result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
+                                        break;
+                                    default:
+                                        result.SearchValue = SearchValueAutoFillValue.Text;
+                                        break;
+                                }
 
+                            }
+                        }
+                        else
+                        {
+                            switch (TreeViewItem.FieldDefinition.FieldDataType)
+                            {
+                                case FieldDataTypes.String:
+                                    result.SearchValue = StringSearchValue;
+                                    break;
+                                case FieldDataTypes.Integer:
+                                    break;
+                                case FieldDataTypes.Decimal:
+                                    break;
+                                case FieldDataTypes.DateTime:
+                                    break;
+                                case FieldDataTypes.Bool:
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    switch (TreeViewItem.FieldDefinition.FieldDataType)
+
+                    break;
+                case TreeViewType.Formula:
+                    result.SearchValue = StringSearchValue;
+                    if (TreeViewItem.Parent != null)
                     {
-                        case FieldDataTypes.String:
-                            result.SearchValue = StringSearchValue;
-                            break;
-                        case FieldDataTypes.Integer:
-                            break;
-                        case FieldDataTypes.Decimal:
-                            break;
-                        case FieldDataTypes.DateTime:
-                            break;
-                        case FieldDataTypes.Bool:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
                     }
-                }
-            }
-            else
-            {
-                result.Formula = Formula;
-                result.FormulaDisplayValue = FormulaDisplayValue;
+
+                    result.Formula = Formula;
+                    result.FormulaDisplayValue = FormulaDisplayValue;
+                    result.FormulaValueType = FormulaValueType;
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             return result;
         }

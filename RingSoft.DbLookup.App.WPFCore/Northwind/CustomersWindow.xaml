@@ -76,7 +76,7 @@
                         <Button Content="_Add/Modify" x:Name="AddModifyButton" VerticalAlignment="Top"/>
                         <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}" DesignText="Andrew Fuller">
                             <lc:LookupControl.LookupColumns>
-                                <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderLookup}}" Width="100" Header="Order Date" DesignText="01/01/1980"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderLookup}}" Width="100" Header="Order Date" DesignText="01/01/1980"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Employee, Type={x:Type lm:OrderLookup}}" Width="260" Header="Employee" DesignText="Andrew Fuller"/>
                             </lc:LookupControl.LookupColumns>
                         </lc:LookupControl>

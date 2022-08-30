@@ -63,7 +63,8 @@ namespace RingSoft.DbMaintenance
             var row = GetNewRow() as AdvancedFindFilterRow;
             if (filterReturn != null)
                 row.LoadFromFilterReturn(filterReturn);
-            if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
+            if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any() &&
+                ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
                 Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed == true).Count())
             {
                 var lastFilterRow =

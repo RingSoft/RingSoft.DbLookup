@@ -59,6 +59,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             NorthwindContextConfiguration.ConfigureLookups();
         }
 
+        public string GetOrderFormula()
+        {
+            return NorthwindContextConfiguration.GetOrderFormula();
+        }
+
         public void SetAdvancedFind()
         {
             SystemGlobals.AdvancedFindLookupContext = this;

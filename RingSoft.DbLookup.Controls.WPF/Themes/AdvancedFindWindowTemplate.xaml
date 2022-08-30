@@ -106,9 +106,9 @@
 
                                         <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.TableColumnId}" Width="150"/>
 
-                                        <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.FieldColumnId}" Width="150"/>
+                                        <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.FieldColumnId}" Width="250"/>
 
-                                        <deg:DataEntryGridTextColumn Header="Search For" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.SearchColumnId}" Width="400"/>
+                                        <deg:DataEntryGridTextColumn Header="Search For" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.SearchColumnId}" Width="300"/>
 
                                         <deg:DataEntryGridTextColumn Header=")" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.RightParenthesesColumnId}" Width="50"/>
 

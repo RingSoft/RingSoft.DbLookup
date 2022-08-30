@@ -90,7 +90,7 @@
                     <Grid>
                         <lc:LookupControl LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsLookupCommand}">
                             <lc:LookupControl.LookupColumns>
-                                <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderDetailLookup}}" Width="90" Header="Order Date" DesignText="01/01/1980"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderDetailLookup}}" Width="90" Header="Order Date" DesignText="01/01/1980"/>
 
                                 <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderDetailLookup}}" Width="180" Header="Customer" DesignText="Rattlesnake Canyon Grocery"/>
 

@@ -12,6 +12,11 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbMaintenance
 {
+    public enum TrueFalseValues
+    {
+        True = 1,
+        False = 0
+    }
     public class AdvancedFilterReturn
     {
         public FieldDefinition FieldDefinition { get; set; }
@@ -260,7 +265,43 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private TextComboBoxControlSetup _boolComboBoxSetup;
 
+        public TextComboBoxControlSetup BoolComboBoxSetup
+        {
+            get => _boolComboBoxSetup;
+            set
+            {
+                if (_boolComboBoxSetup == value)
+                {
+                    return;
+                }
+                _boolComboBoxSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TextComboBoxItem  _boolComboBoxItem;
+
+        public TextComboBoxItem  BoolComboBoxItem
+        {
+            get => _boolComboBoxItem;
+            set
+            {
+                if (_boolComboBoxItem == value)
+                {
+                    return;
+                }
+                _boolComboBoxItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        bool TrueFalseValue
+        {
+            get => BoolComboBoxItem.NumericValue == (int)TrueFalseValues.True;
+            set => BoolComboBoxItem = BoolComboBoxSetup.GetItem(value == true ? 1 : 0);
+        }
 
         public TreeViewItem TreeViewItem { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
@@ -275,6 +316,8 @@ namespace RingSoft.DbMaintenance
             TreeViewItem = treeViewItem;
             FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
             DateSearchValue = null;
+            BoolComboBoxSetup =new TextComboBoxControlSetup();
+            BoolComboBoxSetup.LoadFromEnum<TrueFalseValues>();
 
             if (treeViewItem.Parent == null)
             {
@@ -469,6 +512,7 @@ namespace RingSoft.DbMaintenance
                                     result.SearchValue = DateSearchValue.ToString();
                                     break;
                                 case FieldDataTypes.Bool:
+                                    result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
@@ -495,6 +539,7 @@ namespace RingSoft.DbMaintenance
                             result.SearchValue = DateSearchValue.ToString();
                             break;
                         case FieldDataTypes.Bool:
+                            result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();

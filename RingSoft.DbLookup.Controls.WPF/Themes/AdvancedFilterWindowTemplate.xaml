@@ -72,6 +72,8 @@
 
                             <dec:DateEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDateControl" Value="{Binding DateSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                            <dec:TextComboBoxControl Grid.Row="6" Grid.Column="1" x:Name="SearchForBoolComboBoxControl" Setup="{Binding BoolComboBoxSetup}" SelectedItem="{Binding BoolComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OKButton" Content="_OK" Width="100"/>

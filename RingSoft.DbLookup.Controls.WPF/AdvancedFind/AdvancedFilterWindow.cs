@@ -70,6 +70,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public DecimalEditControl SearchForDecimalControl { get; set; }
         public IntegerEditControl SearchForIntegerControl { get; set; }
         public DateEditControl SearchForDateControl { get; set; }
+        public TextComboBoxControl SearchForBoolComboBoxControl { get; set; }
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
 
@@ -102,6 +103,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForDecimalControl = GetTemplateChild(nameof(SearchForDecimalControl)) as DecimalEditControl;
             SearchForIntegerControl = GetTemplateChild(nameof(SearchForIntegerControl)) as IntegerEditControl;
             SearchForDateControl = GetTemplateChild(nameof(SearchForDateControl)) as DateEditControl;
+            SearchForBoolComboBoxControl = GetTemplateChild(nameof(SearchForBoolComboBoxControl)) as TextComboBoxControl;
 
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
@@ -114,7 +116,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForDecimalControl.Visibility = Visibility.Collapsed;
             SearchForIntegerControl.Visibility = Visibility.Collapsed;
             SearchForDateControl.Visibility = Visibility.Collapsed;
-            
+            SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
+
+
             FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
             {
                 SearchForStringControl.Visibility = Visibility.Collapsed;
@@ -122,6 +126,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SearchForDecimalControl.Visibility = Visibility.Collapsed;
                 SearchForIntegerControl.Visibility = Visibility.Collapsed;
                 SearchForDateControl.Visibility = Visibility.Collapsed;
+                SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
 
                 switch (ViewModel.FormulaValueType)
                 {
@@ -140,6 +145,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         SearchForDateControl.DateFormatType = DateFormatTypes.DateTime;
                         break;
                     case FieldDataTypes.Bool:
+                        SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -199,6 +205,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                                 SearchForDateControl.DateFormatType = dateType;
                                 break;
                             case FieldDataTypes.Bool:
+                                SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();

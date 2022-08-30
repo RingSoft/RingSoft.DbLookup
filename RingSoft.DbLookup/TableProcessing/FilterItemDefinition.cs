@@ -51,7 +51,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The end logic.
         /// </value>
-        public EndLogics EndLogic { get; internal set; }
+        public EndLogics EndLogic { get; set; }
 
         /// <summary>
         /// Gets the join definition.

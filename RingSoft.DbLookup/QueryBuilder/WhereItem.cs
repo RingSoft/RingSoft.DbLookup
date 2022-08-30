@@ -48,7 +48,9 @@ namespace RingSoft.DbLookup.QueryBuilder
 
     public enum EndLogics
     {
+        [Description("AND")]
         And = 0,
+        [Description("OR")]
         Or = 1
     }
 

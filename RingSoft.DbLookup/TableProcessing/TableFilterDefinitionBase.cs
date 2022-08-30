@@ -30,6 +30,7 @@ namespace RingSoft.DbLookup.TableProcessing
             Source = source;
         }
     }
+
     /// <summary>
     /// A table filter definition not based on an entity.
     /// </summary>
@@ -70,7 +71,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal TableFilterDefinitionBase()
         {
-            
+
         }
 
         /// <summary>
@@ -98,7 +99,8 @@ namespace RingSoft.DbLookup.TableProcessing
             FilterCopied?.Invoke(this, e);
         }
 
-        private void CopyFilters(IReadOnlyList<FilterItemDefinition> sourceFilters, List<FilterItemDefinition> destinationFilters)
+        private void CopyFilters(IReadOnlyList<FilterItemDefinition> sourceFilters,
+            List<FilterItemDefinition> destinationFilters)
         {
             destinationFilters.Clear();
             foreach (var sourceFilter in sourceFilters)
@@ -122,7 +124,8 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        protected internal FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition, Conditions condition,
+        protected internal FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition,
+            Conditions condition,
             string value)
         {
             var fieldFilter = new FieldFilterDefinition
@@ -143,6 +146,7 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 formula = formula.Replace("{Alias}", alias);
             }
+
             var formulaFilter = new FormulaFilterDefinition
             {
                 TableFilterDefinition = this,
@@ -225,14 +229,20 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        public FormulaFilterDefinition AddUserFilter(string formula, Conditions? condition = null, string value = "", string alias = "")
+        public FormulaFilterDefinition AddUserFilter(string formula, Conditions? condition = null, string value = "",
+            string alias = "")
         {
-            var formulaFilter = CreateFormulaFilter(formula,condition, value, alias);
+            var formulaFilter = CreateFormulaFilter(formula, condition, value, alias);
             _userFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
 
-        internal void ProcessQuery(SelectQuery query)
+        public void RemoveUserFilter(FilterItemDefinition filterItem)
+        {
+            _userFilterDefinitions.Remove(filterItem);
+        }
+
+    internal void ProcessQuery(SelectQuery query)
         {
             ProcessFieldJoins(query, Joins);
             ProcessFilters(query, FixedFilters);

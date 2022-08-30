@@ -65,9 +65,9 @@ namespace RingSoft.DbMaintenance
                     {
                         return new DataEntryGridTextCellProps(this, columnId);
                     }
-                    return new DataEntryGridTextComboBoxCellProps(this, columnId, EndLogicsSetup,
-                        EndLogicsSetup.GetItem((int) EndLogics)) {ControlMode = true};
-
+                    var result = new DataEntryGridTextComboBoxCellProps(this, columnId, EndLogicsSetup,
+                        EndLogicsSetup.GetItem((int) EndLogics), ComboBoxValueChangedTypes.SelectedItemChanged);
+                    return result;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -86,6 +86,12 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.Table:
                 case AdvancedFindFiltersManager.FilterColumns.Field:
                     return new DataEntryGridCellStyle() {State = DataEntryGridCellStates.Disabled};
+                case AdvancedFindFiltersManager.FilterColumns.EndLogic:
+                    if (EndLogics == null)
+                    {
+                        return new DataEntryGridCellStyle() {State = DataEntryGridCellStates.Disabled};
+                    }
+                    break;
             }
 
             return base.GetCellStyle(columnId);
@@ -110,6 +116,8 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.EndLogic:
                     var endLogicsValue = value as DataEntryGridTextComboBoxCellProps;
                     EndLogics = (EndLogics) endLogicsValue.SelectedItem.NumericValue;
+                    FilterItemDefinition.EndLogic = (EndLogics)EndLogics;
+                    Manager.ViewModel.ResetLookup();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -228,10 +236,15 @@ namespace RingSoft.DbMaintenance
             if (theEnd)
             {
                 EndLogics = null;
+                FilterItemDefinition.EndLogic = DbLookup.QueryBuilder.EndLogics.And;
             }
             else
             {
                 EndLogics = DbLookup.QueryBuilder.EndLogics.And;
+                if (FilterItemDefinition != null)
+                {
+                    FilterItemDefinition.EndLogic = (DbLookup.QueryBuilder.EndLogics) EndLogics;
+                }
             }
         }
 
@@ -451,6 +464,14 @@ namespace RingSoft.DbMaintenance
 
                 FilterItemDefinition.JoinDefinition = includeResult.LookupJoin?.JoinDefinition;
             }
+        }
+
+        public override bool AllowUserDelete => !IsFixed;
+
+        public override void Dispose()
+        {
+            FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
+            base.Dispose();
         }
     }
 }

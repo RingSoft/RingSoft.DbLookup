@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
-    public class AdvancedFindFiltersManager: DbMaintenanceDataEntryGridManager<AdvancedFindFilter>
+    public class AdvancedFindFiltersManager : DbMaintenanceDataEntryGridManager<AdvancedFindFilter>
     {
         public const int LeftParenthesesColumnId = 1;
         public const int TableColumnId = 2;
@@ -36,7 +39,8 @@ namespace RingSoft.DbMaintenance
             return new AdvancedFindFilterRow(this);
         }
 
-        protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(AdvancedFindFilter entity)
+        protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
+            AdvancedFindFilter entity)
         {
             return new AdvancedFindFilterRow(this);
         }
@@ -54,6 +58,7 @@ namespace RingSoft.DbMaintenance
                     var theEnd = !lookupDefinition.FilterDefinition.UserFilters.Any();
                     row.FinishOffFilter(true, theEnd);
                 }
+
                 rowIndex++;
             }
         }
@@ -63,18 +68,39 @@ namespace RingSoft.DbMaintenance
             var row = GetNewRow() as AdvancedFindFilterRow;
             if (filterReturn != null)
                 row.LoadFromFilterReturn(filterReturn);
-            if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any() &&
-                ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
-                Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed == true).Count())
-            {
-                var lastFilterRow =
-                    Rows[ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count - 1] as
-                        AdvancedFindFilterRow;
-                lastFilterRow.FinishOffFilter(true, false);
-            }
+            //if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any() &&
+            //    ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
+            //    Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed == true).Count())
+            //{
+            //    var lastFilterRow =
+            //        Rows[ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count - 1] as
+            //            AdvancedFindFilterRow;
+            //    lastFilterRow.FinishOffFilter(true, false);
+            //}
+            ProcessLastFilterRow(false);
+
             AddRow(row);
-            row.FinishOffFilter(false, true);
+            ProcessLastFilterRow(true);
             Grid?.RefreshGridView();
+        }
+
+        private void ProcessLastFilterRow(bool theEnd)
+        {
+            if (Rows.Any())
+            {
+                var lastFilterRow = Rows.Last() as AdvancedFindFilterRow;
+                lastFilterRow.FinishOffFilter(false, theEnd);
+            }
+        }
+
+        protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                ProcessLastFilterRow(true);
+                ViewModel.ResetLookup();
+            }
+            base.OnRowsChanged(e);
         }
     }
 }

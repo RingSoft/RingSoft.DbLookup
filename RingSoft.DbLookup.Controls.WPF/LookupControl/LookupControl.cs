@@ -1596,6 +1596,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     case LookupCommands.Clear:
                         ClearLookupControl();
+                        LookupDefinition.FilterDefinition.ClearFixedFilters();
                         break;
                     case LookupCommands.Refresh:
                         this.AddViewParameter = command.AddViewParameter;

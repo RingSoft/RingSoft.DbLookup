@@ -70,6 +70,8 @@
 
                             <dec:IntegerEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForIntegerControl" Value="{Binding IntegerSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                            <dec:DateEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDateControl" Value="{Binding DateSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OKButton" Content="_OK" Width="100"/>

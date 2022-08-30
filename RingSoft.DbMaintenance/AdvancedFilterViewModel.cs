@@ -244,6 +244,21 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private DateTime? _dateSearchValue;
+
+        public DateTime? DateSearchValue
+        {
+            get => _dateSearchValue;
+            set
+            {
+                if (_dateSearchValue == value)
+                {
+                    return;
+                }
+                _dateSearchValue = value;
+                OnPropertyChanged();
+            }
+        }
 
 
 
@@ -259,6 +274,7 @@ namespace RingSoft.DbMaintenance
             LookupDefinition = lookupDefinition;
             TreeViewItem = treeViewItem;
             FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
+            DateSearchValue = null;
 
             if (treeViewItem.Parent == null)
             {
@@ -450,6 +466,7 @@ namespace RingSoft.DbMaintenance
                                     result.SearchValue = DecimalSearchValueDecimal.ToString();
                                     break;
                                 case FieldDataTypes.DateTime:
+                                    result.SearchValue = DateSearchValue.ToString();
                                     break;
                                 case FieldDataTypes.Bool:
                                     break;
@@ -475,6 +492,7 @@ namespace RingSoft.DbMaintenance
                             result.SearchValue = DecimalSearchValueDecimal.ToString();
                             break;
                         case FieldDataTypes.DateTime:
+                            result.SearchValue = DateSearchValue.ToString();
                             break;
                         case FieldDataTypes.Bool:
                             break;

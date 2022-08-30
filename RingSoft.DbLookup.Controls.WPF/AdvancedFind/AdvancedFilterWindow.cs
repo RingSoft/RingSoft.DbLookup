@@ -10,9 +10,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
 using TreeViewItem = System.Windows.Controls.TreeViewItem;
@@ -67,6 +69,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AutoFillControl SearchForAutoFillControl { get; set; }
         public DecimalEditControl SearchForDecimalControl { get; set; }
         public IntegerEditControl SearchForIntegerControl { get; set; }
+        public DateEditControl SearchForDateControl { get; set; }
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
 
@@ -98,6 +101,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForAutoFillControl = GetTemplateChild(nameof(SearchForAutoFillControl)) as AutoFillControl;
             SearchForDecimalControl = GetTemplateChild(nameof(SearchForDecimalControl)) as DecimalEditControl;
             SearchForIntegerControl = GetTemplateChild(nameof(SearchForIntegerControl)) as IntegerEditControl;
+            SearchForDateControl = GetTemplateChild(nameof(SearchForDateControl)) as DateEditControl;
+
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
@@ -108,14 +113,15 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
             SearchForDecimalControl.Visibility = Visibility.Collapsed;
             SearchForIntegerControl.Visibility = Visibility.Collapsed;
-
-
+            SearchForDateControl.Visibility = Visibility.Collapsed;
+            
             FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
             {
                 SearchForStringControl.Visibility = Visibility.Collapsed;
                 SearchForAutoFillControl.Visibility = Visibility.Collapsed;
                 SearchForDecimalControl.Visibility = Visibility.Collapsed;
                 SearchForIntegerControl.Visibility = Visibility.Collapsed;
+                SearchForDateControl.Visibility = Visibility.Collapsed;
 
                 switch (ViewModel.FormulaValueType)
                 {
@@ -130,6 +136,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         SearchForIntegerControl.Visibility = Visibility.Visible;
                         break;
                     case FieldDataTypes.DateTime:
+                        SearchForDateControl.Visibility = Visibility.Visible;
+                        SearchForDateControl.DateFormatType = DateFormatTypes.DateTime;
                         break;
                     case FieldDataTypes.Bool:
                         break;
@@ -173,6 +181,22 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                                 SearchForDecimalControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.DateTime:
+                                var dateField = TreeViewItem.FieldDefinition as DateFieldDefinition;
+                                SearchForDateControl.Visibility = Visibility.Visible;
+                                var dateType = DateFormatTypes.DateOnly;
+                                switch (dateField.DateType)
+                                {
+                                    case DbDateTypes.DateOnly:
+                                        dateType = DateFormatTypes.DateOnly;
+                                        break;
+                                    case DbDateTypes.DateTime:
+                                        dateType = DateFormatTypes.DateTime;
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+
+                                SearchForDateControl.DateFormatType = dateType;
                                 break;
                             case FieldDataTypes.Bool:
                                 break;

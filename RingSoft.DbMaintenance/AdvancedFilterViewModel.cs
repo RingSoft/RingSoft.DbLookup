@@ -228,6 +228,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private int _integerSearchValue;
+
+        public int IntegerSearchValue
+        {
+            get => _integerSearchValue;
+            set
+            {
+                if (_integerSearchValue == value)
+                {
+                    return;
+                }
+                _integerSearchValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
 
         public TreeViewItem TreeViewItem { get; set; }
@@ -379,6 +396,7 @@ namespace RingSoft.DbMaintenance
                     ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
                     break;
                 case FieldDataTypes.Decimal:
+                case FieldDataTypes.Integer:
                 case FieldDataTypes.DateTime:
                 case FieldDataTypes.Bool:
                     ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
@@ -426,6 +444,7 @@ namespace RingSoft.DbMaintenance
                                     result.SearchValue = StringSearchValue;
                                     break;
                                 case FieldDataTypes.Integer:
+                                    result.SearchValue = IntegerSearchValue.ToString();
                                     break;
                                 case FieldDataTypes.Decimal:
                                     result.SearchValue = DecimalSearchValueDecimal.ToString();
@@ -450,6 +469,7 @@ namespace RingSoft.DbMaintenance
                             result.SearchValue = StringSearchValue;
                             break;
                         case FieldDataTypes.Integer:
+                            result.SearchValue = IntegerSearchValue.ToString();
                             break;
                         case FieldDataTypes.Decimal:
                             result.SearchValue = DecimalSearchValueDecimal.ToString();

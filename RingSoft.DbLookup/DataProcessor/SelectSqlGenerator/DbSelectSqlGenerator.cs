@@ -490,6 +490,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            var conditionResult = string.Empty;
             var condition = whereItem.Condition;
             if (whereItem.Value.IsNullOrEmpty())
             {
@@ -536,7 +538,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                         return $"IS NOT NULL";
                     }
                 case Conditions.BeginsWith:
-                    return $"LIKE '{whereItem.Value.Replace("'", "''")}%'";
+                    conditionResult = $"LIKE '{whereItem.Value.Replace("'", "''")}%'";
+                    return conditionResult;
+                case Conditions.EndsWith:
+                    conditionResult = $"LIKE '%{whereItem.Value.Replace("'", "''")}'";
+                    return conditionResult;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(whereItem.Condition), whereItem.Condition, null);
             }
@@ -559,6 +565,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 case Conditions.Contains:
                 case Conditions.NotContains:
                 case Conditions.BeginsWith:
+                case Conditions.EndsWith:
                     return string.Empty;
             }
             switch (whereItem.ValueType)

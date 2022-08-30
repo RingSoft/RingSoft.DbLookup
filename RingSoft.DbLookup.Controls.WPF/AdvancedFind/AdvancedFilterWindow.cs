@@ -66,6 +66,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public StringEditControl SearchForStringControl { get; set; }
         public AutoFillControl SearchForAutoFillControl { get; set; }
         public DecimalEditControl SearchForDecimalControl { get; set; }
+        public IntegerEditControl SearchForIntegerControl { get; set; }
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
 
@@ -96,6 +97,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForStringControl = GetTemplateChild(nameof(SearchForStringControl)) as StringEditControl;
             SearchForAutoFillControl = GetTemplateChild(nameof(SearchForAutoFillControl)) as AutoFillControl;
             SearchForDecimalControl = GetTemplateChild(nameof(SearchForDecimalControl)) as DecimalEditControl;
+            SearchForIntegerControl = GetTemplateChild(nameof(SearchForIntegerControl)) as IntegerEditControl;
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
@@ -105,6 +107,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForStringControl.Visibility = Visibility.Collapsed;
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
             SearchForDecimalControl.Visibility = Visibility.Collapsed;
+            SearchForIntegerControl.Visibility = Visibility.Collapsed;
 
 
             FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
@@ -112,6 +115,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SearchForStringControl.Visibility = Visibility.Collapsed;
                 SearchForAutoFillControl.Visibility = Visibility.Collapsed;
                 SearchForDecimalControl.Visibility = Visibility.Collapsed;
+                SearchForIntegerControl.Visibility = Visibility.Collapsed;
 
                 switch (ViewModel.FormulaValueType)
                 {
@@ -121,6 +125,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         break;
                     case FieldDataTypes.Decimal:
                         SearchForDecimalControl.Visibility = Visibility.Visible;
+                        break;
+                    case FieldDataTypes.Integer:
+                        SearchForIntegerControl.Visibility = Visibility.Visible;
                         break;
                     case FieldDataTypes.DateTime:
                         break;
@@ -160,6 +167,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                                 SearchForStringControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.Integer:
+                                SearchForIntegerControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.Decimal:
                                 SearchForDecimalControl.Visibility = Visibility.Visible;

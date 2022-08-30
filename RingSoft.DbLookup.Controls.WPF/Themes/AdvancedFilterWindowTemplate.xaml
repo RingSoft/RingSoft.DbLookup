@@ -68,6 +68,8 @@
 
                             <dec:DecimalEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDecimalControl" Value="{Binding DecimalSearchValueDecimal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                            <dec:IntegerEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForIntegerControl" Value="{Binding IntegerSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OKButton" Content="_OK" Width="100"/>

@@ -177,8 +177,8 @@ CREATE TABLE [AdvancedFindFilters] (
 , [PrimaryFieldName] nvarchar(50) NULL
 , [Operand] [tinyint] NOT NULL
 , [SearchForValue] nvarchar(50) NOT NULL
-, [DisplayValue] nvarchar(50) NOT NULL
 , [Formula] ntext NULL
+, [FormulaDataType] tinyint NULL
 , [SearchForAdvancedFindId] int NULL
 , [CustomDate] bit NULL
 , [RightParentheses] [tinyint] NULL

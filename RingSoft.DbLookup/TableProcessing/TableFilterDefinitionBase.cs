@@ -82,6 +82,11 @@ namespace RingSoft.DbLookup.TableProcessing
             _fixedFilterDefinitions.Clear();
         }
 
+        public void ClearUserFilters()
+        {
+            _userFilterDefinitions.Clear();
+        }
+
         /// <summary>
         /// Clears this filter and copies the source filter data to this object.
         /// </summary>

@@ -16,17 +16,18 @@ namespace RingSoft.DbMaintenance
     {
         public AdvancedFindFiltersManager Manager { get; set; }
 
-        public byte LeftParenthesesCount { get; private set; }
+        public byte LeftParenthesesCount { get; set; }
         public string Table { get; private set; }
         public string Field { get; private set; }
         public string SearchValueText { get; private set; }
-        public byte RightParenthesesCount { get; private set; }
+        public byte RightParenthesesCount { get; set; }
         public EndLogics? EndLogics { get; private set; }
 
         public Conditions Condition { get; private set; }
         public string SearchValue { get; private set; }
         public FilterItemDefinition FilterItemDefinition { get; private set; }
         public string Formula { get; private set; }
+        public FieldDataTypes FormulaDataType { get; private set; }
         public bool IsFixed { get; private set; }
         public string PrimaryTable { get; private set; }
         public string PrimaryField { get; private set; }
@@ -129,6 +130,10 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
+            var filterReturn = new AdvancedFilterReturn();
+            filterReturn.Condition = Condition;
+            filterReturn.SearchValue = SearchValue;
+
             LeftParenthesesCount = entity.LeftParentheses;
             var table = entity.TableName;
             var field = entity.FieldName;
@@ -142,16 +147,34 @@ namespace RingSoft.DbMaintenance
 
                 Table = tableDefinition.Description;
                 Field = fieldDefinition.Description;
+
+                filterReturn.FieldDefinition = fieldDefinition;
+
             }
 
-            Condition = (Conditions) entity.Operand;
-            SearchValue = entity.SearchForValue;
+            filterReturn.Condition = (Conditions)entity.Operand;
+            filterReturn.SearchValue = entity.SearchForValue;
+
             RightParenthesesCount = entity.RightParentheses;
             EndLogics = (EndLogics) entity.EndLogic;
-            Formula = entity.Formula;
+            filterReturn.Formula = entity.Formula;
+            filterReturn.FormulaValueType = (FieldDataTypes)entity.FormulaDataType;
             PrimaryTable = entity.PrimaryTableName;
             PrimaryField = entity.PrimaryFieldName;
-            MakeSearchValueText();
+            if (!PrimaryTable.IsNullOrEmpty() && !PrimaryField.IsNullOrEmpty() && filterReturn.FieldDefinition == null)
+            {
+                var primaryTableDefinition =
+                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == PrimaryTable);
+
+                var primaryFieldDefinition =
+                    primaryTableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == PrimaryField);
+
+                filterReturn.FormulaParentFieldDefinition = primaryFieldDefinition;
+            }
+
+            LoadFromFilterReturn(filterReturn);
+            //MakeSearchValueText();
         }
 
         public override bool ValidateRow()
@@ -163,7 +186,7 @@ namespace RingSoft.DbMaintenance
         {
             
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
-            entity.FilterId = rowIndex;
+            entity.FilterId = rowIndex + 1;
             entity.LeftParentheses = LeftParenthesesCount;
             if (FilterItemDefinition is FieldFilterDefinition fieldFilterDefinition)
             {
@@ -176,6 +199,10 @@ namespace RingSoft.DbMaintenance
             entity.RightParentheses = RightParenthesesCount;
             entity.PrimaryTableName = PrimaryTable;
             entity.PrimaryFieldName = PrimaryField;
+            if (EndLogics != null)
+                entity.EndLogic = (byte) EndLogics;
+            entity.Formula = Formula;
+            entity.FormulaDataType = (byte)FormulaDataType;
         }
 
         public void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
@@ -208,8 +235,23 @@ namespace RingSoft.DbMaintenance
                                 fieldFilterDefinition.Value.ToInt());
                         break;
                     case FieldDataTypes.Decimal:
+                        if (fieldFilterDefinition.FieldDefinition is DecimalFieldDefinition decimalField)
+                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(decimalField,
+                                fieldFilterDefinition.Condition,
+                                fieldFilterDefinition.Value.ToDecimal());
+                        break;
                     case FieldDataTypes.DateTime:
+                        if (fieldFilterDefinition.FieldDefinition is DateFieldDefinition dateField)
+                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(dateField,
+                                fieldFilterDefinition.Condition,
+                                DateTime.Parse(fieldFilterDefinition.Value));
+                        break;
                     case FieldDataTypes.Bool:
+                        if (fieldFilterDefinition.FieldDefinition is BoolFieldDefinition boolField)
+                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(boolField,
+                                fieldFilterDefinition.Condition,
+                                fieldFilterDefinition.Value.ToBool());
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -244,7 +286,11 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
-                EndLogics = DbLookup.QueryBuilder.EndLogics.And;
+                if (EndLogics == null)
+                {
+                    EndLogics = DbLookup.QueryBuilder.EndLogics.And;
+                }
+
                 if (FilterItemDefinition != null)
                 {
                     FilterItemDefinition.EndLogic = (DbLookup.QueryBuilder.EndLogics) EndLogics;
@@ -349,6 +395,8 @@ namespace RingSoft.DbMaintenance
             if (fieldDefinition == null)
             {
                 fieldDefinition = advancedFilterReturn.FormulaParentFieldDefinition;
+                PrimaryTable = fieldDefinition.TableDefinition.TableName;
+                PrimaryField = fieldDefinition.FieldName;
             }
 
             if (fieldDefinition != null)
@@ -385,7 +433,7 @@ namespace RingSoft.DbMaintenance
             }
 
             MakeSearchValueText();
-            Manager.ViewModel.ResetLookup();
+            //Manager.ViewModel.ResetLookup();
         }
 
         private void LoadFromFilterResultField(FieldDefinition fieldDefinition, TreeViewItem foundTreeItem,

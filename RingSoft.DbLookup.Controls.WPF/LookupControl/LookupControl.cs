@@ -430,11 +430,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             else
                 ImportLookupDefinition();
 
-            if (!LookupDefinition.VisibleColumns.Any())
+            if (LookupDefinition != null)
+            {
+                if (!LookupDefinition.VisibleColumns.Any())
+                {
+                    SetActiveColumn(0, FieldDataTypes.String);
+                    return;
+                }
+            }
+            else
             {
                 SetActiveColumn(0, FieldDataTypes.String);
-                return;
             }
+
             //LookupDefinition.InitialSortColumnDefinition = LookupDefinition.VisibleColumns[0];
             var sortColumnIndex =
                 GetIndexOfVisibleColumnDefinition(LookupDefinition?.InitialSortColumnDefinition);
@@ -1616,7 +1624,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.Reset:
                         ClearLookupControl();
                         SetupControl();
-                        if (LookupDefinition.VisibleColumns.Any())
+                        if (LookupDefinition != null && LookupDefinition.VisibleColumns.Any())
                         {
                             _resettingSearchFor = true;
                             this.AddViewParameter = command.AddViewParameter;

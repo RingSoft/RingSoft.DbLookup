@@ -524,7 +524,9 @@ namespace RingSoft.DbMaintenance
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
                         p.Description == SelectedTableBoxItem.TextValue);
 
+                var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
+                FiltersManager?.LoadFromLookupDefinition(oldLookup, true);
             }
             else
             {

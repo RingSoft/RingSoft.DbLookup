@@ -43,15 +43,23 @@ namespace RingSoft.DbLookup.EfCore
                 }
             }
 
-            context.AdvancedFindColumns.RemoveRange(context.AdvancedFindColumns.Where(p => p.AdvancedFindId == advancedFind.Id));
+            context.AdvancedFindColumns.RemoveRange(context.AdvancedFindColumns
+                .Where(p => p.AdvancedFindId == advancedFind.Id));
 
             foreach (var advancedFindColumn in columns)
             {
                 advancedFindColumn.AdvancedFindId = advancedFind.Id;
             }
+
+            context.AdvancedFindFilters.RemoveRange(context.AdvancedFindFilters
+                .Where(p => p.AdvancedFindId == advancedFind.Id));
+
+            foreach (var advancedFindFilter in filters)
+            {
+                advancedFindFilter.AdvancedFindId = advancedFind.Id;
+            }
             context.AdvancedFindColumns.AddRange(columns);
 
-            context.AdvancedFindFilters.RemoveRange(context.AdvancedFindFilters.Where(p => p.AdvancedFindId == advancedFind.Id));
             context.AdvancedFindFilters.AddRange(filters);
             var result = dbContext.SaveEfChanges("Commiting Advanced Find");
 

@@ -171,7 +171,7 @@ CREATE TABLE [AdvancedFindFilters] (
   [AdvancedFindId] int NOT NULL
 , [FilterId] int NOT NULL
 , [LeftParentheses] [tinyint] NULL
-, [TableName] nvarchar(50) NOT NULL
+, [TableName] nvarchar(50) NULL
 , [FieldName] nvarchar(50) NULL
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
@@ -179,6 +179,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [SearchForValue] nvarchar(50) NOT NULL
 , [Formula] ntext NULL
 , [FormulaDataType] tinyint NULL
+, [FormulaDisplayValue] nvarchar(50) NULL
 , [SearchForAdvancedFindId] int NULL
 , [CustomDate] bit NULL
 , [RightParentheses] [tinyint] NULL

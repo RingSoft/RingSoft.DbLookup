@@ -74,6 +74,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
 
+        private bool _formAdd;
+
         public AdvancedFilterReturn FilterReturn { get; set; }
 
         static AdvancedFilterWindow()
@@ -83,6 +85,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void Initialize(DbMaintenance.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
+            _formAdd = true;
             TreeViewItem = treeViewItem;
             LookupDefinition = lookupDefinition;
         }
@@ -110,7 +113,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
 
-            ViewModel.Initialize(TreeViewItem, LookupDefinition);
+            if (_formAdd)
+            {
+                ViewModel.Initialize(TreeViewItem, LookupDefinition);
+            }
+
             SearchForStringControl.Visibility = Visibility.Collapsed;
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
             SearchForDecimalControl.Visibility = Visibility.Collapsed;
@@ -166,6 +173,15 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             FormulaValueTypeLabel.Visibility = Visibility.Collapsed;
             FormulaValueTypeComboBox.Visibility = Visibility.Collapsed;
 
+            if (_formAdd)
+            {
+                SetupControlNew();
+            }
+            base.OnApplyTemplate();
+        }
+
+        private void SetupControlNew()
+        {
             switch (TreeViewItem.Type)
             {
                 case TreeViewType.Field:
@@ -224,7 +240,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            base.OnApplyTemplate();
+
         }
     }
 }

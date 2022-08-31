@@ -20,7 +20,8 @@ namespace RingSoft.DbMaintenance
     public class AdvancedFilterReturn
     {
         public FieldDefinition FieldDefinition { get; set; }
-        public FieldDefinition FormulaParentFieldDefinition { get; set; }
+        public string PrimaryTableName { get; set; }
+        public FieldDefinition PrimaryFieldDefinition { get; set; }
         public Conditions Condition { get; set; }
         public string SearchValue { get; set; }
         public string Formula { get; set; }
@@ -310,8 +311,11 @@ namespace RingSoft.DbMaintenance
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _memoFieldComboBoxControlSetup = new TextComboBoxControlSetup();
 
+        private bool _formAdd;
+
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
+            _formAdd = true;
             LookupDefinition = lookupDefinition;
             TreeViewItem = treeViewItem;
             FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
@@ -472,82 +476,42 @@ namespace RingSoft.DbMaintenance
         {
             var result = new AdvancedFilterReturn();
             result.Condition = Condition;
-            result.FieldDefinition = TreeViewItem.FieldDefinition;
-            switch (TreeViewItem.Type)
+            if (_formAdd)
+            {
+                result.FieldDefinition = TreeViewItem.FieldDefinition;
+                var filterType = TreeViewItem.Type;
+                var fieldDefinition = TreeViewItem.FieldDefinition;
+                GetFilterReturnProperties(filterType, fieldDefinition, result);
+            }
+
+            return result;
+        }
+
+        private void GetFilterReturnProperties(TreeViewType filterType, FieldDefinition fieldDefinition,
+            AdvancedFilterReturn result)
+        {
+            switch (filterType)
             {
                 case TreeViewType.Field:
                     if (TreeViewItem.FieldDefinition != null)
                     {
-                        if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
-                            if (SearchValueAutoFillValue != null)
-                            {
-                                switch (Condition)
-                                {
-                                    case Conditions.Equals:
-                                    case Conditions.NotEquals:
-                                        result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
-                                        break;
-                                    default:
-                                        result.SearchValue = SearchValueAutoFillValue.Text;
-                                        break;
-                                }
-
-                            }
+                            GetAutoFillValueResult(result);
                         }
                         else
                         {
-                            switch (TreeViewItem.FieldDefinition.FieldDataType)
-                            {
-                                case FieldDataTypes.String:
-                                    result.SearchValue = StringSearchValue;
-                                    break;
-                                case FieldDataTypes.Integer:
-                                    result.SearchValue = IntegerSearchValue.ToString();
-                                    break;
-                                case FieldDataTypes.Decimal:
-                                    result.SearchValue = DecimalSearchValueDecimal.ToString();
-                                    break;
-                                case FieldDataTypes.DateTime:
-                                    result.SearchValue = DateSearchValue.ToString();
-                                    break;
-                                case FieldDataTypes.Bool:
-                                    result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
+                            var fieldDataType = fieldDefinition.FieldDataType;
+                            GetSearchValue(fieldDataType, result);
                         }
                     }
 
                     break;
                 case TreeViewType.Formula:
                     //result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
-                    switch (FormulaValueType)
-                    {
-                        case FieldDataTypes.String:
-                        case FieldDataTypes.Memo:
-                            result.SearchValue = StringSearchValue;
-                            break;
-                        case FieldDataTypes.Integer:
-                            result.SearchValue = IntegerSearchValue.ToString();
-                            break;
-                        case FieldDataTypes.Decimal:
-                            result.SearchValue = DecimalSearchValueDecimal.ToString();
-                            break;
-                        case FieldDataTypes.DateTime:
-                            result.SearchValue = DateSearchValue.ToString();
-                            break;
-                        case FieldDataTypes.Bool:
-                            result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    if (TreeViewItem.Parent != null)
-                    {
-                        result.FormulaParentFieldDefinition = TreeViewItem?.Parent.FieldDefinition;
-                    }
+                    GetSearchValue(FormulaValueType, result);
+
+                    GetParentFieldDefinition(result);
 
                     result.Formula = Formula;
                     result.FormulaDisplayValue = FormulaDisplayValue;
@@ -557,7 +521,60 @@ namespace RingSoft.DbMaintenance
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return result;
+        }
+
+        private void GetParentFieldDefinition(AdvancedFilterReturn result)
+        {
+            if (_formAdd)
+            {
+                result.PrimaryTableName = Table;
+
+                if (_formAdd && TreeViewItem.Parent != null)
+                {
+                    result.PrimaryFieldDefinition = TreeViewItem.Parent.FieldDefinition;
+                }
+            }
+        }
+
+        private void GetSearchValue(FieldDataTypes fieldDataType, AdvancedFilterReturn result)
+        {
+            switch (fieldDataType)
+            {
+                case FieldDataTypes.String:
+                    result.SearchValue = StringSearchValue;
+                    break;
+                case FieldDataTypes.Integer:
+                    result.SearchValue = IntegerSearchValue.ToString();
+                    break;
+                case FieldDataTypes.Decimal:
+                    result.SearchValue = DecimalSearchValueDecimal.ToString();
+                    break;
+                case FieldDataTypes.DateTime:
+                    result.SearchValue = DateSearchValue.ToString();
+                    break;
+                case FieldDataTypes.Bool:
+                    result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void GetAutoFillValueResult(AdvancedFilterReturn result)
+        {
+            if (SearchValueAutoFillValue != null)
+            {
+                switch (Condition)
+                {
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
+                        break;
+                    default:
+                        result.SearchValue = SearchValueAutoFillValue.Text;
+                        break;
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

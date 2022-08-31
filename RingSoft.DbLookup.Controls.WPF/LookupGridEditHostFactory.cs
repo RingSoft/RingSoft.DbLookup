@@ -2,6 +2,7 @@
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -12,17 +13,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (editingControlHostId == DataEntryGridAutoFillCellProps.AutoFillControlHostId)
                 return new DataEntryGridAutoFillHost(grid);
 
-            if (editingControlHostId == AdvancedFindMemoCellProps.AdvancedFindMemoHostId)
-            {
-                return new DataEntryGridAdvancedFindMemoHost(grid);
-            }
-
             if (editingControlHostId == AdvancedFindColumnFormulaCellProps.ColumnFormulaCellId)
             {
                 return new DataEntryGridAdvancedFindFormulaColumnHost(grid);
             }
 
-                return base.GetControlHost(grid, editingControlHostId);
+            if (editingControlHostId == AdvancedFindMemoCellProps.AdvancedFindMemoHostId)
+            {
+                return new DataEntryGridAdvancedFindMemoHost(grid);
+            }
+
+            if (editingControlHostId == AdvancedFindFilterCellProps.FilterControlId)
+            {
+                return new AdvancedFindFilterHost(grid);
+            }
+
+
+            return base.GetControlHost(grid, editingControlHostId);
         }
     }
 }

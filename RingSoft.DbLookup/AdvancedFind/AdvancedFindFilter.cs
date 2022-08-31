@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public byte FormulaDataType { get; set; }
 
+        public string FormulaDisplayValue { get; set; }
+
         public int? SearchForAdvancedFindId { get; set; }
 
         public virtual AdvancedFind SearchForAdvancedFind { get; set; }

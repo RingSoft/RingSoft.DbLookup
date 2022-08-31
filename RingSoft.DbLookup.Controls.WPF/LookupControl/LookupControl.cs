@@ -1588,6 +1588,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (selectedIndex >= 0)
                 {
                     LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), AddViewParameter, _readOnlyMode);
+                    RefreshData(false);
                     return true;
                 }
             }
@@ -1605,10 +1606,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.Clear:
                         ClearLookupControl();
                         LookupDefinition.FilterDefinition.ClearFixedFilters();
+                        AdvancedFindButton.IsEnabled = false;
                         break;
                     case LookupCommands.Refresh:
                         this.AddViewParameter = command.AddViewParameter;
                         RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
+                        AdvancedFindButton.IsEnabled = true;
                         break;
                     case LookupCommands.AddModify:
                         var addViewParameter = command.AddViewParameter;
@@ -1620,6 +1623,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
                         else
                             LookupData.AddNewRow(Window.GetWindow(this), addViewParameter);
+                        RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.Reset:
                         ClearLookupControl();
@@ -1631,6 +1635,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             _currentPageSize = GetPageSize();
                             RefreshData(true);
                             _resettingSearchFor = false;
+                            AdvancedFindButton.IsEnabled = true;
                         }
 
                         //LookupData.GetInitData();

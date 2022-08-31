@@ -26,11 +26,13 @@ namespace RingSoft.DbMaintenance
         public Conditions Condition { get; private set; }
         public string SearchValue { get; private set; }
         public FilterItemDefinition FilterItemDefinition { get; private set; }
+        public FieldDefinition FieldDefinition { get; private set; }
         public string Formula { get; private set; }
         public FieldDataTypes FormulaDataType { get; private set; }
         public bool IsFixed { get; private set; }
         public string PrimaryTable { get; private set; }
         public string PrimaryField { get; private set; }
+        public string FormulaDisplayValue { get; private set; }
 
         public TextComboBoxControlSetup EndLogicsSetup { get; private set; }
 
@@ -57,7 +59,7 @@ namespace RingSoft.DbMaintenance
                     return new DataEntryGridTextCellProps(this, columnId, Field);
 
                 case AdvancedFindFiltersManager.FilterColumns.Search:
-                    return new DataEntryGridTextCellProps(this, columnId, SearchValueText);
+                    return new AdvancedFindFilterCellProps(this, columnId, SearchValueText, FilterItemDefinition);
 
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
                     return new DataEntryGridTextCellProps(this, columnId, ")".StringDuplicate(RightParenthesesCount));
@@ -137,20 +139,23 @@ namespace RingSoft.DbMaintenance
             LeftParenthesesCount = entity.LeftParentheses;
             var table = entity.TableName;
             var field = entity.FieldName;
-            if (entity.Formula.IsNullOrEmpty())
+            var tableDefinition =
+                Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == table);
+
+            FieldDefinition fieldDefinition = null;
+            if (!field.IsNullOrEmpty())
             {
-                var tableDefinition =
-                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.EntityName == table);
-
-                var fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.PropertyName == field);
-
-                Table = tableDefinition.Description;
-                Field = fieldDefinition.Description;
-
-                filterReturn.FieldDefinition = fieldDefinition;
-
+                fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.PropertyName == field);
             }
+
+            PrimaryTable = entity.PrimaryTableName;
+            if (!entity.Formula.IsNullOrEmpty())
+                filterReturn.PrimaryTableName = Table = PrimaryTable;
+            //Field = fieldDefinition.Description;
+
+            filterReturn.FieldDefinition = fieldDefinition;
+
 
             filterReturn.Condition = (Conditions)entity.Operand;
             filterReturn.SearchValue = entity.SearchForValue;
@@ -159,19 +164,8 @@ namespace RingSoft.DbMaintenance
             EndLogics = (EndLogics) entity.EndLogic;
             filterReturn.Formula = entity.Formula;
             filterReturn.FormulaValueType = (FieldDataTypes)entity.FormulaDataType;
-            PrimaryTable = entity.PrimaryTableName;
-            PrimaryField = entity.PrimaryFieldName;
-            if (!PrimaryTable.IsNullOrEmpty() && !PrimaryField.IsNullOrEmpty() && filterReturn.FieldDefinition == null)
-            {
-                var primaryTableDefinition =
-                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.TableName == PrimaryTable);
-
-                var primaryFieldDefinition =
-                    primaryTableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == PrimaryField);
-
-                filterReturn.FormulaParentFieldDefinition = primaryFieldDefinition;
-            }
+            filterReturn.FormulaDisplayValue = entity.FormulaDisplayValue;
+            
 
             LoadFromFilterReturn(filterReturn);
             //MakeSearchValueText();
@@ -188,10 +182,16 @@ namespace RingSoft.DbMaintenance
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.FilterId = rowIndex + 1;
             entity.LeftParentheses = LeftParenthesesCount;
-            if (FilterItemDefinition is FieldFilterDefinition fieldFilterDefinition)
+            //if (FilterItemDefinition is FieldFilterDefinition fieldFilterDefinition)
+            //{
+            //    entity.TableName = fieldFilterDefinition.FieldDefinition.TableDefinition.EntityName;
+            //    entity.FieldName = fieldFilterDefinition.FieldDefinition.PropertyName;
+            //}
+
+            if (FieldDefinition != null)
             {
-                entity.TableName = fieldFilterDefinition.FieldDefinition.TableDefinition.EntityName;
-                entity.FieldName = fieldFilterDefinition.FieldDefinition.PropertyName;
+                entity.TableName = FieldDefinition.TableDefinition.EntityName;
+                entity.FieldName = FieldDefinition.PropertyName;
             }
 
             entity.Operand = (byte) Condition;
@@ -202,6 +202,7 @@ namespace RingSoft.DbMaintenance
             if (EndLogics != null)
                 entity.EndLogic = (byte) EndLogics;
             entity.Formula = Formula;
+            entity.FormulaDisplayValue = FormulaDisplayValue;
             entity.FormulaDataType = (byte)FormulaDataType;
         }
 
@@ -394,20 +395,14 @@ namespace RingSoft.DbMaintenance
             var fieldDefinition = advancedFilterReturn.FieldDefinition;
             if (fieldDefinition == null)
             {
-                fieldDefinition = advancedFilterReturn.FormulaParentFieldDefinition;
-                PrimaryTable = fieldDefinition.TableDefinition.TableName;
-                PrimaryField = fieldDefinition.FieldName;
-            }
-
-            if (fieldDefinition != null)
-            {
-                Table = fieldDefinition.TableDefinition.Description;
+                fieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
             }
             else
             {
-                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                Table = fieldDefinition.TableDefinition.Description;
             }
 
+            FieldDefinition = fieldDefinition;
             var foundTreeItem =
                 Manager.ViewModel.ProcessFoundTreeViewItem(string.Empty, fieldDefinition);
 
@@ -421,6 +416,7 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
+                PrimaryTable = Table = advancedFilterReturn.PrimaryTableName;
                 Field = $"{advancedFilterReturn.FormulaDisplayValue} Formula";
                 var alias = Manager.ViewModel.LookupDefinition.TableDefinition.TableName;
                 if (includeResult?.LookupJoin != null)
@@ -428,11 +424,14 @@ namespace RingSoft.DbMaintenance
                     alias = includeResult.LookupJoin.JoinDefinition.Alias;
                 }
 
-                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFilterReturn.Formula,
+                Formula = advancedFilterReturn.Formula;
+                FormulaDisplayValue = advancedFilterReturn.FormulaDisplayValue;
+                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(Formula,
                     Condition, SearchValue, alias, advancedFilterReturn.FormulaValueType);
             }
 
             MakeSearchValueText();
+            Manager?.Grid.RefreshGridView();
             //Manager.ViewModel.ResetLookup();
         }
 

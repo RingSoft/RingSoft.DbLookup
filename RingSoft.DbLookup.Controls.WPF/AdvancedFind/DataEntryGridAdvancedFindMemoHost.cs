@@ -60,20 +60,25 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             Control.ShowMemoEditorWindow += (sender, args) =>
             {
-                var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = control.Text});
-                memoEditor.Owner = Window.GetWindow(control);
-                memoEditor.ShowInTaskbar = false;
-                if (memoEditor.ShowDialog())
-                {
-                    _dataChanged = OriginalCellProps.Text != memoEditor.MemoEditor.Text;
-                    var advancedFindCellProps = GetNewCellProps(memoEditor.MemoEditor.Text);
-                    SetCellText(advancedFindCellProps);
-                    Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
-                }
-
+                ShowMemoEditor();
                 Control.Focus();
 
             };
+
+        }
+
+        protected virtual void ShowMemoEditor()
+        {
+            var memoEditor = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) { Text = Control.Text });
+            memoEditor.Owner = Window.GetWindow(Control);
+            memoEditor.ShowInTaskbar = false;
+            if (memoEditor.ShowDialog())
+            {
+                _dataChanged = OriginalCellProps.Text != memoEditor.MemoEditor.Text;
+                var advancedFindCellProps = GetNewCellProps(memoEditor.MemoEditor.Text);
+                SetCellText(advancedFindCellProps);
+                Grid.CommitCellEdit(CellLostFocusTypes.KeyboardNavigation, false);
+            }
 
         }
 

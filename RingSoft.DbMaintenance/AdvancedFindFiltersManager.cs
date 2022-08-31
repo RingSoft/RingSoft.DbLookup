@@ -88,10 +88,10 @@ namespace RingSoft.DbMaintenance
             //            AdvancedFindFilterRow;
             //    lastFilterRow.FinishOffFilter(true, false);
             //}
-            ProcessLastFilterRow(false, Rows.Last() as AdvancedFindFilterRow);
+            ProcessLastFilterRow(false, Rows.LastOrDefault() as AdvancedFindFilterRow);
 
             AddRow(row);
-            ProcessLastFilterRow(true, Rows.Last() as AdvancedFindFilterRow);
+            ProcessLastFilterRow(true, Rows.LastOrDefault() as AdvancedFindFilterRow);
             Grid?.RefreshGridView();
             ViewModel.ResetLookup();
         }
@@ -116,8 +116,8 @@ namespace RingSoft.DbMaintenance
                     }
                 }
 
-                var lastRow = Rows.Last() as AdvancedFindFilterRow;
-                lastRow.FinishOffFilter(false, true);
+                var lastRow = Rows.LastOrDefault() as AdvancedFindFilterRow;
+                lastRow?.FinishOffFilter(false, true);
             }
             Grid?.RefreshGridView();
             ViewModel.ResetLookup();

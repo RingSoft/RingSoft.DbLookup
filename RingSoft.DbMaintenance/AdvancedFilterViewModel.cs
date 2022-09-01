@@ -27,6 +27,7 @@ namespace RingSoft.DbMaintenance
         public string Formula { get; set; }
         public string FormulaDisplayValue { get; set; }
         public FieldDataTypes FormulaValueType { get; set; }
+        public LookupDefinitionBase LookupDefinition { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
@@ -122,6 +123,7 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
                 _conditionComboBoxItem = value;
+                OnPropertyChanged();
             }
         }
 
@@ -305,6 +307,7 @@ namespace RingSoft.DbMaintenance
         }
 
         //public TreeViewItem TreeViewItem { get; set; }
+        public AdvancedFilterReturn FilterReturn { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
         public FieldDefinition FieldDefinition { get; set; }
         public FieldDefinition ParentFieldDefinition { get; set; }
@@ -318,14 +321,89 @@ namespace RingSoft.DbMaintenance
 
         public void Initialize(AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
         {
-            Initialize(lookupDefinition);
-            Table = filterReturn.FieldDefinition.TableDefinition.Description;
-            Field = filterReturn.FieldDefinition.Description;
-            Condition = filterReturn.Condition;
-
-            if (filterReturn.Formula.IsNullOrEmpty()) 
+            FilterReturn = filterReturn;
+            FieldDefinition = filterReturn.FieldDefinition;
+            if (filterReturn.Formula.IsNullOrEmpty())
             {
-                
+                Table = filterReturn.FieldDefinition.TableDefinition.Description;
+                Field = filterReturn.FieldDefinition.Description;
+
+                Type = TreeViewType.Field;
+            }
+            else
+            {
+                Type = TreeViewType.Formula;
+            }
+
+            Initialize(lookupDefinition);
+            Condition = filterReturn.Condition;
+            
+            if (filterReturn.PrimaryFieldDefinition != null)
+            {
+                Table = filterReturn.PrimaryFieldDefinition.Description;
+                ParentFieldDefinition = filterReturn.PrimaryFieldDefinition;
+            }
+            else if (Type == TreeViewType.Formula)
+            {
+                Table = lookupDefinition.TableDefinition.Description;
+            }
+        }
+
+        public void LoadWindow()
+        {
+            if (_formAdd)
+            {
+                return;
+            }
+
+            Condition = FilterReturn.Condition;
+            FieldDataTypes fieldDataType = FieldDataTypes.String;
+            switch (Type)
+            {
+                case TreeViewType.Field:
+                    fieldDataType = FieldDefinition.FieldDataType;
+                    break;
+                case TreeViewType.Formula:
+                    Formula = FilterReturn.Formula;
+                    fieldDataType = FilterReturn.FormulaValueType;
+                    FormulaDisplayValue = FilterReturn.FormulaDisplayValue;
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            switch (fieldDataType)
+            {
+                case FieldDataTypes.String:
+                case FieldDataTypes.Memo:
+                    StringSearchValue = FilterReturn.SearchValue;
+                    break;
+                case FieldDataTypes.Integer:
+                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        SearchValueAutoFillValue =
+                            LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
+                                FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                    }
+                    else
+                    {
+                        IntegerSearchValue = FilterReturn.SearchValue.ToInt();
+                    }
+                    break;
+                case FieldDataTypes.Decimal:
+                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
+                    break;
+                case FieldDataTypes.DateTime:
+                    DateTime searchDateTime = DateTime.MinValue;
+                    DateTime.TryParse(FilterReturn.SearchValue, out searchDateTime);
+                    DateSearchValue = searchDateTime;
+                    break;
+                case FieldDataTypes.Bool:
+                    TrueFalseValue = FilterReturn.SearchValue.ToBool();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
@@ -334,8 +412,7 @@ namespace RingSoft.DbMaintenance
             FieldDefinition = treeViewItem.FieldDefinition;
             Initialize(lookupDefinition);
             _formAdd = true;
-            //TreeViewItem = treeViewItem;
-
+            
             if (treeViewItem.Parent == null)
             {
                 Table = LookupDefinition.TableDefinition.Description;
@@ -347,49 +424,6 @@ namespace RingSoft.DbMaintenance
             }
             Field = treeViewItem.Name;
 
-            switch (Type)
-            {
-                case TreeViewType.Field:
-                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                    {
-                        SearchValueAutoFillSetup = new AutoFillSetup(treeViewItem.FieldDefinition
-                            .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
-                    }
-                    switch (treeViewItem.FieldDefinition.FieldDataType)
-                    {
-                        case FieldDataTypes.String:
-                            ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
-                            break;
-                        case FieldDataTypes.Integer:
-                            if (treeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                            {
-                                ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
-                            }
-                            else
-                            {
-                                ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
-                            }
-                            break;
-                        case FieldDataTypes.Decimal:
-                        case FieldDataTypes.DateTime:
-                        case FieldDataTypes.Bool:
-                            ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    break;
-                case TreeViewType.Formula:
-                    ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
-                    FormulaValueType = FieldDataTypes.String;
-                    if (FormulaValueComboBoxItem != null)
-                    {
-                        SetupConditionForFormula();
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
 
         private void Initialize( LookupDefinitionBase lookupDefinition)
@@ -466,6 +500,51 @@ namespace RingSoft.DbMaintenance
             _memoFieldComboBoxControlSetup.Items.Remove(
                 _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
                     p.NumericValue == (int) Conditions.EndsWith));
+
+            switch (Type)
+            {
+                case TreeViewType.Field:
+                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        SearchValueAutoFillSetup = new AutoFillSetup(FieldDefinition
+                            .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
+                    }
+                    switch (FieldDefinition.FieldDataType)
+                    {
+                        case FieldDataTypes.String:
+                            ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                            break;
+                        case FieldDataTypes.Integer:
+                            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                            {
+                                ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                            }
+                            else
+                            {
+                                ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            }
+                            break;
+                        case FieldDataTypes.Decimal:
+                        case FieldDataTypes.DateTime:
+                        case FieldDataTypes.Bool:
+                            ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    break;
+                case TreeViewType.Formula:
+                    ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                    FormulaValueType = FieldDataTypes.String;
+                    if (FormulaValueComboBoxItem != null)
+                    {
+                        SetupConditionForFormula();
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
         }
 
         private void SetupConditionForFormula()
@@ -493,12 +572,9 @@ namespace RingSoft.DbMaintenance
         {
             var result = new AdvancedFilterReturn();
             result.Condition = Condition;
-            if (_formAdd)
-            {
-                var filterType = Type;
-                
-                GetFilterReturnProperties(filterType, FieldDefinition, result);
-            }
+            var filterType = Type;
+            result.LookupDefinition = LookupDefinition;
+            GetFilterReturnProperties(filterType, FieldDefinition, result);
 
             return result;
         }
@@ -521,7 +597,6 @@ namespace RingSoft.DbMaintenance
                             GetSearchValue(fieldDataType, result);
                         }
                     }
-
                     break;
                 case TreeViewType.Formula:
                     //result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
@@ -529,6 +604,7 @@ namespace RingSoft.DbMaintenance
                     if (ParentFieldDefinition != null)
                     {
                         result.FieldDefinition = ParentFieldDefinition;
+                        result.PrimaryFieldDefinition = ParentFieldDefinition;
                     }
 
                     result.Formula = Formula;

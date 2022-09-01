@@ -25,7 +25,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The condition.
         /// </value>
-        public Conditions Condition { get; internal set; }
+        public Conditions Condition { get; set; }
 
         /// <summary>
         /// Gets the value to filter.
@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The value.
         /// </value>
-        public string Value { get; internal set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the search is case sensitive.

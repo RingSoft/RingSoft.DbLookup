@@ -158,7 +158,8 @@ namespace RingSoft.DbLookup.TableProcessing
                 Formula = formula,
                 Condition = condition,
                 FilterValue = value,
-                DataType = dataType
+                DataType = dataType,
+                Alias = alias
             };
 
             return formulaFilter;
@@ -281,13 +282,14 @@ namespace RingSoft.DbLookup.TableProcessing
                                 valueType = ValueTypes.Bool;
                                 break;
                         }
+                        var formula = formulaFilter.Formula.Replace("{Alias}", formulaFilter.Alias);
                         if (formulaFilter.Condition != null && !formulaFilter.FilterValue.IsNullOrEmpty() )
                         {
-                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula, (Conditions)formulaFilter.Condition, formulaFilter.FilterValue, valueType);
+                            lastWhere = query.AddWhereItemFormula(formula, (Conditions)formulaFilter.Condition, formulaFilter.FilterValue, valueType);
                         }
                         else
                         {
-                            lastWhere = query.AddWhereItemFormula(formulaFilter.Formula);
+                            lastWhere = query.AddWhereItemFormula(formula);
                         }
 
                         break;

@@ -12,13 +12,15 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The formula.
         /// </value>
-        public string Formula { get; internal set; }
+        public string Formula { get; set; }
 
-        public Conditions? Condition { get; internal set; }
+        public Conditions? Condition { get; set; }
 
-        public string FilterValue { get; internal set; }
+        public string FilterValue { get; set; }
 
-        public FieldDataTypes DataType { get; internal set; }
+        public FieldDataTypes DataType { get; set; }
+
+        public string Alias { get; set; }
 
         internal FormulaFilterDefinition()
         {

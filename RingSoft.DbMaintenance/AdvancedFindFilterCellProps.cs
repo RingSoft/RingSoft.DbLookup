@@ -1,5 +1,6 @@
 ﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
@@ -8,9 +9,13 @@ namespace RingSoft.DbMaintenance
     {
         public const int FilterControlId = 55;
 
-        public AdvancedFindFilterCellProps(DataEntryGridRow row, int columnId, string text, FilterItemDefinition filter) : base(row, columnId, text)
+        public AdvancedFilterReturn FilterReturn { get; set; }
+
+        public AdvancedFindFilterCellProps(DataEntryGridRow row, int columnId, string text, 
+            AdvancedFilterReturn filter) : base(row, columnId, text)
         {
             Text = text;
+            FilterReturn = filter;
         }
 
         public override int EditingControlId => FilterControlId;

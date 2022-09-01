@@ -53,6 +53,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     public class AdvancedFilterWindow : BaseWindow
     {
         public DbMaintenance.TreeViewItem TreeViewItem { get; set; }
+        public AdvancedFilterReturn InputFilterReturn { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
         public AdvancedFilterViewModel ViewModel { get; set; }
 
@@ -83,11 +84,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFilterWindow), new FrameworkPropertyMetadata(typeof(AdvancedFilterWindow)));
         }
 
+        public AdvancedFilterWindow()
+        {
+            Loaded += (sender, args) => ViewModel.LoadWindow();
+        }
         public void Initialize(DbMaintenance.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             _formAdd = true;
             TreeViewItem = treeViewItem;
             LookupDefinition = lookupDefinition;
+        }
+
+        public void Initialize(AdvancedFilterReturn inputFilterReturn)
+        {
+            InputFilterReturn = inputFilterReturn;
+            LookupDefinition = inputFilterReturn.LookupDefinition;
         }
 
         public override void OnApplyTemplate()
@@ -116,6 +127,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (_formAdd)
             {
                 ViewModel.Initialize(TreeViewItem, LookupDefinition);
+            }
+            else
+            {
+                ViewModel.Initialize(InputFilterReturn, LookupDefinition);
             }
 
             SearchForStringControl.Visibility = Visibility.Collapsed;
@@ -173,7 +188,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             FormulaValueTypeLabel.Visibility = Visibility.Collapsed;
             FormulaValueTypeComboBox.Visibility = Visibility.Collapsed;
 
-            if (_formAdd)
+            //if (_formAdd)
             {
                 SetupControlNew();
             }
@@ -182,16 +197,16 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private void SetupControlNew()
         {
-            switch (TreeViewItem.Type)
+            switch (ViewModel.Type)
             {
                 case TreeViewType.Field:
-                    if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    if (ViewModel.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
                         SearchForAutoFillControl.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        switch (TreeViewItem.FieldDefinition.FieldDataType)
+                        switch (ViewModel.FieldDefinition.FieldDataType)
                         {
                             case FieldDataTypes.String:
                                 SearchForStringControl.Visibility = Visibility.Visible;
@@ -203,7 +218,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                                 SearchForDecimalControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.DateTime:
-                                var dateField = TreeViewItem.FieldDefinition as DateFieldDefinition;
+                                var dateField = ViewModel.FieldDefinition as DateFieldDefinition;
                                 SearchForDateControl.Visibility = Visibility.Visible;
                                 var dateType = DateFormatTypes.DateOnly;
                                 switch (dateField.DateType)

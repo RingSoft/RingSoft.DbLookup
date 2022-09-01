@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
@@ -148,6 +150,24 @@ namespace RingSoft.DbLookup
             };
             GetAutoFillText?.Invoke(this, request);
 
+            if (request.ReturnValue == null)
+            {
+                if (tableDefinition?.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    var query = new SelectQuery(tableDefinition.TableName);
+                    query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName);
+                    query.AddWhereItem(tableDefinition.PrimaryKeyFields[0].FieldName, Conditions.Equals, idValue);
+
+                    var result = tableDefinition.Context.DataProcessor.GetData(query);
+                    if (result.ResultCode == GetDataResultCodes.Success)
+                    {
+                        var text = result.DataSet.Tables[0].Rows[0]
+                            .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
+                        var primaryKeyValue = new PrimaryKeyValue(tableDefinition);
+                        return new AutoFillValue(primaryKeyValue, text);
+                    }
+                }
+            }
             return request.ReturnValue;
         }
     }

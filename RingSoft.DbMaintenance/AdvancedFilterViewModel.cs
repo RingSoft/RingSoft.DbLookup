@@ -531,8 +531,6 @@ namespace RingSoft.DbMaintenance
                         result.FieldDefinition = ParentFieldDefinition;
                     }
 
-                    GetParentFieldDefinition(result);
-
                     result.Formula = Formula;
                     result.FormulaDisplayValue = FormulaDisplayValue;
                     result.FormulaValueType = FormulaValueType;
@@ -543,18 +541,6 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private void GetParentFieldDefinition(AdvancedFilterReturn result)
-        {
-            if (_formAdd)
-            {
-                result.PrimaryTableName = Table;
-
-                //if (_formAdd && TreeViewItem.Parent != null)
-                //{
-                //    result.PrimaryFieldDefinition = TreeViewItem.Parent.FieldDefinition;
-                //}
-            }
-        }
 
         private void GetSearchValue(FieldDataTypes fieldDataType, AdvancedFilterReturn result)
         {

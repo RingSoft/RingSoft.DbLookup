@@ -29,20 +29,20 @@ namespace RingSoft.DbLookup.App.Library.EfCore
                     .GetPrimaryKeyValueFromEntity(employee);
                 return new AutoFillValue(primaryKeyValue, employee.FirstName + " " + employee.LastName);
             }
-            else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
-            {
-                var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(idValue);
-                var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers
-                    .GetPrimaryKeyValueFromEntity(customer);
-                return new AutoFillValue(primaryKeyValue, customer.CustomerID);
-            }
-            else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Shippers)
-            {
-                var shipVia = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetShipper(idValue.ToInt());
-                var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Shippers
-                    .GetPrimaryKeyValueFromEntity(shipVia);
-                return new AutoFillValue(primaryKeyValue, shipVia.CompanyName);
-            }
+            //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
+            //{
+            //    var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(idValue);
+            //    var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers
+            //        .GetPrimaryKeyValueFromEntity(customer);
+            //    return new AutoFillValue(primaryKeyValue, customer.CustomerID);
+            //}
+            //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Shippers)
+            //{
+            //    var shipVia = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetShipper(idValue.ToInt());
+            //    var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Shippers
+            //        .GetPrimaryKeyValueFromEntity(shipVia);
+            //    return new AutoFillValue(primaryKeyValue, shipVia.CompanyName);
+            //}
             else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
             {
                 var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(idValue.ToInt(), false);
@@ -52,16 +52,13 @@ namespace RingSoft.DbLookup.App.Library.EfCore
                 var orderDateField = orderTable.GetFieldDefinition(p => p.OrderDate);
                 return new AutoFillValue(primaryKeyValue, orderDateField.FormatValue(order.OrderDate.ToString()) + " - " + order.CustomerID);
             }
-            else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
-            {
-                var product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(idValue.ToInt());
-                var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products
-                    .GetPrimaryKeyValueFromEntity(product);
-                return new AutoFillValue(primaryKeyValue, product.ProductName);
-            }
-            {
-                
-            }
+            //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
+            //{
+            //    var product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(idValue.ToInt());
+            //    var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products
+            //        .GetPrimaryKeyValueFromEntity(product);
+            //    return new AutoFillValue(primaryKeyValue, product.ProductName);
+            //}
             return base.OnAutoFillTextRequest(tableDefinition, idValue);
         }
     }

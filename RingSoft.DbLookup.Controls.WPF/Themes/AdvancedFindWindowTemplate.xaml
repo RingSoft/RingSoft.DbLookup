@@ -102,7 +102,7 @@
                                 <deg:DataEntryGrid Grid.Row="5" Grid.Column="4" Manager="{Binding FiltersManager}" DataEntryCanUserAddRows="False" >
                                     <deg:DataEntryGrid.Columns>
 
-                                        <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50"/>
+                                        <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50" Alignment="Center"/>
 
                                         <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.TableColumnId}" Width="150"/>
 
@@ -110,7 +110,7 @@
 
                                         <deg:DataEntryGridTextColumn Header="Search For" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.SearchColumnId}" Width="300"/>
 
-                                        <deg:DataEntryGridTextColumn Header=")" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.RightParenthesesColumnId}" Width="50"/>
+                                        <deg:DataEntryGridTextColumn Header=")" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.RightParenthesesColumnId}" Width="50" Alignment="Center"/>
 
                                         <deg:DataEntryGridTextColumn Header="End Logic" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.EndLogicColumnId}" Width="100"/>
 

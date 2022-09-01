@@ -379,7 +379,7 @@ namespace RingSoft.DbMaintenance
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
 
-            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+            ResetLookup();
         }
 
         private void LoadTree()
@@ -507,7 +507,7 @@ namespace RingSoft.DbMaintenance
 
             if (LookupDefinition != null)
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Reset);
+                ResetLookup();
             }
 
             ColumnsManager.SetupForNewRecord();
@@ -573,7 +573,7 @@ namespace RingSoft.DbMaintenance
                     throw new ArgumentOutOfRangeException();
             }
 
-            LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
+            ResetLookup();
         }
 
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
@@ -890,12 +890,13 @@ namespace RingSoft.DbMaintenance
 
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
-            LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
+            ResetLookup();
         }
 
         public void ResetLookup()
         {
-            LookupCommand = GetLookupCommand(LookupCommands.Reset);
+            if (FiltersManager.ValidateParentheses())
+                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
         }
 
         private void ShowFromFormulaEditor()

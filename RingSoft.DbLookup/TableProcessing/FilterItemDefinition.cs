@@ -35,7 +35,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The left parentheses count.
         /// </value>
-        public int LeftParenthesesCount { get; internal set; }
+        public int LeftParenthesesCount { get; set; }
 
         /// <summary>
         /// Gets the right parentheses count.
@@ -43,7 +43,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The right parentheses count.
         /// </value>
-        public int RightParenthesesCount { get; internal set; }
+        public int RightParenthesesCount { get; set; }
 
         /// <summary>
         /// Gets the end logic.

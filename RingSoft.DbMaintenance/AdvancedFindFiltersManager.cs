@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
@@ -163,6 +164,28 @@ namespace RingSoft.DbMaintenance
                 Grid?.RefreshGridView();
 
             }
+        }
+
+        public bool ValidateParentheses()
+        {
+            var result = true;
+            var leftParentheses = 0;
+            var rightParentheses = 0;
+
+            foreach (var filterRow in Rows.OfType<AdvancedFindFilterRow>())
+            {
+                leftParentheses += filterRow.LeftParenthesesCount;
+                rightParentheses += filterRow.RightParenthesesCount;
+            }
+
+            if (leftParentheses != rightParentheses)
+            {
+                var caption = "Left Parentheses/Right Parentheses Count Mismatch";
+                var title = "Parentheses Mismatch";
+                ControlsGlobals.UserInterface.ShowMessageBox(caption, title, RsMessageBoxIcons.Exclamation);
+                result = false;
+            }
+            return result;
         }
     }
 }

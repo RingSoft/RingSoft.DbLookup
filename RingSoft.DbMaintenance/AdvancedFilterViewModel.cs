@@ -336,7 +336,7 @@ namespace RingSoft.DbMaintenance
             }
 
             Initialize(lookupDefinition);
-            Condition = filterReturn.Condition;
+            //Condition = filterReturn.Condition;
             
             if (filterReturn.PrimaryFieldDefinition != null)
             {
@@ -356,7 +356,6 @@ namespace RingSoft.DbMaintenance
                 return;
             }
 
-            Condition = FilterReturn.Condition;
             FieldDataTypes fieldDataType = FieldDataTypes.String;
             switch (Type)
             {
@@ -365,13 +364,15 @@ namespace RingSoft.DbMaintenance
                     break;
                 case TreeViewType.Formula:
                     Formula = FilterReturn.Formula;
-                    fieldDataType = FilterReturn.FormulaValueType;
+                    FormulaValueType = fieldDataType = FilterReturn.FormulaValueType;
                     FormulaDisplayValue = FilterReturn.FormulaDisplayValue;
 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            Condition = FilterReturn.Condition;
 
             switch (fieldDataType)
             {
@@ -380,7 +381,7 @@ namespace RingSoft.DbMaintenance
                     StringSearchValue = FilterReturn.SearchValue;
                     break;
                 case FieldDataTypes.Integer:
-                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
                         SearchValueAutoFillValue =
                             LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(

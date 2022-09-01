@@ -114,6 +114,7 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.LeftParentheses:
                     var leftParenthesesValue = value as DataEntryGridTextCellProps;
                     LeftParenthesesCount = (byte) leftParenthesesValue.Text.Length;
+                    FilterItemDefinition.LeftParenthesesCount = LeftParenthesesCount;
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.Search:
                     var filterProps = value as AdvancedFindFilterCellProps;
@@ -126,30 +127,30 @@ namespace RingSoft.DbMaintenance
                     {
                         formulaFilter.Condition = filterProps.FilterReturn.Condition;
                         Condition = filterProps.FilterReturn.Condition;
-                        formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
+                        FormulaDataType = formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
                         SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
                         var formula = filterProps.FilterReturn.Formula;
-                        formulaFilter.Formula = filterProps.FilterReturn.Formula;
+                        Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
                         
                         FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
                     }
                     MakeSearchValueText();
-                    Manager.Grid?.UpdateRow(this);
-                    Manager.ViewModel.ResetLookup();
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
                     var rightParenthesesValue = value as DataEntryGridTextCellProps;
                     RightParenthesesCount = (byte) rightParenthesesValue.Text.Length;
+                    FilterItemDefinition.RightParenthesesCount = RightParenthesesCount;
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.EndLogic:
                     var endLogicsValue = value as DataEntryGridTextComboBoxCellProps;
                     EndLogics = (EndLogics) endLogicsValue.SelectedItem.NumericValue;
                     FilterItemDefinition.EndLogic = (EndLogics)EndLogics;
-                    Manager.ViewModel.ResetLookup();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            Manager.Grid?.UpdateRow(this);
+            Manager.ViewModel.ResetLookup();
 
             base.SetCellValue(value);
         }

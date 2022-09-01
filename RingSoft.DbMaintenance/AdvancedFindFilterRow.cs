@@ -132,10 +132,6 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            var filterReturn = new AdvancedFilterReturn();
-            filterReturn.Condition = Condition;
-            filterReturn.SearchValue = SearchValue;
-
             LeftParenthesesCount = entity.LeftParentheses;
             var table = entity.TableName;
             var field = entity.FieldName;
@@ -149,26 +145,48 @@ namespace RingSoft.DbMaintenance
                 fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.PropertyName == field);
             }
 
+            FieldDefinition = fieldDefinition;
+
             PrimaryTable = entity.PrimaryTableName;
-            if (!entity.Formula.IsNullOrEmpty())
-                filterReturn.PrimaryTableName = Table = PrimaryTable;
-            //Field = fieldDefinition.Description;
-
-            filterReturn.FieldDefinition = fieldDefinition;
-
-
-            filterReturn.Condition = (Conditions)entity.Operand;
-            filterReturn.SearchValue = entity.SearchForValue;
+            Formula = entity.Formula;
+            if (!Formula.IsNullOrEmpty())
+                Table = PrimaryTable;
 
             RightParenthesesCount = entity.RightParentheses;
-            EndLogics = (EndLogics) entity.EndLogic;
-            filterReturn.Formula = entity.Formula;
-            filterReturn.FormulaValueType = (FieldDataTypes)entity.FormulaDataType;
-            filterReturn.FormulaDisplayValue = entity.FormulaDisplayValue;
-            
+            EndLogics = (EndLogics)entity.EndLogic;
+            Condition = (Conditions)entity.Operand;
+
+            SearchValue = entity.SearchForValue;
+            FormulaDataType = (FieldDataTypes) entity.FormulaDataType;
+            FormulaDisplayValue = entity.FormulaDisplayValue;
+
+            var filterReturn = MakeFilterReturn();
 
             LoadFromFilterReturn(filterReturn);
             //MakeSearchValueText();
+        }
+
+        private AdvancedFilterReturn MakeFilterReturn()
+        {
+            var filterReturn = new AdvancedFilterReturn();
+            filterReturn.Condition = Condition;
+            filterReturn.SearchValue = SearchValue;
+
+            if (!Formula.IsNullOrEmpty())
+            {
+                filterReturn.PrimaryTableName = Table;
+            }
+
+            filterReturn.FieldDefinition = FieldDefinition;
+
+
+            filterReturn.Condition = Condition;
+            filterReturn.SearchValue = SearchValue;
+
+            filterReturn.Formula = Formula;
+            filterReturn.FormulaValueType = FormulaDataType;
+            filterReturn.FormulaDisplayValue = FormulaDisplayValue;
+            return filterReturn;
         }
 
         public override bool ValidateRow()

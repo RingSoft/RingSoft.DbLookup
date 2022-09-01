@@ -304,8 +304,11 @@ namespace RingSoft.DbMaintenance
             set => BoolComboBoxItem = BoolComboBoxSetup.GetItem(value == true ? 1 : 0);
         }
 
-        public TreeViewItem TreeViewItem { get; set; }
+        //public TreeViewItem TreeViewItem { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
+        public FieldDefinition FieldDefinition { get; set; }
+        public FieldDefinition ParentFieldDefinition { get; set; }
+        public TreeViewType Type { get; set; }
 
         private TextComboBoxControlSetup _stringFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
@@ -313,114 +316,52 @@ namespace RingSoft.DbMaintenance
 
         private bool _formAdd;
 
+        public void Initialize(AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
+        {
+            Initialize(lookupDefinition);
+            Table = filterReturn.FieldDefinition.TableDefinition.Description;
+            Field = filterReturn.FieldDefinition.Description;
+            Condition = filterReturn.Condition;
+
+            if (filterReturn.Formula.IsNullOrEmpty()) 
+            {
+                
+            }
+        }
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
+            Type = treeViewItem.Type;
+            FieldDefinition = treeViewItem.FieldDefinition;
+            Initialize(lookupDefinition);
             _formAdd = true;
-            LookupDefinition = lookupDefinition;
-            TreeViewItem = treeViewItem;
-            FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
-            DateSearchValue = null;
-            BoolComboBoxSetup =new TextComboBoxControlSetup();
-            BoolComboBoxSetup.LoadFromEnum<TrueFalseValues>();
+            //TreeViewItem = treeViewItem;
 
             if (treeViewItem.Parent == null)
             {
                 Table = LookupDefinition.TableDefinition.Description;
-                if (treeViewItem.ParentJoin != null)
-                {
-                    Field = treeViewItem.ParentJoin.FieldJoins[0].PrimaryField.Description;
-                }
-                else
-                {
-                    switch (treeViewItem.Type)
-                    {
-                        case TreeViewType.Field:
-                            Field = treeViewItem.FieldDefinition.Description;
-                            break;
-                        case TreeViewType.Formula:
-                            Field = treeViewItem.Name;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
             }
             else
             {
                 Table = treeViewItem.Parent.Name;
-                Field = treeViewItem.Name;
+                ParentFieldDefinition = treeViewItem.Parent.FieldDefinition;
             }
+            Field = treeViewItem.Name;
 
-            FormulaValueComboBoxSetup.LoadFromEnum<FieldDataTypes>();
-            FormulaValueType = FieldDataTypes.String;
-
-            _stringFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
-            _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
-            
-            _numericFieldComboBoxControlSetup.Items.Remove(
-                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int) Conditions.Contains));
-
-            _numericFieldComboBoxControlSetup.Items.Remove(
-                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.BeginsWith));
-
-            _numericFieldComboBoxControlSetup.Items.Remove(
-                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.EndsWith));
-
-            _numericFieldComboBoxControlSetup.Items.Remove(
-                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.NotContains));
-
-            _memoFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.Equals));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.NotEquals));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.GreaterThan));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.GreaterThanEquals));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.LessThan));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.LessThanEquals));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.BeginsWith));
-
-            _memoFieldComboBoxControlSetup.Items.Remove(
-                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
-                    p.NumericValue == (int)Conditions.EndsWith));
-
-            switch (TreeViewItem.Type)
+            switch (Type)
             {
                 case TreeViewType.Field:
-                    if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
-                        SearchValueAutoFillSetup = new AutoFillSetup(TreeViewItem.FieldDefinition
+                        SearchValueAutoFillSetup = new AutoFillSetup(treeViewItem.FieldDefinition
                             .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
                     }
-                    switch (TreeViewItem.FieldDefinition.FieldDataType)
+                    switch (treeViewItem.FieldDefinition.FieldDataType)
                     {
                         case FieldDataTypes.String:
                             ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
                             break;
                         case FieldDataTypes.Integer:
-                            if (TreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                            if (treeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                             {
                                 ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
                             }
@@ -451,6 +392,82 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private void Initialize( LookupDefinitionBase lookupDefinition)
+        {
+            LookupDefinition = lookupDefinition;
+            switch (Type)
+            {
+                case TreeViewType.Field:
+                    Field = FieldDefinition.Description;
+                    break;
+                case TreeViewType.Formula:
+                    Field = "<Formula>";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
+            DateSearchValue = null;
+            BoolComboBoxSetup = new TextComboBoxControlSetup();
+            BoolComboBoxSetup.LoadFromEnum<TrueFalseValues>();
+
+            FormulaValueComboBoxSetup.LoadFromEnum<FieldDataTypes>();
+            FormulaValueType = FieldDataTypes.String;
+
+            _stringFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+            _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+
+            _numericFieldComboBoxControlSetup.Items.Remove(
+                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.Contains));
+
+            _numericFieldComboBoxControlSetup.Items.Remove(
+                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.BeginsWith));
+
+            _numericFieldComboBoxControlSetup.Items.Remove(
+                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.EndsWith));
+
+            _numericFieldComboBoxControlSetup.Items.Remove(
+                _numericFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.NotContains));
+
+            _memoFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.Equals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.NotEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.GreaterThan));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.GreaterThanEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.LessThan));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.LessThanEquals));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.BeginsWith));
+
+            _memoFieldComboBoxControlSetup.Items.Remove(
+                _memoFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int) Conditions.EndsWith));
+        }
+
         private void SetupConditionForFormula()
         {
             switch (FormulaValueType)
@@ -478,10 +495,9 @@ namespace RingSoft.DbMaintenance
             result.Condition = Condition;
             if (_formAdd)
             {
-                result.FieldDefinition = TreeViewItem.FieldDefinition;
-                var filterType = TreeViewItem.Type;
-                var fieldDefinition = TreeViewItem.FieldDefinition;
-                GetFilterReturnProperties(filterType, fieldDefinition, result);
+                var filterType = Type;
+                
+                GetFilterReturnProperties(filterType, FieldDefinition, result);
             }
 
             return result;
@@ -493,7 +509,7 @@ namespace RingSoft.DbMaintenance
             switch (filterType)
             {
                 case TreeViewType.Field:
-                    if (TreeViewItem.FieldDefinition != null)
+                    result.FieldDefinition = fieldDefinition;
                     {
                         if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
@@ -510,6 +526,10 @@ namespace RingSoft.DbMaintenance
                 case TreeViewType.Formula:
                     //result.FormulaParentFieldDefinition = TreeViewItem.Parent.FieldDefinition;
                     GetSearchValue(FormulaValueType, result);
+                    if (ParentFieldDefinition != null)
+                    {
+                        result.FieldDefinition = ParentFieldDefinition;
+                    }
 
                     GetParentFieldDefinition(result);
 
@@ -529,10 +549,10 @@ namespace RingSoft.DbMaintenance
             {
                 result.PrimaryTableName = Table;
 
-                if (_formAdd && TreeViewItem.Parent != null)
-                {
-                    result.PrimaryFieldDefinition = TreeViewItem.Parent.FieldDefinition;
-                }
+                //if (_formAdd && TreeViewItem.Parent != null)
+                //{
+                //    result.PrimaryFieldDefinition = TreeViewItem.Parent.FieldDefinition;
+                //}
             }
         }
 

@@ -415,6 +415,7 @@ namespace RingSoft.DbMaintenance
             }
 
             TreeRoot = treeItems;
+            FromFormulaCommand.IsEnabled = true;
         }
 
         private void AddTreeItem(TableDefinitionBase table,
@@ -467,10 +468,24 @@ namespace RingSoft.DbMaintenance
         public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
         {
             SelectedTreeViewItem = treeViewItem;
+            if (treeViewItem != null)
+            {
+                AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = true;
+            }
         }
 
         protected override bool ValidateEntity(AdvancedFind entity)
         {
+            if (SelectedTableBoxItem == null)
+            {
+                var message = "You must select a table before saving.";
+                var caption = "Invalid Table";
+                //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                View.OnValidationFail(
+                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Table)
+                    , message, caption);
+                return false;
+            }
             return base.ValidateEntity(entity);
         }
 
@@ -483,10 +498,10 @@ namespace RingSoft.DbMaintenance
                 advancedFind.Name = KeyAutoFillValue.Text;
             }
 
-            advancedFind.FromFormula = LookupDefinition.FromFormula;
+            advancedFind.FromFormula = LookupDefinition?.FromFormula;
 
             advancedFind.Table = TableDefinition.Context.TableDefinitions
-                .FirstOrDefault(p => p.Description == TableComboBoxSetup.Items[TableIndex].TextValue)
+                .FirstOrDefault(p => p.Description == SelectedTableBoxItem?.TextValue)
                 ?.EntityName;
             return advancedFind;
         }
@@ -512,6 +527,9 @@ namespace RingSoft.DbMaintenance
 
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
+            AddColumnCommand.IsEnabled =
+                AddFilterCommand.IsEnabled = false;
+            FromFormulaCommand.IsEnabled = SelectedTableBoxItem != null;
 
             //LoadTree();
         }
@@ -890,6 +908,7 @@ namespace RingSoft.DbMaintenance
 
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
+            AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = false;
             ResetLookup();
         }
 

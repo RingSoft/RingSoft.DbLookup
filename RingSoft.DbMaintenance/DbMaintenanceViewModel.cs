@@ -412,6 +412,17 @@ namespace RingSoft.DbMaintenance
 
             var entity = GetEntityData();
 
+            if (KeyAutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
+            {
+                if (KeyAutoFillSetup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    var message = $"{lookupFieldColumn.FieldDefinition.Description} cannot be empty.";
+                    var caption = "Invalid Key Value";
+                    //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    View.OnValidationFail(lookupFieldColumn.FieldDefinition, message, caption);
+                    return DbMaintenanceResults.ValidationError;
+                }
+            }
             if (!ValidateEntity(entity))
                 return DbMaintenanceResults.ValidationError;
 

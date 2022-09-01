@@ -176,6 +176,15 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             Processor.OnValidationFail(fieldDefinition, text, caption);
+            if (fieldDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Name))
+            {
+                NameAutoFillControl.Focus();
+            }
+
+            if (fieldDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Table))
+            {
+                TableComboBoxControl.Focus();
+            }
         }
 
         public void ResetViewForNewRecord()

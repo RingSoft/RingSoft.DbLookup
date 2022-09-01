@@ -28,6 +28,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return new AdvancedFindFilterHost(grid);
             }
 
+            if (editingControlHostId == AdvancedFilterParenthesesCellProps.ParenthesesHostId)
+            {
+                return new AdvancedFilterParenthesesHost(grid);
+            }
+
 
             return base.GetControlHost(grid, editingControlHostId);
         }

@@ -51,7 +51,8 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindFiltersManager.FilterColumns.LeftParentheses:
-                    return new DataEntryGridTextCellProps(this, columnId, "(".StringDuplicate(LeftParenthesesCount));
+                    return new AdvancedFilterParenthesesCellProps(this, columnId,
+                        "(".StringDuplicate(LeftParenthesesCount), '(');
 
                 case AdvancedFindFiltersManager.FilterColumns.Table:
                     return new DataEntryGridTextCellProps(this, columnId, Table);
@@ -63,7 +64,8 @@ namespace RingSoft.DbMaintenance
                     return new AdvancedFindFilterCellProps(this, columnId, SearchValueText, MakeFilterReturn());
 
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
-                    return new DataEntryGridTextCellProps(this, columnId, ")".StringDuplicate(RightParenthesesCount));
+                    return new AdvancedFilterParenthesesCellProps(this, columnId,
+                        ")".StringDuplicate(RightParenthesesCount), ')');
 
                 case AdvancedFindFiltersManager.FilterColumns.EndLogic:
                     if (EndLogics == null)

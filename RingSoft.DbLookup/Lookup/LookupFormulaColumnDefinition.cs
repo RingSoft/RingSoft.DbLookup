@@ -81,7 +81,11 @@ namespace RingSoft.DbLookup.Lookup
                     alias = LookupDefinition.TableDefinition.TableName;
                 }
 
-                return _formula.Replace("{Alias}", alias);
+                if (!_formula.IsNullOrEmpty())
+                {
+                    return _formula.Replace("{Alias}", alias);
+                }
+                return string.Empty;
             }
             set
             {

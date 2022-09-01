@@ -42,7 +42,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public Border Border { get; set; }
         public TextComboBoxControl FieldDataTypeComboBox { get; set; }
+        public Label FormatTypeLabel { get; set; }
         public TextComboBoxControl FormatTypeComboBox { get; set; }
+        public DataEntryMemoEditor MemoEditor { get; set; }
 
         public string ParentTable { get; set; }
         public string ParentField { get; set; }
@@ -63,7 +65,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             FieldDataTypeComboBox = GetTemplateChild(nameof(FieldDataTypeComboBox)) as TextComboBoxControl;
+            FormatTypeLabel = GetTemplateChild(nameof(FormatTypeLabel)) as Label;
             FormatTypeComboBox = GetTemplateChild(nameof(FormatTypeComboBox)) as TextComboBoxControl;
+            MemoEditor = GetTemplateChild(nameof(MemoEditor)) as DataEntryMemoEditor;
 
             base.OnApplyTemplate();
 
@@ -73,12 +77,53 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ViewModel.Field = ParentField;
             ViewModel.DataType = DataType;
 
+            SetDecimalFormatType();
+            FieldDataTypeComboBox.SelectionChanged += (sender, args) => { SetDecimalFormatType(); };
+
             if (DataType == FieldDataTypes.Decimal)
             {
                 ViewModel.DecimalFormatType = DecimalFormat;
             }
             FieldDataTypeComboBox.SelectionChanged += FieldDataTypeComboBox_SelectionChanged;
             MemoEditor.CollapseDateButton();
+        }
+
+        private void SetDecimalFormatType()
+        {
+            if (ViewModel.DataType == FieldDataTypes.Decimal)
+            {
+                FormatTypeComboBox.Visibility = Visibility.Visible;
+                FormatTypeLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                FormatTypeComboBox.Visibility = Visibility.Collapsed;
+                FormatTypeLabel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        protected override bool Validate()
+        {
+            if (FormatTypeComboBox.Visibility == Visibility.Visible && ViewModel.DecimalFormatComboBoxItem == null)
+            {
+                var message = "You must select a data format type.";
+                var caption = "Invalid Data Format Type";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                FormatTypeComboBox.Focus();
+                return false;
+
+            }
+
+            if (MemoEditor.Text.IsNullOrEmpty())
+            {
+                var message = "Formula cannot be empty.";
+                var caption = "Invalid Formula";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                MemoEditor.TextBox.Focus();
+                return false;
+            }
+
+            return base.Validate();
         }
 
         private void FieldDataTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -124,6 +124,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
 
+            ViewModel.OnValidationFail += ViewModel_OnValidationFail;
+
             if (_formAdd)
             {
                 ViewModel.Initialize(TreeViewItem, LookupDefinition);
@@ -179,8 +181,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             OKButton.Click += (sender, args) =>
             {
                 FilterReturn = ViewModel.GetAdvancedFilterReturn();
-                DialogResult = true;
-                Close();
+                if (ViewModel.Validate(FilterReturn))
+                {
+                    DialogResult = true;
+                    Close();
+                }
             };
 
             CancelButton.Click += (sender, args) => Close();
@@ -193,6 +198,60 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SetupControlNew();
             }
             base.OnApplyTemplate();
+        }
+
+        private void ViewModel_OnValidationFail(object sender, ValidationFailArgs e)
+        {
+            switch (e.Control)
+            {
+                case ValidationFailControls.Condition:
+                    ConditionComboBox.Focus();
+                    break;
+                case ValidationFailControls.SearchValue:
+                    SearchValueFailFocus();
+                    break;
+                case ValidationFailControls.Formula:
+                    MemoEditor.TextBox.Focus();
+                    break;
+                case ValidationFailControls.FormulaDisplayValue:
+                    DisplayControl.Focus();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SearchValueFailFocus()
+        {
+            if (SearchForStringControl.Visibility == Visibility.Visible)
+            {
+                SearchForStringControl.Focus();
+            }
+
+            if (SearchForAutoFillControl.Visibility == Visibility.Visible)
+            {
+                SearchForAutoFillControl.Focus();
+            }
+
+            if (SearchForDecimalControl.Visibility == Visibility.Visible)
+            {
+                SearchForDecimalControl.Focus();
+            }
+
+            if (SearchForIntegerControl.Visibility == Visibility.Visible)
+            {
+                SearchForIntegerControl.Focus();
+            }
+
+            if (SearchForDateControl.Visibility == Visibility.Visible)
+            {
+                SearchForDateControl.Focus();
+            }
+
+            if (SearchForBoolComboBoxControl.Visibility == Visibility.Visible)
+            {
+                SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
+            }
         }
 
         private void SetupControlNew()

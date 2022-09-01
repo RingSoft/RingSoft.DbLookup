@@ -17,6 +17,19 @@ namespace RingSoft.DbMaintenance
         True = 1,
         False = 0
     }
+
+    public enum ValidationFailControls
+    {
+        Condition = 1,
+        SearchValue = 2,
+        Formula = 3,
+        FormulaDisplayValue = 4,
+    }
+
+    public class ValidationFailArgs
+    {
+        public ValidationFailControls Control { get; set; }
+    }
     public class AdvancedFilterReturn
     {
         public FieldDefinition FieldDefinition { get; set; }
@@ -127,9 +140,16 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        public Conditions Condition
+        public Conditions? Condition
         {
-            get => (Conditions)ConditionComboBoxItem.NumericValue;
+            get
+            {
+                if (ConditionComboBoxItem == null)
+                {
+                    return null;
+                }
+                return (Conditions)ConditionComboBoxItem.NumericValue;
+            }
             set => ConditionComboBoxItem = ConditionComboBoxSetup.GetItem((int)value);
         }
 
@@ -312,6 +332,8 @@ namespace RingSoft.DbMaintenance
         public FieldDefinition FieldDefinition { get; set; }
         public FieldDefinition ParentFieldDefinition { get; set; }
         public TreeViewType Type { get; set; }
+
+        public event EventHandler <ValidationFailArgs> OnValidationFail;
 
         private TextComboBoxControlSetup _stringFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
@@ -572,7 +594,11 @@ namespace RingSoft.DbMaintenance
         public AdvancedFilterReturn GetAdvancedFilterReturn()
         {
             var result = new AdvancedFilterReturn();
-            result.Condition = Condition;
+            if (Condition.HasValue)
+            {
+                result.Condition = Condition.Value;
+            }
+
             var filterType = Type;
             result.LookupDefinition = LookupDefinition;
             GetFilterReturnProperties(filterType, FieldDefinition, result);
@@ -658,6 +684,51 @@ namespace RingSoft.DbMaintenance
                         break;
                 }
             }
+        }
+
+        public bool Validate(AdvancedFilterReturn filterReturn)
+        {
+            if (Type == TreeViewType.Formula)
+            {
+                if (Formula.IsNullOrEmpty())
+                {
+                    var message = "Formula cannot be empty.";
+                    var caption = "Invalid Formula";
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    OnValidationFail?.Invoke(this, new ValidationFailArgs() {Control = ValidationFailControls.Formula});
+                    return false;
+                }
+
+                if (FormulaDisplayValue.IsNullOrEmpty())
+                {
+                    var message = "Display Value cannot be empty.";
+                    var caption = "Invalid Display Value";
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    OnValidationFail?.Invoke(this,
+                        new ValidationFailArgs() {Control = ValidationFailControls.FormulaDisplayValue});
+                    return false;
+                }
+            }
+
+            if (Condition == null)
+            {
+                var message = "You must select a condition.";
+                var caption = "Invalid Condition";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                OnValidationFail?.Invoke(this, new ValidationFailArgs() { Control = ValidationFailControls.Condition });
+                return false;
+            }
+
+            if (filterReturn.SearchValue.IsNullOrEmpty())
+            {
+                var message = "Search Value cannot be empty.";
+                var caption = "Invalid Search Value";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                OnValidationFail?.Invoke(this, new ValidationFailArgs() { Control = ValidationFailControls.SearchValue });
+                return false;
+            }
+
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

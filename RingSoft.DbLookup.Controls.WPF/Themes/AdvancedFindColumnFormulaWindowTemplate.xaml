@@ -50,7 +50,7 @@
 
                             <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" x:Name="FieldDataTypeComboBox" Setup="{Binding DataTypeComboBoxControlSetup}" SelectedItem="{Binding DataTypeComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="200"/>
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Data Format Type"/>
+                            <Label Grid.Row="3" Grid.Column="0" x:Name="FormatTypeLabel" Content="Data Format Type"/>
 
                             <dec:TextComboBoxControl Grid.Row="3" Grid.Column="1" x:Name="FormatTypeComboBox" Setup="{Binding DecimalFormatComboSetup}" SelectedItem="{Binding DecimalFormatComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="200"/>
 

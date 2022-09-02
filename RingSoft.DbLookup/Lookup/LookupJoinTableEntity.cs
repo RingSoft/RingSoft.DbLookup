@@ -133,7 +133,8 @@ namespace RingSoft.DbLookup.Lookup
             var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TParentRelatedEntity>(_lookupEntityDefinition);
             returnEntity.JoinDefinition = JoinDefinition;
             returnEntity.SetJoinDefinition(parentTable, relatedPropertyName, relatedPropertyType);
-            
+            returnEntity.ParentField = ParentField;
+
             return returnEntity;
         }
     }

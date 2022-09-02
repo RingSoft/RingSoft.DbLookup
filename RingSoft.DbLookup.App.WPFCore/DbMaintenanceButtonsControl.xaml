@@ -18,6 +18,7 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -29,6 +30,9 @@
             <Button x:Name="FindButton" Content="_Find" Grid.Column="0" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
             <Button x:Name="SelectButton" Content="Se_lect" Grid.Column="1" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
             <Button x:Name="CloseButton" Content="_Close" Grid.Column="2" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
+
+            <DockPanel Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" x:Name="AdditionalButtonsPanel" HorizontalAlignment="Left"/>
+
         </Grid>
         <Button x:Name="NextButton" Grid.Column="2" Content="--&gt;" IsTabStop="False"/>
     </Grid>

@@ -78,6 +78,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 JoinQueryTableAlias = sourceFieldColumn.JoinQueryTableAlias;
                 Distinct = sourceFieldColumn.Distinct;
+                ParentField = sourceFieldColumn.ParentField;
             }
             base.CopyFrom(source);
         }

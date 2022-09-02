@@ -105,20 +105,27 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
         {
-            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetButtonsControl();
             _addViewArgs = addViewArgs;
 
         }
 
         public AdvancedFindWindow()
         {
-            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetButtonsControl();
+            
         }
 
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
             ViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
+            ViewModel.CreateCommands();
+            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetAdvancedFindButtonsControl(ViewModel);
+            if (ButtonsPanel != null)
+            {
+                ButtonsPanel.Children.Add(_buttonsControl);
+                ButtonsPanel.UpdateLayout();
+            }
+
             ViewModel.View = this;
             Processor.Initialize(this, _buttonsControl, ViewModel, this);
             if (_addViewArgs != null)
@@ -146,12 +153,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
             NotificationButton = GetTemplateChild(nameof(NotificationButton)) as NotificationButton;
-
-            if (ButtonsPanel != null)
-            {
-                ButtonsPanel.Children.Add(_buttonsControl);
-                ButtonsPanel.UpdateLayout();
-            }
 
             if (LookupControl != null)
             {

@@ -61,10 +61,19 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var formulaAutoFillControl = (AutoFillMemoCellControl)obj;
-            if (formulaAutoFillControl.TextBox != null)
+            var autoFillMemoCellControl = (AutoFillMemoCellControl)obj;
+            if (autoFillMemoCellControl.TextBox != null)
             {
-                formulaAutoFillControl.TextBox.Height = formulaAutoFillControl.ActualHeight;
+                var height = autoFillMemoCellControl.Height;
+                if (height > autoFillMemoCellControl.ActualHeight)
+                {
+                    height = autoFillMemoCellControl.ActualHeight;
+                }
+                autoFillMemoCellControl.TextBox.Height = height;
+                if (autoFillMemoCellControl.Button != null)
+                {
+                    autoFillMemoCellControl.Button.Height = height;
+                }
             }
         }
 

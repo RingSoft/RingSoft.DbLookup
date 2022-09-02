@@ -907,7 +907,7 @@ namespace RingSoft.DbMaintenance
             }
 
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
-            ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
+            ColumnsManager.LoadFromLookupDefinition(lookupDefinition);
             AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = false;
             ResetLookup();
         }

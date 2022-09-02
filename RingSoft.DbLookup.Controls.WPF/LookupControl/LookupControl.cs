@@ -22,6 +22,11 @@ using RingSoft.DbMaintenance;
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    public enum AdvancedFindModes
+    {
+        Enabled = 1,
+        Disabled = 2,
+        Done = 3 }
     /// <summary>
     /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
     ///
@@ -282,6 +287,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _designSortIndex = -1;
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
+        private AdvancedFindModes _advancedFindMode = AdvancedFindModes.Done;
 
         static LookupControl()
         {
@@ -330,6 +336,21 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (AdvancedFindButton != null) 
                     AdvancedFindButton.Visibility = Visibility.Collapsed;
             }
+
+            switch (_advancedFindMode)
+            {
+                case AdvancedFindModes.Enabled:
+                    AdvancedFindButton.IsEnabled = true;
+                    break;
+                case AdvancedFindModes.Disabled:
+                    AdvancedFindButton.IsEnabled = false;
+                    break;
+                case AdvancedFindModes.Done:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            _advancedFindMode = AdvancedFindModes.Done;
             base.OnApplyTemplate();
         }
 
@@ -1606,12 +1627,22 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case LookupCommands.Clear:
                         ClearLookupControl();
                         LookupDefinition.FilterDefinition.ClearFixedFilters();
-                        AdvancedFindButton.IsEnabled = false;
+                        if (AdvancedFindButton != null) 
+                            AdvancedFindButton.IsEnabled = false;
+                        else
+                        {
+                            _advancedFindMode = AdvancedFindModes.Disabled;
+                        }
                         break;
                     case LookupCommands.Refresh:
                         this.AddViewParameter = command.AddViewParameter;
                         RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
-                        AdvancedFindButton.IsEnabled = true;
+                        if (AdvancedFindButton != null) 
+                            AdvancedFindButton.IsEnabled = true;
+                        else
+                        {
+                            _advancedFindMode = AdvancedFindModes.Enabled;
+                        }
                         break;
                     case LookupCommands.AddModify:
                         var addViewParameter = command.AddViewParameter;
@@ -1635,7 +1666,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                             _currentPageSize = GetPageSize();
                             RefreshData(true);
                             _resettingSearchFor = false;
-                            AdvancedFindButton.IsEnabled = true;
+                            if (AdvancedFindButton != null) 
+                                AdvancedFindButton.IsEnabled = true;
+                            else
+                            {
+                                _advancedFindMode = AdvancedFindModes.Enabled;
+                            }
                         }
 
                         //LookupData.GetInitData();

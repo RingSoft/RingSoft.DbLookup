@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
@@ -80,6 +81,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 if (_description.IsNullOrEmpty())
                 {
                     var newDescription = PropertyName.ConvertPropertyNameToDescription();
+
+                    if (newDescription.EndsWith("Id", true, CultureInfo.CurrentCulture) &&
+                        ParentJoinForeignKeyDefinition != null)
+                    {
+                        newDescription = newDescription.Replace("Id", "", true, CultureInfo.CurrentCulture);
+                    }
+
                     return newDescription;
                 }
                 return _description;

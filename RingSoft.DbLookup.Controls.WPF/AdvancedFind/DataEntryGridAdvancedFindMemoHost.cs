@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;

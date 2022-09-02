@@ -39,6 +39,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             View = view;
 
+            
             PreviousButton.Command = ViewModel.PreviousCommand;
             NewButton.Command = ViewModel.NewCommand;
             SaveButton.Command = ViewModel.SaveCommand;

@@ -1,4 +1,6 @@
-﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+﻿using System.Windows;
+using System.Windows.Controls;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 using System.Windows.Input;
@@ -60,7 +62,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;
         }
-
+        
         protected override void OnControlLoaded(AutoFillControl control, DataEntryGridEditingCellProps cellProps,
             DataEntryGridCellStyle cellStyle)
         {

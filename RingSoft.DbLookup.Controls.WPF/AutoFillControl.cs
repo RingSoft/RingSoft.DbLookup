@@ -255,6 +255,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        private static void HeightChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.TextBox != null)
+            {
+                var height = autoFillControl.Height;
+                if (height > autoFillControl.ActualHeight)
+                {
+                    height = autoFillControl.ActualHeight;
+                }
+                autoFillControl.TextBox.Height = height;
+                if (autoFillControl.Button != null)
+                {
+                    autoFillControl.Button.Height = height;
+                }
+            }
+        }
+
+
         private static void ForegroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -382,6 +402,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             ForegroundProperty.OverrideMetadata(typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(ForegroundChangedCallback));
+
+            HeightProperty.OverrideMetadata(typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(HeightChangedCallback));
+
         }
 
         public AutoFillControl()

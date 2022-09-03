@@ -153,6 +153,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler<LookupAddViewArgs> LookupView;
 
         public event EventHandler RefreshData;
+        public event EventHandler ApplyNewLookup;
 
         private bool _allowView;
 
@@ -194,11 +195,16 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupControl_Loaded(object sender, RoutedEventArgs e)
         {
-            LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
-            LookupControl.LookupData.LookupView += LookupData_LookupView;
+            Reload();
             LookupControl.RefreshData(false, _initialSearchFor, null, 
                 true, InitialSearchForPrimaryKeyValue);
             LookupControl.AddViewParameter = AddViewParameter;
+        }
+
+        public void Reload()
+        {
+            LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
+            LookupControl.LookupData.LookupView += LookupData_LookupView;
         }
 
         public override void OnApplyTemplate()
@@ -349,6 +355,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             base.SetControlReadOnlyMode(control, readOnlyValue);
+        }
+
+        public void ApplyNewLookupDefinition(LookupDefinitionBase lookupDefinition)
+        {
+            LookupDefinition = lookupDefinition;
+            ApplyNewLookup?.Invoke(this, new EventArgs());
         }
     }
 }

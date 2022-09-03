@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <value>
         /// The lookup definition.
         /// </value>
-        public LookupDefinitionBase LookupDefinition { get; }
+        public LookupDefinitionBase LookupDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether allow the lookup window to add-on-the-fly.

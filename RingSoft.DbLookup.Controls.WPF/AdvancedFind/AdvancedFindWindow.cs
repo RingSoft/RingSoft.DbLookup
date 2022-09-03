@@ -49,6 +49,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public TextComboBoxControl TableComboBoxControl { get; set; }
         public LookupControl LookupControl { get; set; }
         public NotificationButton NotificationButton { get; set; }
+        public bool ApplyToLookupDefinition { get; set; }
 
         public AdvancedFindViewModel ViewModel { get; set; }
 
@@ -96,6 +97,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 _notifyFromFormulaExists = value;
                 NotificationButton.MemoHasText = value;
             }
+        }
+
+        public void ApplyToLookup()
+        {
+            ApplyToLookupDefinition = true;
+            Close();
         }
 
         static AdvancedFindWindow()

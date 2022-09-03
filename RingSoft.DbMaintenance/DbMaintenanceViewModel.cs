@@ -74,13 +74,6 @@ namespace RingSoft.DbMaintenance
         /// </value>
         public bool RecordsChanged { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the find button lookup definition.  By default it is the Lookup definition attached to the Table definition.
-        /// </summary>
-        /// <value>
-        /// The find button lookup definition.
-        /// </value>
-        protected LookupDefinitionBase FindButtonLookupDefinition { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the base entity is loading from the database or is being cleared.

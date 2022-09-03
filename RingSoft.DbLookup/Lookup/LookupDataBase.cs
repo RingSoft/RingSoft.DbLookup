@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The lookup definition.
         /// </value>
-        public LookupDefinitionBase LookupDefinition { get; }
+        public LookupDefinitionBase LookupDefinition { get; set; }
 
         /// <summary>
         /// Gets the lookup control.

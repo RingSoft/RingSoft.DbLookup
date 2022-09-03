@@ -151,6 +151,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
             lookupWindow.Owner = MaintenanceWindow;
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
+            lookupWindow.ApplyNewLookup += (sender, args) =>
+                ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
             lookupWindow.ShowDialog();
         }
 

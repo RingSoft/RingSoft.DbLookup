@@ -1558,6 +1558,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             advancedFindWindow.ShowInTaskbar = false;
             
             advancedFindWindow.ShowDialog();
+            if (advancedFindWindow.ApplyToLookupDefinition)
+            {
+                var lookupWindow = this.GetParentOfType<LookupWindow>();
+                if (lookupWindow != null)
+                {
+                    lookupWindow.ApplyNewLookupDefinition(advancedFindWindow.ViewModel.LookupDefinition);
+                }
+                LookupDefinition = advancedFindWindow.ViewModel.LookupDefinition;
+                Command = new LookupCommand(LookupCommands.Reset);
+                if (lookupWindow != null)
+                {
+                    lookupWindow.Reload();
+                }
+            }
         }
 
         private void SetupRecordCount()

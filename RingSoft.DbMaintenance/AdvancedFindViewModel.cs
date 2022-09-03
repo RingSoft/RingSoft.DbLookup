@@ -26,6 +26,8 @@ namespace RingSoft.DbMaintenance
         AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition);
 
         bool NotifyFromFormulaExists { get; set; }
+
+        void ApplyToLookup();
     }
 
     public enum TreeViewType
@@ -293,6 +295,8 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand ImportDefaultLookupCommand { get; set; }
 
+        public RelayCommand ApplyToLookupCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -350,6 +354,8 @@ namespace RingSoft.DbMaintenance
             FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
 
             ImportDefaultLookupCommand = new RelayCommand(ImportDefaultLookup);
+
+            ApplyToLookupCommand = new RelayCommand(ApplyToLookup);
         }
 
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,
@@ -842,8 +848,12 @@ namespace RingSoft.DbMaintenance
                         }
                         else
                         {
-                            foundTreeItem = FindFieldInTree(TreeRoot, parent.ParentField);
-                            
+                            if (parent is LookupJoin lookupJoin)
+                            {
+                                foundTreeItem = FindFieldInTree(TreeRoot,
+                                    lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField);
+                            }
+
                         }
                         break;
                     default:
@@ -1063,6 +1073,12 @@ namespace RingSoft.DbMaintenance
                 var lookupDefinition= LookupDefinition.TableDefinition.LookupDefinition;
                 LoadFromLookupDefinition(lookupDefinition);
             }
+        }
+
+        private void ApplyToLookup()
+        {
+            LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
+            View.ApplyToLookup();
         }
     }
 }

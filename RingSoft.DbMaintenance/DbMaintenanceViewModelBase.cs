@@ -95,6 +95,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets or sets the find button lookup definition.  By default it is the Lookup definition attached to the Table definition.
+        /// </summary>
+        /// <value>
+        /// The find button lookup definition.
+        /// </value>
+        public LookupDefinitionBase FindButtonLookupDefinition { get; set; }
+
+
         private AutoFillValue _keyAutoFillValue;
         /// <summary>
         /// Gets or sets the unique key control auto fill value.

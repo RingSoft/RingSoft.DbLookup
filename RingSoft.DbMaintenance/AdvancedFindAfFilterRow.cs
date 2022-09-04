@@ -79,8 +79,8 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindFiltersManager.FilterColumns.Search:
-                    var autoFillProps = value as DataEntryGridAutoFillCellProps;
-                    AutoFillValue = autoFillProps.AutoFillValue;
+                    if (value is DataEntryGridAutoFillCellProps autoFillProps) 
+                        AutoFillValue = autoFillProps.AutoFillValue;
                     break;
             }
 

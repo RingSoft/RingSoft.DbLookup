@@ -30,14 +30,6 @@ namespace RingSoft.DbMaintenance
         void ApplyToLookup();
     }
 
-    public enum TreeViewType
-    {
-        Field = 0,
-        AdvancedFind = 1,
-        Formula = 2,
-        ForeignTable = 3
-    }
-
     public class TreeViewFormulaData
     {
         public string Formula { get; set; }
@@ -118,13 +110,6 @@ namespace RingSoft.DbMaintenance
         }
     }
 
-    public class TreeViewItems : List<TreeViewItem>
-    {
-        public string Name { get; set; }
-        public TreeViewType Type { get; set; }
-        public FieldDefinition FieldDefinition { get; set; }
-        public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
-    }
 
     public class AdvancedFindViewModel : DbMaintenanceViewModel<AdvancedFind>
     {
@@ -401,11 +386,11 @@ namespace RingSoft.DbMaintenance
             CreateLookupDefinition();
             var treeItems = new ObservableCollection<TreeViewItem>();
 
-            if (TableIndex >= 0)
+            if (SelectedTableBoxItem != null)
             {
                 var table = SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions
                     .FirstOrDefault(
-                        f => f.Description == TableComboBoxSetup.Items[TableIndex].TextValue);
+                        f => f.Description == SelectedTableBoxItem.TextValue);
                 var fields = table.FieldDefinitions;
 
                 foreach (var field in fields.OrderBy(p => p.Description))

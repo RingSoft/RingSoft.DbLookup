@@ -4,7 +4,8 @@
                     xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                     xmlns:dbm="clr-namespace:RingSoft.DbMaintenance;assembly=RingSoft.DbMaintenance"
                     xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-                    xmlns:deg="clr-namespace:RingSoft.DataEntryControls.WPF.DataEntryGrid;assembly=RingSoft.DataEntryControls.WPF">
+                    xmlns:deg="clr-namespace:RingSoft.DataEntryControls.WPF.DataEntryGrid;assembly=RingSoft.DataEntryControls.WPF"
+                    xmlns:advancedFind="clr-namespace:RingSoft.DbLookup.AdvancedFind;assembly=RingSoft.DbLookup">
 
     <Style TargetType="{x:Type local:AdvancedFindWindow}" BasedOn="{StaticResource {x:Type Window}}" >
         <Setter Property="Template">
@@ -55,7 +56,7 @@
                                 <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" ItemsSource="{Binding TreeRoot}">
                                     <TreeView.ItemTemplate>
 
-                                        <HierarchicalDataTemplate DataType="dbm:TreeViewItems" ItemsSource="{Binding Items}">
+                                        <HierarchicalDataTemplate DataType="advancedFind:TreeViewItems" ItemsSource="{Binding Items}">
                                             <StackPanel>
                                                 <TextBlock Text="{Binding Name}"/>
                                             </StackPanel>

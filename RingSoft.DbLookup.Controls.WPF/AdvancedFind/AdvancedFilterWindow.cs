@@ -52,7 +52,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     /// </summary>
     public class AdvancedFilterWindow : BaseWindow
     {
-        public DbMaintenance.TreeViewItem TreeViewItem { get; set; }
+        public DbLookup.AdvancedFind.TreeViewItem TreeViewItem { get; set; }
         public AdvancedFilterReturn InputFilterReturn { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
         public AdvancedFilterViewModel ViewModel { get; set; }
@@ -88,7 +88,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Loaded += (sender, args) => ViewModel.LoadWindow();
         }
-        public void Initialize(DbMaintenance.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
+        public void Initialize(DbLookup.AdvancedFind.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             _formAdd = true;
             TreeViewItem = treeViewItem;

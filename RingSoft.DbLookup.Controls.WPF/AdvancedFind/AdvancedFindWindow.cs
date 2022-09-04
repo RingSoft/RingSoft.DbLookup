@@ -6,8 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
-using TreeViewItem = RingSoft.DbMaintenance.TreeViewItem;
+using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -216,7 +217,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
             else
             {
-                editor.ParentTable = formulaTreeViewItem.ViewModel.LookupDefinition.TableDefinition.Description;
+                //editor.ParentTable = formulaTreeViewItem.ViewModel.LookupDefinition.TableDefinition.Description;
                 editor.ParentField = "<Lookup Root>";
             }
 

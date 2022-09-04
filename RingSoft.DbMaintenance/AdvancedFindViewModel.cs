@@ -30,20 +30,20 @@ namespace RingSoft.DbMaintenance
         void ApplyToLookup();
     }
 
-    public class TreeViewFormulaData
-    {
-        public string Formula { get; set; }
+    //public class TreeViewFormulaData
+    //{
+    //    public string Formula { get; set; }
 
-        public FieldDataTypes DataType { get; set; }
+    //    public FieldDataTypes DataType { get; set; }
 
-        public DecimalEditFormatTypes DecimalFormatType { get; set; }
-    }
+    //    public DecimalEditFormatTypes DecimalFormatType { get; set; }
+    //}
 
-    public class ProcessIncludeResult
-    {
-        public LookupJoin LookupJoin { get; set; }
-        public LookupColumnDefinitionBase ColumnDefinition { get; set; }
-    }
+    //public class ProcessIncludeResult
+    //{
+    //    public LookupJoin LookupJoin { get; set; }
+    //    public LookupColumnDefinitionBase ColumnDefinition { get; set; }
+    //}
 
     public class AdvancedFindInput
     {
@@ -54,61 +54,61 @@ namespace RingSoft.DbMaintenance
     }
 
 
-    public class TreeViewItem : INotifyPropertyChanged
-    {
-        public string Name { get; set; }
-        public TreeViewType Type { get; set; }
-        public FieldDefinition FieldDefinition { get; set; }
-        public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
-        public ForeignKeyDefinition ParentJoin { get; set; }
-        public AdvancedFindViewModel ViewModel { get; set; }
-        public LookupJoin Include { get; set; }
-        public TreeViewItem Parent { get; set; }
-        public TreeViewFormulaData FormulaData { get; set; }
+    //public class TreeViewItem : INotifyPropertyChanged
+    //{
+    //    public string Name { get; set; }
+    //    public TreeViewType Type { get; set; }
+    //    public FieldDefinition FieldDefinition { get; set; }
+    //    public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
+    //    public ForeignKeyDefinition ParentJoin { get; set; }
+    //    public AdvancedFindViewModel ViewModel { get; set; }
+    //    public LookupJoin Include { get; set; }
+    //    public TreeViewItem Parent { get; set; }
+    //    public TreeViewFormulaData FormulaData { get; set; }
 
-        private bool _isSelected;
+    //    private bool _isSelected;
 
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    OnPropertyChanged();
-                    if (_isSelected)
-                    {
-                        SelectedTreeItem = this;
-                    }
-                }
-            }
-        }
+    //    public bool IsSelected
+    //    {
+    //        get { return _isSelected; }
+    //        set
+    //        {
+    //            if (_isSelected != value)
+    //            {
+    //                _isSelected = value;
+    //                OnPropertyChanged();
+    //                if (_isSelected)
+    //                {
+    //                    SelectedTreeItem = this;
+    //                }
+    //            }
+    //        }
+    //    }
 
-        private TreeViewItem _selectedTreeItem;
+    //    private TreeViewItem _selectedTreeItem;
 
-        public TreeViewItem SelectedTreeItem
-        {
-            get => _selectedTreeItem;
-            set
-            {
-                _selectedTreeItem = value;
-                ViewModel.OnTreeViewItemSelected(_selectedTreeItem);
-            }
-        }
+    //    public TreeViewItem SelectedTreeItem
+    //    {
+    //        get => _selectedTreeItem;
+    //        set
+    //        {
+    //            _selectedTreeItem = value;
+    //            ViewModel.OnTreeViewItemSelected(_selectedTreeItem);
+    //        }
+    //    }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+    //    public override string ToString()
+    //    {
+    //        return Name;
+    //    }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+    //    public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+    //    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    //    {
+    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //    }
+    //}
 
 
     public class AdvancedFindViewModel : DbMaintenanceViewModel<AdvancedFind>
@@ -399,7 +399,8 @@ namespace RingSoft.DbMaintenance
                     treeRoot.Name = field.Description;
                     treeRoot.Type = TreeViewType.Field;
                     treeRoot.FieldDefinition = field;
-                    treeRoot.ViewModel = this;
+                    //treeRoot.ViewModel = this;
+                    treeRoot.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null &&
                         field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
@@ -428,7 +429,8 @@ namespace RingSoft.DbMaintenance
                 treeChildItem.Name = tableFieldDefinition.Description;
                 treeChildItem.Type = TreeViewType.Field;
                 treeChildItem.FieldDefinition = tableFieldDefinition;
-                treeChildItem.ViewModel = this;
+                //treeChildItem.ViewModel = this;
+                treeChildItem.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
                 treeChildItem.Parent = parent;
                 if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
@@ -454,15 +456,20 @@ namespace RingSoft.DbMaintenance
             AddAdvancedFindToTree(treeItems, parent);
         }
 
+        private void TreeChildItem_SelectedTreeItemChanged(object sender, TreeViewItem e)
+        {
+            OnTreeViewItemSelected(e);
+        }
+
         private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
         {
             var formulaTreeItem = new TreeViewItem
             {
                 Name = "<Formula>",
                 Type = TreeViewType.Formula,
-                ViewModel = this,
                 Parent = parent
             };
+            formulaTreeItem.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
             treeItems.Add(formulaTreeItem);
         }
 
@@ -472,9 +479,10 @@ namespace RingSoft.DbMaintenance
             {
                 Name = "<Advanced Find>",
                 Type = TreeViewType.AdvancedFind,
-                ViewModel = this,
+                //ViewModel = this,
                 Parent = parent
             };
+            result.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
 
             treeViewItems.Add(result);
         }

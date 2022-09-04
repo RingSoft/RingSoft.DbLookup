@@ -1,6 +1,8 @@
 ﻿using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.DataProcessor;
 using System.Windows;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -16,6 +18,25 @@ namespace RingSoft.DbLookup.Controls.WPF
                 dataProcessResultWindow.ShowDialog();
             });
         }
+
+        public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
+        {
+            if (e.LookupData.LookupDefinition.TableDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds)
+            {
+                ShowAddOnTheFlyWindow(new AdvancedFindWindow(), e);
+            }
+        }
+
+        private void ShowAddOnTheFlyWindow(AdvancedFindWindow maintenanceWindow, LookupAddViewArgs e)
+        {
+            if (e.OwnerWindow is Window ownerWindow)
+                maintenanceWindow.Owner = ownerWindow;
+
+            maintenanceWindow.ShowInTaskbar = false;
+            maintenanceWindow.Loaded += (sender, args) => maintenanceWindow.Processor.InitializeFromLookupData(e);
+            maintenanceWindow.ShowDialog();
+        }
+
     }
     public static class LookupControlsGlobals
     {

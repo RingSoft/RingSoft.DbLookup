@@ -135,10 +135,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             ViewModel.View = this;
             Processor.Initialize(this, _buttonsControl, ViewModel, this);
-            if (_addViewArgs != null)
+            Processor.LookupAddView += (sender, args) =>
             {
-                Processor.InitializeFromLookupData(_addViewArgs);
-                if (_addViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+                if (args.InputParameter is AdvancedFindInput advancedFindInput)
                 {
                     TableComboBoxControl.IsEnabled = false;
                     if (!advancedFindInput.LookupWidth.Equals(0))
@@ -148,6 +147,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         LookupControl.HorizontalAlignment = HorizontalAlignment.Left;
                     }
                 }
+            };
+            if (_addViewArgs != null)
+            {
+                Processor.InitializeFromLookupData(_addViewArgs);
+
             }
             Processor.CheckAddOnFlyMode();
         }

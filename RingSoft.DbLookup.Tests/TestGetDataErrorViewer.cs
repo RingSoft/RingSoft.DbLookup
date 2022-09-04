@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Tests
 {
@@ -10,6 +11,11 @@ namespace RingSoft.DbLookup.Tests
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             Debug.WriteLine($"GetDataError!  {dataProcessResult.Message}");
+        }
+
+        public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
+        {
+            
         }
 
         public void SetWindowCursor(WindowCursorTypes cursor)

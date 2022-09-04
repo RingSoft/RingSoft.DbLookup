@@ -184,6 +184,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             _splashWindow.ShowErrorMessageBox(dataProcessResult.Message, "Database Connection Error!");
         }
 
+        public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
+        {
+            
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

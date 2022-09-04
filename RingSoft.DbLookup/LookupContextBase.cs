@@ -127,6 +127,7 @@ namespace RingSoft.DbLookup
         /// <param name="e">The lookup add view arguments.</param>
         public virtual void OnAddViewLookup(LookupAddViewArgs e)
         {
+            DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
             LookupAddView?.Invoke(this, e);
         }
 

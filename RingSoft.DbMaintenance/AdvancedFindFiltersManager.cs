@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
@@ -186,6 +188,19 @@ namespace RingSoft.DbMaintenance
                 result = false;
             }
             return result;
+        }
+
+        public void AddAdvancedFindFilterRow(FieldDefinition field = null)
+        {
+            var row = new AdvancedFindAfFilterRow(this, field);
+            AddRow(row);
+            if (Rows.Count > 1)
+            {
+                var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+                advancedRows[Rows.Count - 2].FinishOffFilter(false, false);
+            }
+            Grid?.RefreshGridView();
+            Grid?.GotoCell(row, (int)FilterColumns.Search);
         }
     }
 }

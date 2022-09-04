@@ -1,5 +1,6 @@
 ﻿using System;
 using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup
 {
@@ -13,6 +14,8 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <param name="dataProcessResult">The data process result.</param>
         void ShowDataProcessResult(DataProcessResult dataProcessResult);
+
+        void ShowAddOnTheFlyWindow(LookupAddViewArgs e);
     }
 
     internal class DefaultUserInterface : IDbLookupUserInterface
@@ -20,6 +23,11 @@ namespace RingSoft.DbLookup
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             Console.WriteLine(dataProcessResult.Message);
+        }
+
+        public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
+        {
+            
         }
     }
 }

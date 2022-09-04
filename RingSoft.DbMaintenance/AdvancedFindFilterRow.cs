@@ -17,8 +17,8 @@ namespace RingSoft.DbMaintenance
         public AdvancedFindFiltersManager Manager { get; set; }
 
         public byte LeftParenthesesCount { get; set; }
-        public string Table { get; private set; }
-        public string Field { get; private set; }
+        public string Table { get; set; }
+        public string Field { get; set; }
         public string SearchValueText { get; private set; }
         public byte RightParenthesesCount { get; set; }
         public EndLogics? EndLogics { get; private set; }
@@ -30,8 +30,8 @@ namespace RingSoft.DbMaintenance
         public string Formula { get; private set; }
         public FieldDataTypes FormulaDataType { get; private set; }
         public bool IsFixed { get; private set; }
-        public string PrimaryTable { get; private set; }
-        public string PrimaryField { get; private set; }
+        public string PrimaryTable { get; set; }
+        public string PrimaryField { get; set; }
         public FieldDefinition ParentFieldDefinition { get; private set; }
         public string FormulaDisplayValue { get; private set; }
 
@@ -177,15 +177,7 @@ namespace RingSoft.DbMaintenance
             PrimaryTable = entity.PrimaryTableName;
             PrimaryField = entity.PrimaryFieldName;
 
-            if (!PrimaryTable.IsNullOrEmpty() && !PrimaryField.IsNullOrEmpty())
-            {
-                var primaryTableDefinition =
-                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.TableName == PrimaryTable);
-
-                ParentFieldDefinition = primaryTableDefinition.FieldDefinitions
-                        .FirstOrDefault(p => p.FieldName == PrimaryField);
-            }
+            MakeParentField();
 
             Formula = entity.Formula;
             if (!Formula.IsNullOrEmpty())
@@ -203,6 +195,19 @@ namespace RingSoft.DbMaintenance
 
             LoadFromFilterReturn(filterReturn);
             //MakeSearchValueText();
+        }
+
+        protected void MakeParentField()
+        {
+            if (!PrimaryTable.IsNullOrEmpty() && !PrimaryField.IsNullOrEmpty())
+            {
+                var primaryTableDefinition =
+                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == PrimaryTable);
+
+                ParentFieldDefinition = primaryTableDefinition.FieldDefinitions
+                    .FirstOrDefault(p => p.FieldName == PrimaryField);
+            }
         }
 
         private AdvancedFilterReturn MakeFilterReturn()
@@ -510,7 +515,7 @@ namespace RingSoft.DbMaintenance
             }
 
             MakeSearchValueText();
-            Manager?.Grid.RefreshGridView();
+            Manager?.Grid?.RefreshGridView();
             //Manager.ViewModel.ResetLookup();
         }
 
@@ -600,7 +605,8 @@ namespace RingSoft.DbMaintenance
 
         public override void Dispose()
         {
-            FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
+            if (FilterItemDefinition != null)
+                FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
             base.Dispose();
         }
     }

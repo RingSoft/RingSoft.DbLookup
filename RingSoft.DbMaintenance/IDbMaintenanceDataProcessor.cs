@@ -9,6 +9,8 @@ namespace RingSoft.DbMaintenance
 {
     public interface IDbMaintenanceDataProcessor
     {
+        event EventHandler<LookupAddViewArgs> LookupAddView;
+
         void InitializeFromLookupData(LookupAddViewArgs e);
 
         void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption);

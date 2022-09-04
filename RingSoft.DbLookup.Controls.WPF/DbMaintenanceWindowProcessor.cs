@@ -116,11 +116,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             KeyAutoFillControl.SetReadOnlyMode(false);
         }
 
+        public event EventHandler<LookupAddViewArgs> LookupAddView;
+
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)
         {
             if (ViewModel != null)
             {
                 ViewModel.InitializeFromLookupData(e);
+                LookupAddView?.Invoke(this, e);
             }
         }
 

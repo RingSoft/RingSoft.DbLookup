@@ -301,8 +301,9 @@ namespace RingSoft.DbMaintenance
 
         public IAdvancedFindView View { get; set; }
 
+        public AdvancedFindInput AdvancedFindInput { get; set; }
+
         private List<LookupJoin> _includes = new List<LookupJoin>();
-        private AdvancedFindInput _input = null;
 
         protected override void Initialize()
         {
@@ -310,7 +311,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (LookupAddViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
                 {
-                    _input = advancedFindInput;
+                    AdvancedFindInput = advancedFindInput;
                 }
             }
 
@@ -331,16 +332,16 @@ namespace RingSoft.DbMaintenance
             ColumnsManager = new AdvancedFindColumnsManager(this);
             FiltersManager = new AdvancedFindFiltersManager(this);
 
-            if (_input != null)
+            if (AdvancedFindInput != null)
             {
-                TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == _input.LockTable.Description);
+                TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == AdvancedFindInput.LockTable.Description);
                 ViewLookupDefinition.FilterDefinition.AddFixedFilter(
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p =>
                         p.Table), Conditions.Equals,
-                    _input.LockTable.EntityName);
-                LoadFromLookupDefinition(_input.LookupDefinition);
+                    AdvancedFindInput.LockTable.EntityName);
+                if (AdvancedFindInput.LookupDefinition != null)
+                    LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
             }
-
 
             base.Initialize();
         }
@@ -349,7 +350,7 @@ namespace RingSoft.DbMaintenance
         {
             AddColumnCommand = new RelayCommand(AddColumn);
 
-            AddFilterCommand = new RelayCommand(ShowFilterWindow);
+            AddFilterCommand = new RelayCommand(AddFilter);
 
             FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
 
@@ -422,6 +423,7 @@ namespace RingSoft.DbMaintenance
                 }
 
                 AddFormulaToTree(treeItems, null);
+                AddAdvancedFindToTree(treeItems, null);
 
                 LookupCommand = GetLookupCommand(LookupCommands.Clear);
 
@@ -464,6 +466,7 @@ namespace RingSoft.DbMaintenance
             }
 
             AddFormulaToTree(treeItems, parent);
+            AddAdvancedFindToTree(treeItems, parent);
         }
 
         private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
@@ -476,6 +479,19 @@ namespace RingSoft.DbMaintenance
                 Parent = parent
             };
             treeItems.Add(formulaTreeItem);
+        }
+
+        private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent)
+        {
+            var result = new TreeViewItem
+            {
+                Name = "<Advanced Find>",
+                Type = TreeViewType.AdvancedFind,
+                ViewModel = this,
+                Parent = parent
+            };
+
+            treeViewItems.Add(result);
         }
 
         public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
@@ -522,7 +538,7 @@ namespace RingSoft.DbMaintenance
         protected override void ClearData()
         {
             AdvancedFindId = 0;
-            if (_input == null || _input.LockTable == null)
+            if (AdvancedFindInput == null || AdvancedFindInput.LockTable == null)
             {
                 TableIndex = -1;
                 SelectedTableBoxItem = null;
@@ -961,7 +977,7 @@ namespace RingSoft.DbMaintenance
         public void ResetLookup()
         {
             if (FiltersManager.ValidateParentheses())
-                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, _input?.InputParameter);
+                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
         }
 
         private void ShowFromFormulaEditor()
@@ -975,6 +991,21 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private void AddFilter()
+        {
+            switch (SelectedTreeViewItem.Type)
+            {
+                case TreeViewType.AdvancedFind:
+                    FiltersManager.AddAdvancedFindFilterRow(SelectedTreeViewItem.Parent?.FieldDefinition);
+                    break;
+                case TreeViewType.Field:
+                case TreeViewType.Formula:
+                    ShowFilterWindow();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
         private void ShowFilterWindow()
         {
             var result = View.ShowAdvancedFilterWindow(SelectedTreeViewItem, LookupDefinition);

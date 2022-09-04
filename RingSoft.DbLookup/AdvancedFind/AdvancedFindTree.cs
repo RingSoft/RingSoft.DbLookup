@@ -44,8 +44,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public LookupJoin Include { get; set; }
         public TreeViewItem Parent { get; set; }
         public TreeViewFormulaData FormulaData { get; set; }
-
-        public event EventHandler<TreeViewItem> SelectedTreeItemChanged;
+        public AdvancedFindTree BaseTree  { get; set; }
 
         private bool _isSelected;
 
@@ -74,7 +73,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             set
             {
                 _selectedTreeItem = value;
-                SelectedTreeItemChanged?.Invoke(this, _selectedTreeItem);
+                BaseTree.OnSelectedTreeItemChanged(_selectedTreeItem);
             }
         }
 
@@ -105,5 +104,12 @@ namespace RingSoft.DbLookup.AdvancedFind
         public LookupDefinitionBase LookupDefinition { get; set; }
 
         public ObservableCollection<TreeViewItem> TreeRoot { get; set; }
+
+        public event EventHandler<TreeViewItem> SelectedTreeItemChanged;
+
+        internal void OnSelectedTreeItemChanged(TreeViewItem selectedItem)
+        {
+            SelectedTreeItemChanged?.Invoke(this, selectedItem);
+        }
     }
 }

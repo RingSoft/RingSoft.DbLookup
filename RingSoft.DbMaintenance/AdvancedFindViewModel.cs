@@ -384,6 +384,8 @@ namespace RingSoft.DbMaintenance
         private void LoadTree()
         {
             CreateLookupDefinition();
+            var advancedTree = new AdvancedFindTree();
+            advancedTree.SelectedTreeItemChanged += (sender, item) => OnTreeViewItemSelected(item);
             var treeItems = new ObservableCollection<TreeViewItem>();
 
             if (SelectedTableBoxItem != null)
@@ -399,17 +401,16 @@ namespace RingSoft.DbMaintenance
                     treeRoot.Name = field.Description;
                     treeRoot.Type = TreeViewType.Field;
                     treeRoot.FieldDefinition = field;
-                    //treeRoot.ViewModel = this;
-                    treeRoot.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
+                    treeRoot.BaseTree = advancedTree;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null &&
                         field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
-                            field.ParentJoinForeignKeyDefinition, treeRoot);
+                            field.ParentJoinForeignKeyDefinition, treeRoot, advancedTree);
                 }
 
-                AddFormulaToTree(treeItems, null);
-                AddAdvancedFindToTree(treeItems, null);
+                AddFormulaToTree(treeItems, null, advancedTree);
+                AddAdvancedFindToTree(treeItems, null, advancedTree);
 
                 LookupCommand = GetLookupCommand(LookupCommands.Clear);
 
@@ -421,7 +422,7 @@ namespace RingSoft.DbMaintenance
 
         private void AddTreeItem(TableDefinitionBase table,
             ObservableCollection<TreeViewItem> treeItems,
-            ForeignKeyDefinition join, TreeViewItem parent)
+            ForeignKeyDefinition join, TreeViewItem parent, AdvancedFindTree baseTree)
         {
             foreach (var tableFieldDefinition in table.FieldDefinitions.OrderBy(p => p.Description))
             {
@@ -430,7 +431,7 @@ namespace RingSoft.DbMaintenance
                 treeChildItem.Type = TreeViewType.Field;
                 treeChildItem.FieldDefinition = tableFieldDefinition;
                 //treeChildItem.ViewModel = this;
-                treeChildItem.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
+                treeChildItem.BaseTree = baseTree;
                 treeChildItem.Parent = parent;
                 if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
@@ -448,12 +449,12 @@ namespace RingSoft.DbMaintenance
 
                     if (tableFieldDefinition.AllowRecursion)
                         AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
-                            treeChildItem.Items, join, treeChildItem);
+                            treeChildItem.Items, join, treeChildItem, baseTree);
                 }
             }
 
-            AddFormulaToTree(treeItems, parent);
-            AddAdvancedFindToTree(treeItems, parent);
+            AddFormulaToTree(treeItems, parent, baseTree);
+            AddAdvancedFindToTree(treeItems, parent, baseTree);
         }
 
         private void TreeChildItem_SelectedTreeItemChanged(object sender, TreeViewItem e)
@@ -461,7 +462,7 @@ namespace RingSoft.DbMaintenance
             OnTreeViewItemSelected(e);
         }
 
-        private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
+        private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent, AdvancedFindTree baseTree)
         {
             var formulaTreeItem = new TreeViewItem
             {
@@ -469,11 +470,11 @@ namespace RingSoft.DbMaintenance
                 Type = TreeViewType.Formula,
                 Parent = parent
             };
-            formulaTreeItem.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
+            formulaTreeItem.BaseTree = baseTree;
             treeItems.Add(formulaTreeItem);
         }
 
-        private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent)
+        private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent, AdvancedFindTree baseTree)
         {
             var result = new TreeViewItem
             {
@@ -482,7 +483,7 @@ namespace RingSoft.DbMaintenance
                 //ViewModel = this,
                 Parent = parent
             };
-            result.SelectedTreeItemChanged += TreeChildItem_SelectedTreeItemChanged;
+            result.BaseTree = baseTree;
 
             treeViewItems.Add(result);
         }

@@ -993,38 +993,7 @@ namespace RingSoft.DbMaintenance
         public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
             bool searchForRootFormula = false, TreeViewItem parentItem = null)
         {
-            TreeViewItem foundTreeViewItem = null;
-            if (!items.Any())
-            {
-                return parentItem;
-            }
-
-            foreach (var treeViewItem in items)
-            {
-                if (treeViewItem.Type == TreeViewType.Field)
-                {
-                    if (treeViewItem.FieldDefinition == fieldDefinition)
-                    {
-                        return treeViewItem;
-                    }
-                    else
-                    {
-                        foundTreeViewItem = FindFieldInTree(treeViewItem.Items, fieldDefinition);
-                        if (foundTreeViewItem != null)
-                        {
-                            return foundTreeViewItem;
-                        }
-
-                    }
-                }
-                else if (treeViewItem.Type == TreeViewType.Formula && searchForRootFormula)
-                {
-                    return treeViewItem;
-                }
-
-            }
-
-            return foundTreeViewItem;
+            return AdvancedFindTree.FindFieldInTree(items, fieldDefinition, searchForRootFormula, parentItem);
         }
 
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,

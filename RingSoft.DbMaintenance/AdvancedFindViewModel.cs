@@ -292,8 +292,6 @@ namespace RingSoft.DbMaintenance
 
         public AdvancedFindTree AdvancedFindTree { get; set; }
 
-        private List<LookupJoin> _includes = new List<LookupJoin>();
-
         protected override void Initialize()
         {
             if (LookupAddViewArgs != null)
@@ -391,8 +389,7 @@ namespace RingSoft.DbMaintenance
         private void LoadTree(string tableName)
         {
             CreateLookupDefinition();
-            AdvancedFindTree.LookupDefinition = LookupDefinition;
-            
+
             FromFormulaCommand.IsEnabled = true;
 
             AdvancedFindTree.LoadTree(tableName);
@@ -555,8 +552,7 @@ namespace RingSoft.DbMaintenance
             {
                 LookupDefinition = null;
             }
-
-            _includes.Clear();
+            AdvancedFindTree.LookupDefinition = LookupDefinition;
         }
 
         protected override bool SaveEntity(AdvancedFind entity)
@@ -602,207 +598,9 @@ namespace RingSoft.DbMaintenance
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
             bool createColumn = true)
         {
-            var result = new ProcessIncludeResult();
-            var childNodes = new List<TreeViewItem>();
-
-            LookupJoin includeJoin = null;
-            var parentTreeItem = selectedItem;
-            while (parentTreeItem.Parent != null)
-            {
-                parentTreeItem = parentTreeItem.Parent;
-                childNodes.Insert(0, parentTreeItem);
-            }
-
-            if (childNodes.IndexOf(selectedItem) == -1 && selectedItem?.FieldDefinition?.ParentJoinForeignKeyDefinition != null)
-            {
-                childNodes.Add(selectedItem);
-            }
-            
-            if (childNodes.Any() == false)
-            {
-                if (createColumn)
-                {
-                    switch (selectedItem.Type)
-                    {
-                        case TreeViewType.Field:
-                            var processResult =
-                                SelectColumnDescription(selectedItem, selectedItem, null, columnCaption);
-                            includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                            result.LookupJoin = includeJoin;
-                            result.ColumnDefinition = processResult.ColumnDefinition;
-                            break;
-                        case TreeViewType.Formula:
-                            var column = LookupDefinition.AddVisibleColumnDefinition(columnCaption,
-                                selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType, "");
-                            result.ColumnDefinition = column;
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-
-                    if (result.ColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
-                    {
-                        if (result.LookupJoin == null)
-                        {
-                            formulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
-                        }
-                        else
-                        {
-                            formulaColumn.PrimaryTable =
-                                result.LookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-
-                            formulaColumn.PrimaryField =
-                                result.LookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-                        }
-                    }
-                }
-            }
-
-            foreach (var child in childNodes)
-            {
-                if (childNodes.IndexOf(child) == 0)
-                {
-                    var newInclude = LookupDefinition.Include(child.FieldDefinition);
-                    includeJoin = ProcessInclude(includeJoin, newInclude);
-                    result.LookupJoin = includeJoin;
-                }
-
-                if (childNodes.IndexOf(child) == childNodes.Count - 1)
-                {
-                    if (childNodes.Count > 1)
-                    {
-                        var newInclude = includeJoin.Include(child.FieldDefinition);
-                        includeJoin = ProcessInclude(includeJoin, newInclude);
-                        result.LookupJoin = includeJoin;
-                    }
-
-                    if (createColumn)
-                    {
-                        switch (selectedItem.Type)
-                        {
-                            case TreeViewType.Field:
-                                var processResult =
-                                    SelectColumnDescription(selectedItem, child, includeJoin, columnCaption);
-                                includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                                result.LookupJoin = includeJoin; 
-                                result.ColumnDefinition = processResult.ColumnDefinition;
-                                break;
-                            case TreeViewType.Formula:
-                                 var  column= includeJoin.AddVisibleColumnDefinition(columnCaption,
-                                    selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType);
-                                result.ColumnDefinition = column;
-
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
-                        if (result.ColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
-                        {
-                            formulaColumn.PrimaryTable =
-                                includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-
-                            formulaColumn.PrimaryField =
-                                includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-                        }
-                    }
-                }
-                else if (childNodes.IndexOf(child) != 0)
-                {
-                    var newInclude = includeJoin.Include(child.FieldDefinition);
-                    includeJoin = ProcessInclude(includeJoin, newInclude);
-                    result.LookupJoin = includeJoin;
-                }
-            }
-
-            return result;
+            return AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn);
         }
 
-        private LookupJoin ProcessInclude(LookupJoin includeJoin, LookupJoin newInclude)
-        {
-            if (newInclude != null)
-            {
-                if (_includes.FirstOrDefault(p => p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias) == null)
-                {
-                    _includes.Add(newInclude);
-                    includeJoin = newInclude;
-                }
-                else
-                {
-                    includeJoin = _includes.FirstOrDefault(p =>
-                        p.JoinDefinition.Alias == newInclude.JoinDefinition.Alias);
-                }
-            }
-
-            return includeJoin;
-        }
-
-        private ProcessIncludeResult SelectColumnDescription(TreeViewItem selectedTreeViewItem, TreeViewItem child,
-            LookupJoin includeJoin, string caption)
-        {
-            LookupColumnDefinitionBase column = null;
-            if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-            {
-                var textField = selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition
-                    .FieldJoins[0].ForeignField;
-
-                //if (includeJoin != null)
-                //    includeJoin = includeJoin.Include(textField);
-                //else
-                //{
-                //    includeJoin = LookupDefinition.Include(textField);
-                //}
-
-                if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
-                        .PrimaryField.TableDefinition.LookupDefinition
-                        .InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
-                {
-                    textField = lookupFieldColumn.FieldDefinition;
-                    column = includeJoin.AddVisibleColumnDefinition(caption, textField, 20);
-                }
-                else if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
-                             .PrimaryField.TableDefinition.LookupDefinition
-                             .InitialSortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
-                {
-                    lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
-                    var formula = lookupFormulaColumn.OriginalFormula;
-                    column = includeJoin.AddVisibleColumnDefinition(caption,
-                        formula, 20, lookupFormulaColumn.DataType);
-                }
-            }
-            else
-            {
-                if (includeJoin != null)
-                {
-                    column = includeJoin.AddVisibleColumnDefinition(caption,
-                        selectedTreeViewItem.FieldDefinition,
-                        20);
-                }
-                else
-                {
-                    if (child.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                    {
-                        includeJoin = LookupDefinition.Include(child.FieldDefinition.ParentJoinForeignKeyDefinition
-                            .FieldJoins[0].ForeignField);
-                        column = includeJoin.AddVisibleColumnDefinition(caption, selectedTreeViewItem.FieldDefinition,
-                            20);
-                    }
-                    else
-                    {
-                        column = LookupDefinition.AddVisibleColumnDefinition(caption, child.FieldDefinition, 20, "");
-                    }
-                }
-            }
-
-            var processResult = new ProcessIncludeResult
-            {
-                ColumnDefinition = column,
-                LookupJoin = includeJoin
-            };
-            return processResult;
-        }
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
@@ -823,6 +621,8 @@ namespace RingSoft.DbMaintenance
                 var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
                 TreeViewItem foundTreeItem = null;
                 var createColumn = true;
+                LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
+                LookupColumnDefinitionBase newLookupColumnDefinition = null;
                 switch (visibleColumn.ColumnType)
                 {
                     case LookupColumnTypes.Field:
@@ -834,8 +634,10 @@ namespace RingSoft.DbMaintenance
                             var newFormulaColumn = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
                                 lookupFormulaColumn.OriginalFormula, visibleColumn.PercentWidth,
                                 lookupFormulaColumn.DataType, "");
+                            newLookupFormulaColumnDefinition = newFormulaColumn;
                             createColumn = false;
                             newFormulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
+
                         }
                         else
                         {
@@ -852,7 +654,20 @@ namespace RingSoft.DbMaintenance
                 }
 
                 if (createColumn)
-                    MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn);
+                {
+                    var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn);
+                    newLookupColumnDefinition = includeResult.ColumnDefinition;
+                }
+
+
+                if (newLookupFormulaColumnDefinition != null && lookupFormulaColumn != null)
+                {
+                    newLookupColumnDefinition = newLookupFormulaColumnDefinition;
+                    newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
+                }
+
+                if (visibleColumn.ContentTemplateId != null)
+                    newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
             }
             //    LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
             //    LookupColumnDefinitionBase newLookupColumnDefinition = null;
@@ -999,45 +814,7 @@ namespace RingSoft.DbMaintenance
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
-            var items = TreeRoot;
-            var foundTreeViewItem = FindFieldInTree(items, fieldDefinition);
-            var alreadySearchedRoot = false;
-            if (!formula.IsNullOrEmpty())
-            {
-                if (foundTreeViewItem == null)
-                {
-                    foundTreeViewItem = FindFieldInTree(items, fieldDefinition, true);
-                    alreadySearchedRoot = true;
-                }
-
-                foundTreeViewItem.FormulaData = new TreeViewFormulaData();
-                foundTreeViewItem.FormulaData.Formula = formula;
-                if (fieldDataType != null)
-                {
-                    foundTreeViewItem.FormulaData.DataType = (FieldDataTypes) fieldDataType;
-                }
-
-                if (decimalEditFormat != null)
-                {
-                    foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes) decimalEditFormat;
-                }
-            }
-
-            if (!formula.IsNullOrEmpty() && !alreadySearchedRoot)
-            {
-                foundTreeViewItem =
-                    FindFieldInTree(foundTreeViewItem.Items, fieldDefinition, true, foundTreeViewItem);
-
-                foundTreeViewItem.FormulaData = new TreeViewFormulaData();
-                foundTreeViewItem.FormulaData.Formula = formula;
-                if (fieldDataType != null)
-                {
-                    foundTreeViewItem.FormulaData.DataType = (FieldDataTypes) fieldDataType;
-                    foundTreeViewItem.FormulaData.DecimalFormatType = (DecimalEditFormatTypes) decimalEditFormat;
-                }
-            }
-
-            return foundTreeViewItem;
+            return AdvancedFindTree.ProcessFoundTreeViewItem(formula, fieldDefinition, fieldDataType, decimalEditFormat);
         }
 
         private void ImportDefaultLookup()

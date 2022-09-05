@@ -182,7 +182,9 @@ namespace RingSoft.DbMaintenance
                 _selectedTableBoxItem = value;
                 if (_selectedTableBoxItem != null)
                 {
-                    LoadTree();
+                    var table = TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.Description == _selectedTableBoxItem.TextValue);
+                    LoadTree(table.TableName);
                 }
 
                 OnPropertyChanged();
@@ -288,6 +290,8 @@ namespace RingSoft.DbMaintenance
 
         public AdvancedFindInput AdvancedFindInput { get; set; }
 
+        public AdvancedFindTree AdvancedFindTree { get; set; }
+
         private List<LookupJoin> _includes = new List<LookupJoin>();
 
         protected override void Initialize()
@@ -313,6 +317,9 @@ namespace RingSoft.DbMaintenance
 
                 index++;
             }
+
+            AdvancedFindTree = new AdvancedFindTree(LookupDefinition);
+            AdvancedFindTree.SelectedTreeItemChanged += (sender, item) => OnTreeViewItemSelected(item);
 
             ColumnsManager = new AdvancedFindColumnsManager(this);
             FiltersManager = new AdvancedFindFiltersManager(this);
@@ -381,112 +388,87 @@ namespace RingSoft.DbMaintenance
             ResetLookup();
         }
 
-        private void LoadTree()
+        private void LoadTree(string tableName)
         {
             CreateLookupDefinition();
-            var advancedTree = new AdvancedFindTree();
-            advancedTree.SelectedTreeItemChanged += (sender, item) => OnTreeViewItemSelected(item);
-            var treeItems = new ObservableCollection<TreeViewItem>();
-
-            if (SelectedTableBoxItem != null)
-            {
-                var table = SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions
-                    .FirstOrDefault(
-                        f => f.Description == SelectedTableBoxItem.TextValue);
-                var fields = table.FieldDefinitions;
-
-                foreach (var field in fields.OrderBy(p => p.Description))
-                {
-                    var treeRoot = new TreeViewItem();
-                    treeRoot.Name = field.Description;
-                    treeRoot.Type = TreeViewType.Field;
-                    treeRoot.FieldDefinition = field;
-                    treeRoot.BaseTree = advancedTree;
-                    treeItems.Add(treeRoot);
-                    if (field.ParentJoinForeignKeyDefinition != null &&
-                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
-                        AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
-                            field.ParentJoinForeignKeyDefinition, treeRoot, advancedTree);
-                }
-
-                AddFormulaToTree(treeItems, null, advancedTree);
-                AddAdvancedFindToTree(treeItems, null, advancedTree);
-
-                LookupCommand = GetLookupCommand(LookupCommands.Clear);
-
-            }
-
-            TreeRoot = treeItems;
+            AdvancedFindTree.LookupDefinition = LookupDefinition;
+            
             FromFormulaCommand.IsEnabled = true;
+
+            AdvancedFindTree.LoadTree(tableName);
+
+            TreeRoot = AdvancedFindTree.TreeRoot;
+
+            LookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
-        private void AddTreeItem(TableDefinitionBase table,
-            ObservableCollection<TreeViewItem> treeItems,
-            ForeignKeyDefinition join, TreeViewItem parent, AdvancedFindTree baseTree)
-        {
-            foreach (var tableFieldDefinition in table.FieldDefinitions.OrderBy(p => p.Description))
-            {
-                var treeChildItem = new TreeViewItem();
-                treeChildItem.Name = tableFieldDefinition.Description;
-                treeChildItem.Type = TreeViewType.Field;
-                treeChildItem.FieldDefinition = tableFieldDefinition;
-                //treeChildItem.ViewModel = this;
-                treeChildItem.BaseTree = baseTree;
-                treeChildItem.Parent = parent;
-                if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null)
-                {
-                    join = tableFieldDefinition.ParentJoinForeignKeyDefinition;
-                }
+        //private void AddTreeItem(TableDefinitionBase table,
+        //    ObservableCollection<TreeViewItem> treeItems,
+        //    ForeignKeyDefinition join, TreeViewItem parent, AdvancedFindTree baseTree)
+        //{
+        //    foreach (var tableFieldDefinition in table.FieldDefinitions.OrderBy(p => p.Description))
+        //    {
+        //        var treeChildItem = new TreeViewItem();
+        //        treeChildItem.Name = tableFieldDefinition.Description;
+        //        treeChildItem.Type = TreeViewType.Field;
+        //        treeChildItem.FieldDefinition = tableFieldDefinition;
+        //        //treeChildItem.ViewModel = this;
+        //        treeChildItem.BaseTree = baseTree;
+        //        treeChildItem.Parent = parent;
+        //        if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null)
+        //        {
+        //            join = tableFieldDefinition.ParentJoinForeignKeyDefinition;
+        //        }
 
-                treeChildItem.ParentJoin = join;
-                treeItems.Add(treeChildItem);
+        //        treeChildItem.ParentJoin = join;
+        //        treeItems.Add(treeChildItem);
 
-                if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
-                    tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
-                {
-                    //treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
-                    //    .FieldJoins[0].PrimaryField;
+        //        if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
+        //            tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+        //        {
+        //            //treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
+        //            //    .FieldJoins[0].PrimaryField;
 
-                    if (tableFieldDefinition.AllowRecursion)
-                        AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
-                            treeChildItem.Items, join, treeChildItem, baseTree);
-                }
-            }
+        //            if (tableFieldDefinition.AllowRecursion)
+        //                AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
+        //                    treeChildItem.Items, join, treeChildItem, baseTree);
+        //        }
+        //    }
 
-            AddFormulaToTree(treeItems, parent, baseTree);
-            AddAdvancedFindToTree(treeItems, parent, baseTree);
-        }
+        //    AddFormulaToTree(treeItems, parent, baseTree);
+        //    AddAdvancedFindToTree(treeItems, parent, baseTree);
+        //}
 
-        private void TreeChildItem_SelectedTreeItemChanged(object sender, TreeViewItem e)
-        {
-            OnTreeViewItemSelected(e);
-        }
+        //private void TreeChildItem_SelectedTreeItemChanged(object sender, TreeViewItem e)
+        //{
+        //    OnTreeViewItemSelected(e);
+        //}
 
-        private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent, AdvancedFindTree baseTree)
-        {
-            var formulaTreeItem = new TreeViewItem
-            {
-                Name = "<Formula>",
-                Type = TreeViewType.Formula,
-                Parent = parent
-            };
-            formulaTreeItem.BaseTree = baseTree;
-            treeItems.Add(formulaTreeItem);
-        }
+        //private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent, AdvancedFindTree baseTree)
+        //{
+        //    var formulaTreeItem = new TreeViewItem
+        //    {
+        //        Name = "<Formula>",
+        //        Type = TreeViewType.Formula,
+        //        Parent = parent
+        //    };
+        //    formulaTreeItem.BaseTree = baseTree;
+        //    treeItems.Add(formulaTreeItem);
+        //}
 
-        private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent, AdvancedFindTree baseTree)
-        {
-            var result = new TreeViewItem
-            {
-                Name = "<Advanced Find>",
-                Type = TreeViewType.AdvancedFind,
-                //ViewModel = this,
-                Parent = parent
-            };
-            result.BaseTree = baseTree;
+        //private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent, AdvancedFindTree baseTree)
+        //{
+        //    var result = new TreeViewItem
+        //    {
+        //        Name = "<Advanced Find>",
+        //        Type = TreeViewType.AdvancedFind,
+        //        //ViewModel = this,
+        //        Parent = parent
+        //    };
+        //    result.BaseTree = baseTree;
 
-            treeViewItems.Add(result);
-        }
+        //    treeViewItems.Add(result);
+        //}
 
         public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
         {
@@ -834,7 +816,6 @@ namespace RingSoft.DbMaintenance
                 View.NotifyFromFormulaExists = false;
             }
 
-            var parentObjects = new List<IJoinParent>();
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 var parent = visibleColumn.ParentObject;

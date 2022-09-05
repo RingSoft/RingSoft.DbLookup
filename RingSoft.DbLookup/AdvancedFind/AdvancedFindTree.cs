@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
@@ -107,9 +108,115 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public event EventHandler<TreeViewItem> SelectedTreeItemChanged;
 
+        public AdvancedFindTree(LookupDefinitionBase lookupDefinition)
+        {
+            LookupDefinition = lookupDefinition;
+        }
+
         internal void OnSelectedTreeItemChanged(TreeViewItem selectedItem)
         {
             SelectedTreeItemChanged?.Invoke(this, selectedItem);
         }
+
+        public void LoadTree(string tableName)
+        {
+            var treeItems = new ObservableCollection<TreeViewItem>();
+
+            if (!tableName.IsNullOrEmpty())
+            {
+                var table = SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions
+                    .FirstOrDefault(
+                        f => f.TableName == tableName);
+                var fields = table.FieldDefinitions;
+
+                foreach (var field in fields.OrderBy(p => p.Description))
+                {
+                    var treeRoot = new TreeViewItem();
+                    treeRoot.Name = field.Description;
+                    treeRoot.Type = TreeViewType.Field;
+                    treeRoot.FieldDefinition = field;
+                    treeRoot.BaseTree = this;
+                    treeItems.Add(treeRoot);
+                    if (field.ParentJoinForeignKeyDefinition != null &&
+                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                        AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
+                            field.ParentJoinForeignKeyDefinition, treeRoot);
+                }
+
+                AddFormulaToTree(treeItems, null);
+                AddAdvancedFindToTree(treeItems, null);
+
+                
+
+            }
+
+            TreeRoot = treeItems;
+
+        }
+
+        private void AddTreeItem(TableDefinitionBase table,
+    ObservableCollection<TreeViewItem> treeItems,
+    ForeignKeyDefinition join, TreeViewItem parent)
+        {
+            foreach (var tableFieldDefinition in table.FieldDefinitions.OrderBy(p => p.Description))
+            {
+                var treeChildItem = new TreeViewItem();
+                treeChildItem.Name = tableFieldDefinition.Description;
+                treeChildItem.Type = TreeViewType.Field;
+                treeChildItem.FieldDefinition = tableFieldDefinition;
+                //treeChildItem.ViewModel = this;
+                treeChildItem.BaseTree = this;
+                treeChildItem.Parent = parent;
+                if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    join = tableFieldDefinition.ParentJoinForeignKeyDefinition;
+                }
+
+                treeChildItem.ParentJoin = join;
+                treeItems.Add(treeChildItem);
+
+                if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
+                    tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                {
+                    //treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
+                    //    .FieldJoins[0].PrimaryField;
+
+                    if (tableFieldDefinition.AllowRecursion)
+                        AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
+                            treeChildItem.Items, join, treeChildItem);
+                }
+            }
+
+            AddFormulaToTree(treeItems, parent);
+            AddAdvancedFindToTree(treeItems, parent);
+        }
+
+
+        private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
+        {
+            var formulaTreeItem = new TreeViewItem
+            {
+                Name = "<Formula>",
+                Type = TreeViewType.Formula,
+                Parent = parent
+            };
+            formulaTreeItem.BaseTree = this;
+            treeItems.Add(formulaTreeItem);
+        }
+
+        private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent)
+        {
+            var result = new TreeViewItem
+            {
+                Name = "<Advanced Find>",
+                Type = TreeViewType.AdvancedFind,
+                //ViewModel = this,
+                Parent = parent
+            };
+            result.BaseTree = this;
+
+            treeViewItems.Add(result);
+        }
+
     }
 }

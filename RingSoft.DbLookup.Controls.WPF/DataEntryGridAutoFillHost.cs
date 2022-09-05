@@ -29,6 +29,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public override bool HasDataChanged()
         {
+            if (AutoFillCellProps.AlwaysUpdateOnSelect)
+            {
+                return true;
+            }
+
             if (Control.Value == null && AutoFillCellProps.AutoFillValue != null)
                 return true;
 

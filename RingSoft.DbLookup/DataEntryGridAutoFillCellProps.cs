@@ -19,6 +19,8 @@ namespace RingSoft.DbLookup
 
         public const int AutoFillControlHostId = 51;
 
+        public bool AlwaysUpdateOnSelect { get; set; }
+
         public DataEntryGridAutoFillCellProps(DataEntryGridRow row, int columnId, AutoFillSetup setup, AutoFillValue value) : base(row, columnId)
         {
             AutoFillSetup = setup;

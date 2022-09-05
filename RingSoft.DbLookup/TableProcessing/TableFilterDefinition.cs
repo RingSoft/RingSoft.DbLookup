@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.TableProcessing
     {
         private TableDefinition<TEntity> _entityTableDefinition;
 
-        public TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition)
+        public TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition) : base(entityTableDefinition)
         {
             _entityTableDefinition = entityTableDefinition;
         }

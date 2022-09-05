@@ -5,7 +5,8 @@ namespace RingSoft.DbLookup.TableProcessing
     public enum FilterItemTypes
     {
         Field = 0,
-        Formula = 1
+        Formula = 1,
+        AdvancedFind = 2
     }
 
     /// <summary>

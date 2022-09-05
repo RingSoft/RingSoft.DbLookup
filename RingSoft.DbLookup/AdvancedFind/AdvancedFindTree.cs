@@ -512,7 +512,5 @@ namespace RingSoft.DbLookup.AdvancedFind
             };
             return processResult;
         }
-
-
     }
 }

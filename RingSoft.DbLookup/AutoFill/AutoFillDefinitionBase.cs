@@ -60,7 +60,7 @@ namespace RingSoft.DbLookup.AutoFill
         {
             SelectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
             TableDefinition = tableDefinition;
-            FilterDefinition = new TableFilterDefinitionBase();
+            FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
 
             TableDefinition.Context.Initialize();
         }

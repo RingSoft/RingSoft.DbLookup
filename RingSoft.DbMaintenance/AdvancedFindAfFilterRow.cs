@@ -8,6 +8,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -16,6 +17,8 @@ namespace RingSoft.DbMaintenance
         public AutoFillSetup AutoFillSetup { get; set; }
 
         public AutoFillValue AutoFillValue { get; set; }
+
+        public AdvancedFindFilterDefinition Filter { get; set; }
 
         public AdvancedFindAfFilterRow(AdvancedFindFiltersManager manager, FieldDefinition primaryFieldDefinition = null) : base(manager)
         {
@@ -76,7 +79,10 @@ namespace RingSoft.DbMaintenance
             switch (column)
             {
                 case AdvancedFindFiltersManager.FilterColumns.Search:
-                    return new DataEntryGridAutoFillCellProps(this, columnId, AutoFillSetup, AutoFillValue);
+                    return new DataEntryGridAutoFillCellProps(this, columnId, AutoFillSetup, AutoFillValue)
+                    {
+                        AlwaysUpdateOnSelect = true
+                    };
                 
             }
             return base.GetCellProps(columnId);
@@ -90,10 +96,35 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.Search:
                     if (value is DataEntryGridAutoFillCellProps autoFillProps) 
                         AutoFillValue = autoFillProps.AutoFillValue;
+
+                    CreateFilterDefinition();
+                    Manager.ViewModel.ResetLookup();
                     break;
             }
 
             base.SetCellValue(value);
+        }
+
+        private void CreateFilterDefinition()
+        {
+            if (AutoFillValue != null && AutoFillValue.IsValid())
+            {
+                var advancedFindId = AutoFillValue
+                    .PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
+                if (Filter == null)
+                {
+                    Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
+                        Manager.ViewModel.LookupDefinition);
+                }
+                else
+                {
+                    Filter.AdvancedFindId = advancedFindId;
+                }
+            }
+            else if (Filter != null)
+            {
+                Manager.ViewModel.LookupDefinition.FilterDefinition.RemoveUserFilter(Filter);
+            }
         }
 
         public override void SaveToEntity(AdvancedFindFilter entity, int rowIndex)
@@ -110,8 +141,12 @@ namespace RingSoft.DbMaintenance
         {
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds, entity.SearchForAdvancedFindId.ToString());
+
+            CreateFilterDefinition();
+
             base.LoadFromEntity(entity);
             SetupTableField(ParentFieldDefinition);
+            Manager.ViewModel.ResetLookup();
         }
     }
 }

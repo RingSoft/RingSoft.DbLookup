@@ -125,7 +125,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             tableDefinition.Context.Initialize();
             TableDefinition = tableDefinition;
-            FilterDefinition = new TableFilterDefinitionBase();
+            FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
         }
 
         protected virtual LookupDefinitionBase BaseClone()

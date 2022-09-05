@@ -153,10 +153,18 @@ namespace RingSoft.DbLookup
 
             if (request.ReturnValue == null)
             {
+                if (tableDefinition?.LookupDefinition == null)
+                {
+                    throw new Exception($"There is no lookup defined for table {tableDefinition?.Description}");
+                }
                 if (tableDefinition?.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                 {
                     var query = new SelectQuery(tableDefinition.TableName);
                     query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName);
+                    foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
+                    {
+                        query.AddSelectColumn(primaryKeyField.FieldName);
+                    }
                     query.AddWhereItem(tableDefinition.PrimaryKeyFields[0].FieldName, Conditions.Equals, idValue);
 
                     var result = tableDefinition.Context.DataProcessor.GetData(query);
@@ -165,6 +173,7 @@ namespace RingSoft.DbLookup
                         var text = result.DataSet.Tables[0].Rows[0]
                             .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
                         var primaryKeyValue = new PrimaryKeyValue(tableDefinition);
+                        primaryKeyValue.PopulateFromDataRow(result.DataSet.Tables[0].Rows[0]);
                         return new AutoFillValue(primaryKeyValue, text);
                     }
                 }

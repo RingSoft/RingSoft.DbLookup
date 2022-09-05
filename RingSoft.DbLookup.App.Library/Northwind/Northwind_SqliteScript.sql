@@ -176,7 +176,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
 , [Operand] [tinyint] NOT NULL
-, [SearchForValue] nvarchar(50) NOT NULL
+, [SearchForValue] nvarchar(50) NULL
 , [Formula] ntext NULL
 , [FormulaDataType] tinyint NULL
 , [FormulaDisplayValue] nvarchar(50) NULL

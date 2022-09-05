@@ -45,7 +45,12 @@ namespace RingSoft.DbMaintenance
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
             AdvancedFindFilter entity)
         {
-            return new AdvancedFindFilterRow(this);
+            if (entity.SearchForAdvancedFindId == null)
+            {
+                return new AdvancedFindFilterRow(this);
+            }
+
+            return new AdvancedFindAfFilterRow(this);
         }
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition, bool creatingNew = false)

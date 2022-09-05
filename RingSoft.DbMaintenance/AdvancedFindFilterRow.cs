@@ -191,9 +191,12 @@ namespace RingSoft.DbMaintenance
             FormulaDataType = (FieldDataTypes) entity.FormulaDataType;
             FormulaDisplayValue = entity.FormulaDisplayValue;
 
-            var filterReturn = MakeFilterReturn();
+            if (entity.SearchForAdvancedFindId == null)
+            {
+                var filterReturn = MakeFilterReturn();
 
-            LoadFromFilterReturn(filterReturn);
+                LoadFromFilterReturn(filterReturn);
+            }
             //MakeSearchValueText();
         }
 

@@ -265,6 +265,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             return foundTreeViewItem;
         }
+
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {

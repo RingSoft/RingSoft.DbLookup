@@ -76,7 +76,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             BaseTable = new QueryTable
             {
                 Query = this,
-                Name = baseTableName
+                Name = baseTableName,
+                Alias = baseTableName
             };
         }
 
@@ -90,7 +91,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             BaseTable = new QueryTable
             {
                 Query = this,
-                Name = queryName
+                Name = queryName,
+                Alias = queryName
             };
             NestedQuery = nestedQuery;
         }

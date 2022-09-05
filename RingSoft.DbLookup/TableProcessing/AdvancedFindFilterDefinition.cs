@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
@@ -15,6 +17,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public int AdvancedFindId { get; set; }
 
         public LookupDefinitionBase LookupDefinition { get; private set; }
+
+        //private List<AdvancedFindFilter> _filters;
 
         public AdvancedFindFilterDefinition(LookupDefinitionBase lookupDefinition)
         {
@@ -39,59 +43,178 @@ namespace RingSoft.DbLookup.TableProcessing
         public void ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
             , ref WhereItem lastWhereItem, AdvancedFindTree tree = null)
         {
+            var wheres = new List<WhereItem>();
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
+             var filters = advancedFind.Filters.ToList();
             if (tree == null)
             {
                 tree = new AdvancedFindTree(LookupDefinition);
                 tree.LoadTree(LookupDefinition.TableDefinition.TableName);
             }
-            foreach (var advancedFindFilter in advancedFind.Filters)
+            WhereItem lastAdvancedWhere = null;
+            foreach (var advancedFindFilter in filters)
             {
                 if (advancedFindFilter.Formula.IsNullOrEmpty())
                 {
-                    var tableDefinition = LookupDefinition.TableDefinition;
-                    tableDefinition =
-                        tableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                            p.EntityName == advancedFindFilter.TableName);
-
-                    if (tableDefinition != null)
+                    if (advancedFindFilter.SearchForAdvancedFindId > 0)
                     {
-                        var fieldDefinition =
-                            tableDefinition.FieldDefinitions.FirstOrDefault(p =>
-                                p.PropertyName == advancedFindFilter.FieldName);
+                        var advancedFindFilterDefinition = new AdvancedFindFilterDefinition(LookupDefinition);
+                        advancedFindFilterDefinition.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
+                        advancedFindFilterDefinition.TableFilterDefinition = TableFilterDefinition;
+                        advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
+                        lastAdvancedWhere.EndLogic = advancedFindFilterDefinition.EndLogic;
 
-                        if (fieldDefinition != null)
+                        //ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
+                    }
+                    else
+                    {
+                        var tableDefinition = LookupDefinition.TableDefinition;
+                        tableDefinition =
+                            tableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                                p.EntityName == advancedFindFilter.TableName);
+
+                        if (tableDefinition != null)
                         {
-                            var filterDefinition = TableFilterDefinition.CreateFieldFilter(fieldDefinition,
-                                (Conditions)advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
-                            var foundItem = tree.FindFieldInTree(tree.TreeRoot, fieldDefinition);
-                            if (foundItem != null)
+                            var fieldDefinition =
+                                tableDefinition.FieldDefinitions.FirstOrDefault(p =>
+                                    p.PropertyName == advancedFindFilter.FieldName);
+
+                            if (fieldDefinition != null)
                             {
-                                var includeResult = tree.MakeIncludes(foundItem, "", false);
-                                if (includeResult != null)
-                                {
-                                    filterDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-                                }
+                                var filterDefinition = TableFilterDefinition.CreateFieldFilter(fieldDefinition,
+                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
 
-                                var listJoins = new List<TableFieldJoinDefinition>();
-                                if (filterDefinition.JoinDefinition != null)
-                                {
-                                    listJoins.Add(includeResult.LookupJoin.JoinDefinition);
-                                    TableFilterDefinitionBase.ProcessFieldJoins(query, listJoins);
-                                }
+                                ProcessFieldDefinition(query, tree, fieldDefinition, filterDefinition);
+
+                                var queryTable =
+                                    TableFilterDefinition.GetQueryTableForFieldFilter(query, filterDefinition);
+                                var whereItem = query.AddWhereItem(queryTable, fieldDefinition.FieldName,
+                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
+                                ProcessWhereItem(whereItem, ref lastAdvancedWhere, advancedFindFilter);
+                                wheres.Add(whereItem);
                             }
-                            var queryTable =TableFilterDefinition.GetQueryTableForFieldFilter(query, filterDefinition);
-                            var whereItem = query.AddWhereItem(queryTable, fieldDefinition.FieldName,
-                                (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
-                            whereItem.EndLogic = (EndLogics) advancedFindFilter.EndLogic;
-                            whereItem.LeftParenthesesCount = advancedFindFilter.LeftParentheses;
-                            whereItem.RightParenthesesCount = advancedFindFilter.RightParentheses;
-                            lastWhereItem = whereItem;
-                            if (firstWhereItem == null)
-                                firstWhereItem = lastWhereItem;
-
                         }
                     }
+                }
+                else
+                {
+                    FormulaFilterDefinition formulaFilter = null;
+                    QueryTable queryTable = null;
+                    if (!advancedFindFilter.PrimaryTableName.IsNullOrEmpty() &&
+                        !advancedFindFilter.PrimaryFieldName.IsNullOrEmpty())
+                    {
+                        var tableDefinition = LookupDefinition.TableDefinition;
+                        tableDefinition =
+                            tableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                                p.TableName == advancedFindFilter.PrimaryTableName);
+
+                        if (tableDefinition != null)
+                        {
+                            var fieldDefinition =
+                                tableDefinition.FieldDefinitions.FirstOrDefault(p =>
+                                    p.FieldName == advancedFindFilter.PrimaryFieldName);
+
+                            if (fieldDefinition != null)
+                            {
+                                formulaFilter = TableFilterDefinition.CreateFormulaFilter(
+                                    advancedFindFilter.Formula, (FieldDataTypes) advancedFindFilter.FormulaDataType,
+                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue, "");
+
+                                ProcessFieldDefinition(query, tree, fieldDefinition, formulaFilter);
+                                queryTable =
+                                    TableFilterDefinition.GetQueryTableForFieldFilter(query, formulaFilter);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        formulaFilter = TableFilterDefinition.CreateFormulaFilter(
+                            advancedFindFilter.Formula, (FieldDataTypes)advancedFindFilter.FormulaDataType,
+                            (Conditions)advancedFindFilter.Operand, advancedFindFilter.SearchForValue, "");
+
+                        queryTable = query.BaseTable;
+                    }
+
+                    var valueType = ValueTypes.String;
+                    switch (formulaFilter.DataType)
+                    {
+                        case FieldDataTypes.String:
+                            valueType = ValueTypes.String;
+                            break;
+                        case FieldDataTypes.Integer:
+                        case FieldDataTypes.Decimal:
+                            valueType = ValueTypes.Numeric;
+                            break;
+                        case FieldDataTypes.DateTime:
+                            valueType = ValueTypes.DateTime;
+                            break;
+                        case FieldDataTypes.Bool:
+                            valueType = ValueTypes.Bool;
+                            break;
+                        case FieldDataTypes.Memo:
+                            valueType = ValueTypes.Memo;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    var formula = formulaFilter.Formula.Replace("{Alias}", queryTable?.Alias);
+                    var whereItem = query.AddWhereItemFormula(formula,
+                        formulaFilter.Condition.Value, formulaFilter.FilterValue,
+                        valueType);
+                    whereItem.Table = queryTable;
+                    ProcessWhereItem(whereItem, ref lastAdvancedWhere, advancedFindFilter);
+                    //lastWhereItem = whereItem;
+                    //ProcessWhereItem(ref firstWhereItem, out lastWhereItem, lastWhereItem, advancedFindFilter);
+                    wheres.Add(whereItem);
+                }
+            }
+            ProcessFilterWheres(wheres, firstWhereItem, lastWhereItem);
+            lastAdvancedWhere.EndLogic = EndLogic;
+            //DbDataProcessor.ShowSqlStatementWindow();
+        }
+
+        private void ProcessWhereItem(WhereItem whereItem, ref WhereItem lastWhereItem,
+            AdvancedFindFilter advancedFindFilter)
+        {
+            whereItem.EndLogic = (EndLogics) advancedFindFilter.EndLogic;
+            whereItem.LeftParenthesesCount = advancedFindFilter.LeftParentheses;
+            whereItem.RightParenthesesCount = advancedFindFilter.RightParentheses;
+            lastWhereItem = whereItem;
+            //if (firstWhereItem == null)
+            //    firstWhereItem = lastWhereItem;
+
+        }
+
+        private void ProcessFilterWheres(List<WhereItem> wheres, WhereItem firstWhereItem, WhereItem lastWhereItem)
+        {
+            if (wheres.Count >= 2)
+            {
+                if (wheres[0] != firstWhereItem)
+                    wheres[0].LeftParenthesesCount++;
+                if (wheres[1] != lastWhereItem)
+                    wheres[wheres.Count - 1].RightParenthesesCount++;
+            }
+
+        }
+
+        private static void ProcessFieldDefinition(SelectQuery query, AdvancedFindTree tree, FieldDefinition fieldDefinition,
+            FilterItemDefinition filterDefinition)
+        {
+            var foundItem = tree.FindFieldInTree(tree.TreeRoot, fieldDefinition);
+            if (foundItem != null)
+            {
+                var includeResult = tree.MakeIncludes(foundItem, "", false);
+                if (includeResult != null)
+                {
+                    filterDefinition.JoinDefinition = includeResult.LookupJoin?.JoinDefinition;
+                }
+
+                var listJoins = new List<TableFieldJoinDefinition>();
+                if (filterDefinition.JoinDefinition != null)
+                {
+                    listJoins.Add(includeResult.LookupJoin.JoinDefinition);
+                    TableFilterDefinitionBase.ProcessFieldJoins(query, listJoins);
                 }
             }
         }

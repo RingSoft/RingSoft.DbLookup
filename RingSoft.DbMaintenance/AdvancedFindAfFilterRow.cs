@@ -113,7 +113,7 @@ namespace RingSoft.DbMaintenance
                     .PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
                 if (Filter == null)
                 {
-                    Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
+                    FilterItemDefinition = Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
                         Manager.ViewModel.LookupDefinition);
                 }
                 else

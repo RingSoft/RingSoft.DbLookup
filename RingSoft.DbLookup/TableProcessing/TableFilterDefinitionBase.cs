@@ -152,7 +152,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        private FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition = null,
+        internal FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition = null,
             string value = "", string alias = "")
         {
             if (!alias.IsNullOrEmpty())
@@ -402,7 +402,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        internal QueryTable GetQueryTableForFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
+        internal QueryTable GetQueryTableForFieldFilter(SelectQuery query, FilterItemDefinition fieldFilterDefinition)
         {
             if (fieldFilterDefinition.JoinDefinition != null)
             {

@@ -67,6 +67,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             LeftParenthesesCount = source.LeftParenthesesCount;
             RightParenthesesCount = source.RightParenthesesCount;
+            TableFilterDefinition = source.TableFilterDefinition;
             EndLogic = source.EndLogic;
         }
     }

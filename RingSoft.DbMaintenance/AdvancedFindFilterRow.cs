@@ -25,7 +25,7 @@ namespace RingSoft.DbMaintenance
 
         public Conditions Condition { get; set; }
         public string SearchValue { get; private set; }
-        public FilterItemDefinition FilterItemDefinition { get; private set; }
+        public FilterItemDefinition FilterItemDefinition { get; internal set; }
         public FieldDefinition FieldDefinition { get; private set; }
         public string Formula { get; private set; }
         public FieldDataTypes FormulaDataType { get; private set; }

@@ -74,7 +74,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;
             Control.Setup = AutoFillCellProps.AutoFillSetup;
             Control.Value = AutoFillCellProps.AutoFillValue;
-
             var displayStyle = GetCellDisplayStyle();
             if (displayStyle.SelectionBrush != null)
                 Control.SelectionBrush = displayStyle.SelectionBrush;
@@ -82,6 +81,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             Control.ControlDirty += (sender, args) => OnControlDirty();
 
             Control.SetReadOnlyMode(_gridReadOnlyMode);
+            Control.TabOutAfterLookupSelect = AutoFillCellProps.TabOnSelect;
+            Control.LookupSelect += (sender, args) =>
+            {
+                if (!AutoFillCellProps.TabOnSelect)
+                {
+                    OnUpdateSource(GetCellValue());
+                }
+            };
         }
 
         public override bool CanGridProcessKey(Key key)

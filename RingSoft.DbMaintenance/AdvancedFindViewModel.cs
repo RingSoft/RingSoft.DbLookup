@@ -767,7 +767,19 @@ namespace RingSoft.DbMaintenance
         public void ResetLookup()
         {
             if (FiltersManager.ValidateParentheses())
-                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+            {
+                if (!FiltersManager.ValidateAdvancedFind())
+                {
+                    var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                    command.ClearColumns = true;
+                    command.ResetSearchFor = true;
+                    LookupCommand = command;
+                }
+                else
+                {
+                    LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                }
+            }
         }
 
         private void ShowFromFormulaEditor()

@@ -369,6 +369,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public event EventHandler ControlDirty;
+        public event EventHandler LookupSelect;
 
         private AutoFillData _autoFillData;
         private bool _controlLoaded;
@@ -808,6 +809,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 .GetRowValue(Setup.LookupDefinition.InitialSortColumnDefinition.SelectSqlAlias);
             SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
             RaiseDirtyFlag();
+            LookupSelect?.Invoke(this, new EventArgs());
             if (TabOutAfterLookupSelect)
             {
                 Send(Key.Tab);

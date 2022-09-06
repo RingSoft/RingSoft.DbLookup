@@ -20,6 +20,8 @@ namespace RingSoft.DbMaintenance
 
         public AdvancedFindFilterDefinition Filter { get; set; }
 
+        public int AdvancedFindId { get; set; }
+
         public AdvancedFindAfFilterRow(AdvancedFindFiltersManager manager, FieldDefinition primaryFieldDefinition = null) : base(manager)
         {
             SetupTableField(primaryFieldDefinition);
@@ -81,7 +83,8 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.Search:
                     return new DataEntryGridAutoFillCellProps(this, columnId, AutoFillSetup, AutoFillValue)
                     {
-                        AlwaysUpdateOnSelect = true
+                        AlwaysUpdateOnSelect = true,
+                        TabOnSelect = false
                     };
                 
             }
@@ -96,7 +99,7 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindFiltersManager.FilterColumns.Search:
                     if (value is DataEntryGridAutoFillCellProps autoFillProps) 
                         AutoFillValue = autoFillProps.AutoFillValue;
-
+                    ResetLookup = false;
                     CreateFilterDefinition();
                     Manager.ViewModel.ResetLookup();
                     break;
@@ -120,6 +123,7 @@ namespace RingSoft.DbMaintenance
                 {
                     Filter.AdvancedFindId = advancedFindId;
                 }
+                AdvancedFindId = advancedFindId;
             }
             else if (Filter != null)
             {
@@ -146,7 +150,7 @@ namespace RingSoft.DbMaintenance
 
             base.LoadFromEntity(entity);
             SetupTableField(ParentFieldDefinition);
-            Manager.ViewModel.ResetLookup();
+            //Manager.ViewModel.ResetLookup();
         }
     }
 }

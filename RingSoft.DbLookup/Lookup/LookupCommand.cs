@@ -35,7 +35,7 @@
         /// <value>
         ///   <c>true</c> if reset search for; otherwise, <c>false</c>.
         /// </value>
-        public bool ResetSearchFor { get; }
+        public bool ResetSearchFor { get; set; }
 
         public object AddViewParameter { get; set; }
 
@@ -47,6 +47,8 @@
         {
             Command = command;
         }
+
+        public bool ClearColumns { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupCommand"/> class.

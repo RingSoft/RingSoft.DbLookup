@@ -393,6 +393,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
+            if (Command != null && Command.ClearColumns)
+                return;
+
             //if (LookupDefinition.InitialSortColumnDefinition == null)
             //    throw new ArgumentException(
             //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
@@ -1672,20 +1675,34 @@ namespace RingSoft.DbLookup.Controls.WPF
                         break;
                     case LookupCommands.Reset:
                         ClearLookupControl();
-                        SetupControl();
-                        if (LookupDefinition != null && LookupDefinition.VisibleColumns.Any())
+                        if (!command.ClearColumns)
                         {
-                            _resettingSearchFor = true;
-                            this.AddViewParameter = command.AddViewParameter;
-                            _currentPageSize = GetPageSize();
-                            RefreshData(true);
-                            _resettingSearchFor = false;
-                            if (AdvancedFindButton != null) 
-                                AdvancedFindButton.IsEnabled = true;
-                            else
+                            SetupControl();
+                            if (LookupDefinition != null && LookupDefinition.VisibleColumns.Any())
                             {
-                                _advancedFindMode = AdvancedFindModes.Enabled;
+                                _resettingSearchFor = true;
+                                this.AddViewParameter = command.AddViewParameter;
+                                _currentPageSize = GetPageSize();
+                                RefreshData(true);
+                                _resettingSearchFor = false;
+                                if (AdvancedFindButton != null)
+                                    AdvancedFindButton.IsEnabled = true;
+                                else
+                                {
+                                    _advancedFindMode = AdvancedFindModes.Enabled;
+                                }
                             }
+                        }
+                        else
+                        {
+                            ClearLookupControl();
+                            SearchForHost = null;
+                            SearchForStackPanel.Children.Clear();
+                            LookupColumns.Clear();
+                            LookupGridView?.Columns.Clear();
+                            _dataSource.Columns.Clear();
+                            UpdateLayout();
+                            SetActiveColumn(-1, FieldDataTypes.String);
                         }
 
                         //LookupData.GetInitData();

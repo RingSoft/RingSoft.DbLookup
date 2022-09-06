@@ -37,6 +37,8 @@ namespace RingSoft.DbMaintenance
 
         public TextComboBoxControlSetup EndLogicsSetup { get; private set; }
 
+        protected bool ResetLookup { get; set; } = true;
+
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)
         {
             Manager = manager;
@@ -152,7 +154,14 @@ namespace RingSoft.DbMaintenance
                     throw new ArgumentOutOfRangeException();
             }
             Manager.Grid?.UpdateRow(this);
-            Manager.ViewModel.ResetLookup();
+            if (ResetLookup)
+            {
+                Manager.ViewModel.ResetLookup();
+            }
+            else
+            {
+                ResetLookup = true;
+            }
 
             base.SetCellValue(value);
         }

@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -128,7 +129,7 @@ namespace RingSoft.DbMaintenance
                 lastRow?.FinishOffFilter(false, true);
             }
             Grid?.RefreshGridView();
-            ViewModel.ResetLookup();
+            //ViewModel.ResetLookup();
         }
 
         private void ProcessLastFilterRow(bool theEnd, AdvancedFindFilterRow row)
@@ -206,6 +207,50 @@ namespace RingSoft.DbMaintenance
             }
             Grid?.RefreshGridView();
             Grid?.GotoCell(row, (int)FilterColumns.Search);
+        }
+
+        public bool ValidateAdvancedFind()
+        {
+            var rows = Rows.OfType<AdvancedFindAfFilterRow>();
+            if (rows.Any())
+            {
+                foreach (var advancedFindAfFilterRow in rows)
+                {
+                    var advancedFindList = new List<int>();
+                    var advancedFindId = advancedFindAfFilterRow.AdvancedFindId;
+                    if (!ValidateAdvancedFind(advancedFindList, advancedFindId))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool ValidateAdvancedFind(List<int> advancedFindList, int advancedFindId)
+        {
+            if (advancedFindId <= 0)
+                return true;
+
+            advancedFindList.Add(advancedFindId);
+            var advancedFindSearchFor = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
+            foreach (var advancedFindFilter in advancedFindSearchFor.Filters)
+            {
+                if (advancedFindFilter.SearchForAdvancedFindId.HasValue)
+                {
+                    if (advancedFindList.IndexOf(advancedFindFilter.SearchForAdvancedFindId.Value) != -1)
+                    {
+                        var message = "Advanced find circular reference found. Aborting query.";
+                        var caption = "Circular Reference Found";
+                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                        return false;
+                    }
+
+                    if (!ValidateAdvancedFind(advancedFindList, advancedFindFilter.SearchForAdvancedFindId.Value))
+                        return false;
+                }
+            }
+
+            return true;
         }
     }
 }

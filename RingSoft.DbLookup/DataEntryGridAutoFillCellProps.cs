@@ -21,6 +21,8 @@ namespace RingSoft.DbLookup
 
         public bool AlwaysUpdateOnSelect { get; set; }
 
+        public bool TabOnSelect { get; set; } = true;
+
         public DataEntryGridAutoFillCellProps(DataEntryGridRow row, int columnId, AutoFillSetup setup, AutoFillValue value) : base(row, columnId)
         {
             AutoFillSetup = setup;

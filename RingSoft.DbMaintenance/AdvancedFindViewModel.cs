@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
@@ -18,14 +19,6 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
-    public enum AlertLevels
-    {
-        Green = 0,
-        Yellow = 1,
-        Red = 2,
-    }
-
-
     public interface IAdvancedFindView : IDbMaintenanceView
     {
         bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
@@ -40,7 +33,7 @@ namespace RingSoft.DbMaintenance
 
         void ShowSqlStatement();
 
-        void ShowRefreshSettings(AdvancedFind advancedFind);
+        bool ShowRefreshSettings(AdvancedFind advancedFind);
 
         void SetAlertLevel(AlertLevels level);
 
@@ -318,8 +311,12 @@ namespace RingSoft.DbMaintenance
         public byte? RefreshRate { get; set; }
         public int? RefreshValue { get; set; }
         public byte? RefreshCondition { get; set; }
-        public decimal? YellowAlert { get; set; }
-        public decimal? RedAlert { get; set; }
+        public int? YellowAlert { get; set; }
+        public int? RedAlert { get; set; }
+
+        private RefreshRate _refreshRate;
+        private int _refreshValue;
+        private Timer _timer;
 
         protected override void Initialize()
         {
@@ -415,16 +412,31 @@ namespace RingSoft.DbMaintenance
                 View.NotifyFromFormulaExists = false;
             }
 
+            LoadRefreshSettings(entity);
+
+            ColumnsManager.LoadGrid(entity.Columns);
+            FiltersManager.LoadGrid(entity.Filters);
+
+            ResetLookup();
+        }
+
+        private void LoadRefreshSettings(AdvancedFind entity)
+        {
             RefreshRate = entity.RefreshRate;
             RefreshValue = entity.RefreshValue;
             RefreshCondition = entity.RefreshCondition;
             YellowAlert = entity.YellowAlert;
             RedAlert = entity.RedAlert;
 
-            ColumnsManager.LoadGrid(entity.Columns);
-            FiltersManager.LoadGrid(entity.Filters);
+            if (RefreshRate.HasValue)
+            {
+                _refreshRate = (DbLookup.AdvancedFind.RefreshRate) RefreshRate.Value;
+            }
 
-            ResetLookup();
+            if (RefreshValue.HasValue)
+            {
+                _refreshValue = RefreshValue.Value;
+            }
         }
 
         private void LoadTree(string tableName)
@@ -817,8 +829,7 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-                var recordCount = View.GetRecordCount();
-                View.SetAlertLevel(AlertLevels.Red);
+                ProcessRefresh();
             }
         }
 
@@ -918,7 +929,12 @@ namespace RingSoft.DbMaintenance
 
         private void ShowRefreshSettings()
         {
-            View.ShowRefreshSettings(GetEntityData());
+            var refreshSettings = GetEntityData();
+            if (View.ShowRefreshSettings(refreshSettings))
+            {
+                LoadRefreshSettings(refreshSettings);
+                RefreshNow();
+            }
         }
 
         private void RefreshNow()
@@ -926,6 +942,116 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                ProcessRefresh();
+            }
+        }
+
+        private void ProcessRefresh()
+        {
+            if (RefreshRate.HasValue && RefreshCondition.HasValue)
+            {
+                var recordCount = View.GetRecordCount();
+                var yellowAlert = YellowAlert.Value;
+                var redAlert = RedAlert.Value;
+                var refreshCondition = (Conditions)RefreshCondition.Value;
+
+                switch (refreshCondition)
+                {
+                    case Conditions.Equals:
+                        if (recordCount == yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        if (recordCount == redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if (recordCount != yellowAlert && recordCount != redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    case Conditions.NotEquals:
+                        if (recordCount != yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        else if (recordCount != redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if (recordCount == yellowAlert && recordCount == redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    case Conditions.GreaterThan:
+                        if (recordCount > yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        if (recordCount > redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if(recordCount < yellowAlert && recordCount < redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    case Conditions.GreaterThanEquals:
+                        if (recordCount >= yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        if (recordCount >= redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if (recordCount <= yellowAlert && recordCount <= redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    case Conditions.LessThan:
+                        if (recordCount < yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        else if (recordCount < redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if (recordCount > yellowAlert && recordCount > redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    case Conditions.LessThanEquals:
+                        if (recordCount <= yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow);
+                        }
+                        else if (recordCount <= redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Red);
+                        }
+                        if (recordCount >= yellowAlert && recordCount >= redAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Green);
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private void ResetTimer()
+        {
+            if (_timer == null)
+            {
+                _timer = new Timer(new TimerCallback());
             }
         }
     }

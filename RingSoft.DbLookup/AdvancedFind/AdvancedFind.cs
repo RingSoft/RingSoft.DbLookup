@@ -28,9 +28,9 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public byte? RefreshCondition { get; set; }
 
-        public decimal? YellowAlert { get; set; }
+        public int? YellowAlert { get; set; }
 
-        public decimal? RedAlert { get; set; }
+        public int? RedAlert { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<AdvancedFindColumn> Columns { get; set; }

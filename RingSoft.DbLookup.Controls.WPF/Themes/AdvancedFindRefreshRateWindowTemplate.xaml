@@ -16,10 +16,21 @@
 
                         <Border.Resources>
                             <vm:AdvancedFindRefreshViewModel x:Key="AdvancedFindRefreshViewModel"/>
+                            <Style TargetType="Label">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+                            <Style TargetType="dec:IntegerEditControl">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="Width" Value="50"/>
+                            </Style>
                         </Border.Resources>
                         <Grid DataContext="{DynamicResource AdvancedFindRefreshViewModel}" Margin="5">
 
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -37,10 +48,42 @@
 
                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
 
-                                <dec:IntegerEditControl Width="50"/>
+                                <dec:IntegerEditControl Value="{Binding RefreshValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 <dec:TextComboBoxControl Setup="{Binding RefreshRateSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RefreshRateItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100"/>
                             
+                            </StackPanel>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="When Record Count is: "/>
+
+                            <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" Setup="{Binding RefreshConditionSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RefreshConditionItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Label Content="Yellow Alert Level" />
+
+                                <Image x:Name="YellowAlertImage"/>
+
+                            </StackPanel>
+
+                            <dec:IntegerEditControl Grid.Row="3" Grid.Column="1" Value="{Binding YellowAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Label Content="Red Alert Level" />
+
+                                <Image x:Name="RedAlertImage"/>
+
+                            </StackPanel>
+
+                            <dec:IntegerEditControl Grid.Row="4" Grid.Column="1" Value="{Binding RedAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Button x:Name="OkButton" Content="_OK" IsDefault="True" Width="100"/>
+
+                                <Button x:Name="CancelButton" Content="_Cancel" Width="100" Margin="5, 0, 0, 0"/>
+
                             </StackPanel>
 
                         </Grid>

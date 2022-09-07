@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -48,6 +49,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
         public Border Border { get; set; }
 
+        public Image YellowAlertImage { get; set; }
+
+        public Image RedAlertImage { get; set; }
+
+        public Button OkButton { get; set; }
+
+        public Button CancelButton { get; set; }
+
         public AdvancedFindRefreshViewModel ViewModel { get; set; }
 
         static AdvancedFindRefreshRateWindow()
@@ -57,12 +66,36 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFindRefreshRateWindow(DbLookup.AdvancedFind.AdvancedFind advancedFind)
         {
-            Loaded += (sender, args) => ViewModel.Initialize(advancedFind);
+            Loaded += (sender, args) =>
+            {
+                ViewModel.Initialize(advancedFind);
+                var yellowAlertImage =
+                    LookupControlsGlobals.LookupControlContentTemplateFactory.GetImageForAlertLevel(AlertLevels.Yellow);
+
+                var redAlertImage =
+                    LookupControlsGlobals.LookupControlContentTemplateFactory.GetImageForAlertLevel(AlertLevels.Red);
+
+                YellowAlertImage.Source = yellowAlertImage.Source;
+                RedAlertImage.Source = redAlertImage.Source;
+
+                OkButton.Click += (o, eventArgs) =>
+                {
+                    ViewModel.RefreshProperties();
+                    DialogResult = true;
+                    Close();
+                };
+
+                CancelButton.Click += (o, eventArgs) => Close();
+            };
         }
 
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
+            YellowAlertImage = GetTemplateChild(nameof(YellowAlertImage)) as Image;
+            RedAlertImage = GetTemplateChild(nameof(RedAlertImage)) as Image;
+            OkButton = GetTemplateChild(nameof(OkButton)) as Button;
+            CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
             ViewModel = Border.TryFindResource("AdvancedFindRefreshViewModel") as AdvancedFindRefreshViewModel;
 

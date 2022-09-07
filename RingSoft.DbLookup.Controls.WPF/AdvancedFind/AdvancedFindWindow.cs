@@ -130,20 +130,36 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             window.ShowDialog();
         }
 
-        public void ShowRefreshSettings(DbLookup.AdvancedFind.AdvancedFind advancedFind)
+        public bool ShowRefreshSettings(DbLookup.AdvancedFind.AdvancedFind advancedFind)
         {
             var refreshRateWindow = new AdvancedFindRefreshRateWindow(advancedFind);
             refreshRateWindow.Owner = this;
             refreshRateWindow.ShowInTaskbar = false;
             refreshRateWindow.ShowDialog();
+            return refreshRateWindow.DialogResult.Value;
         }
 
         public void SetAlertLevel(AlertLevels level)
         {
-            var image = LookupControlsGlobals.LookupControlContentTemplateFactory
-                .GetImageForAlertLevel(level);
-            Application.Current.MainWindow.Icon = image.Source;
+            var advancedFindWindows = Application.Current.Windows.OfType<AdvancedFindWindow>().ToList();
+            if (advancedFindWindows.Count >= 2)
+            {
+                if (SystemGlobals.WindowAlertLevel < level)
+                {
+                    SystemGlobals.WindowAlertLevel = level;
+                    var image = LookupControlsGlobals.LookupControlContentTemplateFactory
+                        .GetImageForAlertLevel(level);
+                    Application.Current.MainWindow.Icon = image.Source;
+                }
+            }
+            else
+            {
+                SystemGlobals.WindowAlertLevel = level;
+                var image = LookupControlsGlobals.LookupControlContentTemplateFactory
+                    .GetImageForAlertLevel(level);
+                Application.Current.MainWindow.Icon = image.Source;
 
+            }
         }
 
         public int GetRecordCount()

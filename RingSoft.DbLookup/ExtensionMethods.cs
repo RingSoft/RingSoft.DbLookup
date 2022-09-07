@@ -137,5 +137,34 @@ namespace RingSoft.DbLookup
             return newDescription;
         }
 
+        public static ValueTypes ConvertFieldTypeIntoValueType(this FieldDataTypes fieldDataType)
+        {
+            var valueType = ValueTypes.String;
+            switch (fieldDataType)
+            {
+                case FieldDataTypes.String:
+                    valueType = ValueTypes.String;
+                    break;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.Decimal:
+                    valueType = ValueTypes.Numeric;
+                    break;
+                case FieldDataTypes.DateTime:
+                    valueType = ValueTypes.DateTime;
+                    break;
+                case FieldDataTypes.Bool:
+                    valueType = ValueTypes.Bool;
+                    break;
+                case FieldDataTypes.Memo:
+                    valueType = ValueTypes.Memo;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return valueType;
+
+        }
+
     }
 }

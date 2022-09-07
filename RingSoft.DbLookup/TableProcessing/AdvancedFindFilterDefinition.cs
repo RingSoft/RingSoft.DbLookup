@@ -88,8 +88,13 @@ namespace RingSoft.DbLookup.TableProcessing
 
                                 var queryTable =
                                     TableFilterDefinition.GetQueryTableForFieldFilter(query, filterDefinition);
+                                
+                                var dateType = DbDateTypes.DateOnly;
+                                if (fieldDefinition is DateFieldDefinition dateField)
+                                    dateType = dateField.DateType;
                                 var whereItem = query.AddWhereItem(queryTable, fieldDefinition.FieldName,
-                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
+                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue, 
+                                    fieldDefinition.ValueType, dateType);
                                 ProcessWhereItem(whereItem, ref lastAdvancedWhere, advancedFindFilter);
                                 wheres.Add(whereItem);
                             }
@@ -135,29 +140,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         queryTable = query.BaseTable;
                     }
 
-                    var valueType = ValueTypes.String;
-                    switch (formulaFilter.DataType)
-                    {
-                        case FieldDataTypes.String:
-                            valueType = ValueTypes.String;
-                            break;
-                        case FieldDataTypes.Integer:
-                        case FieldDataTypes.Decimal:
-                            valueType = ValueTypes.Numeric;
-                            break;
-                        case FieldDataTypes.DateTime:
-                            valueType = ValueTypes.DateTime;
-                            break;
-                        case FieldDataTypes.Bool:
-                            valueType = ValueTypes.Bool;
-                            break;
-                        case FieldDataTypes.Memo:
-                            valueType = ValueTypes.Memo;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
+                    var valueType = formulaFilter.DataType.ConvertFieldTypeIntoValueType();
                     var formula = formulaFilter.Formula.Replace("{Alias}", queryTable?.Alias);
                     var whereItem = query.AddWhereItemFormula(formula,
                         formulaFilter.Condition.Value, formulaFilter.FilterValue,

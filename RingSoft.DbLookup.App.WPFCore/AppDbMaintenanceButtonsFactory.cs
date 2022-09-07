@@ -18,6 +18,8 @@ namespace RingSoft.DbLookup.App.WPFCore
             result.AdditionalButtonsPanel.Children.Add(additionalButtons);
             additionalButtons.ImportDefaultLookupButton.Command = viewModel.ImportDefaultLookupCommand;
             additionalButtons.ApplyToLookupButton.Command = viewModel.ApplyToLookupCommand;
+            additionalButtons.SqlViewerButton.Command = viewModel.ShowSqlCommand;
+            additionalButtons.RefreshSettingsButton.Command = viewModel.RefreshSettingsCommand;
             result.UpdateLayout();
             return result;
         }

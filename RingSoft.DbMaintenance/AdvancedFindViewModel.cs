@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
@@ -17,6 +18,12 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
+    public enum AlertLevels
+    {
+        Green = 0,
+        Yellow = 1,
+        Red = 2,
+    }
     public interface IAdvancedFindView : IDbMaintenanceView
     {
         bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
@@ -28,6 +35,14 @@ namespace RingSoft.DbMaintenance
         bool NotifyFromFormulaExists { get; set; }
 
         void ApplyToLookup();
+
+        void ShowSqlStatement();
+
+        void ShowRefreshSettings();
+
+        void SetAlertLevel(AlertLevels level);
+
+        int GetRecordCount();
     }
 
     //public class TreeViewFormulaData
@@ -284,6 +299,10 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand ApplyToLookupCommand { get; set; }
 
+        public RelayCommand ShowSqlCommand { get; set; }
+
+        public RelayCommand RefreshSettingsCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -347,6 +366,10 @@ namespace RingSoft.DbMaintenance
             ImportDefaultLookupCommand = new RelayCommand(ImportDefaultLookup);
 
             ApplyToLookupCommand = new RelayCommand(ApplyToLookup);
+
+            ShowSqlCommand = new RelayCommand(ShowSql);
+
+            RefreshSettingsCommand = new RelayCommand(ShowRefreshSettings);
         }
 
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,
@@ -778,6 +801,8 @@ namespace RingSoft.DbMaintenance
                 else
                 {
                     LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                    var recordCount = View.GetRecordCount();
+                    View.SetAlertLevel(AlertLevels.Red);
                 }
             }
         }
@@ -843,6 +868,16 @@ namespace RingSoft.DbMaintenance
         {
             LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
             View.ApplyToLookup();
+        }
+
+        private void ShowSql()
+        {
+            View.ShowSqlStatement();
+        }
+
+        private void ShowRefreshSettings()
+        {
+            View.ShowRefreshSettings();
         }
     }
 }

@@ -9,6 +9,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/ControlStylesResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Image x:Key="RedIcon" Source="Resources/bullet_red.png" Width="16" Height="16"/>
+            <Image x:Key="YellowIcon" Source="Resources/bullet_yellow.png" Width="16" Height="16"/>
+            <Image x:Key="GreenIcon" Source="Resources/magnify.ico" Width="16" Height="16"/>
+
             <dec:ComparisonConverter x:Key="ComparisonConverter" />
 
             <Style TargetType="TextBox" x:Key="StandardTextBox" BasedOn="{StaticResource {x:Type TextBox}}">

@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
@@ -106,6 +108,54 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             Close();
         }
 
+        public void ShowSqlStatement()
+        {
+            var sql = LookupControl.LookupData.GetSqlStatement();
+            var window = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = sql});
+            window.Loaded += (sender, args) =>
+            {
+                window.MemoEditor.TextBox.IsReadOnly = true;
+                window.MemoEditor.TextBox.TextChanged += (o, eventArgs) =>
+                {
+                    window.MemoEditor.TextBox.SelectionLength = 0;
+                    window.MemoEditor.TextBox.SelectionStart = 0;
+                };
+                window.MemoEditor.TextBox.TextWrapping = TextWrapping.NoWrap;
+                window.MemoEditor.TextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                window.MemoEditor.TextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                window.UpdateLayout();
+            };
+            window.Owner = this;
+            window.ShowInTaskbar = false;
+            window.ShowDialog();
+        }
+
+        public void ShowRefreshSettings()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetAlertLevel(AlertLevels level)
+        {
+            var image = LookupControlsGlobals.LookupControlContentTemplateFactory
+                .GetImageForAlertLevel(level);
+            Application.Current.MainWindow.Icon = image.Source;
+
+        }
+
+        public int GetRecordCount()
+        {
+            LookupControl.LookupData.GetRecordCount(true);
+            return LookupControl.LookupData.RecordCount;
+        }
+
+        public void ExecRecordCount()
+        {
+            LookupControl.LookupData.GetRecordCount(true);
+
+            //Thread.Sleep(1000);
+        }
+
         static AdvancedFindWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFindWindow), new FrameworkPropertyMetadata(typeof(AdvancedFindWindow)));
@@ -119,7 +169,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFindWindow()
         {
-            
         }
 
         public void Initialize()
@@ -152,7 +201,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (_addViewArgs != null)
             {
                 Processor.InitializeFromLookupData(_addViewArgs);
-
             }
             Processor.CheckAddOnFlyMode();
         }

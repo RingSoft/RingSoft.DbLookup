@@ -308,6 +308,17 @@ namespace RingSoft.DbLookup.Lookup
             return getDataResult;
         }
 
+        public string GetSqlStatement()
+        {
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName);
+            SetupBaseQuery(query, false);
+
+            var sql = LookupDefinition.TableDefinition.Context.DataProcessor.SqlGenerator
+                .GenerateSelectStatement(query);
+
+            return sql;
+        }
+
         private void SetupBaseQuery(SelectQuery query, bool reverseOrderBy, bool addSortColumnToQueryWhere = true)
         {
             query.BaseTable.Formula = LookupDefinition.FromFormula;
@@ -1406,64 +1417,72 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the record count.
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> GetRecordCount()
+        public async Task<bool> GetRecordCount(bool wait = false)
         {
             _countingRecords = true;
             var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
-            List<TableFieldJoinDefinition> joins = null;
-            var formulasFound = false;
+            SetupBaseQuery(selectQuery, false);
+            //List<TableFieldJoinDefinition> joins = null;
+            //var formulasFound = false;
 
-            if (LookupControl.SearchType == LookupSearchTypes.Contains &&
-                SortColumnDefinition.DataType == FieldDataTypes.String)
-            {
-                if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
-                {
-                    if (!lookupFieldColumn.JoinQueryTableAlias.IsNullOrEmpty())
-                    {
-                        joins = new List<TableFieldJoinDefinition>();
-                        var join = LookupDefinition.Joins.FirstOrDefault(j =>
-                            j.Alias == lookupFieldColumn.JoinQueryTableAlias);
-                        if (join != null)
-                        {
-                            AddCountParentJoin(joins, join);
-                        }
-                    }
-                }
-                else if (SortColumnDefinition is LookupFormulaColumnDefinition)
-                {
-                    formulasFound = true;
-                    joins = AddCountJoinDefinitions();
-                }
-                else if (LookupDefinition.FilterDefinition.HasFormulaFilters())
-                {
-                    formulasFound = true;
-                    joins = AddCountJoinDefinitions();
-                }
-            }
+            //if (LookupControl.SearchType == LookupSearchTypes.Contains &&
+            //    SortColumnDefinition.DataType == FieldDataTypes.String)
+            //{
+            //    if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+            //    {
+            //        if (!lookupFieldColumn.JoinQueryTableAlias.IsNullOrEmpty())
+            //        {
+            //            joins = new List<TableFieldJoinDefinition>();
+            //            var join = LookupDefinition.Joins.FirstOrDefault(j =>
+            //                j.Alias == lookupFieldColumn.JoinQueryTableAlias);
+            //            if (join != null)
+            //            {
+            //                AddCountParentJoin(joins, join);
+            //            }
+            //        }
+            //    }
+            //    else if (SortColumnDefinition is LookupFormulaColumnDefinition)
+            //    {
+            //        formulasFound = true;
+            //        joins = AddCountJoinDefinitions();
+            //    }
+            //    else if (LookupDefinition.FilterDefinition.HasFormulaFilters())
+            //    {
+            //        formulasFound = true;
+            //        joins = AddCountJoinDefinitions();
+            //    }
+            //}
 
-            if (LookupDefinition.FilterDefinition.HasFormulaFilters() && !formulasFound)
-            {
-                joins = AddCountJoinDefinitions();
-            }
+            //if (LookupDefinition.FilterDefinition.HasFormulaFilters() && !formulasFound)
+            //{
+            //    joins = AddCountJoinDefinitions();
+            //}
 
-            if (joins != null)
-                TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
+            //if (joins != null)
+            //    TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
 
-            foreach (var tableDefinitionPrimaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
-            {
-                selectQuery.AddSelectColumn(tableDefinitionPrimaryKeyField.FieldName);
-            }
+            //foreach (var tableDefinitionPrimaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
+            //{
+            //    selectQuery.AddSelectColumn(tableDefinitionPrimaryKeyField.FieldName);
+            //}
 
-            LookupDefinition.FilterDefinition.ProcessQuery(selectQuery);
+            //LookupDefinition.FilterDefinition.ProcessQuery(selectQuery);
 
             AddSortColumnToQueryWhere(selectQuery);
 
             var countQuery = new CountQuery(selectQuery, "Count");
             DataProcessResult result = null;
-            await Task.Run(() =>
+            if (wait)
             {
                 result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
-            });
+            }
+            else
+            {
+                await Task.Run(() =>
+                {
+                    result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
+                });
+            }
 
             _countingRecords = false;
             if (result.ResultCode == GetDataResultCodes.Success)
@@ -1473,6 +1492,11 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return false;
+        }
+
+        public void GetRecordCountWait()
+        {
+
         }
 
         private List<TableFieldJoinDefinition> AddCountJoinDefinitions()

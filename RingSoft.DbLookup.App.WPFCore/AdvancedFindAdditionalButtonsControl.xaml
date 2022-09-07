@@ -12,8 +12,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" x:Name="ImportDefaultLookupButton" Content="Import Default Lookup"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="1" x:Name="ApplyToLookupButton" Content="Apply To Lookup"/>
+        <Button Grid.Row="0" Grid.Column="0" x:Name="ImportDefaultLookupButton" Content="Import Default Lookup"/>
+
+        <Button Grid.Row="1" Grid.Column="0" x:Name="ApplyToLookupButton" Content="Apply To Lookup"/>
+
+        <Button Grid.Row="0" Grid.Column="1" x:Name="SqlViewerButton" Content="View SQL Statement"/>
+
+        <Button Grid.Row="1" Grid.Column="1" x:Name="RefreshSettingsButton" Content="Refresh Settings"/>
+
     </Grid>
 </UserControl>

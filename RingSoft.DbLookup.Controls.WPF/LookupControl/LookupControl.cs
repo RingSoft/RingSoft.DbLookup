@@ -1519,7 +1519,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 RefreshData(false, SearchForHost.SearchText);
             }
         }
-        private async void GetRecordCountButtonClick()
+        public async void GetRecordCountButtonClick()
         {
             ShowRecordCountLabel();
 

@@ -33,6 +33,8 @@ namespace RingSoft.DbMaintenance
 
         public AdvancedFindViewModel ViewModel { get; set; }
 
+        private bool _resetLookup = true;
+
         public AdvancedFindFiltersManager(AdvancedFindViewModel viewModel) : base(viewModel)
         {
             ViewModel = viewModel;
@@ -148,7 +150,10 @@ namespace RingSoft.DbMaintenance
                 if (Rows.Any())
                 {
                     ProcessLastFilterRow(true, Rows.Last() as AdvancedFindFilterRow);
-                    ViewModel.ResetLookup();
+                    if (_resetLookup)
+                    {
+                        ViewModel.ResetLookup();
+                    }
                 }
                 
             }
@@ -157,6 +162,7 @@ namespace RingSoft.DbMaintenance
 
         protected override void ClearRows(bool addRowToBottom = true)
         {
+            _resetLookup = false;
             var filterRows = Rows.OfType<AdvancedFindFilterRow>();
             var userRows = filterRows.Where(p => p.IsFixed == false).ToList();
             
@@ -172,6 +178,7 @@ namespace RingSoft.DbMaintenance
                 Grid?.RefreshGridView();
 
             }
+            _resetLookup = true;
         }
 
         public bool ValidateParentheses()

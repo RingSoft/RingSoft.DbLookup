@@ -130,9 +130,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             window.ShowDialog();
         }
 
-        public void ShowRefreshSettings()
+        public void ShowRefreshSettings(DbLookup.AdvancedFind.AdvancedFind advancedFind)
         {
-            throw new System.NotImplementedException();
+            var refreshRateWindow = new AdvancedFindRefreshRateWindow(advancedFind);
+            refreshRateWindow.Owner = this;
+            refreshRateWindow.ShowInTaskbar = false;
+            refreshRateWindow.ShowDialog();
         }
 
         public void SetAlertLevel(AlertLevels level)
@@ -147,13 +150,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             LookupControl.LookupData.GetRecordCount(true);
             return LookupControl.LookupData.RecordCount;
-        }
-
-        public void ExecRecordCount()
-        {
-            LookupControl.LookupData.GetRecordCount(true);
-
-            //Thread.Sleep(1000);
         }
 
         static AdvancedFindWindow()

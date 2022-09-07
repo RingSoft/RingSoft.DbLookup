@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbMaintenance;
 
@@ -13,7 +15,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual Image GetImageForAlertLevel(AlertLevels alertLevel)
         {
-            return null;
+            return new Image{Source = Application.Current.MainWindow.Icon};
         }
     }
 }

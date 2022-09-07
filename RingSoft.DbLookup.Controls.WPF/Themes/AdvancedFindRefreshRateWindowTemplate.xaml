@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+                    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
+                    xmlns:vm="clr-namespace:RingSoft.DbLookup.AdvancedFind;assembly=RingSoft.DbLookup">
+
+    <Style TargetType="{x:Type local:AdvancedFindRefreshRateWindow}" BasedOn="{StaticResource {x:Type Window}}">
+        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AdvancedFindRefreshRateWindow}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            x:Name="Border">
+
+                        <Border.Resources>
+                            <vm:AdvancedFindRefreshViewModel x:Key="AdvancedFindRefreshViewModel"/>
+                        </Border.Resources>
+                        <Grid DataContext="{DynamicResource AdvancedFindRefreshViewModel}" Margin="5">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="Advanced Find"/>
+
+                            <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Refresh Every"/>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+
+                                <dec:IntegerEditControl Width="50"/>
+
+                                <dec:TextComboBoxControl Setup="{Binding RefreshRateSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RefreshRateItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100"/>
+                            
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

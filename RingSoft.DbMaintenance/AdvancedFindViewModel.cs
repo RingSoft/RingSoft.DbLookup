@@ -24,6 +24,8 @@ namespace RingSoft.DbMaintenance
         Yellow = 1,
         Red = 2,
     }
+
+
     public interface IAdvancedFindView : IDbMaintenanceView
     {
         bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
@@ -38,7 +40,7 @@ namespace RingSoft.DbMaintenance
 
         void ShowSqlStatement();
 
-        void ShowRefreshSettings();
+        void ShowRefreshSettings(AdvancedFind advancedFind);
 
         void SetAlertLevel(AlertLevels level);
 
@@ -303,6 +305,8 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand RefreshSettingsCommand { get; set; }
 
+        public RelayCommand RefreshNowCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -310,6 +314,12 @@ namespace RingSoft.DbMaintenance
         public AdvancedFindInput AdvancedFindInput { get; set; }
 
         public AdvancedFindTree AdvancedFindTree { get; set; }
+
+        public byte? RefreshRate { get; set; }
+        public int? RefreshValue { get; set; }
+        public byte? RefreshCondition { get; set; }
+        public decimal? YellowAlert { get; set; }
+        public decimal? RedAlert { get; set; }
 
         protected override void Initialize()
         {
@@ -370,6 +380,8 @@ namespace RingSoft.DbMaintenance
             ShowSqlCommand = new RelayCommand(ShowSql);
 
             RefreshSettingsCommand = new RelayCommand(ShowRefreshSettings);
+
+            RefreshNowCommand = new RelayCommand(RefreshNow);
         }
 
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,
@@ -402,6 +414,12 @@ namespace RingSoft.DbMaintenance
             {
                 View.NotifyFromFormulaExists = false;
             }
+
+            RefreshRate = entity.RefreshRate;
+            RefreshValue = entity.RefreshValue;
+            RefreshCondition = entity.RefreshCondition;
+            YellowAlert = entity.YellowAlert;
+            RedAlert = entity.RedAlert;
 
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
@@ -528,6 +546,13 @@ namespace RingSoft.DbMaintenance
             advancedFind.Table = TableDefinition.Context.TableDefinitions
                 .FirstOrDefault(p => p.Description == SelectedTableBoxItem?.TextValue)
                 ?.EntityName;
+
+            advancedFind.RefreshRate = RefreshRate;
+            advancedFind.RefreshValue = RefreshValue;
+            advancedFind.RefreshCondition = RefreshCondition;
+            advancedFind.YellowAlert = YellowAlert;
+            advancedFind.RedAlert = RedAlert;
+
             return advancedFind;
         }
 
@@ -789,6 +814,16 @@ namespace RingSoft.DbMaintenance
 
         public void ResetLookup()
         {
+            if (ValidateLookup())
+            {
+                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                var recordCount = View.GetRecordCount();
+                View.SetAlertLevel(AlertLevels.Red);
+            }
+        }
+
+        private bool ValidateLookup()
+        {
             if (FiltersManager.ValidateParentheses())
             {
                 if (!FiltersManager.ValidateAdvancedFind())
@@ -797,14 +832,13 @@ namespace RingSoft.DbMaintenance
                     command.ClearColumns = true;
                     command.ResetSearchFor = true;
                     LookupCommand = command;
+                    return false;
                 }
-                else
-                {
-                    LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-                    var recordCount = View.GetRecordCount();
-                    View.SetAlertLevel(AlertLevels.Red);
-                }
+
+                return true;
             }
+
+            return false;
         }
 
         private void ShowFromFormulaEditor()
@@ -866,18 +900,33 @@ namespace RingSoft.DbMaintenance
 
         private void ApplyToLookup()
         {
-            LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
-            View.ApplyToLookup();
+            if (ValidateLookup())
+            {
+                LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
+                View.ApplyToLookup();
+            }
         }
 
         private void ShowSql()
         {
-            View.ShowSqlStatement();
+            if (ValidateLookup())
+            {
+                View.ShowSqlStatement();
+
+            }
         }
 
         private void ShowRefreshSettings()
         {
-            View.ShowRefreshSettings();
+            View.ShowRefreshSettings(GetEntityData());
+        }
+
+        private void RefreshNow()
+        {
+            if (ValidateLookup())
+            {
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+            }
         }
     }
 }

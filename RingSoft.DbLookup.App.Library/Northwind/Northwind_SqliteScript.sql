@@ -148,6 +148,11 @@ CREATE TABLE [AdvancedFinds] (
 , [Name] nvarchar(50) NOT NULL
 , [Table] nvarchar(50) NOT NULL
 , [FromFormula] ntext NULL
+, [RefreshRate] tinyint NULL
+, [RefreshValue] integer NULL
+, [RefreshCondition] tinyint NULL
+, [YellowAlert] decimal NULL
+, [RedAlert] decimal NULL
 , CONSTRAINT [PK_AdvancedFinds] PRIMARY KEY ([Id])
 );
 

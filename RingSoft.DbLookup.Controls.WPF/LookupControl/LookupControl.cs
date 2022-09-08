@@ -1607,12 +1607,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (GetRecordCountButton == null || RecordCountControl == null || RecordCountStackPanel == null)
                 return;
 
-            if (ShowRecordCountWait)
-                return;
-            ;
-
             var showRecordCount = false;
-            if (LookupData.ScrollPosition == LookupScrollPositions.Disabled)
+            if (LookupData?.ScrollPosition == LookupScrollPositions.Disabled)
+            {
+                showRecordCount = true;
+            }
+            else if (Command.ClearColumns)
             {
                 showRecordCount = true;
             }
@@ -1730,6 +1730,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupColumns.Clear();
                             LookupGridView?.Columns.Clear();
                             _dataSource.Columns.Clear();
+                            SetupRecordCount(0);
                             UpdateLayout();
                             SetActiveColumn(-1, FieldDataTypes.String);
                         }

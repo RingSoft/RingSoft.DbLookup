@@ -318,7 +318,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             LookupJoin includeJoin = null;
             var parentTreeItem = selectedItem;
-            while (parentTreeItem.Parent != null)
+            while (parentTreeItem?.Parent != null)
             {
                 parentTreeItem = parentTreeItem.Parent;
                 childNodes.Insert(0, parentTreeItem);

@@ -39,6 +39,8 @@ namespace RingSoft.DbMaintenance
         void SetAlertLevel(AlertLevels level);
 
         int GetRecordCount(bool showRecordCount);
+
+        void LockTable(bool lockValue);
     }
 
     //public class TreeViewFormulaData
@@ -423,6 +425,7 @@ namespace RingSoft.DbMaintenance
             FiltersManager.LoadGrid(entity.Filters);
 
             ResetLookup();
+            View.LockTable(true);
 
             ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                 ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
@@ -594,10 +597,13 @@ namespace RingSoft.DbMaintenance
             CreateLookupDefinition();
             View.NotifyFromFormulaExists = false;
 
-            if (LookupDefinition != null)
-            {
-                ResetLookup();
-            }
+            //if (LookupDefinition != null)
+            //{
+            //ResetLookup();
+            var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+            command.ClearColumns = true;
+            LookupCommand = command;
+            //}
 
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
@@ -608,8 +614,15 @@ namespace RingSoft.DbMaintenance
             FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = SelectedTableBoxItem != null;
 
             ClearRefresh();
+            LockTable();
 
             //LoadTree();
+        }
+
+        private void LockTable()
+        {
+            var lockValue = AdvancedFindInput?.LockTable != null;
+            View.LockTable(lockValue);
         }
 
         private void ClearRefresh()
@@ -641,6 +654,10 @@ namespace RingSoft.DbMaintenance
                 LookupDefinition = null;
             }
             AdvancedFindTree.LookupDefinition = LookupDefinition;
+            ColumnsManager?.SetupForNewRecord();
+            FiltersManager?.SetupForNewRecord();
+            RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled =
+                ApplyToLookupCommand.IsEnabled = ShowSqlCommand.IsEnabled = false;
         }
 
         protected override bool SaveEntity(AdvancedFind entity)

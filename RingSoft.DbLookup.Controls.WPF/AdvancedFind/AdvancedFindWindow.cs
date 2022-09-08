@@ -187,6 +187,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return count;
         }
 
+        public void LockTable(bool lockValue)
+        {
+            TableComboBoxControl.IsEnabled = !lockValue;
+        }
+
         static AdvancedFindWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFindWindow), new FrameworkPropertyMetadata(typeof(AdvancedFindWindow)));

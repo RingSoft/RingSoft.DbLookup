@@ -22,12 +22,12 @@
         <TabControl x:Name="TabControl">
             <TabItem Header="General">
                 <StackPanel>
-                    <GroupBox Header="Entity Framework Version">
+                    <!--<GroupBox Header="Entity Framework Version">
                         <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
                             <RadioButton Content="Entity Framework Core" Margin="0,0,5,0" IsChecked="{Binding Path=EntityFrameworkVersion, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:EntityFrameworkVersions.EntityFrameworkCore3}, Mode=TwoWay}"/>
                             <RadioButton Content="Entity Framework 6" IsChecked="{Binding Path=EntityFrameworkVersion, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:EntityFrameworkVersions.EntityFramework6}, Mode=TwoWay}"/>
                         </StackPanel>
-                    </GroupBox>
+                    </GroupBox>-->
                     <GroupBox Header="Northwind Database Platform">
                         <StackPanel Margin="0,10,0,10">
                             <StackPanel Orientation="Horizontal">

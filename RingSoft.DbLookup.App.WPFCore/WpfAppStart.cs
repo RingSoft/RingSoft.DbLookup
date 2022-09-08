@@ -1,18 +1,17 @@
-﻿using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.App.Library.Ef6;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore;
+using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbLookup.App.WPFCore.DevLogix;
 using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using System;
 using System.Data.Common;
-using System.Windows;
 using System.Data.SqlClient;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
-using RingSoft.DbLookup.DataProcessor;
+using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -95,9 +94,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 case EntityFrameworkVersions.EntityFrameworkCore3:
                     RsDbLookupAppGlobals.EfProcessor = new EfProcessorCore();
-                    break;
-                case EntityFrameworkVersions.EntityFramework6:
-                    RsDbLookupAppGlobals.EfProcessor = new EfProcessor6();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(newVersion), newVersion, null);

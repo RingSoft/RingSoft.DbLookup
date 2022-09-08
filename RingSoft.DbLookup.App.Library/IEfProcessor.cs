@@ -8,7 +8,7 @@ namespace RingSoft.DbLookup.App.Library
     public enum EntityFrameworkVersions
     {
         EntityFrameworkCore3 = 0,
-        EntityFramework6 = 1
+        //EntityFramework6 = 1
     }
 
     public interface IEfProcessor

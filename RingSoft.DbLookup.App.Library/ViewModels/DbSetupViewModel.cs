@@ -326,12 +326,12 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             {
                 case EntityFrameworkVersions.EntityFrameworkCore3:
                     break;
-                case EntityFrameworkVersions.EntityFramework6:
-                    enable = false;
-                    NorthwindDbPlatform = NorthwindDbPlatforms.SqlServer;
-                    if (MegaDbDbPlatform != MegaDbPlatforms.None)
-                        MegaDbDbPlatform = MegaDbPlatforms.SqlServer;
-                    break;
+                //case EntityFrameworkVersions.EntityFramework6:
+                //    enable = false;
+                //    NorthwindDbPlatform = NorthwindDbPlatforms.SqlServer;
+                //    if (MegaDbDbPlatform != MegaDbPlatforms.None)
+                //        MegaDbDbPlatform = MegaDbPlatforms.SqlServer;
+                //    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -643,17 +643,17 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             {
                 case EntityFrameworkVersions.EntityFrameworkCore3:
                     break;
-                case EntityFrameworkVersions.EntityFramework6:
-                    var message =
-                        "For optimal performance, it is recommended that you switch to the Entity Framework Core version "
-                        + "and restart this application before seeding the Items table.\r\n\r\nDo you wish to do so now?";
-                    if (_view.ShowYesNoMessage(message, @"Items Table Seed Process"))
-                    {
-                        EntityFrameworkVersion = EntityFrameworkVersions.EntityFrameworkCore3;
-                        SaveRegistry();
-                        _view.ExitApplication();
-                    }
-                    break;
+                //case EntityFrameworkVersions.EntityFramework6:
+                //    var message =
+                //        "For optimal performance, it is recommended that you switch to the Entity Framework Core version "
+                //        + "and restart this application before seeding the Items table.\r\n\r\nDo you wish to do so now?";
+                //    if (_view.ShowYesNoMessage(message, @"Items Table Seed Process"))
+                //    {
+                //        EntityFrameworkVersion = EntityFrameworkVersions.EntityFrameworkCore3;
+                //        SaveRegistry();
+                //        _view.ExitApplication();
+                //    }
+                //    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

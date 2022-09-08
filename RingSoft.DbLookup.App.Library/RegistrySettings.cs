@@ -91,9 +91,10 @@ namespace RingSoft.DbLookup.App.Library
 
         public static EntityFrameworkVersions GetEntityFrameworkVersion()
         {
-            var efVersion = _registryXml.GetElementValue(EntityFrameworkVersionKey,
-                ((int)EntityFrameworkVersions.EntityFrameworkCore3).ToString());
-            return (EntityFrameworkVersions)efVersion.ToInt();
+            //var efVersion = _registryXml.GetElementValue(EntityFrameworkVersionKey,
+            //    ((int)EntityFrameworkVersions.EntityFrameworkCore3).ToString());
+            //return (EntityFrameworkVersions)efVersion.ToInt();
+            return EntityFrameworkVersions.EntityFrameworkCore3;
         }
 
         public void LoadFromRegistry()

@@ -1,4 +1,6 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using System.Windows;
+using System.Windows.Interop;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
@@ -67,8 +69,8 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         private void ShowAdvancedFind()
         {
             var advancedFindWindow = new AdvancedFindWindow();
-            advancedFindWindow.Owner = this;
-            advancedFindWindow.ShowDialog();
+            advancedFindWindow.Loaded += (sender, args) => advancedFindWindow.ShowInTaskbar = true;
+            advancedFindWindow.Show();
         }
     }
 }

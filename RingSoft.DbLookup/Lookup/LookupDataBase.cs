@@ -178,6 +178,7 @@ namespace RingSoft.DbLookup.Lookup
         private int _selectedIndex;
         private bool _selectingRecord;
         private bool _countingRecords;
+        private int _countProcess;
         private bool _searchForChanging;
 
         private void OutputData(int selectedRowIndex, LookupScrollPositions currentPosition)
@@ -1413,78 +1414,38 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        public int GetRecordCountWait()
+        {
+            var countQuery = SetupCountQuery();
+            DataProcessResult result = null;
+            result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
+            if (PostRecordCount(result))
+            {
+                return RecordCount;
+            }
+
+            return 0;
+        }
         /// <summary>
         /// Gets the record count.
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> GetRecordCount(bool wait = false)
+        public async Task<bool> GetRecordCount()
         {
-            _countingRecords = true;
-            var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
-            SetupBaseQuery(selectQuery, false);
-            //List<TableFieldJoinDefinition> joins = null;
-            //var formulasFound = false;
-
-            //if (LookupControl.SearchType == LookupSearchTypes.Contains &&
-            //    SortColumnDefinition.DataType == FieldDataTypes.String)
-            //{
-            //    if (SortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
-            //    {
-            //        if (!lookupFieldColumn.JoinQueryTableAlias.IsNullOrEmpty())
-            //        {
-            //            joins = new List<TableFieldJoinDefinition>();
-            //            var join = LookupDefinition.Joins.FirstOrDefault(j =>
-            //                j.Alias == lookupFieldColumn.JoinQueryTableAlias);
-            //            if (join != null)
-            //            {
-            //                AddCountParentJoin(joins, join);
-            //            }
-            //        }
-            //    }
-            //    else if (SortColumnDefinition is LookupFormulaColumnDefinition)
-            //    {
-            //        formulasFound = true;
-            //        joins = AddCountJoinDefinitions();
-            //    }
-            //    else if (LookupDefinition.FilterDefinition.HasFormulaFilters())
-            //    {
-            //        formulasFound = true;
-            //        joins = AddCountJoinDefinitions();
-            //    }
-            //}
-
-            //if (LookupDefinition.FilterDefinition.HasFormulaFilters() && !formulasFound)
-            //{
-            //    joins = AddCountJoinDefinitions();
-            //}
-
-            //if (joins != null)
-            //    TableFilterDefinitionBase.ProcessFieldJoins(selectQuery, joins);
-
-            //foreach (var tableDefinitionPrimaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
-            //{
-            //    selectQuery.AddSelectColumn(tableDefinitionPrimaryKeyField.FieldName);
-            //}
-
-            //LookupDefinition.FilterDefinition.ProcessQuery(selectQuery);
-
-            AddSortColumnToQueryWhere(selectQuery);
-
-            var countQuery = new CountQuery(selectQuery, "Count");
+            var countQuery = SetupCountQuery();
             DataProcessResult result = null;
-            if (wait)
+            await Task.Run(() =>
             {
                 result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
-            }
-            else
-            {
-                await Task.Run(() =>
-                {
-                    result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuery, false);
-                });
-            }
+            });
 
+            return PostRecordCount(result);
+        }
+
+        private bool PostRecordCount(DataProcessResult result)
+        {
             _countingRecords = false;
+
             if (result.ResultCode == GetDataResultCodes.Success)
             {
                 RecordCount = result.DataSet.Tables[0].Rows[0].GetRowValue("Count").ToInt();
@@ -1494,9 +1455,16 @@ namespace RingSoft.DbLookup.Lookup
             return false;
         }
 
-        public void GetRecordCountWait()
+        private CountQuery SetupCountQuery()
         {
+            _countingRecords = true;
+            var selectQuery = new SelectQuery(LookupDefinition.TableDefinition.TableName);
+            SetupBaseQuery(selectQuery, false);
 
+            AddSortColumnToQueryWhere(selectQuery);
+
+            var countQuery = new CountQuery(selectQuery, "Count");
+            return countQuery;
         }
 
         private List<TableFieldJoinDefinition> AddCountJoinDefinitions()

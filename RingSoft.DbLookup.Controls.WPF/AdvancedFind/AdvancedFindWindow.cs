@@ -141,7 +141,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void SetAlertLevel(AlertLevels level)
         {
-            var advancedFindWindows = Application.Current.Windows.OfType<AdvancedFindWindow>().ToList();
+            var advancedFindWindows = Dispatcher.Invoke(() => Application.Current.Windows.OfType<AdvancedFindWindow>().ToList());
             if (advancedFindWindows.Count >= 2)
             {
                 if (SystemGlobals.WindowAlertLevel < level)
@@ -149,7 +149,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     SystemGlobals.WindowAlertLevel = level;
                     var image = LookupControlsGlobals.LookupControlContentTemplateFactory
                         .GetImageForAlertLevel(level);
-                    Application.Current.MainWindow.Icon = image.Source;
+                    Dispatcher.Invoke(() =>
+                    {
+                        if (Application.Current.MainWindow != null)
+                            return Application.Current.MainWindow.Icon = image.Source;
+
+                        return null;
+                    });
+
                 }
             }
             else
@@ -157,15 +164,27 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SystemGlobals.WindowAlertLevel = level;
                 var image = LookupControlsGlobals.LookupControlContentTemplateFactory
                     .GetImageForAlertLevel(level);
-                Application.Current.MainWindow.Icon = image.Source;
+                Dispatcher.Invoke(() =>
+                {
+                    if (Application.Current.MainWindow != null)
+                        return Application.Current.MainWindow.Icon = image.Source;
+
+                    return null;
+                });
 
             }
         }
 
-        public int GetRecordCount()
+        public int GetRecordCount(bool showRecordCount)
         {
-            LookupControl.LookupData.GetRecordCount(true);
-            return LookupControl.LookupData.RecordCount;
+            LookupControl.ShowRecordCountWait = showRecordCount;
+            var count = LookupControl.RecordCountWait;
+            //Dispatcher.Invoke(() =>
+            //{
+            //    count = LookupControl.GetRecordCountWait();
+            //});
+
+            return count;
         }
 
         static AdvancedFindWindow()
@@ -181,6 +200,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFindWindow()
         {
+            Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
         public void Initialize()

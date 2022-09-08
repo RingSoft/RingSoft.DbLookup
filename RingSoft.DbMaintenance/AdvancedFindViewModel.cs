@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
@@ -37,7 +38,7 @@ namespace RingSoft.DbMaintenance
 
         void SetAlertLevel(AlertLevels level);
 
-        int GetRecordCount();
+        int GetRecordCount(bool showRecordCount);
     }
 
     //public class TreeViewFormulaData
@@ -139,7 +140,7 @@ namespace RingSoft.DbMaintenance
                 }
 
                 _advancedFindId = value;
-                OnPropertyChanged();
+                OnPropertyChanged(null, false);
             }
         }
 
@@ -244,7 +245,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _lookupCommand = value;
-                OnPropertyChanged();
+                OnPropertyChanged(null, false);
             }
         }
 
@@ -316,7 +317,8 @@ namespace RingSoft.DbMaintenance
 
         private RefreshRate _refreshRate;
         private int _refreshValue;
-        private Timer _timer;
+        private System.Timers.Timer _timer;
+        private int _interval = 0;
 
         protected override void Initialize()
         {
@@ -327,6 +329,8 @@ namespace RingSoft.DbMaintenance
                     AdvancedFindInput = advancedFindInput;
                 }
             }
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += _timer_Elapsed;
 
             TableComboBoxSetup = new TextComboBoxControlSetup();
             var index = 0;
@@ -411,13 +415,17 @@ namespace RingSoft.DbMaintenance
             {
                 View.NotifyFromFormulaExists = false;
             }
-
+            ClearRefresh();
             LoadRefreshSettings(entity);
+            ProcessRefresh(true);
 
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
 
             ResetLookup();
+
+            ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+                ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
         }
 
         private void LoadRefreshSettings(AdvancedFind entity)
@@ -443,7 +451,7 @@ namespace RingSoft.DbMaintenance
         {
             CreateLookupDefinition();
 
-            FromFormulaCommand.IsEnabled = true;
+            ImportDefaultLookupCommand.IsEnabled = FromFormulaCommand.IsEnabled = true;
 
             AdvancedFindTree.LoadTree(tableName);
 
@@ -525,12 +533,16 @@ namespace RingSoft.DbMaintenance
             SelectedTreeViewItem = treeViewItem;
             if (treeViewItem != null)
             {
-                AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = true;
+                AddColumnCommand.IsEnabled = SelectedTreeViewItem.Type != TreeViewType.AdvancedFind;
+                AddFilterCommand.IsEnabled = true;
             }
         }
 
         protected override bool ValidateEntity(AdvancedFind entity)
         {
+            if (!ValidateLookup())
+                return false;
+
             if (SelectedTableBoxItem == null)
             {
                 var message = "You must select a table before saving.";
@@ -589,11 +601,27 @@ namespace RingSoft.DbMaintenance
 
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
-            AddColumnCommand.IsEnabled =
-                AddFilterCommand.IsEnabled = false;
-            FromFormulaCommand.IsEnabled = SelectedTableBoxItem != null;
+            AddColumnCommand.IsEnabled = 
+                AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
+
+            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = SelectedTableBoxItem != null;
+
+            ClearRefresh();
 
             //LoadTree();
+        }
+
+        private void ClearRefresh()
+        {
+            RefreshRate = null;
+            RefreshValue = null;
+            RefreshCondition = null;
+            YellowAlert = null;
+            RedAlert = null;
+            View.SetAlertLevel(AlertLevels.Green);
+            _refreshValue = 0;
+            ProcessRefresh(true);
         }
 
         public void CreateLookupDefinition()
@@ -820,7 +848,9 @@ namespace RingSoft.DbMaintenance
 
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
-            AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = false;
+            AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = 
+                AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
             ResetLookup();
         }
 
@@ -829,7 +859,9 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-                ProcessRefresh();
+                ProcessRefresh(true);
+                ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
             }
         }
 
@@ -942,15 +974,15 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Refresh);
-                ProcessRefresh();
+                ProcessRefresh(true);
             }
         }
 
-        private void ProcessRefresh()
+        private void ProcessRefresh(bool resetTimer)
         {
-            if (RefreshRate.HasValue && RefreshCondition.HasValue)
+            if (RefreshCondition.HasValue)
             {
-                var recordCount = View.GetRecordCount();
+                var recordCount = View.GetRecordCount(true);
                 var yellowAlert = YellowAlert.Value;
                 var redAlert = RedAlert.Value;
                 var refreshCondition = (Conditions)RefreshCondition.Value;
@@ -1044,15 +1076,84 @@ namespace RingSoft.DbMaintenance
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                if (resetTimer)
+                {
+                    ResetTimer();
+                }
+            }
+            else
+            {
+                _refreshValue = 0;
+                View.GetRecordCount(false);
             }
         }
 
         private void ResetTimer()
         {
-            if (_timer == null)
+            _interval = 0;
+            if (_refreshValue <= 0)
             {
-                _timer = new Timer(new TimerCallback());
+                _timer.Enabled = false;
             }
+            else
+            {
+                _timer.Enabled = true;
+            }
+
+        }
+
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _interval++ ;
+            switch (_refreshRate)
+            {
+                case DbLookup.AdvancedFind.RefreshRate.Hours:
+                    if (_interval == (_refreshValue * 60) * 60)
+                    {
+                        _interval = 0;
+                        TimerRefresh();
+                    }
+                    break;
+                case DbLookup.AdvancedFind.RefreshRate.Minutes:
+                    if (_interval == _refreshValue * 60)
+                    {
+                        _interval = 0;
+                        TimerRefresh();
+                    }
+                    break;
+                case DbLookup.AdvancedFind.RefreshRate.Seconds:
+                    if (_interval == _refreshValue)
+                    {
+                        _interval = 0;
+                        TimerRefresh();
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
+
+        private void TimerRefresh()
+        {
+            _timer.Enabled = false;
+            if (ValidateLookup())
+            {
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                ProcessRefresh(false);
+            }
+            _timer.Enabled = true;
+
+        }
+
+        public override void OnWindowClosing(CancelEventArgs e)
+        {
+            _timer.Enabled = false;
+            _timer.Stop();
+            _interval = 0;
+            View.SetAlertLevel(AlertLevels.Green);
+            base.OnWindowClosing(e);
         }
     }
 }

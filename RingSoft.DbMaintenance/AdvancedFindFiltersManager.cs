@@ -60,10 +60,12 @@ namespace RingSoft.DbMaintenance
         {
             if (creatingNew)
             {
+                _resetLookup = false;
                 foreach (var dataEntryGridRow in Rows.ToList())
                 {
                     RemoveRow(dataEntryGridRow);
                 }
+                _resetLookup = true;
             }
 
             if (lookupDefinition != null)
@@ -218,7 +220,7 @@ namespace RingSoft.DbMaintenance
 
         public bool ValidateAdvancedFind()
         {
-            var rows = Rows.OfType<AdvancedFindAfFilterRow>();
+            var rows = Rows.OfType<AdvancedFindAfFilterRow>().ToList();
             if (rows.Any())
             {
                 foreach (var advancedFindAfFilterRow in rows)

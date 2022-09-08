@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
+	  <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\magnify.ico</ApplicationIcon>
     <AssemblyName>RingSoft.DbLookup.App.WPFCore</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.1" />
   </ItemGroup>

@@ -263,6 +263,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowAdvancedFindButton { get; internal set; } = true;
 
+        public int RecordCountWait { get; set; }
+
+        public bool ShowRecordCountWait { get; set; }
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -417,7 +421,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (!_setupRan)
             {
-                SetupRecordCount();
+                SetupRecordCount(LookupData.RecordCount);
                 if (ListView != null)
                 {
                     ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
@@ -1152,8 +1156,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            if (setupRecordCount)
-                SetupRecordCount();
+
+            if (ShowRecordCountWait)
+            {
+                GetRecordCountWait();
+            }
+            else
+            {
+                if (setupRecordCount)
+                    SetupRecordCount(LookupData.RecordCount);
+            }
         }
 
         private void SetScrollThumbToMiddle()
@@ -1519,6 +1531,19 @@ namespace RingSoft.DbLookup.Controls.WPF
                 RefreshData(false, SearchForHost.SearchText);
             }
         }
+
+        public int GetRecordCountWait()
+        {
+            var result = LookupData.GetRecordCountWait();
+
+            ShowRecordCountLabel();
+            var recordsText = result == 1 ? "" : "s";
+            RecordCountControl.Text =
+                $@"{result.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
+            RecordCountWait = result;
+            return result;
+        }
+
         public async void GetRecordCountButtonClick()
         {
             ShowRecordCountLabel();
@@ -1534,7 +1559,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (processComplete)
             {
                 if (!GetRecordCountButton.IsVisible)
-                    SetupRecordCount();
+                    SetupRecordCount(LookupData.RecordCount);
             }
         }
 
@@ -1577,25 +1602,29 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private void SetupRecordCount()
+        private void SetupRecordCount(int recordCount)
         {
             if (GetRecordCountButton == null || RecordCountControl == null || RecordCountStackPanel == null)
                 return;
+
+            if (ShowRecordCountWait)
+                return;
+            ;
 
             var showRecordCount = false;
             if (LookupData.ScrollPosition == LookupScrollPositions.Disabled)
             {
                 showRecordCount = true;
             }
-            else if (LookupData.RecordCount > 0)
+            else if (recordCount > 0)
                 showRecordCount = true;
 
             if (showRecordCount)
             {
                 ShowRecordCountLabel();
-                var recordsText = LookupData.RecordCount == 1 ? "" : "s";
+                var recordsText = recordCount == 1 ? "" : "s";
                 RecordCountControl.Text =
-                    $@"{LookupData.RecordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
+                    $@"{recordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
             }
             else
             {

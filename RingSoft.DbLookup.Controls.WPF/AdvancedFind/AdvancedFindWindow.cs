@@ -145,6 +145,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             var image = LookupControlsGlobals.LookupControlContentTemplateFactory
                 .GetImageForAlertLevel(level);
 
+            Dispatcher.Invoke(() => Icon = image.Source);
             if (advancedFindWindows.Count >= 2)
             {
                 if (SystemGlobals.WindowAlertLevel < level)
@@ -154,7 +155,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     {
                         if (Application.Current.MainWindow != null)
                         {
-                            Icon = image.Source;
                             return Application.Current.MainWindow.Icon = image.Source;
                         }
                         return null;
@@ -169,7 +169,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     if (Application.Current.MainWindow != null)
                     {
-                        Icon = image.Source;
                         return Application.Current.MainWindow.Icon = image.Source;
                     }
 

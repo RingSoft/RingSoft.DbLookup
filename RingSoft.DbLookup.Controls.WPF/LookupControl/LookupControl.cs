@@ -589,20 +589,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 columnHeader.SizeChanged += (sender, args) =>
                 {
+             
                     if (args.WidthChanged)
                     {
-                        var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
-                            .ElementAt(LookupGridView.Columns.IndexOf(gridColumn));
-                        lookupColumnDefinition.UpdatePercentWidth(Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
-                        ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
+                        if (!DesignerProperties.GetIsInDesignMode(this))
                         {
-                            ColumnDefinition = lookupColumnDefinition,
-                            SizeChangedEventArgs = args
-                        });
+
+                            var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
+                                .ElementAt(LookupGridView.Columns.IndexOf(gridColumn));
+
+                            lookupColumnDefinition?.UpdatePercentWidth(
+                                Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
+                            ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
+                            {
+                                ColumnDefinition = lookupColumnDefinition,
+                                SizeChangedEventArgs = args
+                            });
+                        }
                     }
                 };
             }
-
             return gridColumn;
         }
 
@@ -1612,7 +1618,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 showRecordCount = true;
             }
-            else if (Command.ClearColumns)
+            else if (Command != null && Command.ClearColumns)
             {
                 showRecordCount = true;
             }

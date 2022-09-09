@@ -39,7 +39,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             View = view;
 
-            
+            if (PreviousButton == null)
+            {
+                throw new Exception("Maintenance Buttons Not Created");
+            }
             PreviousButton.Command = ViewModel.PreviousCommand;
             NewButton.Command = ViewModel.NewCommand;
             SaveButton.Command = ViewModel.SaveCommand;

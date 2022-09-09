@@ -364,7 +364,7 @@ namespace RingSoft.DbMaintenance
                 if (AdvancedFindInput.LookupDefinition != null)
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
             }
-
+            View.SetAlertLevel(AlertLevels.Green);
             base.Initialize();
         }
 

@@ -982,7 +982,8 @@ namespace RingSoft.DbMaintenance
             if (View.ShowRefreshSettings(refreshSettings))
             {
                 LoadRefreshSettings(refreshSettings);
-                RefreshNow();
+                View.GetRecordCount(true);
+                ResetLookup();
             }
         }
 

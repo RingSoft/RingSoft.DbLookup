@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto.Tls;
+﻿using System;
+using Org.BouncyCastle.Crypto.Tls;
 using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup
@@ -14,7 +15,20 @@ namespace RingSoft.DbLookup
     {
         public static IAdvancedFindDbProcessor AdvancedFindDbProcessor { get; set; }
 
-        public static IAdvancedFindLookupContext  AdvancedFindLookupContext { get; set; }
+        private static IAdvancedFindLookupContext _context;
+
+        public static IAdvancedFindLookupContext AdvancedFindLookupContext
+        {
+            get
+            {
+                if (_context == null)
+                {
+                    throw new Exception("Need To Instantiate IAdvancedFindLookupContext.");
+                }
+                return _context;
+            }
+            set => _context = value;
+        }
 
         public static AlertLevels WindowAlertLevel { get; set; }
     }

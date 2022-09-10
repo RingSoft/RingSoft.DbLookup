@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using MySql.Data.MySqlClient;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.QueryBuilder;
@@ -101,6 +102,29 @@ namespace RingSoft.DbLookup.DataProcessor
             var result = GetData(query);
             Database = originalDatabase;
             return result;
+        }
+
+        public override string GetColumnTypeForFieldType(DbFieldTypes fieldType)
+        {
+            switch (fieldType)
+            {
+                case DbFieldTypes.Integer:
+                    return "int";
+                case DbFieldTypes.String:
+                    return "varchar";
+                case DbFieldTypes.Decimal:
+                    return "decimal";
+                case DbFieldTypes.DateTime:
+                    return "datetime";
+                case DbFieldTypes.Byte:
+                    return "tinyint";
+                case DbFieldTypes.Bool:
+                    return "tinyint";
+                case DbFieldTypes.Memo:
+                    return "longtext";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fieldType), fieldType, null);
+            }
         }
     }
 }

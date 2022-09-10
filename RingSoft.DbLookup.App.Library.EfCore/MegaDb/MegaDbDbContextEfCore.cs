@@ -45,7 +45,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
                     optionsBuilder.UseSqlServer(LookupContext.MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.MySql:
-                    optionsBuilder.UseMySql(LookupContext.MegaDbContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    optionsBuilder.UseMySQL(LookupContext.MegaDbContextConfiguration.MySqlDataProcessor.ConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

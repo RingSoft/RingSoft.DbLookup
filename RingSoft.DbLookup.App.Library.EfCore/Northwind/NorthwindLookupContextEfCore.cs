@@ -26,6 +26,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public TableDefinition<Shipper> Shippers { get; set; }
         public TableDefinition<Supplier> Suppliers { get; set; }
         public TableDefinition<Territory> Territories { get; set; }
+        public LookupContextBase Context => this;
         public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
@@ -36,6 +37,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             NorthwindContextConfiguration = new NorthwindLookupContextConfiguration(this);
             NorthwindDbContext = new NorthwindDbContextEfCore(this);
+            SetAdvancedFind();
             Initialize();
         }
 

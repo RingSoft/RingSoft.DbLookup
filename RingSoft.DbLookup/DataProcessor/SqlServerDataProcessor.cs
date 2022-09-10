@@ -134,5 +134,28 @@ namespace RingSoft.DbLookup.DataProcessor
             SqlConnection.ClearAllPools();
             base.ClearConnectionPools();
         }
+
+        public override string GetColumnTypeForFieldType(DbFieldTypes fieldType)
+        {
+            switch (fieldType)
+            {
+                case DbFieldTypes.Integer:
+                    return "integer";
+                case DbFieldTypes.String:
+                    return "nvarchar";
+                case DbFieldTypes.Decimal:
+                    return "numeric";
+                case DbFieldTypes.DateTime:
+                    return "datetime";
+                case DbFieldTypes.Byte:
+                    return "tinyint";
+                case DbFieldTypes.Bool:
+                    return "bit";
+                case DbFieldTypes.Memo:
+                    return "ntext";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fieldType), fieldType, null);
+            }
+        }
     }
 }

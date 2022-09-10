@@ -8,6 +8,16 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.DataProcessor
 {
+    public enum DbFieldTypes
+    {
+        Integer,
+        String,
+        Decimal,
+        DateTime,
+        Byte,
+        Bool,
+        Memo
+    }
     /// <summary>
     /// Base class for processing database data.
     /// </summary>
@@ -348,6 +358,8 @@ namespace RingSoft.DbLookup.DataProcessor
 
             return result;
         }
+
+        public abstract string GetColumnTypeForFieldType(DbFieldTypes fieldType);
 
         /// <summary>
         /// Displays a data exception.

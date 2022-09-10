@@ -5,6 +5,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 {
     public interface IAdvancedFindLookupContext
     {
+        LookupContextBase Context { get; }
         TableDefinition<AdvancedFind> AdvancedFinds { get; set; }
 
         TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }

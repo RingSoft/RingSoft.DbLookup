@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                     optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.MySql:
-                    optionsBuilder.UseMySql(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    optionsBuilder.UseMySQL(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

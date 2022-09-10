@@ -160,5 +160,15 @@ namespace RingSoft.DbLookup.Tests
         {
             throw new NotImplementedException();
         }
+
+        public void SetAdvancedFindDbContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetAdvancedFindLookupContext()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

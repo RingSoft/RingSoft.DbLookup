@@ -117,8 +117,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             keyAutoFillControl.LostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
             KeyAutoFillControl.SetReadOnlyMode(false);
+            KeyControlRegistered = true;
         }
 
+        public bool KeyControlRegistered { get; set; }
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)

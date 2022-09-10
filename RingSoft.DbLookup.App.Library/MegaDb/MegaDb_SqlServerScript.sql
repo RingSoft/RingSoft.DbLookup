@@ -163,6 +163,68 @@ CREATE TABLE [dbo].[StockMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+CREATE TABLE [dbo].[AdvancedFinds](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[Table] [nvarchar](50) NOT NULL,
+	[FromFormula] [ntext] NULL,
+	[RefreshRate] [tinyint] NULL,
+	[RefreshValue] [integer] NULL,
+	[RefreshCondition] [tinyint] NULL,
+	[YellowAlert] [integer] NULL,
+	[RedAlert] [integer] NULL
+
+ CONSTRAINT [PK_AdvancedFind] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[AdvancedFindColumns](
+  [AdvancedFindId] [int] NOT NULL,
+  [ColumnId] [int] NOT NULL,
+  [TableName] [nvarchar](50) NOT NULL,
+  [FieldName] [nvarchar](50) NULL,
+  [PrimaryTableName] [nvarchar](50) NULL,
+  [PrimaryFieldName] [nvarchar](50) NULL,
+  [Caption] [nvarchar](50) NOT NULL,
+  [PercentWidth] [decimal](18, 4) NOT NULL,
+  [Formula] [ntext] NULL,
+  [FieldDataType] [tinyint] NULL,
+  [DecimalFormatType] [tinyint] NULL
+
+ CONSTRAINT [PK_AdvancedFindColumn] PRIMARY KEY CLUSTERED 
+(
+	[AdvancedFindId] ASC,
+	[ColumnId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[AdvancedFindFilters](
+  [AdvancedFindId] [int] NOT NULL,
+  [FilterId] [int] NOT NULL,
+  [LeftParentheses] [tinyint] NULL,
+  [TableName] [nvarchar](50) NULL,
+  [FieldName] [nvarchar](50) NULL,
+  [PrimaryTableName] [nvarchar](50) NULL,
+  [PrimaryFieldName] [nvarchar](50) NULL,
+  [Operand] [tinyint] NOT NULL,
+  [SearchForValue] [nvarchar](50) NULL,
+  [Formula] [ntext] NULL,
+  [FormulaDataType] [tinyint] NULL,
+  [FormulaDisplayValue] [nvarchar](50) NULL,
+  [SearchForAdvancedFindId] [int] NULL,
+  [CustomDate] [bit] NULL,
+  [RightParentheses] [tinyint] NULL,
+  [EndLogic] [tinyint] NULL
+ CONSTRAINT [PK_AdvancedFindFilter] PRIMARY KEY CLUSTERED 
+(
+	[AdvancedFindId] ASC,
+	[FilterId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
 SET IDENTITY_INSERT [dbo].[Locations] ON 
 GO
 INSERT [dbo].[Locations] ([Id], [Name]) VALUES (1, N'Aisle 1')

@@ -9,6 +9,8 @@ namespace RingSoft.DbMaintenance
 {
     public interface IDbMaintenanceDataProcessor
     {
+        bool KeyControlRegistered { get; set; }
+
         event EventHandler<LookupAddViewArgs> LookupAddView;
 
         void InitializeFromLookupData(LookupAddViewArgs e);

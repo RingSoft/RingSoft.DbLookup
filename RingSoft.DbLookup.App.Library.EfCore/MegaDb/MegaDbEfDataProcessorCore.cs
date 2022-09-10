@@ -158,5 +158,17 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
                 f.StockNumber == stockNumber && f.Location == location && f.PurchasedDateTime == purchaseDate);
             return context.DeleteEntity(context.StockCostQuantities, stockCostQuantity, "Deleting Stock Item Purchase");
         }
+
+        public void SetAdvancedFindDbContext()
+        {
+            EfCoreGlobals.DbAdvancedFindContextCore = new MegaDbDbContextEfCore();
+            SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
+        }
+
+        public void SetAdvancedFindLookupContext()
+        {
+
+        }
+
     }
 }

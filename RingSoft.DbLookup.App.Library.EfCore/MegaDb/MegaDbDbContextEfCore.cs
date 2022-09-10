@@ -4,13 +4,15 @@ using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.EfCore;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {
-    public class MegaDbDbContextEfCore : DbContext
+    public class MegaDbDbContextEfCore : DbContext, IAdvancedFindDbContextEfCore
     {
         public DbSet<Item> Items { get; set; }
 
@@ -23,6 +25,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public DbSet<StockMaster> Stocks { get; set; }
 
         public DbSet<StockCostQuantity> StockCostQuantities { get; set; }
+
+        public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
+        public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
+        public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+
 
         internal MegaDbDbContextEfCore(MegaDbLookupContextEfCore lookupContext)
         {
@@ -72,6 +79,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             modelBuilder.Entity<Location>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<Manufacturer>().Property(p => p.Name).IsRequired();
 
+            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -87,6 +96,16 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
                 result = 0;
             }
             return result;
+        }
+
+        public DbContext GetDbContextEf()
+        {
+            return this;
+        }
+
+        public IAdvancedFindDbContextEfCore GetNewDbContext()
+        {
+            return new MegaDbDbContextEfCore();
         }
     }
 }

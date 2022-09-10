@@ -63,5 +63,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         bool SaveStockCostQuantity(StockCostQuantity stockCostQuantity);
 
         bool DeleteStockCostQuantity(string stockNumber, string location, DateTime purchaseDate);
+
+        void SetAdvancedFindDbContext();
+
+        void SetAdvancedFindLookupContext();
+
     }
 }

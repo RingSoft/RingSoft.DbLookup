@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
+using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbMaintenance;
 
@@ -122,8 +125,18 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
-                var result =
-                    await RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SeedItemsTable(MaxRecords, _cancellationToken);
+                int result = 0;
+                try
+                {
+                    result =
+                        await RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SeedItemsTable(MaxRecords, _cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+                
                 FinishProcess(result <= 0);
                 if (result > 0)
                 {

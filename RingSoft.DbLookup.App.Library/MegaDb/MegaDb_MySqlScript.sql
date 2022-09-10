@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `megadb` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE  IF NOT EXISTS `megadb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `megadb`;
--- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: localhost    Database: megadb
 -- ------------------------------------------------------
--- Server version	5.7.23-log
+-- Server version	8.0.30
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,6 +18,105 @@ USE `megadb`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `advancedfindcolumns`
+--
+
+DROP TABLE IF EXISTS `advancedfindcolumns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `advancedfindcolumns` (
+  `AdvancedFindId` int NOT NULL,
+  `ColumnId` int NOT NULL,
+  `TableName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `FieldName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `PrimaryTableName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `PrimaryFieldName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Caption` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `PercentWidth` decimal(18,4) NOT NULL,
+  `Formula` longtext,
+  `FieldDataType` tinyint unsigned DEFAULT NULL,
+  `DecimalFormatType` tinyint unsigned DEFAULT NULL,
+  PRIMARY KEY (`AdvancedFindId`,`ColumnId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `advancedfindcolumns`
+--
+
+LOCK TABLES `advancedfindcolumns` WRITE;
+/*!40000 ALTER TABLE `advancedfindcolumns` DISABLE KEYS */;
+/*!40000 ALTER TABLE `advancedfindcolumns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `advancedfindfilters`
+--
+
+DROP TABLE IF EXISTS `advancedfindfilters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `advancedfindfilters` (
+  `AdvancedFindId` int NOT NULL,
+  `FilterId` int NOT NULL,
+  `LeftParentheses` tinyint unsigned DEFAULT NULL,
+  `TableName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `FieldName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `PrimaryTableName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `PrimaryFieldName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Operand` tinyint unsigned NOT NULL,
+  `SearchForValue` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Formula` longtext,
+  `FormulaDataType` tinyint unsigned DEFAULT NULL,
+  `FormulaDisplayValue` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `SearchForAdvancedFindId` int DEFAULT NULL,
+  `CustomDate` tinyint(1) DEFAULT NULL,
+  `RightParentheses` tinyint unsigned DEFAULT NULL,
+  `EndLogic` tinyint unsigned DEFAULT NULL,
+  PRIMARY KEY (`AdvancedFindId`,`FilterId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `advancedfindfilters`
+--
+
+LOCK TABLES `advancedfindfilters` WRITE;
+/*!40000 ALTER TABLE `advancedfindfilters` DISABLE KEYS */;
+/*!40000 ALTER TABLE `advancedfindfilters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `advancedfinds`
+--
+
+DROP TABLE IF EXISTS `advancedfinds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `advancedfinds` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Table` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `FromFormula` longtext,
+  `RefreshRate` tinyint unsigned DEFAULT NULL,
+  `RefreshValue` int DEFAULT NULL,
+  `RefreshCondition` tinyint unsigned DEFAULT NULL,
+  `YellowAlert` int DEFAULT NULL,
+  `RedAlert` int DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `advancedfinds`
+--
+
+LOCK TABLES `advancedfinds` WRITE;
+/*!40000 ALTER TABLE `advancedfinds` DISABLE KEYS */;
+/*!40000 ALTER TABLE `advancedfinds` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `items`
 --
 
@@ -25,18 +124,18 @@ DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `items` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
-  `LocationID` int(11) NOT NULL,
-  `ManufacturerID` int(11) NOT NULL,
-  `IconType` tinyint(3) NOT NULL,
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `LocationID` int NOT NULL,
+  `ManufacturerID` int NOT NULL,
+  `IconType` tinyint unsigned NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_Items` (`Name`),
   KEY `IX_Items_Location` (`LocationID`),
   KEY `IX_Items_Manufacturer` (`ManufacturerID`),
-  CONSTRAINT `FK_Items_Locations` FOREIGN KEY (`LocationID`) REFERENCES `locations` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_Items_Manufacturers` FOREIGN KEY (`ManufacturerID`) REFERENCES `manufacturers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_Items_Locations` FOREIGN KEY (`LocationID`) REFERENCES `locations` (`Id`),
+  CONSTRAINT `FK_Items_Manufacturers` FOREIGN KEY (`ManufacturerID`) REFERENCES `manufacturers` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,11 +155,11 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `locations` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `IX_Locations` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,11 +180,11 @@ DROP TABLE IF EXISTS `manufacturers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `manufacturers` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `IX_Manufacturers` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,14 +205,14 @@ DROP TABLE IF EXISTS `stockcostquantity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockcostquantity` (
-  `StockNumber` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
-  `Location` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+  `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `PurchasedDateTime` datetime(6) NOT NULL,
   `Quantity` decimal(18,4) NOT NULL,
   `Cost` decimal(18,4) NOT NULL,
   PRIMARY KEY (`StockNumber`,`Location`,`PurchasedDateTime`),
-  CONSTRAINT `FK_StockCostQuantity_StockMaster` FOREIGN KEY (`StockNumber`, `Location`) REFERENCES `stockmaster` (`StockNumber`, `Location`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_StockCostQuantity_StockMaster` FOREIGN KEY (`StockNumber`, `Location`) REFERENCES `stockmaster` (`StockNumber`, `Location`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,11 +233,11 @@ DROP TABLE IF EXISTS `stockmaster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockmaster` (
-  `StockNumber` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
-  `Location` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+  `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Price` decimal(18,4) NOT NULL,
   PRIMARY KEY (`StockNumber`,`Location`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-13 12:52:19
+-- Dump completed on 2022-09-10 17:16:52

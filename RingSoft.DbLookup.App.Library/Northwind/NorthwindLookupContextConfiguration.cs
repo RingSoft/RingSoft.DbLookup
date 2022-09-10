@@ -95,6 +95,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                     result = "strftime('%m/%d/%Y', [{Alias}].[OrderDate]) || ' - ' || [{Alias}].[CustomerId]";
                     break;
                 case DataProcessorTypes.SqlServer:
+                    result = "FORMAT ([{Alias}].[OrderDate], 'dd/MM/yyyy ') + ' - ' + [{Alias}].[CustomerId]";
                     break;
                 case DataProcessorTypes.MySql:
                     result = "CONCAT(`{Alias}`.`OrderDate`, ' - ', `{Alias}`.`CustomerId`)";

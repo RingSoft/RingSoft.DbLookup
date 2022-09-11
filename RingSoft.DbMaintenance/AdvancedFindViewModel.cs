@@ -390,6 +390,11 @@ namespace RingSoft.DbMaintenance
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,
             PrimaryKeyValue primaryKeyValue)
         {
+            if (SystemGlobals.AdvancedFindDbProcessor == null)
+            {
+                throw new ApplicationException(
+                    $"{nameof(SystemGlobals)}.{nameof(SystemGlobals.AdvancedFindDbProcessor)} not set.");
+            }
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(newEntity.Id);
             AdvancedFindId = advancedFind.Id;
 

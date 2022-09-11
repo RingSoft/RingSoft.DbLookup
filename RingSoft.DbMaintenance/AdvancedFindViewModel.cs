@@ -662,6 +662,10 @@ namespace RingSoft.DbMaintenance
 
         protected override bool SaveEntity(AdvancedFind entity)
         {
+            if (SystemGlobals.AdvancedFindDbProcessor == null)
+            {
+                throw new ApplicationException("SystemGlobals.AdvancedFindDbProcessor has not been set.");
+            }
             return SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
                 FiltersManager.GetEntityList());
         }

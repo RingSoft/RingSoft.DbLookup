@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
@@ -17,6 +18,11 @@ namespace RingSoft.DbLookup.EfCore
 
         public AdvancedFind.AdvancedFind GetAdvancedFind(int advancedFindId)
         {
+            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            {
+                throw new ApplicationException(
+                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
+            }
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
             return context.AdvancedFinds.Include(p => p.Columns)
                 .Include(p => p.Filters)
@@ -26,6 +32,11 @@ namespace RingSoft.DbLookup.EfCore
         public bool SaveAdvancedFind(AdvancedFind.AdvancedFind advancedFind, List<AdvancedFindColumn> columns,
             List<AdvancedFindFilter> filters)
         {
+            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            {
+                throw new ApplicationException(
+                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
+            }
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
             var dbContext = context.GetDbContextEf();
 
@@ -69,6 +80,11 @@ namespace RingSoft.DbLookup.EfCore
 
         public bool DeleteAdvancedFind(int advancedFindId)
         {
+            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            {
+                throw new ApplicationException(
+                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
+            }
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
             var dbContext = context.GetDbContextEf();
             var advancedFind = context.AdvancedFinds.FirstOrDefault(p => p.Id == advancedFindId);

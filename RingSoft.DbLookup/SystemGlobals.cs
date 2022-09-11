@@ -23,7 +23,8 @@ namespace RingSoft.DbLookup
             {
                 if (_context == null)
                 {
-                    throw new Exception("Need To Instantiate IAdvancedFindLookupContext.");
+                    var message = $"Need To Instantiate {nameof(IAdvancedFindLookupContext)}.";
+                    throw new ApplicationException(message);
                 }
                 return _context;
             }

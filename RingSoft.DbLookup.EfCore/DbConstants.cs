@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.DataProcessor;
+﻿using System;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.EfCore
 {
@@ -12,46 +13,104 @@ namespace RingSoft.DbLookup.EfCore
         //public const string BoolColumnType = "bit";
         //public const string MemoColumnType = "ntext";
 
+        public static DbFieldConstants ConstantGenerator { get; set; }
+
         public static string IntegerColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .Integer);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .Integer);
+            } 
         }
 
         public static string StringColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .String);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .String);
+            }
         }
 
         public static string DecimalColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .Decimal);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .Decimal);
+            }
         }
 
         public static string DateColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .DateTime);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .DateTime);
+            }
         }
 
         public static string ByteColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .Byte);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .Byte);
+            }
         }
 
         public static string BoolColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .Bool);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .Bool);
+            }
         }
 
         public static string MemoColumnType
         {
-            get => SystemGlobals.AdvancedFindLookupContext.Context.DataProcessor.GetColumnTypeForFieldType(DbFieldTypes
-                .Memo);
+            get
+            {
+                if (ConstantGenerator == null)
+                {
+                    throw new ApplicationException(
+                        $"{nameof(DbConstants)}.{nameof(DbConstants.ConstantGenerator)} not set.");
+                }
+                return ConstantGenerator.GetColumnTypeForFieldType(DbFieldTypes
+                    .Memo);
+            }
         }
 
     }

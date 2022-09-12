@@ -46,12 +46,15 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             switch (LookupContext.DataProcessorType)
             {
                 case DataProcessorTypes.Sqlite:
+                    DbConstants.ConstantGenerator = new SqliteDbConstants();
                     optionsBuilder.UseSqlite(LookupContext.MegaDbContextConfiguration.SqliteDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.SqlServer:
+                    DbConstants.ConstantGenerator = new SqlServerDbConstants();
                     optionsBuilder.UseSqlServer(LookupContext.MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.MySql:
+                    DbConstants.ConstantGenerator = new MySqlDbConstants();
                     optionsBuilder.UseMySQL(LookupContext.MegaDbContextConfiguration.MySqlDataProcessor.ConnectionString);
                     break;
                 default:

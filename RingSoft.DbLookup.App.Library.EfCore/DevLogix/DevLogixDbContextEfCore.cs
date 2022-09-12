@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.DevLogix.Model;
 using RingSoft.DbLookup.App.Library.EfCore.DevLogix.Configurations;
+using RingSoft.DbLookup.EfCore;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
 {
@@ -25,6 +26,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.DevLogix
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            DbConstants.ConstantGenerator = new SqliteDbConstants();
             optionsBuilder.UseSqlite(_lookupContext.DevLogixConfiguration.SqliteDataProcessor.ConnectionString);
             base.OnConfiguring(optionsBuilder);
         }

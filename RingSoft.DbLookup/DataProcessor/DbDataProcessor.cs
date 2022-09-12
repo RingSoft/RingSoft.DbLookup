@@ -359,8 +359,6 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
-        public abstract string GetColumnTypeForFieldType(DbFieldTypes fieldType);
-
         /// <summary>
         /// Displays a data exception.
         /// </summary>

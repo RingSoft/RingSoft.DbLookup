@@ -52,12 +52,15 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             switch (_lookupContext.DataProcessorType)
             {
                 case DataProcessorTypes.Sqlite:
+                    DbConstants.ConstantGenerator = new SqliteDbConstants();
                     optionsBuilder.UseSqlite(_lookupContext.NorthwindContextConfiguration.SqliteDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.SqlServer:
+                    DbConstants.ConstantGenerator = new SqlServerDbConstants();
                     optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
                     break;
                 case DataProcessorTypes.MySql:
+                    DbConstants.ConstantGenerator = new MySqlDbConstants();
                     optionsBuilder.UseMySQL(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
                     break;
                 default:

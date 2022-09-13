@@ -152,7 +152,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        internal FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition = null,
+        internal FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition,
             string value = "", string alias = "")
         {
             if (!alias.IsNullOrEmpty())
@@ -181,9 +181,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        private FormulaFilterDefinition CreateAddFixedFilter(string formula, FieldDataTypes dataType)
+        private FormulaFilterDefinition CreateAddFixedFilter(string description, Conditions? condition,
+            string value, string formula, FieldDataTypes dataType)
         {
-            var formulaFilter = CreateFormulaFilter(formula, dataType);
+            var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value);
+            formulaFilter.Description = description;
             _fixedFilterDefinitions.Add(formulaFilter);
             return formulaFilter;
         }
@@ -224,9 +226,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
-        public FormulaFilterDefinition AddFixedFilter(string formula, FieldDataTypes dataType = FieldDataTypes.String)
+        public FormulaFilterDefinition AddFixedFilter(string description, Conditions? condition,
+            string value, string formula, FieldDataTypes dataType = FieldDataTypes.String)
         {
-            return CreateAddFixedFilter(formula, dataType);
+            return CreateAddFixedFilter(description, condition, value, formula, dataType);
         }
 
         public void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
@@ -243,7 +246,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        public FormulaFilterDefinition AddUserFilter(string formula, Conditions? condition = null, string value = "",
+        public FormulaFilterDefinition AddUserFilter(string formula, Conditions condition, string value = "",
             string alias = "", FieldDataTypes dataType = FieldDataTypes.String)
         {
             var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value, alias);

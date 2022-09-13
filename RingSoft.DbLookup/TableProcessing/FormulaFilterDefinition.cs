@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -6,6 +7,7 @@ namespace RingSoft.DbLookup.TableProcessing
     {
         public override FilterItemTypes Type => FilterItemTypes.Formula;
 
+        public string Description { get; internal set; }
         /// <summary>
         /// Gets the formula.
         /// </summary>

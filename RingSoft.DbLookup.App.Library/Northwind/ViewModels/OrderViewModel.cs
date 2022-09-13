@@ -770,7 +770,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
                 var tableFilterDefinition = new TableFilterDefinition<Order>(TableDefinition);
                 var sql = sqlStringBuilder.ToString();
-                tableFilterDefinition.AddFixedFilter(sql);
+                tableFilterDefinition.AddFixedFilter("Order Details", null, "", sql);
                 
                 return tableFilterDefinition;
             }

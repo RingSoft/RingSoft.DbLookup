@@ -6,6 +6,7 @@ using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
@@ -339,8 +340,18 @@ namespace RingSoft.DbMaintenance
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                MakeSearchValueText();
-
+                
+            }
+            else if (filter is FormulaFilterDefinition formulaFilter)
+            {
+                Table = filter.TableFilterDefinition.TableDefinition.Description;
+                Field = $"{formulaFilter.Description} Formula";
+                Formula = formulaFilter.Formula;
+                SearchValue = formulaFilter.FilterValue;
+                Condition = formulaFilter.Condition.GetValueOrDefault();
+                FormulaDataType = formulaFilter.DataType;
+                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(formulaFilter.Description, Condition,
+                    SearchValue, Formula, FormulaDataType);
             }
 
             RightParenthesesCount = (byte) filter.RightParenthesesCount;
@@ -350,6 +361,7 @@ namespace RingSoft.DbMaintenance
             {
                 AllowSave = false;
             }
+            MakeSearchValueText();
         }
 
         public void FinishOffFilter(bool isFixed, bool theEnd)
@@ -390,24 +402,35 @@ namespace RingSoft.DbMaintenance
             var searchValueText = MakeBeginSearchValueText();
             if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
             {
+                TableDefinitionBase tableToSearch = null;
+                var makeSearchValueText = true;
                 if (fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
-                    var tableToSearch = fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
-                    switch (Condition)
-                    {
-                        case Conditions.Equals:
-                        case Conditions.NotEquals:
-                            var searchAutoFillValue =
-                                Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
-                            if (searchAutoFillValue != null)
-                                searchValueText += searchAutoFillValue.Text;
-                            break;
-                        default:
-                            searchValueText += MakeEndSearchValueText(fieldFilter, searchValue);
-                            break;
-                    }
+                    tableToSearch = fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
                 }
                 else
+                {
+                    tableToSearch = fieldFilter.FieldDefinition.TableDefinition;
+                }
+                switch (Condition)
+                {
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        var searchAutoFillValue =
+                            Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
+                        if (searchAutoFillValue != null)
+                        {
+                            searchValueText += searchAutoFillValue.Text;
+                            makeSearchValueText = false;
+                        }
+
+                        break;
+                    default:
+                        searchValueText += MakeEndSearchValueText(fieldFilter, searchValue);
+                        makeSearchValueText = false;
+                        break;
+                }
+                if (makeSearchValueText)
                 {
                     searchValueText += MakeEndSearchValueText(fieldFilter, searchValue);
                 }
@@ -543,6 +566,10 @@ namespace RingSoft.DbMaintenance
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
+                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        {
+                            fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                        }
                         FilterItemDefinition =
                             Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
                                 fieldDefinition, Condition, SearchValue);

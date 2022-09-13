@@ -143,7 +143,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     var valueType = formulaFilter.DataType.ConvertFieldTypeIntoValueType();
                     var formula = formulaFilter.Formula.Replace("{Alias}", queryTable?.Alias);
                     var whereItem = query.AddWhereItemFormula(formula,
-                        formulaFilter.Condition.Value, formulaFilter.FilterValue,
+                        formulaFilter.Condition.GetValueOrDefault(), formulaFilter.FilterValue,
                         valueType);
                     whereItem.Table = queryTable;
                     ProcessWhereItem(whereItem, ref lastAdvancedWhere, advancedFindFilter);

@@ -710,9 +710,9 @@ namespace RingSoft.DbMaintenance
         }
 
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
-            bool createColumn = true)
+            bool createColumn = true, double percentWidth = 20)
         {
-            return AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn);
+            return AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn, percentWidth);
         }
 
 
@@ -769,8 +769,23 @@ namespace RingSoft.DbMaintenance
 
                 if (createColumn)
                 {
-                    var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn);
-                    newLookupColumnDefinition = includeResult.ColumnDefinition;
+                    if (lookupFormulaColumn != null)
+                    {
+                        var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, false);
+                        if (includeResult != null && includeResult.LookupJoin != null)
+                        {
+                            newLookupColumnDefinition = includeResult.LookupJoin.AddVisibleColumnDefinition(lookupFormulaColumn.Caption,
+                                lookupFormulaColumn.Formula, lookupFormulaColumn.PercentWidth,
+                                lookupFormulaColumn.DataType);
+
+                            newLookupFormulaColumnDefinition = newLookupColumnDefinition as LookupFormulaColumnDefinition;
+                        }
+                    }
+                    else
+                    {
+                        var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn, visibleColumn.PercentWidth);
+                        newLookupColumnDefinition = includeResult.ColumnDefinition;
+                    }
                 }
 
 
@@ -782,6 +797,9 @@ namespace RingSoft.DbMaintenance
 
                 if (visibleColumn.ContentTemplateId != null)
                     newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
+
+                newLookupColumnDefinition.DoShowNegativeValuesInRed(visibleColumn.ShowNegativeValuesInRed);
+                newLookupColumnDefinition.DoShowPositiveValuesInGreen(visibleColumn.ShowPositiveValuesInGreen);
             }
             //    LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
             //    LookupColumnDefinitionBase newLookupColumnDefinition = null;

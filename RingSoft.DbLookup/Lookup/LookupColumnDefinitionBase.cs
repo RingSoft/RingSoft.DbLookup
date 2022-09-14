@@ -203,7 +203,20 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
-        public IJoinParent ParentObject { get; set; }
+        private IJoinParent _parent;
+
+        public IJoinParent ParentObject
+        {
+            get => _parent;
+            set
+            {
+                if (Caption == "Difference" && value == null)
+                {
+                    
+                }
+                _parent = value;
+            }
+        }
         public FieldDefinition ChildField { get; set; }
         public FieldDefinition ParentField { get; set; }
 

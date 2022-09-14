@@ -187,6 +187,11 @@ namespace RingSoft.DbLookup.Lookup
                 JoinQueryTableAlias = formulaSource.JoinQueryTableAlias;
                 PrimaryTable = formulaSource.PrimaryTable;
                 PrimaryField = formulaSource.PrimaryField;
+                ParentObject =formulaSource.ParentObject;
+                if (formulaSource.Caption == "Difference")
+                {
+                    
+                }
             }
             base.CopyFrom(source);
         }

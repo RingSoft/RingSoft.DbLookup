@@ -311,7 +311,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
-    bool createColumn = true)
+    bool createColumn = true, double percentWidth = 20)
         {
             var result = new ProcessIncludeResult();
             var childNodes = new List<TreeViewItem>();
@@ -337,14 +337,14 @@ namespace RingSoft.DbLookup.AdvancedFind
                     {
                         case TreeViewType.Field:
                             var processResult =
-                                SelectColumnDescription(selectedItem, selectedItem, null, columnCaption);
+                                SelectColumnDescription(selectedItem, selectedItem, null, columnCaption, percentWidth);
                             includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                             result.LookupJoin = includeJoin;
                             result.ColumnDefinition = processResult.ColumnDefinition;
                             break;
                         case TreeViewType.Formula:
                             var column = LookupDefinition.AddVisibleColumnDefinition(columnCaption,
-                                selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType, "");
+                                selectedItem.FormulaData.Formula, percentWidth, selectedItem.FormulaData.DataType, "");
                             result.ColumnDefinition = column;
 
                             break;
@@ -395,14 +395,14 @@ namespace RingSoft.DbLookup.AdvancedFind
                         {
                             case TreeViewType.Field:
                                 var processResult =
-                                    SelectColumnDescription(selectedItem, child, includeJoin, columnCaption);
+                                    SelectColumnDescription(selectedItem, child, includeJoin, columnCaption, percentWidth);
                                 includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
                                 result.LookupJoin = includeJoin;
                                 result.ColumnDefinition = processResult.ColumnDefinition;
                                 break;
                             case TreeViewType.Formula:
                                 var column = includeJoin.AddVisibleColumnDefinition(columnCaption,
-                                   selectedItem.FormulaData.Formula, 20, selectedItem.FormulaData.DataType);
+                                   selectedItem.FormulaData.Formula, percentWidth, selectedItem.FormulaData.DataType);
                                 result.ColumnDefinition = column;
 
                                 break;
@@ -449,7 +449,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             return includeJoin;
         }
         private ProcessIncludeResult SelectColumnDescription(TreeViewItem selectedTreeViewItem, TreeViewItem child,
-            LookupJoin includeJoin, string caption)
+            LookupJoin includeJoin, string caption, double percentWidth)
         {
             LookupColumnDefinitionBase column = null;
             if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -469,7 +469,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                         .InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
                 {
                     textField = lookupFieldColumn.FieldDefinition;
-                    column = includeJoin.AddVisibleColumnDefinition(caption, textField, 20);
+                    column = includeJoin.AddVisibleColumnDefinition(caption, textField, percentWidth);
                 }
                 else if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
                              .PrimaryField.TableDefinition.LookupDefinition
@@ -478,7 +478,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
                     var formula = lookupFormulaColumn.OriginalFormula;
                     column = includeJoin.AddVisibleColumnDefinition(caption,
-                        formula, 20, lookupFormulaColumn.DataType);
+                        formula, percentWidth, lookupFormulaColumn.DataType);
                 }
             }
             else
@@ -487,7 +487,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                 {
                     column = includeJoin.AddVisibleColumnDefinition(caption,
                         selectedTreeViewItem.FieldDefinition,
-                        20);
+                        percentWidth);
                 }
                 else
                 {
@@ -496,11 +496,11 @@ namespace RingSoft.DbLookup.AdvancedFind
                         includeJoin = LookupDefinition.Include(child.FieldDefinition.ParentJoinForeignKeyDefinition
                             .FieldJoins[0].ForeignField);
                         column = includeJoin.AddVisibleColumnDefinition(caption, selectedTreeViewItem.FieldDefinition,
-                            20);
+                            percentWidth);
                     }
                     else
                     {
-                        column = LookupDefinition.AddVisibleColumnDefinition(caption, child.FieldDefinition, 20, "");
+                        column = LookupDefinition.AddVisibleColumnDefinition(caption, child.FieldDefinition, percentWidth, "");
                     }
                 }
             }

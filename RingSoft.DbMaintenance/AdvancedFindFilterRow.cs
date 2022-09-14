@@ -40,6 +40,8 @@ namespace RingSoft.DbMaintenance
 
         protected bool ResetLookup { get; set; } = true;
 
+        private FieldDefinition _autoFillField;
+
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)
         {
             Manager = manager;
@@ -299,6 +301,11 @@ namespace RingSoft.DbMaintenance
             }
             if (filter is FieldFilterDefinition fieldFilterDefinition)
             {
+                if (fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    _autoFillField = fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
+                        .PrimaryField;
+                }
                 Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
                 Field = fieldFilterDefinition.FieldDefinition.Description;
                 Condition = fieldFilterDefinition.Condition;
@@ -404,9 +411,9 @@ namespace RingSoft.DbMaintenance
             {
                 TableDefinitionBase tableToSearch = null;
                 var makeSearchValueText = true;
-                if (fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                if (_autoFillField != null)
                 {
-                    tableToSearch = fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
+                    tableToSearch = _autoFillField.TableDefinition;
                 }
                 else
                 {
@@ -416,12 +423,15 @@ namespace RingSoft.DbMaintenance
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
-                        var searchAutoFillValue =
-                            Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
-                        if (searchAutoFillValue != null)
+                        if (_autoFillField != null)
                         {
-                            searchValueText += searchAutoFillValue.Text;
-                            makeSearchValueText = false;
+                            var searchAutoFillValue =
+                                Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
+                            if (searchAutoFillValue != null)
+                            {
+                                searchValueText += searchAutoFillValue.Text;
+                                makeSearchValueText = false;
+                            }
                         }
 
                         break;
@@ -566,17 +576,23 @@ namespace RingSoft.DbMaintenance
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
+                        DbLookup.ModelDefinition.FieldDefinitions.FieldDefinition fieldToSearch = fieldDefinition;
                         if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
-                            fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                            fieldToSearch = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
                         }
+
                         FilterItemDefinition =
                             Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                fieldDefinition, Condition, SearchValue);
+                                fieldToSearch, Condition, SearchValue);
 
                         if (includeResult.LookupJoin != null)
                         {
                             FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                        }
+                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        {
+                            _autoFillField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
                         }
 
                         break;

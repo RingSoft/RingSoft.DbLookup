@@ -76,7 +76,7 @@
 
                             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                <Button x:Name="OKButton" Content="_OK" Width="100"/>
+                                <Button x:Name="OKButton" Content="_OK" Width="100" IsDefault="True"/>
 
                                 <Button x:Name="CancelButton" Content="_Cancel" Width="100" Margin="5, 0, 0, 0"/>
 

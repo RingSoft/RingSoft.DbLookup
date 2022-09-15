@@ -1018,7 +1018,7 @@ namespace RingSoft.DbMaintenance
         {
             if (ValidateLookup())
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition));
                 ProcessRefresh(true);
             }
         }
@@ -1182,10 +1182,14 @@ namespace RingSoft.DbMaintenance
 
         private void TimerRefresh()
         {
+            if (_timer.Enabled == false)
+            {
+                return;
+            }
             _timer.Enabled = false;
             if (ValidateLookup())
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh);
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition));
                 ProcessRefresh(false);
             }
             _timer.Enabled = true;

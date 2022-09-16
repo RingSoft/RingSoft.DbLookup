@@ -62,7 +62,7 @@
 
                                 <Label Content="Yellow Alert Level" />
 
-                                <Image x:Name="YellowAlertImage"/>
+                                <Image x:Name="YellowAlertImage" Width="16" Height="16"/>
 
                             </StackPanel>
 
@@ -72,7 +72,7 @@
 
                                 <Label Content="Red Alert Level" />
 
-                                <Image x:Name="RedAlertImage"/>
+                                <Image x:Name="RedAlertImage" Width="16" Height="16"/>
 
                             </StackPanel>
 

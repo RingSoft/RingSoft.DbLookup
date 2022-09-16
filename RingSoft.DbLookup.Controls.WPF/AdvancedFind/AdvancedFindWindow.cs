@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RingSoft.DataEntryControls.WPF;
@@ -6,6 +7,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
+using Hardcodet.Wpf.TaskbarNotification;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
@@ -58,6 +60,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private Control _buttonsControl;
         private LookupAddViewArgs _addViewArgs;
+        private TaskbarIcon _taskbarIcon;
 
         public IDbMaintenanceProcessor Processor { get; set; }
 
@@ -167,12 +170,28 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SystemGlobals.WindowAlertLevel = level;
                 Dispatcher.Invoke(() =>
                 {
-                    if (Application.Current.MainWindow != null)
+                    if (level == AlertLevels.Green)
                     {
-                        return Application.Current.MainWindow.Icon = image.Source;
+                        _taskbarIcon.Visibility = Visibility.Collapsed;
                     }
+                    else
+                    {
+                        if (image.Source != null)
+                        {
+                            _taskbarIcon.ToolTipText = "Hello World";
+                            _taskbarIcon.IconSource = image.Source;
+                            _taskbarIcon.Visibility = Visibility.Visible;
+                            _taskbarIcon.ShowBalloonTip("title", "message", BalloonIcon.Info);
+                            
+                            _taskbarIcon.HideBalloonTip();
+                            return;
 
-                    return null;
+                            //return Application.Current.MainWindow.Icon = image.Source;
+
+                        }
+
+                        return;
+                    }
                 });
 
             }
@@ -243,6 +262,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 Processor.InitializeFromLookupData(_addViewArgs);
             }
             Processor.CheckAddOnFlyMode();
+            _taskbarIcon = new TaskbarIcon();
+
         }
 
         public override void OnApplyTemplate()

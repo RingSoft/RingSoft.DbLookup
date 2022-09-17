@@ -989,7 +989,13 @@ namespace RingSoft.DbMaintenance
             {
                 CreateLookupDefinition();
                 var lookupDefinition= LookupDefinition.TableDefinition.LookupDefinition;
-                LoadFromLookupDefinition(lookupDefinition);
+                if (lookupDefinition != null) 
+                    LoadFromLookupDefinition(lookupDefinition);
+                else
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox("No default lookup for table set.",
+                        "No Default Lookup", RsMessageBoxIcons.Exclamation);
+                }
             }
         }
 

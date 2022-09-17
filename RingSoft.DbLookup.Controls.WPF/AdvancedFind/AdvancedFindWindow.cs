@@ -164,6 +164,27 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
 
+            if (image == null)
+            {
+                var errorMessage = "No icon found for alert level: ";
+                switch (level)
+                {
+                    case AlertLevels.Green:
+                        errorMessage += "Green";
+                        break;
+                    case AlertLevels.Yellow:
+                        errorMessage += "Yellow";
+                        break;
+                    case AlertLevels.Red:
+                        errorMessage += "Red";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(level), level, null);
+                }
+
+                throw new ApplicationException(errorMessage);
+
+            }
             Dispatcher.Invoke(() => Icon = image.Source);
             //if (advancedFindWindows.Count >= 2)
             //{

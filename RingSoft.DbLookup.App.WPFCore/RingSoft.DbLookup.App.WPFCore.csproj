@@ -14,6 +14,7 @@
     <None Remove="Resources\bullet_green.png" />
     <None Remove="Resources\bullet_red.ico" />
     <None Remove="Resources\bullet_red.png" />
+    <None Remove="Resources\bullet_yellow.ico" />
     <None Remove="Resources\bullet_yellow.png" />
   </ItemGroup>
 
@@ -35,6 +36,7 @@
     <Resource Include="Resources\bullet_green.png" />
     <Resource Include="Resources\bullet_red.ico" />
     <Resource Include="Resources\bullet_red.png" />
+    <Resource Include="Resources\bullet_yellow.ico" />
     <Resource Include="Resources\bullet_yellow.png" />
   </ItemGroup>
 

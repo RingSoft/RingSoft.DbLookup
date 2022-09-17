@@ -172,7 +172,8 @@ CREATE TABLE [dbo].[AdvancedFinds](
 	[RefreshValue] [integer] NULL,
 	[RefreshCondition] [tinyint] NULL,
 	[YellowAlert] [integer] NULL,
-	[RedAlert] [integer] NULL
+	[RedAlert] [integer] NULL,
+	[Disabled] [bit] NULL
 
  CONSTRAINT [PK_AdvancedFind] PRIMARY KEY CLUSTERED 
 (

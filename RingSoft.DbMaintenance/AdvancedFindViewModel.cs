@@ -36,7 +36,7 @@ namespace RingSoft.DbMaintenance
 
         bool ShowRefreshSettings(AdvancedFind advancedFind);
 
-        void SetAlertLevel(AlertLevels level);
+        void SetAlertLevel(AlertLevels level, string message = "");
 
         int GetRecordCount(bool showRecordCount);
 
@@ -316,6 +316,7 @@ namespace RingSoft.DbMaintenance
         public byte? RefreshCondition { get; set; }
         public int? YellowAlert { get; set; }
         public int? RedAlert { get; set; }
+        public bool Disabled { get; set; }
 
         private RefreshRate _refreshRate;
         private int _refreshValue;
@@ -453,6 +454,12 @@ namespace RingSoft.DbMaintenance
             {
                 _refreshValue = RefreshValue.Value;
             }
+
+            if (entity.Disabled.HasValue)
+            {
+                Disabled = entity.Disabled.Value;
+            }
+
         }
 
         private void LoadTree(string tableName)
@@ -584,6 +591,7 @@ namespace RingSoft.DbMaintenance
             advancedFind.RefreshCondition = RefreshCondition;
             advancedFind.YellowAlert = YellowAlert;
             advancedFind.RedAlert = RedAlert;
+            advancedFind.Disabled = Disabled;
 
             return advancedFind;
         }
@@ -1025,23 +1033,27 @@ namespace RingSoft.DbMaintenance
 
         private void ProcessRefresh(bool resetTimer)
         {
-            if (RefreshCondition.HasValue)
+            if (RefreshCondition.HasValue && !Disabled)
             {
                 var recordCount = View.GetRecordCount(true);
                 var yellowAlert = YellowAlert.Value;
                 var redAlert = RedAlert.Value;
                 var refreshCondition = (Conditions)RefreshCondition.Value;
+                var formattedCount = GblMethods.FormatValue(FieldDataTypes.Integer,
+                    recordCount.ToString(), GblMethods.GetNumFormat(0, false));
+                var message =
+                    $"There are {formattedCount} records in the {KeyAutoFillValue?.Text} Advanced Find.";
 
                 switch (refreshCondition)
                 {
                     case Conditions.Equals:
                         if (recordCount == yellowAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Yellow);
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
                         }
                         if (recordCount == redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
                         if (recordCount != yellowAlert && recordCount != redAlert)
                         {
@@ -1051,11 +1063,11 @@ namespace RingSoft.DbMaintenance
                     case Conditions.NotEquals:
                         if (recordCount != yellowAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Yellow);
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
                         }
                         else if (recordCount != redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
                         if (recordCount == yellowAlert && recordCount == redAlert)
                         {
@@ -1063,15 +1075,15 @@ namespace RingSoft.DbMaintenance
                         }
                         break;
                     case Conditions.GreaterThan:
-                        if (recordCount > yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow);
-                        }
                         if (recordCount > redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
-                        if(recordCount < yellowAlert && recordCount < redAlert)
+                        else if (recordCount > yellowAlert)
+                        {
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
+                        }
+                        if (recordCount < yellowAlert && recordCount < redAlert)
                         {
                             View.SetAlertLevel(AlertLevels.Green);
                         }
@@ -1079,11 +1091,11 @@ namespace RingSoft.DbMaintenance
                     case Conditions.GreaterThanEquals:
                         if (recordCount >= yellowAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Yellow);
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
                         }
                         if (recordCount >= redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
                         if (recordCount <= yellowAlert && recordCount <= redAlert)
                         {
@@ -1093,11 +1105,11 @@ namespace RingSoft.DbMaintenance
                     case Conditions.LessThan:
                         if (recordCount < yellowAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Yellow);
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
                         }
                         else if (recordCount < redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
                         if (recordCount > yellowAlert && recordCount > redAlert)
                         {
@@ -1107,11 +1119,11 @@ namespace RingSoft.DbMaintenance
                     case Conditions.LessThanEquals:
                         if (recordCount <= yellowAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Yellow);
+                            View.SetAlertLevel(AlertLevels.Yellow, message);
                         }
                         else if (recordCount <= redAlert)
                         {
-                            View.SetAlertLevel(AlertLevels.Red);
+                            View.SetAlertLevel(AlertLevels.Red, message);
                         }
                         if (recordCount >= yellowAlert && recordCount >= redAlert)
                         {
@@ -1131,6 +1143,7 @@ namespace RingSoft.DbMaintenance
             {
                 _refreshValue = 0;
                 View.GetRecordCount(false);
+                View.SetAlertLevel(AlertLevels.Green);
             }
         }
 

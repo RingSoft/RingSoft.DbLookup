@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public int? RedAlert { get; set; }
 
+        public bool? Disabled { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<AdvancedFindColumn> Columns { get; set; }
 

@@ -162,6 +162,23 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        private bool _disable;
+
+        public bool Disable
+        {
+            get => _disable;
+            set
+            {
+                if (_disable == value)
+                {
+                    return;
+                }
+                _disable = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public AdvancedFind Properties { get; set; }
 
         public void Initialize(AdvancedFind advancedFindModel)
@@ -222,6 +239,12 @@ namespace RingSoft.DbLookup.AdvancedFind
             {
                 RedAlert = advancedFindModel.RedAlert.Value;
             }
+
+            if (advancedFindModel.Disabled.HasValue)
+            {
+                Disable = advancedFindModel.Disabled.Value;
+            }
+            
         }
 
         public void RefreshProperties()
@@ -239,6 +262,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             Properties.RefreshValue = (int)RefreshValue;
             Properties.YellowAlert = (int)YellowAlert;
             Properties.RedAlert = (int)RedAlert;
+            Properties.Disabled = Disable;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

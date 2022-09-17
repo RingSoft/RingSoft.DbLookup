@@ -142,58 +142,72 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return refreshRateWindow.DialogResult.Value;
         }
 
-        public void SetAlertLevel(AlertLevels level)
+        public void SetAlertLevel(AlertLevels level, string message = "")
         {
             var advancedFindWindows = Dispatcher.Invoke(() => Application.Current.Windows.OfType<AdvancedFindWindow>().ToList());
             var image = LookupControlsGlobals.LookupControlContentTemplateFactory
                 .GetImageForAlertLevel(level);
+            var title = string.Empty;
+            var baloonIcon = BalloonIcon.Info;
+            switch (level)
+            {
+                case AlertLevels.Green:
+                    break;
+                case AlertLevels.Yellow:
+                    title = "Warning!";
+                    break;
+                case AlertLevels.Red:
+                    title = "Red Alert!";
+                    baloonIcon = BalloonIcon.Error;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
+            }
 
             Dispatcher.Invoke(() => Icon = image.Source);
-            if (advancedFindWindows.Count >= 2)
-            {
-                if (SystemGlobals.WindowAlertLevel < level)
-                {
-                    SystemGlobals.WindowAlertLevel = level;
-                    Dispatcher.Invoke(() =>
-                    {
-                        if (Application.Current.MainWindow != null)
-                        {
-                            return Application.Current.MainWindow.Icon = image.Source;
-                        }
-                        return null;
-                    });
+            //if (advancedFindWindows.Count >= 2)
+            //{
+            //    if (SystemGlobals.WindowAlertLevel < level)
+            //    {
+            //        SystemGlobals.WindowAlertLevel = level;
+            //        Dispatcher.Invoke(() =>
+            //        {
+            //            ShowLevelIcon(level, message, image, title, baloonIcon);
+            //            return;
+            //        });
+            //    }
 
-                }
+            //}
+            //else
+            //{
+                SystemGlobals.WindowAlertLevel = level;
+                Dispatcher.Invoke(() => { ShowLevelIcon(level, message, image, title, baloonIcon); });
+
+            //}
+        }
+
+        private void ShowLevelIcon(AlertLevels level, string message, Image image, string title, BalloonIcon baloonIcon)
+        {
+            if (level == AlertLevels.Green)
+            {
+                _taskbarIcon.Visibility = Visibility.Collapsed;
             }
             else
             {
-                SystemGlobals.WindowAlertLevel = level;
-                Dispatcher.Invoke(() =>
+                if (image.Source != null)
                 {
-                    if (level == AlertLevels.Green)
-                    {
-                        _taskbarIcon.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        if (image.Source != null)
-                        {
-                            _taskbarIcon.ToolTipText = "Hello World";
-                            _taskbarIcon.IconSource = image.Source;
-                            _taskbarIcon.Visibility = Visibility.Visible;
-                            _taskbarIcon.ShowBalloonTip("title", "message", BalloonIcon.Info);
-                            
-                            _taskbarIcon.HideBalloonTip();
-                            return;
+                    _taskbarIcon.ToolTipText = message;
+                    _taskbarIcon.IconSource = image.Source;
+                    _taskbarIcon.Visibility = Visibility.Visible;
+                    _taskbarIcon.ShowBalloonTip(title, message, baloonIcon);
 
-                            //return Application.Current.MainWindow.Icon = image.Source;
+                    _taskbarIcon.HideBalloonTip();
+                    return;
 
-                        }
+                    //return Application.Current.MainWindow.Icon = image.Source;
+                }
 
-                        return;
-                    }
-                });
-
+                return;
             }
         }
 
@@ -222,12 +236,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
         {
             _addViewArgs = addViewArgs;
-
+            _taskbarIcon = new TaskbarIcon();
         }
 
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+            _taskbarIcon = new TaskbarIcon();
         }
 
         public void Initialize()
@@ -262,7 +277,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 Processor.InitializeFromLookupData(_addViewArgs);
             }
             Processor.CheckAddOnFlyMode();
-            _taskbarIcon = new TaskbarIcon();
 
         }
 

@@ -7,6 +7,7 @@ namespace RingSoft.DbLookup.EfCore
     {
         public void Configure(EntityTypeBuilder<AdvancedFind.AdvancedFind> builder)
         {
+            builder.Property(p => p.Disabled).HasColumnType(DbConstants.BoolColumnType);
             builder.Property(p => p.Id).HasColumnType(DbConstants.IntegerColumnType);
             builder.Property(p => p.Name).HasColumnType(DbConstants.StringColumnType);
             builder.Property(p => p.Table).HasColumnType(DbConstants.StringColumnType);

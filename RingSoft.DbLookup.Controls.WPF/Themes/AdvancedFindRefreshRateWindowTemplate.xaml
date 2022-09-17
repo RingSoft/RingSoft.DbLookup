@@ -33,6 +33,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
@@ -44,9 +45,11 @@
 
                             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Refresh Every"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Disable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Disabled" />
 
-                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                            <Label Grid.Row="2" Grid.Column="0" Content="Refresh Every"/>
+
+                            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
 
                                 <dec:IntegerEditControl Value="{Binding RefreshValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -54,11 +57,11 @@
                             
                             </StackPanel>
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="When Record Count is: "/>
+                            <Label Grid.Row="3" Grid.Column="0" Content="When Record Count is: "/>
 
-                            <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" Setup="{Binding RefreshConditionSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RefreshConditionItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <dec:TextComboBoxControl Grid.Row="3" Grid.Column="1" Setup="{Binding RefreshConditionSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RefreshConditionItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Label Content="Yellow Alert Level" />
 
@@ -66,9 +69,9 @@
 
                             </StackPanel>
 
-                            <dec:IntegerEditControl Grid.Row="3" Grid.Column="1" Value="{Binding YellowAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <dec:IntegerEditControl Grid.Row="4" Grid.Column="1" Value="{Binding YellowAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Label Content="Red Alert Level" />
 
@@ -76,9 +79,9 @@
 
                             </StackPanel>
 
-                            <dec:IntegerEditControl Grid.Row="4" Grid.Column="1" Value="{Binding RedAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <dec:IntegerEditControl Grid.Row="5" Grid.Column="1" Value="{Binding RedAlert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button x:Name="OkButton" Content="_OK" IsDefault="True" Width="100"/>
 

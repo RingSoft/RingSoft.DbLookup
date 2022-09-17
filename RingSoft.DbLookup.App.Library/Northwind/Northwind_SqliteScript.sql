@@ -153,6 +153,7 @@ CREATE TABLE [AdvancedFinds] (
 , [RefreshCondition] tinyint NULL
 , [YellowAlert] integer NULL
 , [RedAlert] integer NULL
+, [Disabled] bit NULL
 , CONSTRAINT [PK_AdvancedFinds] PRIMARY KEY ([Id])
 );
 

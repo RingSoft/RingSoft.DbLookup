@@ -843,7 +843,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (TextBox != null)
             {
-                TextBox.IsReadOnly = readOnlyValue;
+                TextBox.IsEnabled = !readOnlyValue;
             }
         }
     }

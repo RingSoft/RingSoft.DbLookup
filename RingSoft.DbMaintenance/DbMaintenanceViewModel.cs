@@ -360,7 +360,6 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnNewButton()
         {
-            FireNewEvent();
             if (!CheckDirty())
                 return;
 
@@ -378,6 +377,7 @@ namespace RingSoft.DbMaintenance
 
             View.ResetViewForNewRecord();
             RecordDirty = false;
+            FireNewEvent();
         }
 
         /// <summary>

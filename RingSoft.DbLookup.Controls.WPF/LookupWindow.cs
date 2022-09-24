@@ -294,7 +294,18 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupData_LookupView(object sender, LookupAddViewArgs e)
         {
-            OnSelectButtonClick();
+            if (_readOnlyMode)
+            {
+                if (_allowView)
+                {
+                    ViewButton_Click(this, new RoutedEventArgs());
+                }
+            }
+            else
+            {
+                OnSelectButtonClick();
+            }
+            
             e.Handled = true;
         }
 

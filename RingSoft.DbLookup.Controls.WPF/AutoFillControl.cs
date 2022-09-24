@@ -368,6 +368,19 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        private bool _readOnlyMode;
+
+        public bool ReadOnlyMode
+        {
+            get => _readOnlyMode;
+            set
+            {
+                _readOnlyMode = value;
+                SetReadOnlyMode(_readOnlyMode);
+            }
+        }
+
+
         public event EventHandler ControlDirty;
         public event EventHandler LookupSelect;
 
@@ -379,7 +392,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _setupRan;
         private bool _settingText;
         private AutoFillValue _pendingAutoFillValue;
-        private bool _readOnlyMode;
 
         static AutoFillControl()
         {
@@ -423,19 +435,41 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Popup != null)
                     Popup.IsOpen = false;
             };
-            GotFocus += (sender, args) =>
-            {
-                if (TextBox != null)
-                {
-                    TextBox.Focus();
-                    TextBox.SelectionStart = 0;
-                    TextBox.SelectionLength = TextBox.Text.Length;
-                }
-            };
+            //GotFocus += AutoFillControl_GotFocus;
             ContextMenu = new ContextMenu();
             ContextMenu.AddTextBoxContextMenuItems();
-
+            MouseEnter += (sender, args) =>
+            {
+                if (_readOnlyMode)
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
+                else
+                {
+                    Mouse.OverrideCursor = null;
+                }
+            };
         }
+
+        //private void AutoFillControl_GotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if (ReadOnlyMode)
+        //    {
+        //        if (Button != null)
+        //        {
+        //            Button.Focus();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (TextBox != null)
+        //        {
+        //            TextBox.Focus();
+        //            TextBox.SelectionStart = 0;
+        //            TextBox.SelectionLength = TextBox.Text.Length;
+        //        }
+        //    }
+        //}
 
         public override void OnApplyTemplate()
         {
@@ -474,8 +508,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             SetReadOnlyMode(_readOnlyMode);
+            Button.KeyDown += Button_KeyDown;
 
             base.OnApplyTemplate();
+        }
+
+        private void Button_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                ShowLookupWindow();
+                e.Handled = true;
+            }
         }
 
         private void OnLoad()
@@ -778,7 +822,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             RaiseDirtyFlag();
         }
 
-        protected virtual void ShowLookupWindow()
+        public virtual void ShowLookupWindow()
         {
             var initialText = string.Empty;
             if (TextBox != null)
@@ -843,8 +887,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (TextBox != null)
             {
-                TextBox.IsEnabled = !readOnlyValue;
+                TextBox.IsReadOnly = readOnlyValue;
+                TextBox.Focusable = !readOnlyValue;
             }
+
+            //if (IsFocused)
+            //{
+            //    AutoFillControl_GotFocus(this, new RoutedEventArgs());
+            //}
         }
     }
 }

@@ -89,6 +89,28 @@ namespace RingSoft.DbLookup.Controls.WPF
                     OnUpdateSource(GetCellValue());
                 }
             };
+            if (_gridReadOnlyMode)
+            {
+                Control.TextBox.Focusable = false;
+                Control.KeyDown += (sender, args) =>
+                {
+                    if (args.Key == Key.F5)
+                    {
+                        Control.ShowLookupWindow();
+                        args.Handled = true;
+                    }
+                };
+                //Control.Button.Focus();
+            }
+        }
+
+        protected override void ImportDataGridCellProperties(DataGridCell dataGridCell)
+        {
+            base.ImportDataGridCellProperties(dataGridCell);
+            if (_gridReadOnlyMode)
+            {
+                dataGridCell.BorderThickness = new Thickness(1);
+            }
         }
 
         public override bool CanGridProcessKey(Key key)

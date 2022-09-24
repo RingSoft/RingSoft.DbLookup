@@ -261,7 +261,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public object AddViewParameter { get; internal set; }
 
-        public bool ShowAdvancedFindButton { get; internal set; } = true;
+        public bool ShowAdvancedFindButton { get; set; } = true;
 
         public int RecordCountWait { get; set; }
 

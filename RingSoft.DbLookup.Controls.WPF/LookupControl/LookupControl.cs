@@ -1660,8 +1660,23 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var selectedIndex = ListView.SelectedIndex;
                 if (selectedIndex >= 0)
                 {
-                    LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), AddViewParameter, _readOnlyMode);
-                    RefreshData(false);
+                    var ownerWindow = Window.GetWindow(this);
+                    ownerWindow.Activated += (sender, args) =>
+                    {
+                        RefreshData(false);
+                        //Peter Ringering - 09/25/2022 - E-273
+                        if (SearchForHost.SearchText.IsNullOrEmpty())
+                        {
+                            ListView.SelectedIndex = selectedIndex;
+                        }
+                        else
+                        {
+                            LookupData.OnSearchForChange(SearchForHost.SearchText);
+                        }
+
+                        SearchForHost.Control.Focus();
+                    };
+                    LookupData.ViewSelectedRow(selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
                     return true;
                 }
             }

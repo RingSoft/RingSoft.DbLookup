@@ -16,8 +16,10 @@ namespace RingSoft.DbLookup.AdvancedFind
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Table { get; set; }
 
         public string FromFormula { get; set; }

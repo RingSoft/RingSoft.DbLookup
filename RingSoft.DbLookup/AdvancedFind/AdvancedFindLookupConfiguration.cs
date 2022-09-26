@@ -24,7 +24,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public void InitializeModel()
         {
-
+            _lookupContext.AdvancedFinds.RecordDescription = "Advanced Find";
         }
     }
 }

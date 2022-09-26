@@ -419,7 +419,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
             }
 
-            if (!_setupRan)
+            if (!_setupRan && LookupData != null)
             {
                 SetupRecordCount(LookupData.RecordCount);
                 if (ListView != null)

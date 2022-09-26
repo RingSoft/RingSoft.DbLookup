@@ -435,7 +435,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Popup != null)
                     Popup.IsOpen = false;
             };
-            //GotFocus += AutoFillControl_GotFocus;
+            GotFocus += AutoFillControl_GotFocus;
             ContextMenu = new ContextMenu();
             ContextMenu.AddTextBoxContextMenuItems();
             MouseEnter += (sender, args) =>
@@ -451,25 +451,25 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
-        //private void AutoFillControl_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    if (ReadOnlyMode)
-        //    {
-        //        if (Button != null)
-        //        {
-        //            Button.Focus();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (TextBox != null)
-        //        {
-        //            TextBox.Focus();
-        //            TextBox.SelectionStart = 0;
-        //            TextBox.SelectionLength = TextBox.Text.Length;
-        //        }
-        //    }
-        //}
+        private void AutoFillControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (ReadOnlyMode)
+            {
+                if (Button != null)
+                {
+                    Button.Focus();
+                }
+            }
+            else
+            {
+                if (TextBox != null)
+                {
+                    TextBox.Focus();
+                    TextBox.SelectionStart = 0;
+                    TextBox.SelectionLength = TextBox.Text.Length;
+                }
+            }
+        }
 
         public override void OnApplyTemplate()
         {

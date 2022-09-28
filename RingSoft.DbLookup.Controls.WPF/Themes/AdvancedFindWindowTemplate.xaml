@@ -8,6 +8,7 @@
                     xmlns:advancedFind="clr-namespace:RingSoft.DbLookup.AdvancedFind;assembly=RingSoft.DbLookup">
 
     <Style TargetType="{x:Type local:AdvancedFindWindow}" BasedOn="{StaticResource {x:Type Window}}" >
+        <Setter Property="Title" Value="Advanced Find"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:AdvancedFindWindow}">

@@ -220,9 +220,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     _taskbarIcon.ToolTipText = message;
                     _taskbarIcon.IconSource = image.Source;
                     _taskbarIcon.Visibility = Visibility.Visible;
-                    _taskbarIcon.ShowBalloonTip(title, message, baloonIcon);
 
-                    _taskbarIcon.HideBalloonTip();
+                    if (!ViewModel.Disabled)
+                    {
+                        _taskbarIcon.ShowBalloonTip(title, message, baloonIcon);
+
+                        _taskbarIcon.HideBalloonTip();
+                    }
+
                     return;
 
                     //return Application.Current.MainWindow.Icon = image.Source;

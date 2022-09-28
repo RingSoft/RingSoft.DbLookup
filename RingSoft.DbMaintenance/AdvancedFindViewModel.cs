@@ -1039,7 +1039,7 @@ namespace RingSoft.DbMaintenance
 
         private void ProcessRefresh(bool resetTimer)
         {
-            if (RefreshCondition.HasValue && !Disabled)
+            if (RefreshCondition.HasValue)
             {
                 var recordCount = View.GetRecordCount(true);
                 var yellowAlert = YellowAlert.Value;

@@ -45,7 +45,7 @@
 
                             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Disable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Disabled" />
+                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Disable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Disable Balloon" />
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Refresh Every"/>
 

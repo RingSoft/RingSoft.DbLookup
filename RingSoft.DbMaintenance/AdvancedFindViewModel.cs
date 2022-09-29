@@ -695,10 +695,12 @@ namespace RingSoft.DbMaintenance
                 case TreeViewType.Field:
                     var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition;
                     ColumnsManager.LoadFromColumnDefinition(column);
+                    RecordDirty = true;
                     break;
                 case TreeViewType.Formula:
                     if (View.ShowFormulaEditor(SelectedTreeViewItem))
                     {
+                        RecordDirty = true;
                         var formulaColumn =
                             MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition as
                                 LookupFormulaColumnDefinition;
@@ -968,6 +970,7 @@ namespace RingSoft.DbMaintenance
             if (result != null)
             {
                 FiltersManager.LoadNewUserFilter(result);
+                RecordDirty = true;
             }
         }
 
@@ -989,8 +992,11 @@ namespace RingSoft.DbMaintenance
             {
                 CreateLookupDefinition();
                 var lookupDefinition= LookupDefinition.TableDefinition.LookupDefinition;
-                if (lookupDefinition != null) 
+                if (lookupDefinition != null)
+                {
+                    RecordDirty = true;
                     LoadFromLookupDefinition(lookupDefinition);
+                }
                 else
                 {
                     ControlsGlobals.UserInterface.ShowMessageBox("No default lookup for table set.",
@@ -1022,6 +1028,7 @@ namespace RingSoft.DbMaintenance
             var refreshSettings = GetEntityData();
             if (View.ShowRefreshSettings(refreshSettings))
             {
+                RecordDirty = true;
                 LoadRefreshSettings(refreshSettings);
                 View.GetRecordCount(true);
                 ResetLookup();

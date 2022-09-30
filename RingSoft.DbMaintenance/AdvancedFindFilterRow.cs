@@ -455,6 +455,30 @@ namespace RingSoft.DbMaintenance
         private string MakeEndSearchValueText(FieldFilterDefinition fieldFilter, string searchValue)
         {
             var result = string.Empty;
+            if (fieldFilter.FieldDefinition is IntegerFieldDefinition integerField)
+            {
+                if (integerField.EnumTranslation != null)
+                {
+                    var item = integerField.EnumTranslation.TypeTranslations.FirstOrDefault(p =>
+                        p.NumericValue == searchValue.ToInt());
+                    result = item.TextValue;
+                    return result;
+                }
+            }
+            else if (fieldFilter.FieldDefinition is BoolFieldDefinition boolField)
+            {
+                var boolItem = searchValue.ToBool();
+                if (boolItem)
+                {
+                    result = "True";
+                }
+                else
+                {
+                    result = "False";
+                }
+
+                return result;
+            }
             result = fieldFilter.FieldDefinition.FormatValue(searchValue);
             return result;
         }

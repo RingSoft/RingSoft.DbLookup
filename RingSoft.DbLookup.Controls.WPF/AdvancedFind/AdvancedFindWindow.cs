@@ -263,6 +263,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             _addViewArgs = addViewArgs;
             _taskbarIcon = new TaskbarIcon();
+            Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
         public AdvancedFindWindow()

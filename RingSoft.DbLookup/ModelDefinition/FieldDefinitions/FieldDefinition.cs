@@ -104,6 +104,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public bool AllowRecursion { get; private set; } = true;
 
+        public Enum EnumValue { get; set; }
 
         internal FieldDefinition()
         {

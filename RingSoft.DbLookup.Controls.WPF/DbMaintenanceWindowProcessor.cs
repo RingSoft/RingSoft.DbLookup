@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             MaintenanceWindow.Loaded += (sender, args) => ViewModel.OnViewLoaded(View);
             MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
-            MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+            //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
         public virtual void CloseWindow()

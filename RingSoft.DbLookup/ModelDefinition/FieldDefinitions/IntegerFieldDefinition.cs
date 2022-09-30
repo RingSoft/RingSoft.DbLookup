@@ -29,6 +29,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
+        private EnumFieldTranslation _enumField;
         /// <summary>
         /// Gets the enum translation object which maps an enumerator value to its associated description.
         /// </summary>

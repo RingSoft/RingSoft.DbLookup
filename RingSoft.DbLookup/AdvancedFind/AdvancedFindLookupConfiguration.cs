@@ -1,4 +1,6 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -25,6 +27,20 @@ namespace RingSoft.DbLookup.AdvancedFind
         public void InitializeModel()
         {
             _lookupContext.AdvancedFinds.RecordDescription = "Advanced Find";
+            _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.DecimalFormatType)
+                .IsEnum<DecimalEditFormatTypes>();
+
+            _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.FieldDataType)
+                .IsEnum<FieldDataTypes>();
+
+            _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.EndLogic)
+                .IsEnum<EndLogics>();
+
+            _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.FormulaDataType)
+                .IsEnum<FieldDataTypes>();
+
+            _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Operand)
+                .HasDescription("Condition").IsEnum<Conditions>();
         }
     }
 }

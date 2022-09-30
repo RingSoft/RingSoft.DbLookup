@@ -271,7 +271,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                                 SearchForStringControl.Visibility = Visibility.Visible;
                                 break;
                             case FieldDataTypes.Integer:
-                                SearchForIntegerControl.Visibility = Visibility.Visible;
+                                if (ViewModel.FieldDefinition is IntegerFieldDefinition integerField)
+                                {
+                                    if (integerField.EnumTranslation != null)
+                                    {
+                                        SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
+                                    }
+                                    else
+                                    {
+                                        SearchForIntegerControl.Visibility = Visibility.Visible;
+                                    }
+                                }
                                 break;
                             case FieldDataTypes.Decimal:
                                 SearchForDecimalControl.Visibility = Visibility.Visible;

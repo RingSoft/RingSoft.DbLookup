@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
+﻿using RingSoft.DataEntryControls.Engine;
+
+namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// A boolean (True/False) field definition.
@@ -29,6 +31,13 @@
         /// </value>
         public string FalseText { get; private set; } = "False";
 
+        public EnumFieldTranslation EnumField { get; private set; }
+
+        public BoolFieldDefinition()
+        {
+            EnumField = new EnumFieldTranslation();
+            EnumField.LoadFromBoolean("True", "False");
+        }
         /// <summary>
         /// Sets the displayed text for True and False values.
         /// </summary>

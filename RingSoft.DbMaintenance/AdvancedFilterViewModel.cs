@@ -289,42 +289,42 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private TextComboBoxControlSetup _boolComboBoxSetup;
+        private TextComboBoxControlSetup _valueComboBoxSetup;
 
-        public TextComboBoxControlSetup BoolComboBoxSetup
+        public TextComboBoxControlSetup ValueComboBoxSetup
         {
-            get => _boolComboBoxSetup;
+            get => _valueComboBoxSetup;
             set
             {
-                if (_boolComboBoxSetup == value)
+                if (_valueComboBoxSetup == value)
                 {
                     return;
                 }
-                _boolComboBoxSetup = value;
+                _valueComboBoxSetup = value;
                 OnPropertyChanged();
             }
         }
 
-        private TextComboBoxItem  _boolComboBoxItem;
+        private TextComboBoxItem  _valueComboBoxItem;
 
-        public TextComboBoxItem  BoolComboBoxItem
+        public TextComboBoxItem  ValueComboBoxItem
         {
-            get => _boolComboBoxItem;
+            get => _valueComboBoxItem;
             set
             {
-                if (_boolComboBoxItem == value)
+                if (_valueComboBoxItem == value)
                 {
                     return;
                 }
-                _boolComboBoxItem = value;
+                _valueComboBoxItem = value;
                 OnPropertyChanged();
             }
         }
 
         bool TrueFalseValue
         {
-            get => BoolComboBoxItem.NumericValue == (int)TrueFalseValues.True;
-            set => BoolComboBoxItem = BoolComboBoxSetup.GetItem(value == true ? 1 : 0);
+            get => ValueComboBoxItem.NumericValue == (int)TrueFalseValues.True;
+            set => ValueComboBoxItem = ValueComboBoxSetup.GetItem(value == true ? 1 : 0);
         }
 
         //public TreeViewItem TreeViewItem { get; set; }
@@ -410,9 +410,20 @@ namespace RingSoft.DbMaintenance
                             LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
                                 FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
                     }
-                    else
+                    else if (FieldDefinition is IntegerFieldDefinition integerField)
                     {
-                        IntegerSearchValue = FilterReturn.SearchValue.ToInt();
+                        if (integerField.EnumTranslation != null)
+                        {
+                            var setup = new TextComboBoxControlSetup();
+                            setup.LoadFromEnum(integerField.EnumTranslation);
+                            ValueComboBoxItem = null;
+                            ValueComboBoxSetup = setup;
+                            ValueComboBoxItem = ValueComboBoxSetup.GetItem(FilterReturn.SearchValue.ToInt());
+                        }
+                        else
+                        {
+                            IntegerSearchValue = FilterReturn.SearchValue.ToInt();
+                        }
                     }
                     break;
                 case FieldDataTypes.Decimal:
@@ -467,9 +478,9 @@ namespace RingSoft.DbMaintenance
 
             FormulaValueComboBoxSetup = new TextComboBoxControlSetup();
             DateSearchValue = null;
-            BoolComboBoxSetup = new TextComboBoxControlSetup();
-            BoolComboBoxSetup.LoadFromEnum<TrueFalseValues>();
-
+            ValueComboBoxSetup = new TextComboBoxControlSetup();
+            //ValueComboBoxSetup.LoadFromEnum<TrueFalseValues>();
+            
             FormulaValueComboBoxSetup.LoadFromEnum<FieldDataTypes>();
             FormulaValueType = FieldDataTypes.String;
 
@@ -547,11 +558,36 @@ namespace RingSoft.DbMaintenance
                             {
                                 ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
                             }
+                            //if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                            //{
+                            //    SearchValueAutoFillValue =
+                            //        LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
+                            //            FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                            //}
+                            if (FieldDefinition is IntegerFieldDefinition integerField)
+                            {
+                                if (integerField.EnumTranslation != null)
+                                {
+                                    var setup = new TextComboBoxControlSetup();
+                                    setup.LoadFromEnum(integerField.EnumTranslation);
+                                    ValueComboBoxItem = null;
+                                    ValueComboBoxSetup = setup;
+                                }
+                            }
                             break;
                         case FieldDataTypes.Decimal:
                         case FieldDataTypes.DateTime:
+                            ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            break;
                         case FieldDataTypes.Bool:
                             ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            if (FieldDefinition is BoolFieldDefinition boolField)
+                            {
+                                var setup = new TextComboBoxControlSetup();
+                                setup.LoadFromEnum(boolField.EnumField);
+                                ValueComboBoxItem = null;
+                                ValueComboBoxSetup = setup;
+                            }
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -654,7 +690,17 @@ namespace RingSoft.DbMaintenance
                     result.SearchValue = StringSearchValue;
                     break;
                 case FieldDataTypes.Integer:
-                    result.SearchValue = IntegerSearchValue.ToString();
+                    if (FieldDefinition is IntegerFieldDefinition integerField)
+                    {
+                        if (integerField.EnumTranslation != null)
+                        {
+                            result.SearchValue = ValueComboBoxItem.NumericValue.ToString();
+                        }
+                        else
+                        {
+                            result.SearchValue = IntegerSearchValue.ToString();
+                        }
+                    }
                     break;
                 case FieldDataTypes.Decimal:
                     result.SearchValue = DecimalSearchValueDecimal.ToString();
@@ -663,7 +709,7 @@ namespace RingSoft.DbMaintenance
                     result.SearchValue = DateSearchValue.ToString();
                     break;
                 case FieldDataTypes.Bool:
-                    result.SearchValue = BoolComboBoxItem.NumericValue.ToString();
+                    result.SearchValue = ValueComboBoxItem.NumericValue.ToString();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

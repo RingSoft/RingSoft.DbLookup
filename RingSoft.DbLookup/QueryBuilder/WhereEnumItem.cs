@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.QueryBuilder
+﻿using RingSoft.DataEntryControls.Engine;
+
+namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A Where Item that searches the text value of an enumerator.

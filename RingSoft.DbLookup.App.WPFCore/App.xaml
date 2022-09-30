@@ -31,6 +31,7 @@
                 <Setter Property="IsEditable" Value="True" />
             </Style>
 
+
             <Style TargetType="dec:DecimalEditControl" x:Key="{x:Type dec:DecimalEditControl}">
                 <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Converter={StaticResource ValueToForeground}, ConverterParameter={StaticResource ShowNegativeValuesInRed}}"/>
             </Style>

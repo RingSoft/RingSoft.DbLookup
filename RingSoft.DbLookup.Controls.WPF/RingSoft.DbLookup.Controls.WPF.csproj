@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.01.19</Version>
+    <Version>2.01.20</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -35,11 +35,10 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="2.1.16" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="2.1.23" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>
 

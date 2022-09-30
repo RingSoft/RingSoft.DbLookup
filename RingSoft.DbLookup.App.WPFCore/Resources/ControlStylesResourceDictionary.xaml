@@ -64,6 +64,11 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="dec:TextComboBoxControl" x:Key="{x:Type dec:TextComboBoxControl}"
+           BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Height" Value="20"/>
+    </Style>
+
     <Style TargetType="dec:NotificationButton" BasedOn="{StaticResource {x:Type Button}}"/>
 
     <Style TargetType="TabControl">

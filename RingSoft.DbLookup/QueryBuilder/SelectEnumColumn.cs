@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.QueryBuilder
+﻿using RingSoft.DataEntryControls.Engine;
+
+namespace RingSoft.DbLookup.QueryBuilder
 {
     /// <summary>
     /// A column that has a numeric database value translated into a text value.

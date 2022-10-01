@@ -198,9 +198,16 @@ namespace RingSoft.DbMaintenance
             switch (LookupAddViewArgs.LookupFormMode)
             {
                 case LookupFormModes.Add:
-                    result =
-                        LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
-                            .InitialAddModeText);
+                    if (!LookupAddViewArgs.InitialAddModeText.IsNullOrEmpty())
+                    {
+                        result =
+                            LookupAddViewArgs.LookupData.GetPrimaryKeyValueForSearchText(LookupAddViewArgs
+                                .InitialAddModeText);
+                    }
+                    else
+                    {
+                        result = new PrimaryKeyValue(addViewPrimaryKeyValue.TableDefinition);
+                    }
                     break;
             }
 

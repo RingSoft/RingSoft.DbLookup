@@ -178,6 +178,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
+                    <Border>
                     <Grid>
                         <!-- ReSharper disable once Xaml.IndexOutOfGridDefinition -->
                         <ToggleButton 
@@ -230,6 +231,7 @@
                             </Grid>
                         </Popup>
                     </Grid>
+                        </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems" Value="false">
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>

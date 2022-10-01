@@ -396,6 +396,25 @@ namespace RingSoft.DbMaintenance
             }
 
             Condition = FilterReturn.Condition;
+            if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                var process = true;
+                switch (Condition)
+                {
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        process = false;
+                        break;
+                }
+
+                if (process)
+                {
+                    SearchValueAutoFillValue =
+                        LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
+                            FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                }
+            }
+
 
             switch (fieldDataType)
             {
@@ -404,13 +423,7 @@ namespace RingSoft.DbMaintenance
                     StringSearchValue = FilterReturn.SearchValue;
                     break;
                 case FieldDataTypes.Integer:
-                    if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                    {
-                        SearchValueAutoFillValue =
-                            LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
-                                FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
-                    }
-                    else if (FieldDefinition is IntegerFieldDefinition integerField)
+                    if (FieldDefinition is IntegerFieldDefinition integerField)
                     {
                         if (integerField.EnumTranslation != null)
                         {
@@ -547,7 +560,17 @@ namespace RingSoft.DbMaintenance
                     switch (FieldDefinition.FieldDataType)
                     {
                         case FieldDataTypes.String:
-                            ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                            if (FieldDefinition is StringFieldDefinition stringField)
+                            {
+                                if (stringField.MemoField)
+                                {
+                                    ConditionComboBoxSetup = _memoFieldComboBoxControlSetup;
+                                }
+                                else
+                                {
+                                    ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                                }
+                            }
                             break;
                         case FieldDataTypes.Integer:
                             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -768,11 +791,26 @@ namespace RingSoft.DbMaintenance
 
             if (filterReturn.SearchValue.IsNullOrEmpty())
             {
-                var message = "Search Value cannot be empty.";
-                var caption = "Invalid Search Value";
-                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                OnValidationFail?.Invoke(this, new ValidationFailArgs() { Control = ValidationFailControls.SearchValue });
-                return false;
+                var result = false;
+                switch (filterReturn.Condition)
+                {
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        result = true;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (!result)
+                {
+                    var message = "Search Value cannot be empty.";
+                    var caption = "Invalid Search Value";
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    OnValidationFail?.Invoke(this,
+                        new ValidationFailArgs() {Control = ValidationFailControls.SearchValue});
+                    return false;
+                }
             }
 
             return true;

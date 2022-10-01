@@ -283,6 +283,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
         private double _preScrollThumbPosition;
+        private int _selectedIndex;
 
         private RefreshPendingData _refreshPendingData;
 
@@ -463,6 +464,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (!LookupDefinition.VisibleColumns.Any())
                 {
                     SetActiveColumn(0, FieldDataTypes.String);
+                    _setupRan = true;
                     return;
                 }
             }
@@ -1657,31 +1659,33 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             else
             {
-                var selectedIndex = ListView.SelectedIndex;
-                if (selectedIndex >= 0)
+                _selectedIndex = ListView.SelectedIndex;
+                if (_selectedIndex >= 0)
                 {
                     var ownerWindow = Window.GetWindow(this);
-                    ownerWindow.Activated += (sender, args) =>
-                    {
-                        RefreshData(false);
-                        //Peter Ringering - 09/25/2022 - E-273
-                        if (SearchForHost.SearchText.IsNullOrEmpty())
-                        {
-                            ListView.SelectedIndex = selectedIndex;
-                        }
-                        else
-                        {
-                            LookupData.OnSearchForChange(SearchForHost.SearchText);
-                        }
-
-                        SearchForHost.Control.Focus();
-                    };
-                    LookupData.ViewSelectedRow(selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
+                    ownerWindow.Activated += OwnerWindow_Activated;
+                    LookupData.ViewSelectedRow(_selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private void OwnerWindow_Activated(object sender, EventArgs e)
+        {
+            //Peter Ringering - 09/25/2022 - E-273
+            RefreshData(false);
+            if (SearchForHost != null && SearchForHost.SearchText.IsNullOrEmpty())
+            {
+                ListView.SelectedIndex = _selectedIndex;
+            }
+            else
+            {
+                if (SearchForHost != null) LookupData.OnSearchForChange(SearchForHost.SearchText);
+            }
+
+            if (SearchForHost != null) SearchForHost.Control.Focus();
         }
 
         private void ExecuteCommand()

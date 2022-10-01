@@ -150,7 +150,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     treeRoot.BaseTree = this;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null &&
-                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null && field.AllowRecursion)
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
                             field.ParentJoinForeignKeyDefinition, treeRoot);
                 }

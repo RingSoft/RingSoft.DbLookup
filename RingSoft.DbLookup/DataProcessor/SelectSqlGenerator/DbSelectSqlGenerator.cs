@@ -348,20 +348,38 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                         whereItemSql += $"{whereLinePrefix}{GenerateWhereItemSqlText(whereItem)}";
                         break;
                     case WhereItemTypes.Formula:
+                        var processNull = true;
                         if (whereItem is WhereFormulaItem whereFormulaItem)
                         {
-                            string formulaText;
+                            switch (whereItem.Condition)
+                            {
+                                case Conditions.EqualsNull:
+                                case Conditions.NotEqualsNull:
+                                    if (whereFormulaItem.Formula.IsNullOrEmpty())
+                                    {
+                                        whereItemSql += $"{whereLinePrefix}{GenerateWhereItemSqlText(whereItem)}";
+                                        processNull = false;
+                                    }
+                                    break;
+                            }
 
-                            if (whereFormulaItem.NoValue)
-                                formulaText = GenerateWhereItemNoValueFormulaText(whereFormulaItem.Formula);
-                            else
-                                formulaText = GenerateWhereItemFormulaText(whereFormulaItem, whereFormulaItem.Formula);
+                            if (processNull)
+                            {
+                                string formulaText;
 
-                            whereItemSql +=
-                                $"{whereLinePrefix}{FormatFormulaSqlText(formulaText, whereLinePrefix)}";
+                                if (whereFormulaItem.NoValue)
+                                    formulaText = GenerateWhereItemNoValueFormulaText(whereFormulaItem.Formula);
+                                else
+                                    formulaText =
+                                        GenerateWhereItemFormulaText(whereFormulaItem, whereFormulaItem.Formula);
+
+                                whereItemSql +=
+                                    $"{whereLinePrefix}{FormatFormulaSqlText(formulaText, whereLinePrefix)}";
+                            }
                         }
 
                         break;
+
                     case WhereItemTypes.Enum:
                         if (whereItem is WhereEnumItem whereEnumItem)
                         {
@@ -415,8 +433,15 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             var sqlFieldName = GenerateWhereItemSqlFieldNameText(whereItem);
             var condition = GenerateConditionSqlText(whereItem, sqlFieldName);
             var sqlValue = FormatValueForSqlWhereItem(whereItem);
-
             var sql = $"({sqlFieldName} {condition} {sqlValue})";
+
+            switch (whereItem.Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    sql = $"({sqlFieldName} {condition})";
+                    break;
+            }
             return sql;
         }
 
@@ -497,7 +522,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             {
                 switch (condition)
                 {
-                    case Conditions.Equals:
+                    case Conditions.EqualsNull:
                         condition = Conditions.EqualsNull;
                         break;
                     default:

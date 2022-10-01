@@ -136,9 +136,14 @@ namespace RingSoft.DbMaintenance
                         Condition = filterProps.FilterReturn.Condition;
                         FormulaDataType = formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
                         SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
-                        var formula = filterProps.FilterReturn.Formula;
-                        Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
-                        
+                        if (!filterProps.FilterReturn.Formula.IsNullOrEmpty())
+                        {
+                            var formula = filterProps.FilterReturn.Formula;
+
+                            Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
+
+                        }
+
                         FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
                     }
                     MakeSearchValueText();
@@ -479,7 +484,16 @@ namespace RingSoft.DbMaintenance
 
                 return result;
             }
-            result = fieldFilter.FieldDefinition.FormatValue(searchValue);
+
+            switch (Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    break;
+                default:
+                    result = fieldFilter.FieldDefinition.FormatValue(searchValue);
+                    break;
+            }
             return result;
         }
 
@@ -659,9 +673,32 @@ namespace RingSoft.DbMaintenance
                                         fieldDefinition = foundTreeItem.Parent.FieldDefinition;
                                     }
 
-                                    FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                        initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
-                                        includeResult.LookupJoin.JoinDefinition.Alias);
+                                    switch (Condition)
+                                    {
+                                        case Conditions.EqualsNull:
+                                        case Conditions.NotEqualsNull:
+                                            if (fieldDefinition.ParentJoinForeignKeyDefinition != null && fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
+                                            {
+                                                fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition
+                                                    .ForeignKeyFieldJoins[0].PrimaryField;
+                                            }
+                                            FilterItemDefinition =
+                                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                                    fieldDefinition, Condition, SearchValue);
+                                            if (includeResult.LookupJoin != null &&
+                                                fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
+                                            {
+                                                FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                                            }
+
+                                            break;
+                                        default:
+                                            FilterItemDefinition = 
+                                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                                                initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
+                                                includeResult.LookupJoin.JoinDefinition.Alias);
+                                            break;
+                                    }
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
@@ -686,6 +723,7 @@ namespace RingSoft.DbMaintenance
         {
             if (FilterItemDefinition != null)
                 FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
+            Manager.ViewModel.ResetLookup();
             base.Dispose();
         }
     }

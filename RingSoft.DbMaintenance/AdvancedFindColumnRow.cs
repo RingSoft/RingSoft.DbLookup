@@ -279,7 +279,7 @@ namespace RingSoft.DbMaintenance
                 Manager.Grid.UpdateRow(this);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Manager.ViewModel.LookupDefinition.DeleteVisibleColumn(LookupColumnDefinition);
             if (!Manager.ViewModel.LookupDefinition.VisibleColumns.Any())
@@ -287,6 +287,7 @@ namespace RingSoft.DbMaintenance
                 Manager.ViewModel.CreateLookupDefinition();
             }
             Manager.ViewModel.ResetLookup();
+            base.Dispose();
         }
     }
 }

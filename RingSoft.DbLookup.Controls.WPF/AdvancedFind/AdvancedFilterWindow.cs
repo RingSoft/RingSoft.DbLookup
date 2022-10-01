@@ -86,7 +86,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFilterWindow()
         {
-            Loaded += (sender, args) => ViewModel.LoadWindow();
+            Loaded += (sender, args) =>
+            {
+                ViewModel.LoadWindow();
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+            };
         }
         public void Initialize(DbLookup.AdvancedFind.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
@@ -120,6 +124,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForBoolComboBoxControl = GetTemplateChild(nameof(SearchForBoolComboBoxControl)) as TextComboBoxControl;
 
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
+
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFilterViewModel;
@@ -135,46 +140,25 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 ViewModel.Initialize(InputFilterReturn, LookupDefinition);
             }
 
-            SearchForStringControl.Visibility = Visibility.Collapsed;
-            SearchForAutoFillControl.Visibility = Visibility.Collapsed;
-            SearchForDecimalControl.Visibility = Visibility.Collapsed;
-            SearchForIntegerControl.Visibility = Visibility.Collapsed;
-            SearchForDateControl.Visibility = Visibility.Collapsed;
-            SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
+            HideSearchValues();
 
-
+            ConditionComboBox.SelectionChanged += (sender, args) =>
+            {
+                HideSearchValues();
+                switch (ViewModel.Type)
+                {
+                    case TreeViewType.Field:
+                        SetFieldSearch();
+                        break;
+                    case TreeViewType.Formula:
+                        ShowSearchValue(ViewModel.FormulaValueType);
+                        break;
+                }
+            };
             FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
             {
-                SearchForStringControl.Visibility = Visibility.Collapsed;
-                SearchForAutoFillControl.Visibility = Visibility.Collapsed;
-                SearchForDecimalControl.Visibility = Visibility.Collapsed;
-                SearchForIntegerControl.Visibility = Visibility.Collapsed;
-                SearchForDateControl.Visibility = Visibility.Collapsed;
-                SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
-
-                switch (ViewModel.FormulaValueType)
-                {
-                    case FieldDataTypes.String:
-                    case FieldDataTypes.Memo:
-                        SearchForStringControl.Visibility = Visibility.Visible;
-                        break;
-                    case FieldDataTypes.Decimal:
-                        SearchForDecimalControl.Visibility = Visibility.Visible;
-                        break;
-                    case FieldDataTypes.Integer:
-                        SearchForIntegerControl.Visibility = Visibility.Visible;
-                        break;
-                    case FieldDataTypes.DateTime:
-                        SearchForDateControl.Visibility = Visibility.Visible;
-                        SearchForDateControl.DateFormatType = DateFormatTypes.DateTime;
-                        break;
-                    case FieldDataTypes.Bool:
-                        SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
+                HideSearchValues();
+                ShowSearchValue(ViewModel.FormulaValueType);
             };
             MemoEditor.CollapseDateButton();
 
@@ -198,6 +182,29 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SetupControlNew();
             }
             base.OnApplyTemplate();
+        }
+
+        private void HideSearchValues()
+        {
+            SearchForStringControl.Visibility = Visibility.Collapsed;
+            SearchForAutoFillControl.Visibility = Visibility.Collapsed;
+            SearchForDecimalControl.Visibility = Visibility.Collapsed;
+            SearchForIntegerControl.Visibility = Visibility.Collapsed;
+            SearchForDateControl.Visibility = Visibility.Collapsed;
+            SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
+        }
+
+        private bool CheckCondition()
+        {
+            switch (ViewModel.Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    return false;
+                
+                default:
+                    return true;
+            }
         }
 
         private void ViewModel_OnValidationFail(object sender, ValidationFailArgs e)
@@ -259,59 +266,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             switch (ViewModel.Type)
             {
                 case TreeViewType.Field:
-                    if (ViewModel.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                    {
-                        SearchForAutoFillControl.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        switch (ViewModel.FieldDefinition.FieldDataType)
-                        {
-                            case FieldDataTypes.String:
-                                SearchForStringControl.Visibility = Visibility.Visible;
-                                break;
-                            case FieldDataTypes.Integer:
-                                if (ViewModel.FieldDefinition is IntegerFieldDefinition integerField)
-                                {
-                                    if (integerField.EnumTranslation != null)
-                                    {
-                                        SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
-                                    }
-                                    else
-                                    {
-                                        SearchForIntegerControl.Visibility = Visibility.Visible;
-                                    }
-                                }
-                                break;
-                            case FieldDataTypes.Decimal:
-                                SearchForDecimalControl.Visibility = Visibility.Visible;
-                                break;
-                            case FieldDataTypes.DateTime:
-                                var dateField = ViewModel.FieldDefinition as DateFieldDefinition;
-                                SearchForDateControl.Visibility = Visibility.Visible;
-                                var dateType = DateFormatTypes.DateOnly;
-                                switch (dateField.DateType)
-                                {
-                                    case DbDateTypes.DateOnly:
-                                        dateType = DateFormatTypes.DateOnly;
-                                        break;
-                                    case DbDateTypes.DateTime:
-                                        dateType = DateFormatTypes.DateTime;
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
-
-                                SearchForDateControl.DateFormatType = dateType;
-                                break;
-                            case FieldDataTypes.Bool:
-                                SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
-                    }
+                    SetFieldSearch();
                     MemoEditor.Visibility = Visibility.Collapsed;
                     DisplayLabel.Visibility = Visibility.Collapsed;
                     DisplayControl.Visibility = Visibility.Collapsed;
@@ -319,12 +274,113 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 case TreeViewType.Formula:
                     FormulaValueTypeLabel.Visibility = Visibility.Visible;
                     FormulaValueTypeComboBox.Visibility = Visibility.Visible;
-                    SearchForStringControl.Visibility = Visibility.Visible;
+                    if (CheckCondition())
+                    {
+                        SearchForStringControl.Visibility = Visibility.Visible;
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
+        }
+
+        private void SetFieldSearch()
+        {
+            if (ViewModel.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                if (CheckCondition())
+                {
+                    SearchForLabel.Visibility = Visibility.Visible;
+                    SearchForAutoFillControl.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SearchForLabel.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                if (ViewModel.FieldDefinition is IntegerFieldDefinition integerField)
+                {
+                    if (integerField.EnumTranslation != null)
+                    {
+                        if (CheckCondition())
+                        {
+                            SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
+                            return;
+                        }
+                    }
+                }
+                ShowSearchValue(ViewModel.FieldDefinition.FieldDataType);
+            }
+        }
+
+        private void ShowSearchValue(FieldDataTypes dataType)
+        {
+            if (CheckCondition())
+            {
+                SearchForLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchForLabel.Visibility = Visibility.Collapsed;
+            }
+            switch (dataType)
+            {
+                case FieldDataTypes.String:
+                    if (CheckCondition())
+                    {
+                        SearchForStringControl.Visibility = Visibility.Visible;
+                    }
+
+                    break;
+                case FieldDataTypes.Integer:
+                    if (CheckCondition())
+                    {
+                        SearchForIntegerControl.Visibility = Visibility.Visible;
+                    }
+                    break;
+                case FieldDataTypes.Decimal:
+                    if (CheckCondition())
+                    {
+                        SearchForDecimalControl.Visibility = Visibility.Visible;
+                    }
+
+                    break;
+                case FieldDataTypes.DateTime:
+                    var dateField = ViewModel.FieldDefinition as DateFieldDefinition;
+                    if (CheckCondition())
+                    {
+                        SearchForDateControl.Visibility = Visibility.Visible;
+                    }
+
+                    var dateType = DateFormatTypes.DateOnly;
+                    switch (dateField.DateType)
+                    {
+                        case DbDateTypes.DateOnly:
+                            dateType = DateFormatTypes.DateOnly;
+                            break;
+                        case DbDateTypes.DateTime:
+                            dateType = DateFormatTypes.DateTime;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    SearchForDateControl.DateFormatType = dateType;
+                    break;
+                case FieldDataTypes.Bool:
+                    if (CheckCondition())
+                    {
+                        SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

@@ -547,7 +547,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 case Conditions.Contains:
                     return $"LIKE '%{whereItem.Value.Replace("'", "''")}%'";
                 case Conditions.NotContains:
-                    return $"NOT LIKE %{whereItem.Value}%";
+                    return $"NOT LIKE '%{whereItem.Value}%'";
                 case Conditions.EqualsNull:
                     if (whereItem.ValueType == ValueTypes.String && !formula)
                         return $"IS NULL OR {sqlFieldName} = ''";
@@ -587,11 +587,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             {
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
-                case Conditions.Contains:
-                case Conditions.NotContains:
                 case Conditions.BeginsWith:
                 case Conditions.EndsWith:
+                case Conditions.Contains:
+                case Conditions.NotContains:
                     return string.Empty;
+
             }
             switch (whereItem.ValueType)
             {

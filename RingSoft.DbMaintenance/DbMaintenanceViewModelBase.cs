@@ -141,7 +141,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _primaryKeyControlsEnabled = value;
-                OnPropertyChanged(nameof(PrimaryKeyControlsEnabled));
+                OnPropertyChanged(nameof(PrimaryKeyControlsEnabled), false);
             }
         }
 

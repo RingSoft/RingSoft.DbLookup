@@ -30,11 +30,11 @@ namespace RingSoft.DbLookup.EfCore
 
             builder.HasOne(p => p.AdvancedFind)
                 .WithMany(p => p.Filters).HasForeignKey(p => p.AdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.SearchForAdvancedFind)
                 .WithMany(p => p.SearchForAdvancedFindFilters).HasForeignKey(p => p.SearchForAdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+                .OnDelete(DeleteBehavior.NoAction).IsRequired(false);
 
             builder.HasKey(p => new { p.AdvancedFindId, p.FilterId });
 

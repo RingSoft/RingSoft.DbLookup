@@ -148,6 +148,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public event EventHandler DebugShowFind;
+
         public virtual void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView,
             string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey)
         {
@@ -162,6 +164,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ApplyNewLookup += (sender, args) =>
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
+
+            DebugShowFind?.Invoke(this, EventArgs.Empty);
             lookupWindow.ShowDialog();
         }
 

@@ -16,16 +16,21 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public byte LeftParentheses { get; set; }
 
+        [MaxLength(50)]
         public string TableName { get; set; }
 
+        [MaxLength(50)]
         public string FieldName { get; set; }
 
+        [MaxLength(50)]
         public string PrimaryTableName { get; set; }
 
+        [MaxLength(50)]
         public string PrimaryFieldName { get; set; }
 
         public byte Operand { get; set; }
 
+        [MaxLength(50)]
         public string SearchForValue { get; set; }
 
         public string Formula { get; set; }

@@ -12,14 +12,19 @@ namespace RingSoft.DbLookup.AdvancedFind
         [Required]
         public int ColumnId { get; set; }
 
+        [MaxLength(50)]
         public string TableName { get; set; }
 
+        [MaxLength(50)]
         public string FieldName { get; set; }
 
+        [MaxLength(50)]
         public string PrimaryTableName { get; set; }
 
+        [MaxLength(50)]
         public string PrimaryFieldName { get; set; }
 
+        [MaxLength(250)]
         public string Caption { get; set; }
 
         public double PercentWidth { get; set; }

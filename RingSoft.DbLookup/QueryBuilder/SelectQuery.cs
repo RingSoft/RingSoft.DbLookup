@@ -30,7 +30,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <value>
         /// The maximum records.
         /// </value>
-        public int MaxRecords { get; private set; }
+        public int MaxRecords { get; set; }
 
         /// <summary>Gets the base table object attached to this query.</summary>
         /// <value>The base table. that is appears after the FROM keyword in a SQL statement.</value>

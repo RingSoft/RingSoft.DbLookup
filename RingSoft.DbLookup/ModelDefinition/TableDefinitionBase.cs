@@ -101,6 +101,7 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public List<FieldDefinition> ChildFields { get; set; } = new List<FieldDefinition>();
 
+        public int PriorityLevel { get; set; }
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();

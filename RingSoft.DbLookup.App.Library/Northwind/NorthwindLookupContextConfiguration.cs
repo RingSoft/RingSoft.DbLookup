@@ -247,6 +247,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             _lookupContext.Products.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
+
+            //var chunk = _lookupContext.OrderDetails.GetChunk(100);
+            //chunk = _lookupContext.OrderDetails.GetChunk(100, chunk.BottomPrimaryKey);
+
+            //var chunk = _lookupContext.Orders.GetChunk(100);
+            //chunk = _lookupContext.Orders.GetChunk(100, chunk.BottomPrimaryKey);
+
+            //var chunk = _lookupContext.Employees.GetChunk(100);
+            //if (chunk.Chunk.Count >= 100)
+            //{
+            //    chunk = _lookupContext.Employees.GetChunk(100, chunk.BottomPrimaryKey);
+            //}
         }
 
         public int PageSize { get; } = 15;

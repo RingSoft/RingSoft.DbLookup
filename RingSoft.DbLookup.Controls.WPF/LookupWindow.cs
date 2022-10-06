@@ -187,7 +187,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 if (AddButton != null)
-                    AddButton.IsEnabled = allowAdd && LookupDefinition.AllowAddOnTheFly && !_readOnlyMode;
+                    AddButton.IsEnabled = allowAdd && LookupDefinition.AllowAddOnTheFly;
 
                 LookupControl?.Focus();
             };
@@ -255,7 +255,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
                 LookupControl.SearchText, this)
             {
-                InputParameter = AddViewParameter
+                InputParameter = AddViewParameter,
+                LookupReadOnlyMode = _readOnlyMode
             };
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 

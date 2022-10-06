@@ -105,7 +105,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private static void ValueChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
-            var autoFillControl = (AutoFillControl) obj;
+            var autoFillControl = (AutoFillControl)obj;
             if (!autoFillControl._onAutoFillDataChanged)
             {
                 autoFillControl._onValuePropertySetting = true;

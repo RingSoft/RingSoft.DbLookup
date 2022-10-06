@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
+                    xmlns:wpf="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF">
+
+    <BitmapImage x:Key="AutoFillButtonImage" UriSource="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"/>
+
+    <Style TargetType="{x:Type local:AutoFillReadOnlyControl}">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AutoFillReadOnlyControl}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Border BorderThickness="0,0,1,1" BorderBrush="Gainsboro">
+                                <Border BorderThickness="1,1,0,0" BorderBrush="Black">
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="TextBlock" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                                        <Button Name="DropDownButton" Grid.Column="1" Width="20" Height="{Binding ElementName=TextBlock, Path=ActualHeight}" VerticalAlignment="Center">
+                                            <Image Source="{StaticResource AutoFillButtonImage}"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -23,7 +23,7 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock x:Name="TextBlock" Margin="5,0,5,0" VerticalAlignment="Center"/>
-                                        <Button Name="DropDownButton" Grid.Column="1" Width="20" Height="{Binding ElementName=TextBlock, Path=ActualHeight}" VerticalAlignment="Center">
+                                        <Button Name="DropDownButton" Grid.Column="1" Width="20" Height="{Binding ElementName=TextBlock, Path=ActualHeight}" VerticalAlignment="Center" Focusable="False">
                                             <Image Source="{StaticResource AutoFillButtonImage}"/>
                                         </Button>
                                     </Grid>

@@ -852,9 +852,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _autoFillData.RefreshData(popupIsOpen);
             };
             lookupWindow.LookupSelect += LookupForm_LookupSelect;
-            bool readOnlyMode = _readOnlyMode;
-            if (Setup.ReadOnlyModeSet) readOnlyMode = Setup.ReadOnlyMode;
-            lookupWindow.SetReadOnlyMode(readOnlyMode);
+            lookupWindow.SetReadOnlyMode(_readOnlyMode);
             lookupWindow.ApplyNewLookup += (sender, args) => Setup.LookupDefinition = lookupWindow.LookupDefinition;
             LookupShown?.Invoke(this, new LookupShownArgs(){LookupWindow = lookupWindow});
             lookupWindow.ShowDialog();

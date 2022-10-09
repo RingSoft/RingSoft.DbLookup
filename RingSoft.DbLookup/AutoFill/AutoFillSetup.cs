@@ -43,6 +43,19 @@ namespace RingSoft.DbLookup.AutoFill
 
         public object AddViewParameter { get; set; }
 
+        public bool ReadOnlyModeSet { get; private set; }
+        private bool _readOnlyMode;
+
+        public bool ReadOnlyMode
+        {
+            get => _readOnlyMode;
+            set
+            {
+                ReadOnlyModeSet = true;
+                _readOnlyMode = value;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the class with a lookup definition that is attached to the primary table of the parent join definition of the foreign field definition parameter.
         /// </summary>

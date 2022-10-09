@@ -16,6 +16,10 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    public class LookupShownArgs
+    {
+        public LookupWindow LookupWindow { get; set; }
+    }
     /// <summary>
     /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
     ///
@@ -383,6 +387,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public event EventHandler ControlDirty;
         public event EventHandler LookupSelect;
+        public event EventHandler<LookupShownArgs> LookupShown;
 
         private AutoFillData _autoFillData;
         private bool _controlLoaded;
@@ -847,8 +852,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _autoFillData.RefreshData(popupIsOpen);
             };
             lookupWindow.LookupSelect += LookupForm_LookupSelect;
-            lookupWindow.SetReadOnlyMode(_readOnlyMode);
+            bool readOnlyMode = _readOnlyMode;
+            if (Setup.ReadOnlyModeSet) readOnlyMode = Setup.ReadOnlyMode;
+            lookupWindow.SetReadOnlyMode(readOnlyMode);
             lookupWindow.ApplyNewLookup += (sender, args) => Setup.LookupDefinition = lookupWindow.LookupDefinition;
+            LookupShown?.Invoke(this, new LookupShownArgs(){LookupWindow = lookupWindow});
             lookupWindow.ShowDialog();
         }
 

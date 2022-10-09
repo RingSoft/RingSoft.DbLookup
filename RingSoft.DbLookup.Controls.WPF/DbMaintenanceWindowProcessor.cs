@@ -130,6 +130,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ViewModel.InitializeFromLookupData(e);
                 LookupAddView?.Invoke(this, e);
+                if (e.LookupReadOnlyMode)
+                {
+                    SelectButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                }
+                
             }
         }
 

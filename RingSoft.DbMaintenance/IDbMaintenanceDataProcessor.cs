@@ -31,5 +31,7 @@ namespace RingSoft.DbMaintenance
         void ShowRecordSavedMessage();
 
         void OnReadOnlyModeSet(bool readOnlyValue);
+
+        void Activate();
     }
 }

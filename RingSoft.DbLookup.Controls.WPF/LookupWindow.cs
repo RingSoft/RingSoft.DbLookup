@@ -160,6 +160,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private string _initialSearchFor;
 
         private bool _readOnlyMode;
+        private PrimaryKeyValue _readOnlyPrimaryKeyValue;
 
         static LookupWindow()
         {
@@ -167,8 +168,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowInTaskbarProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(false));
         }
 
-        public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor)
+        public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor, PrimaryKeyValue readOnlyValue = null)
         {
+            _readOnlyPrimaryKeyValue = readOnlyValue;
             DataContext = this;
 
             if (lookupDefinition.InitialSortColumnDefinition == null)
@@ -188,6 +190,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (AddButton != null)
                     AddButton.IsEnabled = allowAdd && LookupDefinition.AllowAddOnTheFly;
+
+                if (_readOnlyMode)
+                {
+                    SelectButton.Visibility = Visibility.Collapsed;
+                }
 
                 LookupControl?.Focus();
             };
@@ -234,7 +241,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 InputParameter = AddViewParameter,
                 AllowEdit = AddButton.IsEnabled,
-                LookupReadOnlyMode = _readOnlyMode
+                LookupReadOnlyMode = _readOnlyMode,
+                ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue
             };
 
             if (_readOnlyMode)
@@ -256,7 +264,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupControl.SearchText, this)
             {
                 InputParameter = AddViewParameter,
-                LookupReadOnlyMode = _readOnlyMode
+                LookupReadOnlyMode = _readOnlyMode,
+                ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue
             };
             args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
 
@@ -285,7 +294,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.NewIndex >= 0)
             {
                 ViewButton.IsEnabled = _allowView && LookupDefinition.AllowAddOnTheFly;
-                SelectButton.IsEnabled = !_readOnlyMode;
             }
             else
             {
@@ -329,7 +337,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
             _readOnlyMode = readOnlyValue || LookupDefinition.ReadOnlyMode;
-            
+
             base.OnReadOnlyModeSet(readOnlyValue);
         }
 

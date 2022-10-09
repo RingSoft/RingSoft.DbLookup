@@ -89,6 +89,8 @@
 
         public bool LookupReadOnlyMode { get; set; }
 
+        public PrimaryKeyValue ReadOnlyPrimaryKeyValue { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

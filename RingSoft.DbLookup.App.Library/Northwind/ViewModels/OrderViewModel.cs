@@ -540,9 +540,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _customerDirty = false;
 
             if (ReadOnlyMode)
+            {
                 ControlsGlobals.UserInterface.ShowMessageBox(
                     "This Order is being modified in another window.  Editing not allowed.", "Editing not allowed",
                     RsMessageBoxIcons.Exclamation);
+                Processor?.Activate();
+            }
         }
 
         public void RefreshTotalControls()

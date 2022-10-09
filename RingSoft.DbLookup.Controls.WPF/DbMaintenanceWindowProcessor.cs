@@ -133,7 +133,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (e.LookupReadOnlyMode)
                 {
                     SelectButton.Visibility = Visibility.Collapsed;
-                    DeleteButton.Visibility = Visibility.Collapsed;
                 }
                 
             }
@@ -233,6 +232,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     WPFControlsGlobals.SendKey(Key.Tab);
                 }
+            }
+        }
+
+        public void Activate()
+        {
+            if (MaintenanceWindow != null)
+            {
+                MaintenanceWindow.Activate();
+                MaintenanceWindow.Focus();
+                WPFControlsGlobals.SendKey(Key.Tab);
             }
         }
 

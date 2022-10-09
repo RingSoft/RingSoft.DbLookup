@@ -828,8 +828,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (TextBox != null)
                 initialText = TextBox.Text;
 
+            PrimaryKeyValue readOnlyPrimaryKeyValue = null;
+            if (_readOnlyMode)
+            {
+                readOnlyPrimaryKeyValue = Value.PrimaryKeyValue;
+            }
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
-                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText);
+                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText, readOnlyPrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
             lookupWindow.Owner = Window.GetWindow(this);

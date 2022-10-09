@@ -294,6 +294,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.NewIndex >= 0)
             {
                 ViewButton.IsEnabled = _allowView && LookupDefinition.AllowAddOnTheFly;
+                SelectButton.IsEnabled = true;
             }
             else
             {

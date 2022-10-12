@@ -13,9 +13,9 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition
 {
-    public class ChunkResult<TEntity> where TEntity : new()
+    public class ChunkResult
     {
-        public List<TEntity> Chunk { get; } = new List<TEntity>();
+        public DataTable Chunk { get; internal set; }
 
         public PrimaryKeyValue BottomPrimaryKey { get; set; }
     }
@@ -445,102 +445,5 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
-        public ChunkResult<TEntity> GetChunk(int chunkSize, PrimaryKeyValue primaryKey = null)
-        {
-            var result = new ChunkResult<TEntity>();
-            var query = new SelectQuery(TableName).SetMaxRecords(chunkSize);
-            foreach (var fieldDefinition in FieldDefinitions)
-            {
-                query.AddSelectColumn(fieldDefinition.FieldName);
-            }
-
-            foreach (var primaryKeyField in PrimaryKeyFields)
-            {
-                query.AddOrderBySegment(primaryKeyField.FieldName, OrderByTypes.Ascending);
-            }
-
-            if (primaryKey != null && primaryKey.IsValid && primaryKey.TableDefinition == this)
-            {
-                if (primaryKey.KeyValueFields.Count > 1)
-                {
-                    var countQuery = new SelectQuery(TableName);
-                    foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
-                    {
-                        countQuery.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
-                            primaryKeyKeyValueField.Value);
-                        countQuery.AddOrderBySegment(primaryKeyKeyValueField.FieldDefinition.FieldName,
-                            OrderByTypes.Ascending);
-
-                        var countResult = Context.DataProcessor.GetData(countQuery);
-                        if (countResult.ResultCode == GetDataResultCodes.Success)
-                        {
-                            if (countResult.DataSet.Tables[0].Rows.Count > 1)
-                            {
-                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
-                                    primaryKeyKeyValueField.Value);
-                            }
-                            else
-                            {
-                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName,
-                                    Conditions.GreaterThan,
-                                    primaryKeyKeyValueField.Value);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var primaryKeyField = primaryKey.KeyValueFields[0];
-                    query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.GreaterThan,
-                        primaryKeyField.Value);
-                }
-            }
-
-            if (primaryKey == null || !primaryKey.IsValid)
-            {
-                ProcessChunkResult(query, result);
-            }
-            else
-            {
-                while (query.WhereItems.Count > 0)
-                {
-                    query.WhereItems.LastOrDefault()?.UpdateCondition(Conditions.GreaterThan);
-                    ProcessChunkResult(query, result);
-                    query.RemoveWhereItem(query.WhereItems.LastOrDefault());
-                    if (query.MaxRecords <= 0)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private void ProcessChunkResult(SelectQuery query, ChunkResult<TEntity> result)
-        {
-            var getDataResult = Context.DataProcessor.GetData(query);
-            if (getDataResult.ResultCode == GetDataResultCodes.Success)
-            {
-                foreach (DataRow dataRow in getDataResult.DataSet.Tables[0].Rows)
-                {
-                    var entity = (TEntity) Activator.CreateInstance(typeof(TEntity));
-                    foreach (var fieldDefinition in FieldDefinitions)
-                    {
-                        GblMethods.SetPropertyValue(entity, fieldDefinition.PropertyName,
-                            dataRow.GetRowValue(fieldDefinition.FieldName));
-                    }
-
-                    result.Chunk.Add(entity);
-                }
-                query.MaxRecords -= getDataResult.DataSet.Tables[0].Rows.Count;
-
-                if (result.Chunk.Any())
-                {
-                    var lastRecord = result.Chunk.LastOrDefault();
-                    result.BottomPrimaryKey = GetPrimaryKeyValueFromEntity(lastRecord);
-                }
-            }
-        }
     }
 }

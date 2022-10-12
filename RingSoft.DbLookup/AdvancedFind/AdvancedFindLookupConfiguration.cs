@@ -27,6 +27,8 @@ namespace RingSoft.DbLookup.AdvancedFind
         public void InitializeModel()
         {
             _lookupContext.AdvancedFinds.RecordDescription = "Advanced Find";
+            _lookupContext.AdvancedFinds.PriorityLevel = 10;
+
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.DecimalFormatType)
                 .IsEnum<DecimalEditFormatTypes>();
 

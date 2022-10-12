@@ -753,5 +753,35 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             sql = $"{sql.TrimRight(",\r\n")}\r\n";
             return sql;
         }
+
+        public virtual string ConvertValueToSqlText(string value, ValueTypes valueType)
+        {
+            if (value.IsNullOrEmpty())
+                return "NULL";
+
+            switch (valueType)
+            {
+                case ValueTypes.String:
+                case ValueTypes.Memo:
+                    return FormatStringValueForSql(value);
+                case ValueTypes.Numeric:
+                    return value;
+                case ValueTypes.DateTime:
+                    return $"'{value}'";
+                case ValueTypes.Bool:
+                    var result = value.ToBool();
+                    if (result)
+                    {
+                        return "1";
+                    }
+                    else
+                    {
+                        return "0";
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
     }
 }

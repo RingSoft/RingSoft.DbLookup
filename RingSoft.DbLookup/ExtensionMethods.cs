@@ -165,6 +165,5 @@ namespace RingSoft.DbLookup
             return valueType;
 
         }
-
     }
 }

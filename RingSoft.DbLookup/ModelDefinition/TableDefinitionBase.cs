@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition
 {
@@ -101,7 +105,7 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public List<FieldDefinition> ChildFields { get; set; } = new List<FieldDefinition>();
 
-        public int PriorityLevel { get; set; }
+        public int PriorityLevel { get; set; } = 1000;
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
@@ -258,5 +262,106 @@ namespace RingSoft.DbLookup.ModelDefinition
             RecordDescription = description;
             return this;
         }
+
+        public ChunkResult GetChunk(int chunkSize, PrimaryKeyValue primaryKey = null)
+        {
+            var result = new ChunkResult();
+            var query = new SelectQuery(TableName).SetMaxRecords(chunkSize);
+            foreach (var fieldDefinition in FieldDefinitions)
+            {
+                query.AddSelectColumn(fieldDefinition.FieldName);
+            }
+
+            foreach (var primaryKeyField in PrimaryKeyFields)
+            {
+                query.AddOrderBySegment(primaryKeyField.FieldName, OrderByTypes.Ascending);
+            }
+
+            if (primaryKey != null && primaryKey.IsValid && primaryKey.TableDefinition == this)
+            {
+                if (primaryKey.KeyValueFields.Count > 1)
+                {
+                    var countQuery = new SelectQuery(TableName);
+                    foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
+                    {
+                        countQuery.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
+                            primaryKeyKeyValueField.Value);
+                        countQuery.AddOrderBySegment(primaryKeyKeyValueField.FieldDefinition.FieldName,
+                            OrderByTypes.Ascending);
+
+                        var countResult = Context.DataProcessor.GetData(countQuery);
+                        if (countResult.ResultCode == GetDataResultCodes.Success)
+                        {
+                            if (countResult.DataSet.Tables[0].Rows.Count > 1)
+                            {
+                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
+                                    primaryKeyKeyValueField.Value);
+                            }
+                            else
+                            {
+                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName,
+                                    Conditions.GreaterThan,
+                                    primaryKeyKeyValueField.Value);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var primaryKeyField = primaryKey.KeyValueFields[0];
+                    query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.GreaterThan,
+                        primaryKeyField.Value);
+                }
+            }
+
+            if (primaryKey == null || !primaryKey.IsValid)
+            {
+                ProcessChunkResult(query, result);
+            }
+            else
+            {
+                while (query.WhereItems.Count > 0)
+                {
+                    query.WhereItems.LastOrDefault()?.UpdateCondition(Conditions.GreaterThan);
+                    ProcessChunkResult(query, result);
+                    query.RemoveWhereItem(query.WhereItems.LastOrDefault());
+                    if (query.MaxRecords <= 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private void ProcessChunkResult(SelectQuery query, ChunkResult result)
+        {
+            var getDataResult = Context.DataProcessor.GetData(query);
+            if (getDataResult.ResultCode == GetDataResultCodes.Success)
+            {
+                if (result.Chunk == null)
+                {
+                    result.Chunk = getDataResult.DataSet.Tables[0].Copy();
+                }
+                else
+                {
+                    foreach (DataRow dataRow in getDataResult.DataSet.Tables[0].Rows)
+                    {
+                        result.Chunk.ImportRow(dataRow);
+                    }
+                }
+                query.MaxRecords -= getDataResult.DataSet.Tables[0].Rows.Count;
+
+                if (result.Chunk.Rows.Count > 0)
+                {
+                    var lastRecord = result.Chunk.Rows[result.Chunk.Rows.Count - 1];
+                    var primaryKeyValue = new PrimaryKeyValue(this);
+                    primaryKeyValue.PopulateFromDataRow(lastRecord);
+                    result.BottomPrimaryKey = primaryKeyValue;
+                }
+            }
+        }
+
     }
 }

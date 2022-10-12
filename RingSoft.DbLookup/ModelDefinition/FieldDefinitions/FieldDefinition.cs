@@ -103,8 +103,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public int LookupControlColumnId { get; internal set; }
 
         public bool AllowRecursion { get; private set; } = true;
-
-        public Enum EnumValue { get; set; }
+        
+        public bool UpdateOnly { get; private set; }
 
         internal FieldDefinition()
         {
@@ -222,6 +222,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             AllowRecursion = value;
             return this;
+        }
+
+        internal void SetUpdateOnly(bool value = true)
+        {
+            UpdateOnly = value;
         }
     }
 }

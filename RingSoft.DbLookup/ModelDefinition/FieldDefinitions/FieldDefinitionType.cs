@@ -56,5 +56,11 @@
             base.HasLookupControlColumnId(lookupControlColumnId);
             return (TFieldDefinition) this;
         }
+
+        public TFieldDefinition IsUpdateOnly(bool value)
+        {
+            base.SetUpdateOnly(value);
+            return (TFieldDefinition)this;
+        }
     }
 }

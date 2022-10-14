@@ -115,6 +115,12 @@ namespace RingSoft.DbLookup.DataProcessor
 
         public override void CloseConnection(IDbConnection connection)
         {
+            if (connection is SQLiteConnection sqLiteConnection)
+            {
+                sqLiteConnection.Close();
+                sqLiteConnection.Dispose();
+                GC.Collect();
+            }
         }
 
         public override string GetIdentityInsertSql(string tableName)

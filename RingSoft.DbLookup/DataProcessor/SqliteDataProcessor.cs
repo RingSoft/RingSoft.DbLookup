@@ -80,6 +80,25 @@ namespace RingSoft.DbLookup.DataProcessor
             throw new NotImplementedException("Not relevant for Sqlite.");
         }
 
+        public override bool DropDatabase()
+        {
+            var path = FilePath;
+            if (!path.EndsWith("\\"))
+                path += "\\";
+            var filePath = $"{path}{FileName}";
+            var file = new System.IO.FileInfo(filePath);
+            try
+            {
+                file.Delete();
+            }
+            catch (Exception e)
+            {
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                return false;
+            }
+            return true;
+        }
+
         private string GenerateConnectionString()
         {
             if (!FilePath.EndsWith("\\"))
@@ -92,6 +111,15 @@ namespace RingSoft.DbLookup.DataProcessor
             //connectionString += "Version=3;";
 
             return connectionString;
+        }
+
+        public override void CloseConnection(IDbConnection connection)
+        {
+        }
+
+        public override string GetIdentityInsertSql(string tableName)
+        {
+            return string.Empty;
         }
     }
 }

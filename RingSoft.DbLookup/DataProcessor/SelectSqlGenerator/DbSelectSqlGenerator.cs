@@ -754,7 +754,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
-        public virtual string ConvertValueToSqlText(string value, ValueTypes valueType)
+        public virtual string ConvertValueToSqlText(string value, ValueTypes valueType,DbDateTypes dateType)
         {
             if (value.IsNullOrEmpty())
                 return "NULL";
@@ -767,6 +767,22 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 case ValueTypes.Numeric:
                     return value;
                 case ValueTypes.DateTime:
+                    DateTime date = DateTime.MinValue;
+                    if (DateTime.TryParse(value, out date))
+                    {
+                        switch (dateType)
+                        {
+                            case DbDateTypes.DateOnly:
+                                value = date.ToString("yyyy-MM-dd");
+                                break;
+                            case DbDateTypes.DateTime:
+                                value = date.ToString("yyyy-MM-dd hh:mm:ss");
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(dateType), dateType, null);
+                        }
+                    }
+
                     return $"'{value}'";
                 case ValueTypes.Bool:
                     var result = value.ToBool();

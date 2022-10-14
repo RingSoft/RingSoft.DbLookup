@@ -83,7 +83,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <summary>
         /// Closes the database connection.
         /// </summary>
-        public void CloseConnection(IDbConnection connection)
+        public virtual void CloseConnection(IDbConnection connection)
         {
             KeepConnectionOpen = false;
             if (connection != null)
@@ -120,6 +120,8 @@ namespace RingSoft.DbLookup.DataProcessor
         {
             return  new DataProcessResult("");
         }
+
+        public abstract bool DropDatabase();
 
         /// <summary>
         /// Gets the resulting data or error after executing the query.
@@ -368,6 +370,11 @@ namespace RingSoft.DbLookup.DataProcessor
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
             ControlsGlobals.UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
+        }
+
+        public virtual string GetIdentityInsertSql(string tableName)
+        {
+            return $"SET IDENTITY_INSERT {SqlGenerator.FormatSqlObject(tableName)} ON";
         }
     }
 }

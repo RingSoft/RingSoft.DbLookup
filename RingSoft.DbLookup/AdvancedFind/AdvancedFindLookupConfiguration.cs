@@ -26,14 +26,19 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         public void InitializeModel()
         {
+            _lookupContext.AdvancedFinds.GetFieldDefinition(p => p.FromFormula).IsMemo();
             _lookupContext.AdvancedFinds.RecordDescription = "Advanced Find";
             _lookupContext.AdvancedFinds.PriorityLevel = 10;
+
+            _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.Formula).IsMemo();
 
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.DecimalFormatType)
                 .IsEnum<DecimalEditFormatTypes>();
 
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.FieldDataType)
                 .IsEnum<FieldDataTypes>();
+
+            _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Formula).IsMemo();
 
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.EndLogic)
                 .IsEnum<EndLogics>();

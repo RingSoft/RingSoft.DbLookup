@@ -284,8 +284,9 @@ namespace RingSoft.DbLookup.ModelDefinition
                     var countQuery = new SelectQuery(TableName);
                     foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
                     {
-                        countQuery.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
-                            primaryKeyKeyValueField.Value);
+                        //countQuery.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
+                        //    primaryKeyKeyValueField.Value);
+                        AddWhereChunk(primaryKeyKeyValueField, countQuery, Conditions.Equals);
                         countQuery.AddOrderBySegment(primaryKeyKeyValueField.FieldDefinition.FieldName,
                             OrderByTypes.Ascending);
 
@@ -294,14 +295,14 @@ namespace RingSoft.DbLookup.ModelDefinition
                         {
                             if (countResult.DataSet.Tables[0].Rows.Count > 1)
                             {
-                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
-                                    primaryKeyKeyValueField.Value);
+                                AddWhereChunk(primaryKeyKeyValueField, query, Conditions.Equals);
                             }
                             else
                             {
-                                query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName,
-                                    Conditions.GreaterThan,
-                                    primaryKeyKeyValueField.Value);
+                                //query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName,
+                                //    Conditions.GreaterThan,
+                                //    primaryKeyKeyValueField.Value);
+                                AddWhereChunk(primaryKeyKeyValueField, query, Conditions.GreaterThan);
                             }
                         }
                     }
@@ -309,8 +310,9 @@ namespace RingSoft.DbLookup.ModelDefinition
                 else
                 {
                     var primaryKeyField = primaryKey.KeyValueFields[0];
-                    query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.GreaterThan,
-                        primaryKeyField.Value);
+                    //query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.GreaterThan,
+                    //    primaryKeyField.Value);
+                    AddWhereChunk(primaryKeyField, query, Conditions.GreaterThan);
                 }
             }
 
@@ -333,6 +335,46 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
 
             return result;
+        }
+
+        private static void AddWhereChunk(PrimaryKeyValueField primaryKeyKeyValueField, SelectQuery query, Conditions condition)
+        {
+            switch (primaryKeyKeyValueField.FieldDefinition.FieldDataType)
+            {
+                case FieldDataTypes.String:
+                case FieldDataTypes.Memo:
+                    query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, condition,
+                        primaryKeyKeyValueField.Value);
+                    break;
+                case FieldDataTypes.Integer:
+                    query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, condition,
+                        primaryKeyKeyValueField.Value.ToInt());
+                    break;
+                case FieldDataTypes.Decimal:
+                    query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, condition,
+                        primaryKeyKeyValueField.Value.ToDecimal().ToDouble());
+                    break;
+                case FieldDataTypes.DateTime:
+                    DbDateTypes dateType = new DbDateTypes();
+                    DateTime dateValue = DateTime.Now;
+                    if (DateTime.TryParse(primaryKeyKeyValueField.Value, out dateValue))
+                    {
+                        var dateField =
+                            primaryKeyKeyValueField.FieldDefinition as DateFieldDefinition;
+                        if (dateField != null)
+                            query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName,
+                                condition,
+                                dateValue, dateField.DateType);
+                    }
+
+                    break;
+                case FieldDataTypes.Bool:
+                    query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, condition,
+                        primaryKeyKeyValueField.Value.ToBool());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void ProcessChunkResult(SelectQuery query, ChunkResult result)

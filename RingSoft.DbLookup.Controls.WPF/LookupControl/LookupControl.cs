@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
@@ -1253,7 +1254,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return 10;
 
             //var itemHeight = 0.0;
-            if (_itemHeight <= 0)
+            if (_itemHeight <= 0 || ListView.Items.Count == 0)
             {
                 ListView.ItemsSource = null;
                 var addBlankRow = ListView.Items.Count <= 0;
@@ -1276,6 +1277,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ListView.Items.Clear();
             }
 
+            ListView.UpdateLayout();
             var totalHeight = ListView.ActualHeight;
             GridViewHeaderRowPresenter header = (GridViewHeaderRowPresenter)LookupGridView.GetType()
                 .GetProperty("HeaderRowPresenter", BindingFlags.NonPublic | BindingFlags.Instance)

@@ -80,23 +80,27 @@ namespace RingSoft.DbLookup.DataProcessor
             throw new NotImplementedException("Not relevant for Sqlite.");
         }
 
-        public override bool DropDatabase()
+        public override DataProcessResult DropDatabase()
         {
             var path = FilePath;
             if (!path.EndsWith("\\"))
                 path += "\\";
             var filePath = $"{path}{FileName}";
             var file = new System.IO.FileInfo(filePath);
+            var result = new DataProcessResult("");
+            result.ResultCode = GetDataResultCodes.Success;
             try
             {
                 file.Delete();
             }
             catch (Exception e)
             {
-                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
-                return false;
+                //ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                result.ResultCode = GetDataResultCodes.SqlError;
+                result.Message = e.Message;
             }
-            return true;
+
+            return result;
         }
 
         private string GenerateConnectionString()

@@ -104,13 +104,14 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
-        public override bool DropDatabase()
+        public override DataProcessResult DropDatabase()
         {
             var originalDatabase = Database;
             Database = "sys";
-            var result = ExecuteSql($"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(originalDatabase)}");
+            var result = ExecuteSql($"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(originalDatabase)}", false,
+                true, false);
             Database = originalDatabase;
-            return result.ResultCode == GetDataResultCodes.Success;
+            return result;
 
         }
     }

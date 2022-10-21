@@ -121,7 +121,7 @@ namespace RingSoft.DbLookup.DataProcessor
             return  new DataProcessResult("");
         }
 
-        public abstract bool DropDatabase();
+        public abstract DataProcessResult DropDatabase();
 
         /// <summary>
         /// Gets the resulting data or error after executing the query.
@@ -192,7 +192,7 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
-        private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools, bool setCursor)
+        private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools, bool setCursor, bool showError = true)
         {
             IDbConnection connection = null;
             try
@@ -211,8 +211,12 @@ namespace RingSoft.DbLookup.DataProcessor
                 result.Message = $"Database Connection Error!\r\n\r\n{e.Message}";
                 result.ResultCode = GetDataResultCodes.DbConnectError;
                 result.ProcessedSqlStatement = ConnectionString;
-                ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "Database Connection Error",
-                    RsMessageBoxIcons.Error);
+                if (showError)
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "Database Connection Error",
+                        RsMessageBoxIcons.Error);
+                }
+
                 CloseConnection(connection);
             }
 
@@ -260,11 +264,11 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="clearConnectionPools">if set to <c>true</c> clear connection pools.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false, bool setWaitCursor = true)
+        public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false, bool setWaitCursor = true, bool showError = true)
         {
             var sqlList = new List<string>();
             sqlList.Add(sqlStatement);
-            return ExecuteSqls(sqlList, setWaitCursor);
+            return ExecuteSqls(sqlList, clearConnectionPools, setWaitCursor, showError);
         }
 
         /// <summary>
@@ -274,7 +278,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="clearConnectionPools">if set to <c>true</c> [clear connection pools].</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false, bool setWaitCursor = true)
+        public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false, bool setWaitCursor = true, bool showError = true)
         {
             if (setWaitCursor)
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
@@ -309,8 +313,13 @@ namespace RingSoft.DbLookup.DataProcessor
                     CloseConnection(connection);
                     if (setWaitCursor)
                         ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
-                    ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "SQL Process Failed",
-                        RsMessageBoxIcons.Error);
+
+                    if (showError)
+                    {
+                        ControlsGlobals.UserInterface.ShowMessageBox(result.Message, "SQL Process Failed",
+                            RsMessageBoxIcons.Error);
+                    }
+
                     return result;
                 }
             }

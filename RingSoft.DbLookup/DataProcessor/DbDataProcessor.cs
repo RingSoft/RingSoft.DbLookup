@@ -129,12 +129,12 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="query">The query.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult GetData(QueryBase query, bool setWaitCursor = true)
+        public DataProcessResult GetData(QueryBase query, bool setWaitCursor = true, bool showError = true)
         {
             var querySet = new QuerySet();
             querySet.AddQuery(query, "TABLE");
             querySet.DebugMessage = query.DebugMessage;
-            return GetData(querySet, setWaitCursor);
+            return GetData(querySet, setWaitCursor, showError);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="querySet">The query set.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
         /// <returns></returns>
-        public DataProcessResult GetData(QuerySet querySet, bool setWaitCursor = true)
+        public DataProcessResult GetData(QuerySet querySet, bool setWaitCursor = true, bool showError = true)
         {
             if (setWaitCursor)
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
@@ -156,7 +156,7 @@ namespace RingSoft.DbLookup.DataProcessor
                 return result;
             }
 
-            IDbConnection connection = TryOpenConnection(result, false, setWaitCursor);
+            IDbConnection connection = TryOpenConnection(result, false, setWaitCursor, showError);
             if (result.ResultCode == GetDataResultCodes.DbConnectError)
                 return result;
 
@@ -168,7 +168,11 @@ namespace RingSoft.DbLookup.DataProcessor
                 {
                     if (setWaitCursor)
                         ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
-                    UserInterface.ShowDataProcessResult(result);
+                    if (showError)
+                    {
+                        UserInterface.ShowDataProcessResult(result);
+                    }
+
                     return result;
                 }
                 else if (ShowSqlWindow)

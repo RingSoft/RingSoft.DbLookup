@@ -29,6 +29,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             _lookupContext.AdvancedFinds.GetFieldDefinition(p => p.FromFormula).IsMemo();
             _lookupContext.AdvancedFinds.RecordDescription = "Advanced Find";
             _lookupContext.AdvancedFinds.PriorityLevel = 10;
+            _lookupContext.AdvancedFinds.IsAdvancedFind = true;
 
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.Formula).IsMemo();
 
@@ -37,6 +38,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.FieldDataType)
                 .IsEnum<FieldDataTypes>();
+            _lookupContext.AdvancedFindColumns.IsAdvancedFind = true;
 
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Formula).IsMemo();
 
@@ -48,6 +50,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Operand)
                 .HasDescription("Condition").IsEnum<Conditions>();
+            _lookupContext.AdvancedFindFilters.IsAdvancedFind = true;
         }
     }
 }

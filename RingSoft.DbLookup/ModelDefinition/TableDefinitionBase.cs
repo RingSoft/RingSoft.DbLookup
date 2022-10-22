@@ -107,6 +107,8 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public int PriorityLevel { get; set; } = 1000;
 
+        public bool IsAdvancedFind { get; internal set; }
+
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
 

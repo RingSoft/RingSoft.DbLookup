@@ -301,6 +301,12 @@ namespace RingSoft.DbMaintenance
                     _lookupData.GotoPreviousRecord();
                 }
             }
+
+            if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
+            {
+                View.ResetViewForNewRecord();
+            }
+
         }
 
         /// <summary>
@@ -328,19 +334,30 @@ namespace RingSoft.DbMaintenance
                     _lookupData.GotoNextRecord();
                 }
             }
-        }
 
+            if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
+            {
+                View.ResetViewForNewRecord();
+            }
+        }
         /// <summary>
         /// Called when the Find button is clicked.
         /// </summary>
         public override void OnFindButton()
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
+
             FireFindEvent();
             if (!FindCommand.IsEnabled)
                 return;
 
             Processor.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
                 _lookupData.SelectedPrimaryKeyValue);
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
+            }
         }
 
         public override void OnRecordSelected(LookupSelectArgs e)
@@ -407,6 +424,7 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoSave(bool unitTestMode = false)
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             FireSaveEvent();
             if (!SaveCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
@@ -473,6 +491,11 @@ namespace RingSoft.DbMaintenance
 
             Processor?.ShowRecordSavedMessage();
             RecordsChanged = true;
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
+            }
 
             return DbMaintenanceResults.Success;
         }

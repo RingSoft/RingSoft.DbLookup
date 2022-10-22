@@ -7,6 +7,12 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbMaintenance
 {
+    public enum MaintenanceKey
+    {
+        Alt = 0,
+        Ctrl = 1,
+    }
+
     public interface IDbMaintenanceDataProcessor
     {
         bool KeyControlRegistered { get; set; }
@@ -32,6 +38,7 @@ namespace RingSoft.DbMaintenance
 
         void OnReadOnlyModeSet(bool readOnlyValue);
 
+        bool IsMaintenanceKeyDown(MaintenanceKey key);
         void Activate();
     }
 }

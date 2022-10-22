@@ -259,5 +259,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             
         }
+
+        public bool IsMaintenanceKeyDown(MaintenanceKey key)
+        {
+            switch (key)
+            {
+                case MaintenanceKey.Alt:
+                    return Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+                case MaintenanceKey.Ctrl:
+                    return Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(key), key, null);
+            }
+        }
     }
 }

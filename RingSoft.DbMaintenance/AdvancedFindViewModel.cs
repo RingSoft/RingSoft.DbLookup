@@ -988,6 +988,7 @@ namespace RingSoft.DbMaintenance
 
         private void ImportDefaultLookup()
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             if (SelectedTableBoxItem != null)
             {
                 CreateLookupDefinition();
@@ -1003,28 +1004,46 @@ namespace RingSoft.DbMaintenance
                         "No Default Lookup", RsMessageBoxIcons.Exclamation);
                 }
             }
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
+            }
         }
 
         private void ApplyToLookup()
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             if (ValidateLookup())
             {
                 LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
                 View.ApplyToLookup();
             }
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
+            }
         }
 
         private void ShowSql()
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             if (ValidateLookup())
             {
                 View.ShowSqlStatement();
 
             }
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
+            }
         }
 
         private void ShowRefreshSettings()
         {
+            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             var refreshSettings = GetEntityData();
             if (View.ShowRefreshSettings(refreshSettings))
             {
@@ -1032,6 +1051,11 @@ namespace RingSoft.DbMaintenance
                 LoadRefreshSettings(refreshSettings);
                 View.GetRecordCount(true);
                 ResetLookup();
+            }
+
+            if (!keyDown)
+            {
+                View.ResetViewForNewRecord();
             }
         }
 

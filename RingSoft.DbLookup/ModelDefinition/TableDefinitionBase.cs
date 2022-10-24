@@ -109,6 +109,14 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public bool IsAdvancedFind { get; internal set; }
 
+        public bool CanViewTable
+        {
+            get
+            {
+                return Context.CanViewTable(this);
+            }
+        }
+
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
 

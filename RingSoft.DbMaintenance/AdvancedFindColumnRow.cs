@@ -185,22 +185,26 @@ namespace RingSoft.DbMaintenance
                 (FieldDataTypes) entity.FieldDataType, (DecimalEditFormatTypes) entity.DecimalFormatType);
 
             LookupColumnDefinition = Manager.ViewModel.MakeIncludes(foundTreeViewItem, Name).ColumnDefinition;
-            LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
-
-            if (LookupColumnDefinition is LookupFormulaColumnDefinition)
+            if (LookupColumnDefinition != null)
             {
-               LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
-               Field = "<Formula>";
-               LookupFormulaColumnDefinition.HasDataType((FieldDataTypes)entity.FieldDataType);
 
-                if (entity.DecimalFormatType > 0)
-               {
-                   LookupFormulaColumnDefinition.DecimalFieldType = (DecimalFieldTypes)entity.DecimalFormatType;
-               }
-            }
-            else
-            {
-                LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
+                LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
+
+                if (LookupColumnDefinition is LookupFormulaColumnDefinition)
+                {
+                    LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
+                    Field = "<Formula>";
+                    LookupFormulaColumnDefinition.HasDataType((FieldDataTypes) entity.FieldDataType);
+
+                    if (entity.DecimalFormatType > 0)
+                    {
+                        LookupFormulaColumnDefinition.DecimalFieldType = (DecimalFieldTypes) entity.DecimalFormatType;
+                    }
+                }
+                else
+                {
+                    LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
+                }
             }
         }
 

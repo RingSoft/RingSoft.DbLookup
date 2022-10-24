@@ -10,6 +10,18 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
+    public class CanViewTableArgs
+    {
+        public TableDefinitionBase TableDefinition { get; private set; }
+
+        public bool AllowView { get; set; } = true;
+
+        public CanViewTableArgs(TableDefinitionBase tableDefinition)
+        {
+            TableDefinition = tableDefinition;
+        }
+    }
+
     public class TableDefinitionValue
     {
         public AutoFillValue ReturnValue { get; set; }
@@ -57,12 +69,21 @@ namespace RingSoft.DbLookup
         /// </value>
         public virtual string ValidateFieldFailCaption => "Validation Failure!";
 
+        public bool CanViewTable(TableDefinitionBase tableDefinition)
+        {
+            var args = new CanViewTableArgs(tableDefinition);
+            CanViewTableEvent?.Invoke(this, args);
+            return args.AllowView;
+        }
+
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
         public event EventHandler<TableDefinitionValue> GetAutoFillText;
+
+        public event EventHandler<CanViewTableArgs> CanViewTableEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 
@@ -127,6 +148,11 @@ namespace RingSoft.DbLookup
         /// <param name="e">The lookup add view arguments.</param>
         public virtual void OnAddViewLookup(LookupAddViewArgs e)
         {
+            if (!e.LookupData.LookupDefinition.TableDefinition.CanViewTable)
+            {
+                DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
+                return;
+            }
             DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
             LookupAddView?.Invoke(this, e);
         }

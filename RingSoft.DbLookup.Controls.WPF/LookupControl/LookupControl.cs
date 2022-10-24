@@ -337,6 +337,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
             AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
 
+            if (LookupDefinition != null && !LookupDefinition.TableDefinition.CanViewTable)
+            {
+                ShowAdvancedFindButton = false;
+            }
+
             if (!ShowAdvancedFindButton)
             {
                 if (AdvancedFindButton != null) 

@@ -1,4 +1,5 @@
 ﻿using System;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 
@@ -16,6 +17,8 @@ namespace RingSoft.DbLookup
         void ShowDataProcessResult(DataProcessResult dataProcessResult);
 
         void ShowAddOnTheFlyWindow(LookupAddViewArgs e);
+
+        void PlaySystemSound(RsMessageBoxIcons icon);
     }
 
     internal class DefaultUserInterface : IDbLookupUserInterface
@@ -26,6 +29,11 @@ namespace RingSoft.DbLookup
         }
 
         public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
+        {
+            
+        }
+
+        public void PlaySystemSound(RsMessageBoxIcons icon)
         {
             
         }

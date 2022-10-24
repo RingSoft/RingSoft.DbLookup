@@ -340,7 +340,7 @@ namespace RingSoft.DbMaintenance
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context
                          .TableDefinitions.OrderBy(p => p.Description))
             {
-                if (!contextTableDefinition.Description.IsNullOrEmpty())
+                if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
                 {
                     TableComboBoxSetup.Items.Add(new TextComboBoxItem()
                         {NumericValue = index, TextValue = contextTableDefinition.Description});
@@ -397,10 +397,20 @@ namespace RingSoft.DbMaintenance
                     $"{nameof(SystemGlobals)}.{nameof(SystemGlobals.AdvancedFindDbProcessor)} not set.");
             }
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(newEntity.Id);
+            if (advancedFind != null)
+            {
+                var tableDefinition =
+                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.EntityName == advancedFind.Table);
+                if (!tableDefinition.CanViewTable)
+                {
+                    return null;
+                }
+            }
             AdvancedFindId = advancedFind.Id;
 
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, advancedFind.Name);
 
+            ReadOnlyMode = false;
             return advancedFind;
         }
 
@@ -606,6 +616,8 @@ namespace RingSoft.DbMaintenance
                 SelectedTreeViewItem = null;
                 TreeRoot?.Clear();
             }
+
+            ReadOnlyMode = false;
 
             CreateLookupDefinition();
             View.NotifyFromFormulaExists = false;

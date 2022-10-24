@@ -35,9 +35,12 @@ namespace RingSoft.DbMaintenance
         public virtual void AddRowFromEntity(TEntity entity)
         {
             var newRow = ConstructNewRowFromEntity(entity);
-            AddRow(newRow);
-            newRow.LoadFromEntity(entity);
-            Grid?.UpdateRow(newRow);
+            if (newRow != null)
+            {
+                AddRow(newRow);
+                newRow.LoadFromEntity(entity);
+                Grid?.UpdateRow(newRow);
+            }
         }
 
         protected abstract DbMaintenanceDataEntryGridRow<TEntity> ConstructNewRowFromEntity(TEntity entity);

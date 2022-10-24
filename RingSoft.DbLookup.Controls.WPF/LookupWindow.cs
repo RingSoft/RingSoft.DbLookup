@@ -189,7 +189,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 if (AddButton != null)
+                {
                     AddButton.IsEnabled = allowAdd && LookupDefinition.AllowAddOnTheFly;
+                    if (!AddButton.IsEnabled)
+                    {
+                        AddButton.Visibility = Visibility.Collapsed;
+                    }
+                }
 
                 if (_readOnlyMode)
                 {
@@ -225,6 +231,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             SetReadOnlyMode(_readOnlyMode);
 
             base.OnApplyTemplate();
+
+            if (!_allowView)
+            {
+                ViewButton.Visibility = AddButton.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -361,12 +373,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (control == AddButton)
                 {
                     AddButton.IsEnabled = false;
+                    AddButton.Visibility = Visibility.Collapsed;
                     return;
                 }
 
                 if (control == ViewButton)
                 {
                     ViewButton.IsEnabled = _allowView;
+                    if (!ViewButton.IsEnabled)
+                    {
+                        ViewButton.Visibility = Visibility.Collapsed;
+                    }
+                    
                     if (LookupControl.ListView != null)
                         if (LookupControl.ListView.SelectedIndex >= 0)
                             ViewButton.IsEnabled = true;

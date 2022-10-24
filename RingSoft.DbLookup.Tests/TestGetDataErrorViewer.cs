@@ -18,6 +18,11 @@ namespace RingSoft.DbLookup.Tests
             
         }
 
+        public void PlaySystemSound(RsMessageBoxIcons icon)
+        {
+            
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

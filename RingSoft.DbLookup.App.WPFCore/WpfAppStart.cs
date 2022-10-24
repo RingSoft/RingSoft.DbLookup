@@ -11,6 +11,7 @@ using RingSoft.DbLookup.Lookup;
 using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Media;
 using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPFCore
@@ -183,6 +184,24 @@ namespace RingSoft.DbLookup.App.WPFCore
         public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
         {
             
+        }
+
+        public void PlaySystemSound(RsMessageBoxIcons icon)
+        {
+            switch (icon)
+            {
+                case RsMessageBoxIcons.Error:
+                    SystemSounds.Hand.Play();
+                    break;
+                case RsMessageBoxIcons.Exclamation:
+                    SystemSounds.Exclamation.Play();
+                    break;
+                case RsMessageBoxIcons.Information:
+                    SystemSounds.Exclamation.Play();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(icon), icon, null);
+            }
         }
 
         public void SetWindowCursor(WindowCursorTypes cursor)

@@ -35,6 +35,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         public NorthwindLookupContextConfiguration(INorthwindLookupContext lookupContext)
         {
             _lookupContext = lookupContext;
+            //_lookupContext.CanViewTableEvent += (sender, args) =>
+            //{
+            //    if (args.TableDefinition == _lookupContext.Orders)
+            //    {
+            //        args.AllowView = false;
+            //    }
+            //};
             Reinitialize();
         }
 

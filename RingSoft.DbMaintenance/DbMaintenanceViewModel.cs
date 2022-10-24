@@ -247,7 +247,13 @@ namespace RingSoft.DbMaintenance
                 ChangingEntity = true;
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
                 var entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
-
+                if (entity == null)
+                {
+                    DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
+                    ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                    ChangingEntity = false;
+                    return;
+                }
                 if (!_savingRecord)
                 {
                     LoadFromEntity(entity);

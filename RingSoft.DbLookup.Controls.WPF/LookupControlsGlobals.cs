@@ -1,6 +1,9 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using System;
+using System.Media;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.DataProcessor;
 using System.Windows;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 
@@ -24,6 +27,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.LookupData.LookupDefinition.TableDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds)
             {
                 ShowAddOnTheFlyWindow(new AdvancedFindWindow(), e);
+            }
+        }
+
+        public void PlaySystemSound(RsMessageBoxIcons icon)
+        {
+            switch (icon)
+            {
+                case RsMessageBoxIcons.Error:
+                    SystemSounds.Hand.Play();
+                    break;
+                case RsMessageBoxIcons.Exclamation:
+                case RsMessageBoxIcons.Information:
+                    SystemSounds.Exclamation.Play();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(icon), icon, null);
             }
         }
 

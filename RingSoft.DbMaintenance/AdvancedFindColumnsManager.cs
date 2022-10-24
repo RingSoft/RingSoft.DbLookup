@@ -1,6 +1,8 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 
@@ -22,6 +24,30 @@ namespace RingSoft.DbMaintenance
 
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindColumn> ConstructNewRowFromEntity(AdvancedFindColumn entity)
         {
+            if (entity.Formula.IsNullOrEmpty())
+            {
+                var tableDefinition =
+                    ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.EntityName == entity.TableName);
+
+                if (tableDefinition != null && tableDefinition.CanViewTable)
+                {
+                    var fieldDefinition =
+                        tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+
+                    var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
+                    if (foundTreeViewItem == null)
+                    {
+                        ViewModel.ReadOnlyMode = true;
+                        return null;
+                    }
+                }
+                else
+                {
+                    ViewModel.ReadOnlyMode = true;
+                    return null;
+                }
+            }
             return new AdvancedFindColumnRow(this);
         }
 

@@ -150,7 +150,8 @@ namespace RingSoft.DbLookup.AdvancedFind
                     treeRoot.BaseTree = this;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null &&
-                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null && field.AllowRecursion)
+                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null && field.AllowRecursion
+                        && field.ParentJoinForeignKeyDefinition.PrimaryTable.CanViewTable)
                         AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
                             field.ParentJoinForeignKeyDefinition, treeRoot);
                 }
@@ -193,7 +194,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     //treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
                     //    .FieldJoins[0].PrimaryField;
 
-                    if (tableFieldDefinition.AllowRecursion)
+                    if (tableFieldDefinition.AllowRecursion && tableFieldDefinition.TableDefinition.CanViewTable)
                         AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
                             treeChildItem.Items, join, treeChildItem);
                 }
@@ -331,7 +332,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             if (childNodes.Any() == false)
             {
-                if (createColumn)
+                if (createColumn && selectedItem != null)
                 {
                     switch (selectedItem.Type)
                     {

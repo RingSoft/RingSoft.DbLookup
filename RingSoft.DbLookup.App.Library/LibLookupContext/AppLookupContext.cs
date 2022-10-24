@@ -1,4 +1,5 @@
 ﻿using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.LibLookupContext
 {

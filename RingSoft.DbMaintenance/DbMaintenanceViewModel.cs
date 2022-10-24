@@ -47,6 +47,8 @@ namespace RingSoft.DbMaintenance
         /// </value>
         public abstract TableDefinition<TEntity> TableDefinition { get; }
 
+        public override sealed TableDefinitionBase TableDefinitionBase => TableDefinition;
+
         /// <summary>
         /// Gets the initial search for text when the Find button is clicked.  By default it is the key auto fill text.
         /// </summary>

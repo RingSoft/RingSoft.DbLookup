@@ -4,6 +4,7 @@ using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbMaintenance
 {
@@ -42,6 +43,14 @@ namespace RingSoft.DbMaintenance
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public abstract class DbMaintenanceViewModelBase : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>
+        /// The table definition.
+        /// </value>
+        public abstract TableDefinitionBase TableDefinitionBase { get; }
+
         /// <summary>
         /// Gets the view lookup definition used to get the next and previous record.
         /// </summary>

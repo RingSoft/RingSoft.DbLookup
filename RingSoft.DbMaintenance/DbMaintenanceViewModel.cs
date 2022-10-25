@@ -125,6 +125,11 @@ namespace RingSoft.DbMaintenance
 
         protected internal override void InternalInitialize()
         {
+            if (TableDefinition == null)
+            {
+                throw new Exception("Table definition is null");
+
+            }
             if (TableDefinition.LookupDefinition == null)
                 throw new ArgumentException(
                     $"Table definition '{TableDefinition}' does not have a lookup definition setup.");

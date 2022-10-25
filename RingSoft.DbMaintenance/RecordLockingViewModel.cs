@@ -13,7 +13,8 @@ namespace RingSoft.DbMaintenance
     }
     public class RecordLockingViewModel : DbMaintenanceViewModel<RecordLock>
     {
-        public override TableDefinition<RecordLock> TableDefinition { get; }
+        public override TableDefinition<RecordLock> TableDefinition =>
+            SystemGlobals.AdvancedFindLookupContext.RecordLocks;
 
         private string _primaryKeyDescription;
 
@@ -142,7 +143,7 @@ namespace RingSoft.DbMaintenance
 
                 PrimaryKeyAutoFillSetup = new AutoFillSetup(tableDefinition.LookupDefinition);
                 PrimaryKeyAutoFillValue =
-                    TableDefinition.Context.OnAutoFillTextRequest(TableDefinition, recordLock.PrimaryKey);
+                    TableDefinition.Context.OnAutoFillTextRequest(tableDefinition, recordLock.PrimaryKey);
 
                 var userAutoFill = TableDefinition.Context.GetUserAutoFill(recordLock.User);
 

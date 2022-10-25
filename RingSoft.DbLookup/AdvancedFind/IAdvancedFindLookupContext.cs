@@ -17,5 +17,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
 
         LookupDefinition<AdvancedFindLookup, AdvancedFind> AdvancedFindLookup { get; set; }
+
+        LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
     }
 }

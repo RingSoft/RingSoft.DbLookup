@@ -13,7 +13,7 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFilterWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFindRefreshRateWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillReadOnlyControlTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/RecordLockingWindowTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
 
 </ResourceDictionary>

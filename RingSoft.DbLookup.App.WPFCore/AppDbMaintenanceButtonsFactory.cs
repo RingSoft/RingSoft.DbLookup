@@ -23,5 +23,12 @@ namespace RingSoft.DbLookup.App.WPFCore
             result.UpdateLayout();
             return result;
         }
+
+        public override Control GetRecordLockingButtonsControl(RecordLockingViewModel viewModel)
+        {
+            var result = new DbMaintenanceButtonsControl();
+            result.UpdateLayout();
+            return result;
+        }
     }
 }

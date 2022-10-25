@@ -26,6 +26,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
         public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
+        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
 
         public MegaDbLookupContextEfCore()
         {

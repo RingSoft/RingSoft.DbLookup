@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -22,6 +23,16 @@ namespace RingSoft.DbLookup.AdvancedFind
             _lookupContext.AdvancedFindLookup = advancedFindLookup;
 
             _lookupContext.AdvancedFinds.HasLookupDefinition(advancedFindLookup);
+
+            var recordLockingLookup = new LookupDefinition<RecordLockingLookup, RecordLock>(_lookupContext.RecordLocks);
+            recordLockingLookup.AddVisibleColumnDefinition(p => p.Table, "Table"
+                , p => p.Table, 50);
+            recordLockingLookup.AddVisibleColumnDefinition(p => p.User, "User"
+                , p => p.User, 50);
+
+            _lookupContext.RecordLockingLookup = recordLockingLookup;
+
+            _lookupContext.RecordLocks.HasLookupDefinition(recordLockingLookup);
         }
 
         public void InitializeModel()

@@ -14,5 +14,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             return new Control();
         }
+
+        public virtual Control GetRecordLockingButtonsControl(RecordLockingViewModel viewModel)
+        {
+            return new Control();
+        }
     }
 }

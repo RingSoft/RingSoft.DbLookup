@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -11,5 +12,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             List<AdvancedFindFilter> filters);
 
         bool DeleteAdvancedFind(int advancedFindId);
+
+        RecordLock GetRecordLock(string table, string primaryKey);
     }
 }

@@ -131,6 +131,33 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public void LoadFromIdValue(string idValue)
+        {
+            if (KeyValueFields.Count > 1)
+            {
+                throw new Exception(
+                    $"You can't run {nameof(LoadFromIdValue)} on PrimaryKeyValues that have more than 1 Primary Key Field");
+            }
+
+            KeyValueFields[0].Value = idValue;
+        }
+
+        public void LoadFromPrimaryString(string primaryKeyString)
+        {
+            var processedKeyString = primaryKeyString;
+            var lfCharPos = processedKeyString.IndexOf("\n");
+            var keyPos = 0;
+            while (lfCharPos >= 0)
+            {
+                var keyValue = processedKeyString.LeftStr(lfCharPos);
+                KeyValueFields[keyPos].Value = keyValue;
+                processedKeyString = processedKeyString.RightStr(lfCharPos + 1);
+                keyPos++;
+                lfCharPos = processedKeyString.IndexOf("\n");
+            }
+            KeyValueFields[keyPos].Value = processedKeyString;
+        }
+
         /// <summary>
         /// Determines whether this primary key value is equal to the specified compare to primary key value.
         /// </summary>

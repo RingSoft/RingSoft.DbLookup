@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.EfCore
 {
@@ -97,6 +98,17 @@ namespace RingSoft.DbLookup.EfCore
 
             return dbContext.DeleteEntity(context.AdvancedFinds, advancedFind, "Deleting Customer");
 
+        }
+
+        public RecordLock GetRecordLock(string table, string primaryKey)
+        {
+            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            {
+                throw new ApplicationException(
+                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
+            }
+            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
+            return context.RecordLocks.FirstOrDefault(p => p.Table == table && p.PrimaryKey == primaryKey);
         }
     }
 }

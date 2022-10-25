@@ -22,13 +22,20 @@ namespace RingSoft.DbLookup
         }
     }
 
+    public class UserAutoFill
+    {
+        public AutoFillSetup AutoFillSetup { get; set; }
+
+        public AutoFillValue AutoFillValue { get; set; }
+    }
+
     public class TableDefinitionValue
     {
         public AutoFillValue ReturnValue { get; set; }
 
         public TableDefinitionBase TableDefinition { get; set; }
 
-        public string IdValue { get; set; }
+        public string PrimaryKeyString { get; set; }
     }
 
     // ReSharper disable once InconsistentNaming
@@ -168,30 +175,38 @@ namespace RingSoft.DbLookup
             return message;
         }
 
-        public virtual AutoFillValue OnAutoFillTextRequest(TableDefinitionBase tableDefinition, string idValue)
+        public virtual AutoFillValue OnAutoFillTextRequest(TableDefinitionBase tableDefinition, string primaryKeyString)
         {
+            if (tableDefinition?.LookupDefinition == null)
+            {
+                throw new Exception($"There is no lookup defined for table {tableDefinition?.Description}");
+            }
+
             var request = new TableDefinitionValue
             {
                 TableDefinition = tableDefinition,
-                IdValue = idValue
+                PrimaryKeyString = primaryKeyString
             };
             GetAutoFillText?.Invoke(this, request);
 
             if (request.ReturnValue == null)
             {
-                if (tableDefinition?.LookupDefinition == null)
+                if (tableDefinition?.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition
+                    lookupFieldColumn)
                 {
-                    throw new Exception($"There is no lookup defined for table {tableDefinition?.Description}");
-                }
-                if (tableDefinition?.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
-                {
+                    var primaryKey = new PrimaryKeyValue(tableDefinition);
+                    primaryKey.LoadFromPrimaryString(primaryKeyString);
                     var query = new SelectQuery(tableDefinition.TableName);
                     query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName);
                     foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
                     {
                         query.AddSelectColumn(primaryKeyField.FieldName);
                     }
-                    query.AddWhereItem(tableDefinition.PrimaryKeyFields[0].FieldName, Conditions.Equals, idValue);
+
+                    foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
+                    {
+                        query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals, primaryKeyKeyValueField.Value);
+                    }
 
                     var result = tableDefinition.Context.DataProcessor.GetData(query);
                     if (result.ResultCode == GetDataResultCodes.Success)
@@ -205,6 +220,11 @@ namespace RingSoft.DbLookup
                 }
             }
             return request.ReturnValue;
+        }
+
+        public virtual UserAutoFill GetUserAutoFill(string userName)
+        {
+            return null;
         }
     }
 }

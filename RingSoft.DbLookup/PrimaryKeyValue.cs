@@ -85,6 +85,29 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public string KeyString
+        {
+            get
+            {
+                var result = string.Empty;
+
+                if (IsValid)
+                {
+                    var firstRecord = true;
+                    foreach (var keyValueField in KeyValueFields)
+                    {
+                        result += keyValueField.Value;
+                        if (!firstRecord)
+                        {
+                            result += '\n';
+                        }
+                        firstRecord = false;
+                    }
+                }
+                return result;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimaryKeyValue"/> class.
         /// </summary>

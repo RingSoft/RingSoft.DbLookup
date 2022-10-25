@@ -194,6 +194,15 @@ CREATE TABLE [AdvancedFindFilters] (
 , FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 , FOREIGN KEY ([SearchForAdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+CREATE TABLE [RecordLocks] (
+  [Table] nvarchar(50) NOT NULL
+, [PrimaryKey] nvarchar(50) NOT NULL
+, [LockDateTime] datetime NOT NULL
+, [User] nvarchar(50) NULL
+, CONSTRAINT [PK_RecordLocks] PRIMARY KEY ([Table],[PrimaryKey])
+);
+
 INSERT INTO [Suppliers] ([SupplierID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax],[HomePage]) VALUES (
 1,'Exotic Liquids','Charlotte Cooper','Purchasing Manager','49 Gilbert St.','London',NULL,'EC1 4SD','UK','(171) 555-2222',NULL,NULL);
 INSERT INTO [Suppliers] ([SupplierID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax],[HomePage]) VALUES (

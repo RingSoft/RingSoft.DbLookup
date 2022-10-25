@@ -776,7 +776,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                                 value = date.ToString("yyyy-MM-dd");
                                 break;
                             case DbDateTypes.DateTime:
-                                value = date.ToString("yyyy-MM-dd hh:mm:ss");
+                                value = date.ToString("yyyy-MM-dd HH:mm:ss");
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException(nameof(dateType), dateType, null);

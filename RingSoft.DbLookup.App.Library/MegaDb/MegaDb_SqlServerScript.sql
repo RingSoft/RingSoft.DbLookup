@@ -225,7 +225,18 @@ CREATE TABLE [dbo].[AdvancedFindFilters](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
+CREATE TABLE [dbo].[RecordLocks](
+  [Table] [nvarchar](50) NOT NULL,
+  [PrimaryKey] [nvarchar](50) NOT NULL,
+  [LockDateTime] [datetime] NOT NULL,
+  [User] [nvarchar](50) NULL
+CONSTRAINT [PK_RecordLock] PRIMARY KEY CLUSTERED 
+(
+	[Table] ASC,
+	[PrimaryKey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 SET IDENTITY_INSERT [dbo].[Locations] ON 
 GO
 INSERT [dbo].[Locations] ([Id], [Name]) VALUES (1, N'Aisle 1')

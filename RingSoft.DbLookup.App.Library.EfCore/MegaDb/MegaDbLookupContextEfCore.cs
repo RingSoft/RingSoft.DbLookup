@@ -5,6 +5,7 @@ using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 {
@@ -20,6 +21,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public TableDefinition<StockMaster> Stocks { get; set; }
         public TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
         public LookupContextBase Context => this;
+        public TableDefinition<RecordLock> RecordLocks { get; set; }
         public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }

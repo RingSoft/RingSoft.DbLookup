@@ -400,6 +400,27 @@ INSERT INTO `products` VALUES (1,'Chai',1,1,'10 boxes x 20 bags',18.0000,39,0,10
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `recordlocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recordlocks` (
+  `Table` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `PrimaryKey` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `LockDateTime` datetime(6) NOT NULL,
+  `User` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`Table`,`PrimaryKey`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recordlocks`
+--
+
+LOCK TABLES `recordlocks` WRITE;
+/*!40000 ALTER TABLE `recordlocks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recordlocks` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Table structure for table `region`
 --

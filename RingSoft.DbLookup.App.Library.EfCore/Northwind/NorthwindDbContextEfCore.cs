@@ -5,6 +5,7 @@ using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.EfCore;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
@@ -22,6 +23,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Territory> Territories { get; set; }
 
+        public DbSet<RecordLock> RecordLocks { get; set; }
         public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }

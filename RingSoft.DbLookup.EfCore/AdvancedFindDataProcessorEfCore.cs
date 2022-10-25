@@ -10,6 +10,7 @@ namespace RingSoft.DbLookup.EfCore
     {
         public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new RecordLockConfiguration());
             modelBuilder.ApplyConfiguration(new AdvancedFindConfiguration());
             modelBuilder.ApplyConfiguration(new AdvancedFindColumnConfiguration());
             modelBuilder.ApplyConfiguration(new AdvancedFindFilterConfiguration());

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.EfCore;
+using RingSoft.DbLookup.RecordLocking;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -26,6 +27,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 
         public DbSet<StockCostQuantity> StockCostQuantities { get; set; }
 
+        public DbSet<RecordLock> RecordLocks { get; set; }
         public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }

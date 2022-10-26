@@ -91,6 +91,8 @@
 
         public PrimaryKeyValue ReadOnlyPrimaryKeyValue { get; set; }
 
+        public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

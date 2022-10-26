@@ -28,14 +28,16 @@ namespace RingSoft.DbLookup
         private string _newText;
         private object _ownerWindow;
         private PrimaryKeyValue _newPrimaryKeyValue;
+        private PrimaryKeyValue _selectedPrimaryKeyValue;
 
         public AddOnTheFlyProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,
-            object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null)
+            object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null, PrimaryKeyValue selectedPrimaryKeyValue = null)
         {
             _lookupDefinition = lookupDefinition;
             _newText = newText;
             _ownerWindow = ownerWindow;
             _newPrimaryKeyValue = newRecordPrimaryKeyValue;
+            _selectedPrimaryKeyValue = selectedPrimaryKeyValue;
         }
 
         public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
@@ -45,12 +47,26 @@ namespace RingSoft.DbLookup
             {
                 viewArgs.Handled = true;
             };
-            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
-                _newText, _ownerWindow)
+            LookupAddViewArgs args = null;
+            if (_selectedPrimaryKeyValue == null)
             {
-                NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
-                InputParameter = AddViewParameter
-            };
+                args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
+                    _newText, _ownerWindow)
+                {
+                    NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
+                    InputParameter = AddViewParameter
+                };
+            }
+            else
+            {
+                args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
+                    string.Empty, _ownerWindow)
+                {
+                    SelectedPrimaryKeyValue = _selectedPrimaryKeyValue,
+                    InputParameter = AddViewParameter
+                };
+
+            }
 
             args.CallBackToken.RefreshData += (sender, eventArgs) =>
             {

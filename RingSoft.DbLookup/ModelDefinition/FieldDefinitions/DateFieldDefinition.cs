@@ -36,6 +36,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultDateCulture;
 
+        public bool ConvertToLocalTime { get; private set; }
+
         internal DateFieldDefinition()
         {
             DateType = DbDateTypes.DateOnly;
@@ -95,11 +97,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <exception cref="ArgumentOutOfRangeException">value - null</exception>
         public override string FormatValue(string value)
         {
-            return FormatDateValue(value, DateFormatString, DateType, Culture);
+            return FormatDateValue(value, DateFormatString, DateType, Culture, ConvertToLocalTime);
         }
 
         public static string FormatDateValue(string dateValue, string dateFormatString, DbDateTypes dateType,
-            CultureInfo culture)
+            CultureInfo culture, bool convertToLocalTime = false)
         {
             var formatString = dateFormatString;
             if (formatString.IsNullOrEmpty())
@@ -117,7 +119,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 }
             }
 
-            return GblMethods.FormatValue(FieldDataTypes.DateTime, dateValue, formatString, culture);
+            return GblMethods.FormatValue(FieldDataTypes.DateTime, dateValue, formatString, culture, convertToLocalTime);
+        }
+
+        public DateFieldDefinition DoConvertToLocalTime(bool value = true)
+        {
+            ConvertToLocalTime = value;
+            return this;
         }
     }
 }

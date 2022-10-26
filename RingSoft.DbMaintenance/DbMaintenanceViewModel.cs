@@ -145,6 +145,10 @@ namespace RingSoft.DbMaintenance
 
             if (LookupAddViewArgs != null)
             {
+                if (InputParameter == null)
+                {
+                    InputParameter = LookupAddViewArgs.InputParameter;
+                }
                 var filter = GetAddViewFilter();
                 if (filter != null)
                     _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
@@ -219,6 +223,12 @@ namespace RingSoft.DbMaintenance
                     else
                     {
                         result = new PrimaryKeyValue(addViewPrimaryKeyValue.TableDefinition);
+                    }
+                    break;
+                case LookupFormModes.View:
+                    if (LookupAddViewArgs.SelectedPrimaryKeyValue != null)
+                    {
+                        result = LookupAddViewArgs.SelectedPrimaryKeyValue;
                     }
                     break;
             }
@@ -502,8 +512,8 @@ namespace RingSoft.DbMaintenance
                     var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
 
                     var selectQuery = new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
-                    selectQuery.AddSelectColumn(dateField.FieldName);
-                    selectQuery.AddSelectColumn(userField.FieldName);
+                    //selectQuery.AddSelectColumn(dateField.FieldName);
+                    //selectQuery.AddSelectColumn(userField.FieldName);
                     selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
                     selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
 
@@ -521,30 +531,35 @@ namespace RingSoft.DbMaintenance
                         if (dataResult.DataSet.Tables[0].Rows.Count > 0)
                         {
                             var row = dataResult.DataSet.Tables[0].Rows[0];
+                            
                             var rowLockDateString = row.GetRowValue(dateField.FieldName);
                             DateTime rowLockDate = DateTime.MinValue;
                             if (DateTime.TryParse(rowLockDateString, out rowLockDate))
                             {
-                                if (rowLockDate > LockDate)
+                                if (rowLockDate.ToLocalTime() > LockDate)
                                 {
                                     var message =
-                                        $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("hh:mm:ss tt")}.\r\n\r\n";
-                                    message += $"This record was saved on {rowLockDate.ToString("dddd, MMM dd yyyy")} at {rowLockDate.ToString("hh:mm:ss tt")}";
-                                    if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
-                                    {
-                                        message += $" by {row.GetRowValue(userField.FieldName)}";
-                                    }
+                                        $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
+                                    //message += $"This record was saved on {rowLockDate.ToString("dddd, MMM dd yyyy")} at {rowLockDate.ToString("hh:mm:ss tt")}";
+                                    //if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
+                                    //{
+                                    //    message += $" by {row.GetRowValue(userField.FieldName)}";
+                                    //}
 
-                                    message += ".  Do you wish to continue saving";
-                                    if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
-                                    {
-                                        message +=
-                                            $" and erase {row.GetRowValue(userField.FieldName)}'s changes to this record";
-                                    }
+                                    message += "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
+                                    //if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
+                                    //{
+                                    //    message +=
+                                    //        $" and erase {row.GetRowValue(userField.FieldName)}'s changes to this record";
+                                    //}
 
-                                    message += "?";
-                                    var caption = "Record Locking";
-                                    if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) == MessageBoxButtonsResult.No)
+                                    //message += "?";
+                                    //var caption = "Record Locking";
+                                    //if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) == MessageBoxButtonsResult.No)
+                                    var lockKey =
+                                        new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+                                    lockKey.PopulateFromDataRow(row);
+                                    if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
                                     {
                                         return DbMaintenanceResults.ValidationError;
                                     }
@@ -563,7 +578,7 @@ namespace RingSoft.DbMaintenance
 
                             fields += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
                             values +=
-                                $", {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
+                                $", {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
 
                             if (!SystemGlobals.UserName.IsNullOrEmpty())
                             {
@@ -621,17 +636,17 @@ namespace RingSoft.DbMaintenance
             StringFieldDefinition pkField, string keyString, DateFieldDefinition dateField, StringFieldDefinition userField)
         {
             string lockSql;
-            lockSql = $"UPDATE {table} SET {sqlGenerator.FormatSqlObject(tableField.FieldName)}";
-            lockSql +=
-                $" = {sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime)}";
+            lockSql = $"UPDATE {table} SET ";//{sqlGenerator.FormatSqlObject(tableField.FieldName)}";
+            //lockSql +=
+            //    $" = {sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime)}";
 
-            lockSql += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
-            lockSql +=
-                $" = {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
+            //lockSql += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
+            //lockSql +=
+            //    $" = {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
 
-            lockSql += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
+            lockSql += $"{sqlGenerator.FormatSqlObject(dateField.FieldName)}";
             lockSql +=
-                $" = {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
+                $" = {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
 
             if (!SystemGlobals.UserName.IsNullOrEmpty())
             {
@@ -639,6 +654,14 @@ namespace RingSoft.DbMaintenance
                 lockSql +=
                     $" = {sqlGenerator.ConvertValueToSqlText(SystemGlobals.UserName, ValueTypes.String, DbDateTypes.DateTime)}";
             }
+
+            lockSql += $"WHERE {sqlGenerator.FormatSqlObject(tableField.FieldName)} = ";
+            lockSql +=
+                $"{sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime)} ";
+
+            lockSql += $"AND {sqlGenerator.FormatSqlObject(pkField.FieldName)} = ";
+            lockSql +=
+                $"{sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)} ";
 
             return lockSql;
         }

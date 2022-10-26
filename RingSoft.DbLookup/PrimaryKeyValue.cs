@@ -96,11 +96,11 @@ namespace RingSoft.DbLookup
                     var firstRecord = true;
                     foreach (var keyValueField in KeyValueFields)
                     {
-                        result += keyValueField.Value;
                         if (!firstRecord)
                         {
                             result += '\n';
                         }
+                        result += keyValueField.Value;
                         firstRecord = false;
                     }
                 }
@@ -122,7 +122,7 @@ namespace RingSoft.DbLookup
             }
         }
 
-        internal void PopulateFromDataRow(DataRow dataRow)
+        public void PopulateFromDataRow(DataRow dataRow)
         {
             foreach (var keyValueField in _fieldValues)
             {
@@ -151,7 +151,7 @@ namespace RingSoft.DbLookup
             {
                 var keyValue = processedKeyString.LeftStr(lfCharPos);
                 KeyValueFields[keyPos].Value = keyValue;
-                processedKeyString = processedKeyString.RightStr(lfCharPos + 1);
+                processedKeyString = processedKeyString.RightStr(processedKeyString.Length - (lfCharPos + 1));
                 keyPos++;
                 lfCharPos = processedKeyString.IndexOf("\n");
             }

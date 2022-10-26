@@ -26,9 +26,11 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             var recordLockingLookup = new LookupDefinition<RecordLockingLookup, RecordLock>(_lookupContext.RecordLocks);
             recordLockingLookup.AddVisibleColumnDefinition(p => p.Table, "Table"
-                , p => p.Table, 50);
+                , p => p.Table, 34);
+            recordLockingLookup.AddVisibleColumnDefinition(p => p.LockDate, "Lock Date"
+                , p => p.LockDateTime, 33);
             recordLockingLookup.AddVisibleColumnDefinition(p => p.User, "User"
-                , p => p.User, 50);
+                , p => p.User, 33);
 
             _lookupContext.RecordLockingLookup = recordLockingLookup;
 
@@ -63,7 +65,8 @@ namespace RingSoft.DbLookup.AdvancedFind
                 .HasDescription("Condition").IsEnum<Conditions>();
             _lookupContext.AdvancedFindFilters.IsAdvancedFind = true;
 
-            _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.DateTime);
+            _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.DateTime)
+                .DoConvertToLocalTime();
         }
     }
 }

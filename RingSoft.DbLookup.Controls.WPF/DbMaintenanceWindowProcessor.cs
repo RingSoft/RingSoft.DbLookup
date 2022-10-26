@@ -260,6 +260,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        public virtual void SetWindowReadOnlyMode()
+        {
+            SaveButton.IsEnabled = DeleteButton.IsEnabled = NewButton.IsEnabled = false;
+            SelectButton.IsEnabled = false;
+        }
+
+        public bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
+        {
+            var recordLockInputParameter = new RecordLockingInputParameter
+            {
+                InputParameter = inputParameter,
+                RecordLockMessage = message
+            };
+
+            var lookupDefinition = SystemGlobals.AdvancedFindLookupContext.RecordLockingLookup.Clone();
+
+            lookupDefinition.ShowAddOnTheFlyWindow(string.Empty, MaintenanceWindow, null, recordLockInputParameter,
+                lockKey);
+            
+            return recordLockInputParameter.ContinueSave;
+        }
+
         public bool IsMaintenanceKeyDown(MaintenanceKey key)
         {
             switch (key)
@@ -272,5 +294,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }
         }
+
+        
     }
 }

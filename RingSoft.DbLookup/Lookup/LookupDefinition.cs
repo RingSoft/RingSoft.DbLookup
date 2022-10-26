@@ -280,10 +280,11 @@ namespace RingSoft.DbLookup.Lookup
         /// The new Primary Key Value and new lookup entity.
         /// </returns>
         public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow(string keyText, object ownerWindow,
-            PrimaryKeyValue newRecordPrimaryKeyValue = null, object addViewParameter = null)
+            PrimaryKeyValue newRecordPrimaryKeyValue = null, object addViewParameter = null, PrimaryKeyValue selectedPrimaryKeyValue = null)
         {
             var addNewRecordProcessor =
-                new AddOnTheFlyProcessor<TLookupEntity, TEntity>(this, keyText, ownerWindow, newRecordPrimaryKeyValue)
+                new AddOnTheFlyProcessor<TLookupEntity, TEntity>(this, keyText, ownerWindow, newRecordPrimaryKeyValue,
+                    selectedPrimaryKeyValue)
                 {
                     AddViewParameter = addViewParameter
                 };

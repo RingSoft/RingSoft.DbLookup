@@ -22,7 +22,48 @@
 
                         <DockPanel DataContext="{DynamicResource RecordLockingViewModel}" Margin="5">
 
-                            <StackPanel x:Name="ButtonsPanel" DockPanel.Dock="Top"/>
+                            <StackPanel x:Name="MessagePanel" DockPanel.Dock="Top" Orientation=" Vertical">
+                                <TextBlock Text="{Binding Message}" HorizontalAlignment="Left" Width="300" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                    <Button Content="_Stop Save" Command="{Binding CancelSaveCommand}" Margin="0, 0, 5, 0" IsDefault="True" Width="100"/>
+
+                                    <Button Content="_Continue Save" Command="{Binding ContinueSaveCommand}" Width="100"/>
+                                    
+                                </StackPanel>
+                            </StackPanel>
+                            <DockPanel>
+                                <StackPanel x:Name="ButtonsPanel" DockPanel.Dock="Top"/>
+                                <Grid Margin="5">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Content="Lock Date" HorizontalAlignment="Right"/>
+
+                                    <dec:DateReadOnlyBox Grid.Row="1" Grid.Column="1" Value="{Binding LockDate}" DateFormatType="DateTime" Width="200" HorizontalAlignment="Left"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Content="{Binding PrimaryKeyDescription}" HorizontalAlignment="Right"/>
+
+                                    <lc:AutoFillReadOnlyControl Grid.Row="2" Grid.Column="1" Setup="{Binding PrimaryKeyAutoFillSetup}" Value="{Binding PrimaryKeyAutoFillValue}" Width="200"/>
+
+                                    <Label Grid.Row="3" Grid.Column="0" x:Name="UserLabel" Content="User Name" HorizontalAlignment="Right"/>
+
+                                    <dec:StringReadOnlyBox Grid.Row="3" Grid.Column="1" x:Name="UserReadOnlyControl" Text="{Binding UserName}" Width="200"/>
+
+                                    <lc:AutoFillReadOnlyControl Grid.Row="3" Grid.Column="1" x:Name="UserAutoFillControl" Setup="{Binding UserAutoFillSetup}" Value="{Binding UserAutoFillValue}" Width="200"/>
+
+                                </Grid>
+                            </DockPanel>
 
                         </DockPanel>
 

@@ -22,6 +22,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -46,6 +47,12 @@
                     <lc:LookupColumn PropertyName="{lc:NameOf Cost, Type={x:Type lm:StockCostQuantityLookup}}" Width="100" Header="Cost" TextAlignment="Right" DesignText="$100,000.00"/>
                 </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
+
+            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                <Button x:Name="AdvancedFindButton" Content="_Advanced Find" />
+
+            </StackPanel>
+
         </Grid>
     </DockPanel>
 </app:DbMaintenanceWindow>

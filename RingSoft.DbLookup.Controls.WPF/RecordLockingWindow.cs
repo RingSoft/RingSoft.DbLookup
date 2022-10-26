@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -49,9 +50,13 @@ namespace RingSoft.DbLookup.Controls.WPF
     public class RecordLockingWindow : BaseWindow, IRecordLockingView
     {
         public StackPanel ButtonsPanel { get; set; }
+        public StackPanel MessagePanel { get; set; }
         public Border Border { get; set; }
         public RecordLockingViewModel ViewModel { get; set; }
         public IDbMaintenanceProcessor Processor { get; set; }
+        public Label UserLabel { get; set; }
+        public StringReadOnlyBox UserReadOnlyControl { get; set; }
+        public AutoFillReadOnlyControl UserAutoFillControl { get; set; }
 
         private Control _buttonsControl;
         private LookupAddViewArgs _addViewArgs;
@@ -84,6 +89,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             Border = GetTemplateChild(nameof(Border)) as Border;
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
             ViewModel = Border.TryFindResource("RecordLockingViewModel") as RecordLockingViewModel;
+            UserLabel = GetTemplateChild(nameof(UserLabel)) as Label;
+            UserReadOnlyControl = GetTemplateChild(nameof(UserReadOnlyControl)) as StringReadOnlyBox;
+            UserAutoFillControl = GetTemplateChild(nameof(UserAutoFillControl)) as AutoFillReadOnlyControl;
+            MessagePanel = GetTemplateChild(nameof(MessagePanel)) as StackPanel;
 
             Initialize();
 
@@ -102,7 +111,32 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SetupView()
         {
-            
+            UserLabel.Visibility = Visibility.Collapsed;
+            UserReadOnlyControl.Visibility = Visibility.Collapsed;
+            UserAutoFillControl.Visibility = Visibility.Collapsed;
+            MessagePanel.Visibility = Visibility.Collapsed;
+
+            if (!ViewModel.Message.IsNullOrEmpty())
+            {
+                MessagePanel.Visibility = Visibility.Visible;
+
+                ButtonsPanel.Visibility = Visibility.Collapsed;
+            }
+            if (!ViewModel.UserName.IsNullOrEmpty())
+            {
+                UserLabel.Visibility = Visibility.Visible;
+                UserReadOnlyControl.Visibility = Visibility.Visible;
+            }
+            else if (ViewModel.UserAutoFillSetup != null)
+            {
+                UserLabel.Visibility = Visibility.Visible;
+                UserAutoFillControl.Visibility = Visibility.Visible;
+            }
+        }
+
+        public void CloseWindow()
+        {
+            Close();
         }
     }
 }

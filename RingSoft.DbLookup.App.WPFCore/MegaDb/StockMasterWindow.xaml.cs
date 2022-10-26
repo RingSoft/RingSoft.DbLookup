@@ -1,4 +1,5 @@
 ﻿using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
@@ -21,6 +22,8 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 
             AddModifyButton.Click += (sender, args) => { StockMasterViewModel.OnAddModify(); };
 
+            AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
+
             Initialize();
         }
 
@@ -41,5 +44,13 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 
             base.OnValidationFail(fieldDefinition, text, caption);
         }
+
+        private void ShowAdvancedFind()
+        {
+            var advancedFindWindow = new AdvancedFindWindow();
+            advancedFindWindow.Loaded += (sender, args) => advancedFindWindow.ShowInTaskbar = true;
+            advancedFindWindow.Show();
+        }
+
     }
 }

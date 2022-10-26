@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup
         /// <param name="culture">The culture.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string FormatValue(FieldDataTypes dataType, string value, string formatString = "", CultureInfo culture = null)
+        public static string FormatValue(FieldDataTypes dataType, string value, string formatString = "", CultureInfo culture = null, bool convertToLocalTime = false)
         {
            
             switch (dataType)
@@ -145,7 +145,14 @@ namespace RingSoft.DbLookup
                     if (culture == null)
                         culture = LookupDefaults.DefaultDateCulture;
                     if (DateTime.TryParse(value, out var dateValue))
+                    {
+                        if (convertToLocalTime)
+                        {
+                            dateValue = dateValue.ToLocalTime();
+                        }
                         return dateValue.ToString(formatString, culture.DateTimeFormat);
+                    }
+
                     break;
                 case FieldDataTypes.Bool:
                     break;

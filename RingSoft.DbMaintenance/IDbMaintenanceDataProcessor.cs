@@ -40,5 +40,9 @@ namespace RingSoft.DbMaintenance
 
         bool IsMaintenanceKeyDown(MaintenanceKey key);
         void Activate();
+
+        void SetWindowReadOnlyMode();
+
+        bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter);
     }
 }

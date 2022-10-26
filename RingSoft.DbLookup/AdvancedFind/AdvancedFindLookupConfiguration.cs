@@ -67,6 +67,8 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.DateTime)
                 .DoConvertToLocalTime();
+
+            _lookupContext.RecordLocks.IsAdvancedFind = true;
         }
     }
 }

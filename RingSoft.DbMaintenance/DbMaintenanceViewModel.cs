@@ -496,24 +496,23 @@ namespace RingSoft.DbMaintenance
             if (previewArgs.Handled)
                 return DbMaintenanceResults.NotAllowed;
 
+            var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+            var keyString = recordLockPrimaryKey.KeyString;
+            var tableField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
+            var pkField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
+            var dateField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
+            var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
+            var lockSql = string.Empty;
+
             switch (MaintenanceMode)
             {
                 case DbMaintenanceModes.AddMode:
                     break;
                 case DbMaintenanceModes.EditMode:
-                    var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
-                    var keyString = recordLockPrimaryKey.KeyString;
-                    var tableField =
-                        SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
-                    var pkField =
-                        SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
-                    var dateField =
-                        SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
-                    var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
-
                     var selectQuery = new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
-                    //selectQuery.AddSelectColumn(dateField.FieldName);
-                    //selectQuery.AddSelectColumn(userField.FieldName);
                     selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
                     selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
 
@@ -522,7 +521,6 @@ namespace RingSoft.DbMaintenance
 
                     if (dataResult.ResultCode == GetDataResultCodes.Success)
                     {
-                        var lockSql = string.Empty;
                         var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
                             .SqlGenerator;
                         var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
@@ -540,22 +538,7 @@ namespace RingSoft.DbMaintenance
                                 {
                                     var message =
                                         $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
-                                    //message += $"This record was saved on {rowLockDate.ToString("dddd, MMM dd yyyy")} at {rowLockDate.ToString("hh:mm:ss tt")}";
-                                    //if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
-                                    //{
-                                    //    message += $" by {row.GetRowValue(userField.FieldName)}";
-                                    //}
-
                                     message += "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
-                                    //if (!row.GetRowValue(userField.FieldName).IsNullOrEmpty())
-                                    //{
-                                    //    message +=
-                                    //        $" and erase {row.GetRowValue(userField.FieldName)}'s changes to this record";
-                                    //}
-
-                                    //message += "?";
-                                    //var caption = "Record Locking";
-                                    //if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) == MessageBoxButtonsResult.No)
                                     var lockKey =
                                         new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
                                     lockKey.PopulateFromDataRow(row);
@@ -589,14 +572,6 @@ namespace RingSoft.DbMaintenance
 
                             lockSql = $"INSERT INTO {table} ({fields}) VALUES ({values})";
                         }
-
-                        var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                            .ExecuteSql(lockSql);
-
-                        if (recordLockResult.ResultCode != GetDataResultCodes.Success)
-                        {
-                            return DbMaintenanceResults.DatabaseError;
-                        }
                     }
                     break;
                 default:
@@ -604,6 +579,14 @@ namespace RingSoft.DbMaintenance
             }
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
+
+            var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
+                .ExecuteSql(lockSql);
+
+            if (recordLockResult.ResultCode != GetDataResultCodes.Success)
+            {
+                return DbMaintenanceResults.DatabaseError;
+            }
 
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 

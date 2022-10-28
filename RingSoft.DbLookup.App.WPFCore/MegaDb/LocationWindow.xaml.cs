@@ -16,11 +16,11 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         {
             InitializeComponent();
 
-            RegisterFormKeyControl(NameControl);
-
+            
             AddModifyButton.Click += (sender, args) => LocationViewModel.OnAddModify();
 
             Initialize();
+            RegisterFormKeyControl(NameControl);
         }
 
         public override void ResetViewForNewRecord()

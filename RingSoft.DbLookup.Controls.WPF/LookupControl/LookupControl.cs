@@ -382,6 +382,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LoadOnIsVisible()
         {
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
             //All 4 of these variables must be checked to ensure the following scenarios work:
             //* Northwind Customers Window Orders tab page works.
             //* SimpleDemo Order Details lookup when initial is collapsed and then is expanded.
@@ -822,6 +826,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void DesignerFillGrid()
         {
+            //This is to buggy.  It's causing Visual Studio to hang.
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
             //Must get page size before clearing the data source.  Otherwise we get exceptions if column PropertyName is invalid.
             _currentPageSize = GetPageSize(false);
             _dataSource.Rows.Clear();

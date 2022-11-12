@@ -479,7 +479,7 @@ namespace RingSoft.DbMaintenance
             ImportDefaultLookupCommand.IsEnabled = FromFormulaCommand.IsEnabled = true;
 
             AdvancedFindTree.LoadTree(tableName);
-
+            this.LookupDefinition.AdvancedFindTree = AdvancedFindTree;
             TreeRoot = AdvancedFindTree.TreeRoot;
 
             LookupCommand = GetLookupCommand(LookupCommands.Clear);
@@ -672,6 +672,7 @@ namespace RingSoft.DbMaintenance
 
                 var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
+                this.LookupDefinition.AdvancedFindTree = AdvancedFindTree;
                 FiltersManager?.LoadFromLookupDefinition(oldLookup, true);
             }
             else
@@ -734,7 +735,7 @@ namespace RingSoft.DbMaintenance
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
             bool createColumn = true, double percentWidth = 20)
         {
-            return AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn, percentWidth);
+            return LookupDefinition.AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn, percentWidth);
         }
 
 
@@ -989,13 +990,13 @@ namespace RingSoft.DbMaintenance
         public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
             bool searchForRootFormula = false, TreeViewItem parentItem = null)
         {
-            return AdvancedFindTree.FindFieldInTree(items, fieldDefinition, searchForRootFormula, parentItem);
+            return LookupDefinition.AdvancedFindTree.FindFieldInTree(items, fieldDefinition, searchForRootFormula, parentItem);
         }
 
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
-            return AdvancedFindTree.ProcessFoundTreeViewItem(formula, fieldDefinition, fieldDataType, decimalEditFormat);
+            return LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(formula, fieldDefinition, fieldDataType, decimalEditFormat);
         }
 
         private void ImportDefaultLookup()

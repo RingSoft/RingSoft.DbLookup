@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -104,6 +105,8 @@ namespace RingSoft.DbLookup.Lookup
         public bool AllowAddOnTheFly { get; set; } = true;
 
         public string FromFormula { get; internal set; }
+
+        public AdvancedFindTree AdvancedFindTree { get; set; }
 
         public LookupDefinitionBase HasFromFormula(string value)
         {

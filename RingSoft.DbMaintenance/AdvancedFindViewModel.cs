@@ -672,7 +672,7 @@ namespace RingSoft.DbMaintenance
 
                 var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
-                this.LookupDefinition.AdvancedFindTree = AdvancedFindTree;
+                LookupDefinition.AdvancedFindTree = AdvancedFindTree;
                 FiltersManager?.LoadFromLookupDefinition(oldLookup, true);
             }
             else

@@ -145,61 +145,20 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindColumn entity)
         {
-            var tableDefinition =
-                Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                    p.EntityName == entity.TableName);
-            Table = tableDefinition.Description;
-            FieldDefinition fieldDefinition = null;
-            if (!entity.FieldName.IsNullOrEmpty())
-            {
-                fieldDefinition =
-                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
-                Field = fieldDefinition.Description;
-            }
-
-            TableDefinitionBase primaryTable = null;
-            FieldDefinition primaryField = null;
-            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
-            {
-                primaryTable =
-                    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.EntityName == entity.PrimaryTableName);
-
-                primaryField =
-                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
-
-            }
-
+            LookupColumnDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindColumnEntity(entity);
             Name = entity.Caption;
-            var percentWidth = (double) entity.PercentWidth * 100;
-
+            var percentWidth = (double)entity.PercentWidth * 100;
             PercentWidth = percentWidth / 100;
 
-            if (fieldDefinition == null)
-            {
-                tableDefinition = primaryTable;
-                fieldDefinition = primaryField;
-            }
+            Table = LookupColumnDefinition.TableDescription;
+            Field = LookupColumnDefinition.FieldDescription;
 
-            var foundTreeViewItem = Manager.ViewModel.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition,
-                (FieldDataTypes) entity.FieldDataType, (DecimalEditFormatTypes) entity.DecimalFormatType);
-
-            LookupColumnDefinition = Manager.ViewModel.MakeIncludes(foundTreeViewItem, Name).ColumnDefinition;
             if (LookupColumnDefinition != null)
             {
-
-                LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
-
                 if (LookupColumnDefinition is LookupFormulaColumnDefinition)
                 {
                     LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
                     Field = "<Formula>";
-                    LookupFormulaColumnDefinition.HasDataType((FieldDataTypes) entity.FieldDataType);
-
-                    if (entity.DecimalFormatType > 0)
-                    {
-                        LookupFormulaColumnDefinition.DecimalFieldType = (DecimalFieldTypes) entity.DecimalFormatType;
-                    }
                 }
                 else
                 {

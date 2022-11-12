@@ -108,6 +108,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool ShowPositiveValuesInGreen { get; internal set; }
 
+        public string TableDescription { get; internal set; }
+
+        public string FieldDescription { get; internal set; }
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
@@ -139,6 +143,8 @@ namespace RingSoft.DbLookup.Lookup
             ParentObject = source.ParentObject;
             ChildField = source.ChildField;
             ParentField = source.ParentField;
+            TableDescription = source.TableDescription;
+            FieldDescription = source.FieldDescription;
         }
 
         /// <summary>

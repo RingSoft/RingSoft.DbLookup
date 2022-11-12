@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.AdvancedFind;
 
@@ -399,7 +400,59 @@ namespace RingSoft.DbLookup.Lookup
             {
                 InitialSortColumnDefinition = VisibleColumns[0];
             }
+        }
 
+        public LookupColumnDefinitionBase LoadFromAdvFindColumnEntity(AdvancedFindColumn entity)
+        {
+            var tableDefinition =
+                TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.TableName);
+            
+            FieldDefinition fieldDefinition = null;
+            var fieldDescription = string.Empty;
+            if (!entity.FieldName.IsNullOrEmpty())
+            {
+                fieldDefinition =
+                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+                fieldDescription = fieldDefinition.Description;
+            }
+
+            TableDefinitionBase primaryTable = null;
+            FieldDefinition primaryField = null;
+            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
+            {
+                primaryTable =
+                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.EntityName == entity.PrimaryTableName);
+
+                primaryField =
+                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
+
+            }
+
+            if (fieldDefinition == null)
+            {
+                tableDefinition = primaryTable;
+                fieldDefinition = primaryField;
+            }
+
+            var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition,
+                (FieldDataTypes)entity.FieldDataType, (DecimalEditFormatTypes)entity.DecimalFormatType);
+
+            var result = AdvancedFindTree.MakeIncludes(foundTreeViewItem, entity.Caption).ColumnDefinition;
+            result.TableDescription = tableDefinition.Description;
+            result.FieldDescription = fieldDescription;
+            result.PercentWidth = entity.PercentWidth * 100;
+
+            if (result is LookupFormulaColumnDefinition lookupFormulaColumn)
+            {
+                lookupFormulaColumn.HasDataType((FieldDataTypes)entity.FieldDataType);
+                if (entity.DecimalFormatType > 0)
+                {
+                    lookupFormulaColumn.DecimalFieldType = (DecimalFieldTypes)entity.DecimalFormatType;
+                }
+            }
+            return result;
         }
     }
 }

@@ -153,7 +153,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 }
             }
             ProcessFilterWheres(wheres, firstWhereItem, lastWhereItem);
-            lastAdvancedWhere.EndLogic = EndLogic;
+            if (lastAdvancedWhere != null) lastAdvancedWhere.EndLogic = EndLogic;
             //DbDataProcessor.ShowSqlStatementWindow();
         }
 

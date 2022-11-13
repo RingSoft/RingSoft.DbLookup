@@ -428,12 +428,11 @@ namespace RingSoft.DbLookup.Lookup
                 primaryField =
                     primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
 
-            }
-
-            if (fieldDefinition == null)
-            {
-                tableDefinition = primaryTable;
-                fieldDefinition = primaryField;
+                if (fieldDefinition == null)
+                {
+                    tableDefinition = primaryTable;
+                    fieldDefinition = primaryField;
+                }
             }
 
             var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition,

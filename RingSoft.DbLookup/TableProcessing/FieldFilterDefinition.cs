@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The field definition.
         /// </value>
-        public FieldDefinition FieldDefinition { get; internal set; }
+        public FieldDefinition FieldDefinition { get; set; }
 
         /// <summary>
         /// Gets the condition.

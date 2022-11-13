@@ -40,7 +40,9 @@ namespace RingSoft.DbMaintenance
 
         protected bool ResetLookup { get; set; } = true;
 
-        private FieldDefinition _autoFillField;
+        public FieldDefinition AutoFillField { get; private set; }
+
+        private FieldDefinition _searchAutoFillField;
 
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)
         {
@@ -129,6 +131,31 @@ namespace RingSoft.DbMaintenance
                     {
                         Condition = fieldFilter.Condition = filterProps.FilterReturn.Condition;
                         SearchValue = fieldFilter.Value = filterProps.FilterReturn.SearchValue;
+                        if (filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        {
+                            switch (Condition)
+                            {
+                                case Conditions.Equals:
+                                case Conditions.NotEquals:
+                                case Conditions.EqualsNull:
+                                case Conditions.NotEqualsNull:
+                                    fieldFilter.FieldDefinition = AutoFillField;
+                                    break;
+                                default:
+                                    if (fieldFilter.FieldDefinition.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                                    {
+                                        fieldFilter.FieldDefinition = fieldColumn.FieldDefinition;
+                                    }
+                                    else if (fieldFilter.FieldDefinition.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
+                                    {
+                                        var message = "This operation is not supported due to poor database design.";
+                                        var caption = "Operation Not Supported";
+                                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption,
+                                            RsMessageBoxIcons.Exclamation);
+                                    }
+                                    break;
+                            }
+                        }
                     }
                     else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
                     {
@@ -308,7 +335,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
-                    _autoFillField = fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
+                    AutoFillField = fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
                         .PrimaryField;
                 }
                 Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
@@ -416,9 +443,9 @@ namespace RingSoft.DbMaintenance
             {
                 TableDefinitionBase tableToSearch = null;
                 var makeSearchValueText = true;
-                if (_autoFillField != null)
+                if (AutoFillField != null)
                 {
-                    tableToSearch = _autoFillField.TableDefinition;
+                    tableToSearch = AutoFillField.TableDefinition;
                 }
                 else
                 {
@@ -428,7 +455,7 @@ namespace RingSoft.DbMaintenance
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
-                        if (_autoFillField != null)
+                        if (AutoFillField != null)
                         {
                             var searchAutoFillValue =
                                 Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
@@ -630,7 +657,8 @@ namespace RingSoft.DbMaintenance
                         }
                         if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
-                            _autoFillField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                            AutoFillField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                            _searchAutoFillField = fieldDefinition;
                         }
 
                         break;

@@ -62,7 +62,8 @@ namespace RingSoft.DbLookup.TableProcessing
                         advancedFindFilterDefinition.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
                         advancedFindFilterDefinition.TableFilterDefinition = TableFilterDefinition;
                         advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
-                        lastAdvancedWhere.EndLogic = advancedFindFilterDefinition.EndLogic;
+                        if (lastAdvancedWhere != null)
+                            lastAdvancedWhere.EndLogic = advancedFindFilterDefinition.EndLogic;
 
                         //ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
                     }

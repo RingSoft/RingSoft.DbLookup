@@ -453,5 +453,79 @@ namespace RingSoft.DbLookup.Lookup
             }
             return result;
         }
+
+        public FilterItemDefinition LoadFromAdvFindFilter(AdvancedFindFilter entity)
+        {
+            FilterItemDefinition filterItemDefinition = null;
+            if (entity.SearchForAdvancedFindId > 0)
+            {
+                filterItemDefinition= FilterDefinition.AddUserFilter(entity.AdvancedFindId, this);
+                SetFilterProperties(entity, filterItemDefinition);
+                filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
+                    .GetAdvancedFind(entity.AdvancedFindId).Table;
+                return filterItemDefinition;
+
+            }
+            var tableDefinition =
+                TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.TableName);
+
+            FieldDefinition fieldDefinition = null;
+            var fieldDescription = string.Empty;
+            if (!entity.FieldName.IsNullOrEmpty())
+            {
+                fieldDefinition =
+                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+                fieldDescription = fieldDefinition.Description;
+            }
+
+            TableDefinitionBase primaryTable = null;
+            FieldDefinition primaryField = null;
+            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
+            {
+                primaryTable =
+                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == entity.PrimaryTableName);
+
+                primaryField =
+                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
+
+                if (fieldDefinition == null)
+                {
+                    tableDefinition = primaryTable;
+                    fieldDefinition = primaryField;
+                }
+            }
+
+            var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition);
+
+            var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
+            if (entity.Formula.IsNullOrEmpty())
+            {
+                filterItemDefinition = FilterDefinition.AddUserFilter(fieldDefinition, (Conditions)entity.Operand,
+                    entity.SearchForValue);
+            }
+            else
+            {
+                var alias = includeResult.LookupJoin.JoinDefinition.Alias;
+                filterItemDefinition = FilterDefinition.AddUserFilter(entity.Formula, (Conditions)entity.Operand,
+                    entity.SearchForValue, alias, (FieldDataTypes)entity.FormulaDataType);
+            }
+            if (includeResult.LookupJoin != null)
+            {
+                filterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            }
+
+            filterItemDefinition.TableDescription = tableDefinition.Description;
+            SetFilterProperties(entity, filterItemDefinition);
+            return filterItemDefinition;
+        }
+
+        private static void SetFilterProperties(AdvancedFindFilter entity, FilterItemDefinition filterItemDefinition)
+        {
+            filterItemDefinition.LeftParenthesesCount = entity.LeftParentheses;
+            filterItemDefinition.RightParenthesesCount = entity.RightParentheses;
+            filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
+        }
     }
 }

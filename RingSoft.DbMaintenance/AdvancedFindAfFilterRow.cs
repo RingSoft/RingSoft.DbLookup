@@ -146,10 +146,16 @@ namespace RingSoft.DbMaintenance
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds, entity.SearchForAdvancedFindId.ToString());
 
-            CreateFilterDefinition();
+            //CreateFilterDefinition();
 
             base.LoadFromEntity(entity);
-            SetupTableField(ParentFieldDefinition);
+            if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
+            {
+                Filter = advancedFindFilter;
+                Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
+            }
+            
+            //SetupTableField(ParentFieldDefinition);
             //Manager.ViewModel.ResetLookup();
         }
     }

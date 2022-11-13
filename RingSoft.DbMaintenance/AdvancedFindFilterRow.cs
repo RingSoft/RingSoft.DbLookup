@@ -203,45 +203,80 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            LeftParenthesesCount = entity.LeftParentheses;
-            var table = entity.TableName;
-            var field = entity.FieldName;
-            var tableDefinition =
-                Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                    p.EntityName == table);
-
-            FieldDefinition fieldDefinition = null;
-            if (!field.IsNullOrEmpty())
+            var filterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            LoadFromFilterDefinition(filterItemDefinition, false, entity.AdvancedFindId);
+            if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
             {
-                fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.PropertyName == field);
+                FieldDefinition = fieldFilter.FieldDefinition;
+                MakeParentField();
             }
 
-            FieldDefinition = fieldDefinition;
+            //Table = FilterItemDefinition.TableDescription;
+            //if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+            //{
+            //    Condition = fieldFilter.Condition;
+            //    SearchValue = fieldFilter.Value;
+            //    Field = fieldFilter.FieldDefinition.Description;
+            //    MakeParentField();
+            //    if (fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            //    {
+            //        AutoFillField = fieldFilter.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+            //    }
 
-            PrimaryTable = entity.PrimaryTableName;
-            PrimaryField = entity.PrimaryFieldName;
+            //}
+            //else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
+            //{
+            //    if (formulaFilter.Condition != null) Condition = formulaFilter.Condition.Value;
+            //    formulaFilter.FilterValue = entity.SearchForValue;
+            //    Field = "<Formula>";
+            //    Formula = formulaFilter.Formula;
+            //    FormulaDataType = (FieldDataTypes) entity.FormulaDataType;
+            //    FormulaDisplayValue = entity.FormulaDisplayValue;
+            //}
 
-            MakeParentField();
-
-            Formula = entity.Formula;
-            if (!Formula.IsNullOrEmpty())
-                Table = PrimaryTable;
-
-            RightParenthesesCount = entity.RightParentheses;
-            EndLogics = (EndLogics)entity.EndLogic;
-            Condition = (Conditions)entity.Operand;
-
-            SearchValue = entity.SearchForValue;
-            FormulaDataType = (FieldDataTypes) entity.FormulaDataType;
-            FormulaDisplayValue = entity.FormulaDisplayValue;
-
-            if (entity.SearchForAdvancedFindId == null)
-            {
-                var filterReturn = MakeFilterReturn();
-
-                LoadFromFilterReturn(filterReturn);
-            }
+            //LeftParenthesesCount = (byte)FilterItemDefinition.LeftParenthesesCount;
+            //RightParenthesesCount = (byte)FilterItemDefinition.RightParenthesesCount;
             //MakeSearchValueText();
+
+            //LeftParenthesesCount = entity.LeftParentheses;
+            //var table = entity.TableName;
+            //var field = entity.FieldName;
+            //var tableDefinition =
+            //    Manager.ViewModel.LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+            //        p.EntityName == table);
+
+            //FieldDefinition fieldDefinition = null;
+            //if (!field.IsNullOrEmpty())
+            //{
+            //    fieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.PropertyName == field);
+            //}
+
+            //FieldDefinition = fieldDefinition;
+
+            //PrimaryTable = entity.PrimaryTableName;
+            //PrimaryField = entity.PrimaryFieldName;
+
+            //MakeParentField();
+
+            //Formula = entity.Formula;
+            //if (!Formula.IsNullOrEmpty())
+            //    Table = PrimaryTable;
+
+            //RightParenthesesCount = entity.RightParentheses;
+            //EndLogics = (EndLogics)entity.EndLogic;
+            //Condition = (Conditions)entity.Operand;
+
+            //SearchValue = entity.SearchForValue;
+            //FormulaDataType = (FieldDataTypes) entity.FormulaDataType;
+            //FormulaDisplayValue = entity.FormulaDisplayValue;
+
+            //if (entity.SearchForAdvancedFindId == null)
+            //{
+            //    var filterReturn = MakeFilterReturn();
+
+            //    LoadFromFilterReturn(filterReturn);
+            //}
+            ////MakeSearchValueText();
         }
 
         protected void MakeParentField()
@@ -343,43 +378,46 @@ namespace RingSoft.DbMaintenance
                 Condition = fieldFilterDefinition.Condition;
                 SearchValue = fieldFilterDefinition.Value;
 
-                switch (fieldFilterDefinition.FieldDefinition.FieldDataType)
+                if (isFixed)
                 {
-                    case FieldDataTypes.String:
-                        if (fieldFilterDefinition.FieldDefinition is StringFieldDefinition stringField)
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(stringField,
-                                fieldFilterDefinition.Condition,
-                                fieldFilterDefinition.Value);
-                        break;
-                    case FieldDataTypes.Integer:
-                        if (fieldFilterDefinition.FieldDefinition is IntegerFieldDefinition integerField)
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(integerField,
-                                fieldFilterDefinition.Condition,
-                                fieldFilterDefinition.Value.ToInt());
-                        break;
-                    case FieldDataTypes.Decimal:
-                        if (fieldFilterDefinition.FieldDefinition is DecimalFieldDefinition decimalField)
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(decimalField,
-                                fieldFilterDefinition.Condition,
-                                fieldFilterDefinition.Value.ToDecimal());
-                        break;
-                    case FieldDataTypes.DateTime:
-                        if (fieldFilterDefinition.FieldDefinition is DateFieldDefinition dateField)
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(dateField,
-                                fieldFilterDefinition.Condition,
-                                DateTime.Parse(fieldFilterDefinition.Value));
-                        break;
-                    case FieldDataTypes.Bool:
-                        if (fieldFilterDefinition.FieldDefinition is BoolFieldDefinition boolField)
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(boolField,
-                                fieldFilterDefinition.Condition,
-                                fieldFilterDefinition.Value.ToBool());
+                    switch (fieldFilterDefinition.FieldDefinition.FieldDataType)
+                    {
+                        case FieldDataTypes.String:
+                            if (fieldFilterDefinition.FieldDefinition is StringFieldDefinition stringField)
+                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(stringField,
+                                    fieldFilterDefinition.Condition,
+                                    fieldFilterDefinition.Value);
+                            break;
+                        case FieldDataTypes.Integer:
+                            if (fieldFilterDefinition.FieldDefinition is IntegerFieldDefinition integerField)
+                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(integerField,
+                                    fieldFilterDefinition.Condition,
+                                    fieldFilterDefinition.Value.ToInt());
+                            break;
+                        case FieldDataTypes.Decimal:
+                            if (fieldFilterDefinition.FieldDefinition is DecimalFieldDefinition decimalField)
+                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(decimalField,
+                                    fieldFilterDefinition.Condition,
+                                    fieldFilterDefinition.Value.ToDecimal());
+                            break;
+                        case FieldDataTypes.DateTime:
+                            if (fieldFilterDefinition.FieldDefinition is DateFieldDefinition dateField)
+                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(dateField,
+                                    fieldFilterDefinition.Condition,
+                                    DateTime.Parse(fieldFilterDefinition.Value));
+                            break;
+                        case FieldDataTypes.Bool:
+                            if (fieldFilterDefinition.FieldDefinition is BoolFieldDefinition boolField)
+                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(boolField,
+                                    fieldFilterDefinition.Condition,
+                                    fieldFilterDefinition.Value.ToBool());
 
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
-                
+
             }
             else if (filter is FormulaFilterDefinition formulaFilter)
             {
@@ -389,8 +427,13 @@ namespace RingSoft.DbMaintenance
                 SearchValue = formulaFilter.FilterValue;
                 Condition = formulaFilter.Condition.GetValueOrDefault();
                 FormulaDataType = formulaFilter.DataType;
-                Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(formulaFilter.Description, Condition,
-                    SearchValue, Formula, FormulaDataType);
+                if (isFixed)
+                {
+
+                    Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(formulaFilter.Description,
+                        Condition,
+                        SearchValue, Formula, FormulaDataType);
+                }
             }
 
             RightParenthesesCount = (byte) filter.RightParenthesesCount;

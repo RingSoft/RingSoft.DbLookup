@@ -398,12 +398,12 @@ namespace RingSoft.DbMaintenance
             Condition = FilterReturn.Condition;
             if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
-                var process = true;
+                var process = false;
                 switch (Condition)
                 {
-                    case Conditions.EqualsNull:
-                    case Conditions.NotEqualsNull:
-                        process = false;
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        process = true;
                         break;
                 }
 
@@ -412,6 +412,13 @@ namespace RingSoft.DbMaintenance
                     SearchValueAutoFillValue =
                         LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
                             FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                }
+                else
+                {
+                    SearchValueAutoFillValue =
+                        new AutoFillValue(
+                            new PrimaryKeyValue(FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable),
+                            FilterReturn.SearchValue);
                 }
             }
 

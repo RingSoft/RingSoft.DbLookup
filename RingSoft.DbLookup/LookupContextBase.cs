@@ -211,11 +211,14 @@ namespace RingSoft.DbLookup
                     var result = tableDefinition.Context.DataProcessor.GetData(query);
                     if (result.ResultCode == GetDataResultCodes.Success)
                     {
-                        var text = result.DataSet.Tables[0].Rows[0]
-                            .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
                         var primaryKeyValue = new PrimaryKeyValue(tableDefinition);
-                        primaryKeyValue.PopulateFromDataRow(result.DataSet.Tables[0].Rows[0]);
-                        return new AutoFillValue(primaryKeyValue, text);
+                        if (result.DataSet.Tables[0].Rows.Count > 0)
+                        {
+                            var text = result.DataSet.Tables[0].Rows[0]
+                                .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
+                            primaryKeyValue.PopulateFromDataRow(result.DataSet.Tables[0].Rows[0]);
+                            return new AutoFillValue(primaryKeyValue, text);
+                        }
                     }
                 }
             }

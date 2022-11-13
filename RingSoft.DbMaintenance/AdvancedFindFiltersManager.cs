@@ -54,23 +54,23 @@ namespace RingSoft.DbMaintenance
                     ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
                         p.EntityName == entity.TableName);
 
-                if (tableDefinition != null && tableDefinition.CanViewTable)
+                if (tableDefinition != null)
                 {
                     var fieldDefinition =
                         tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
 
                     var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
-                    if (foundTreeViewItem == null)
+                    if (foundTreeViewItem == null || !tableDefinition.CanViewTable)
                     {
                         ViewModel.ReadOnlyMode = true;
                         return null;
                     }
                 }
-                else
-                {
-                    ViewModel.ReadOnlyMode = true;
-                    return null;
-                }
+                //else
+                //{
+                //    ViewModel.ReadOnlyMode = true;
+                //    return null;
+                //}
             }
             if (entity.SearchForAdvancedFindId == null)
             {

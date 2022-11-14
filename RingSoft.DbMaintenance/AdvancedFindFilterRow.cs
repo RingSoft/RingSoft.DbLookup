@@ -142,7 +142,12 @@ namespace RingSoft.DbMaintenance
                                     fieldFilter.FieldDefinition = AutoFillField;
                                     break;
                                 default:
-                                    if (fieldFilter.FieldDefinition.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                                    var field = fieldFilter.FieldDefinition;
+                                    if (field.ParentJoinForeignKeyDefinition != null)
+                                    {
+                                        field = field.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                                    }
+                                    if (field.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
                                     {
                                         fieldFilter.FieldDefinition = fieldColumn.FieldDefinition;
                                     }

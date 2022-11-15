@@ -12,6 +12,12 @@ using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public class LookupFilterReturn
+    {
+        public FilterItemDefinition FilterItemDefinition { get; set; }
+
+        public FieldDefinition FieldDefinition { get; set; }
+    }
     /// <summary>
     /// Contains all the data necessary for a lookup.
     /// </summary>
@@ -454,8 +460,9 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        public FilterItemDefinition LoadFromAdvFindFilter(AdvancedFindFilter entity)
+        public LookupFilterReturn LoadFromAdvFindFilter(AdvancedFindFilter entity)
         {
+            var result = new LookupFilterReturn();
             FilterItemDefinition filterItemDefinition = null;
             if (entity.SearchForAdvancedFindId > 0)
             {
@@ -463,7 +470,8 @@ namespace RingSoft.DbLookup.Lookup
                 SetFilterProperties(entity, filterItemDefinition);
                 filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
                     .GetAdvancedFind(entity.AdvancedFindId).Table;
-                return filterItemDefinition;
+                result.FilterItemDefinition = filterItemDefinition;
+                return result;
 
             }
             var tableDefinition =
@@ -500,15 +508,37 @@ namespace RingSoft.DbLookup.Lookup
             var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition);
 
             var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
-            if (entity.Formula.IsNullOrEmpty())
+            var formula = entity.Formula;
+            if (fieldDefinition != null)
+            {
+                if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    var condition = (Conditions)entity.Operand;
+                    switch (condition)
+                    {
+                        case Conditions.Equals:
+                        case Conditions.NotEquals:
+                            break;
+                        default:
+                            var lookupColumn = fieldDefinition.ParentJoinForeignKeyDefinition
+                                .PrimaryTable.LookupDefinition.InitialSortColumnDefinition;
+                            if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
+                            {
+                                formula = lookupFormulaColumn.OriginalFormula;
+                            }
+                            break;
+                    }
+                }
+            }
+            if (formula.IsNullOrEmpty())
             {
                 filterItemDefinition = FilterDefinition.AddUserFilter(fieldDefinition, (Conditions)entity.Operand,
                     entity.SearchForValue);
             }
             else
             {
-                var alias = includeResult.LookupJoin.JoinDefinition.Alias;
-                filterItemDefinition = FilterDefinition.AddUserFilter(entity.Formula, (Conditions)entity.Operand,
+                var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
+                filterItemDefinition = FilterDefinition.AddUserFilter(formula, (Conditions)entity.Operand,
                     entity.SearchForValue, alias, (FieldDataTypes)entity.FormulaDataType);
             }
             if (includeResult.LookupJoin != null)
@@ -518,7 +548,9 @@ namespace RingSoft.DbLookup.Lookup
 
             filterItemDefinition.TableDescription = tableDefinition.Description;
             SetFilterProperties(entity, filterItemDefinition);
-            return filterItemDefinition;
+            result.FilterItemDefinition = filterItemDefinition;
+            result.FieldDefinition = fieldDefinition;
+            return result;
         }
 
         private static void SetFilterProperties(AdvancedFindFilter entity, FilterItemDefinition filterItemDefinition)

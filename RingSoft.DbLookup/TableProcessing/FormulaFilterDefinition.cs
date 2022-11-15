@@ -38,5 +38,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
             base.CopyFrom(source);
         }
+
+        public override string ToString()
+        {
+            return Formula;
+        }
     }
 }

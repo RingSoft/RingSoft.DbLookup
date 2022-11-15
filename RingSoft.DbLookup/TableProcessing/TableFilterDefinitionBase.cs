@@ -137,7 +137,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        protected internal FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition,
+        public FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition,
             Conditions condition,
             string value)
         {
@@ -152,7 +152,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
-        internal FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition,
+        public FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition,
             string value = "", string alias = "")
         {
             if (!alias.IsNullOrEmpty())
@@ -272,6 +272,14 @@ namespace RingSoft.DbLookup.TableProcessing
             _userFilterDefinitions.Remove(filterItem);
         }
 
+        public void ReplaceUserFilter(FilterItemDefinition oldFilterItemDefinition,
+            FilterItemDefinition newFilterItemDefinition)
+        {
+            var index = _userFilterDefinitions.IndexOf(oldFilterItemDefinition);
+            _userFilterDefinitions.Remove(oldFilterItemDefinition);
+            _userFilterDefinitions.Insert(index, newFilterItemDefinition);
+        }
+
     internal void ProcessQuery(SelectQuery query)
         {
             ProcessFieldJoins(query, Joins);
@@ -349,7 +357,8 @@ namespace RingSoft.DbLookup.TableProcessing
                     break;
                 case FilterItemTypes.AdvancedFind:
                     var advancedFindFilterDefinition = (AdvancedFindFilterDefinition) filterDefinition;
-                    advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhere, ref lastWhere, advancedFindTree);
+                    advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhere, ref lastWhere, false,
+                        advancedFindTree);
 
                     break;
                 default:

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
@@ -754,6 +755,40 @@ namespace RingSoft.DbMaintenance
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
+                        if (!SearchValueAutoFillValue.IsValid())
+                        {
+                            var tableDefinition = SearchValueAutoFillValue.PrimaryKeyValue.TableDefinition;
+                            var query = new SelectQuery(tableDefinition.TableName);
+                            foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
+                            {
+                                query.AddSelectColumn(primaryKeyField.FieldName);
+                            }
+
+                            if (tableDefinition.LookupDefinition.InitialSortColumnDefinition is
+                                LookupFieldColumnDefinition lookupFieldColumn)
+                            {
+                                query.AddWhereItem(lookupFieldColumn.FieldDefinition.FieldName, Conditions.Equals,
+                                    SearchValueAutoFillValue.Text);
+                            }
+                            else  if (tableDefinition.LookupDefinition.InitialSortColumnDefinition is
+                                LookupFormulaColumnDefinition lookupFormulaColumn)
+                            {
+                                var formula =
+                                    lookupFormulaColumn.OriginalFormula.Replace("{Alias}", tableDefinition.TableName);
+                                query.AddWhereItemFormula(formula, Conditions.Equals,
+                                    SearchValueAutoFillValue.Text);
+                            }
+
+                            var queryResult = tableDefinition.Context.DataProcessor.GetData(query);
+                            if (queryResult.ResultCode == GetDataResultCodes.Success)
+                            {
+                                if (queryResult.DataSet.Tables[0].Rows.Count > 0)
+                                {
+                                    SearchValueAutoFillValue.PrimaryKeyValue.PopulateFromDataRow(queryResult.DataSet
+                                        .Tables[0].Rows[0]);
+                                }
+                            }
+                        }
                         result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;
                         break;
                     default:
@@ -795,6 +830,23 @@ namespace RingSoft.DbMaintenance
                 OnValidationFail?.Invoke(this, new ValidationFailArgs() { Control = ValidationFailControls.Condition });
                 return false;
             }
+
+            if (Type == TreeViewType.Field && FieldDefinition.ParentJoinForeignKeyDefinition != null
+                                           && !SearchValueAutoFillValue.IsValid())
+            {
+                switch (Condition)
+                {
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        var message = "You must select a valid search value.";
+                        var caption = "Invalid Search Value";
+                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                        OnValidationFail?.Invoke(this, new ValidationFailArgs() { Control = ValidationFailControls.SearchValue });
+                        return false;
+                }
+
+            }
+
 
             if (filterReturn.SearchValue.IsNullOrEmpty())
             {

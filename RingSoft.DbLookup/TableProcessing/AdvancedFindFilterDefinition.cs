@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public void ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
-            , ref WhereItem lastWhereItem, AdvancedFindTree tree = null)
+            , ref WhereItem lastWhereItem, bool fromAdvancedFind, AdvancedFindTree tree = null)
         {
             var wheres = new List<WhereItem>();
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
@@ -61,13 +61,14 @@ namespace RingSoft.DbLookup.TableProcessing
                         var advancedFindFilterDefinition = new AdvancedFindFilterDefinition(LookupDefinition);
                         advancedFindFilterDefinition.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
                         advancedFindFilterDefinition.TableFilterDefinition = TableFilterDefinition;
-                        advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
+                        advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem,
+                            true, tree);
                         if (lastAdvancedWhere != null)
                             lastAdvancedWhere.EndLogic = advancedFindFilterDefinition.EndLogic;
 
                         //ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem, tree);
                     }
-                    else
+                    else if (fromAdvancedFind)
                     {
                         var tableDefinition = LookupDefinition.TableDefinition;
                         tableDefinition =
@@ -83,18 +84,18 @@ namespace RingSoft.DbLookup.TableProcessing
                             if (fieldDefinition != null)
                             {
                                 var filterDefinition = TableFilterDefinition.CreateFieldFilter(fieldDefinition,
-                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
+                                    (Conditions)advancedFindFilter.Operand, advancedFindFilter.SearchForValue);
 
                                 ProcessFieldDefinition(query, tree, fieldDefinition, filterDefinition);
 
                                 var queryTable =
                                     TableFilterDefinition.GetQueryTableForFieldFilter(query, filterDefinition);
-                                
+
                                 var dateType = DbDateTypes.DateOnly;
                                 if (fieldDefinition is DateFieldDefinition dateField)
                                     dateType = dateField.DateType;
                                 var whereItem = query.AddWhereItem(queryTable, fieldDefinition.FieldName,
-                                    (Conditions) advancedFindFilter.Operand, advancedFindFilter.SearchForValue, 
+                                    (Conditions)advancedFindFilter.Operand, advancedFindFilter.SearchForValue,
                                     fieldDefinition.ValueType, dateType);
                                 ProcessWhereItem(whereItem, ref lastAdvancedWhere, advancedFindFilter);
                                 wheres.Add(whereItem);
@@ -102,7 +103,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         }
                     }
                 }
-                else
+                else if (fromAdvancedFind)
                 {
                     FormulaFilterDefinition formulaFilter = null;
                     QueryTable queryTable = null;

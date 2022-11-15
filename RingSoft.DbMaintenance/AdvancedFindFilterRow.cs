@@ -127,42 +127,50 @@ namespace RingSoft.DbMaintenance
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.Search:
                     var filterProps = value as AdvancedFindFilterCellProps;
-                    if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+                    Condition = filterProps.FilterReturn.Condition;
+                    SearchValue = filterProps.FilterReturn.SearchValue;
+                    if (filterProps.FilterReturn.Formula.IsNullOrEmpty())
                     {
-                        Condition = fieldFilter.Condition = filterProps.FilterReturn.Condition;
-                        SearchValue = fieldFilter.Value = filterProps.FilterReturn.SearchValue;
-                        if (filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                        {
-                            switch (Condition)
-                            {
-                                case Conditions.Equals:
-                                case Conditions.NotEquals:
-                                case Conditions.EqualsNull:
-                                case Conditions.NotEqualsNull:
-                                    fieldFilter.FieldDefinition = AutoFillField;
-                                    break;
-                                default:
-                                    var field = fieldFilter.FieldDefinition;
-                                    if (field.ParentJoinForeignKeyDefinition != null)
-                                    {
-                                        field = field.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
-                                    }
-                                    if (field.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
-                                    {
-                                        fieldFilter.FieldDefinition = fieldColumn.FieldDefinition;
-                                    }
-                                    else if (fieldFilter.FieldDefinition.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
-                                    {
-                                        var message = "This operation is not supported due to poor database design.";
-                                        var caption = "Operation Not Supported";
-                                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption,
-                                            RsMessageBoxIcons.Exclamation);
-                                    }
-                                    break;
-                            }
-                        }
+                        SetCellValueProcessField(filterProps);
                     }
-                    else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
+
+                    //if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+                    //{
+                    //    Condition = fieldFilter.Condition = filterProps.FilterReturn.Condition;
+                    //    SearchValue = fieldFilter.Value = filterProps.FilterReturn.SearchValue;
+
+                    //    if (filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    //    {
+                    //        switch (Condition)
+                    //        {
+                    //            case Conditions.Equals:
+                    //            case Conditions.NotEquals:
+                    //            case Conditions.EqualsNull:
+                    //            case Conditions.NotEqualsNull:
+                    //                fieldFilter.FieldDefinition = AutoFillField;
+                    //                break;
+                    //            default:
+                    //                var field = fieldFilter.FieldDefinition;
+                    //                if (field.ParentJoinForeignKeyDefinition != null)
+                    //                {
+                    //                    field = field.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                    //                }
+                    //                if (field.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                    //                {
+                    //                    fieldFilter.FieldDefinition = fieldColumn.FieldDefinition;
+                    //                }
+                    //                else if (fieldFilter.FieldDefinition.TableDefinition.LookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
+                    //                {
+                    //                    var message = "This operation is not supported due to poor database design.";
+                    //                    var caption = "Operation Not Supported";
+                    //                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption,
+                    //                        RsMessageBoxIcons.Exclamation);
+                    //                }
+                    //                break;
+                    //        }
+                    //    }
+                    //}
+                    if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
                     {
                         formulaFilter.Condition = filterProps.FilterReturn.Condition;
                         Condition = filterProps.FilterReturn.Condition;
@@ -173,11 +181,13 @@ namespace RingSoft.DbMaintenance
                             var formula = filterProps.FilterReturn.Formula;
 
                             Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
-
+                            PrimaryTable = filterProps.FilterReturn.PrimaryTableName;
                         }
 
                         FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
+                        Field = $"{filterProps.FilterReturn.FormulaDisplayValue} Formula";
                     }
+                    Manager.ViewModel.RecordDirty = true;
                     MakeSearchValueText();
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
@@ -206,15 +216,71 @@ namespace RingSoft.DbMaintenance
             base.SetCellValue(value);
         }
 
+        private void SetCellValueProcessField(AdvancedFindFilterCellProps filterProps)
+        {
+            if (filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                FilterItemDefinition filterDefinition = null;
+                switch (Condition)
+                {
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        filterDefinition =
+                            FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(
+                                filterProps.FilterReturn.FieldDefinition,
+                                Condition, SearchValue);
+                        break;
+                    default:
+                        var lookupColumn = filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition
+                            .PrimaryTable.LookupDefinition.InitialSortColumnDefinition;
+
+                        if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                        {
+                            filterDefinition =
+                                FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(lookupFieldColumn.FieldDefinition,
+                                    Condition, SearchValue);
+                        }
+                        else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
+                        {
+                            filterDefinition = FilterItemDefinition.TableFilterDefinition.CreateFormulaFilter(
+                                lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType, Condition, SearchValue, FilterItemDefinition.JoinDefinition.Alias);
+                        }
+                        break;
+                }
+
+                filterDefinition.JoinDefinition = FilterItemDefinition.JoinDefinition;
+                FilterItemDefinition.TableFilterDefinition.ReplaceUserFilter(FilterItemDefinition,
+                    filterDefinition);
+                FilterItemDefinition = filterDefinition;
+                FilterItemDefinition.LeftParenthesesCount = LeftParenthesesCount;
+                FilterItemDefinition.RightParenthesesCount = RightParenthesesCount;
+                if (EndLogics.HasValue)
+                {
+                    FilterItemDefinition.EndLogic = EndLogics.Value;
+                }
+                MakeSearchValueText();
+            }
+        }
+
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            var filterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
-            LoadFromFilterDefinition(filterItemDefinition, false, entity.AdvancedFindId);
+            var lookupFilterResult = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            LoadFromFilterDefinition(lookupFilterResult.FilterItemDefinition, false, entity.AdvancedFindId);
+            FieldDefinition = lookupFilterResult.FieldDefinition;
             if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
             {
-                FieldDefinition = fieldFilter.FieldDefinition;
+                //FieldDefinition = fieldFilter.FieldDefinition;
                 MakeParentField();
             }
+            Formula = entity.Formula;
+            FormulaDisplayValue = entity.FormulaDisplayValue;
+            if (FieldDefinition == null)
+            {
+                Field = $"{FormulaDisplayValue} Formula";
+            }
+
 
             //Table = FilterItemDefinition.TableDescription;
             //if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
@@ -303,10 +369,14 @@ namespace RingSoft.DbMaintenance
             filterReturn.Condition = Condition;
             filterReturn.SearchValue = SearchValue;
 
-            if (!Formula.IsNullOrEmpty())
+            if (FieldDefinition == null)
             {
                 filterReturn.PrimaryTableName = Table;
                 filterReturn.PrimaryFieldDefinition = ParentFieldDefinition;
+            }
+            else
+            {
+                
             }
 
             filterReturn.FieldDefinition = FieldDefinition;

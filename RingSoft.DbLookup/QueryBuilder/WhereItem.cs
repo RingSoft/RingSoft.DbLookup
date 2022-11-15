@@ -212,5 +212,10 @@ namespace RingSoft.DbLookup.QueryBuilder
             CaseSensitive = value;
             return this;
         }
+
+        public override string ToString()
+        {
+            return FieldName;
+        }
     }
 }

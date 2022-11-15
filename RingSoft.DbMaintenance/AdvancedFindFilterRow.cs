@@ -129,10 +129,6 @@ namespace RingSoft.DbMaintenance
                     var filterProps = value as AdvancedFindFilterCellProps;
                     Condition = filterProps.FilterReturn.Condition;
                     SearchValue = filterProps.FilterReturn.SearchValue;
-                    if (filterProps.FilterReturn.Formula.IsNullOrEmpty())
-                    {
-                        SetCellValueProcessField(filterProps);
-                    }
 
                     //if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
                     //{
@@ -170,7 +166,11 @@ namespace RingSoft.DbMaintenance
                     //        }
                     //    }
                     //}
-                    if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
+                    if (FieldDefinition != null)
+                    {
+                        SetCellValueProcessField(filterProps);
+                    }
+                    else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
                     {
                         formulaFilter.Condition = filterProps.FilterReturn.Condition;
                         Condition = filterProps.FilterReturn.Condition;
@@ -218,7 +218,7 @@ namespace RingSoft.DbMaintenance
 
         private void SetCellValueProcessField(AdvancedFindFilterCellProps filterProps)
         {
-            if (filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 FilterItemDefinition filterDefinition = null;
                 switch (Condition)
@@ -233,7 +233,7 @@ namespace RingSoft.DbMaintenance
                                 Condition, SearchValue);
                         break;
                     default:
-                        var lookupColumn = filterProps.FilterReturn.FieldDefinition.ParentJoinForeignKeyDefinition
+                        var lookupColumn = FieldDefinition.ParentJoinForeignKeyDefinition
                             .PrimaryTable.LookupDefinition.InitialSortColumnDefinition;
 
                         if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
@@ -267,8 +267,21 @@ namespace RingSoft.DbMaintenance
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
             var lookupFilterResult = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            if (lookupFilterResult.FieldDefinition != null &&
+                lookupFilterResult.FilterItemDefinition is FieldFilterDefinition)
+            {
+                FieldDefinition = lookupFilterResult.FieldDefinition;
+                AutoFillField = FieldDefinition;
+            }
             LoadFromFilterDefinition(lookupFilterResult.FilterItemDefinition, false, entity.AdvancedFindId);
-            FieldDefinition = lookupFilterResult.FieldDefinition;
+            if (lookupFilterResult.FieldDefinition != null &&
+                lookupFilterResult.FieldDefinition.ParentJoinForeignKeyDefinition != null &&
+                lookupFilterResult.FilterItemDefinition is FormulaFilterDefinition)
+            {
+                FieldDefinition = lookupFilterResult.FieldDefinition;
+                AutoFillField = FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+            }
+
             if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
             {
                 //FieldDefinition = fieldFilter.FieldDefinition;
@@ -276,9 +289,13 @@ namespace RingSoft.DbMaintenance
             }
             Formula = entity.Formula;
             FormulaDisplayValue = entity.FormulaDisplayValue;
-            if (FieldDefinition == null)
+            if (FieldDefinition == null && entity.SearchForAdvancedFindId == null)
             {
                 Field = $"{FormulaDisplayValue} Formula";
+            }
+            else if (entity.SearchForAdvancedFindId == null)
+            {
+                Field = FieldDefinition.Description;
             }
 
 
@@ -347,7 +364,7 @@ namespace RingSoft.DbMaintenance
 
             //    LoadFromFilterReturn(filterReturn);
             //}
-            ////MakeSearchValueText();
+            //MakeSearchValueText();
         }
 
         protected void MakeParentField()
@@ -557,7 +574,7 @@ namespace RingSoft.DbMaintenance
                 searchValue = SearchValue;
             }
             var searchValueText = MakeBeginSearchValueText();
-            if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+            if (FieldDefinition != null)
             {
                 TableDefinitionBase tableToSearch = null;
                 var makeSearchValueText = true;
@@ -567,7 +584,7 @@ namespace RingSoft.DbMaintenance
                 }
                 else
                 {
-                    tableToSearch = fieldFilter.FieldDefinition.TableDefinition;
+                    tableToSearch = FieldDefinition.TableDefinition;
                 }
                 switch (Condition)
                 {
@@ -586,13 +603,14 @@ namespace RingSoft.DbMaintenance
 
                         break;
                     default:
-                        searchValueText += MakeEndSearchValueText(fieldFilter, searchValue);
+                        searchValueText += MakeEndSearchValueText(searchValue);
+
                         makeSearchValueText = false;
                         break;
                 }
                 if (makeSearchValueText)
                 {
-                    searchValueText += MakeEndSearchValueText(fieldFilter, searchValue);
+                    searchValueText += MakeEndSearchValueText(searchValue);
                 }
             }
             else
@@ -602,10 +620,10 @@ namespace RingSoft.DbMaintenance
             SearchValueText = searchValueText;
         }
 
-        private string MakeEndSearchValueText(FieldFilterDefinition fieldFilter, string searchValue)
+        private string MakeEndSearchValueText(string searchValue)
         {
             var result = string.Empty;
-            if (fieldFilter.FieldDefinition is IntegerFieldDefinition integerField)
+            if (FieldDefinition is IntegerFieldDefinition integerField)
             {
                 if (integerField.EnumTranslation != null)
                 {
@@ -615,7 +633,7 @@ namespace RingSoft.DbMaintenance
                     return result;
                 }
             }
-            else if (fieldFilter.FieldDefinition is BoolFieldDefinition boolField)
+            else if (FieldDefinition is BoolFieldDefinition boolField)
             {
                 var boolItem = searchValue.ToBool();
                 if (boolItem)
@@ -636,7 +654,7 @@ namespace RingSoft.DbMaintenance
                 case Conditions.NotEqualsNull:
                     break;
                 default:
-                    result = fieldFilter.FieldDefinition.FormatValue(searchValue);
+                    result = FieldDefinition.FormatValue(searchValue);
                     break;
             }
             return result;

@@ -479,10 +479,11 @@ namespace RingSoft.DbLookup.Lookup
                     p.EntityName == entity.TableName);
 
             FieldDefinition fieldDefinition = null;
+            FieldDefinition filterField = null;
             var fieldDescription = string.Empty;
             if (!entity.FieldName.IsNullOrEmpty())
             {
-                fieldDefinition =
+                filterField = fieldDefinition =
                     tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
                 fieldDescription = fieldDefinition.Description;
             }
@@ -549,7 +550,11 @@ namespace RingSoft.DbLookup.Lookup
             filterItemDefinition.TableDescription = tableDefinition.Description;
             SetFilterProperties(entity, filterItemDefinition);
             result.FilterItemDefinition = filterItemDefinition;
-            result.FieldDefinition = fieldDefinition;
+            if (entity.Formula.IsNullOrEmpty())
+            {
+                result.FieldDefinition = filterField;
+            }
+            
             return result;
         }
 

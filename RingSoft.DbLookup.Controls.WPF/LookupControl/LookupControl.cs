@@ -942,7 +942,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (headerClicked != null)
             {
                 var columnIndex = LookupGridView.Columns.IndexOf(headerClicked.Column);
-                OnColumnClick(columnIndex, true);
+                if (columnIndex != -1)
+                    OnColumnClick(columnIndex, true);
             }
         }
 

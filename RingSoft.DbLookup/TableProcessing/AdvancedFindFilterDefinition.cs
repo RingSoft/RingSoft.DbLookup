@@ -173,11 +173,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
         private void ProcessFilterWheres(List<WhereItem> wheres, WhereItem firstWhereItem, WhereItem lastWhereItem)
         {
-            if (wheres.Count >= 2)
+            if (wheres.Count >= 1)
             {
                 if (wheres[0] != firstWhereItem)
                     wheres[0].LeftParenthesesCount++;
-                if (wheres[1] != lastWhereItem)
+                if (wheres[wheres.Count - 1] != lastWhereItem)
                     wheres[wheres.Count - 1].RightParenthesesCount++;
             }
 

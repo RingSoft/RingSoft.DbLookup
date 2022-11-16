@@ -932,6 +932,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public void RefreshLookup()
+        {
+            if (ValidateLookup())
+            {
+                LookupCommand = GetLookupCommand(LookupCommands.Refresh, null, AdvancedFindInput?.InputParameter);
+                ProcessRefresh(true);
+            }
+        }
+
         private bool ValidateLookup()
         {
             if (FiltersManager.ValidateParentheses())

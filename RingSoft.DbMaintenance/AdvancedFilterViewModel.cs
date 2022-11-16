@@ -43,6 +43,7 @@ namespace RingSoft.DbMaintenance
         public string FormulaDisplayValue { get; set; }
         public FieldDataTypes FormulaValueType { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
+        public string TableDescription { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
@@ -669,6 +670,7 @@ namespace RingSoft.DbMaintenance
 
             var filterType = Type;
             result.LookupDefinition = LookupDefinition;
+            result.TableDescription = Table;
             GetFilterReturnProperties(filterType, FieldDefinition, result);
 
             return result;
@@ -691,6 +693,10 @@ namespace RingSoft.DbMaintenance
                             var fieldDataType = fieldDefinition.FieldDataType;
                             GetSearchValue(fieldDataType, result);
                         }
+                    }
+                    if (ParentFieldDefinition != null)
+                    {
+                        result.PrimaryFieldDefinition = ParentFieldDefinition;
                     }
                     break;
                 case TreeViewType.Formula:

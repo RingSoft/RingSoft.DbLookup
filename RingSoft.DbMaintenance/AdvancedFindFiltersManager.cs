@@ -199,6 +199,7 @@ namespace RingSoft.DbMaintenance
             
             foreach (var filterRow in userRows)
             {
+                filterRow.Clearing = true;
                 RemoveRow(filterRow);
             }
 

@@ -102,7 +102,7 @@ namespace RingSoft.DbMaintenance
                     ResetLookup = false;
                     CreateFilterDefinition();
                     Manager.ViewModel.ResetLookup();
-                    return;
+                    break;
             }
 
             base.SetCellValue(value);

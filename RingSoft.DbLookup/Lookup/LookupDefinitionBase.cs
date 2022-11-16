@@ -506,10 +506,16 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
+            if (tableDefinition == null)
+            {
+                var message = $"Advanced Find Id {entity.AdvancedFindId} Filter Id {entity.FilterId} is corrupt.";
+                throw new Exception(message);
+            }
             var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition);
 
             var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
             var formula = entity.Formula;
+            var lookupField = fieldDefinition;
             if (fieldDefinition != null)
             {
                 if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -527,13 +533,17 @@ namespace RingSoft.DbLookup.Lookup
                             {
                                 formula = lookupFormulaColumn.OriginalFormula;
                             }
+                            else if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                            {
+                                lookupField = lookupFieldColumn.FieldDefinition;
+                            }
                             break;
                     }
                 }
             }
             if (formula.IsNullOrEmpty())
             {
-                filterItemDefinition = FilterDefinition.AddUserFilter(fieldDefinition, (Conditions)entity.Operand,
+                filterItemDefinition = FilterDefinition.AddUserFilter(lookupField, (Conditions)entity.Operand,
                     entity.SearchForValue);
             }
             else

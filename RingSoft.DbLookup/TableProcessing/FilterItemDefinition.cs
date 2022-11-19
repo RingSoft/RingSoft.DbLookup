@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {

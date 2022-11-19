@@ -460,19 +460,21 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        public LookupFilterReturn LoadFromAdvFindFilter(AdvancedFindFilter entity)
+        public LookupFilterReturn LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true)
         {
             var result = new LookupFilterReturn();
             FilterItemDefinition filterItemDefinition = null;
-            if (entity.SearchForAdvancedFindId > 0)
+            if (entity.SearchForAdvancedFindId != null)
             {
-                filterItemDefinition= FilterDefinition.AddUserFilter(entity.AdvancedFindId, this);
-                SetFilterProperties(entity, filterItemDefinition);
-                filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
-                    .GetAdvancedFind(entity.AdvancedFindId).Table;
-                result.FilterItemDefinition = filterItemDefinition;
+                if (addFilterToLookup)
+                {
+                    filterItemDefinition = FilterDefinition.AddUserFilter(entity.SearchForAdvancedFindId.Value, this);
+                    SetFilterProperties(entity, filterItemDefinition);
+                    filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
+                        .GetAdvancedFind(entity.AdvancedFindId).Table;
+                    result.FilterItemDefinition = filterItemDefinition;
+                }
                 return result;
-
             }
             var tableDefinition =
                 TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
@@ -541,17 +543,36 @@ namespace RingSoft.DbLookup.Lookup
                     }
                 }
             }
-            if (formula.IsNullOrEmpty())
+
+            if (addFilterToLookup)
             {
-                filterItemDefinition = FilterDefinition.AddUserFilter(lookupField, (Conditions)entity.Operand,
-                    entity.SearchForValue);
+                if (formula.IsNullOrEmpty())
+                {
+                    filterItemDefinition = FilterDefinition.AddUserFilter(lookupField, (Conditions)entity.Operand,
+                        entity.SearchForValue);
+                }
+                else
+                {
+                    var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
+                    filterItemDefinition = FilterDefinition.AddUserFilter(formula, (Conditions)entity.Operand,
+                        entity.SearchForValue, alias, (FieldDataTypes)entity.FormulaDataType);
+                }
             }
             else
             {
-                var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
-                filterItemDefinition = FilterDefinition.AddUserFilter(formula, (Conditions)entity.Operand,
-                    entity.SearchForValue, alias, (FieldDataTypes)entity.FormulaDataType);
+                if (formula.IsNullOrEmpty())
+                {
+                    filterItemDefinition = FilterDefinition.CreateFieldFilter(lookupField, (Conditions)entity.Operand,
+                        entity.SearchForValue);
+                }
+                else
+                {
+                    var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
+                    filterItemDefinition = FilterDefinition.CreateFormulaFilter(formula, (FieldDataTypes)entity.FormulaDataType, (Conditions)entity.Operand,
+                        entity.SearchForValue, alias);
+                }
             }
+
             if (includeResult.LookupJoin != null)
             {
                 filterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;

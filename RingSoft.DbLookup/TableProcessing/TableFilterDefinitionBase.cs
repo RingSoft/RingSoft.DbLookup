@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
@@ -290,41 +291,56 @@ namespace RingSoft.DbLookup.TableProcessing
         private void ProcessFilters(SelectQuery query, IReadOnlyList<FilterItemDefinition> filters)
         {
             WhereItem firstWhere = null, lastWhere = null;
-            
-            foreach (var filterDefinition in filters.ToList())
-            {
-                ProcessFilter(query, filterDefinition, ref lastWhere, ref firstWhere);
-                if (lastWhere != null)
-                {
-                    lastWhere.SetEndLogic(filterDefinition.EndLogic)
-                        .SetLeftParenthesesCount(filterDefinition.LeftParenthesesCount)
-                        .SetRightParenthesesCount(filterDefinition.RightParenthesesCount);
 
-                    if (firstWhere == null)
-                        firstWhere = lastWhere;
-                }
+            var newfilters = filters.ToList();
+            var wheres = new List<WhereItem>();
+            foreach (var filterDefinition in newfilters)
+            {
+                var newWheres = ProcessFilter(query, filterDefinition, ref lastWhere, ref firstWhere);
+                //ProcessFilterWheres(newWheres, ref firstWhere, ref lastWhere, filterDefinition);
+
+                wheres.AddRange(newWheres);
+                
+                //if (whereItem != null)
+                //{
+                //    wheres.Add(whereItem);
+                //}
+                //if (firstWhere == null)
+                //    firstWhere = lastWhere;
+
+                //if (lastWhere != null)
+                //{
+                //    lastWhere.SetEndLogic(filterDefinition.EndLogic)
+                //        .SetLeftParenthesesCount(filterDefinition.LeftParenthesesCount)
+                //        .SetRightParenthesesCount(filterDefinition.RightParenthesesCount);
+
+                //}
             }
 
-            if (firstWhere != null)
-            {
-                firstWhere.SetLeftParenthesesCount(firstWhere.LeftParenthesesCount + 1);
-                if (lastWhere != null)
-                {
-                    lastWhere.SetRightParenthesesCount(lastWhere.RightParenthesesCount + 1);
-                    lastWhere.SetEndLogic(EndLogics.And);
-                }
-            }
+            //if (wheres.Count >= 1) wheres[0].SetLeftParenthesesCount(wheres[0].LeftParenthesesCount + 1);
+            //ProcessFilterWheres(wheres, ref firstWhere, ref lastWhere);
+            //if (firstWhere != null)
+            //{
+            //    firstWhere.SetLeftParenthesesCount(firstWhere.LeftParenthesesCount + 1);
+            //    if (lastWhere != null)
+            //    {
+            //        lastWhere.SetRightParenthesesCount(lastWhere.RightParenthesesCount + 1);
+            //        lastWhere.SetEndLogic(EndLogics.And);
+            //    }
+            //}
         }
 
-        public void ProcessFilter(SelectQuery query, FilterItemDefinition filterDefinition, ref WhereItem lastWhere,
+        public List<WhereItem> ProcessFilter(SelectQuery query, FilterItemDefinition filterDefinition, ref WhereItem lastWhere,
             ref WhereItem firstWhere,
             AdvancedFindTree advancedFindTree = null)
         {
+            var result = new List<WhereItem>();
             switch (filterDefinition.Type)
             {
                 case FilterItemTypes.Field:
                     var fieldFilterDefinition = (FieldFilterDefinition) filterDefinition;
                     lastWhere = ProcessFieldFilter(query, fieldFilterDefinition);
+                    result.Add(lastWhere);
                     break;
                 case FilterItemTypes.Formula:
                     var formulaFilter = (FormulaFilterDefinition) filterDefinition;
@@ -353,17 +369,28 @@ namespace RingSoft.DbLookup.TableProcessing
                     {
                         lastWhere = query.AddWhereItemFormula(formula);
                     }
-
+                    result.Add(lastWhere);
                     break;
                 case FilterItemTypes.AdvancedFind:
                     var advancedFindFilterDefinition = (AdvancedFindFilterDefinition) filterDefinition;
-                    advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhere, ref lastWhere, false,
-                        advancedFindTree);
+                    var wheres = advancedFindFilterDefinition.ProcessAdvancedFind(query, ref firstWhere, ref lastWhere, false, advancedFindTree);
+                    result.AddRange(wheres);
+                    if (result.Count > 0)
+                    {
+                        result[0].SetLeftParenthesesCount(wheres[0].LeftParenthesesCount + 1);
+                        result[result.Count - 1]
+                            .SetRightParenthesesCount(result[result.Count - 1].RightParenthesesCount + 1);
+                    }
 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+                
             }
+
+            ProcessFilterWheres(result, ref firstWhere, ref lastWhere, filterDefinition);
+ 
+            return result;
         }
 
         private WhereItem ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
@@ -427,15 +454,35 @@ namespace RingSoft.DbLookup.TableProcessing
             return query.BaseTable;
         }
 
-        internal bool HasFormulaFilters()
+        public void ProcessFilterWheres(List<WhereItem> wheres, ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, FilterItemDefinition filterDefinition)
         {
-            if (_fixedFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula || a.JoinDefinition != null))
-                return true;
+            if (wheres.Count > 0)
+            {
+                wheres[0].SetLeftParenthesesCount(
+                    wheres[0].LeftParenthesesCount + filterDefinition.LeftParenthesesCount);
 
-            if (_userFilterDefinitions.Any(a => a.Type == FilterItemTypes.Formula || a.JoinDefinition != null))
-                return true;
+                wheres[wheres.Count - 1].SetRightParenthesesCount(
+                    wheres[wheres.Count - 1].RightParenthesesCount + filterDefinition.RightParenthesesCount);
 
-            return false;
+                wheres[wheres.Count - 1].EndLogic = filterDefinition.EndLogic;
+            }
+
         }
+
+        public void ProcessFilterWheres(List<WhereItem> wheres, ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, AdvancedFindFilter advancedFindFilter)
+        {
+            if (wheres.Count > 0)
+            {
+                wheres[0].SetLeftParenthesesCount(
+                    wheres[0].LeftParenthesesCount + advancedFindFilter.LeftParentheses);
+
+                wheres[wheres.Count - 1].SetRightParenthesesCount(
+                    wheres[wheres.Count - 1].RightParenthesesCount + advancedFindFilter.RightParentheses);
+
+                wheres[wheres.Count - 1].EndLogic = (EndLogics)advancedFindFilter.EndLogic;
+            }
+
+        }
+
     }
 }

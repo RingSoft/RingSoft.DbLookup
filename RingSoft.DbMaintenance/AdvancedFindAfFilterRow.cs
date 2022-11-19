@@ -114,6 +114,7 @@ namespace RingSoft.DbMaintenance
             {
                 var advancedFindId = AutoFillValue
                     .PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
+                
                 if (Filter == null)
                 {
                     FilterItemDefinition = Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
@@ -152,7 +153,7 @@ namespace RingSoft.DbMaintenance
             if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
             {
                 Filter = advancedFindFilter;
-                Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
+                //Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
             }
             
             //SetupTableField(ParentFieldDefinition);

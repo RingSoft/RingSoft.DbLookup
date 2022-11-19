@@ -484,11 +484,12 @@ namespace RingSoft.DbMaintenance
             {
                 if (fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
-                    AutoFillField = fieldFilterDefinition.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
+                    FieldDefinition = AutoFillField = fieldFilterDefinition.FieldDefinition
+                        .ParentJoinForeignKeyDefinition.FieldJoins[0]
                         .PrimaryField;
                 }
 
-                Table = fieldFilterDefinition.TableDescription;
+                Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
                 Field = fieldFilterDefinition.FieldDefinition.Description;
                 Condition = fieldFilterDefinition.Condition;
                 SearchValue = fieldFilterDefinition.Value;

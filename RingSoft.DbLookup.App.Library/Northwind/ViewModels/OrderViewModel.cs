@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 
@@ -483,7 +484,29 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             DetailsGridManager = new OrderDetailsGridManager(this);
 
             RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
-            
+
+            //var querySet = new QuerySet();
+            //var lookupDefinition =
+            //    new LookupDefinition<OrderDetailLookup, Order_Detail>(
+            //        RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails, 2);
+
+            ////var lookupDefinition =
+            ////    new LookupDefinitionBase(2);
+
+            //lookupDefinition.GetCountQuery(querySet);
+
+            //var countResult = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.DataProcessor.GetData(querySet);
+            //var count = lookupDefinition.GetCount(countResult);
+
+            //var advancedFind = new AdvancedFind.AdvancedFind { Id = 2 };
+            //var primaryKey =
+            //    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetPrimaryKeyValueFromEntity(advancedFind);
+
+            //var advFindLookup =
+            //    new LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind>(SystemGlobals
+            //        .AdvancedFindLookupContext.AdvancedFinds);
+            //advFindLookup.ShowAddOnTheFlyWindow(primaryKey);
+
             base.Initialize();
         }
 

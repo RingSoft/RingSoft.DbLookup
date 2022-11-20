@@ -240,10 +240,7 @@ namespace RingSoft.DbLookup.Lookup
             if (resetRecordCount)
                 RecordCount = 0;
 
-            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
-            query.BaseTable.Formula = LookupDefinition.FromFormula;
-
-            SetupBaseQuery(query, false);
+            var query = GetQuery();
 
             query.DebugMessage = "LookupData.GetInitData";
             var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
@@ -261,6 +258,15 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return getDataResult;
+        }
+
+        public SelectQuery GetQuery()
+        {
+            var query = new SelectQuery(LookupDefinition.TableDefinition.TableName).SetMaxRecords(LookupControl.PageSize);
+            query.BaseTable.Formula = LookupDefinition.FromFormula;
+
+            SetupBaseQuery(query, false);
+            return query;
         }
 
         /// <summary>

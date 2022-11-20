@@ -15,54 +15,44 @@ namespace RingSoft.DbLookup
         }
     }
 
-    internal class AddOnTheFlyProcessor<TLookupEntity, TEntity> : ILookupControl
-        where TLookupEntity : new() where TEntity : new()
+    internal class AddOnTheFlyProcessor : ILookupControl
     {
         public int PageSize => 1;
         public LookupSearchTypes SearchType => LookupSearchTypes.Equals;
-        public string SearchText => _newText;
-
+        public string SearchText { get; set; }
         public object AddViewParameter { get; set; }
 
-        private LookupDefinition<TLookupEntity, TEntity> _lookupDefinition;
-        private string _newText;
-        private object _ownerWindow;
-        private PrimaryKeyValue _newPrimaryKeyValue;
-        private PrimaryKeyValue _selectedPrimaryKeyValue;
+        public object OwnerWindow { get; set; }
 
-        public AddOnTheFlyProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,
-            object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null, PrimaryKeyValue selectedPrimaryKeyValue = null)
+        public PrimaryKeyValue NewPrimaryKeyValue { get; set; }
+
+        public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }
+
+        public LookupDefinitionBase LookupDefinition { get; private set; }
+
+        public AddOnTheFlyProcessor(LookupDefinitionBase lookupDefinition)
         {
-            _lookupDefinition = lookupDefinition;
-            _newText = newText;
-            _ownerWindow = ownerWindow;
-            _newPrimaryKeyValue = newRecordPrimaryKeyValue;
-            _selectedPrimaryKeyValue = selectedPrimaryKeyValue;
+            LookupDefinition = lookupDefinition;
         }
 
-        public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
+        public LookupAddViewArgs SetupProcessor(LookupDataBase lookupData)
         {
-            var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
-            lookupData.LookupView += (sender, viewArgs) =>
-            {
-                viewArgs.Handled = true;
-            };
             LookupAddViewArgs args = null;
-            if (_selectedPrimaryKeyValue == null)
+            if (SelectedPrimaryKeyValue == null)
             {
                 args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
-                    _newText, _ownerWindow)
+                    SearchText, OwnerWindow)
                 {
-                    NewRecordPrimaryKeyValue = _newPrimaryKeyValue,
+                    NewRecordPrimaryKeyValue = NewPrimaryKeyValue,
                     InputParameter = AddViewParameter
                 };
             }
             else
             {
                 args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
-                    string.Empty, _ownerWindow)
+                    string.Empty, OwnerWindow)
                 {
-                    SelectedPrimaryKeyValue = _selectedPrimaryKeyValue,
+                    SelectedPrimaryKeyValue = SelectedPrimaryKeyValue,
                     InputParameter = AddViewParameter
                 };
 
@@ -73,6 +63,44 @@ namespace RingSoft.DbLookup
                 if (lookupData.SelectedPrimaryKeyValue == null || !lookupData.SelectedPrimaryKeyValue.IsValid)
                     lookupData.RefreshData();
             };
+            return args;
+        }
+
+        public void ShowAddOnTheFlyWindow()
+        {
+            var lookupData = new LookupDataBase(LookupDefinition, this);
+            lookupData.LookupView += (sender, viewArgs) =>
+            {
+                viewArgs.Handled = true;
+            };
+            var args = SetupProcessor(lookupData);
+            LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+        }
+    }
+
+    internal class AddOnTheFlyProcessor<TLookupEntity, TEntity> : AddOnTheFlyProcessor
+        where TLookupEntity : new() where TEntity : new()
+    {
+        private LookupDefinition<TLookupEntity, TEntity> _lookupDefinition;
+        public AddOnTheFlyProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,
+            object ownerWindow, PrimaryKeyValue newRecordPrimaryKeyValue = null,
+            PrimaryKeyValue selectedPrimaryKeyValue = null) : base(lookupDefinition)
+        {
+            SearchText = newText;
+            OwnerWindow = ownerWindow;
+            NewPrimaryKeyValue = newRecordPrimaryKeyValue;
+            SelectedPrimaryKeyValue = selectedPrimaryKeyValue;
+            _lookupDefinition = lookupDefinition;
+        }
+
+        public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
+        {
+            var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
+            lookupData.LookupView += (sender, viewArgs) =>
+            {
+                viewArgs.Handled = true;
+            };
+            var args = SetupProcessor(lookupData);
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 
             var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);

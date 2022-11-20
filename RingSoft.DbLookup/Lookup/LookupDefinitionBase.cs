@@ -9,6 +9,7 @@ using System.Reflection;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -18,6 +19,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public FieldDefinition FieldDefinition { get; set; }
     }
+
     /// <summary>
     /// Contains all the data necessary for a lookup.
     /// </summary>
@@ -38,7 +40,7 @@ namespace RingSoft.DbLookup.Lookup
         /// The visible columns.
         /// </value>
         public IReadOnlyList<LookupColumnDefinitionBase> VisibleColumns => _visibleColumns;
-        
+
         /// <summary>
         /// Gets the hidden columns.
         /// </summary>
@@ -69,7 +71,8 @@ namespace RingSoft.DbLookup.Lookup
             set
             {
                 if (value.LookupDefinition != this)
-                    throw new ArgumentException($"Sort column {value.PropertyName}'s lookup definition does not match this.");
+                    throw new ArgumentException(
+                        $"Sort column {value.PropertyName}'s lookup definition does not match this.");
 
                 _initialSortLookupColumnDefinition = value;
             }
@@ -123,7 +126,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public void ClearVisibleColumns()
         {
-            _visibleColumns.Clear();            
+            _visibleColumns.Clear();
         }
 
 
@@ -136,6 +139,34 @@ namespace RingSoft.DbLookup.Lookup
             tableDefinition.Context.Initialize();
             TableDefinition = tableDefinition;
             FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
+        }
+
+        public LookupDefinitionBase(int advancedFindId)
+        {
+            var entity = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
+            TableDefinition =
+                SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.Table);
+            if (TableDefinition == null)
+            {
+                var message = "Invalid table";
+                throw new Exception(message);
+            }
+
+            FilterDefinition = new TableFilterDefinitionBase(TableDefinition);
+            AdvancedFindTree = new AdvancedFindTree(this);
+            AdvancedFindTree.LoadTree(TableDefinition.TableName);
+
+            FromFormula = entity.FromFormula;
+            foreach (var advancedFindColumn in entity.Columns)
+            {
+                LoadFromAdvFindColumnEntity(advancedFindColumn);
+            }
+
+            foreach (var advancedFindFilter in entity.Filters)
+            {
+                LoadFromAdvFindFilter(advancedFindFilter);
+            }
         }
 
         protected virtual LookupDefinitionBase BaseClone()
@@ -595,5 +626,44 @@ namespace RingSoft.DbLookup.Lookup
             filterItemDefinition.RightParenthesesCount = entity.RightParentheses;
             filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
         }
+
+        public void GetCountQuery(QuerySet querySet)
+        {
+            var lookupInterface = new LookupUserInterface
+            {
+                PageSize = 0
+            };
+            var lookupData = new LookupDataBase(this, lookupInterface);
+            var query = lookupData.GetQuery();
+            var countQuery = new CountQuery(query, TableDefinition.EntityName);
+
+            querySet.AddQuery(countQuery, TableDefinition.EntityName);
+        }
+
+        public int GetCount(DataProcessResult countResult)
+        {
+            if (countResult.ResultCode == GetDataResultCodes.Success)
+            {
+                var count = countResult.DataSet.Tables[TableDefinition.EntityName].Rows[0]
+                    .GetRowValue(TableDefinition.EntityName)
+                    .ToInt();
+                return count;
+            }
+            return 0;
+        }
+
+        public void ShowAddOnTheFlyWindow(PrimaryKeyValue selectedPrimaryKeyValue = null, object addViewParameter = null, object ownerWindow = null)
+        {
+            var addNewRecordProcessor =
+                new AddOnTheFlyProcessor(this)
+                {
+                    AddViewParameter = addViewParameter,
+                    OwnerWindow = ownerWindow,
+                    SelectedPrimaryKeyValue = selectedPrimaryKeyValue
+                };
+
+            addNewRecordProcessor.ShowAddOnTheFlyWindow();
+        }
+
     }
 }

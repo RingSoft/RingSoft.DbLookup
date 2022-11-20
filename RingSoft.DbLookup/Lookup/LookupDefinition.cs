@@ -44,6 +44,15 @@ namespace RingSoft.DbLookup.Lookup
             base.FilterDefinition = FilterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
         }
 
+        public LookupDefinition(TableDefinition<TEntity> tableDefinition, int advancedFindId) : base(advancedFindId)
+        {
+            if (base.TableDefinition.EntityName != tableDefinition.EntityName)
+            {
+                var message = "Invalid Table";
+                throw new Exception(message);
+            }
+        }
+
         protected override LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinition<TLookupEntity, TEntity>(TableDefinition);

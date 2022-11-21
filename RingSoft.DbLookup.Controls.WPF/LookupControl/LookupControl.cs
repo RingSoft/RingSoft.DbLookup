@@ -408,7 +408,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
-            if (Command != null && Command.ClearColumns)
+            if (Command != null && (Command.ClearColumns || LookupDefinition == null))
                 return;
 
             //if (LookupDefinition.InitialSortColumnDefinition == null)
@@ -1559,14 +1559,19 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public int GetRecordCountWait()
         {
-            var result = LookupData.GetRecordCountWait();
+            if (LookupData != null)
+            {
+                var result = LookupData.GetRecordCountWait();
 
+                ShowRecordCountLabel();
+                var recordsText = result == 1 ? "" : "s";
+                RecordCountControl.Text =
+                    $@"{result.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
+                RecordCountWait = result;
+                return result;
+            }
             ShowRecordCountLabel();
-            var recordsText = result == 1 ? "" : "s";
-            RecordCountControl.Text =
-                $@"{result.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
-            RecordCountWait = result;
-            return result;
+            return 0;
         }
 
         public async void GetRecordCountButtonClick()
@@ -1784,6 +1789,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
         }
+
         /// <summary>
         /// Clears all the data in the list view.
         /// </summary>
@@ -1792,6 +1798,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _refreshPendingData = null;
             if (LookupData != null)
             {
+                ShowRecordCountWait = false;
                 LookupData.ClearLookupData();
             }
 

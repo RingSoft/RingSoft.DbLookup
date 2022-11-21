@@ -17,6 +17,7 @@ using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
+using Google.Protobuf.WellKnownTypes;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -493,10 +494,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ////var lookupDefinition =
             ////    new LookupDefinitionBase(2);
 
-            //lookupDefinition.GetCountQuery(querySet);
+            //lookupDefinition.GetCountQuery(querySet, "Test");
 
             //var countResult = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.DataProcessor.GetData(querySet);
-            //var count = lookupDefinition.GetCount(countResult);
+            //var count = lookupDefinition.GetCount(countResult, "Test");
 
             //var advancedFind = new AdvancedFind.AdvancedFind { Id = 2 };
             //var primaryKey =
@@ -506,6 +507,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             //    new LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind>(SystemGlobals
             //        .AdvancedFindLookupContext.AdvancedFinds);
             //advFindLookup.ShowAddOnTheFlyWindow(primaryKey);
+
+            double init = 1326;
+            var test = init / 5;
+            var ceiling = Math.Ceiling(test);
+            var max = ceiling * 5;
 
             base.Initialize();
         }

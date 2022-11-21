@@ -1551,7 +1551,7 @@ namespace RingSoft.DbLookup.Lookup
         public void ClearLookupData()
         {
             LookupResultsDataTable = new DataTable();
-
+            
             OutputData(0, LookupScrollPositions.Disabled);
         }
     }

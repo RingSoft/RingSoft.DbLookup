@@ -627,7 +627,7 @@ namespace RingSoft.DbLookup.Lookup
             filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
         }
 
-        public void GetCountQuery(QuerySet querySet)
+        public void GetCountQuery(QuerySet querySet, string name)
         {
             var lookupInterface = new LookupUserInterface
             {
@@ -635,17 +635,16 @@ namespace RingSoft.DbLookup.Lookup
             };
             var lookupData = new LookupDataBase(this, lookupInterface);
             var query = lookupData.GetQuery();
-            var countQuery = new CountQuery(query, TableDefinition.EntityName);
-
-            querySet.AddQuery(countQuery, TableDefinition.EntityName);
+            var countQuery = new CountQuery(query, name);
+            querySet.AddQuery(countQuery, name);
         }
 
-        public int GetCount(DataProcessResult countResult)
+        public int GetCount(DataProcessResult countResult, string name)
         {
             if (countResult.ResultCode == GetDataResultCodes.Success)
             {
-                var count = countResult.DataSet.Tables[TableDefinition.EntityName].Rows[0]
-                    .GetRowValue(TableDefinition.EntityName)
+                var count = countResult.DataSet.Tables[name].Rows[0]
+                    .GetRowValue(name)
                     .ToInt();
                 return count;
             }

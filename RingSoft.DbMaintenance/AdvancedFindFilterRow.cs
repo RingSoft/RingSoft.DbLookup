@@ -922,9 +922,9 @@ namespace RingSoft.DbMaintenance
         {
             if (FilterItemDefinition != null)
                 FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
-            if (!Clearing)
+            if (!Manager.ViewModel.Clearing)
             {
-                Manager.ViewModel.ResetLookup();
+                Manager.ViewModel.RefreshLookup();
             }
 
             base.Dispose();

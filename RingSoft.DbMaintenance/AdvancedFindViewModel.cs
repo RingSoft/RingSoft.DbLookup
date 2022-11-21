@@ -317,11 +317,13 @@ namespace RingSoft.DbMaintenance
         public int? YellowAlert { get; set; }
         public int? RedAlert { get; set; }
         public bool Disabled { get; set; }
+        public bool Clearing { get; private set; }
 
         private RefreshRate _refreshRate;
         private int _refreshValue;
         private System.Timers.Timer _timer;
         private int _interval = 0;
+        private bool _loaded;
 
         protected override void Initialize()
         {
@@ -416,6 +418,7 @@ namespace RingSoft.DbMaintenance
 
         protected override void LoadFromEntity(AdvancedFind entity)
         {
+            Clearing = true;
             AdvancedFindId = entity.Id;
 
             var tableDefinition =
@@ -435,10 +438,10 @@ namespace RingSoft.DbMaintenance
             }
             ClearRefresh();
             LoadRefreshSettings(entity);
-            ProcessRefresh(true);
-
+            
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
+            ProcessRefresh(true);
 
             ResetLookup();
             View.LockTable(true);
@@ -470,6 +473,7 @@ namespace RingSoft.DbMaintenance
                 Disabled = entity.Disabled.Value;
             }
 
+            Clearing = false;
         }
 
         private void LoadTree(string tableName)
@@ -608,6 +612,7 @@ namespace RingSoft.DbMaintenance
 
         protected override void ClearData()
         {
+            Clearing = true;
             AdvancedFindId = 0;
             if (AdvancedFindInput == null || AdvancedFindInput.LockTable == null)
             {
@@ -640,6 +645,7 @@ namespace RingSoft.DbMaintenance
 
             ClearRefresh();
             LockTable();
+            Clearing = false;
 
             //LoadTree();
         }
@@ -943,6 +949,9 @@ namespace RingSoft.DbMaintenance
 
         private bool ValidateLookup()
         {
+            if (Clearing)
+                return true;
+
             if (FiltersManager.ValidateParentheses())
             {
                 if (!FiltersManager.ValidateAdvancedFind())
@@ -1254,6 +1263,10 @@ namespace RingSoft.DbMaintenance
 
         private void TimerRefresh()
         {
+            if (LookupDefinition == null)
+            {
+                return;
+            }
             if (_timer.Enabled == false)
             {
                 return;

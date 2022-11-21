@@ -60,8 +60,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private Control _buttonsControl;
         private LookupAddViewArgs _addViewArgs;
-        private TaskbarIcon _taskbarIcon;
-
+        
         public IDbMaintenanceProcessor Processor { get; set; }
 
         private bool _notifyFromFormulaExists;
@@ -144,107 +143,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void SetAlertLevel(AlertLevels level, string message = "")
         {
-            var advancedFindWindows = Dispatcher.Invoke(() => Application.Current.Windows.OfType<AdvancedFindWindow>().ToList());
-            var image = LookupControlsGlobals.LookupControlContentTemplateFactory
-                .GetImageForAlertLevel(level);
-            var title = string.Empty;
-            var baloonIcon = BalloonIcon.Info;
-            switch (level)
-            {
-                case AlertLevels.Green:
-                    break;
-                case AlertLevels.Yellow:
-                    title = "Warning!";
-                    break;
-                case AlertLevels.Red:
-                    title = "Red Alert!";
-                    baloonIcon = BalloonIcon.Error;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
-            }
-
-            if (image == null)
-            {
-                var errorMessage = "No icon found for alert level: ";
-                switch (level)
-                {
-                    case AlertLevels.Green:
-                        errorMessage += "Green";
-                        break;
-                    case AlertLevels.Yellow:
-                        errorMessage += "Yellow";
-                        break;
-                    case AlertLevels.Red:
-                        errorMessage += "Red";
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(level), level, null);
-                }
-
-                throw new ApplicationException(errorMessage);
-
-            }
-            Dispatcher.Invoke(() => Icon = image.Source);
-            //if (advancedFindWindows.Count >= 2)
-            //{
-            //    if (SystemGlobals.WindowAlertLevel < level)
-            //    {
-            //        SystemGlobals.WindowAlertLevel = level;
-            //        Dispatcher.Invoke(() =>
-            //        {
-            //            ShowLevelIcon(level, message, image, title, baloonIcon);
-            //            return;
-            //        });
-            //    }
-
-            //}
-            //else
-            //{
-                SystemGlobals.WindowAlertLevel = level;
-                Dispatcher.Invoke(() => { ShowLevelIcon(level, message, image, title, baloonIcon); });
-
-            //}
+            LookupControlsGlobals.LookupWindowFactory.SetAlertLevel(level, ViewModel.Disabled, this, message);
         }
 
-        private void ShowLevelIcon(AlertLevels level, string message, Image image, string title, BalloonIcon baloonIcon)
-        {
-            if (level == AlertLevels.Green)
-            {
-                _taskbarIcon.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                if (image.Source != null)
-                {
-                    _taskbarIcon.ToolTipText = message;
-                    _taskbarIcon.IconSource = image.Source;
-                    _taskbarIcon.Visibility = Visibility.Visible;
-
-                    if (!ViewModel.Disabled)
-                    {
-                        _taskbarIcon.ShowBalloonTip(title, message, baloonIcon);
-
-                        _taskbarIcon.HideBalloonTip();
-                    }
-
-                    return;
-
-                    //return Application.Current.MainWindow.Icon = image.Source;
-                }
-
-                return;
-            }
-        }
 
         public int GetRecordCount(bool showRecordCount)
         {
             LookupControl.ShowRecordCountWait = showRecordCount;
             var count = LookupControl.RecordCountWait;
-            //Dispatcher.Invoke(() =>
-            //{
-            //    count = LookupControl.GetRecordCountWait();
-            //});
+            if (showRecordCount)
+            {
+                Dispatcher.Invoke(() => { count = LookupControl.GetRecordCountWait(); });
+            }
 
             return count;
         }
@@ -262,14 +172,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
         {
             _addViewArgs = addViewArgs;
-            _taskbarIcon = new TaskbarIcon();
+            
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
-            _taskbarIcon = new TaskbarIcon();
+            
         }
 
         public void Initialize()

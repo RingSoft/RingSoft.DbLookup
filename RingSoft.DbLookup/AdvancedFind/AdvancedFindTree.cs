@@ -271,6 +271,10 @@ namespace RingSoft.DbLookup.AdvancedFind
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
             var items = TreeRoot;
+            if (!items.Any())
+            {
+                return null;
+            }
             var foundTreeViewItem = FindFieldInTree(items, fieldDefinition);
             var alreadySearchedRoot = false;
             if (!formula.IsNullOrEmpty())

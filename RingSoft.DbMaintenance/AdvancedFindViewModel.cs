@@ -36,11 +36,11 @@ namespace RingSoft.DbMaintenance
 
         bool ShowRefreshSettings(AdvancedFind advancedFind);
 
-        void SetAlertLevel(AlertLevels level, string message = "");
-
-        int GetRecordCount(bool showRecordCount);
+        void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount);
 
         void LockTable(bool lockValue);
+
+        int GetRecordCount(bool showRecordCount);
     }
 
     //public class TreeViewFormulaData
@@ -311,19 +311,11 @@ namespace RingSoft.DbMaintenance
 
         public AdvancedFindTree AdvancedFindTree { get; set; }
 
-        public byte? RefreshRate { get; set; }
-        public int? RefreshValue { get; set; }
-        public byte? RefreshCondition { get; set; }
-        public int? YellowAlert { get; set; }
-        public int? RedAlert { get; set; }
-        public bool Disabled { get; set; }
+        public LookupRefresher LookupRefresher { get; private set; }
+
         public bool Clearing { get; private set; }
 
-        private RefreshRate _refreshRate;
-        private int _refreshValue;
-        private System.Timers.Timer _timer;
-        private int _interval = 0;
-        private bool _loaded;
+        private int _recordCount;
 
         protected override void Initialize()
         {
@@ -334,9 +326,7 @@ namespace RingSoft.DbMaintenance
                     AdvancedFindInput = advancedFindInput;
                 }
             }
-            _timer = new System.Timers.Timer(1000);
-            _timer.Elapsed += _timer_Elapsed;
-
+            
             TableComboBoxSetup = new TextComboBoxControlSetup();
             var index = 0;
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context
@@ -351,8 +341,11 @@ namespace RingSoft.DbMaintenance
                 index++;
             }
 
+            LookupRefresher = new LookupRefresher();
             AdvancedFindTree = new AdvancedFindTree(LookupDefinition);
             AdvancedFindTree.SelectedTreeItemChanged += (sender, item) => OnTreeViewItemSelected(item);
+            LookupRefresher.SetAlertLevelEvent += LookupRefresher_SetAlertLevelEvent;
+            LookupRefresher.RefreshRecordCountEvent += LookupRefresher_RefreshRecordCountEvent;
 
             ColumnsManager = new AdvancedFindColumnsManager(this);
             FiltersManager = new AdvancedFindFiltersManager(this);
@@ -367,8 +360,24 @@ namespace RingSoft.DbMaintenance
                 if (AdvancedFindInput.LookupDefinition != null)
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
             }
-            View.SetAlertLevel(AlertLevels.Green);
+            View.SetAlertLevel(AlertLevels.Green, "", true, 0);
             base.Initialize();
+        }
+
+        private void LookupRefresher_RefreshRecordCountEvent(object sender, EventArgs e)
+        {
+            ProcessRefresh();
+        }
+
+        private void LookupRefresher_SetAlertLevelEvent(object sender, RefreshAlertLevelArgs e)
+        {
+
+            var formattedCount = GblMethods.FormatValue(FieldDataTypes.Integer,
+                _recordCount.ToString(), GblMethods.GetNumFormat(0, false));
+            var message =
+                $"There are {formattedCount} records in the {KeyAutoFillValue?.Text} Advanced Find.";
+            View.SetAlertLevel(e.AlertLevel, message, LookupRefresher.RefreshRate != RefreshRate.None, _recordCount);
+
         }
 
         public void CreateCommands()
@@ -441,39 +450,28 @@ namespace RingSoft.DbMaintenance
             
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
-            ProcessRefresh(true);
+            ProcessRefresh();
 
             ResetLookup();
             View.LockTable(true);
 
             ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                 ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
+
+            Clearing = false;
         }
 
         private void LoadRefreshSettings(AdvancedFind entity)
         {
-            RefreshRate = entity.RefreshRate;
-            RefreshValue = entity.RefreshValue;
-            RefreshCondition = entity.RefreshCondition;
-            YellowAlert = entity.YellowAlert;
-            RedAlert = entity.RedAlert;
+            if (entity.RefreshRate != null) LookupRefresher.RefreshRate = (RefreshRate)entity.RefreshRate.Value;
+            if (entity.RefreshValue != null) LookupRefresher.RefreshValue = entity.RefreshValue.Value;
+            if (entity.RefreshCondition != null) LookupRefresher.RefreshCondition = (Conditions)entity.RefreshCondition;
+            if (entity.YellowAlert != null) LookupRefresher.YellowAlert = (int)entity.YellowAlert;
+            if (entity.RedAlert != null) LookupRefresher.RedAlert = (int)entity.RedAlert;
+            if (entity.Disabled != null) LookupRefresher.Disabled = entity.Disabled.Value;
 
-            if (RefreshRate.HasValue)
-            {
-                _refreshRate = (DbLookup.AdvancedFind.RefreshRate) RefreshRate.Value;
-            }
-
-            if (RefreshValue.HasValue)
-            {
-                _refreshValue = RefreshValue.Value;
-            }
-
-            if (entity.Disabled.HasValue)
-            {
-                Disabled = entity.Disabled.Value;
-            }
-
-            Clearing = false;
+            //ProcessRefresh();
+            LookupRefresher.ResetTimer();
         }
 
         private void LoadTree(string tableName)
@@ -600,12 +598,12 @@ namespace RingSoft.DbMaintenance
                 .FirstOrDefault(p => p.Description == SelectedTableBoxItem?.TextValue)
                 ?.EntityName;
 
-            advancedFind.RefreshRate = RefreshRate;
-            advancedFind.RefreshValue = RefreshValue;
-            advancedFind.RefreshCondition = RefreshCondition;
-            advancedFind.YellowAlert = YellowAlert;
-            advancedFind.RedAlert = RedAlert;
-            advancedFind.Disabled = Disabled;
+            advancedFind.RefreshRate = (byte)LookupRefresher.RefreshRate;
+            advancedFind.RefreshValue = LookupRefresher.RefreshValue;
+            advancedFind.RefreshCondition = (byte)LookupRefresher.RefreshCondition;
+            advancedFind.YellowAlert = LookupRefresher.YellowAlert;
+            advancedFind.RedAlert = LookupRefresher.RedAlert;
+            advancedFind.Disabled = LookupRefresher.Disabled;
 
             return advancedFind;
         }
@@ -658,14 +656,15 @@ namespace RingSoft.DbMaintenance
 
         private void ClearRefresh()
         {
-            RefreshRate = null;
-            RefreshValue = null;
-            RefreshCondition = null;
-            YellowAlert = null;
-            RedAlert = null;
-            View.SetAlertLevel(AlertLevels.Green);
-            _refreshValue = 0;
-            ProcessRefresh(true);
+            LookupRefresher.RefreshRate = RefreshRate.None;
+            LookupRefresher.RefreshValue = 0;
+            LookupRefresher.RefreshCondition = Conditions.Equals;
+            LookupRefresher.YellowAlert = 0;
+            LookupRefresher.RedAlert = 0;
+            LookupRefresher.Disabled = false;
+            View.SetAlertLevel(AlertLevels.Green, "", true, 0);
+            //ProcessRefresh(true);
+            LookupRefresher.ResetTimer();
         }
 
         public void CreateLookupDefinition()
@@ -932,7 +931,7 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-                ProcessRefresh(true);
+                ProcessRefresh();
                 ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
             }
@@ -943,7 +942,7 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Refresh, null, AdvancedFindInput?.InputParameter);
-                ProcessRefresh(true);
+                ProcessRefresh();
             }
         }
 
@@ -1080,7 +1079,6 @@ namespace RingSoft.DbMaintenance
             {
                 RecordDirty = true;
                 LoadRefreshSettings(refreshSettings);
-                View.GetRecordCount(true);
                 ResetLookup();
             }
 
@@ -1095,198 +1093,30 @@ namespace RingSoft.DbMaintenance
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition));
-                ProcessRefresh(true);
+                ProcessRefresh();
             }
         }
 
-        private void ProcessRefresh(bool resetTimer)
+        private void ProcessRefresh()
         {
-            if (RefreshCondition.HasValue)
-            {
-                var recordCount = View.GetRecordCount(true);
-                var yellowAlert = YellowAlert.Value;
-                var redAlert = RedAlert.Value;
-                var refreshCondition = (Conditions)RefreshCondition.Value;
-                var formattedCount = GblMethods.FormatValue(FieldDataTypes.Integer,
-                    recordCount.ToString(), GblMethods.GetNumFormat(0, false));
-                var message =
-                    $"There are {formattedCount} records in the {KeyAutoFillValue?.Text} Advanced Find.";
-
-                switch (refreshCondition)
-                {
-                    case Conditions.Equals:
-                        if (recordCount == yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        if (recordCount == redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        if (recordCount != yellowAlert && recordCount != redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    case Conditions.NotEquals:
-                        if (recordCount != yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        else if (recordCount != redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        if (recordCount == yellowAlert && recordCount == redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    case Conditions.GreaterThan:
-                        if (recordCount > redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        else if (recordCount > yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        if (recordCount < yellowAlert && recordCount < redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    case Conditions.GreaterThanEquals:
-                        if (recordCount >= yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        if (recordCount >= redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        if (recordCount <= yellowAlert && recordCount <= redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    case Conditions.LessThan:
-                        if (recordCount < yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        else if (recordCount < redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        if (recordCount > yellowAlert && recordCount > redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    case Conditions.LessThanEquals:
-                        if (recordCount <= yellowAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Yellow, message);
-                        }
-                        else if (recordCount <= redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Red, message);
-                        }
-                        if (recordCount >= yellowAlert && recordCount >= redAlert)
-                        {
-                            View.SetAlertLevel(AlertLevels.Green);
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                if (resetTimer)
-                {
-                    ResetTimer();
-                }
-            }
-            else
-            {
-                _refreshValue = 0;
-                View.GetRecordCount(false);
-                View.SetAlertLevel(AlertLevels.Green);
-            }
-        }
-
-        private void ResetTimer()
-        {
-            _interval = 0;
-            if (_refreshValue <= 0)
-            {
-                _timer.Enabled = false;
-            }
-            else
-            {
-                _timer.Enabled = true;
-            }
-
-        }
-
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            _interval++ ;
-            switch (_refreshRate)
-            {
-                case DbLookup.AdvancedFind.RefreshRate.Hours:
-                    if (_interval == (_refreshValue * 60) * 60)
-                    {
-                        _interval = 0;
-                        TimerRefresh();
-                    }
-                    break;
-                case DbLookup.AdvancedFind.RefreshRate.Minutes:
-                    if (_interval == _refreshValue * 60)
-                    {
-                        _interval = 0;
-                        TimerRefresh();
-                    }
-                    break;
-                case DbLookup.AdvancedFind.RefreshRate.Seconds:
-                    if (_interval == _refreshValue)
-                    {
-                        _interval = 0;
-                        TimerRefresh();
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-        }
-
-        private void TimerRefresh()
-        {
-            if (LookupDefinition == null)
+            if (LookupRefresher.RefreshRate == RefreshRate.None)
             {
                 return;
             }
-            if (_timer.Enabled == false)
+
+            _recordCount = View.GetRecordCount(true);
+            if (_recordCount == 0 && LookupRefresher.RefreshRate == RefreshRate.None)
             {
                 return;
             }
-            _timer.Enabled = false;
-            if (ValidateLookup())
-            {
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition));
-                ProcessRefresh(false);
-            }
-            _timer.Enabled = true;
 
+            LookupRefresher.UpdateRecordCount(_recordCount);
         }
 
         public override void OnWindowClosing(CancelEventArgs e)
         {
-            _timer.Enabled = false;
-            _timer.Stop();
-            _interval = 0;
-            View.SetAlertLevel(AlertLevels.Green);
+            LookupRefresher.Dispose();
+            
             base.OnWindowClosing(e);
         }
     }

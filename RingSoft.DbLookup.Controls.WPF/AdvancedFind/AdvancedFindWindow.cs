@@ -13,6 +13,8 @@ using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
+using RingSoft.DbLookup.QueryBuilder;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -141,22 +143,43 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return refreshRateWindow.DialogResult.Value;
         }
 
-        public void SetAlertLevel(AlertLevels level, string message = "")
+        public void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount)
         {
-            LookupControlsGlobals.LookupWindowFactory.SetAlertLevel(level, ViewModel.Disabled, this, message);
+            LookupControl.ShowRecordCount(recordCount, showCount);
+            LookupControlsGlobals.LookupWindowFactory.SetAlertLevel(level, ViewModel.LookupRefresher.Disabled, this, message);
+            if (ViewModel.LookupRefresher.RefreshRate == RefreshRate.None)
+            {
+                LookupControl.ShowRecordCountProps = false;
+                if (recordCount == 0)
+                {
+                    showCount = true;
+                }
+                LookupControl.ShowRecordCount(0, showCount);
+            }
+            else
+            {
+                LookupControl.ShowRecordCountProps = true;
+            }
         }
-
 
         public int GetRecordCount(bool showRecordCount)
         {
-            LookupControl.ShowRecordCountWait = showRecordCount;
-            var count = LookupControl.RecordCountWait;
-            if (showRecordCount)
+            var recordCount = 0;
+            Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() => { count = LookupControl.GetRecordCountWait(); });
-            }
+                if (ViewModel.LookupDefinition != null && showRecordCount)
+                {
+                    recordCount = LookupControl.LookupData.GetRecordCountWait();
+                    //var countQuerySet = new QuerySet();
+                    //ViewModel.LookupDefinition.GetCountQuery(countQuerySet, "Count");
+                    //var countResult =
+                    //    ViewModel.LookupDefinition.TableDefinition.Context.DataProcessor.GetData(countQuerySet);
+                    //recordCount = ViewModel.LookupDefinition.GetCount(countResult, "Count");
+                }
 
-            return count;
+                return recordCount;
+            });
+            return recordCount;
         }
 
         public void LockTable(bool lockValue)

@@ -11,6 +11,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 {
     public enum RefreshRate
     {
+        None = 3,
         Hours = 0,
         Minutes = 1,
         Seconds = 2,

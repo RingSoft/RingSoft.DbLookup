@@ -1,0 +1,183 @@
+﻿using System;
+using System.Timers;
+using Renci.SshNet.Messages;
+using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.QueryBuilder;
+
+namespace RingSoft.DbLookup.Lookup
+{
+    public class RefreshAlertLevelArgs
+    {
+        public AlertLevels AlertLevel { get; set; }
+    }
+    public class LookupRefresher : IDisposable
+    {
+        public RefreshRate RefreshRate { get; set; }
+        public int RefreshValue { get; set; }
+        public Conditions  RefreshCondition { get; set; }
+        public int YellowAlert { get; set; }
+        public int RedAlert { get; set; }
+        public bool Disabled { get; set; }
+
+        public event EventHandler RefreshRecordCountEvent;
+        public event EventHandler<RefreshAlertLevelArgs> SetAlertLevelEvent;
+
+        private System.Timers.Timer _timer;
+        private int _interval = 0;
+
+        public LookupRefresher()
+        {
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += _timer_Elapsed;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
+
+        private void ResetCount() => RefreshRecordCountEvent?.Invoke(this, EventArgs.Empty);
+
+        private void SetAlertLevel(AlertLevels alertLevel) =>
+            SetAlertLevelEvent.Invoke(this, new RefreshAlertLevelArgs{AlertLevel = alertLevel});
+
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _interval++;
+            switch (RefreshRate)
+            {
+                case RefreshRate.Hours:
+                    if (_interval == (RefreshValue * 60) * 60)
+                    {
+                        _interval = 0;
+                        ResetCount();
+                    }
+                    break;
+                case RefreshRate.Minutes:
+                    if (_interval == RefreshValue * 60)
+                    {
+                        _interval = 0;
+                        ResetCount();
+                    }
+                    break;
+                case RefreshRate.Seconds:
+                    if (_interval == RefreshValue)
+                    {
+                        _interval = 0;
+                        ResetCount();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void ResetTimer()
+        {
+            _interval = 0;
+        }
+
+        public void UpdateRecordCount(int recordCount)
+        {
+            var level = AlertLevels.Green;
+            switch (RefreshCondition)
+            {
+                case Conditions.Equals:
+                    if (recordCount == YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    if (recordCount == RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    if (recordCount != YellowAlert && recordCount != RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                case Conditions.NotEquals:
+                    if (recordCount != YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    else if (recordCount != RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    if (recordCount == YellowAlert && recordCount == RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                case Conditions.GreaterThan:
+                    if (recordCount > RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    else if (recordCount > YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    if (recordCount < YellowAlert && recordCount < RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                case Conditions.GreaterThanEquals:
+                    if (recordCount >= YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    if (recordCount >= RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    if (recordCount <= YellowAlert && recordCount <= RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                case Conditions.LessThan:
+                    if (recordCount < YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    else if (recordCount < RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    if (recordCount > YellowAlert && recordCount > RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                case Conditions.LessThanEquals:
+                    if (recordCount <= YellowAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Yellow);
+                    }
+                    else if (recordCount <= RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Red);
+                    }
+                    if (recordCount >= YellowAlert && recordCount >= RedAlert)
+                    {
+                        SetAlertLevel(AlertLevels.Green);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
+
+
+        public void Dispose()
+        {
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Enabled = false;
+                _timer.Dispose();
+            }
+        }
+    }
+}

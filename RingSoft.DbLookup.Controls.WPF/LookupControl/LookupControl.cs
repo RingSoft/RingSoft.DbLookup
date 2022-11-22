@@ -113,6 +113,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public Button AdvancedFindButton { get; set; }
 
+        public bool ShowRecordCountProps { get; set; }
+
         //--------------------------------------------------------------
 
         private LookupSearchForHost _lookupSearchForHost;
@@ -1181,15 +1183,27 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (ShowRecordCountWait)
+            if (ShowRecordCountWait || ShowRecordCountProps)
             {
                 GetRecordCountWait();
             }
+
+            if (setupRecordCount)
+            {
+            }
+            if (ShowRecordCountProps)
+            {
+                SetupRecordCount(LookupData.GetRecordCountWait());
+            }
             else
             {
-                if (setupRecordCount)
+                if (setupRecordCount )
+                {
                     SetupRecordCount(LookupData.RecordCount);
+                }
+                
             }
+
         }
 
         private void SetScrollThumbToMiddle()
@@ -1588,8 +1602,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (processComplete)
             {
-                if (!GetRecordCountButton.IsVisible)
-                    SetupRecordCount(LookupData.RecordCount);
+                //if (!GetRecordCountButton.IsVisible)
+                ShowRecordCount(LookupData.RecordCount, true);
             }
         }
 
@@ -1637,7 +1651,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (GetRecordCountButton == null || RecordCountControl == null || RecordCountStackPanel == null)
                 return;
 
-            var showRecordCount = false;
+            var showRecordCount = ShowRecordCountProps;
             if (LookupData?.ScrollPosition == LookupScrollPositions.Disabled)
             {
                 showRecordCount = true;
@@ -1646,21 +1660,34 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 showRecordCount = true;
             }
-            else if (recordCount > 0)
-                showRecordCount = true;
+            //else if (recordCount > 0)
+            //    showRecordCount = true;
 
-            if (showRecordCount)
+            ShowRecordCount(recordCount, showRecordCount);
+        }
+
+        public void ShowRecordCount(int recordCount, bool showRecordCount)
+        {
+            Dispatcher.Invoke(() =>
             {
-                ShowRecordCountLabel();
-                var recordsText = recordCount == 1 ? "" : "s";
-                RecordCountControl.Text =
-                    $@"{recordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
-            }
-            else
-            {
-                RecordCountStackPanel.Visibility = Visibility.Hidden;
-                GetRecordCountButton.Visibility = Visibility.Visible;
-            }
+                if (!showRecordCount)
+                {
+                    showRecordCount = ShowRecordCountProps;
+                }
+
+                if (showRecordCount)
+                {
+                    ShowRecordCountLabel();
+                    var recordsText = recordCount == 1 ? "" : "s";
+                    RecordCountControl.Text =
+                        $@"{recordCount.ToString(GblMethods.GetNumFormat(0, false))} Record{recordsText} Found";
+                }
+                else
+                {
+                    RecordCountStackPanel.Visibility = Visibility.Hidden;
+                    GetRecordCountButton.Visibility = Visibility.Visible;
+                }
+            });
         }
 
         private void ShowRecordCountLabel()
@@ -1799,6 +1826,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupData != null)
             {
                 ShowRecordCountWait = false;
+                ShowRecordCountProps = false;
                 LookupData.ClearLookupData();
             }
 

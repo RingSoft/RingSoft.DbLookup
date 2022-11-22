@@ -182,6 +182,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return recordCount;
         }
 
+        public void SetAddOnFlyFocus()
+        {
+            LookupControl.Focus();
+        }
+
         public void LockTable(bool lockValue)
         {
             TableComboBoxControl.IsEnabled = !lockValue;

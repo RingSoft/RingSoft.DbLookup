@@ -41,6 +41,8 @@ namespace RingSoft.DbMaintenance
         void LockTable(bool lockValue);
 
         int GetRecordCount(bool showRecordCount);
+
+        void SetAddOnFlyFocus();
     }
 
     //public class TreeViewFormulaData
@@ -360,7 +362,11 @@ namespace RingSoft.DbMaintenance
                 if (AdvancedFindInput.LookupDefinition != null)
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
             }
-            View.SetAlertLevel(AlertLevels.Green, "", true, 0);
+            //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
+            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
+            {
+                View.SetAddOnFlyFocus();
+            }
             base.Initialize();
         }
 
@@ -463,13 +469,7 @@ namespace RingSoft.DbMaintenance
 
         private void LoadRefreshSettings(AdvancedFind entity)
         {
-            if (entity.RefreshRate != null) LookupRefresher.RefreshRate = (RefreshRate)entity.RefreshRate.Value;
-            if (entity.RefreshValue != null) LookupRefresher.RefreshValue = entity.RefreshValue.Value;
-            if (entity.RefreshCondition != null) LookupRefresher.RefreshCondition = (Conditions)entity.RefreshCondition;
-            if (entity.YellowAlert != null) LookupRefresher.YellowAlert = (int)entity.YellowAlert;
-            if (entity.RedAlert != null) LookupRefresher.RedAlert = (int)entity.RedAlert;
-            if (entity.Disabled != null) LookupRefresher.Disabled = entity.Disabled.Value;
-
+            LookupRefresher.LoadFromAdvFind(entity);
             //ProcessRefresh();
             LookupRefresher.ResetTimer();
         }

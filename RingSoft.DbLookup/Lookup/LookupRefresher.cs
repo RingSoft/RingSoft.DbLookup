@@ -12,7 +12,7 @@ namespace RingSoft.DbLookup.Lookup
     }
     public class LookupRefresher : IDisposable
     {
-        public RefreshRate RefreshRate { get; set; }
+        public RefreshRate RefreshRate { get; set; } = RefreshRate.None;
         public int RefreshValue { get; set; }
         public Conditions  RefreshCondition { get; set; }
         public int YellowAlert { get; set; }
@@ -31,6 +31,16 @@ namespace RingSoft.DbLookup.Lookup
             _timer.Elapsed += _timer_Elapsed;
             _timer.Enabled = true;
             _timer.Start();
+        }
+
+        public void LoadFromAdvFind(AdvancedFind.AdvancedFind entity)
+        {
+            if (entity.RefreshRate != null) RefreshRate = (RefreshRate)entity.RefreshRate.Value;
+            if (entity.RefreshValue != null) RefreshValue = entity.RefreshValue.Value;
+            if (entity.RefreshCondition != null) RefreshCondition = (Conditions)entity.RefreshCondition;
+            if (entity.YellowAlert != null) YellowAlert = (int)entity.YellowAlert;
+            if (entity.RedAlert != null) RedAlert = (int)entity.RedAlert;
+            if (entity.Disabled != null) Disabled = entity.Disabled.Value;
         }
 
         private void ResetCount() => RefreshRecordCountEvent?.Invoke(this, EventArgs.Empty);

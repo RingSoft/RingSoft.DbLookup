@@ -118,6 +118,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public AdvancedFindTree AdvancedFindTree { get; set; }
 
+        public AdvancedFind.AdvancedFind Entity { get; internal set; }
+
         public LookupDefinitionBase HasFromFormula(string value)
         {
             FromFormula = value;
@@ -143,10 +145,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupDefinitionBase(int advancedFindId)
         {
-            var entity = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
+            Entity = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
             TableDefinition =
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
-                    p.EntityName == entity.Table);
+                    p.EntityName == Entity.Table);
             if (TableDefinition == null)
             {
                 var message = "Invalid table";
@@ -157,13 +159,13 @@ namespace RingSoft.DbLookup.Lookup
             AdvancedFindTree = new AdvancedFindTree(this);
             AdvancedFindTree.LoadTree(TableDefinition.TableName);
 
-            FromFormula = entity.FromFormula;
-            foreach (var advancedFindColumn in entity.Columns)
+            FromFormula = Entity.FromFormula;
+            foreach (var advancedFindColumn in Entity.Columns)
             {
                 LoadFromAdvFindColumnEntity(advancedFindColumn);
             }
 
-            foreach (var advancedFindFilter in entity.Filters)
+            foreach (var advancedFindFilter in Entity.Filters)
             {
                 LoadFromAdvFindFilter(advancedFindFilter);
             }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>2.5.16</Version>
+    <Version>2.5.17</Version>
     <Authors>Peter Ringering</Authors>
     <Product>RingSoft.DbLookup.EntityFrameworkCore</Product>
     <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core</Description>

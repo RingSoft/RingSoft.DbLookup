@@ -37,6 +37,7 @@ namespace RingSoft.DbLookup.Tests
         {
             var itemViewModel = new ItemViewModel();
             itemViewModel.OnViewLoaded(new TestDbMaintenanceView());
+            itemViewModel.Processor = new TestDbMaintenanceProcessor();
 
             itemViewModel.UnitTestLoadFromEntity(_testMegaDbDbProcessor.GetItem(TestMegaDbEfDataProcessor.TestItemId1));
             var item = itemViewModel.UnitTestGetEntityData();

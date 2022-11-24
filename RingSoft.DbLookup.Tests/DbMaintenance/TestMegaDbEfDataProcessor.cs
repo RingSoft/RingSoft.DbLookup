@@ -163,12 +163,12 @@ namespace RingSoft.DbLookup.Tests
 
         public void SetAdvancedFindDbContext()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SetAdvancedFindLookupContext()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

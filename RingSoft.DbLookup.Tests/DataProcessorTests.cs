@@ -70,7 +70,7 @@ namespace RingSoft.DbLookup.Tests
 
             _sqliteDataProcessor = new SqliteDataProcessor()
             {
-                FilePath = "C:\\Users\\petem\\source\\repos\\RingSoft.DbLookup\\RingSoft.DbLookup.App.Library\\DevLogix",
+                FilePath = "C:\\Users\\petem\\source\\repos\\RingSoft\\RingSoft.DbLookup\\RingSoft.DbLookup.App.Library\\DevLogix",
                 FileName = "DevLogix.sqlite"
             };
         }

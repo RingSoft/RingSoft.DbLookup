@@ -450,6 +450,10 @@ namespace RingSoft.DbMaintenance
         /// </returns>
         public override DbMaintenanceResults DoSave(bool unitTestMode = false)
         {
+            if (Processor == null)
+            {
+                throw new Exception("Processor is null");
+            }
             var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
             FireSaveEvent();
             if (!SaveCommand.IsEnabled)

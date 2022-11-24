@@ -500,96 +500,110 @@ namespace RingSoft.DbMaintenance
             if (previewArgs.Handled)
                 return DbMaintenanceResults.NotAllowed;
 
-            var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
-            var keyString = recordLockPrimaryKey.KeyString;
-            var tableField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
-            var pkField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
-            var dateField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
-            var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
             var lockSql = string.Empty;
-
-            switch (MaintenanceMode)
+            if (!unitTestMode)
             {
-                case DbMaintenanceModes.AddMode:
-                    break;
-                case DbMaintenanceModes.EditMode:
-                    var selectQuery = new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
-                    selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
-                    selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
+                var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                var keyString = recordLockPrimaryKey.KeyString;
+                var tableField =
+                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
+                var pkField =
+                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
+                var dateField =
+                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
+                var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
 
-                    var dataResult =
-                        SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(selectQuery);
+                switch (MaintenanceMode)
+                {
+                    case DbMaintenanceModes.AddMode:
+                        break;
+                    case DbMaintenanceModes.EditMode:
+                        var selectQuery =
+                            new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
+                        selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
+                        selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
 
-                    if (dataResult.ResultCode == GetDataResultCodes.Success)
-                    {
-                        var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                            .SqlGenerator;
-                        var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
-                        table = sqlGenerator.FormatSqlObject(table);
+                        var dataResult =
+                            SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
+                                selectQuery);
 
-                        if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                        if (dataResult.ResultCode == GetDataResultCodes.Success)
                         {
-                            var row = dataResult.DataSet.Tables[0].Rows[0];
-                            
-                            var rowLockDateString = row.GetRowValue(dateField.FieldName);
-                            DateTime rowLockDate = DateTime.MinValue;
-                            if (DateTime.TryParse(rowLockDateString, out rowLockDate))
+                            var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
+                                .SqlGenerator;
+                            var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
+                            table = sqlGenerator.FormatSqlObject(table);
+
+                            if (dataResult.DataSet.Tables[0].Rows.Count > 0)
                             {
-                                if (rowLockDate.ToLocalTime() > LockDate)
+                                var row = dataResult.DataSet.Tables[0].Rows[0];
+
+                                var rowLockDateString = row.GetRowValue(dateField.FieldName);
+                                DateTime rowLockDate = DateTime.MinValue;
+                                if (DateTime.TryParse(rowLockDateString, out rowLockDate))
                                 {
-                                    var message =
-                                        $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
-                                    message += "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
-                                    var lockKey =
-                                        new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
-                                    lockKey.PopulateFromDataRow(row);
-                                    if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
+                                    if (rowLockDate.ToLocalTime() > LockDate)
                                     {
-                                        return DbMaintenanceResults.ValidationError;
+                                        var message =
+                                            $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
+                                        message +=
+                                            "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
+                                        var lockKey =
+                                            new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+                                        lockKey.PopulateFromDataRow(row);
+                                        if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
+                                        {
+                                            return DbMaintenanceResults.ValidationError;
+                                        }
                                     }
+
+                                    lockSql = GetUpdateLockSql(table, sqlGenerator, tableField, pkField, keyString,
+                                        dateField, userField);
                                 }
-                                lockSql = GetUpdateLockSql(table, sqlGenerator, tableField, pkField, keyString, dateField, userField);
                             }
-                        }
-                        else
-                        {
-                            var fields = sqlGenerator.FormatSqlObject(tableField.FieldName);
-                            var values = sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime);
-
-                            fields += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
-                            values +=
-                                $", {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
-
-                            fields += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
-                            values +=
-                                $", {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
-
-                            if (!SystemGlobals.UserName.IsNullOrEmpty())
+                            else
                             {
-                                fields += $", {sqlGenerator.FormatSqlObject(userField.FieldName)}";
-                                values +=
-                                    $", {sqlGenerator.ConvertValueToSqlText(SystemGlobals.UserName, ValueTypes.String, DbDateTypes.DateTime)}";
-                            }
+                                var fields = sqlGenerator.FormatSqlObject(tableField.FieldName);
+                                var values = sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName,
+                                    ValueTypes.String, DbDateTypes.DateTime);
 
-                            lockSql = $"INSERT INTO {table} ({fields}) VALUES ({values})";
+                                fields += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
+                                values +=
+                                    $", {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
+
+                                fields += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
+                                values +=
+                                    $", {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
+
+                                if (!SystemGlobals.UserName.IsNullOrEmpty())
+                                {
+                                    fields += $", {sqlGenerator.FormatSqlObject(userField.FieldName)}";
+                                    values +=
+                                        $", {sqlGenerator.ConvertValueToSqlText(SystemGlobals.UserName, ValueTypes.String, DbDateTypes.DateTime)}";
+                                }
+
+                                lockSql = $"INSERT INTO {table} ({fields}) VALUES ({values})";
+                            }
                         }
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
+
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
 
-            var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                .ExecuteSql(lockSql);
-
-            if (recordLockResult.ResultCode != GetDataResultCodes.Success)
+            if (!unitTestMode)
             {
-                return DbMaintenanceResults.DatabaseError;
+                var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
+                    .ExecuteSql(lockSql);
+
+                if (recordLockResult.ResultCode != GetDataResultCodes.Success)
+                {
+                    return DbMaintenanceResults.DatabaseError;
+                }
             }
 
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);

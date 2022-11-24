@@ -18,6 +18,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using Google.Protobuf.WellKnownTypes;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {

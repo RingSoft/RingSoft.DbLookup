@@ -6,6 +6,7 @@ using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.App.Library.Northwind
 {
@@ -173,7 +174,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right)
                 .DoShowNegativeValuesInRed().HasDescription("Extended Price");
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Discount, "Discount", p => p.Discount, 15);
-            
+
             ProductsLookup = new LookupDefinition<ProductLookup, Product>(_lookupContext.Products);
             ProductsLookup.AddVisibleColumnDefinition(p => p.ProductName, "Name", p => p.ProductName, 40);
             ProductsLookup.Include(p => p.Category)

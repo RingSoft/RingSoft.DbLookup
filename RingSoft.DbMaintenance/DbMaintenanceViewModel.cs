@@ -595,7 +595,7 @@ namespace RingSoft.DbMaintenance
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
 
-            if (!unitTestMode)
+            if (!unitTestMode && !lockSql.IsNullOrEmpty())
             {
                 var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
                     .ExecuteSql(lockSql);

@@ -565,6 +565,9 @@ namespace RingSoft.DbMaintenance
                     {
                         SearchValueAutoFillSetup = new AutoFillSetup(FieldDefinition
                             .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
+                        ParentFieldDefinition =
+                            FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+
                     }
                     switch (FieldDefinition.FieldDataType)
                     {

@@ -551,6 +551,7 @@ namespace RingSoft.DbLookup.Lookup
             var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
             var formula = entity.Formula;
             var lookupField = fieldDefinition;
+            
             if (fieldDefinition != null)
             {
                 if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -560,6 +561,11 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         case Conditions.Equals:
                         case Conditions.NotEquals:
+                            if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                            {
+                                lookupField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                            }
+
                             break;
                         default:
                             var lookupColumn = fieldDefinition.ParentJoinForeignKeyDefinition

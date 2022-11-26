@@ -73,6 +73,7 @@ namespace RingSoft.DbLookup.TableProcessing
             TableFilterDefinition = source.TableFilterDefinition;
             JoinDefinition = source.JoinDefinition;
             EndLogic = source.EndLogic;
+            TableDescription = source.TableDescription;
         }
     }
 }

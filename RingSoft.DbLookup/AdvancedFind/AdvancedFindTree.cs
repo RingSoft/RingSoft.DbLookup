@@ -267,6 +267,11 @@ namespace RingSoft.DbLookup.AdvancedFind
             return foundTreeViewItem;
         }
 
+        public TreeViewItem FindAfInTree(FieldDefinition parentFieldDefinition)
+        {
+            return null;
+        }
+
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {

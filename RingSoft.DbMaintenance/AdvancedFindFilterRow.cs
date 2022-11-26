@@ -282,6 +282,10 @@ namespace RingSoft.DbMaintenance
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
             var lookupFilterResult = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            if (lookupFilterResult != null && lookupFilterResult.FilterItemDefinition != null)
+            {
+                Table = lookupFilterResult.FilterItemDefinition.TableDescription;
+            }
             if (lookupFilterResult.FieldDefinition != null &&
                 lookupFilterResult.FilterItemDefinition is FieldFilterDefinition)
             {
@@ -289,13 +293,16 @@ namespace RingSoft.DbMaintenance
                 AutoFillField = FieldDefinition;
             }
             LoadFromFilterDefinition(lookupFilterResult.FilterItemDefinition, false, entity.AdvancedFindId);
-            Table = lookupFilterResult.FieldDefinition.TableDefinition.Description;
-            if (lookupFilterResult.FieldDefinition != null &&
-                lookupFilterResult.FieldDefinition.ParentJoinForeignKeyDefinition != null &&
-                lookupFilterResult.FilterItemDefinition is FormulaFilterDefinition)
+            if (lookupFilterResult.FieldDefinition != null)
             {
-                FieldDefinition = lookupFilterResult.FieldDefinition;
-                AutoFillField = FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                //Table = lookupFilterResult.FieldDefinition.TableDefinition.Description;
+                if (lookupFilterResult.FieldDefinition != null &&
+                    lookupFilterResult.FieldDefinition.ParentJoinForeignKeyDefinition != null &&
+                    lookupFilterResult.FilterItemDefinition is FormulaFilterDefinition)
+                {
+                    FieldDefinition = lookupFilterResult.FieldDefinition;
+                    AutoFillField = FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                }
             }
 
             //if (FieldDefinition != null)
@@ -493,7 +500,7 @@ namespace RingSoft.DbMaintenance
                         .PrimaryField;
                 }
                 
-                Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
+                //Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
                 Field = fieldFilterDefinition.FieldDefinition.Description;
                 Condition = fieldFilterDefinition.Condition;
                 SearchValue = fieldFilterDefinition.Value;
@@ -541,7 +548,7 @@ namespace RingSoft.DbMaintenance
             }
             else if (filter is FormulaFilterDefinition formulaFilter)
             {
-                Table = filter.TableFilterDefinition.TableDefinition.Description;
+                //Table = filter.TableFilterDefinition.TableDefinition.Description;
                 Field = $"{formulaFilter.Description} Formula";
                 Formula = formulaFilter.Formula;
                 SearchValue = formulaFilter.FilterValue;
@@ -752,19 +759,20 @@ namespace RingSoft.DbMaintenance
             Condition = advancedFilterReturn.Condition;
             SearchValue = advancedFilterReturn.SearchValue;
             var fieldDefinition = advancedFilterReturn.FieldDefinition;
-            if (fieldDefinition == null)
-            {
-                fieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
+            //if (fieldDefinition == null)
+            //{
+            //    fieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
 
-                if (fieldDefinition == null)
-                {
-                    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-                }
-            }
-            else
-            {
-                Table = fieldDefinition.TableDefinition.Description;
-            }
+            //    if (fieldDefinition == null)
+            //    {
+            //        Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            //    }
+            //}
+            //else
+            //{
+            //    Table = fieldDefinition.TableDefinition.Description;
+            //}
+            Table = advancedFilterReturn.TableDescription;
             ParentFieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
             //if (fieldDefinition != null)
             //{

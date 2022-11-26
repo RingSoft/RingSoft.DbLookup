@@ -502,44 +502,21 @@ namespace RingSoft.DbLookup.Lookup
                 if (addFilterToLookup)
                 {
                     filterItemDefinition = FilterDefinition.AddUserFilter(entity.SearchForAdvancedFindId.Value, this);
-                    SetFilterProperties(entity, filterItemDefinition);
-                    filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
-                        .GetAdvancedFind(entity.AdvancedFindId).Table;
+                    var afTableDefinition =
+                        GetTableFieldForFilter(entity, out var afFieldDefinition, out var afFilterField);
+                    TreeViewItem afItem = null;
+                    if (afFieldDefinition != null)
+                    {
+                        afItem = AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty, afFieldDefinition);
+                    }
+                    SetFilterProperties(entity, filterItemDefinition, afItem, true);
+                    //filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
+                    //    .GetAdvancedFind(entity.AdvancedFindId).Table;
                     result.FilterItemDefinition = filterItemDefinition;
                 }
                 return result;
             }
-            var tableDefinition =
-                TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                    p.EntityName == entity.TableName);
-
-            FieldDefinition fieldDefinition = null;
-            FieldDefinition filterField = null;
-            var fieldDescription = string.Empty;
-            if (!entity.FieldName.IsNullOrEmpty())
-            {
-                filterField = fieldDefinition =
-                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
-                fieldDescription = fieldDefinition.Description;
-            }
-
-            TableDefinitionBase primaryTable = null;
-            FieldDefinition primaryField = null;
-            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
-            {
-                primaryTable =
-                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.TableName == entity.PrimaryTableName);
-
-                primaryField =
-                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
-
-                if (fieldDefinition == null)
-                {
-                    tableDefinition = primaryTable;
-                    fieldDefinition = primaryField;
-                }
-            }
+            var tableDefinition = GetTableFieldForFilter(entity, out var fieldDefinition, out var filterField);
 
             if (tableDefinition == null)
             {
@@ -617,8 +594,16 @@ namespace RingSoft.DbLookup.Lookup
                 filterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
             }
 
-            filterItemDefinition.TableDescription = tableDefinition.Description;
-            SetFilterProperties(entity, filterItemDefinition);
+            if (foundTreeViewItem.Parent != null)
+            {
+                filterItemDefinition.TableDescription = foundTreeViewItem.Parent.Name;
+            }
+            else
+            {
+                filterItemDefinition.TableDescription = tableDefinition.Description;
+            }
+
+            SetFilterProperties(entity, filterItemDefinition, foundTreeViewItem);
             result.FilterItemDefinition = filterItemDefinition;
             if (entity.Formula.IsNullOrEmpty())
             {
@@ -628,11 +613,70 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        private static void SetFilterProperties(AdvancedFindFilter entity, FilterItemDefinition filterItemDefinition)
+        private TableDefinitionBase GetTableFieldForFilter(AdvancedFindFilter entity, out FieldDefinition fieldDefinition,
+            out FieldDefinition filterField)
+        {
+            var tableDefinition =
+                TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.TableName);
+
+            fieldDefinition = null;
+            filterField = null;
+            if (!entity.FieldName.IsNullOrEmpty())
+            {
+                filterField = fieldDefinition =
+                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+            }
+
+            TableDefinitionBase primaryTable = null;
+            FieldDefinition primaryField = null;
+            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
+            {
+                primaryTable =
+                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == entity.PrimaryTableName);
+
+                primaryField =
+                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
+
+                if (fieldDefinition == null)
+                {
+                    tableDefinition = primaryTable;
+                    fieldDefinition = primaryField;
+                }
+            }
+
+            return tableDefinition;
+        }
+
+        private void SetFilterProperties(AdvancedFindFilter entity, 
+            FilterItemDefinition filterItemDefinition, TreeViewItem foundItem, bool isAdvFind = false)
         {
             filterItemDefinition.LeftParenthesesCount = entity.LeftParentheses;
             filterItemDefinition.RightParenthesesCount = entity.RightParentheses;
             filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
+            if (foundItem != null)
+            {
+                if (foundItem.Parent != null)
+                {
+                    filterItemDefinition.TableDescription = foundItem.Parent.Name;
+                }
+                else
+                {
+                    if (isAdvFind)
+                    {
+                        filterItemDefinition.TableDescription = foundItem.Name;
+                    }
+                    else
+                    {
+                        filterItemDefinition.TableDescription = TableDefinition.Description;
+                    }
+                }
+            }
+            else
+            {
+                filterItemDefinition.TableDescription = TableDefinition.Description;
+            }
         }
 
         public void GetCountQuery(QuerySet querySet, string name)

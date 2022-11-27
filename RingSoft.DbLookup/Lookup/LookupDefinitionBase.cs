@@ -474,11 +474,15 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition,
+            var fieldToProcess = fieldDefinition;
+            if (primaryField != null)
+            {
+                fieldToProcess = primaryField;
+            }
+            var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldToProcess,
                 (FieldDataTypes)entity.FieldDataType, (DecimalEditFormatTypes)entity.DecimalFormatType);
 
             var result = AdvancedFindTree.MakeIncludes(foundTreeViewItem, entity.Caption).ColumnDefinition;
-            result.TableDescription = tableDefinition.Description;
             result.FieldDescription = fieldDescription;
             result.PercentWidth = entity.PercentWidth * 100;
 

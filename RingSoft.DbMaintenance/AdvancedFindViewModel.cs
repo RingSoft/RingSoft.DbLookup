@@ -790,6 +790,7 @@ namespace RingSoft.DbMaintenance
                             }
 
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

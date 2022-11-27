@@ -7,6 +7,7 @@ using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -72,8 +73,16 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 var memoEditor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0){Text = LookupFormulaColumnDefinition.OriginalFormula })
                 {
-                    ParentTable = LookupFormulaColumnDefinition.PrimaryTable.Description
+                    ParentTable = LookupFormulaColumnDefinition.TableDescription
                 };
+                if (memoEditor.ParentTable.IsNullOrEmpty())
+                {
+                    var gridRow = cellProps.Row as AdvancedFindColumnRow;
+                    if (gridRow != null)
+                    {
+                        memoEditor.ParentTable = gridRow.Table;
+                    }
+                }
                 if (LookupFormulaColumnDefinition.PrimaryField == null)
                 {
                     memoEditor.ParentField = "<Lookup Root>";

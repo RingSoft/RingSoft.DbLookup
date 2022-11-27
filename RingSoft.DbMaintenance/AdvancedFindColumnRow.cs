@@ -35,6 +35,7 @@ namespace RingSoft.DbMaintenance
         public LookupFieldColumnDefinition LookupFieldColumnDefinition { get; set; }
         public LookupFormulaColumnDefinition LookupFormulaColumnDefinition { get; set; }
         public LookupColumnDefinitionBase LookupColumnDefinition { get; set; }
+        public TableDefinitionBase TableDefinition { get; private set; }
         public new AdvancedFindColumnsManager Manager { get; set; }
 
         public AdvancedFindColumnRow(AdvancedFindColumnsManager manager) : base(manager)
@@ -158,11 +159,13 @@ namespace RingSoft.DbMaintenance
                 if (LookupColumnDefinition is LookupFormulaColumnDefinition)
                 {
                     LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
-                    Field = "<Formula>";
+                    SetFormulaTableField();
                 }
                 else
                 {
                     LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
+                    TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
+
                 }
             }
         }
@@ -176,8 +179,7 @@ namespace RingSoft.DbMaintenance
         {
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.ColumnId = rowIndex;
-            var tableDefinition =
-                Manager.ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.Description == Table);
+            var tableDefinition = TableDefinition;
             entity.TableName = tableDefinition.EntityName;
 
             if (LookupColumnDefinition.ParentObject != null)
@@ -201,8 +203,11 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
-                entity.FieldName = tableDefinition.FieldDefinitions.FirstOrDefault(p => p.Description == Field)
-                    .FieldName;
+                if (LookupFieldColumnDefinition != null)
+                {
+                    entity.FieldName = LookupFieldColumnDefinition.FieldDefinition.FieldName;
+
+                }
             }
         }
 
@@ -212,27 +217,66 @@ namespace RingSoft.DbMaintenance
             LookupFieldColumnDefinition = column as LookupFieldColumnDefinition;
             LookupFormulaColumnDefinition = column as LookupFormulaColumnDefinition;
 
-            if (column.ParentObject == null)
-            {
-                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-            }
-            else
-            {
-                var lookupJoin = column.ParentObject as LookupJoin;
-                Table = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable.Description;
-            }
+            //if (column.ParentObject == null)
+            //{
+            //    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            //}
+            //else
+            //{
+            //    var lookupJoin = column.ParentObject as LookupJoin;
+            //    Table = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable.Description;
+            //}
+            Table = column.TableDescription;
+            Field = column.FieldDescription;
 
             Name = column.Caption;
             PercentWidth = column.PercentWidth / 100;
             if (LookupFormulaColumnDefinition != null)
             {
-                Field = "<Formula>";
+                SetFormulaTableField();
             }
 
             if (LookupFieldColumnDefinition != null)
             {
-                Field = LookupFieldColumnDefinition.FieldDefinition.Description;
+                //Field = LookupFieldColumnDefinition.FieldDefinition.Description;
+                TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
             }
+        }
+
+        private void SetFormulaTableField()
+        {
+            TableDefinition = LookupFormulaColumnDefinition.PrimaryTable;
+            if (TableDefinition == null)
+            {
+                TableDefinition = Manager.ViewModel.LookupDefinition.TableDefinition;
+            }
+
+            var foundItem = Manager.ViewModel.ProcessFoundTreeViewItem(LookupFormulaColumnDefinition.Formula,
+                LookupFormulaColumnDefinition.PrimaryField);
+            if (foundItem == null)
+            {
+                Table = TableDefinition.Description;
+            }
+            else
+            {
+                if (foundItem.Name == "<Formula>")
+                {
+                    if (foundItem.Parent == null)
+                    {
+                        Table = TableDefinition.Description;
+                    }
+                    else
+                    {
+                        Table = foundItem.Parent.Name;
+                    }
+                }
+                else
+                {
+                    Table = foundItem.Name;
+                }
+            }
+
+            Field = "<Formula>";
         }
 
         public void UpdatePercentWidth()

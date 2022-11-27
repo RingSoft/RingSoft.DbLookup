@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using MySqlX.XDevAPI.Common;
+using MySqlX.XDevAPI.Relational;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -321,7 +323,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
-    bool createColumn = true, double percentWidth = 20)
+            bool createColumn = true, double percentWidth = 20)
         {
             var result = new ProcessIncludeResult();
             var childNodes = new List<TreeViewItem>();
@@ -414,7 +416,6 @@ namespace RingSoft.DbLookup.AdvancedFind
                                 var column = includeJoin.AddVisibleColumnDefinition(columnCaption,
                                    selectedItem.FormulaData.Formula, percentWidth, selectedItem.FormulaData.DataType);
                                 result.ColumnDefinition = column;
-
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -438,8 +439,41 @@ namespace RingSoft.DbLookup.AdvancedFind
                 }
             }
 
+            if (createColumn)
+            {
+                SetTableField(selectedItem, result);
+            }
             return result;
         }
+
+        private void SetTableField(TreeViewItem selectedItem, ProcessIncludeResult result)
+        {
+            if (selectedItem.FieldDefinition != null && selectedItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                result.ColumnDefinition.FieldDescription = selectedItem.FieldDefinition.ParentJoinForeignKeyDefinition
+                    .PrimaryTable.LookupDefinition.InitialSortColumnDefinition.Caption;
+                result.ColumnDefinition.TableDescription = selectedItem.Name;
+            }
+            else
+            {
+                result.ColumnDefinition.FieldDescription = selectedItem.Name;
+            }
+            if (selectedItem.Parent == null)
+            {
+                if (result.ColumnDefinition.TableDescription.IsNullOrEmpty())
+                {
+                    result.ColumnDefinition.TableDescription = LookupDefinition.TableDefinition.Description;
+                }
+            }
+            else
+            {
+                if (result.ColumnDefinition.TableDescription.IsNullOrEmpty())
+                {
+                    result.ColumnDefinition.TableDescription = selectedItem.Parent.Name;
+                }
+            }
+        }
+
         private LookupJoin ProcessInclude(LookupJoin includeJoin, LookupJoin newInclude)
         {
             if (newInclude != null)
@@ -520,6 +554,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                 ColumnDefinition = column,
                 LookupJoin = includeJoin
             };
+
             return processResult;
         }
     }

@@ -77,11 +77,6 @@ namespace RingSoft.DbMaintenance
                 return new AdvancedFindFilterRow(this);
             }
 
-            if (entity.SearchForAdvancedFindId == null)
-            {
-                return new AdvancedFindFilterRow(this);
-            }
-
             return new AdvancedFindAfFilterRow(this);
         }
 

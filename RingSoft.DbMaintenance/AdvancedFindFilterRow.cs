@@ -507,6 +507,11 @@ namespace RingSoft.DbMaintenance
 
                 if (isFixed)
                 {
+                    var foundItem =
+                        Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty,
+                            fieldFilterDefinition.FieldDefinition);
+                    SetFixedTableName(foundItem);
+
                     switch (fieldFilterDefinition.FieldDefinition.FieldDataType)
                     {
                         case FieldDataTypes.String:
@@ -560,6 +565,12 @@ namespace RingSoft.DbMaintenance
                     newFilter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddFixedFilter(formulaFilter.Description,
                         Condition,
                         SearchValue, Formula, FormulaDataType);
+
+                    var foundItem =
+                        Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Formula,
+                            null);
+                    SetFixedTableName(foundItem);
+
                 }
             }
             IsFixed = isFixed;
@@ -578,6 +589,21 @@ namespace RingSoft.DbMaintenance
 
             }
             MakeSearchValueText();
+        }
+
+        private void SetFixedTableName(TreeViewItem foundItem)
+        {
+            if (foundItem != null)
+            {
+                if (foundItem.Parent == null)
+                {
+                    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                }
+                else
+                {
+                    Table = foundItem.Parent.Name;
+                }
+            }
         }
 
         public void FinishOffFilter(bool isFixed, bool theEnd)

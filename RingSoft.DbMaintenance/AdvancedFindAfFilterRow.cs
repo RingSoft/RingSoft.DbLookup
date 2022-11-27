@@ -150,6 +150,11 @@ namespace RingSoft.DbMaintenance
             //CreateFilterDefinition();
 
             base.LoadFromEntity(entity);
+            var test = this;
+            if (ParentFieldDefinition?.ParentJoinForeignKeyDefinition != null)
+            {
+                SetupTableField(ParentFieldDefinition);
+            }
             if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
             {
                 Filter = advancedFindFilter;

@@ -153,6 +153,8 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// </value>
         public bool CaseSensitive { get; internal set; }
 
+        public bool CheckDescriptionForNull { get; internal set; }
+
         internal WhereItem()
         {
             

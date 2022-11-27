@@ -885,8 +885,8 @@ namespace RingSoft.DbMaintenance
                 case LookupCommands.Reset:
                     break;
                 case LookupCommands.Refresh:
-                    if (primaryKeyValue == null)
-                        throw new ArgumentException("You must pass in a primary key value if KeyAutoFillValue is null.");
+                    //if (primaryKeyValue == null)
+                    //    throw new ArgumentException("You must pass in a primary key value if KeyAutoFillValue is null.");
                     return new LookupCommand(command, primaryKeyValue, RecordsChanged){AddViewParameter = addViewParameter};
                 default:
                     throw new ArgumentOutOfRangeException(nameof(command), command, null);

@@ -51,6 +51,8 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public bool CastEnumValueAsInt { get; internal set; } = true;
 
+        public FieldDefinition ParentField { get; set; }
+
         internal FieldFilterDefinition()
         {
             
@@ -75,6 +77,7 @@ namespace RingSoft.DbLookup.TableProcessing
             Value = fieldFilterDefinition.Value;
             CastEnumValueAsInt = fieldFilterDefinition.CastEnumValueAsInt;
             CaseSensitive = fieldFilterDefinition.CaseSensitive;
+            ParentField = fieldFilterDefinition.ParentField;
 
             if (fieldFilterDefinition.JoinDefinition != null)
             {

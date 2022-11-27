@@ -56,7 +56,7 @@
 
                                 <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="Refresh Now"/>
 
-                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" ItemsSource="{Binding TreeRoot}">
+                                <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" x:Name="TreeView" ItemsSource="{Binding TreeRoot}">
                                     <TreeView.ItemTemplate>
 
                                         <HierarchicalDataTemplate DataType="advancedFind:TreeViewItems" ItemsSource="{Binding Items}">

@@ -339,11 +339,11 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 case FilterItemTypes.Field:
                     var fieldFilterDefinition = (FieldFilterDefinition) filterDefinition;
-                    lastWhere = ProcessFieldFilter(query, fieldFilterDefinition);
-                    result.Add(lastWhere);
+                    result.AddRange(ProcessFieldFilter(query, fieldFilterDefinition));
                     break;
                 case FilterItemTypes.Formula:
                     var formulaFilter = (FormulaFilterDefinition) filterDefinition;
+
                     ValueTypes valueType = ValueTypes.String;
                     switch (formulaFilter.DataType)
                     {
@@ -393,7 +393,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        private WhereItem ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
+        private List<WhereItem> ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
         {
             var value = fieldFilterDefinition.Value;
             var queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
@@ -406,11 +406,40 @@ namespace RingSoft.DbLookup.TableProcessing
                     dateType = dateField.DateType;
             }
 
-            var lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
-                fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
-            lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
+            WhereItem lastWhere = null;
+            var result = new List<WhereItem>();
+            switch (fieldFilterDefinition.Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    if (fieldFilterDefinition.ParentField != null)
+                    {
+                        var primaryKeyField = fieldFilterDefinition.ParentField;
+                        queryTable = GetQueryTableForFieldFilter(query, primaryKeyField);
+                        if (primaryKeyField.ParentJoinForeignKeyDefinition != null)
+                        {
+                            result.Add(query.AddWhereItemCheckNull(queryTable, primaryKeyField.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField.FieldName,
+                                fieldFilterDefinition.Condition, false));
+                        }
+                        else
+                        {
+                            result.Add(query.AddWhereItemCheckNull(queryTable, primaryKeyField.FieldName,
+                                fieldFilterDefinition.Condition, false));
+                        }
+                    }
+                    break;
+            }
 
-            return lastWhere;
+            if (lastWhere == null)
+            {
+                queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
+                lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
+                    fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
+                lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
+                result.Add(lastWhere);
+            }
+
+            return new List<WhereItem>();
         }
 
         internal static void ProcessFieldJoins(SelectQuery query, IReadOnlyList<TableFieldJoinDefinition> joins)
@@ -453,6 +482,22 @@ namespace RingSoft.DbLookup.TableProcessing
 
             return query.BaseTable;
         }
+
+        internal QueryTable GetQueryTableForFieldFilter(SelectQuery query, FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition.TableDefinition.TableName != query.BaseTable.Name)
+            {
+                if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    var foreignTable = query.JoinTables.FirstOrDefault(p =>
+                        p.Alias == fieldDefinition.ParentJoinForeignKeyDefinition.Alias);
+                    return foreignTable;
+                }
+            }
+
+            return query.BaseTable;
+        }
+
 
         public void ProcessFilterWheres(List<WhereItem> wheres, ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, FilterItemDefinition filterDefinition)
         {

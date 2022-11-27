@@ -7,7 +7,9 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AdvancedFind;
@@ -15,6 +17,7 @@ using RingSoft.DbLookup.Lookup;
 using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 using RingSoft.DbLookup.QueryBuilder;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using TreeView = System.Windows.Controls.TreeView;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -53,6 +56,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public StackPanel ButtonsPanel { get; set; }
         public Border Border { get; set; }
         public AutoFillControl NameAutoFillControl { get; set; }
+        public TreeView TreeView { get; set; }
         public TextComboBoxControl TableComboBoxControl { get; set; }
         public LookupControl LookupControl { get; set; }
         public NotificationButton NotificationButton { get; set; }
@@ -77,7 +81,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 fromFormula = editor.GridMemoValue.Text;
                 return true;
             }
-
             return false;
         }
 
@@ -182,6 +185,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return recordCount;
         }
 
+        private bool _templateApplied;
+
         public void SetAddOnFlyFocus()
         {
             LookupControl.Focus();
@@ -250,6 +255,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             Border = GetTemplateChild(nameof(Border)) as Border;
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
+            TreeView = GetTemplateChild(nameof(TreeView)) as TreeView;
             TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
             NotificationButton = GetTemplateChild(nameof(NotificationButton)) as NotificationButton;
@@ -271,7 +277,37 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 Processor.RegisterFormKeyControl(NameAutoFillControl);
             }
 
+            if (!_templateApplied)
+            {
+                Border.GotFocus += Border_GotFocus;
+                TreeView.GotFocus += TreeView_GotFocus;
+            }
+
             base.OnApplyTemplate();
+        }
+
+        private void TreeView_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (TreeView.SelectedItem == null)
+            {
+                if (ViewModel.AdvancedFindTree != null)
+                {
+                    ViewModel.AdvancedFindTree.TreeRoot[0].IsSelected = true;
+                }
+            }
+        }
+
+        private void Border_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!TableComboBoxControl.IsEnabled)
+            {
+                if (!_templateApplied)
+                {
+                    TreeView.Focus();
+                }
+
+                _templateApplied = true;
+            }
         }
 
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
@@ -291,6 +327,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public void ResetViewForNewRecord()
         {
             NameAutoFillControl?.Focus();
+            _templateApplied = false;
         }
 
         public bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem)

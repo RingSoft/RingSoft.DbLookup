@@ -527,6 +527,14 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        public WhereItem AddWhereItemCheckNull(QueryTable table, string idField, Conditions condition, bool checkString)
+        {
+            var idWhere = AddNewWhereItem(table, idField, condition, string.Empty, ValueTypes.Numeric);
+            idWhere.CheckDescriptionForNull = checkString;
+
+            return idWhere;
+        }
+
         /// <summary>
         /// Adds the where item bool text.
         /// </summary>

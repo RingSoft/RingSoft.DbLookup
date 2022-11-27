@@ -203,6 +203,7 @@ namespace RingSoft.DbMaintenance
                     }
                     Manager.ViewModel.RecordDirty = true;
                     MakeSearchValueText();
+                    Manager.ViewModel.RefreshLookup();
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
                     var rightParenthesesValue = value as DataEntryGridTextCellProps;
@@ -233,18 +234,27 @@ namespace RingSoft.DbMaintenance
         private void SetCellValueProcessField(AdvancedFindFilterCellProps filterProps, FieldFilterDefinition filter)
         {
             filter.Value = SearchValue;
+            filter.Condition = Condition;
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 FilterItemDefinition filterDefinition = null;
+                var fieldDefinition = filterProps.FilterReturn.FieldDefinition;
+                if (fieldDefinition.ParentJoinForeignKeyDefinition != null && fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
+                {
+                    fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition
+                        .ForeignKeyFieldJoins[0].PrimaryField;
+                }
+
                 switch (Condition)
                 {
-                    case Conditions.Equals:
-                    case Conditions.NotEquals:
                     case Conditions.EqualsNull:
                     case Conditions.NotEqualsNull:
+                    case Conditions.Equals:
+                    case Conditions.NotEquals:
+                        FieldDefinition = fieldDefinition;
+                        AutoFillField = fieldDefinition;
                         filterDefinition =
-                            FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(
-                                filterProps.FilterReturn.FieldDefinition,
+                            FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(fieldDefinition,
                                 Condition, SearchValue);
                         break;
                     default:
@@ -260,7 +270,8 @@ namespace RingSoft.DbMaintenance
                         else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
                         {
                             filterDefinition = FilterItemDefinition.TableFilterDefinition.CreateFormulaFilter(
-                                lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType, Condition, SearchValue, FilterItemDefinition.JoinDefinition.Alias);
+                                lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType, Condition, 
+                                SearchValue, FilterItemDefinition.JoinDefinition.Alias);
                         }
                         break;
                 }
@@ -899,6 +910,13 @@ namespace RingSoft.DbMaintenance
                                     FilterItemDefinition =
                                         Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
                                             fieldDefinition, Condition, SearchValue);
+                                    if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+                                    {
+                                        if (FieldDefinition != null)
+                                        {
+                                            fieldFilter.ParentField = FieldDefinition;
+                                        }
+                                    }
 
                                     if (includeResult.LookupJoin != null)
                                     {
@@ -912,11 +930,7 @@ namespace RingSoft.DbMaintenance
                                         foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
                                             .LookupDefinition
                                             .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
-                                    if (foundTreeItem.Parent != null)
-                                    {
-                                        fieldDefinition = foundTreeItem.Parent.FieldDefinition;
-                                    }
-
+                                    
                                     switch (Condition)
                                     {
                                         case Conditions.EqualsNull:
@@ -944,6 +958,11 @@ namespace RingSoft.DbMaintenance
                                             break;
                                     }
                                     break;
+                                    //if (foundTreeItem.Parent != null)
+                                    //{
+                                    //    fieldDefinition = foundTreeItem.Parent.FieldDefinition;
+                                    //}
+
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }

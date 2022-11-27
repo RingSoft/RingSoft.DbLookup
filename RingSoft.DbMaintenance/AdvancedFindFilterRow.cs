@@ -251,10 +251,15 @@ namespace RingSoft.DbMaintenance
                     case Conditions.NotEqualsNull:
                     case Conditions.Equals:
                     case Conditions.NotEquals:
+                        var fieldToSearch = fieldDefinition;
+                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                        {
+                            fieldToSearch = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+                        }
                         FieldDefinition = fieldDefinition;
                         AutoFillField = fieldDefinition;
                         filterDefinition =
-                            FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(fieldDefinition,
+                            FilterItemDefinition.TableFilterDefinition.CreateFieldFilter(fieldToSearch,
                                 Condition, SearchValue);
                         break;
                     default:
@@ -861,14 +866,16 @@ namespace RingSoft.DbMaintenance
         {
             Field = fieldDefinition.Description;
 
-            fieldDefinition = foundTreeItem.FieldDefinition;
+            //fieldDefinition = foundTreeItem.FieldDefinition;
             if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 switch (Condition)
                 {
                     case Conditions.Equals:
                     case Conditions.NotEquals:
-                        DbLookup.ModelDefinition.FieldDefinitions.FieldDefinition fieldToSearch = fieldDefinition;
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        var fieldToSearch = fieldDefinition;
                         if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                         {
                             fieldToSearch = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;

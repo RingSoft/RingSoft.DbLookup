@@ -439,7 +439,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 result.Add(lastWhere);
             }
 
-            return new List<WhereItem>();
+            return result;
         }
 
         internal static void ProcessFieldJoins(SelectQuery query, IReadOnlyList<TableFieldJoinDefinition> joins)

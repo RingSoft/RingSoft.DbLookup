@@ -311,6 +311,10 @@ namespace RingSoft.DbMaintenance
             LoadFromFilterDefinition(lookupFilterResult.FilterItemDefinition, false, entity.AdvancedFindId);
             if (lookupFilterResult.FieldDefinition != null)
             {
+                Field = lookupFilterResult.FieldDefinition.Description;
+            }
+            if (lookupFilterResult.FieldDefinition != null)
+            {
                 //Table = lookupFilterResult.FieldDefinition.TableDefinition.Description;
                 if (lookupFilterResult.FieldDefinition != null &&
                     lookupFilterResult.FieldDefinition.ParentJoinForeignKeyDefinition != null &&
@@ -339,7 +343,7 @@ namespace RingSoft.DbMaintenance
             {
                 Field = $"{FormulaDisplayValue} Formula";
             }
-            else if (entity.SearchForAdvancedFindId == null)
+            else if (entity.SearchForAdvancedFindId == null && Field.IsNullOrEmpty())
             {
                 Field = FieldDefinition.Description;
             }
@@ -514,6 +518,10 @@ namespace RingSoft.DbMaintenance
                     FieldDefinition = AutoFillField = fieldFilterDefinition.FieldDefinition
                         .ParentJoinForeignKeyDefinition.FieldJoins[0]
                         .PrimaryField;
+                }
+                else if (FieldDefinition == null)
+                {
+                    FieldDefinition = fieldFilterDefinition.FieldDefinition;
                 }
                 
                 //Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;

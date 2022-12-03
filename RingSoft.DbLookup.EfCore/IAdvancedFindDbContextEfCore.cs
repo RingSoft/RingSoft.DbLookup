@@ -5,7 +5,7 @@ using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.EfCore
 {
-    public interface IAdvancedFindDbContextEfCore : IDisposable
+    public interface IAdvancedFindDbContextEfCore : IDisposable, IDbContext
     {
         DbSet<RecordLock> RecordLocks { get; set; }
 

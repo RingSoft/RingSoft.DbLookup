@@ -5,23 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         mc:Ignorable="d"
-        Title="Data Process Result" Height="600" Width="600" SetFocusToFirstControl="False">
+        Title="Data Process Result" MinHeight="400" MinWidth="400" SetFocusToFirstControl="False" Width="300" Height="400">
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="150"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label x:Name="TitleLabel" Content="Data Process Error!" FontSize="12" FontWeight="Bold"/>
         <ScrollViewer x:Name="ResultScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Visible">
             <TextBox x:Name="ResultTextBox" Height="{Binding ElementName=ResultScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalContentAlignment="Top"/>
         </ScrollViewer>
-        <Label Grid.Row="2" x:Name="SqlStatementLabel" Content="Failed SQL Statement"/>
-        <ScrollViewer x:Name="SqlScrollViewer" Grid.Row="3" HorizontalScrollBarVisibility="Visible">
-            <TextBox x:Name="SqlStatementTextBox" Height="{Binding ElementName=SqlScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalContentAlignment="Top"/>
-        </ScrollViewer>
+        <TabControl Grid.Row="3" x:Name="TabControl" VerticalAlignment="Stretch">
+
+            <TabItem x:Name="SqlTabItem" Header="Processed SQL Statement" VerticalAlignment="Stretch">
+
+                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+                    <ScrollViewer x:Name="SqlScrollViewer" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBox x:Name="SqlStatementTextBox" Height="{Binding ElementName=SqlScrollViewer}" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalContentAlignment="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </ScrollViewer>
+
+                </DockPanel>
+
+            </TabItem>
+
+            <TabItem x:Name="DataResultsTabItem" Header="SQL Results" VerticalAlignment="Stretch">
+
+                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+                    <DataGrid x:Name="DataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </DockPanel>
+            </TabItem>
+
+        </TabControl>
         <Button Grid.Row="4" x:Name="CloseButton" Content="_Close" Height="25" Width="75" HorizontalAlignment="Right"/>
     </Grid>
 </dec:BaseWindow>

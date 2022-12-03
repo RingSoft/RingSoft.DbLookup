@@ -195,13 +195,17 @@
         <!--<Setter Property="Margin" Value="2.5"/>-->
     </Style>
 
-    <Style TargetType="deg:DataEntryGrid">
+    <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
+        <Setter Property="AlternationCount" Value="2" />
+    </Style>
+
+    <Style TargetType="deg:DataEntryGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
         <Setter Property="EnterToTab" Value="True" />
         <Setter Property="CloseWindowOnEscape" Value="True" />
         <Setter Property="GridLinesVisibility" Value="All" />
         <Setter Property="HorizontalGridLinesBrush" Value="LightGray" />
         <Setter Property="VerticalGridLinesBrush" Value="LightGray" />
-        <Setter Property="AlternationCount" Value="2" />
+        
         <Setter Property="DisabledCellDisplayStyle">
             <Setter.Value>
                 <deg:DataEntryGridDisplayStyle ForegroundBrush="Black" BackgroundBrush="{StaticResource GridDisabledCellBrush}"/>

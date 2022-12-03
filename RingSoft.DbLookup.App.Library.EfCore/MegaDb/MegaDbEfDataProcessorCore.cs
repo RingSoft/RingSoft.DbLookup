@@ -162,7 +162,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public void SetAdvancedFindDbContext()
         {
             EfCoreGlobals.DbAdvancedFindContextCore = new MegaDbDbContextEfCore();
-            SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
+            var processor = new AdvancedFindDataProcessorEfCore();
+            SystemGlobals.AdvancedFindDbProcessor = processor;
+            SystemGlobals.DataRepository = processor;
         }
 
         public void SetAdvancedFindLookupContext()

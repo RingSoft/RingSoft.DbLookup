@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using RingSoft.DbLookup.DataProcessor;
 
@@ -12,30 +13,34 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DataProcessResultWindow(DataProcessResult dataProcessResult)
         {
             InitializeComponent();
+            SqlStatementTextBox.GotFocus += (sender, args) => SqlStatementTextBox.SelectAll();
 
             if (dataProcessResult.ResultCode == GetDataResultCodes.Success)
             {
                 TitleLabel.Content = @"Data Process Success!";
                 TitleLabel.Background = new SolidColorBrush(Colors.Green);
                 TitleLabel.Foreground = new SolidColorBrush(Colors.White);
-                SqlStatementLabel.Content = @"Processed SQL Statement";
                 ResultTextBox.Text = $@"Debug Message:{Environment.NewLine}{Environment.NewLine}{dataProcessResult.DebugMessage}";
                 SqlStatementTextBox.Text = dataProcessResult.ProcessedSqlStatement;
+                DataGrid.ItemsSource = dataProcessResult.DataSet.Tables[0].DefaultView;
             }
             else
             {
+                SqlTabItem.Header = "Failed SQL Statement";
                 TitleLabel.Background = new SolidColorBrush(Colors.Red);
                 TitleLabel.Foreground = new SolidColorBrush(Colors.Black);
                 ResultTextBox.Text =
                     $@"Debug Message:{Environment.NewLine}{dataProcessResult.DebugMessage}{Environment.NewLine}{Environment.NewLine}";
                 ResultTextBox.Text += $@"Error Message:{Environment.NewLine}{dataProcessResult.Message}";
                 SqlStatementTextBox.Text = dataProcessResult.ProcessedSqlStatement;
+                DataResultsTabItem.Visibility = Visibility.Collapsed;
             }
 
             Loaded += (sender, args) =>
             {
-                SqlStatementTextBox.SelectAll();
-                SqlStatementTextBox.Focus();
+                SqlStatementTextBox.SelectionStart = 0;
+                TabControl.SelectedItem = SqlTabItem;
+                SqlTabItem.Focus();
             };
 
             CloseButton.Click += (sender, args) => Close();

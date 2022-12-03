@@ -73,7 +73,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public bool ShowFromFormulaEditor(ref string fromFormula)
         {
             var editor = new DataEntryGridMemoEditor(new DataEntryGridMemoValue(0){Text = fromFormula});
-            editor.Loaded += (sender, args) => editor.MemoEditor.CollapseDateButton();
+            editor.SnugWidth = 700;
+            editor.SnugHeight = 500;
+            editor.Loaded += (sender, args) =>
+            {
+                editor.MemoEditor.CollapseDateButton();
+            };
             editor.ShowInTaskbar = false;
             editor.Owner = this;
             if (editor.ShowDialog())
@@ -119,6 +124,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             var sql = LookupControl.LookupData.GetSqlStatement();
             var window = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = sql});
+            window.SnugWidth = 700;
+            window.SnugHeight = 500;
             window.Loaded += (sender, args) =>
             {
                 window.MemoEditor.TextBox.IsReadOnly = true;

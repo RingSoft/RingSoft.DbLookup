@@ -96,6 +96,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 memoEditor.DecimalFormat = LookupFormulaColumnDefinition.DecimalFieldType.ConvertDecimalFieldTypeToDecimalEditFormatType();
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;
+                memoEditor.SnugWidth = 700;
+                memoEditor.SnugHeight = 500;
                 if (memoEditor.ShowDialog())
                 {
                     LookupFormulaColumnDefinition.UpdateFormula(memoEditor.MemoEditor.Text);

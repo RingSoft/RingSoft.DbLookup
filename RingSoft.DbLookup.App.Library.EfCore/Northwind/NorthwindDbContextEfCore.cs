@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
@@ -91,6 +92,56 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        {
+            var context = GetDbContextEf();
+            if (!context.SaveNoCommitEntity(Set<TEntity>(), entity, message))
+                return false;
+
+            return true;
+        }
+
+        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        {
+            return GetDbContextEf().SaveEntity(Set<TEntity>(), entity, message);
+        }
+
+        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        {
+            return GetDbContextEf().DeleteEntity(Set<TEntity>(), entity, message);
+        }
+
+        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        {
+            return GetDbContextEf().DeleteNoCommitEntity(Set<TEntity>(), entity, message);
+        }
+
+        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        {
+            return GetDbContextEf().AddNewNoCommitEntity(Set<TEntity>(), entity, message);
+        }
+
+        public bool Commit(string message)
+        {
+            var result = GetDbContextEf().SaveEfChanges(message);
+
+            return result;
+        }
+
+        public void RemoveRange<TEntity>(List<TEntity> listToRemove) where TEntity : class
+        {
+            var dbSet = Set<TEntity>();
+
+            dbSet.RemoveRange(listToRemove);
+        }
+
+        public void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class
+        {
+            var dbSet = Set<TEntity>();
+
+            dbSet.AddRange(listToAdd);
         }
     }
 }

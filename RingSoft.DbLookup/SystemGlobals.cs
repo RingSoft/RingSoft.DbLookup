@@ -33,6 +33,23 @@ namespace RingSoft.DbLookup
             set => _context = value;
         }
 
+        private static IDataRepository _dataRepository;
+
+        public static IDataRepository DataRepository
+        {
+            get
+            {
+                if (_dataRepository == null)
+                {
+                    var message = $"Need To Instantiate {nameof(IDataRepository)}.";
+                    throw new ApplicationException(message);
+                }
+                return _dataRepository;
+            }
+            set => _dataRepository = value;
+        }
+
+
         public static AlertLevels WindowAlertLevel { get; set; }
     }
 }

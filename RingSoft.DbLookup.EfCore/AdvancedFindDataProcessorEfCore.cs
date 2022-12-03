@@ -7,7 +7,7 @@ using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.EfCore
 {
-    public class AdvancedFindDataProcessorEfCore : IAdvancedFindDbProcessor
+    public class AdvancedFindDataProcessorEfCore : IAdvancedFindDbProcessor, IDataRepository
     {
         public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
         {
@@ -20,13 +20,9 @@ namespace RingSoft.DbLookup.EfCore
 
         public AdvancedFind.AdvancedFind GetAdvancedFind(int advancedFindId)
         {
-            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
-            {
-                throw new ApplicationException(
-                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
-            }
-            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            return context.AdvancedFinds.Include(p => p.Columns)
+            IQueryable<AdvancedFind.AdvancedFind> context =
+                SystemGlobals.DataRepository.GetTable<AdvancedFind.AdvancedFind>();
+            return context.Include(p => p.Columns)
                 .Include(p => p.Filters)
                 .FirstOrDefault(p => p.Id == advancedFindId);
         }
@@ -34,81 +30,83 @@ namespace RingSoft.DbLookup.EfCore
         public bool SaveAdvancedFind(AdvancedFind.AdvancedFind advancedFind, List<AdvancedFindColumn> columns,
             List<AdvancedFindFilter> filters)
         {
-            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            var result = true;
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            if (context.SaveEntity(advancedFind, $"Saving Advanced Find '{advancedFind.Name}.'"))
             {
-                throw new ApplicationException(
-                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
-            }
-            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            var dbContext = context.GetDbContextEf();
+                var columnsQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindColumn>();
+                var oldColumns = columnsQuery.Where(
+                    p => p.AdvancedFindId == advancedFind.Id).ToList();
+                context.RemoveRange(oldColumns);
 
-            if (context.AdvancedFinds.FirstOrDefault(p => p.Id == advancedFind.Id) == null)
-                dbContext.AddNewEntity(context.AdvancedFinds, advancedFind, "Adding New Advanced Find");
-            else
-            {
-                context.Dispose();
-                context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-                dbContext = context.GetDbContextEf();
-                if (!dbContext.SaveEntity(context.AdvancedFinds, advancedFind, "Saving Advanced Find"))
+                foreach (var advancedFindColumn in columns)
                 {
-                    context.Dispose();
-                    return false;
+                    advancedFindColumn.AdvancedFindId = advancedFind.Id;
                 }
+                context.AddRange(columns);
+
+                var filtersQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindFilter>();
+                var oldFilters = filtersQuery.Where(
+                    p => p.AdvancedFindId == advancedFind.Id).ToList();
+                context.RemoveRange(oldFilters);
+
+                foreach (var advancedFindFilter in filters)
+                {
+                    advancedFindFilter.AdvancedFindId = advancedFind.Id;
+                }
+                context.AddRange(filters);
+
+                result = context.Commit($"Saving Advanced Find '{advancedFind.Name}' Details");
             }
-
-            context.AdvancedFindColumns.RemoveRange(context.AdvancedFindColumns
-                .Where(p => p.AdvancedFindId == advancedFind.Id));
-
-            foreach (var advancedFindColumn in columns)
-            {
-                advancedFindColumn.AdvancedFindId = advancedFind.Id;
-            }
-
-            context.AdvancedFindFilters.RemoveRange(context.AdvancedFindFilters
-                .Where(p => p.AdvancedFindId == advancedFind.Id));
-
-            foreach (var advancedFindFilter in filters)
-            {
-                advancedFindFilter.AdvancedFindId = advancedFind.Id;
-            }
-            context.AdvancedFindColumns.AddRange(columns);
-
-            context.AdvancedFindFilters.AddRange(filters);
-            var result = dbContext.SaveEfChanges("Commiting Advanced Find");
-
-            context.Dispose();
             return result;
         }
 
         public bool DeleteAdvancedFind(int advancedFindId)
         {
-            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var query = SystemGlobals.DataRepository.GetTable<AdvancedFind.AdvancedFind>();
+            var advancedFind = query.FirstOrDefault(p => p.Id == advancedFindId);
+            if (advancedFind != null)
             {
-                throw new ApplicationException(
-                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
+                var columnsQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindColumn>();
+                var oldColumns = columnsQuery.Where(
+                    p => p.AdvancedFindId == advancedFindId).ToList();
+                context.RemoveRange(oldColumns);
+
+                var filtersQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindFilter>();
+                var oldFilters = filtersQuery.Where(
+                    p => p.AdvancedFindId == advancedFindId).ToList();
+                context.RemoveRange(oldFilters);
+
+                if (context.DeleteNoCommitEntity(advancedFind, $"Deleting Advanced Find '{advancedFind.Name}'."))
+                {
+                    return context.Commit($"Deleting Advanced Find '{advancedFind.Name}'.");
+                }
+                else
+                {
+                    return false;
+                }
             }
-            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            var dbContext = context.GetDbContextEf();
-            var advancedFind = context.AdvancedFinds.FirstOrDefault(p => p.Id == advancedFindId);
 
-            context.AdvancedFindColumns.RemoveRange(
-                context.AdvancedFindColumns.Where(p => p.AdvancedFindId == advancedFindId));
-            context.AdvancedFindFilters.RemoveRange(
-                context.AdvancedFindFilters.Where(p => p.AdvancedFindId == advancedFindId));
-
-            return dbContext.DeleteEntity(context.AdvancedFinds, advancedFind, "Deleting Customer");
-
+            return true;
         }
 
         public RecordLock GetRecordLock(string table, string primaryKey)
         {
-            if (EfCoreGlobals.DbAdvancedFindContextCore == null)
-            {
-                throw new ApplicationException(
-                    $"{nameof(EfCoreGlobals)}.{nameof(EfCoreGlobals.DbAdvancedFindContextCore)} not set.");
-            }
+            var query = SystemGlobals.DataRepository.GetTable<RecordLock>();
+            return query.FirstOrDefault(p => p.Table == table && p.PrimaryKey == primaryKey);
+        }
+
+        public IDbContext GetDataContext()
+        {
+            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
+        }
+
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        {
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            return context.RecordLocks.FirstOrDefault(p => p.Table == table && p.PrimaryKey == primaryKey);
+            var dbSet = context.GetDbContextEf().Set<TEntity>();
+            return dbSet;
         }
     }
 }

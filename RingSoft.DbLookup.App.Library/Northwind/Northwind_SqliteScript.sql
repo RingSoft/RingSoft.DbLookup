@@ -164,6 +164,7 @@ CREATE TABLE [AdvancedFindColumns] (
 , [FieldName] nvarchar(50) NULL
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
+, [Path] nvarchar(1000) NULL
 , [Caption] nvarchar(50) NOT NULL
 , [PercentWidth] [decimal](18, 4) NOT NULL
 , [Formula] ntext NULL
@@ -181,6 +182,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [FieldName] nvarchar(50) NULL
 , [PrimaryTableName] nvarchar(50) NULL
 , [PrimaryFieldName] nvarchar(50) NULL
+, [Path] nvarchar(1000) NULL
 , [Operand] [tinyint] NOT NULL
 , [SearchForValue] nvarchar(50) NULL
 , [Formula] ntext NULL

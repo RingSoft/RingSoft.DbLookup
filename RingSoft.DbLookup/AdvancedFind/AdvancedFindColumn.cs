@@ -24,6 +24,9 @@ namespace RingSoft.DbLookup.AdvancedFind
         [MaxLength(50)]
         public string PrimaryFieldName { get; set; }
 
+        [MaxLength(1000)]
+        public string Path { get; set; }
+
         [MaxLength(250)]
         public string Caption { get; set; }
 

@@ -15,6 +15,8 @@ namespace RingSoft.DbLookup.EfCore
             builder.Property(p => p.TableName).HasColumnType(DbConstants.StringColumnType);
             builder.Property(p => p.FieldName).HasColumnType(DbConstants.StringColumnType);
             builder.Property(p => p.PrimaryTableName).HasColumnType(DbConstants.StringColumnType);
+            builder.Property(p => p.PrimaryFieldName).HasColumnType(DbConstants.StringColumnType);
+            builder.Property(p => p.Path).HasColumnType(DbConstants.StringColumnType);
             builder.Property(p => p.DecimalFormatType).HasColumnType(DbConstants.ByteColumnType);
             builder.Property(p => p.FieldDataType).HasColumnType(DbConstants.ByteColumnType);
             builder.Property(p => p.Formula).HasColumnType(DbConstants.MemoColumnType);

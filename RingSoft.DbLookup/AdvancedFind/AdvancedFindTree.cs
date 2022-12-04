@@ -85,6 +85,23 @@ namespace RingSoft.DbLookup.AdvancedFind
             return Name;
         }
 
+        public string MakePath()
+        {
+            var result = string.Empty;
+            if (FieldDefinition != null)
+            {
+                result = FieldDefinition.TableDefinition.TableName + "@"+ FieldDefinition.FieldName + ";";
+            }
+            
+            var parent = Parent;
+            while (parent != null)
+            {
+                result = parent.FieldDefinition.TableDefinition.TableName + "@" + parent.FieldDefinition.FieldName +
+                         ";" + result;
+                parent = parent.Parent;
+            }
+            return result;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -274,6 +291,57 @@ namespace RingSoft.DbLookup.AdvancedFind
             return null;
         }
 
+        public TreeViewItem ProcessFoundTreeViewItem(string path)
+        {
+            TreeViewItem result = null;
+            while (!path.IsNullOrEmpty())
+            {
+                var sepPos = path.IndexOf(";");
+                var filePath = path.LeftStr(sepPos);
+
+                var fieldDefinition = GetFieldDefinition(filePath);
+                if (fieldDefinition != null)
+                {
+                    if (result == null)
+                    {
+                        result = TreeRoot.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
+                    }
+                    else
+                    {
+                        result = result.Items.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
+                    }
+                }
+                path = path.RightStr(path.Length - (sepPos + 1));
+            }
+            return result;
+        }
+
+        private FieldDefinition GetFieldDefinition(string path)
+        {
+            var sepPos = path.IndexOf("@");
+            if (sepPos >= 0)
+            {
+                var tableName = path.LeftStr(sepPos);
+                var fieldName = path.RightStr(path.Length - (sepPos + 1));
+
+                var tableDefinition =
+                    LookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == tableName);
+
+                if (tableDefinition != null)
+                {
+                    var fieldDefinition =
+                        tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == fieldName);
+                    if (fieldDefinition != null)
+                    {
+                        return fieldDefinition;
+                    }
+                }
+            }
+
+            throw new Exception($"Could not find path '{path}'");
+        }
+
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
@@ -448,6 +516,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         private void SetTableField(TreeViewItem selectedItem, ProcessIncludeResult result)
         {
+            result.ColumnDefinition.Path = selectedItem.MakePath();
             if (selectedItem.FieldDefinition != null && selectedItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 result.ColumnDefinition.FieldDescription = selectedItem.FieldDefinition.ParentJoinForeignKeyDefinition

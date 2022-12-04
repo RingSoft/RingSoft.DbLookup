@@ -112,6 +112,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public string FieldDescription { get; internal set; }
 
+        public string Path { get; internal set; }
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();

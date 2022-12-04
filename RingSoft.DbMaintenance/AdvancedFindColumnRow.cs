@@ -181,6 +181,7 @@ namespace RingSoft.DbMaintenance
             entity.ColumnId = rowIndex;
             var tableDefinition = TableDefinition;
             entity.TableName = tableDefinition.EntityName;
+            entity.Path = LookupColumnDefinition.Path;
 
             if (LookupColumnDefinition.ParentObject != null)
             {
@@ -206,7 +207,6 @@ namespace RingSoft.DbMaintenance
                 if (LookupFieldColumnDefinition != null)
                 {
                     entity.FieldName = LookupFieldColumnDefinition.FieldDefinition.FieldName;
-
                 }
             }
         }

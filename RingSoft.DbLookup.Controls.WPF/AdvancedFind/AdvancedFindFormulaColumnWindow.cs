@@ -47,7 +47,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public DataEntryMemoEditor MemoEditor { get; set; }
 
         public string ParentTable { get; set; }
-        public string ParentField { get; set; }
         public FieldDataTypes DataType { get; set; }
         public DecimalEditFormatTypes DecimalFormat { get; set; }
         public AdvancedFindFormulaColumnViewModel ViewModel { get; set; }
@@ -59,6 +58,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public AdvancedFindFormulaColumnWindow(DataEntryGridMemoValue gridMemoValue) : base(gridMemoValue)
         {
+            Loaded += (sender, args) =>
+            {
+                SnugWidth = 700;
+                SnugHeight = 500;
+                SnugWindow();
+            };
         }
 
         public override void OnApplyTemplate()
@@ -74,7 +79,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ViewModel = Border.TryFindResource("ViewModel") as AdvancedFindFormulaColumnViewModel;
             ViewModel.Initialize();
             ViewModel.Table = ParentTable;
-            ViewModel.Field = ParentField;
             ViewModel.DataType = DataType;
 
             SetDecimalFormatType();

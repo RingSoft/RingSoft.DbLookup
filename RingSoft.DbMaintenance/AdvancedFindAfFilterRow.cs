@@ -118,7 +118,7 @@ namespace RingSoft.DbMaintenance
                 if (Filter == null)
                 {
                     FilterItemDefinition = Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
-                        Manager.ViewModel.LookupDefinition);
+                        Manager.ViewModel.LookupDefinition, Path);
                 }
                 else
                 {
@@ -138,7 +138,7 @@ namespace RingSoft.DbMaintenance
             {
                 entity.SearchForAdvancedFindId = AutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
             }
-
+            
             base.SaveToEntity(entity, rowIndex);
         }
 

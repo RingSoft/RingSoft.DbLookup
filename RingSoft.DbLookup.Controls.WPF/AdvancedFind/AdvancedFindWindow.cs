@@ -344,13 +344,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 editor.ParentTable = formulaTreeViewItem.Parent.FieldDefinition.ParentJoinForeignKeyDefinition
                     .ForeignTable.Description;
-                editor.ParentField = formulaTreeViewItem.Parent.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0]
-                    .ForeignField.Description;
             }
             else
             {
-                //editor.ParentTable = formulaTreeViewItem.ViewModel.LookupDefinition.TableDefinition.Description;
-                editor.ParentField = "<Lookup Root>";
+                editor.ParentTable = ViewModel.LookupDefinition.TableDefinition.Description;
             }
 
             if (formulaTreeViewItem.FormulaData != null)

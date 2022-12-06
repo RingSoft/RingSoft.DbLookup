@@ -455,6 +455,10 @@ namespace RingSoft.DbLookup.Lookup
                     tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
                 fieldDescription = fieldDefinition.Description;
             }
+            else if (!entity.Formula.IsNullOrEmpty())
+            {
+                fieldDescription = "<Formula>";
+            }
 
             TableDefinitionBase primaryTable = null;
             FieldDefinition primaryField = null;
@@ -483,7 +487,12 @@ namespace RingSoft.DbLookup.Lookup
             TreeViewItem foundTreeViewItem = null;
             if (!entity.Path.IsNullOrEmpty())
             {
-                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path);
+                var type = TreeViewType.Field;
+                if (!entity.Formula.IsNullOrEmpty())
+                {
+                    type = TreeViewType.Formula;
+                }
+                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, type);
             }
             else
             {
@@ -491,6 +500,16 @@ namespace RingSoft.DbLookup.Lookup
                     (FieldDataTypes)entity.FieldDataType, (DecimalEditFormatTypes)entity.DecimalFormatType);
             }
 
+            if (!entity.Formula.IsNullOrEmpty())
+            {
+                foundTreeViewItem.FormulaData = new TreeViewFormulaData
+                {
+                    Formula = entity.Formula,
+                    DataType = (FieldDataTypes)entity.FieldDataType,
+                    DecimalFormatType = (DecimalEditFormatTypes)entity.DecimalFormatType,
+                };
+
+            }
             var result = AdvancedFindTree.MakeIncludes(foundTreeViewItem, entity.Caption).ColumnDefinition;
             result.FieldDescription = fieldDescription;
             result.PercentWidth = entity.PercentWidth * 100;
@@ -506,7 +525,8 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        public LookupFilterReturn LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true)
+        public LookupFilterReturn LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true,
+            TreeViewItem parentTreeItem = null)
         {
             var result = new LookupFilterReturn();
             FilterItemDefinition filterItemDefinition = null;
@@ -514,13 +534,21 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (addFilterToLookup)
                 {
-                    filterItemDefinition = FilterDefinition.AddUserFilter(entity.SearchForAdvancedFindId.Value, this);
+                    filterItemDefinition =
+                        FilterDefinition.AddUserFilter(entity.SearchForAdvancedFindId.Value, this, entity.Path);
                     var afTableDefinition =
                         GetTableFieldForFilter(entity, out var afFieldDefinition, out var afFilterField);
                     TreeViewItem afItem = null;
                     if (afFieldDefinition != null)
                     {
-                        afItem = AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty, afFieldDefinition);
+                        if (entity.Path.IsNullOrEmpty())
+                        {
+                            afItem = AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty, afFieldDefinition);
+                        }
+                        else
+                        {
+                            afItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, TreeViewType.AdvancedFind);
+                        }
                     }
                     SetFilterProperties(entity, filterItemDefinition, afItem, true);
                     //filterItemDefinition.TableDescription = SystemGlobals.AdvancedFindDbProcessor
@@ -531,12 +559,25 @@ namespace RingSoft.DbLookup.Lookup
             }
             var tableDefinition = GetTableFieldForFilter(entity, out var fieldDefinition, out var filterField);
 
-            if (tableDefinition == null)
+            if (tableDefinition == null && entity.Formula.IsNullOrEmpty())
             {
                 var message = $"Advanced Find Id {entity.AdvancedFindId} Filter Id {entity.FilterId} is corrupt.";
                 throw new Exception(message);
             }
-            var foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition);
+            TreeViewItem foundTreeViewItem = null;
+            var type = TreeViewType.Field;
+            if (!entity.Formula.IsNullOrEmpty())
+            {
+                type = TreeViewType.Formula;
+            }
+            if (entity.Path.IsNullOrEmpty())
+            {
+                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldDefinition);
+            }
+            else
+            {
+                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, type, parentTreeItem);
+            }
 
             var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
             var formula = entity.Formula;
@@ -583,6 +624,10 @@ namespace RingSoft.DbLookup.Lookup
                 else
                 {
                     var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
+                    if (alias.IsNullOrEmpty())
+                    {
+                        alias = TableDefinition.TableName;
+                    }
                     filterItemDefinition = FilterDefinition.AddUserFilter(formula, (Conditions)entity.Operand,
                         entity.SearchForValue, alias, (FieldDataTypes)entity.FormulaDataType);
                 }
@@ -597,6 +642,10 @@ namespace RingSoft.DbLookup.Lookup
                 else
                 {
                     var alias = includeResult.LookupJoin?.JoinDefinition.Alias;
+                    if (alias.IsNullOrEmpty())
+                    {
+                        alias = TableDefinition.TableName;
+                    }
                     filterItemDefinition = FilterDefinition.CreateFormulaFilter(formula, (FieldDataTypes)entity.FormulaDataType, (Conditions)entity.Operand,
                         entity.SearchForValue, alias);
                 }
@@ -613,7 +662,18 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
-                filterItemDefinition.TableDescription = tableDefinition.Description;
+                if (tableDefinition == null)
+                {
+                    filterItemDefinition.TableDescription = TableDefinition.Description;
+                }
+                else
+                {
+                    filterItemDefinition.TableDescription = tableDefinition.Description;
+                    if (filterItemDefinition is FormulaFilterDefinition formulaFilter)
+                    {
+                        filterItemDefinition.TableDescription = foundTreeViewItem.Name;
+                    }
+                }
             }
 
             SetFilterProperties(entity, filterItemDefinition, foundTreeViewItem);
@@ -682,7 +742,14 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     else
                     {
-                        filterItemDefinition.TableDescription = TableDefinition.Description;
+                        if (filterItemDefinition is FormulaFilterDefinition formulaFilter && !entity.Path.IsNullOrEmpty())
+                        {
+                            filterItemDefinition.TableDescription = foundItem.Name;
+                        }
+                        else
+                        {
+                            filterItemDefinition.TableDescription = TableDefinition.Description;
+                        }
                     }
                 }
             }

@@ -22,12 +22,11 @@ namespace RingSoft.DbLookup.EfCore
             builder.Property(p => p.Formula).HasColumnType(DbConstants.MemoColumnType);
             builder.Property(p => p.PercentWidth).HasColumnType(DbConstants.DecimalColumnType);
 
-            builder.HasKey(p => new { p.AdvancedFindId, p.ColumnId });
-
             builder.HasOne(p => p.AdvancedFind)
                 .WithMany(p => p.Columns).HasForeignKey(p => p.AdvancedFindId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasKey(p => new { p.AdvancedFindId, p.ColumnId });
         }
     }
 }

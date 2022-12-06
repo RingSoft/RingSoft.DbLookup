@@ -42,9 +42,9 @@
 
                             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Table, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Field"/>
+                            <Label Grid.Row="1" Grid.Column="0" x:Name="FieldLabel" Content="Field"/>
 
-                            <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" Text="{Binding Field, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
+                            <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" x:Name="FieldControl" Text="{Binding Field, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left"/>
 
                             <dec:DataEntryMemoEditor x:Name="MemoEditor" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Formula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="200" MaxWidth="500"/>
 

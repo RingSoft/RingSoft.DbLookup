@@ -112,7 +112,8 @@ namespace RingSoft.DbLookup.Lookup
             var column = LookupDefinition.AddVisibleColumnDefinition(caption, formula, percentWidth, fieldDataType, JoinDefinition.Alias);
             column.JoinQueryTableAlias = JoinDefinition.Alias;
             column.ParentObject = this;
-            column.ParentField = ParentField;
+            column.ParentField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;
+            column.PrimaryTable = JoinDefinition.ForeignKeyDefinition.PrimaryTable;
             column.ChildField = ChildField;
             return column;
         }

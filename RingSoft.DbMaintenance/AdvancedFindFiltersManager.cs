@@ -115,7 +115,11 @@ namespace RingSoft.DbMaintenance
         {
             var row = GetNewRow() as AdvancedFindFilterRow;
             if (filterReturn != null)
+            {
+                row.Path = ViewModel.SelectedTreeViewItem.MakePath();
                 row.LoadFromFilterReturn(filterReturn);
+            }
+
             //if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any() &&
             //    ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
             //    Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed == true).Count())
@@ -233,6 +237,7 @@ namespace RingSoft.DbMaintenance
         public void AddAdvancedFindFilterRow(FieldDefinition field = null)
         {
             var row = new AdvancedFindAfFilterRow(this, field);
+            row.Path = ViewModel.SelectedTreeViewItem.MakePath();
             AddRow(row);
             if (Rows.Count > 1)
             {

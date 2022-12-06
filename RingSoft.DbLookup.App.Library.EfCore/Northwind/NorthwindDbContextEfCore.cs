@@ -130,7 +130,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             return result;
         }
 
-        public void RemoveRange<TEntity>(List<TEntity> listToRemove) where TEntity : class
+        public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class
         {
             var dbSet = Set<TEntity>();
 

@@ -44,6 +44,8 @@ namespace RingSoft.DbMaintenance
 
         public bool Clearing { get; set; }
 
+        public string Path { get; internal set; }
+
         private FieldDefinition _searchAutoFillField;
 
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)
@@ -298,6 +300,7 @@ namespace RingSoft.DbMaintenance
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
             var lookupFilterResult = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            Path = entity.Path;
             if (lookupFilterResult != null && lookupFilterResult.FilterItemDefinition != null)
             {
                 Table = lookupFilterResult.FilterItemDefinition.TableDescription;
@@ -306,7 +309,10 @@ namespace RingSoft.DbMaintenance
                 lookupFilterResult.FilterItemDefinition is FieldFilterDefinition)
             {
                 FieldDefinition = lookupFilterResult.FieldDefinition;
-                AutoFillField = FieldDefinition;
+                if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                {
+                    AutoFillField = FieldDefinition;
+                }
             }
             LoadFromFilterDefinition(lookupFilterResult.FilterItemDefinition, false, entity.AdvancedFindId);
             if (lookupFilterResult.FieldDefinition != null)
@@ -471,6 +477,7 @@ namespace RingSoft.DbMaintenance
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.FilterId = rowIndex + 1;
             entity.LeftParentheses = (byte)LeftParenthesesCount;
+            entity.Path = Path;
             //if (FilterItemDefinition is FieldFilterDefinition fieldFilterDefinition)
             //{
             //    entity.TableName = fieldFilterDefinition.FieldDefinition.TableDefinition.EntityName;
@@ -838,7 +845,7 @@ namespace RingSoft.DbMaintenance
 
             FieldDefinition = fieldDefinition;
             var foundTreeItem =
-                Manager.ViewModel.ProcessFoundTreeViewItem(string.Empty, fieldDefinition);
+                Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
 
             ProcessIncludeResult includeResult = null;
             if (foundTreeItem != null)
@@ -918,7 +925,7 @@ namespace RingSoft.DbMaintenance
                                     {
                                         fieldDefinition = initialSortColumnField.FieldDefinition;
                                         foundTreeItem =
-                                            Manager.ViewModel.ProcessFoundTreeViewItem("", fieldDefinition);
+                                            Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
                                         includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
                                     }
 

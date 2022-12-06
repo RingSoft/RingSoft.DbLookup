@@ -57,6 +57,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public LookupDefinitionBase LookupDefinition { get; set; }
         public AdvancedFilterViewModel ViewModel { get; set; }
 
+        public Label FieldLabel { get; set; }
+        public StringReadOnlyBox FieldControl { get; set; }
         public Label DisplayLabel { get; set; }
         public StringEditControl DisplayControl { get; set; }
         public Border Border { get; set; }
@@ -109,6 +111,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             MemoEditor = GetTemplateChild(nameof(MemoEditor)) as DataEntryMemoEditor;
+            FieldLabel = GetTemplateChild(nameof(FieldLabel)) as Label;
+            FieldControl = GetTemplateChild(nameof(FieldControl)) as StringReadOnlyBox;
             DisplayLabel = GetTemplateChild(nameof(DisplayLabel)) as Label;
             DisplayControl = GetTemplateChild(nameof(DisplayControl)) as StringEditControl;
             FormulaValueTypeLabel = GetTemplateChild(nameof(FormulaValueTypeLabel)) as Label;
@@ -272,6 +276,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     DisplayControl.Visibility = Visibility.Collapsed;
                     break;
                 case TreeViewType.Formula:
+                    FieldLabel.Visibility = FieldControl.Visibility = Visibility.Collapsed;
                     FormulaValueTypeLabel.Visibility = Visibility.Visible;
                     FormulaValueTypeComboBox.Visibility = Visibility.Visible;
                     if (CheckCondition())

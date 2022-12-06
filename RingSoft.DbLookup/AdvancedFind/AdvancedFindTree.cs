@@ -291,9 +291,13 @@ namespace RingSoft.DbLookup.AdvancedFind
             return null;
         }
 
-        public TreeViewItem ProcessFoundTreeViewItem(string path)
+        public TreeViewItem ProcessFoundTreeViewItem(string path, TreeViewType type = TreeViewType.Field, TreeViewItem root = null)
         {
             TreeViewItem result = null;
+            if (root != null)
+            {
+                result = root;
+            }
             while (!path.IsNullOrEmpty())
             {
                 var sepPos = path.IndexOf(";");
@@ -312,6 +316,15 @@ namespace RingSoft.DbLookup.AdvancedFind
                     }
                 }
                 path = path.RightStr(path.Length - (sepPos + 1));
+            }
+
+            switch (type)
+            {
+                case TreeViewType.Field:
+                    break;
+                default:
+                    result = result.Items.FirstOrDefault(p => p.Type == type);
+                    break;
             }
             return result;
         }

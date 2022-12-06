@@ -65,7 +65,6 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string TableDescription { get; set; }
 
-
         internal virtual void CopyFrom(FilterItemDefinition source)
         {
             LeftParenthesesCount = source.LeftParenthesesCount;

@@ -83,21 +83,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         memoEditor.ParentTable = gridRow.Table;
                     }
                 }
-                if (LookupFormulaColumnDefinition.PrimaryField == null)
-                {
-                    memoEditor.ParentField = "<Lookup Root>";
-                }
-                else
-                {
-                    memoEditor.ParentField = LookupFormulaColumnDefinition.PrimaryField.Description;
-                }
 
                 memoEditor.DataType = LookupFormulaColumnDefinition.DataType;
                 memoEditor.DecimalFormat = LookupFormulaColumnDefinition.DecimalFieldType.ConvertDecimalFieldTypeToDecimalEditFormatType();
                 memoEditor.Owner = Window.GetWindow(control);
                 memoEditor.ShowInTaskbar = false;
-                memoEditor.SnugWidth = 700;
-                memoEditor.SnugHeight = 500;
                 if (memoEditor.ShowDialog())
                 {
                     LookupFormulaColumnDefinition.UpdateFormula(memoEditor.MemoEditor.Text);

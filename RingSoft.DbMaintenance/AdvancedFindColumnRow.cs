@@ -178,7 +178,7 @@ namespace RingSoft.DbMaintenance
         public override void SaveToEntity(AdvancedFindColumn entity, int rowIndex)
         {
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
-            entity.ColumnId = rowIndex;
+            entity.ColumnId = rowIndex + 1;
             var tableDefinition = TableDefinition;
             entity.TableName = tableDefinition.EntityName;
             entity.Path = LookupColumnDefinition.Path;
@@ -252,7 +252,7 @@ namespace RingSoft.DbMaintenance
             }
 
             var foundItem = Manager.ViewModel.ProcessFoundTreeViewItem(LookupFormulaColumnDefinition.Formula,
-                LookupFormulaColumnDefinition.PrimaryField);
+                LookupFormulaColumnDefinition.ParentField);
             if (foundItem == null)
             {
                 Table = TableDefinition.Description;
@@ -272,7 +272,14 @@ namespace RingSoft.DbMaintenance
                 }
                 else
                 {
-                    Table = foundItem.Name;
+                    if (foundItem.Parent != null && LookupFormulaColumnDefinition != null)
+                    {
+                        Table = foundItem.Parent.Name;
+                    }
+                    else
+                    {
+                        Table = foundItem.Name;
+                    }
                 }
             }
 

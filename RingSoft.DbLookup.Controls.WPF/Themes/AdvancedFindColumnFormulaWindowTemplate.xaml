@@ -40,11 +40,6 @@
 
                             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" x:Name="TableReadOnlyBox" Width="200" HorizontalAlignment="Left" Text="{Binding Table, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Field"/>
-
-                            <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" x:Name="FieldReadOnlyBox" Width="200" HorizontalAlignment="Left" Text="{Binding Field, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-
                             <Label Grid.Row="2" Grid.Column="0" Content="Field Data Type"/>
 
                             <dec:TextComboBoxControl Grid.Row="2" Grid.Column="1" x:Name="FieldDataTypeComboBox" Setup="{Binding DataTypeComboBoxControlSetup}" SelectedItem="{Binding DataTypeComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="200"/>

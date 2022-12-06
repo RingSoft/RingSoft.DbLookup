@@ -14,6 +14,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public LookupDefinitionBase LookupDefinition { get; private set; }
 
+        public string Path { get; internal set; }
+
         public AdvancedFindFilterDefinition(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
@@ -30,6 +32,7 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 AdvancedFindId = advancedFindFilterDefinition.AdvancedFindId;
                 LookupDefinition = advancedFindFilterDefinition.LookupDefinition;
+                Path = advancedFindFilterDefinition.Path;
             }
             base.CopyFrom(source);
         }
@@ -52,7 +55,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         var newAdvancedFindFilter = new AdvancedFindFilterDefinition(LookupDefinition);
                         newAdvancedFindFilter.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
                         newAdvancedFindFilter.TableFilterDefinition = TableFilterDefinition;
-        
+                        newAdvancedFindFilter.Path = Path;
                         var newWheres = newAdvancedFindFilter.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem,
                                 true,
                                 tree);
@@ -61,7 +64,8 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     else
                     {
-                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
+                        var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false, foundTreeItem);
                         TableFilterDefinitionBase.ProcessFieldJoins(query, LookupDefinition.Joins);
                         wheres.AddRange(TableFilterDefinition.ProcessFilter(query, advFindFilterReturn.FilterItemDefinition,
                             ref lastWhereItem, ref firstWhereItem, tree));

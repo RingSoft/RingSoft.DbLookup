@@ -31,29 +31,28 @@ namespace RingSoft.DbLookup.EfCore
             List<AdvancedFindFilter> filters)
         {
             var result = true;
-            var context = SystemGlobals.DataRepository.GetDataContext();
+            var context = GetDataContext();
             if (context.SaveEntity(advancedFind, $"Saving Advanced Find '{advancedFind.Name}.'"))
             {
-                var columnsQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindColumn>();
-                var oldColumns = columnsQuery.Where(
-                    p => p.AdvancedFindId == advancedFind.Id).ToList();
-                context.RemoveRange(oldColumns);
-
+                var columnsQuery = GetTable<AdvancedFindColumn>();
+                var oldColumns = columnsQuery.Where(p => p.AdvancedFindId == advancedFind.Id);
+                
                 foreach (var advancedFindColumn in columns)
                 {
                     advancedFindColumn.AdvancedFindId = advancedFind.Id;
                 }
-                context.AddRange(columns);
-
-                var filtersQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindFilter>();
+                
+                var filtersQuery = GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
-                    p => p.AdvancedFindId == advancedFind.Id).ToList();
-                context.RemoveRange(oldFilters);
-
+                    p => p.AdvancedFindId == advancedFind.Id);
+                
                 foreach (var advancedFindFilter in filters)
                 {
                     advancedFindFilter.AdvancedFindId = advancedFind.Id;
                 }
+                context.RemoveRange(oldColumns);
+                context.RemoveRange(oldFilters);
+                context.AddRange(columns);
                 context.AddRange(filters);
 
                 result = context.Commit($"Saving Advanced Find '{advancedFind.Name}' Details");
@@ -70,12 +69,14 @@ namespace RingSoft.DbLookup.EfCore
             {
                 var columnsQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindColumn>();
                 var oldColumns = columnsQuery.Where(
-                    p => p.AdvancedFindId == advancedFindId).ToList();
-                context.RemoveRange(oldColumns);
+                    p => p.AdvancedFindId == advancedFindId);
+                
 
                 var filtersQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
-                    p => p.AdvancedFindId == advancedFindId).ToList();
+                    p => p.AdvancedFindId == advancedFindId);
+
+                context.RemoveRange(oldColumns);
                 context.RemoveRange(oldFilters);
 
                 if (context.DeleteNoCommitEntity(advancedFind, $"Deleting Advanced Find '{advancedFind.Name}'."))

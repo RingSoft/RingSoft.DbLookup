@@ -741,6 +741,10 @@ namespace RingSoft.DbMaintenance
                             result.SearchValue = IntegerSearchValue.ToString();
                         }
                     }
+                    else if(!Formula.IsNullOrEmpty())
+                    {
+                        result.SearchValue = IntegerSearchValue.ToString();
+                    }
                     break;
                 case FieldDataTypes.Decimal:
                     result.SearchValue = DecimalSearchValueDecimal.ToString();
@@ -866,8 +870,8 @@ namespace RingSoft.DbMaintenance
                     case Conditions.NotEqualsNull:
                         result = true;
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    //default:
+                    //    throw new ArgumentOutOfRangeException();
                 }
 
                 if (!result)

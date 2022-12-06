@@ -256,9 +256,13 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public AdvancedFindFilterDefinition AddUserFilter(int advancedFindId, LookupDefinitionBase lookupDefinition,
-            bool addToUsersFilters = true)
+            string path, bool addToUsersFilters = true)
         {
-            var advancedFindFilter = new AdvancedFindFilterDefinition(lookupDefinition) {AdvancedFindId = advancedFindId};
+            var advancedFindFilter = new AdvancedFindFilterDefinition(lookupDefinition)
+            {
+                AdvancedFindId = advancedFindId,
+                Path = path
+            };
             advancedFindFilter.TableFilterDefinition = this;
             if (addToUsersFilters)
             {

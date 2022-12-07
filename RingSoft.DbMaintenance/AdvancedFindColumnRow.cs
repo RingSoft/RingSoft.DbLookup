@@ -245,6 +245,11 @@ namespace RingSoft.DbMaintenance
 
         private void SetFormulaTableField()
         {
+            if (!Table.IsNullOrEmpty())
+            {
+                return;
+            }
+
             TableDefinition = LookupFormulaColumnDefinition.PrimaryTable;
             if (TableDefinition == null)
             {

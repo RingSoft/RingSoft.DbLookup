@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RingSoft.DbLookup
 {
@@ -19,5 +20,7 @@ namespace RingSoft.DbLookup
         void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class;
 
         void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class;
+
+        IQueryable<TEntity> GetTable<TEntity>() where TEntity : class;
     }
 }

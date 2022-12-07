@@ -245,15 +245,15 @@ namespace RingSoft.DbMaintenance
 
         private void SetFormulaTableField()
         {
-            if (!Table.IsNullOrEmpty())
-            {
-                return;
-            }
-
             TableDefinition = LookupFormulaColumnDefinition.PrimaryTable;
             if (TableDefinition == null)
             {
                 TableDefinition = Manager.ViewModel.LookupDefinition.TableDefinition;
+            }
+
+            if (!Table.IsNullOrEmpty())
+            {
+                return;
             }
 
             var foundItem = Manager.ViewModel.ProcessFoundTreeViewItem(LookupFormulaColumnDefinition.Formula,

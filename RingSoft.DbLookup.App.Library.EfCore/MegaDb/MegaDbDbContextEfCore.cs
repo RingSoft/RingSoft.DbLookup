@@ -9,6 +9,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.RecordLocking;
+using System.Linq;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -162,6 +163,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             var dbSet = Set<TEntity>();
 
             dbSet.AddRange(listToAdd);
+        }
+
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        {
+            var dbSet = Set<TEntity>();
+            return dbSet;
         }
     }
 }

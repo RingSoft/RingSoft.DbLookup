@@ -20,9 +20,9 @@ namespace RingSoft.DbLookup.EfCore
 
         public AdvancedFind.AdvancedFind GetAdvancedFind(int advancedFindId)
         {
-            IQueryable<AdvancedFind.AdvancedFind> context =
-                SystemGlobals.DataRepository.GetTable<AdvancedFind.AdvancedFind>();
-            return context.Include(p => p.Columns)
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            IQueryable<AdvancedFind.AdvancedFind> query = context.GetTable<AdvancedFind.AdvancedFind>();
+            return query.Include(p => p.Columns)
                 .Include(p => p.Filters)
                 .FirstOrDefault(p => p.Id == advancedFindId);
         }
@@ -34,15 +34,17 @@ namespace RingSoft.DbLookup.EfCore
             var context = GetDataContext();
             if (context.SaveEntity(advancedFind, $"Saving Advanced Find '{advancedFind.Name}.'"))
             {
-                var columnsQuery = GetTable<AdvancedFindColumn>();
+                var columnsQuery = context.GetTable<AdvancedFindColumn>();
                 var oldColumns = columnsQuery.Where(p => p.AdvancedFindId == advancedFind.Id);
                 
                 foreach (var advancedFindColumn in columns)
                 {
                     advancedFindColumn.AdvancedFindId = advancedFind.Id;
                 }
-                
-                var filtersQuery = GetTable<AdvancedFindFilter>();
+                context.RemoveRange(oldColumns);
+                context.AddRange(columns);
+
+                var filtersQuery = context.GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
                     p => p.AdvancedFindId == advancedFind.Id);
                 
@@ -50,9 +52,7 @@ namespace RingSoft.DbLookup.EfCore
                 {
                     advancedFindFilter.AdvancedFindId = advancedFind.Id;
                 }
-                context.RemoveRange(oldColumns);
                 context.RemoveRange(oldFilters);
-                context.AddRange(columns);
                 context.AddRange(filters);
 
                 result = context.Commit($"Saving Advanced Find '{advancedFind.Name}' Details");
@@ -63,16 +63,16 @@ namespace RingSoft.DbLookup.EfCore
         public bool DeleteAdvancedFind(int advancedFindId)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
-            var query = SystemGlobals.DataRepository.GetTable<AdvancedFind.AdvancedFind>();
+            var query = context.GetTable<AdvancedFind.AdvancedFind>();
             var advancedFind = query.FirstOrDefault(p => p.Id == advancedFindId);
             if (advancedFind != null)
             {
-                var columnsQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindColumn>();
+                var columnsQuery = context.GetTable<AdvancedFindColumn>();
                 var oldColumns = columnsQuery.Where(
                     p => p.AdvancedFindId == advancedFindId);
                 
 
-                var filtersQuery = SystemGlobals.DataRepository.GetTable<AdvancedFindFilter>();
+                var filtersQuery = context.GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
                     p => p.AdvancedFindId == advancedFindId);
 
@@ -94,7 +94,8 @@ namespace RingSoft.DbLookup.EfCore
 
         public RecordLock GetRecordLock(string table, string primaryKey)
         {
-            var query = SystemGlobals.DataRepository.GetTable<RecordLock>();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var query = context.GetTable<RecordLock>();
             return query.FirstOrDefault(p => p.Table == table && p.PrimaryKey == primaryKey);
         }
 
@@ -106,7 +107,7 @@ namespace RingSoft.DbLookup.EfCore
         public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
         {
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            var dbSet = context.GetDbContextEf().Set<TEntity>();
+            var dbSet = context.GetTable<TEntity>();
             return dbSet;
         }
     }

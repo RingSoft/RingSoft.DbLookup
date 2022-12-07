@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
@@ -142,6 +143,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var dbSet = Set<TEntity>();
 
             dbSet.AddRange(listToAdd);
+        }
+
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        {
+            var dbSet = Set<TEntity>();
+            return dbSet;
         }
     }
 }

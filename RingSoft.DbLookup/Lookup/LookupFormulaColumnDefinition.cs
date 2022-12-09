@@ -153,6 +153,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public FieldDefinition PrimaryField { get; set; }
 
+        public bool ConvertToLocalTime { get; private set; }
+
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 
@@ -188,6 +190,7 @@ namespace RingSoft.DbLookup.Lookup
                 PrimaryTable = formulaSource.PrimaryTable;
                 PrimaryField = formulaSource.PrimaryField;
                 ParentObject =formulaSource.ParentObject;
+                ConvertToLocalTime = formulaSource.ConvertToLocalTime;
                 if (formulaSource.Caption == "Difference")
                 {
                     
@@ -279,7 +282,7 @@ namespace RingSoft.DbLookup.Lookup
                     return DecimalFieldDefinition.FormatNumericValue(value, NumberFormatString, DecimalFieldType,
                         DecimalCount, ColumnCulture);
                 case FieldDataTypes.DateTime:
-                    return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture);
+                    return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture, ConvertToLocalTime);
                 case FieldDataTypes.Bool:
                     break;
                 default:
@@ -331,6 +334,12 @@ namespace RingSoft.DbLookup.Lookup
         public LookupFormulaColumnDefinition HasDataType(FieldDataTypes value)
         {
             _dataType = value;
+            return this;
+        }
+
+        public LookupFormulaColumnDefinition HasConvertToLocalTime(bool value = true)
+        {
+            ConvertToLocalTime = value;
             return this;
         }
     }

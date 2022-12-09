@@ -342,8 +342,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             var editor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0));
             if (formulaTreeViewItem.Parent != null)
             {
-                editor.ParentTable = formulaTreeViewItem.Parent.FieldDefinition.ParentJoinForeignKeyDefinition
-                    .ForeignTable.Description;
+                editor.ParentTable = formulaTreeViewItem.Parent.Name;
             }
             else
             {

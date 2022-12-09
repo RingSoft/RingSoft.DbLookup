@@ -247,6 +247,27 @@ namespace RingSoft.DbLookup.ModelDefinition
             if (lookupDefinition.TableDefinition != this)
                 throw new ArgumentException(
                     $"Lookup's table definition '{lookupDefinition.TableDefinition}' does not match this table definition. ({this})");
+
+            //var message = $"The first column's field definition table must be of '{Description}'";
+            //var caption = "Invalid Lookup Definition";
+
+            //if (lookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+            //{
+            //    if (lookupFieldColumn.FieldDefinition.TableDefinition != this)
+            //    {
+            //        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+            //        return this;
+            //    }
+            //}
+
+            //else if (lookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
+            //{
+            //    if (lookupFormulaColumn.PrimaryField != null && lookupFormulaColumn.PrimaryField.TableDefinition != this)
+            //    {
+            //        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+            //        return this;
+            //    }
+            //}
             LookupDefinition = lookupDefinition;
             return this;
         }

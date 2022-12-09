@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine;
 using System;
 using System.Data;
+using System.Linq;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -81,7 +82,25 @@ namespace RingSoft.DbLookup.AutoFill
             AutoFillControl = autoFillControl;
 
             AutoFillDefinitionBase autoFillDefinition = null;
-
+            if (lookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition initialFieldColumnDefinition)
+            {
+                if (initialFieldColumnDefinition.FieldDefinition.TableDefinition != lookupDefinition.TableDefinition)
+                {
+                    var stringField =
+                        lookupDefinition.TableDefinition.FieldDefinitions.FirstOrDefault(p =>
+                            p.FieldDataType == FieldDataTypes.String);
+                    var columnDefinition = lookupDefinition.AddHiddenColumn(stringField);
+                    lookupDefinition.InitialSortColumnDefinition = columnDefinition;
+                }
+            }
+            //else if (lookupDefinition.InitialSortColumnDefinition is LookupFormulaColumnDefinition initialFormulaColumnDefinition)
+            //{
+            //    var stringField =
+            //        lookupDefinition.TableDefinition.FieldDefinitions.FirstOrDefault(p =>
+            //            p.FieldDataType == FieldDataTypes.String);
+            //    var columnDefinition = lookupDefinition.AddHiddenColumn(stringField);
+            //    lookupDefinition.InitialSortColumnDefinition = columnDefinition;
+            //}
             switch (lookupDefinition.InitialSortColumnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:

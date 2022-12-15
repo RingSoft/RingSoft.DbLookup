@@ -222,7 +222,7 @@ namespace RingSoft.DbLookup.Lookup
 
             LookupDefinition = lookupDefinition;
             LookupControl = userInterface;
-            SortColumnDefinition = lookupDefinition.InitialSortColumnDefinition;
+            SortColumnDefinition = lookupDefinition.InitialOrderByColumn;
             OrderByType = lookupDefinition.InitialOrderByType;
         }
 
@@ -1320,8 +1320,20 @@ namespace RingSoft.DbLookup.Lookup
                 case LookupColumnTypes.Formula:
                     if (SortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
-                        query.AddWhereItemFormula(lookupFormulaColumn.Formula, condition, searchText,
-                            lookupFormulaColumn.ValueType);
+                        switch (lookupFormulaColumn.DataType)
+                        {
+                            case FieldDataTypes.DateTime:
+                                if (DateTime.TryParse(searchText, out var date))
+                                {
+                                    query.AddWhereItemFormula(lookupFormulaColumn.Formula, condition, date,
+                                        lookupFormulaColumn.DateType);
+                                }
+                                break;
+                            default:
+                                query.AddWhereItemFormula(lookupFormulaColumn.Formula, condition, searchText,
+                                    lookupFormulaColumn.ValueType);
+                                break;
+                        }
                     }
 
                     break;

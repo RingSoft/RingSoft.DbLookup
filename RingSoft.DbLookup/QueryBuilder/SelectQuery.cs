@@ -402,6 +402,10 @@ namespace RingSoft.DbLookup.QueryBuilder
                 case DbDateTypes.DateTime:
                     stringValue = $"{value:yyyy-MM-dd HH:mm:ss}";
                     break;
+                case DbDateTypes.Millisecond:
+                    stringValue = $"{value:yyyy-MM-dd HH:mm:ss.fff}";
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dateType), dateType, null);
             }

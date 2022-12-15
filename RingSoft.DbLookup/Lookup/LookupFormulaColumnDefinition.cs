@@ -5,6 +5,7 @@ using System.Globalization;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -290,6 +291,40 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return GblMethods.FormatValue(DataType, value);
+        }
+
+        public override string GetTextForColumn(PrimaryKeyValue primaryKeyValue)
+        {
+            var query = new SelectQuery(primaryKeyValue.TableDefinition.TableName);
+            if (!LookupDefinition.FromFormula.IsNullOrEmpty())
+            {
+                query.BaseTable.Formula = LookupDefinition.FromFormula;
+            }
+
+            query.AddSelectFormulaColumn("Formula",
+                OriginalFormula.Replace("{Alias}", primaryKeyValue.TableDefinition.TableName));
+            var test = this;
+            foreach (var primaryKeyField in primaryKeyValue.KeyValueFields)
+            {
+                query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.Equals, primaryKeyField.Value);
+            }
+
+            var dataProcessResult = primaryKeyValue.TableDefinition.Context.DataProcessor.GetData(query);
+            if (dataProcessResult.ResultCode == GetDataResultCodes.Success)
+            {
+                var result = dataProcessResult.DataSet.Tables[0].Rows[0].GetRowValue("Formula");
+                if (DataType == FieldDataTypes.DateTime)
+                {
+                    var date = DateTime.MinValue;
+                    if (DateTime.TryParse(result, out date))
+                    {
+                        result = FormatValue(date.ToString());
+                    }
+                }
+                return result;
+            }
+
+            return "";
         }
 
         /// <summary>

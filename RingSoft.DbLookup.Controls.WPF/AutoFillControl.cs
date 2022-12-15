@@ -833,13 +833,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (TextBox != null)
                 initialText = TextBox.Text;
 
+            if (Setup.LookupDefinition.InitialOrderByColumn != Setup.LookupDefinition.InitialSortColumnDefinition &&
+                !initialText.IsNullOrEmpty() && Value.PrimaryKeyValue.IsValid)
+            {
+                initialText = Setup.LookupDefinition.InitialOrderByColumn.GetTextForColumn(Value.PrimaryKeyValue);
+            }
             PrimaryKeyValue readOnlyPrimaryKeyValue = null;
             if (_readOnlyMode)
             {
                 readOnlyPrimaryKeyValue = Value.PrimaryKeyValue;
             }
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
-                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText, readOnlyPrimaryKeyValue);
+                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText, Value?.PrimaryKeyValue, readOnlyPrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
             lookupWindow.Owner = Window.GetWindow(this);
@@ -855,7 +860,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.SetReadOnlyMode(_readOnlyMode);
             lookupWindow.ApplyNewLookup += (sender, args) => Setup.LookupDefinition = lookupWindow.LookupDefinition;
             LookupShown?.Invoke(this, new LookupShownArgs(){LookupWindow = lookupWindow});
-            lookupWindow.ShowDialog();
+            lookupWindow.Closed += (sender, args) =>
+            {
+                Window.GetWindow(this).Activate();
+            };
+            lookupWindow.Show();
         }
 
         private void LookupForm_LookupSelect(object sender, LookupSelectArgs e)

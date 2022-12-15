@@ -272,8 +272,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl == null)
                 return;
 
+            var searchText = LookupControl.SearchText;
+            if (!searchText.IsNullOrEmpty())
+            {
+                if (LookupControl.LookupData.SortColumnDefinition != LookupDefinition.InitialSortColumnDefinition)
+                {
+                    searchText = string.Empty;
+                }
+            }
             var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
-                LookupControl.SearchText, this)
+                searchText, this)
             {
                 InputParameter = AddViewParameter,
                 LookupReadOnlyMode = _readOnlyMode,

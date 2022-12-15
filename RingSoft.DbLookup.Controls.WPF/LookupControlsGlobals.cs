@@ -6,17 +6,24 @@ using System.Windows;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using System.Linq;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
     public class ControlsUserInterface : IDbLookupUserInterface
     {
+        public static Window GetActiveWindow()
+        {
+            var activeWindow = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            return activeWindow;
+        }
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
-                dataProcessResultWindow.Owner = Application.Current.MainWindow;
+                var activeWindow = GetActiveWindow();
+                dataProcessResultWindow.Owner = activeWindow;
                 dataProcessResultWindow.ShowInTaskbar = false;
                 dataProcessResultWindow.ShowDialog();
             });
@@ -24,25 +31,30 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
         {
+            var activeWindow = GetActiveWindow();
             if (e.LookupData.LookupDefinition.TableDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds)
             {
                 var maintenanceWindow = new AdvancedFindWindow();
-                if (e.OwnerWindow is Window ownerWindow)
-                    maintenanceWindow.Owner = ownerWindow;
+                //if (e.OwnerWindow is Window ownerWindow)
+                //    maintenanceWindow.Owner = ownerWindow;
 
+                maintenanceWindow.Owner = activeWindow;
                 maintenanceWindow.ShowInTaskbar = false;
                 maintenanceWindow.Loaded += (sender, args) => maintenanceWindow.Processor.InitializeFromLookupData(e);
-                maintenanceWindow.ShowDialog();
+                maintenanceWindow.Closed += (sender, args) => activeWindow.Activate();
+                maintenanceWindow.Show();
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      SystemGlobals.AdvancedFindLookupContext.RecordLocks)
             {
                 var maintenanceWindow = new RecordLockingWindow();
-                if (e.OwnerWindow is Window ownerWindow)
-                    maintenanceWindow.Owner = ownerWindow;
+                //if (e.OwnerWindow is Window ownerWindow)
+                //    maintenanceWindow.Owner = ownerWindow;
+                maintenanceWindow.Owner = activeWindow;
 
                 maintenanceWindow.ShowInTaskbar = false;
                 maintenanceWindow.Loaded += (sender, args) => maintenanceWindow.Processor.InitializeFromLookupData(e);
+                maintenanceWindow.Closed += (sender, args) => activeWindow.Activate();
                 maintenanceWindow.ShowDialog();
 
             }

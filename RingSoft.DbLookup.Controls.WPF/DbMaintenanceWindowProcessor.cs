@@ -171,7 +171,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
 
             DebugShowFind?.Invoke(this, EventArgs.Empty);
-            lookupWindow.ShowDialog();
+            bool isAltDown = IsMaintenanceKeyDown(MaintenanceKey.Alt);
+            lookupWindow.Closed += (sender, args) =>
+            {
+                MaintenanceWindow.Activate();
+                if (!isAltDown)
+                {
+                    View.ResetViewForNewRecord();
+                }
+            };
+            lookupWindow.Show();
         }
 
         public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)

@@ -5,11 +5,14 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.ComponentModel;
+using Google.Protobuf.WellKnownTypes;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
+using System.ComponentModel.DataAnnotations;
+using Renci.SshNet.Messages;
 
 namespace RingSoft.DbMaintenance
 {
@@ -377,13 +380,22 @@ namespace RingSoft.DbMaintenance
             if (!FindCommand.IsEnabled)
                 return;
 
-            Processor.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, FindButtonInitialSearchFor,
+            var searchText = FindButtonInitialSearchFor;
+            if (FindButtonLookupDefinition.InitialOrderByColumn != FindButtonLookupDefinition.InitialSortColumnDefinition &&
+                !FindButtonInitialSearchFor.IsNullOrEmpty() && _lookupData.SelectedPrimaryKeyValue.IsValid)
+            {
+                searchText =
+                    FindButtonLookupDefinition.InitialOrderByColumn.GetTextForColumn(
+                        _lookupData.SelectedPrimaryKeyValue);
+            }
+
+            Processor.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, searchText,
                 _lookupData.SelectedPrimaryKeyValue);
 
-            if (!keyDown)
-            {
-                View.ResetViewForNewRecord();
-            }
+            //if (!keyDown)
+            //{
+            //    View.ResetViewForNewRecord();
+            //}
         }
 
         public override void OnRecordSelected(LookupSelectArgs e)
@@ -522,6 +534,9 @@ namespace RingSoft.DbMaintenance
                             new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
                         selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
                         selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
+                        var lockDateWhere = selectQuery.AddWhereItem(dateField.FieldName, Conditions.GreaterThanEquals,
+                            LockDate.ToUniversalTime(),
+                            DbDateTypes.Millisecond);
 
                         var dataResult =
                             SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
@@ -537,29 +552,28 @@ namespace RingSoft.DbMaintenance
                             if (dataResult.DataSet.Tables[0].Rows.Count > 0)
                             {
                                 var row = dataResult.DataSet.Tables[0].Rows[0];
+                                var message =
+                                    $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
+                                message +=
+                                    "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
 
-                                var rowLockDateString = row.GetRowValue(dateField.FieldName);
-                                DateTime rowLockDate = DateTime.MinValue;
-                                if (DateTime.TryParse(rowLockDateString, out rowLockDate))
+                                var lockKey =
+                                    new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+                                lockKey.PopulateFromDataRow(row);
+                                if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
                                 {
-                                    if (rowLockDate.ToLocalTime() > LockDate)
-                                    {
-                                        var message =
-                                            $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
-                                        message +=
-                                            "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
-                                        var lockKey =
-                                            new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
-                                        lockKey.PopulateFromDataRow(row);
-                                        if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
-                                        {
-                                            return DbMaintenanceResults.ValidationError;
-                                        }
-                                    }
-
-                                    lockSql = GetUpdateLockSql(table, sqlGenerator, tableField, pkField, keyString,
-                                        dateField, userField);
+                                    return DbMaintenanceResults.ValidationError;
                                 }
+                            }
+
+                            selectQuery.RemoveWhereItem(lockDateWhere);
+                            dataResult =
+                                SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
+                                    selectQuery);
+                            if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                            {
+                                lockSql = GetUpdateLockSql(table, sqlGenerator, tableField, pkField, keyString,
+                                    dateField, userField);
                             }
                             else
                             {
@@ -572,8 +586,9 @@ namespace RingSoft.DbMaintenance
                                     $", {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
 
                                 fields += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
+                                var dateText = GetNowDateText();
                                 values +=
-                                    $", {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
+                                    $", {sqlGenerator.ConvertValueToSqlText(dateText, ValueTypes.DateTime, DbDateTypes.Millisecond)}";
 
                                 if (!SystemGlobals.UserName.IsNullOrEmpty())
                                 {
@@ -638,16 +653,17 @@ namespace RingSoft.DbMaintenance
         {
             string lockSql;
             lockSql = $"UPDATE {table} SET ";//{sqlGenerator.FormatSqlObject(tableField.FieldName)}";
-            //lockSql +=
-            //    $" = {sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime)}";
+                                             //lockSql +=
+                                             //    $" = {sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName, ValueTypes.String, DbDateTypes.DateTime)}";
 
             //lockSql += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
             //lockSql +=
             //    $" = {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
 
+            var dateText = GetNowDateText();
             lockSql += $"{sqlGenerator.FormatSqlObject(dateField.FieldName)}";
             lockSql +=
-                $" = {sqlGenerator.ConvertValueToSqlText(DateTime.Now.ToUniversalTime().ToString(), ValueTypes.DateTime, DbDateTypes.DateTime)}";
+                $" = {sqlGenerator.ConvertValueToSqlText(dateText, ValueTypes.DateTime, DbDateTypes.Millisecond)}";
 
             if (!SystemGlobals.UserName.IsNullOrEmpty())
             {
@@ -665,6 +681,13 @@ namespace RingSoft.DbMaintenance
                 $"{sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)} ";
 
             return lockSql;
+        }
+
+        private static string GetNowDateText()
+        {
+            var newDate = DateTime.Now.ToUniversalTime();
+            var dateText = newDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return dateText;
         }
 
         private bool CheckKeyValueTextChanged()

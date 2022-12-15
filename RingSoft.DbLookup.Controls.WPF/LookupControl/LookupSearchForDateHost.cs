@@ -18,6 +18,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Control.Value != null)
                 {
                     var dateValue = (DateTime) Control.Value;
+                    if (ConvertToLocalTime)
+                    {
+                        dateValue = dateValue.ToUniversalTime();
+                    }
                     result = dateValue.ToString(Control.Culture);
                 }
 
@@ -38,6 +42,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected virtual double? DefaultDateTimeWidth { get; set; } = 175;
 
+        public bool ConvertToLocalTime { get; private set; }
+
         private DateTime? _currentValue;
 
         protected override DateEditControl ConstructControl()
@@ -49,7 +55,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             Control.AllowNullValue = true;
             Control.PlayValidationSoundOnLostFocus = false;
-
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
@@ -60,6 +65,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
                             Control.CultureId = dateFieldDefinition.Culture.Name;
                             Control.DisplayFormat = dateFieldDefinition.DateFormatString;
+                            ConvertToLocalTime = dateFieldDefinition.ConvertToLocalTime;
                         }
                     }
                     break;
@@ -70,6 +76,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             formulaColumnDefinition.DateType.ConvertDbDateTypeToDateFormatType();
                         control.CultureId = formulaColumnDefinition.ColumnCulture.Name;
                         control.DisplayFormat = formulaColumnDefinition.DateFormatString;
+                        ConvertToLocalTime = formulaColumnDefinition.ConvertToLocalTime;
                     }
                     break;
                 default:

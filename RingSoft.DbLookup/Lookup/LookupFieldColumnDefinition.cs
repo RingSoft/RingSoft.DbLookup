@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -93,6 +95,29 @@ namespace RingSoft.DbLookup.Lookup
         public override string FormatValue(string value)
         {
             return FieldDefinition.FormatValue(value);
+        }
+
+        public override string GetTextForColumn(PrimaryKeyValue primaryKeyValue)
+        {
+            if (primaryKeyValue.TableDefinition != FieldDefinition.TableDefinition)
+            {
+                throw new Exception("Invalid column primaryKey");
+            }
+            var query = new SelectQuery(primaryKeyValue.TableDefinition.TableName);
+            query.AddSelectColumn(FieldDefinition.FieldName);
+            foreach (var primaryKeyField in primaryKeyValue.KeyValueFields)
+            {
+                query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.Equals, primaryKeyField.Value);
+            }
+
+            var dataProcessResult = primaryKeyValue.TableDefinition.Context.DataProcessor.GetData(query);
+            if (dataProcessResult.ResultCode == GetDataResultCodes.Success)
+            {
+                return dataProcessResult.DataSet.Tables[0].Rows[0]
+                    .GetRowValue(FieldDefinition.FieldName);
+            }
+
+            return "";
         }
 
         private void SetFieldDefinition(FieldDefinition fieldDefinition)

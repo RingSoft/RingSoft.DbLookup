@@ -102,6 +102,9 @@ namespace RingSoft.DbLookup
                 case DbDateTypes.DateTime:
                     formatString = "MM/dd/yyyy hh:mm:ss tt";
                     break;
+                case DbDateTypes.Millisecond:
+                    formatString = "MM/dd/yyyy hh:mm:ss tt.fff";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(value), value, null);
             }

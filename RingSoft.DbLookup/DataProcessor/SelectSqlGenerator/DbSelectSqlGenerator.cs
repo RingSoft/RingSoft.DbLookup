@@ -778,6 +778,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                             case DbDateTypes.DateTime:
                                 value = date.ToString("yyyy-MM-dd HH:mm:ss");
                                 break;
+                            case DbDateTypes.Millisecond:
+                                value = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                break;
                             default:
                                 throw new ArgumentOutOfRangeException(nameof(dateType), dateType, null);
                         }

@@ -487,13 +487,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             //LookupDefinition.InitialSortColumnDefinition = LookupDefinition.VisibleColumns[0];
             var sortColumnIndex =
-                GetIndexOfVisibleColumnDefinition(LookupDefinition?.InitialSortColumnDefinition);
+                GetIndexOfVisibleColumnDefinition(LookupDefinition?.InitialOrderByColumn);
 
             if (sortColumnIndex < 0)
                 sortColumnIndex = 0;
             InitializeHeader(sortColumnIndex);
-            if (LookupDefinition?.InitialSortColumnDefinition != null)
-                SetActiveColumn(sortColumnIndex, LookupDefinition.InitialSortColumnDefinition.DataType);
+            if (LookupDefinition?.InitialOrderByColumn != null)
+                SetActiveColumn(sortColumnIndex, LookupDefinition.InitialOrderByColumn.DataType);
 
             if (_refreshPendingData != null)
             {

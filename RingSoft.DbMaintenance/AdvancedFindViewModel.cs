@@ -779,7 +779,10 @@ namespace RingSoft.DbMaintenance
                             newLookupFormulaColumnDefinition = newFormulaColumn;
                             createColumn = false;
                             newFormulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
-
+                            newFormulaColumn.HasConvertToLocalTime(lookupFormulaColumn
+                                .ConvertToLocalTime);
+                            newFormulaColumn.HasDateType(lookupFormulaColumn.DateType);
+                            newFormulaColumn.HasDateFormatString(string.Empty);
                         }
                         else
                         {
@@ -806,7 +809,6 @@ namespace RingSoft.DbMaintenance
                             newLookupColumnDefinition = includeResult.LookupJoin.AddVisibleColumnDefinition(lookupFormulaColumn.Caption,
                                 lookupFormulaColumn.Formula, lookupFormulaColumn.PercentWidth,
                                 lookupFormulaColumn.DataType);
-
                             newLookupFormulaColumnDefinition = newLookupColumnDefinition as LookupFormulaColumnDefinition;
                         }
                     }
@@ -822,6 +824,7 @@ namespace RingSoft.DbMaintenance
                 {
                     newLookupColumnDefinition = newLookupFormulaColumnDefinition;
                     newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
+
                 }
 
                 if (visibleColumn.ContentTemplateId != null)
@@ -921,6 +924,17 @@ namespace RingSoft.DbMaintenance
 
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
+
+            if (lookupDefinition.InitialOrderByColumn != lookupDefinition.InitialSortColumnDefinition)
+            {
+                var initialSortColumnIndex = lookupDefinition.VisibleColumns.ToList()
+                    .IndexOf(lookupDefinition.InitialOrderByColumn);
+                if (initialSortColumnIndex != -1)
+                {
+                    LookupDefinition.InitialOrderByColumn = LookupDefinition.VisibleColumns[initialSortColumnIndex];
+                }
+            }
+            LookupDefinition.InitialOrderByType = lookupDefinition.InitialOrderByType;
             AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = 
                 AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;

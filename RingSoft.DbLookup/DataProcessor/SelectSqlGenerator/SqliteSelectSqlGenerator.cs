@@ -73,6 +73,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                         case DbDateTypes.DateOnly:
                             return $"date({fieldName})";
                         case DbDateTypes.DateTime:
+                        case DbDateTypes.Millisecond:
                             return $"datetime({fieldName})";
                         default:
                             throw new ArgumentOutOfRangeException();

@@ -75,6 +75,7 @@ namespace RingSoft.DbLookup.Lookup
                         $"Sort column {value.PropertyName}'s lookup definition does not match this.");
 
                 _initialSortLookupColumnDefinition = value;
+                InitialOrderByColumn =value;
             }
         }
 
@@ -85,6 +86,8 @@ namespace RingSoft.DbLookup.Lookup
         /// The initial type of the order by.
         /// </value>
         public OrderByTypes InitialOrderByType { get; set; }
+
+        public LookupColumnDefinitionBase InitialOrderByColumn { get; set; }
 
         /// <summary>
         /// Gets the name of the lookup entity.
@@ -189,6 +192,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public virtual void CopyLookupData(LookupDefinitionBase source)
         {
+            var initialOrderByIndex = source.VisibleColumns.ToList().IndexOf(source.InitialOrderByColumn);
             CopyColumns(source.VisibleColumns, false);
             CopyColumns(source.HiddenColumns, true);
 
@@ -201,6 +205,7 @@ namespace RingSoft.DbLookup.Lookup
 
             FilterDefinition.CopyFrom(source.FilterDefinition);
             InitialOrderByType = source.InitialOrderByType;
+            InitialOrderByColumn = VisibleColumns[initialOrderByIndex];  
             FromFormula = source.FromFormula;
             ReadOnlyMode = source.ReadOnlyMode;
             ParentObject = source.ParentObject;

@@ -156,6 +156,8 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns>The formatted value.</returns>
         public abstract string FormatValue(string value);
 
+        public abstract string GetTextForColumn(PrimaryKeyValue primaryKeyValue);
+
         /// <summary>
         /// Sets the horizontal alignment type.
         /// </summary>

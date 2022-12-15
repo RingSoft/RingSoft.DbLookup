@@ -57,7 +57,8 @@ namespace RingSoft.DbLookup.QueryBuilder
     public enum DbDateTypes
     {
         DateOnly = 0,
-        DateTime = 1
+        DateTime = 1,
+        Millisecond = 2,
     }
 
     /// <summary>

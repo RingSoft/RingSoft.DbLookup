@@ -119,8 +119,9 @@ namespace RingSoft.DbLookup.DataProcessor
 
         public override void CloseConnection(IDbConnection connection)
         {
-            if (connection is SQLiteConnection sqLiteConnection)
+            if (connection is SQLiteConnection sqLiteConnection && !IsClosed)
             {
+                IsClosed = true;
                 sqLiteConnection.Close();
                 sqLiteConnection.Dispose();
                 GC.Collect();

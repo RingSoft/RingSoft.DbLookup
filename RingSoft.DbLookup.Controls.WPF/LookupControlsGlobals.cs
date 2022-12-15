@@ -89,6 +89,8 @@ namespace RingSoft.DbLookup.Controls.WPF
     }
     public static class LookupControlsGlobals
     {
+        public static Window ActiveWindow => ControlsUserInterface.GetActiveWindow();
+
         public static LookupWindowFactory LookupWindowFactory { get; set; } = new LookupWindowFactory();
 
         public static LookupSearchForHostFactory LookupControlSearchForFactory { get; set; } = new LookupSearchForHostFactory();

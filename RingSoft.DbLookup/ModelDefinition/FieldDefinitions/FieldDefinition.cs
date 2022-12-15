@@ -228,5 +228,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             UpdateOnly = value;
         }
+
+        public string GetSqlFormatObject()
+        {
+            var tableName = TableDefinition.TableName;
+            if (ParentJoinForeignKeyDefinition != null)
+            {
+                tableName = ParentJoinForeignKeyDefinition.Alias;
+            }
+
+            tableName = TableDefinition.Context.DataProcessor.SqlGenerator.FormatSqlObject(tableName);
+            var result = $"{tableName}.{TableDefinition.Context.DataProcessor.SqlGenerator.FormatSqlObject(FieldName)}";
+            return result;
+        }
     }
 }

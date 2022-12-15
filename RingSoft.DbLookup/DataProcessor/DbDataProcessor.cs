@@ -48,6 +48,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// </value>
         public abstract DbSelectSqlGenerator SqlGenerator { get; }
 
+        public bool IsClosed { get; internal set; }
+
         /// <summary>
         /// Gets the user interface for this class to interact with.
         /// </summary>
@@ -86,8 +88,9 @@ namespace RingSoft.DbLookup.DataProcessor
         public virtual void CloseConnection(IDbConnection connection)
         {
             KeepConnectionOpen = false;
-            if (connection != null)
+            if (connection != null && !IsClosed)
             {
+                IsClosed = true;
                 if (connection.State == ConnectionState.Open)
                     connection.Close();
                 connection.Dispose();
@@ -198,6 +201,7 @@ namespace RingSoft.DbLookup.DataProcessor
 
         private IDbConnection TryOpenConnection(DataProcessResult result, bool clearConnectionPools, bool setCursor, bool showError = true)
         {
+            IsClosed = false;
             IDbConnection connection = null;
             try
             {

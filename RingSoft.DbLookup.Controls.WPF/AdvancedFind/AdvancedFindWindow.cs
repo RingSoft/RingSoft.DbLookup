@@ -17,6 +17,7 @@ using RingSoft.DbLookup.Lookup;
 using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 using RingSoft.DbLookup.QueryBuilder;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using MessageBox = System.Windows.Forms.MessageBox;
 using TreeView = System.Windows.Controls.TreeView;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
@@ -219,7 +220,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
-            
         }
 
         public void Initialize()

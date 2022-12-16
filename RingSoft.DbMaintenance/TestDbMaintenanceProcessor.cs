@@ -75,5 +75,10 @@ namespace RingSoft.DbMaintenance
         {
             return true;
         }
+
+        public bool CheckDeleteTables(DeleteTables deleteTables)
+        {
+            return true;
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <param name="primaryField">The primary field.</param>
         /// <param name="foreignField">The foreign field.</param>
         /// <returns>This object.</returns>
-        public ForeignKeyDefinition AddFieldJoin(FieldDefinition primaryField, FieldDefinition foreignField)
+        public ForeignKeyDefinition AddFieldJoin(FieldDefinition primaryField, FieldDefinition foreignField, bool addChildField)
         {
             var foreignKeyFieldJoin = new ForeignKeyFieldJoin
             {
@@ -70,7 +70,11 @@ namespace RingSoft.DbLookup.ModelDefinition
                 ForeignField = foreignField
             };
             ForeignKeyFieldJoins.Add(foreignKeyFieldJoin);
-            primaryField.TableDefinition.ChildFields.Add(foreignField);
+
+            if (addChildField)
+            {
+                primaryField.TableDefinition.ChildFields.Add(foreignField);
+            }
 
             return this;
         }

@@ -14,6 +14,7 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AdvancedFindRefreshRateWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/AutoFillReadOnlyControlTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/RecordLockingWindowTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/DeleteWindowTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

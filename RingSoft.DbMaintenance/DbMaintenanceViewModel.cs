@@ -4,6 +4,7 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Google.Protobuf.WellKnownTypes;
 using RingSoft.DataEntryControls.Engine;
@@ -12,6 +13,7 @@ using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Renci.SshNet.Messages;
 
 namespace RingSoft.DbMaintenance
@@ -113,6 +115,8 @@ namespace RingSoft.DbMaintenance
         /// The confirm delete caption.
         /// </value>
         protected virtual string ConfirmDeleteCaption => "Confirm Delete";
+
+        protected virtual List<TableDefinitionBase> TablesToDelete { get; } = new List<TableDefinitionBase>();
 
         public event EventHandler<ViewModelOperationPreviewEventArgs<TEntity>> ViewModelOperationPreview;
 
@@ -808,6 +812,52 @@ namespace RingSoft.DbMaintenance
             FireDeleteEvent();
             if (!DeleteCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
+
+            var tables = new List<TableDefinitionBase>();
+            var deleteTables = new DeleteTables();
+            foreach (var childField in TableDefinition.ChildFields)
+            {
+                if (!tables.Contains(childField.TableDefinition))
+                {
+                    if (!TablesToDelete.Contains(childField.TableDefinition))
+                    {
+                        tables.Add(childField.TableDefinition);
+                        if (childField.ParentJoinForeignKeyDefinition != null)
+                        {
+                            var query = new SelectQuery(childField.TableDefinition.TableName).SetMaxRecords(1);
+                            foreach (var fieldJoin in childField.ParentJoinForeignKeyDefinition.FieldJoins)
+                            {
+                                var keyValueField =
+                                    _lookupData.SelectedPrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
+                                        p.FieldDefinition == fieldJoin.PrimaryField);
+                                query.AddWhereItem(fieldJoin.ForeignField.FieldName, Conditions.Equals,
+                                    keyValueField.Value);
+                            }
+
+                            var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
+                            if (dataResult.ResultCode == GetDataResultCodes.Success)
+                            {
+                                if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                                {
+                                    deleteTables.PrimaryKeyValue = _lookupData.SelectedPrimaryKeyValue;
+                                    deleteTables.Tables.Add(new DeleteTable
+                                    {
+                                        ChildField = childField
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (deleteTables.Tables.Any())
+            {
+                if (!Processor.CheckDeleteTables(deleteTables))
+                {
+                    return DbMaintenanceResults.ValidationError;
+                }
+            }
 
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())

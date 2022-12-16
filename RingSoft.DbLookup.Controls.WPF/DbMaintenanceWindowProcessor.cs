@@ -269,6 +269,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        public bool CheckDeleteTables(DeleteTables deleteTables)
+        {
+            var deleteWindow = new DeleteRecordWindow(deleteTables);
+            deleteWindow.Owner = MaintenanceWindow;
+            deleteWindow.ShowInTaskbar = false;
+            deleteWindow.ShowDialog();
+            if (deleteWindow.DialogResult.HasValue)
+            {
+                return deleteWindow.DialogResult.Value;
+            }
+            return false;
+        }
+
         public virtual void SetWindowReadOnlyMode()
         {
             SaveButton.IsEnabled = DeleteButton.IsEnabled = NewButton.IsEnabled = false;

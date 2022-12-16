@@ -109,7 +109,7 @@ namespace RingSoft.DbLookup.EfCore
                                     fieldDefinition.TableDefinition.FieldDefinitions.FirstOrDefault(f =>
                                         f.PropertyName == foreignKeyProperty.Name);
                                 if (foreignFieldDefinition != null)
-                                    foreignKeyDefinition.AddFieldJoin(primaryFieldDefinition, foreignFieldDefinition);
+                                    foreignKeyDefinition.AddFieldJoin(primaryFieldDefinition, foreignFieldDefinition, false);
                             }
                         }
                     }

@@ -44,5 +44,7 @@ namespace RingSoft.DbMaintenance
         void SetWindowReadOnlyMode();
 
         bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter);
+
+        bool CheckDeleteTables(DeleteTables deleteTables);
     }
 }

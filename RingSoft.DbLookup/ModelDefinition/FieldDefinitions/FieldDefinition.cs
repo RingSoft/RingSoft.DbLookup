@@ -152,7 +152,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                     ForeignTable = TableDefinition,
                     ForeignObjectPropertyName = propertyName
                 };
-                ParentJoinForeignKeyDefinition.AddFieldJoin(parentFieldDefinition, this);
+                ParentJoinForeignKeyDefinition.AddFieldJoin(parentFieldDefinition, this, true);
             }
             else
             {

@@ -117,6 +117,15 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        public bool CanDeleteTable
+        {
+            get
+            {
+                return Context.CanDeleteTable(this);
+            }
+        }
+
+
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
 

@@ -839,11 +839,21 @@ namespace RingSoft.DbMaintenance
                             {
                                 if (dataResult.DataSet.Tables[0].Rows.Count > 0)
                                 {
-                                    deleteTables.PrimaryKeyValue = _lookupData.SelectedPrimaryKeyValue;
+                                    if (!childField.TableDefinition.CanViewTable)
+                                    {
+                                        var deleteMessage =
+                                            $"You are not allowed to view records in the {childField.TableDefinition.Description} table.";
+                                        var deleteCaption = "Delete Denied!";
+                                        ControlsGlobals.UserInterface.ShowMessageBox(deleteMessage, deleteCaption,
+                                            RsMessageBoxIcons.Exclamation);
+                                        return DbMaintenanceResults.ValidationError;
+                                    }
                                     deleteTables.Tables.Add(new DeleteTable
                                     {
-                                        ChildField = childField
-                                    });
+                                        ChildField = childField,
+                                        Parent = deleteTables,
+                                        PrimaryKeyValue = _lookupData.SelectedPrimaryKeyValue
+                                });
                                 }
                             }
                         }

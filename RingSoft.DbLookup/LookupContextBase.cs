@@ -10,13 +10,15 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
-    public class CanViewTableArgs
+    public class CanProcessTableArgs
     {
         public TableDefinitionBase TableDefinition { get; private set; }
 
         public bool AllowView { get; set; } = true;
 
-        public CanViewTableArgs(TableDefinitionBase tableDefinition)
+        public bool AllowDelete { get; set; } = true;
+
+        public CanProcessTableArgs(TableDefinitionBase tableDefinition)
         {
             TableDefinition = tableDefinition;
         }
@@ -78,9 +80,16 @@ namespace RingSoft.DbLookup
 
         public bool CanViewTable(TableDefinitionBase tableDefinition)
         {
-            var args = new CanViewTableArgs(tableDefinition);
+            var args = new CanProcessTableArgs(tableDefinition);
             CanViewTableEvent?.Invoke(this, args);
             return args.AllowView;
+        }
+
+        public bool CanDeleteTable(TableDefinitionBase tableDefinition)
+        {
+            var args = new CanProcessTableArgs(tableDefinition);
+            CanViewTableEvent?.Invoke(this, args);
+            return args.AllowDelete;
         }
 
         /// <summary>
@@ -90,7 +99,7 @@ namespace RingSoft.DbLookup
 
         public event EventHandler<TableDefinitionValue> GetAutoFillText;
 
-        public event EventHandler<CanViewTableArgs> CanViewTableEvent;
+        public event EventHandler<CanProcessTableArgs> CanViewTableEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 

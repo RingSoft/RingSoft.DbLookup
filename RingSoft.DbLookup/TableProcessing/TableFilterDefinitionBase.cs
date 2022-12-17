@@ -227,6 +227,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
+        public FieldFilterDefinition AddFixedFieldFilter(FieldDefinition fieldDefinition, Conditions condition,
+            string value)
+        {
+            return CreateAddFixedFilter(fieldDefinition, condition, value);
+        }
+
         public FormulaFilterDefinition AddFixedFilter(string description, Conditions? condition,
             string value, string formula, FieldDataTypes dataType = FieldDataTypes.String)
         {

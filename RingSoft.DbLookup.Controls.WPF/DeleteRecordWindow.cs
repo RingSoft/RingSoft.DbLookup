@@ -50,29 +50,40 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DeleteRecordWindow(DeleteTables deleteTables)
         {
             DeleteTables = deleteTables;
+            Loaded += (sender, args) =>
+            {
+                foreach (var deleteTable in DeleteTables.Tables)
+                {
+                    var tabItem = new TabItem();
+                    tabItem.Header = deleteTable.ChildField.TableDefinition.Description;
+                    tabItem.Content = new DeleteRecordWindowItemControl(deleteTable);
+                    tabItem.Focusable = true;
+                    TabControl.Items.Add(tabItem);
+                    tabItem.UpdateLayout();
+                }
+                TabControl.UpdateLayout();
+                UpdateLayout();
+
+                var firstTab = TabControl.Items[0] as TabItem;
+                if (firstTab != null)
+                {
+                    firstTab.Focus();
+                }
+            };
         }
 
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             CheckBox = GetTemplateChild(nameof(CheckBox)) as CheckBox;
-            //TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
+            TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
 
-            //foreach (var deleteTable in DeleteTables.Tables)
+
+            //Border.GotFocus += (sender, args) =>
             //{
-            //    var tabItem = new TabItem();
-            //    tabItem.Header = deleteTable.ChildField.TableDefinition.Description;
-            //    tabItem.Content = new DeleteRecordWindowItemControl(deleteTable);
-            //    tabItem.Focusable = true;
-            //    TabControl.Items.Add(tabItem);
-            //}
-
-            Border.GotFocus += (sender, args) =>
-            {
-                //TabControl.Focus();
-                //TabControl.SelectedIndex = 0;
-                CheckBox.Focus();
-            };
+            //    TabControl.Focus();
+            //    TabControl.SelectedIndex = 0;
+            //};
 
             base.OnApplyTemplate();
         }

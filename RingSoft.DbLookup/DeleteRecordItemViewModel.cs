@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
@@ -58,11 +61,35 @@ namespace RingSoft.DbLookup
         {
             if (deleteTable.ChildField.TableDefinition.LookupDefinition != null)
             {
-                LookupDefinition = deleteTable.ChildField.TableDefinition.LookupDefinition;
+                LookupDefinition = deleteTable.ChildField.TableDefinition.LookupDefinition.Clone();
+            }
+            else
+            {
+                LookupDefinition = new LookupDefinitionBase(deleteTable.ChildField.TableDefinition);
+                var stringFields =
+                    deleteTable.ChildField.TableDefinition.FieldDefinitions.Where(p =>
+                        p.FieldDataType == FieldDataTypes.String);
+                foreach (var stringField in stringFields)
+                {
+                    var width = (100 / stringFields.Count());
+                    LookupDefinition.AddVisibleColumnDefinition(stringField.Description, stringField, width, "");
+                }
             }
 
             if (LookupDefinition != null)
             {
+                foreach (var fieldJoin in deleteTable.ChildField.ParentJoinForeignKeyDefinition.FieldJoins)
+                {
+                    var keyValueField =
+                        deleteTable.PrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
+                            p.FieldDefinition == fieldJoin.PrimaryField);
+
+                    if (keyValueField != null)
+                    {
+                        LookupDefinition.FilterDefinition.AddFixedFieldFilter(fieldJoin.ForeignField, Conditions.Equals,
+                            keyValueField.Value);
+                    }
+                }
                 LookupCommand = new LookupCommand(LookupCommands.Refresh);
             }
         }

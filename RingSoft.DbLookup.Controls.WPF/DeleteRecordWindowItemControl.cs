@@ -52,6 +52,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         static DeleteRecordWindowItemControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl), new FrameworkPropertyMetadata(typeof(DeleteRecordWindowItemControl)));
+
+            IsTabStopProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl), new FrameworkPropertyMetadata(false));
+
+            KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl),
+                new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
 
         public DeleteRecordWindowItemControl(DeleteTable deleteTable)

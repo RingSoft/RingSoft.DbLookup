@@ -813,61 +813,6 @@ namespace RingSoft.DbMaintenance
             if (!DeleteCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
-            var tables = new List<TableDefinitionBase>();
-            var deleteTables = new DeleteTables();
-            foreach (var childField in TableDefinition.ChildFields)
-            {
-                if (!tables.Contains(childField.TableDefinition))
-                {
-                    if (!TablesToDelete.Contains(childField.TableDefinition))
-                    {
-                        tables.Add(childField.TableDefinition);
-                        if (childField.ParentJoinForeignKeyDefinition != null)
-                        {
-                            var query = new SelectQuery(childField.TableDefinition.TableName).SetMaxRecords(1);
-                            foreach (var fieldJoin in childField.ParentJoinForeignKeyDefinition.FieldJoins)
-                            {
-                                var keyValueField =
-                                    _lookupData.SelectedPrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
-                                        p.FieldDefinition == fieldJoin.PrimaryField);
-                                query.AddWhereItem(fieldJoin.ForeignField.FieldName, Conditions.Equals,
-                                    keyValueField.Value);
-                            }
-
-                            var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
-                            if (dataResult.ResultCode == GetDataResultCodes.Success)
-                            {
-                                if (dataResult.DataSet.Tables[0].Rows.Count > 0)
-                                {
-                                    if (!childField.TableDefinition.CanViewTable)
-                                    {
-                                        var deleteMessage =
-                                            $"You are not allowed to view records in the {childField.TableDefinition.Description} table.";
-                                        var deleteCaption = "Delete Denied!";
-                                        ControlsGlobals.UserInterface.ShowMessageBox(deleteMessage, deleteCaption,
-                                            RsMessageBoxIcons.Exclamation);
-                                        return DbMaintenanceResults.ValidationError;
-                                    }
-                                    deleteTables.Tables.Add(new DeleteTable
-                                    {
-                                        ChildField = childField,
-                                        Parent = deleteTables,
-                                        PrimaryKeyValue = _lookupData.SelectedPrimaryKeyValue
-                                });
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (deleteTables.Tables.Any())
-            {
-                if (!Processor.CheckDeleteTables(deleteTables))
-                {
-                    return DbMaintenanceResults.ValidationError;
-                }
-            }
 
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())
@@ -876,6 +821,23 @@ namespace RingSoft.DbMaintenance
             var message = ConfirmDeleteMessage(description);
             if (Processor.ShowYesNoMessage(message, ConfirmDeleteCaption))
             {
+                var tables = new List<TableDefinitionBase>();
+                var deleteTables = new DeleteTables();
+                foreach (var childField in TableDefinition.ChildFields)
+                {
+                    if (!ProcessDeleteChildField(tables, childField, deleteTables))
+                    {
+                        return DbMaintenanceResults.ValidationError;
+                    }
+                }
+
+                if (deleteTables.Tables.Any())
+                {
+                    if (!Processor.CheckDeleteTables(deleteTables))
+                    {
+                        return DbMaintenanceResults.ValidationError;
+                    }
+                }
                 var operationArgs = new ViewModelOperationPreviewEventArgs<TEntity>
                 {
                     Operation = ViewModelOperations.Delete
@@ -893,6 +855,106 @@ namespace RingSoft.DbMaintenance
             }
 
             return DbMaintenanceResults.Success;
+        }
+
+        private bool ProcessDeleteChildField(List<TableDefinitionBase> tables, FieldDefinition childField, DeleteTables deleteTables,
+            FieldDefinition parentField = null, FieldDefinition rootChild = null)
+        {
+            if (!tables.Contains(childField.TableDefinition))
+            {
+                if (!TablesToDelete.Contains(childField.TableDefinition))
+                {
+                    tables.Add(childField.TableDefinition);
+                    var query = new SelectQuery(childField.TableDefinition.TableName).SetMaxRecords(1);
+                    if (parentField == null)
+                    {
+                        if (childField.ParentJoinForeignKeyDefinition != null)
+                        {
+                            foreach (var fieldJoin in childField.ParentJoinForeignKeyDefinition.FieldJoins)
+                            {
+                                var keyValueField =
+                                    _lookupData.SelectedPrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
+                                        p.FieldDefinition == fieldJoin.PrimaryField);
+
+                                query.AddWhereItem(fieldJoin.ForeignField.FieldName, Conditions.Equals,
+                                    keyValueField.Value);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var joinTable = query.AddPrimaryJoinTable(JoinTypes.InnerJoin,
+                            parentField.TableDefinition.TableName);
+
+                        foreach (var fieldJoin in childField.ParentJoinForeignKeyDefinition.FieldJoins)
+                        {
+                            joinTable.AddJoinField(fieldJoin.PrimaryField.FieldName,
+                                fieldJoin.ForeignField.FieldName);
+                        }
+
+                        if (rootChild?.ParentJoinForeignKeyDefinition != null)
+                        {
+                            foreach (var fieldJoin in rootChild.ParentJoinForeignKeyDefinition.FieldJoins)
+                            {
+                                var keyValueField =
+                                    _lookupData.SelectedPrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
+                                        p.FieldDefinition == fieldJoin.PrimaryField);
+
+                                query.AddWhereItem(joinTable, fieldJoin.ForeignField.FieldName, Conditions.Equals,
+                                    keyValueField.Value);
+
+                            }
+                        }
+                    }
+
+                    var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
+                    if (dataResult.ResultCode == GetDataResultCodes.Success)
+                    {
+                        if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                        {
+                            if (!childField.TableDefinition.CanViewTable)
+                            {
+                                var deleteMessage =
+                                    $"You are not allowed to view records in the {childField.TableDefinition.Description} table.";
+                                var deleteCaption = "Delete Denied!";
+                                ControlsGlobals.UserInterface.ShowMessageBox(deleteMessage, deleteCaption,
+                                    RsMessageBoxIcons.Exclamation);
+                                {
+                                    return false;
+                                }
+                            }
+
+                            if (rootChild == null)
+                            {
+                                rootChild = childField;
+                            }
+                            deleteTables.PrimaryKeyValue = _lookupData.SelectedPrimaryKeyValue;
+                            deleteTables.Tables.Add(new DeleteTable
+                            {
+                                ChildField = childField,
+                                Parent = deleteTables,
+                                ParentField = parentField,
+                                RootField = rootChild
+                            });
+                        }
+                    }
+                }
+
+            }
+
+            foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
+            {
+                if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
+                {
+                    if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
+                            rootChild))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

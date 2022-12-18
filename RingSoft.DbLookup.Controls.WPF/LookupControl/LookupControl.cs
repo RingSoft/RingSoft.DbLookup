@@ -266,6 +266,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowAdvancedFindButton { get; set; } = true;
 
+        public bool ForceRefreshOnActivate { get; set; } = true;
+
         public int RecordCountWait { get; set; }
 
         public bool ShowRecordCountWait { get; set; }
@@ -1723,6 +1725,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OwnerWindow_Activated(object sender, EventArgs e)
         {
+            if (!ForceRefreshOnActivate)
+            {
+                return;
+            }
             //Peter Ringering - 09/25/2022 - E-273
             RefreshData(false);
             if (SearchForHost != null && SearchForHost.SearchText.IsNullOrEmpty())

@@ -144,20 +144,6 @@ namespace RingSoft.DbLookup
                             fieldFilter.JoinDefinition = joins[joins.Count - 1];
                         }
                     }
-                    var parentIndex = joins.Count - 1;
-                    var joinIndex = 0;
-                    var firstJoin = true;
-                    //foreach (var tableFieldJoinDefinition in LookupDefinition.FilterDefinition.Joins)
-                    //{
-                    //    joinIndex++;
-                    //    if (!firstJoin)
-                    //    {
-                    //        parentIndex--;
-                    //        tableFieldJoinDefinition.ParentAlias = joins[parentIndex].Alias;
-                    //    }
-                    //    firstJoin = false;
-                    //}
-
                 }
 
                 LookupCommand = new LookupCommand(LookupCommands.Refresh);
@@ -167,6 +153,7 @@ namespace RingSoft.DbLookup
         private LookupJoin ProcessFieldJoins(DeleteTable deleteTable, List<TableFieldJoinDefinition> joins, LookupJoin parentJoin = null)
         {
             LookupJoin join = null;
+            var joinIndex = 0;
             foreach (var fieldJoin in deleteTable.ChildField.ParentJoinForeignKeyDefinition.FieldJoins)
             {
                 if (parentJoin == null)
@@ -177,17 +164,22 @@ namespace RingSoft.DbLookup
                 {
                     join = parentJoin.Include(fieldJoin.ForeignField);
                 }
-                var tableFieldJoinDefinition = new TableFieldJoinDefinition
+                if (joinIndex == 0)
                 {
-                    ForeignKeyDefinition = fieldJoin.ForeignField.ParentJoinForeignKeyDefinition,
-                };
-                joins.Add(tableFieldJoinDefinition);
-                LookupDefinition.FilterDefinition.AddJoin(tableFieldJoinDefinition);
+                    var tableFieldJoinDefinition = new TableFieldJoinDefinition
+                    {
+                        ForeignKeyDefinition = fieldJoin.ForeignField.ParentJoinForeignKeyDefinition,
+                    };
+
+                    joins.Add(tableFieldJoinDefinition);
+                    LookupDefinition.FilterDefinition.AddJoin(tableFieldJoinDefinition);
+                }
+                joinIndex++;
             }
 
             if (joins.Count > 1)
             {
-                var joinIndex = joins.Count - 1;
+                joinIndex = joins.Count - 1;
                 joins[joinIndex].ParentAlias = joins[joinIndex - 1].Alias;
             }
             return join;

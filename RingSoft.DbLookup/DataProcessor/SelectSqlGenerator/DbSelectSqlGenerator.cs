@@ -164,7 +164,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         {
             var sqlStringBuilder = new StringBuilder();
 
-            sqlStringBuilder.AppendLine(GenerateSelectClause(selectQuery));
+            sqlStringBuilder.AppendLine(GenerateSelectClause(selectQuery, count));
 
             if (selectQuery.NestedQuery != null)
             {

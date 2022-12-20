@@ -578,7 +578,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             LookupJoin includeJoin, string caption, double percentWidth)
         {
             LookupColumnDefinitionBase column = null;
-            if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            if (selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition != null && selectedTreeViewItem.FieldDefinition.FieldDataType != FieldDataTypes.String)
             {
                 var textField = selectedTreeViewItem.FieldDefinition.ParentJoinForeignKeyDefinition
                     .FieldJoins[0].ForeignField;

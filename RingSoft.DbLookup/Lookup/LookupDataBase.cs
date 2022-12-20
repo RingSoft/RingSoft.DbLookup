@@ -308,8 +308,17 @@ namespace RingSoft.DbLookup.Lookup
 
                 if (LookupControl.PageSize > 1 && selectedIndex == 0)
                     FillAroundFoundEqualsRow();
-                else 
-                    OutputData(selectedIndex, LookupScrollPositions.Middle);
+                else
+                {
+                    if (LookupControl.PageSize > 1)
+                    {
+                        getDataResult = GetInitData();
+                    }
+                    else
+                    {
+                        OutputData(selectedIndex, LookupScrollPositions.Middle);
+                    }
+                }
             }
 
             return getDataResult;

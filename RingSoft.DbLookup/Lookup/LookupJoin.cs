@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
@@ -71,7 +72,8 @@ namespace RingSoft.DbLookup.Lookup
 
             if (LookupDefinition.AddJoin(JoinDefinition) == null)
             {
-                JoinDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition))
+                JoinDefinition = LookupDefinition.Joins.FirstOrDefault(p =>
+                    p.ForeignKeyDefinition.IsEqualTo(JoinDefinition.ForeignKeyDefinition));
             }
         }
 
@@ -105,7 +107,7 @@ namespace RingSoft.DbLookup.Lookup
 
         private void ValidateFieldDefinition(FieldDefinition fieldDefinition)
         {
-            if (fieldDefinition.TableDefinition != JoinDefinition.ForeignKeyDefinition.PrimaryTable)
+            if (fieldDefinition.TableDefinition != JoinDefinition.ForeignKeyDefinition.PrimaryTable && fieldDefinition.FieldDataType != FieldDataTypes.String)
                 throw new ArgumentException(
                     $"Field Definition table definition '{fieldDefinition.TableDefinition}' doesn't match {JoinDefinition.ForeignKeyDefinition.PrimaryTable}");
         }

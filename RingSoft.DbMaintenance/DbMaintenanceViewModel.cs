@@ -965,7 +965,7 @@ namespace RingSoft.DbMaintenance
 
             }
 
-            //if (!childField.AllowNulls)
+            if (!childField.AllowNulls)
             {
                 foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
                 {

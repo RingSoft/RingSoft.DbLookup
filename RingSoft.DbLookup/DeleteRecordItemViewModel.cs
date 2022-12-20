@@ -124,14 +124,10 @@ namespace RingSoft.DbLookup
                         }
                     }
 
-                    var parentIndex = joins.Count - 1;
+
+                    
                     foreach (var foreignKeyFieldJoin in deleteTable.RootField.ParentJoinForeignKeyDefinition.FieldJoins)
                     {
-                        parentIndex--;
-                        if (parentIndex < 0)
-                        {
-                            parentIndex = 0;
-                        }
                         var keyValueField =
                             deleteTable.Parent.PrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
                                 p.FieldDefinition == foreignKeyFieldJoin.PrimaryField);
@@ -145,15 +141,23 @@ namespace RingSoft.DbLookup
 
                             var fieldFilter = LookupDefinition.FilterDefinition.AddFixedFieldFilter(deleteTable.ChildField,
                                 Conditions.Equals, keyValueField.Value);
-                            //fieldFilter.TableFilterDefinition.AddJoin(joins[fieldIndex]);
                             fieldFilter.JoinDefinition = joins[joins.Count - 1];
-                            if (parentJoin != null)
-                            {
-                                fieldFilter.JoinDefinition.ParentAlias = joins[parentIndex].Alias;
-                                DbDataProcessor.ShowSqlStatementWindow();
-                            }
                         }
                     }
+                    var parentIndex = joins.Count - 1;
+                    var joinIndex = 0;
+                    var firstJoin = true;
+                    //foreach (var tableFieldJoinDefinition in LookupDefinition.FilterDefinition.Joins)
+                    //{
+                    //    joinIndex++;
+                    //    if (!firstJoin)
+                    //    {
+                    //        parentIndex--;
+                    //        tableFieldJoinDefinition.ParentAlias = joins[parentIndex].Alias;
+                    //    }
+                    //    firstJoin = false;
+                    //}
+
                 }
 
                 LookupCommand = new LookupCommand(LookupCommands.Refresh);
@@ -181,6 +185,11 @@ namespace RingSoft.DbLookup
                 LookupDefinition.FilterDefinition.AddJoin(tableFieldJoinDefinition);
             }
 
+            if (joins.Count > 1)
+            {
+                var joinIndex = joins.Count - 1;
+                joins[joinIndex].ParentAlias = joins[joinIndex - 1].Alias;
+            }
             return join;
         }
 

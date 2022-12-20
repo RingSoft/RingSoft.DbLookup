@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using System.Linq;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,7 +40,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public TabControl TabControl { get; private set; }
         public Border Border { get; set; }
         public DeleteRecordViewModel ViewModel { get; private set; }
-        public CheckBox CheckBox { get; set; }
+        public CheckBox DeleteAllCheckBox { get; set; }
+        public CheckBox NullAllCheckBox { get; set; }
 
         public DeleteTables DeleteTables { get; private set; }
 
@@ -57,27 +59,38 @@ namespace RingSoft.DbLookup.Controls.WPF
                 foreach (var deleteTable in DeleteTables.Tables)
                 {
                     var tabItem = new TabItem();
-                    tabItem.Header = deleteTable.ChildField.TableDefinition.Description;
+                    tabItem.Header = $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
                     tabItem.Content = new DeleteRecordWindowItemControl(deleteTable);
-                    tabItem.Focusable = true;
                     TabControl.Items.Add(tabItem);
-                    tabItem.UpdateLayout();
                 }
-                TabControl.UpdateLayout();
-                UpdateLayout();
 
                 var firstTab = TabControl.Items[0] as TabItem;
                 if (firstTab != null)
                 {
                     firstTab.Focus();
                 }
+
+                DeleteAllCheckBox.Visibility = NullAllCheckBox.Visibility = Visibility.Collapsed;
+                var nullTables = deleteTables.Tables.Where(p => p.ChildField.AllowNulls);
+                var noNullTables = deleteTables.Tables.Where(p => !p.ChildField.AllowNulls);
+                if (nullTables.Count() == deleteTables.Tables.Count)
+                {
+                    NullAllCheckBox.Visibility = Visibility.Visible;
+                }
+                if (noNullTables.Count() == deleteTables.Tables.Count)
+                {
+                    DeleteAllCheckBox.Visibility = Visibility.Visible;
+                }
+
             };
         }
 
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
-            CheckBox = GetTemplateChild(nameof(CheckBox)) as CheckBox;
+            DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
+            NullAllCheckBox = GetTemplateChild(nameof(NullAllCheckBox)) as CheckBox;
+
             TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
 

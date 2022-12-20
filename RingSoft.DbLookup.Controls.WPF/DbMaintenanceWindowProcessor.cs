@@ -116,7 +116,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Mode = BindingMode.TwoWay
             });
 
-            keyAutoFillControl.LostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
+            keyAutoFillControl.AutoFillLostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
             KeyAutoFillControl.SetReadOnlyMode(false);
             KeyControlRegistered = true;
         }

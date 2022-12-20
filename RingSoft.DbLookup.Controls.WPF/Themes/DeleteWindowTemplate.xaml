@@ -25,7 +25,13 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <CheckBox Grid.Row="0" Content="Delete All Records" IsChecked="{Binding DeleteAllRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsTabStop="True"/>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+                                <CheckBox x:Name="DeleteAllCheckBox" Content="Delete All Records" IsChecked="{Binding DeleteAllRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <CheckBox x:Name="NullAllCheckBox" Content="Set All Values to NULL" IsChecked="{Binding NullAllRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            </StackPanel>
 
                             <lc:LookupControl Grid.Row="1" LookupDefinition="{Binding LookupDefinition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinHeight="400" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
@@ -61,7 +67,13 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" x:Name="TextBlock" TextWrapping="Wrap" Text="Abc"/>
-                                <CheckBox Grid.Row="1" x:Name="CheckBox" Content="Delete All Data"/>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+                                    <CheckBox x:Name="DeleteAllCheckBox" Content="Delete All Related Data" IsChecked="{Binding DeleteAllData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                    <CheckBox x:Name="NullAllCheckBox" Content="Set All Related Data to NULL" IsChecked="{Binding NullAllData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                </StackPanel>
                                 <TabControl Grid.Row="2" x:Name="TabControl" MinWidth="600" MinHeight="400"/>
                                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5, 0,0">
                                     <Button Content="_OK" Width="75" Command="{Binding OkCommand}" IsDefault="True"/>

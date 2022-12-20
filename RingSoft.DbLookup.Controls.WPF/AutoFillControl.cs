@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -388,6 +389,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler ControlDirty;
         public event EventHandler LookupSelect;
         public event EventHandler<LookupShownArgs> LookupShown;
+        public event EventHandler AutoFillLostFocus;
 
         private AutoFillData _autoFillData;
         private bool _controlLoaded;
@@ -439,6 +441,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (Popup != null)
                     Popup.IsOpen = false;
+                AutoFillLostFocus?.Invoke(this, EventArgs.Empty);
             };
             GotFocus += AutoFillControl_GotFocus;
             ContextMenu = new ContextMenu();
@@ -540,6 +543,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 TextBox?.Focus();
 
             CreateContainsTemplate();
+            var window = Window.GetWindow(this);
         }
 
         public new bool Focus()
@@ -915,6 +919,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             //{
             //    AutoFillControl_GotFocus(this, new RoutedEventArgs());
             //}
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                var predictionElement = TextBox.PredictFocus(FocusNavigationDirection.Up);
+                {
+                    if (predictionElement == TextBox)
+                    {
+                        Popup.IsOpen = false;
+                        AutoFillLostFocus?.Invoke(this, EventArgs.Empty);
+                    }
+                }
+            }
         }
     }
 }

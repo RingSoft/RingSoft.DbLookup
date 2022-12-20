@@ -11,6 +11,39 @@ namespace RingSoft.DbLookup
     }
     public class DeleteRecordViewModel : INotifyPropertyChanged
     {
+        private bool _deleteAllData;
+
+        public bool DeleteAllData
+        {
+            get => _deleteAllData;
+            set
+            {
+                if (_deleteAllData == value)
+                {
+                    return;
+                }
+                _deleteAllData = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _nullAllData;
+
+        public bool NullAllData
+        {
+            get => _nullAllData;
+            set
+            {
+                if (_nullAllData == value)
+                {
+                    return;
+                }
+                _nullAllData = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public IDeleteRecordView View { get; private set; }
 
         public RelayCommand OkCommand { get; set; }

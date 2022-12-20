@@ -929,7 +929,6 @@ namespace RingSoft.DbMaintenance
                         }
                     }
 
-                    //DbDataProcessor.ShowSqlStatementWindow();
                     var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
                     if (dataResult.ResultCode == GetDataResultCodes.Success)
                     {

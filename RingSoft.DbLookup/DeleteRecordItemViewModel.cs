@@ -29,6 +29,23 @@ namespace RingSoft.DbLookup
             }
 		}
 
+        private bool _nullAllRecords;
+
+        public bool NullAllRecords
+        {
+            get => _nullAllRecords;
+            set
+            {
+                if (_nullAllRecords == value)
+                {
+                    return;
+                }
+                _nullAllRecords = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         private LookupDefinitionBase _lookupDefinition;
 
         public LookupDefinitionBase LookupDefinition
@@ -62,6 +79,8 @@ namespace RingSoft.DbLookup
 
         public void Initialize(DeleteTable deleteTable)
         {
+            DeleteAllRecords = deleteTable.DeleteAllData;
+            NullAllRecords = deleteTable.NullAllData;
             if (deleteTable.ChildField.TableDefinition.LookupDefinition != null)
             {
                 LookupDefinition = deleteTable.ChildField.TableDefinition.LookupDefinition.Clone();

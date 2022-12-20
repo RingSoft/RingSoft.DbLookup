@@ -24,13 +24,13 @@ namespace RingSoft.DbLookup
 
         public DeleteTable ParentDeleteTable { get; set; }
 
-        public DeleteTable ChildTable { get; set; }
-
         public FieldDefinition RootField { get; set; }
         
         public SelectQuery Query { get; set; }
 
         public bool DeleteAllData { get; set; }
+
+        public bool NullAllData { get; set; }
 
         public bool Processed { get; set; }
     }

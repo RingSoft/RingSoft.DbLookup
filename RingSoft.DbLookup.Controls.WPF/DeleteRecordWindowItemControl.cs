@@ -46,9 +46,12 @@ namespace RingSoft.DbLookup.Controls.WPF
     public class DeleteRecordWindowItemControl : Control
     {
         public Border Border { get; private set; }
+        public CheckBox DeleteAllCheckBox { get; private set; }
+        public CheckBox NullAllCheckBox { get; private set; }
 
         public DeleteRecordItemViewModel ViewModel { get; private set; }
         public DeleteTable DeleteTable { get; private set; }
+        
         static DeleteRecordWindowItemControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl), new FrameworkPropertyMetadata(typeof(DeleteRecordWindowItemControl)));
@@ -67,9 +70,20 @@ namespace RingSoft.DbLookup.Controls.WPF
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
+            DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
+            NullAllCheckBox = GetTemplateChild(nameof(NullAllCheckBox)) as CheckBox;
+            
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordItemViewModel;
 
             ViewModel.Initialize(DeleteTable);
+            if (DeleteTable.ChildField.AllowNulls)
+            {
+                DeleteAllCheckBox.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                NullAllCheckBox.Visibility = Visibility.Collapsed;
+            }
             base.OnApplyTemplate();
         }
     }

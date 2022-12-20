@@ -81,6 +81,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             };
         }
 
+        internal void RemoveSelectColumn(SelectColumn column)
+        {
+            _columns.Remove(column);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectQuery"/> class.
         /// </summary>
@@ -341,9 +346,9 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="value">The string value.</param>
         /// <param name="isMemo">if set to <c>true</c> [is memo/ntext].</param>
         /// <returns>The where item object that was created for further configuration.</returns>
-        public WhereItem AddWhereItem(string fieldName, Conditions condition, string value, bool isMemo = false)
+        public WhereItem AddWhereItem(string fieldName, Conditions condition, string value, bool isMemo = false, ValueTypes valueType = ValueTypes.String)
         {
-            return AddWhereItem(BaseTable, fieldName, condition, value, isMemo);
+            return AddWhereItem(BaseTable, fieldName, condition, value, isMemo, valueType);
         }
 
         /// <summary>
@@ -355,9 +360,9 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="value">The string value.</param>
         /// <param name="isMemo">if set to <c>true</c> [is memo].</param>
         /// <returns>The where item object that was created for further configuration.</returns>
-        public WhereItem AddWhereItem(QueryTable table, string fieldName, Conditions condition, string value, bool isMemo = false)
+        public WhereItem AddWhereItem(QueryTable table, string fieldName, Conditions condition, string value, bool isMemo = false, ValueTypes valueType = ValueTypes.String)
         {
-            return AddNewWhereItem(table, fieldName, condition, value,  isMemo?ValueTypes.Memo:ValueTypes.String);
+            return AddNewWhereItem(table, fieldName, condition, value,  isMemo?ValueTypes.Memo: valueType);
         }
 
         /// <summary>

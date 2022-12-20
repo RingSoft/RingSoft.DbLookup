@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -54,6 +55,21 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         internal ForeignKeyDefinition()
         {
+        }
+
+        public bool IsEqualTo(ForeignKeyDefinition foreignKeyDefinition)
+        {
+            var found = false;
+            foreach (var foreignKeyFieldJoin in FieldJoins)
+            {
+                found = foreignKeyDefinition.FieldJoins.Any(p => p.ForeignField == foreignKeyFieldJoin.ForeignField);
+                if (found)
+                {
+                    found = foreignKeyDefinition.FieldJoins.Any(p =>
+                        p.PrimaryField == foreignKeyFieldJoin.PrimaryField);
+                }
+            }
+            return found;
         }
 
         /// <summary>

@@ -34,10 +34,11 @@ namespace RingSoft.DbLookup.Controls.WPF
     ///     <MyNamespace:DeleteRecordWindow/>
     ///
     /// </summary>
-    public class DeleteRecordWindow : BaseWindow
+    public class DeleteRecordWindow : BaseWindow, IDeleteRecordView
     {
         public TabControl TabControl { get; private set; }
         public Border Border { get; set; }
+        public DeleteRecordViewModel ViewModel { get; private set; }
         public CheckBox CheckBox { get; set; }
 
         public DeleteTables DeleteTables { get; private set; }
@@ -52,6 +53,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             DeleteTables = deleteTables;
             Loaded += (sender, args) =>
             {
+                ViewModel.Initialize(this);
                 foreach (var deleteTable in DeleteTables.Tables)
                 {
                     var tabItem = new TabItem();
@@ -77,15 +79,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             Border = GetTemplateChild(nameof(Border)) as Border;
             CheckBox = GetTemplateChild(nameof(CheckBox)) as CheckBox;
             TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
-
-
-            //Border.GotFocus += (sender, args) =>
-            //{
-            //    TabControl.Focus();
-            //    TabControl.SelectedIndex = 0;
-            //};
+            ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
 
             base.OnApplyTemplate();
+        }
+
+        public void CloseWindow(bool result)
+        {
+            DialogResult = result;
+            Close();
         }
     }
 }

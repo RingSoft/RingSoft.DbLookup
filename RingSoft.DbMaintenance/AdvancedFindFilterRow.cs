@@ -615,6 +615,15 @@ namespace RingSoft.DbMaintenance
                     newFilter.LeftParenthesesCount = (byte)filter.LeftParenthesesCount;
 
                     newFilter.EndLogic = (EndLogics)filter.EndLogic;
+
+                    if (newFilter.JoinDefinition == null && filter.JoinDefinition != null)
+                    {
+                        newFilter.JoinDefinition = filter.TableFilterDefinition.Joins[filter.TableFilterDefinition.Joins.Count - 1];
+                        foreach (var joinDefinition in filter.TableFilterDefinition.Joins)
+                        {
+                            newFilter.TableFilterDefinition.AddJoin(joinDefinition);
+                        }
+                    }
                 }
 
 

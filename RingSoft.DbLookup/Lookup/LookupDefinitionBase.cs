@@ -393,15 +393,18 @@ namespace RingSoft.DbLookup.Lookup
                 InitialSortColumnDefinition = columnDefinition;
         }
 
-        internal void AddJoin(TableFieldJoinDefinition lookupFieldJoin)
+        internal TableFieldJoinDefinition AddJoin(TableFieldJoinDefinition lookupFieldJoin)
         {
             if (_joinsList.All(p => p.ForeignKeyDefinition.Alias != lookupFieldJoin.ForeignKeyDefinition.Alias))
-                _joinsList.Add(lookupFieldJoin);
-
-            foreach (var column in VisibleColumns)
             {
-                //column.JoinQueryTableAlias = lookupFieldJoin.Alias;
+                if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
+                {
+                    _joinsList.Add(lookupFieldJoin);
+                    return lookupFieldJoin;
+                }
             }
+
+            return null;
         }
 
         /// <summary>

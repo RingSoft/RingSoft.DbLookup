@@ -41,10 +41,10 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
         /// <param name="skipOrderBy">if set to <c>true</c> then don't generate the ORDER BY clause.</param>
         /// <returns></returns>
-        protected override string GenerateSelectQueryStatement(SelectQuery query, bool skipOrderBy = false)
+        protected override string GenerateSelectQueryStatement(SelectQuery query, bool skipOrderBy = false, int? count = null)
         {
-            var sql = base.GenerateSelectQueryStatement(query, skipOrderBy);
-            if (query.MaxRecords > 0)
+            var sql = base.GenerateSelectQueryStatement(query, skipOrderBy, count);
+            if (query.MaxRecords > 0 && count == null)
                 sql += $" LIMIT {query.MaxRecords}";
 
             return sql;

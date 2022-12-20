@@ -1,4 +1,5 @@
 ﻿using System;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 
@@ -68,7 +69,10 @@ namespace RingSoft.DbLookup.Lookup
                 ParentAlias = parentJoinAlias
             };
 
-            LookupDefinition.AddJoin(JoinDefinition);
+            if (LookupDefinition.AddJoin(JoinDefinition) == null)
+            {
+                JoinDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition))
+            }
         }
 
         /// <summary>

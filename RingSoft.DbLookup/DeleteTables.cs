@@ -1,6 +1,7 @@
 ﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System.Collections.Generic;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
@@ -9,6 +10,8 @@ namespace RingSoft.DbLookup
         public List<DeleteTable> Tables { get; private set; } = new List<DeleteTable>();
 
         public PrimaryKeyValue PrimaryKeyValue { get; set; }
+
+        public bool DeleteAllData { get; set; }
     }
 
     public class DeleteTable
@@ -19,6 +22,16 @@ namespace RingSoft.DbLookup
 
         public FieldDefinition ParentField { get; set; }
 
+        public DeleteTable ParentDeleteTable { get; set; }
+
+        public DeleteTable ChildTable { get; set; }
+
         public FieldDefinition RootField { get; set; }
+        
+        public SelectQuery Query { get; set; }
+
+        public bool DeleteAllData { get; set; }
+
+        public bool Processed { get; set; }
     }
 }

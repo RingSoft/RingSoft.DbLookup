@@ -24,20 +24,96 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 
         public string FormatSqlObject(string sqlObject) => $"{SqlObjectPrefixChar}{sqlObject}{SqlObjectSuffixChar}";
 
+        public string GenerateDeleteStatement(SelectQuery query)
+        {
+            var sqlStringBuilder = new StringBuilder();
+
+            sqlStringBuilder.AppendLine("DELETE");
+
+            sqlStringBuilder.AppendLine(GenerateFromClause(query));
+
+            if (query.JoinTables.Any())
+            {
+                //foreach (var joinTable in query.JoinTables)
+                {
+                    if (query.JoinTables[0].JoinFields.Count > 1)
+                    {
+                        var message = "Deletes with multiple joins not supported.";
+                        throw new Exception(message);
+                    }
+
+                    query.AddSelectColumn(query.JoinTables[0].JoinFields[0].ForeignField);
+                    var column = query.Columns[query.Columns.Count - 1];
+                    SqlLinePrefix += "\t";
+                    var selectStatement = GenerateSelectStatement(query, 0);
+                    SqlLinePrefix = "";
+                    query.RemoveSelectColumn(column);
+                    var tableField = $"{FormatSqlObject(query.BaseTable.Name)}.{FormatSqlObject(column.ColumnName)}";
+                    var whereSql = $"WHERE {tableField} IN\r\n(\r\n{selectStatement}\r\n)";
+                    sqlStringBuilder.AppendLine(whereSql);
+                }
+            }
+            else
+            {
+
+                if (query.WhereItems.Any())
+                    sqlStringBuilder.AppendLine(GenerateWhereClause(query));
+            }
+
+            var selectColumns = query.Columns.Where(w => w.IsDistinct);
+            var distinctColumns = selectColumns as SelectColumn[] ?? selectColumns.ToArray();
+            if (distinctColumns.Any())
+                sqlStringBuilder.AppendLine(GenerateGroupBy(distinctColumns));
+
+            var sqlString = sqlStringBuilder.ToString().TrimEnd('\r', '\n');
+            return sqlString;
+        }
+
+        public string GenerateSetNullStatement(SelectQuery query, string fieldName)
+        {
+            var sqlStringBuilder = new StringBuilder();
+
+            sqlStringBuilder.AppendLine($"UPDATE {FormatSqlObject(query.BaseTable.Name)}");
+            fieldName = FormatSqlObject(fieldName);
+            sqlStringBuilder.AppendLine($"SET {fieldName} = NULL");
+
+            if (query.JoinTables.Any())
+            {
+                query.AddSelectColumn(query.JoinTables[0].JoinFields[0].ForeignField);
+                var column = query.Columns[query.Columns.Count - 1];
+                SqlLinePrefix += "\t";
+                var selectStatement = GenerateSelectStatement(query, 0);
+                SqlLinePrefix = "";
+                query.RemoveSelectColumn(column);
+                var tableField = $"{FormatSqlObject(query.BaseTable.Name)}.{FormatSqlObject(column.ColumnName)}";
+                var whereSql = $"WHERE {tableField} IN\r\n(\r\n{selectStatement}\r\n)";
+                sqlStringBuilder.AppendLine(whereSql);
+            }
+            else
+            {
+
+                if (query.WhereItems.Any())
+                    sqlStringBuilder.AppendLine(GenerateWhereClause(query));
+            }
+
+            var sql = sqlStringBuilder.ToString();
+            return sql;
+        }
+
         /// <summary>
         /// Generates the SELECT SQL statement.
         /// </summary>
         /// <param name="query">The QueryBuilder.QueryBase object containing all the data for the SQL statement.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string GenerateSelectStatement(QueryBase query)
+        public string GenerateSelectStatement(QueryBase query, int? count = null)
         {
             switch (query.QueryType)
             {
                 case QueryTypes.SelectQuery:
                     if (query is SelectQuery selectQuery)
                     {
-                        return GenerateSelectQueryStatement(selectQuery);
+                        return GenerateSelectQueryStatement(selectQuery, false, count);
                     }
                     break;
                 case QueryTypes.CountQuery:
@@ -84,7 +160,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <param name="selectQuery">The QueryBuilder.SelectQuery object containing all the data for the SQL statement.</param>
         /// <param name="skipOrderBy">if set to <c>true</c> then don't generate the ORDER BY clause.</param>
         /// <returns></returns>
-        protected virtual string GenerateSelectQueryStatement(SelectQuery selectQuery, bool skipOrderBy = false)
+        protected virtual string GenerateSelectQueryStatement(SelectQuery selectQuery, bool skipOrderBy = false, int? count = null)
         {
             var sqlStringBuilder = new StringBuilder();
 
@@ -122,11 +198,14 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
         /// <returns></returns>
-        protected virtual string GenerateSelectClause(SelectQuery query)
+        protected virtual string GenerateSelectClause(SelectQuery query, int? count = null)
         {
             var sqlStringBuilder = new StringBuilder();
             sqlStringBuilder.Append($"{SqlLinePrefix}SELECT ");
-            sqlStringBuilder.Append($"{GenerateTopRecordCountSqlText(query)} ");
+            if (count == null)
+            {
+                sqlStringBuilder.Append($"{GenerateTopRecordCountSqlText(query)} ");
+            }
 
             if (query.Columns.Any())
             {

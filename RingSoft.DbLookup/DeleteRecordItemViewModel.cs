@@ -100,38 +100,88 @@ namespace RingSoft.DbLookup
                 else
                 {
                     var joins = new List<TableFieldJoinDefinition>();
-                    foreach (var fieldJoin in deleteTable.ChildField.ParentJoinForeignKeyDefinition.FieldJoins)
+
+                    var parentJoin = ProcessFieldJoins(deleteTable, joins);
+                    var topTable = deleteTable;
+                    var tableTree = new List<DeleteTable>();
+                    while (topTable.ParentDeleteTable != null)
                     {
-                        LookupDefinition.Include(fieldJoin.ForeignField);
+                        tableTree.Add(topTable);
+                        topTable = topTable.ParentDeleteTable;
+                    }
+
+                    if (tableTree.Count > 1)
+                    {
+                        var first = true;
+                        foreach (var table in tableTree)
                         {
-                            var tableFieldJoinDefinition = new TableFieldJoinDefinition
+                            if (!first)
                             {
-                                ForeignKeyDefinition = fieldJoin.ForeignField.ParentJoinForeignKeyDefinition,
-                            };
-                            joins.Add(tableFieldJoinDefinition);
-                            LookupDefinition.FilterDefinition.AddJoin(tableFieldJoinDefinition);
+                                parentJoin = ProcessFieldJoins(table, joins, parentJoin);
+                                //LookupDefinition.AddJoin(parentJoin);
+                            }
+                            first = false;
                         }
                     }
-                    var fieldIndex = 0;
+
+                    var parentIndex = joins.Count - 1;
                     foreach (var foreignKeyFieldJoin in deleteTable.RootField.ParentJoinForeignKeyDefinition.FieldJoins)
                     {
+                        parentIndex--;
+                        if (parentIndex < 0)
+                        {
+                            parentIndex = 0;
+                        }
                         var keyValueField =
                             deleteTable.Parent.PrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
                                 p.FieldDefinition == foreignKeyFieldJoin.PrimaryField);
 
                         if (keyValueField != null)
                         {
-                            var fieldFilter = LookupDefinition.FilterDefinition.AddFixedFieldFilter(foreignKeyFieldJoin.ForeignField,
-                                Conditions.Equals, keyValueField.Value);
-                            fieldFilter.JoinDefinition = joins[fieldIndex];
-                        }
+                            while (deleteTable.ParentDeleteTable != null)
+                            {
+                                deleteTable = deleteTable.ParentDeleteTable;
+                            }
 
-                        fieldIndex++;
+                            var fieldFilter = LookupDefinition.FilterDefinition.AddFixedFieldFilter(deleteTable.ChildField,
+                                Conditions.Equals, keyValueField.Value);
+                            //fieldFilter.TableFilterDefinition.AddJoin(joins[fieldIndex]);
+                            fieldFilter.JoinDefinition = joins[joins.Count - 1];
+                            if (parentJoin != null)
+                            {
+                                fieldFilter.JoinDefinition.ParentAlias = joins[parentIndex].Alias;
+                                DbDataProcessor.ShowSqlStatementWindow();
+                            }
+                        }
                     }
                 }
 
                 LookupCommand = new LookupCommand(LookupCommands.Refresh);
             }
+        }
+
+        private LookupJoin ProcessFieldJoins(DeleteTable deleteTable, List<TableFieldJoinDefinition> joins, LookupJoin parentJoin = null)
+        {
+            LookupJoin join = null;
+            foreach (var fieldJoin in deleteTable.ChildField.ParentJoinForeignKeyDefinition.FieldJoins)
+            {
+                if (parentJoin == null)
+                {
+                    join = LookupDefinition.Include(fieldJoin.ForeignField);
+                }
+                else
+                {
+                    join = parentJoin.Include(fieldJoin.ForeignField);
+                }
+                var tableFieldJoinDefinition = new TableFieldJoinDefinition
+                {
+                    ForeignKeyDefinition = fieldJoin.ForeignField.ParentJoinForeignKeyDefinition,
+                };
+                joins.Add(tableFieldJoinDefinition);
+                LookupDefinition.FilterDefinition.AddJoin(tableFieldJoinDefinition);
+            }
+
+            return join;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

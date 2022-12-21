@@ -842,6 +842,7 @@ namespace RingSoft.DbMaintenance
                     {
                         return DbMaintenanceResults.DatabaseError;
                     }
+                    OnDeletedRelatedTables(deleteTables);
                 }
                 var operationArgs = new ViewModelOperationPreviewEventArgs<TEntity>
                 {
@@ -860,6 +861,11 @@ namespace RingSoft.DbMaintenance
             }
 
             return DbMaintenanceResults.Success;
+        }
+
+        protected void OnDeletedRelatedTables(DeleteTables relatedTables)
+        {
+
         }
 
         private bool ProcessDeleteChildField(List<TableDefinitionBase> tables, FieldDefinition childField, DeleteTables deleteTables,

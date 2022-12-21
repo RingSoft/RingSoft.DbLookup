@@ -8,6 +8,10 @@ namespace RingSoft.DbLookup
     public interface IDeleteRecordView
     {
         void CloseWindow(bool result);
+
+        void SetAllDataDelete(bool value);
+
+        void SetAllDataNull(bool value);
     }
     public class DeleteRecordViewModel : INotifyPropertyChanged
     {
@@ -23,6 +27,7 @@ namespace RingSoft.DbLookup
                     return;
                 }
                 _deleteAllData = value;
+                SetAllTabsDelete(value);
                 OnPropertyChanged();
             }
         }
@@ -39,6 +44,7 @@ namespace RingSoft.DbLookup
                     return;
                 }
                 _nullAllData = value;
+                SetAllTabsNull(value);
                 OnPropertyChanged();
             }
         }
@@ -49,6 +55,8 @@ namespace RingSoft.DbLookup
         public RelayCommand OkCommand { get; set; }
 
         public RelayCommand CancelCommand { get; set; }
+
+        public List<DeleteRecordItemViewModel> Tabs { get; private set; } = new List<DeleteRecordItemViewModel>();
 
         public DeleteRecordViewModel()
         {
@@ -66,6 +74,16 @@ namespace RingSoft.DbLookup
         public void Initialize(IDeleteRecordView view)
         {
             View = view;
+        }
+
+        private void SetAllTabsDelete(bool value)
+        {
+            View.SetAllDataDelete(value);
+        }
+
+        private void SetAllTabsNull(bool value)
+        {
+            View.SetAllDataNull(value);
         }
         public event PropertyChangedEventHandler PropertyChanged;
 

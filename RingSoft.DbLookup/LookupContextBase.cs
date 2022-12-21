@@ -16,6 +16,8 @@ namespace RingSoft.DbLookup
 
         public bool AllowView { get; set; } = true;
 
+        public bool AllowEdit { get; set; } = true;
+
         public bool AllowDelete { get; set; } = true;
 
         public CanProcessTableArgs(TableDefinitionBase tableDefinition)
@@ -81,14 +83,21 @@ namespace RingSoft.DbLookup
         public bool CanViewTable(TableDefinitionBase tableDefinition)
         {
             var args = new CanProcessTableArgs(tableDefinition);
-            CanViewTableEvent?.Invoke(this, args);
+            CanProcessTableEvent?.Invoke(this, args);
             return args.AllowView;
+        }
+
+        public bool CanEditTable(TableDefinitionBase tableDefinition)
+        {
+            var args = new CanProcessTableArgs(tableDefinition);
+            CanProcessTableEvent?.Invoke(this, args);
+            return args.AllowEdit;
         }
 
         public bool CanDeleteTable(TableDefinitionBase tableDefinition)
         {
             var args = new CanProcessTableArgs(tableDefinition);
-            CanViewTableEvent?.Invoke(this, args);
+            CanProcessTableEvent?.Invoke(this, args);
             return args.AllowDelete;
         }
 
@@ -99,7 +108,7 @@ namespace RingSoft.DbLookup
 
         public event EventHandler<TableDefinitionValue> GetAutoFillText;
 
-        public event EventHandler<CanProcessTableArgs> CanViewTableEvent;
+        public event EventHandler<CanProcessTableArgs> CanProcessTableEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 

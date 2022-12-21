@@ -117,6 +117,14 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        public bool CanEditTabe
+        {
+            get
+            {
+                return Context.CanEditTable(this);
+            }
+        }
+
         public bool CanDeleteTable
         {
             get

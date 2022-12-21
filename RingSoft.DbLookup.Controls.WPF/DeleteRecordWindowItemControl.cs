@@ -51,7 +51,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DeleteRecordItemViewModel ViewModel { get; private set; }
         public DeleteTable DeleteTable { get; private set; }
-        
+
         static DeleteRecordWindowItemControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl), new FrameworkPropertyMetadata(typeof(DeleteRecordWindowItemControl)));
@@ -84,6 +84,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 NullAllCheckBox.Visibility = Visibility.Collapsed;
             }
+
+            ViewModel.DeleteAllRecords = DeleteTable.DeleteAllData;
+            ViewModel.NullAllRecords = DeleteTable.NullAllData;
+
             base.OnApplyTemplate();
         }
     }

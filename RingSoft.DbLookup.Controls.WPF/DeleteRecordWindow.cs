@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbMaintenance;
 using System.Windows;
@@ -44,6 +46,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         public CheckBox NullAllCheckBox { get; set; }
 
         public DeleteTables DeleteTables { get; private set; }
+        public List<DeleteRecordWindowItemControl> DeleteTabs { get; private set; } =
+            new List<DeleteRecordWindowItemControl>();
+
 
         static DeleteRecordWindow()
         {
@@ -60,7 +65,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     var tabItem = new TabItem();
                     tabItem.Header = $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                    tabItem.Content = new DeleteRecordWindowItemControl(deleteTable);
+                    var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
+                    DeleteTabs.Add(deleteTab);
+                    tabItem.Content = deleteTab;
                     TabControl.Items.Add(tabItem);
                 }
 
@@ -101,6 +108,31 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             DialogResult = result;
             Close();
+        }
+
+        public void SetAllDataDelete(bool value)
+        {
+            foreach (var deleteTab in DeleteTabs)
+            {
+                deleteTab.DeleteTable.DeleteAllData = value;
+                if (deleteTab.ViewModel != null)
+                {
+                    deleteTab.ViewModel.DeleteAllRecords = value;
+                }
+            }
+
+        }
+
+        public void SetAllDataNull(bool value)
+        {
+            foreach (var deleteTab in DeleteTabs)
+            {
+                deleteTab.DeleteTable.NullAllData = value;
+                if (deleteTab.ViewModel != null)
+                {
+                    deleteTab.ViewModel.NullAllRecords = value;
+                }
+            }
         }
     }
 }

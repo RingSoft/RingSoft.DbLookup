@@ -25,6 +25,7 @@ namespace RingSoft.DbLookup
                     return;
                 }
                 _deleteAllRecords = value;
+                DeleteTable.DeleteAllData = value;
                 OnPropertyChanged();
             }
 		}
@@ -41,6 +42,7 @@ namespace RingSoft.DbLookup
                     return;
                 }
                 _nullAllRecords = value;
+                DeleteTable.NullAllData = value;
                 OnPropertyChanged();
             }
         }
@@ -77,8 +79,11 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public DeleteTable DeleteTable { get; private set; }
+
         public void Initialize(DeleteTable deleteTable)
         {
+            DeleteTable = deleteTable;
             DeleteAllRecords = deleteTable.DeleteAllData;
             NullAllRecords = deleteTable.NullAllData;
             if (deleteTable.ChildField.TableDefinition.LookupDefinition != null)

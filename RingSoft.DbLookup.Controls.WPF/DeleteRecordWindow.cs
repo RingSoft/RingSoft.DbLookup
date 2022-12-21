@@ -60,11 +60,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             DeleteTables = deleteTables;
             Loaded += (sender, args) =>
             {
-                ViewModel.Initialize(this);
+                ViewModel.Initialize(this, deleteTables);
                 foreach (var deleteTable in DeleteTables.Tables)
                 {
                     var tabItem = new TabItem();
-                    tabItem.Header = $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                    deleteTable.Description = $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                    tabItem.Header = deleteTable.Description;
                     var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
                     DeleteTabs.Add(deleteTab);
                     tabItem.Content = deleteTab;
@@ -114,7 +115,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             foreach (var deleteTab in DeleteTabs)
             {
-                deleteTab.DeleteTable.DeleteAllData = value;
                 if (deleteTab.ViewModel != null)
                 {
                     deleteTab.ViewModel.DeleteAllRecords = value;
@@ -127,10 +127,22 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             foreach (var deleteTab in DeleteTabs)
             {
-                deleteTab.DeleteTable.NullAllData = value;
                 if (deleteTab.ViewModel != null)
                 {
                     deleteTab.ViewModel.NullAllRecords = value;
+                }
+            }
+        }
+
+        public void SetFocusToTable(DeleteTable deleteTable)
+        {
+            var deleteItem = DeleteTabs.FirstOrDefault(p => p.DeleteTable == deleteTable);
+            if (deleteItem != null)
+            {
+                var tabItem = deleteItem.GetParentOfType<TabItem>();
+                if (tabItem != null)
+                {
+                    tabItem.Focus();
                 }
             }
         }

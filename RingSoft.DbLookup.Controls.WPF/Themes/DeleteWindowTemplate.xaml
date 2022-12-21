@@ -62,20 +62,22 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" x:Name="TextBlock" TextWrapping="Wrap" Text="Abc"/>
-                                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Grid.Row="0" x:Name="TextBlock" TextWrapping="Wrap" Text="You must edit or delete related data to this record before you can continue." Margin="0,0,0,5"/>
+                                <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Stroke="Black" StrokeThickness="2" />
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5">
 
                                     <CheckBox x:Name="DeleteAllCheckBox" Content="Delete All Related Data" IsChecked="{Binding DeleteAllData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                     <CheckBox x:Name="NullAllCheckBox" Content="Set All Related Data to NULL" IsChecked="{Binding NullAllData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 </StackPanel>
-                                <TabControl Grid.Row="2" x:Name="TabControl" MinWidth="600" MinHeight="400"/>
-                                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5, 0,0">
+                                <TabControl Grid.Row="3" x:Name="TabControl" MinWidth="600" MinHeight="400"/>
+                                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5, 0,0">
                                     <Button Content="_OK" Width="75" Command="{Binding OkCommand}" IsDefault="True"/>
                                     <Button Content="_Cancel" Width="75" Command="{Binding CancelCommand}" Margin="5, 0, 0, 0" IsCancel="True"/>
                                 </StackPanel>

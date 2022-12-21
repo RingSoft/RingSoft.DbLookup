@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup
 {
@@ -12,6 +13,8 @@ namespace RingSoft.DbLookup
         void SetAllDataDelete(bool value);
 
         void SetAllDataNull(bool value);
+
+        void SetFocusToTable(DeleteTable deleteTable);
     }
     public class DeleteRecordViewModel : INotifyPropertyChanged
     {
@@ -55,14 +58,14 @@ namespace RingSoft.DbLookup
         public RelayCommand OkCommand { get; set; }
 
         public RelayCommand CancelCommand { get; set; }
-
-        public List<DeleteRecordItemViewModel> Tabs { get; private set; } = new List<DeleteRecordItemViewModel>();
-
+        
+        public DeleteTables DeleteTables { get; private set; }
+        
         public DeleteRecordViewModel()
         {
             OkCommand = new RelayCommand(() =>
             {
-                View.CloseWindow(true);
+                OnOk();
             });
 
             CancelCommand = new RelayCommand(() =>
@@ -71,20 +74,93 @@ namespace RingSoft.DbLookup
             });
         }
 
-        public void Initialize(IDeleteRecordView view)
+        public void Initialize(IDeleteRecordView view, DeleteTables deleteTables)
         {
             View = view;
+            DeleteTables = deleteTables;
         }
 
         private void SetAllTabsDelete(bool value)
         {
+            foreach (var deleteTable in DeleteTables.Tables)
+            {
+                deleteTable.DeleteAllData = value;
+            }
             View.SetAllDataDelete(value);
         }
 
         private void SetAllTabsNull(bool value)
         {
+            foreach (var deleteTable in DeleteTables.Tables)
+            {
+                deleteTable.NullAllData = value;
+            }
             View.SetAllDataNull(value);
         }
+
+        private void OnOk()
+        {
+            foreach (var deleteTable in DeleteTables.Tables)
+            {
+                if (!ValidateDeleteTable(deleteTable))
+                {
+                    return;
+                }
+            }
+            View.CloseWindow(true);
+        }
+
+        public bool ValidateDeleteTable(DeleteTable deleteTable)
+        {
+            var getDataResult = deleteTable.ChildField.TableDefinition.Context.DataProcessor.GetData(deleteTable.Query);
+            if (getDataResult.ResultCode != GetDataResultCodes.Success)
+            {
+                return false;
+            }
+            var hasData = getDataResult.DataSet.Tables[0].Rows.Count > 0;
+            var caption = "Validation Failure";
+            var tableDescription = deleteTable.Description.Replace("\r\n", " ");
+            if (deleteTable.ChildField.AllowNulls)
+            {
+                if (hasData && !deleteTable.ChildField.TableDefinition.CanEditTabe)
+                {
+                    var message = $"You are not allowed to edit data in the {tableDescription} table. Delete Denied!";
+                    View.SetFocusToTable(deleteTable);
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    return false;
+                }
+
+                if (hasData && deleteTable.NullAllData == false)
+                {
+                    var message =
+                        $"There is data left in the {tableDescription} table. You must edit the table or check Set All Values to NULL before continuing.";
+                    View.SetFocusToTable(deleteTable);
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    return false;
+                }
+            }
+            else
+            {
+                if (hasData && !deleteTable.ChildField.TableDefinition.CanDeleteTable)
+                {
+                    var message = $"You are not allowed to delete data in the {tableDescription} table. Delete Denied!";
+                    View.SetFocusToTable(deleteTable);
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    return false;
+                }
+
+                if (hasData && deleteTable.DeleteAllData == false)
+                {
+                    var message =
+                        $"There is data left in the {tableDescription} table. You must edit the table or check Delete All Records before continuing.";
+                    View.SetFocusToTable(deleteTable);
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

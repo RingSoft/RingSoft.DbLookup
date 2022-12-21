@@ -29,9 +29,11 @@ namespace RingSoft.DbLookup
         public SelectQuery Query { get; set; }
 
         public bool DeleteAllData { get; set; }
-
+        
         public bool NullAllData { get; set; }
 
         public bool Processed { get; set; }
+
+        public string Description { get; set; }
     }
 }

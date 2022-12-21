@@ -642,6 +642,7 @@ namespace RingSoft.DbMaintenance
             _savingRecord = false;
 
             Processor?.ShowRecordSavedMessage();
+            RecordDirty = false;
             RecordsChanged = true;
 
             if (!keyDown)

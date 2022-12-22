@@ -319,6 +319,12 @@ namespace RingSoft.DbMaintenance
 
         private int _recordCount;
 
+        public AdvancedFindViewModel()
+        {
+            TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindColumns);
+            TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindFilters);
+        }
+
         protected override void Initialize()
         {
             if (LookupAddViewArgs != null)

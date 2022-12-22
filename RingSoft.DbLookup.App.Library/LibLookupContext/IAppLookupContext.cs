@@ -18,7 +18,5 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
         DbDataProcessor DataProcessor { get; }
 
         bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings);
-
-        event EventHandler<CanProcessTableArgs> CanViewTableEvent;
     }
 }

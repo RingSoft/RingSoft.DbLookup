@@ -446,6 +446,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             _orderDate = _newDateTime;
             _requiredDate = _shippedDate = null;
+            TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
         }
 
         protected override void Initialize()

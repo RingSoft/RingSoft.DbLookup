@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.DataProcessor;
+﻿using System;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.App.Library.LibLookupContext
@@ -19,5 +20,7 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
         {
             return true;
         }
+
+        public event EventHandler<CanProcessTableArgs> CanViewTableEvent;
     }
 }

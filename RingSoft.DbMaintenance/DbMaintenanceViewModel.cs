@@ -971,7 +971,7 @@ namespace RingSoft.DbMaintenance
 
             }
 
-            if (!childField.AllowNulls)
+            if (!childField.AllowNulls || !childField.AllowUserNulls)
             {
                 foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
                 {
@@ -1043,7 +1043,7 @@ namespace RingSoft.DbMaintenance
             if (!deleteTable.Processed)
             {
                 var sql = string.Empty;
-                if (deleteTable.ChildField.AllowNulls)
+                if (deleteTable.ChildField.AllowNulls && deleteTable.ChildField.AllowUserNulls)
                 {
                     sql = deleteTable.ChildField.TableDefinition.Context.DataProcessor.SqlGenerator
                         .GenerateSetNullStatement(deleteTable.Query, deleteTable.ChildField.FieldName);

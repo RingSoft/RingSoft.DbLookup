@@ -76,7 +76,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordItemViewModel;
 
             ViewModel.Initialize(DeleteTable);
-            if (DeleteTable.ChildField.AllowNulls)
+            if (DeleteTable.ChildField.AllowNulls && DeleteTable.ChildField.AllowUserNulls)
             {
                 DeleteAllCheckBox.Visibility = Visibility.Collapsed;
             }

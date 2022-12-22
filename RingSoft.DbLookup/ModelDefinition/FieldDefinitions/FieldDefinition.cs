@@ -106,6 +106,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         
         public bool UpdateOnly { get; private set; }
 
+        public bool AllowUserNulls { get; private set; } = true;
+
         internal FieldDefinition()
         {
             AllowNulls = true;
@@ -235,6 +237,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             tableName = TableDefinition.Context.DataProcessor.SqlGenerator.FormatSqlObject(tableName);
             var result = $"{tableName}.{TableDefinition.Context.DataProcessor.SqlGenerator.FormatSqlObject(FieldName)}";
             return result;
+        }
+
+        public FieldDefinition CanSetAsNull(bool value = true)
+        {
+            AllowUserNulls = value;
+            return this;
         }
     }
 }

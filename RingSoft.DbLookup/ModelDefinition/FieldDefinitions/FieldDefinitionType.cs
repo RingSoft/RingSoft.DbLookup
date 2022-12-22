@@ -62,5 +62,11 @@
             base.SetUpdateOnly(value);
             return (TFieldDefinition)this;
         }
+
+        public new TFieldDefinition CanSetNull(bool value)
+        {
+            base.CanSetAsNull(value);
+            return (TFieldDefinition)this;
+        }
     }
 }

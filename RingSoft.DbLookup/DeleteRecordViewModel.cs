@@ -120,7 +120,7 @@ namespace RingSoft.DbLookup
             var hasData = getDataResult.DataSet.Tables[0].Rows.Count > 0;
             var caption = "Validation Failure";
             var tableDescription = deleteTable.Description.Replace("\r\n", " ");
-            if (deleteTable.ChildField.AllowNulls)
+            if (deleteTable.ChildField.AllowNulls && deleteTable.ChildField.AllowUserNulls)
             {
                 if (hasData && !deleteTable.ChildField.TableDefinition.CanEditTabe)
                 {

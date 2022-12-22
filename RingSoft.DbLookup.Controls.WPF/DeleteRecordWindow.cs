@@ -79,8 +79,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
 
                 DeleteAllCheckBox.Visibility = NullAllCheckBox.Visibility = Visibility.Collapsed;
-                var nullTables = deleteTables.Tables.Where(p => p.ChildField.AllowNulls);
-                var noNullTables = deleteTables.Tables.Where(p => !p.ChildField.AllowNulls);
+                var nullTables = deleteTables.Tables.Where(p => p.ChildField.AllowNulls
+                                                                && p.ChildField.AllowUserNulls);
+                var noNullTables = deleteTables.Tables.Where(p => !p.ChildField.AllowNulls
+                                                                  || !p.ChildField.AllowUserNulls);
                 if (nullTables.Count() == deleteTables.Tables.Count)
                 {
                     NullAllCheckBox.Visibility = Visibility.Visible;

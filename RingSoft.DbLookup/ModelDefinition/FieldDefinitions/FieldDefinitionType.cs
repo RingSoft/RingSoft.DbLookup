@@ -65,7 +65,7 @@
 
         public new TFieldDefinition CanSetNull(bool value)
         {
-            base.CanSetAsNull(value);
+            base.CanSetNull(value);
             return (TFieldDefinition)this;
         }
     }

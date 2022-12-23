@@ -239,7 +239,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return result;
         }
 
-        public FieldDefinition CanSetAsNull(bool value = true)
+        public FieldDefinition CanSetNull(bool value = true)
         {
             AllowUserNulls = value;
             return this;

@@ -1022,7 +1022,13 @@ namespace RingSoft.DbMaintenance
             {
                 return false;
             }
+            OnTablesDeleted(deleteTables);
             return true;
+        }
+
+        public virtual void OnTablesDeleted(DeleteTables deleteTables)
+        {
+
         }
 
         private void ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls)

@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup
 {
@@ -164,6 +167,11 @@ namespace RingSoft.DbLookup
 
             return valueType;
 
+        }
+
+        public static AutoFillValue GetAutoFillValue(this TableDefinitionBase tableDefinition, string primaryKeyString)
+        {
+            return tableDefinition.Context.OnAutoFillTextRequest(tableDefinition, primaryKeyString);
         }
     }
 }

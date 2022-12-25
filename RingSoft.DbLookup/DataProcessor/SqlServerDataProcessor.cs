@@ -136,6 +136,7 @@ namespace RingSoft.DbLookup.DataProcessor
                     throw new ArgumentOutOfRangeException();
             }
 
+            connectionString += "TrustServerCertificate=True;";
             return connectionString;
         }
 

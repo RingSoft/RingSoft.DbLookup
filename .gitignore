@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /RingSoft.DbLookup.App.Library.EfCore/MegaDb/MegaDbLookupContextEfCore.cs
+/RingSoft.DbMaintenance/AdvancedFindViewModel.cs

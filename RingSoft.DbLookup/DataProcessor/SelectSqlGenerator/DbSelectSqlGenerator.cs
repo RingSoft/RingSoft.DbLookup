@@ -602,6 +602,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 switch (condition)
                 {
                     case Conditions.EqualsNull:
+                    case Conditions.Equals:
                         condition = Conditions.EqualsNull;
                         break;
                     default:
@@ -687,7 +688,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 case ValueTypes.Numeric:
                     break;
                 case ValueTypes.DateTime:
-                    valueReturn = $"'{valueReturn}'";
+                    if (!valueReturn.IsNullOrEmpty())
+                    {
+                        valueReturn = $"'{valueReturn}'";
+                    }
+
                     break;
                 case ValueTypes.Bool:
                     break;

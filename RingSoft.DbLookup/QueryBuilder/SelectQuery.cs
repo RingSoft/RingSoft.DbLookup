@@ -525,10 +525,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             if (type == ValueTypes.DateTime)
             {
                 DateTime dateValue;
-                if (!DateTime.TryParse(value, out dateValue))
-                    dateValue = DateTime.MinValue;
-
-                value = FormatDateString(dateValue, dateType);
+                if (DateTime.TryParse(value, out dateValue))
+                    value = FormatDateString(dateValue, dateType);
             }
 
             var result = AddNewWhereItem(table, fieldName, condition, value, type);

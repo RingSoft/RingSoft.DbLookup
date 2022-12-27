@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>

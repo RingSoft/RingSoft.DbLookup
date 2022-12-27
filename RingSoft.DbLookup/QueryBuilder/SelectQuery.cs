@@ -526,7 +526,7 @@ namespace RingSoft.DbLookup.QueryBuilder
             {
                 DateTime dateValue;
                 if (!DateTime.TryParse(value, out dateValue))
-                    throw new ArgumentException("Value is not a DateTimeValue");
+                    dateValue = DateTime.MinValue;
 
                 value = FormatDateString(dateValue, dateType);
             }

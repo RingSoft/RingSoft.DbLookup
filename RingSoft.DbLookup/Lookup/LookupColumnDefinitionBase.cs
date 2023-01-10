@@ -147,6 +147,7 @@ namespace RingSoft.DbLookup.Lookup
             ParentField = source.ParentField;
             TableDescription = source.TableDescription;
             FieldDescription = source.FieldDescription;
+            Path = source.Path;
         }
 
         /// <summary>

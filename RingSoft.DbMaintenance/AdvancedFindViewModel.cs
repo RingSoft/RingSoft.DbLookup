@@ -767,7 +767,14 @@ namespace RingSoft.DbMaintenance
                 switch (visibleColumn.ColumnType)
                 {
                     case LookupColumnTypes.Field:
-                        foundTreeItem = FindFieldInTree(TreeRoot, lookupFieldColumn.FieldDefinition);
+                        if (lookupFieldColumn.Path.IsNullOrEmpty())
+                        {
+                            foundTreeItem = FindFieldInTree(TreeRoot, lookupFieldColumn.FieldDefinition);
+                        }
+                        else
+                        {
+                            foundTreeItem = AdvancedFindTree.ProcessFoundTreeViewItem(lookupFieldColumn.Path);
+                        }
                         break;
                     case LookupColumnTypes.Formula:
                         if (parent == null)

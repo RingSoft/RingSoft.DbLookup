@@ -244,5 +244,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             AllowUserNulls = value;
             return this;
         }
+
+        public string MakePath()
+        {
+            return TableDefinition.TableName + "@" + FieldName + ";";
+        }
     }
 }

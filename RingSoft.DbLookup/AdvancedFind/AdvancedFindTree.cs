@@ -90,14 +90,13 @@ namespace RingSoft.DbLookup.AdvancedFind
             var result = string.Empty;
             if (FieldDefinition != null)
             {
-                result = FieldDefinition.TableDefinition.TableName + "@"+ FieldDefinition.FieldName + ";";
+                result = FieldDefinition.MakePath();
             }
             
             var parent = Parent;
             while (parent != null)
             {
-                result = parent.FieldDefinition.TableDefinition.TableName + "@" + parent.FieldDefinition.FieldName +
-                         ";" + result;
+                result = parent.FieldDefinition.MakePath() + result;
                 parent = parent.Parent;
             }
             return result;

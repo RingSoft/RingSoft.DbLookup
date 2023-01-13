@@ -60,7 +60,7 @@ namespace RingSoft.DbLookup.AutoFill
             if (foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition == null)
                 throw new ArgumentException($"Parent table '{foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable}' does not have a lookup definition.  Make sure you attach it in the LookupContext.InitializeLookupDefinitions override and execute {foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable}.HasLookupDefinition()");
 
-            LookupDefinition = foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition;
+            LookupDefinition = foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition.Clone();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <param name="lookupDefinition">The lookup definition.</param>
         public AutoFillSetup(LookupDefinitionBase lookupDefinition)
         {
-            LookupDefinition = lookupDefinition;
+            LookupDefinition = lookupDefinition.Clone();
         }
 
         public AutoFillValue GetAutoFillValueForIdValue(string idValue)

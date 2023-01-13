@@ -308,6 +308,27 @@ namespace RingSoft.DbLookup.Controls.WPF
                 autoFillControl.TextBox.SelectionBrush = autoFillControl.SelectionBrush;
         }
 
+        public static new readonly DependencyProperty RsIsTabStopProperty =
+            DependencyProperty.Register(nameof(RsIsTabStop), typeof(bool), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(true, RsIsTabStopChangedCallback));
+
+        public new bool RsIsTabStop
+        {
+            get { return (bool)GetValue(RsIsTabStopProperty); }
+            set { SetValue(RsIsTabStopProperty, value); }
+        }
+
+        private static void RsIsTabStopChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl.TextBox != null)
+            {
+                autoFillControl.TextBox.IsTabStop = autoFillControl.RsIsTabStop;
+            }
+        }
+
+
         public string EditText
         {
             get
@@ -513,6 +534,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (SelectionBrush != null)
                     TextBox.SelectionBrush = SelectionBrush;
+
+                TextBox.IsTabStop = RsIsTabStop;
             }
 
             SetReadOnlyMode(_readOnlyMode);

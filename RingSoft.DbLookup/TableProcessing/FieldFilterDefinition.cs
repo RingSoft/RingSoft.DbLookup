@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+﻿using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
@@ -51,7 +52,17 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public bool CastEnumValueAsInt { get; internal set; } = true;
 
-        public FieldDefinition ParentField { get; set; }
+        private FieldDefinition _parentField;
+        public FieldDefinition ParentField
+        {
+            get => _parentField;
+            set
+            {
+                _parentField = value;
+            }
+        }
+
+        public string Path { get; internal set; }
 
         internal FieldFilterDefinition()
         {
@@ -78,6 +89,7 @@ namespace RingSoft.DbLookup.TableProcessing
             CastEnumValueAsInt = fieldFilterDefinition.CastEnumValueAsInt;
             CaseSensitive = fieldFilterDefinition.CaseSensitive;
             ParentField = fieldFilterDefinition.ParentField;
+            Path = fieldFilterDefinition.Path;
 
             if (fieldFilterDefinition.JoinDefinition != null)
             {

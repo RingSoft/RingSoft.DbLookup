@@ -538,10 +538,25 @@ namespace RingSoft.DbMaintenance
 
                 if (isFixed)
                 {
-                    var foundItem =
-                        Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty,
-                            fieldFilterDefinition.FieldDefinition);
-                    SetFixedTableName(foundItem);
+                    TreeViewItem foundItem = null;
+                    if (fieldFilterDefinition.JoinDefinition != null)
+                    {
+                        var path = fieldFilterDefinition.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
+                        foundItem =
+                            Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(path);
+                        if (foundItem != null)
+                        {
+                            Table = foundItem.Name;
+                        }
+
+                    }
+                    else
+                    {
+                        foundItem =
+                            Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(string.Empty,
+                                fieldFilterDefinition.FieldDefinition);
+                        SetFixedTableName(foundItem);
+                    }
 
                     switch (fieldFilterDefinition.FieldDefinition.FieldDataType)
                     {

@@ -173,5 +173,17 @@ namespace RingSoft.DbLookup
         {
             return tableDefinition.Context.OnAutoFillTextRequest(tableDefinition, primaryKeyString);
         }
+
+        public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue,
+            TableDefinition<TEntity> tableDefinition) where TEntity : new()
+        {
+            var result = new TEntity();
+            if (autoFillValue.IsValid())
+            {
+                result = tableDefinition.GetEntityFromPrimaryKeyValue(autoFillValue.PrimaryKeyValue);
+            }
+            
+            return result;
+        }
     }
 }

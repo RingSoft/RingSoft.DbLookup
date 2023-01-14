@@ -542,6 +542,11 @@ namespace RingSoft.DbMaintenance
                     if (fieldFilterDefinition.JoinDefinition != null)
                     {
                         var path = fieldFilterDefinition.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
+                        if (fieldFilterDefinition.JoinDefinition.ParentObject != null)
+                        {
+                            path = $"{fieldFilterDefinition.JoinDefinition.ParentObject
+                                .MakePath()}{path}";
+                        }
                         foundItem =
                             Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(path);
                         if (foundItem != null)

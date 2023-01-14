@@ -67,7 +67,8 @@ namespace RingSoft.DbLookup.Lookup
             JoinDefinition = new TableFieldJoinDefinition
             {
                 ForeignKeyDefinition = foreignFieldDefinition.ParentJoinForeignKeyDefinition,
-                ParentAlias = parentJoinAlias
+                ParentAlias = parentJoinAlias,
+                ParentObject = this
             };
 
             if (LookupDefinition.AddJoin(JoinDefinition) == null)
@@ -157,6 +158,7 @@ namespace RingSoft.DbLookup.Lookup
             var lookupJoin = new LookupJoin(LookupDefinition);
             lookupJoin.JoinDefinition = JoinDefinition;
             lookupJoin.SetJoinDefinition(foreignFieldDefinition);
+            lookupJoin.ParentObject = this;
             return lookupJoin;
         }
 
@@ -173,6 +175,20 @@ namespace RingSoft.DbLookup.Lookup
             double percentWidth)
         {
             return AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth);
+        }
+
+        public string MakePath()
+        {
+            var result = string.Empty;
+            if (ParentObject == null)
+            {
+                result = $"{JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath()}";
+            }
+            else
+            {
+                result = $"{ParentObject.MakePath()}{JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath()}";
+            }
+            return result;
         }
     }
 }

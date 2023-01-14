@@ -193,6 +193,7 @@ namespace RingSoft.DbLookup
                     var tableFieldJoinDefinition = new TableFieldJoinDefinition
                     {
                         ForeignKeyDefinition = fieldJoin.ForeignField.ParentJoinForeignKeyDefinition,
+                        ParentObject = parentJoin
                     };
 
                     joins.Add(tableFieldJoinDefinition);

@@ -18,5 +18,7 @@ namespace RingSoft.DbLookup.Lookup
 
         LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
             double percentWidth);
+
+        string MakePath();
     }
 }

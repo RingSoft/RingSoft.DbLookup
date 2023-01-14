@@ -241,5 +241,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             return null;
         }
+
+        public string MakePath()
+        {
+            return string.Empty;
+        }
     }
 }

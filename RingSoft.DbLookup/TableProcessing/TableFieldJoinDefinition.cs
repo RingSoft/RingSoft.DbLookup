@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
+﻿using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -31,6 +32,13 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         public string ParentAlias { get; internal set; }
 
+        public IJoinParent ParentObject { get; internal set; }
+
+        internal TableFieldJoinDefinition()
+        {
+            
+        }
+
         public override string ToString()
         {
             return Alias;
@@ -40,6 +48,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             ForeignKeyDefinition = source.ForeignKeyDefinition;
             ParentAlias = source.ParentAlias;
+            ParentObject = source.ParentObject;
         }
     }
 }

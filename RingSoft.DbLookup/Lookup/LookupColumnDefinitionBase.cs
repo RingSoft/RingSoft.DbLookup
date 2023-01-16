@@ -215,6 +215,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         private IJoinParent _parent;
+        private JoinTypes _joinType;
 
         public IJoinParent ParentObject
         {
@@ -245,6 +246,12 @@ namespace RingSoft.DbLookup.Lookup
         public string MakePath()
         {
             return string.Empty;
+        }
+
+        JoinTypes IJoinParent.JoinType
+        {
+            get => _joinType;
+            set => _joinType = value;
         }
     }
 }

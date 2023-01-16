@@ -951,6 +951,7 @@ namespace RingSoft.DbMaintenance
         {
             if (ValidateLookup())
             {
+                var test = LookupDefinition;
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
                 ProcessRefresh();
                 ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =

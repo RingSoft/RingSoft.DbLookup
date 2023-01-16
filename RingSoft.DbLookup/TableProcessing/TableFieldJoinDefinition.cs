@@ -1,5 +1,7 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -22,7 +24,23 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The alias.
         /// </value>
-        public string Alias => ForeignKeyDefinition.Alias;
+        private string _alias;
+
+        public string Alias
+        {
+            get
+            {
+                if (_alias.IsNullOrEmpty())
+                {
+                    return ForeignKeyDefinition.Alias;
+                }
+                return _alias;
+            }
+            set
+            {
+                _alias = value;
+            }
+        }
 
         /// <summary>
         /// Gets the parent alias used in the SQL string.
@@ -33,6 +51,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public string ParentAlias { get; internal set; }
 
         public IJoinParent ParentObject { get; internal set; }
+
+        public JoinTypes JoinType { get; internal set; }
 
         internal TableFieldJoinDefinition()
         {

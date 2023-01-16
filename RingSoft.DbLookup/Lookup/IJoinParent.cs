@@ -20,5 +20,7 @@ namespace RingSoft.DbLookup.Lookup
             double percentWidth);
 
         string MakePath();
+
+        JoinTypes JoinType { get; internal set; }
     }
 }

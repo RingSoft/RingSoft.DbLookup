@@ -395,9 +395,9 @@ namespace RingSoft.DbLookup.Lookup
 
         internal TableFieldJoinDefinition AddJoin(TableFieldJoinDefinition lookupFieldJoin)
         {
-            if (_joinsList.All(p => p.ForeignKeyDefinition.Alias != lookupFieldJoin.ForeignKeyDefinition.Alias))
+            if (_joinsList.All(p => p.Alias != lookupFieldJoin.Alias))
             {
-                if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
+                //if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
                 {
                     _joinsList.Add(lookupFieldJoin);
                     return lookupFieldJoin;
@@ -590,16 +590,18 @@ namespace RingSoft.DbLookup.Lookup
             var includeResult = AdvancedFindTree.MakeIncludes(foundTreeViewItem, string.Empty, false);
             var formula = entity.Formula;
             var lookupField = fieldDefinition;
-            
+            var condition = (Conditions)entity.Operand;
+
             if (fieldDefinition != null)
             {
                 if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                 {
-                    var condition = (Conditions)entity.Operand;
                     switch (condition)
                     {
                         case Conditions.Equals:
                         case Conditions.NotEquals:
+                        case Conditions.EqualsNull:
+                        case Conditions.NotEqualsNull:
                             if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
                             {
                                 lookupField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
@@ -619,6 +621,19 @@ namespace RingSoft.DbLookup.Lookup
                             }
                             break;
                     }
+                }
+            }
+
+            if (foundTreeViewItem != null && foundTreeViewItem.Parent == null)
+            {
+                switch (condition)
+                {
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        includeResult.LookupJoin = null;
+                        lookupField = foundTreeViewItem.FieldDefinition;
+                        filterField = foundTreeViewItem.FieldDefinition;
+                        break;
                 }
             }
 
@@ -667,6 +682,7 @@ namespace RingSoft.DbLookup.Lookup
             if (foundTreeViewItem.Parent != null)
             {
                 filterItemDefinition.TableDescription = foundTreeViewItem.Parent.Name;
+                filterField = foundTreeViewItem.FieldDefinition;
             }
             else
             {

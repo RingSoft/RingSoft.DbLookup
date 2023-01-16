@@ -19,10 +19,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            var activeWindow = GetActiveWindow();
+            activeWindow.Dispatcher.Invoke(() =>
             {
                 var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
-                var activeWindow = GetActiveWindow();
                 dataProcessResultWindow.Owner = activeWindow;
                 dataProcessResultWindow.ShowInTaskbar = false;
                 dataProcessResultWindow.ShowDialog();

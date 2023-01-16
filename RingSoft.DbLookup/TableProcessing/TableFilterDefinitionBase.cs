@@ -460,10 +460,26 @@ namespace RingSoft.DbLookup.TableProcessing
                 if (tableFieldJoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowNulls)
                     joinType = JoinTypes.LeftOuterJoin;
 
+                tableFieldJoinDefinition.JoinType = joinType;
                 QueryTable foreignTable =
                     query.JoinTables.FirstOrDefault(f => f.Alias == tableFieldJoinDefinition.ParentAlias);
                 if (foreignTable == null)
+                {
                     foreignTable = query.BaseTable;
+                }
+                else
+                {
+                    var parentFilter = joins.FirstOrDefault(p => 
+                        p.Alias == tableFieldJoinDefinition.ParentAlias);
+                    if (parentFilter != null)
+                    {
+                        if (joinType == JoinTypes.InnerJoin)
+                        {
+                            joinType = parentFilter.JoinType;
+                        }
+                        tableFieldJoinDefinition .JoinType = joinType;
+                    }
+                }
 
                 if (query.JoinTables.All(a => a.Alias != tableFieldJoinDefinition.Alias))
                 {

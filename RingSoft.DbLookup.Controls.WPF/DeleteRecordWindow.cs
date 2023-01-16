@@ -43,7 +43,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         public Border Border { get; set; }
         public DeleteRecordViewModel ViewModel { get; private set; }
         public CheckBox DeleteAllCheckBox { get; set; }
-        public CheckBox NullAllCheckBox { get; set; }
 
         public DeleteTables DeleteTables { get; private set; }
         public List<DeleteRecordWindowItemControl> DeleteTabs { get; private set; } =
@@ -72,26 +71,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     TabControl.Items.Add(tabItem);
                 }
 
-                var firstTab = TabControl.Items[0] as TabItem;
-                if (firstTab != null)
-                {
-                    firstTab.Focus();
-                }
-
-                DeleteAllCheckBox.Visibility = NullAllCheckBox.Visibility = Visibility.Collapsed;
-                var nullTables = deleteTables.Tables.Where(p => p.ChildField.AllowNulls
-                                                                && p.ChildField.AllowUserNulls);
-                var noNullTables = deleteTables.Tables.Where(p => !p.ChildField.AllowNulls
-                                                                  || !p.ChildField.AllowUserNulls);
-                if (nullTables.Count() == deleteTables.Tables.Count)
-                {
-                    NullAllCheckBox.Visibility = Visibility.Visible;
-                }
-                if (noNullTables.Count() == deleteTables.Tables.Count)
-                {
-                    DeleteAllCheckBox.Visibility = Visibility.Visible;
-                }
-
+                DeleteAllCheckBox.Focus();
             };
         }
 
@@ -99,7 +79,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
-            NullAllCheckBox = GetTemplateChild(nameof(NullAllCheckBox)) as CheckBox;
 
             TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
@@ -120,6 +99,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (deleteTab.ViewModel != null)
                 {
                     deleteTab.ViewModel.DeleteAllRecords = value;
+                    deleteTab.ViewModel.NullAllRecords = value;
                 }
             }
 

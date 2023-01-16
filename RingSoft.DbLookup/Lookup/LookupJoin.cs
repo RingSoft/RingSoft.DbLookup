@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
@@ -11,6 +13,8 @@ namespace RingSoft.DbLookup.Lookup
     /// </summary>
     public class LookupJoin : IJoinParent
     {
+        private JoinTypes _joinType;
+
         /// <summary>
         /// Gets the join definition.
         /// </summary>
@@ -71,11 +75,18 @@ namespace RingSoft.DbLookup.Lookup
                 ParentObject = this
             };
 
+            if (!JoinDefinition.ParentAlias.IsNullOrEmpty())
+            {
+                //JoinDefinition.Alias = $"{JoinDefinition.ParentAlias}_{JoinDefinition.Alias}";
+                JoinDefinition.Alias = $"{Guid.NewGuid().ToString()}";
+            }
+
             if (LookupDefinition.AddJoin(JoinDefinition) == null)
             {
                 JoinDefinition = LookupDefinition.Joins.FirstOrDefault(p =>
                     p.ForeignKeyDefinition.IsEqualTo(JoinDefinition.ForeignKeyDefinition));
             }
+
         }
 
         /// <summary>
@@ -189,6 +200,12 @@ namespace RingSoft.DbLookup.Lookup
                 result = $"{ParentObject.MakePath()}{JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath()}";
             }
             return result;
+        }
+
+        JoinTypes IJoinParent.JoinType
+        {
+            get => _joinType;
+            set => _joinType = value;
         }
     }
 }

@@ -40,8 +40,25 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <value>
         /// The alias.
         /// </value>
-        public string Alias =>
-            $"{ForeignTable.TableName}_{PrimaryTable.TableName}_{FieldJoins[0].ForeignField.FieldName}";
+        private string _alias;
+
+        public string Alias
+        {
+            get
+            {
+                if (_alias.IsNullOrEmpty())
+                {
+                    return GetDefaultAlias();
+                }
+                return _alias;
+            }
+            internal set => _alias = value;
+        }
+
+        private string GetDefaultAlias()
+        {
+            return $"{ForeignTable.TableName}_{PrimaryTable.TableName}_{FieldJoins[0].ForeignField.FieldName}";
+        }
 
         /// <summary>
         /// Gets the name of the foreign object property.
@@ -55,6 +72,7 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         internal ForeignKeyDefinition()
         {
+            
         }
 
         public bool IsEqualTo(ForeignKeyDefinition foreignKeyDefinition)

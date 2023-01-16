@@ -35,24 +35,6 @@ namespace RingSoft.DbLookup
             }
         }
 
-        private bool _nullAllData;
-
-        public bool NullAllData
-        {
-            get => _nullAllData;
-            set
-            {
-                if (_nullAllData == value)
-                {
-                    return;
-                }
-                _nullAllData = value;
-                SetAllTabsNull(value);
-                OnPropertyChanged();
-            }
-        }
-
-
         public IDeleteRecordView View { get; private set; }
 
         public RelayCommand OkCommand { get; set; }
@@ -85,17 +67,9 @@ namespace RingSoft.DbLookup
             foreach (var deleteTable in DeleteTables.Tables)
             {
                 deleteTable.DeleteAllData = value;
-            }
-            View.SetAllDataDelete(value);
-        }
-
-        private void SetAllTabsNull(bool value)
-        {
-            foreach (var deleteTable in DeleteTables.Tables)
-            {
                 deleteTable.NullAllData = value;
             }
-            View.SetAllDataNull(value);
+            View.SetAllDataDelete(value);
         }
 
         private void OnOk()

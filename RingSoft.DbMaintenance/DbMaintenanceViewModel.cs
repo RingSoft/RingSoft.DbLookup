@@ -1012,7 +1012,9 @@ namespace RingSoft.DbMaintenance
         protected bool DeleteChildren(DeleteTables deleteTables)
         {
             var sqls = new List<string>();
-            foreach (var deleteTable in deleteTables.Tables)
+            var tables = deleteTables.Tables
+                .OrderByDescending(p => p.ChildField.TableDefinition.PriorityLevel);
+            foreach (var deleteTable in tables)
             {
                 ProcessDeleteChildren(deleteTable, sqls);
             }

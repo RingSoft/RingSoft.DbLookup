@@ -35,5 +35,14 @@ namespace RingSoft.DbLookup
         public bool Processed { get; set; }
 
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            if (ChildField != null)
+            {
+                return ChildField.ToString();
+            }
+            return base.ToString();
+        }
     }
 }

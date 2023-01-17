@@ -41,6 +41,8 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public TabControl TabControl { get; private set; }
         public Border Border { get; set; }
+        public StackPanel SingleTabPanel { get; private set; }
+        public TextBlock SingleTextBlock { get; private set; }
         public DeleteRecordViewModel ViewModel { get; private set; }
         public CheckBox DeleteAllCheckBox { get; set; }
 
@@ -60,15 +62,37 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 ViewModel.Initialize(this, deleteTables);
-                foreach (var deleteTable in DeleteTables.Tables)
+                if (deleteTables.Tables.Count == 1)
                 {
-                    var tabItem = new TabItem();
-                    deleteTable.Description = $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                    tabItem.Header = deleteTable.Description;
+                    TabControl.Visibility = Visibility.Collapsed;
+                    DeleteAllCheckBox.Visibility = Visibility.Collapsed;
+                    var deleteTable = deleteTables.Tables[0];
                     var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
+                    deleteTable.Description =
+                        $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                    SingleTextBlock.Text = deleteTable.Description;
+
                     DeleteTabs.Add(deleteTab);
-                    tabItem.Content = deleteTab;
-                    TabControl.Items.Add(tabItem);
+                    SingleTabPanel.Children.Add(deleteTab);
+                    deleteTab.Loaded += (o, eventArgs) =>
+                    {
+                        deleteTab.SetInitialFocusCheckBox();
+                    };
+                }
+                else
+                {
+                    SingleTabPanel.Visibility = Visibility.Collapsed;
+                    foreach (var deleteTable in DeleteTables.Tables)
+                    {
+                        var tabItem = new TabItem();
+                        deleteTable.Description =
+                            $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                        tabItem.Header = deleteTable.Description;
+                        var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
+                        DeleteTabs.Add(deleteTab);
+                        tabItem.Content = deleteTab;
+                        TabControl.Items.Add(tabItem);
+                    }
                 }
 
                 DeleteAllCheckBox.Focus();
@@ -81,6 +105,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
 
             TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
+            SingleTabPanel = GetTemplateChild(nameof(SingleTabPanel)) as StackPanel;
+            SingleTextBlock = GetTemplateChild(nameof(SingleTextBlock)) as TextBlock;
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
 
             base.OnApplyTemplate();

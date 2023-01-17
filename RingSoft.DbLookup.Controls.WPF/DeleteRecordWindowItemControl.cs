@@ -67,6 +67,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             DeleteTable = deleteTable;
         }
 
+        public void SetInitialFocusCheckBox()
+        {
+            DeleteAllCheckBox.Focus();
+        }
+
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;

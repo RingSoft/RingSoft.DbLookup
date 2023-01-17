@@ -69,6 +69,7 @@ namespace RingSoft.DbLookup.TableProcessing
             ForeignKeyDefinition = source.ForeignKeyDefinition;
             ParentAlias = source.ParentAlias;
             ParentObject = source.ParentObject;
+            Alias = source.Alias;
         }
     }
 }

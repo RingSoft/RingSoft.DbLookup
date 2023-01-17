@@ -15,11 +15,10 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         public LocationWindow()
         {
             InitializeComponent();
+            Initialize();
 
-            
             AddModifyButton.Click += (sender, args) => LocationViewModel.OnAddModify();
 
-            Initialize();
             RegisterFormKeyControl(NameControl);
         }
 

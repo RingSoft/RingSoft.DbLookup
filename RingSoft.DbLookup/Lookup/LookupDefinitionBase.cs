@@ -407,6 +407,14 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        public TableFieldJoinDefinition AddCopyJoin(TableFieldJoinDefinition lookupFieldJoin)
+        {
+            var result = new TableFieldJoinDefinition();
+            result.CopyFrom(lookupFieldJoin);
+            AddJoin(result);
+            return result;
+        }
+
         /// <summary>
         /// Gets the index of visible column.
         /// </summary>

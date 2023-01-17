@@ -158,7 +158,13 @@ namespace RingSoft.DbMaintenance
                 }
                 var filter = GetAddViewFilter();
                 if (filter != null)
+                {
                     _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
+                    foreach (var joinDefinition in LookupAddViewArgs.LookupData.LookupDefinition.Joins)
+                    {
+                        _lookupData.LookupDefinition.AddCopyJoin(joinDefinition);
+                    }
+                }
             }
 
             Initialize();

@@ -52,7 +52,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 }
                 return _alias;
             }
-            internal set => _alias = value;
+            //internal set => _alias = value;
         }
 
         private string GetDefaultAlias()

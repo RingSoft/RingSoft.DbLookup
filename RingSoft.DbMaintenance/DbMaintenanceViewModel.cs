@@ -975,26 +975,41 @@ namespace RingSoft.DbMaintenance
                             deleteTable.Query = query;
                             deleteTable.ParentDeleteTable = parentDeleteTable;
                             deleteTables.Tables.Add(deleteTable);
+
+                            if (!childField.AllowNulls || !childField.AllowUserNulls)
+                            {
+                                foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
+                                {
+                                    if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
+                                    {
+                                        if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
+                                                rootChild, deleteTable))
+                                        {
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
             }
 
-            if (!childField.AllowNulls || !childField.AllowUserNulls)
-            {
-                foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
-                {
-                    if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
-                    {
-                        if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
-                                rootChild, deleteTable))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
+            //if (!childField.AllowNulls || !childField.AllowUserNulls)
+            //{
+            //    foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
+            //    {
+            //        if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
+            //        {
+            //            if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
+            //                    rootChild, deleteTable))
+            //            {
+            //                return false;
+            //            }
+            //        }
+            //    }
+            //}
 
             return true;
         }

@@ -4,12 +4,15 @@ using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
 using System.Windows.Input;
+using System;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
     public class DataEntryGridAutoFillHost : DataEntryGridEditingControlHost<AutoFillControl>
     {
         public override bool IsDropDownOpen => Control.ContainsBoxIsOpen;
+
+        public override bool AllowReadOnlyEdit => true;
 
         public DataEntryGridAutoFillCellProps AutoFillCellProps { get; private set; }
 
@@ -89,6 +92,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                     OnUpdateSource(GetCellValue());
                 }
             };
+            switch (cellStyle.State)
+            {
+                case DataEntryGridCellStates.Enabled:
+                    break;
+                case DataEntryGridCellStates.ReadOnly:
+                case DataEntryGridCellStates.Disabled:
+                    _gridReadOnlyMode = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             if (_gridReadOnlyMode)
             {
                 Control.TextBox.Focusable = false;
@@ -100,6 +115,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         args.Handled = true;
                     }
                 };
+                Control.SetReadOnlyMode(true);
                 //Control.Button.Focus();
             }
         }

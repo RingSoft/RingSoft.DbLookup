@@ -87,10 +87,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                         var tabItem = new TabItem();
                         deleteTable.Description =
                             $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                        tabItem.Header = deleteTable.Description;
+                        var textBlockHeader = new TextBlock { Text = deleteTable.Description };
+                        textBlockHeader.Margin = new Thickness(5);
+                        tabItem.Header = textBlockHeader;
                         var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
                         DeleteTabs.Add(deleteTab);
                         tabItem.Content = deleteTab;
+                        var left = tabItem.Margin.Left;
+                        var bottom = tabItem.Margin.Bottom;
+                        var right = tabItem.Margin.Right;
+                        tabItem.Margin = new Thickness(left, 2, right, bottom);
                         TabControl.Items.Add(tabItem);
                     }
                 }

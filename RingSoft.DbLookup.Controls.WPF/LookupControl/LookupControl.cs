@@ -1730,7 +1730,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
             //Peter Ringering - 09/25/2022 - E-273
-            RefreshData(false);
+            RefreshData(false, "", LookupData.ParentWindowPrimaryKeyValue);
             if (SearchForHost != null && SearchForHost.SearchText.IsNullOrEmpty())
             {
                 ListView.SelectedIndex = _selectedIndex;

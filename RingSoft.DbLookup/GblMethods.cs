@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup
 {
@@ -44,6 +47,17 @@ namespace RingSoft.DbLookup
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
         {
+            //var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
+            //if (System.IO.File.Exists(jsonFile))
+            //{
+            //    var test = System.IO.File.ReadAllText(jsonFile);
+            //    var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
+            //    var arguments = new List<string>();
+            //    arguments.Add("-p");
+            //    arguments.Add("nub");
+
+            //    System.Diagnostics.Process.Start(printInput.ExePath, arguments);
+            //}
             if (isCurrency)
                 return $"C{decimals}";
 

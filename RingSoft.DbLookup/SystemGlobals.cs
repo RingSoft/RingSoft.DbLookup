@@ -17,6 +17,8 @@ namespace RingSoft.DbLookup
 
         public static string UserName { get; set; }
 
+        public static string ProgramDataFolder { get; set; }
+
         private static IAdvancedFindLookupContext _context;
 
         public static IAdvancedFindLookupContext AdvancedFindLookupContext

@@ -18,6 +18,19 @@ namespace RingSoft.DbLookup.App.WPFCore
 {
     public class WpfAppStart : AppStart, IDbLookupUserInterface, IControlsUserInterface
     {
+        public static string ProgramDataFolder
+        {
+            get
+            {
+#if DEBUG
+                return AppDomain.CurrentDomain.BaseDirectory;
+#else
+                return
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\DbLookup\\";
+#endif
+            }
+        }
+
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
         private Application _application;
@@ -32,6 +45,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void StartApp(string appSection, string[] args)
         {
+            SystemGlobals.ProgramDataFolder = ProgramDataFolder;
             LookupControlsGlobals.InitUi();
             LookupControlsGlobals.LookupControlContentTemplateFactory =
                 new AppLookupContentTemplateFactory(_application);

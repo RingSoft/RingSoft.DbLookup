@@ -47,6 +47,35 @@ namespace RingSoft.DbLookup
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
         {
+            //PrintingInteropGlobals.Input = new PrintingInput();
+            //PrintingInteropGlobals.Input.PrinterInputDir = SystemGlobals.ProgramDataFolder;
+            //PrintingInteropGlobals.Properties = new PrintingProperties();
+
+            //PrintingInteropGlobals.Properties.ReportType = ReportTypes.Summary;
+            //var result = PrintingInteropGlobals.ProcessPrintingPropertiesFileJson();
+            //if (!string.IsNullOrEmpty(result))
+            //{
+            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
+            //}
+
+            //var table = new PrintingInputHeaderTable
+            //{
+            //    RowId = 1,
+            //    StringField01 = "RingSoft"
+            //};
+            //PrintingInteropGlobals.HeaderTable.Add(table);
+            //result = PrintingInteropGlobals.ProcessHeaderFileJson();
+            //if (!string.IsNullOrEmpty(result))
+            //{
+            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
+            //}
+
+            //result = PrintingInteropGlobals.ProcessInput();
+            //if (!string.IsNullOrEmpty(result))
+            //{
+            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
+            //}
+
             //var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
             //if (System.IO.File.Exists(jsonFile))
             //{
@@ -54,10 +83,13 @@ namespace RingSoft.DbLookup
             //    var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
             //    var arguments = new List<string>();
             //    arguments.Add("-p");
-            //    arguments.Add("nub");
+            //    arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
 
             //    System.Diagnostics.Process.Start(printInput.ExePath, arguments);
             //}
+
+
+
             if (isCurrency)
                 return $"C{decimals}";
 

@@ -62,6 +62,21 @@
 
                             <Label Grid.Row="6" Grid.Column="0" x:Name="SearchForLabel" Content="Search Value"/>
 
+                            <StackPanel Grid.Row="6" Grid.Column="1" x:Name="DatePanel">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <dec:IntegerEditControl x:Name="DateValueControl" Width="50" Value="{Binding DateValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AllowNullValue="False"/>
+
+                                    <dec:TextComboBoxControl x:Name="DateFilterTypeComboBoxControl" Setup="{Binding DateFilterTypeComboBoxControlSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding DateFilterTypeComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"/>
+
+
+                                </StackPanel>
+
+                                <dec:DateEditControl x:Name="SearchForDateControl" Value="{Binding DateSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            </StackPanel>
+
                             <dec:StringEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForStringControl" Text="{Binding StringSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <lc:AutoFillControl Grid.Row="6" Grid.Column="1" x:Name="SearchForAutoFillControl" Setup="{Binding SearchValueAutoFillSetup}" Value="{Binding SearchValueAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -69,8 +84,6 @@
                             <dec:DecimalEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDecimalControl" Value="{Binding DecimalSearchValueDecimal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <dec:IntegerEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForIntegerControl" Value="{Binding IntegerSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-                            <dec:DateEditControl Grid.Row="6" Grid.Column="1" x:Name="SearchForDateControl" Value="{Binding DateSearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <dec:TextComboBoxControl Grid.Row="6" Grid.Column="1" x:Name="SearchForBoolComboBoxControl" Setup="{Binding ValueComboBoxSetup}" SelectedItem="{Binding ValueComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 

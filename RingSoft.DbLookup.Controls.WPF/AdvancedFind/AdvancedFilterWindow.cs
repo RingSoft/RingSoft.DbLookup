@@ -73,6 +73,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public DecimalEditControl SearchForDecimalControl { get; set; }
         public IntegerEditControl SearchForIntegerControl { get; set; }
         public DateEditControl SearchForDateControl { get; set; }
+
+        public TextComboBoxControl DateFilterTypeComboBoxControl { get; set; }
+        public StackPanel DatePanel { get; set; }
+
+        public IntegerEditControl DateValueControl { get; set; }
+
         public TextComboBoxControl SearchForBoolComboBoxControl { get; set; }
         public Button OKButton { get; set; }
         public Button CancelButton { get; set; }
@@ -126,6 +132,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForIntegerControl = GetTemplateChild(nameof(SearchForIntegerControl)) as IntegerEditControl;
             SearchForDateControl = GetTemplateChild(nameof(SearchForDateControl)) as DateEditControl;
             SearchForBoolComboBoxControl = GetTemplateChild(nameof(SearchForBoolComboBoxControl)) as TextComboBoxControl;
+            DatePanel = GetTemplateChild(nameof(DatePanel)) as StackPanel;
+            DateFilterTypeComboBoxControl = GetTemplateChild(nameof(DateFilterTypeComboBoxControl)) as TextComboBoxControl;
+            DateValueControl = GetTemplateChild(nameof(DateValueControl)) as IntegerEditControl;
 
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
 
@@ -159,6 +168,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         break;
                 }
             };
+
+            
             FormulaValueTypeComboBox.SelectionChanged += (sender, args) =>
             {
                 HideSearchValues();
@@ -181,6 +192,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             FormulaValueTypeLabel.Visibility = Visibility.Collapsed;
             FormulaValueTypeComboBox.Visibility = Visibility.Collapsed;
 
+            DateFilterTypeComboBoxControl.SelectionChanged += (sender, args) =>
+            {
+                SetupDateControls();
+            };
             //if (_formAdd)
             {
                 SetupControlNew();
@@ -194,10 +209,30 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForAutoFillControl.Visibility = Visibility.Collapsed;
             SearchForDecimalControl.Visibility = Visibility.Collapsed;
             SearchForIntegerControl.Visibility = Visibility.Collapsed;
-            SearchForDateControl.Visibility = Visibility.Collapsed;
+            DatePanel.Visibility = Visibility.Collapsed;
             SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
         }
 
+        private void SetupDateControls()
+        {
+            DateValueControl.Visibility = Visibility.Collapsed;
+            SearchForDateControl.Visibility = Visibility.Collapsed;
+            var dateFilterType = DateFilterTypes.SpecificDate;
+            if (ViewModel != null && ViewModel.DateFilterTypeComboBoxControlSetup != null
+                && ViewModel.DateFilterTypeComboBoxItem != null)
+            {
+                dateFilterType = ViewModel.DateFilterType;
+            }
+            switch (dateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    SearchForDateControl.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    DateValueControl.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
         private bool CheckCondition()
         {
             switch (ViewModel.Condition)
@@ -254,9 +289,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 SearchForIntegerControl.Focus();
             }
 
-            if (SearchForDateControl.Visibility == Visibility.Visible)
+            if (DatePanel.Visibility == Visibility.Visible)
             {
-                SearchForDateControl.Focus();
+                if (SearchForDateControl.Visibility == Visibility.Visible)
+                {
+                    SearchForDateControl.Focus();
+                }
+
+                if (DateValueControl.Visibility == Visibility.Visible)
+                {
+                    DateValueControl.Focus();
+                }
+
             }
 
             if (SearchForBoolComboBoxControl.Visibility == Visibility.Visible)
@@ -358,7 +402,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     var dateField = ViewModel.FieldDefinition as DateFieldDefinition;
                     if (CheckCondition())
                     {
-                        SearchForDateControl.Visibility = Visibility.Visible;
+                        DatePanel.Visibility = Visibility.Visible;
                     }
 
                     var dateType = DateFormatTypes.DateOnly;
@@ -375,6 +419,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     }
 
                     SearchForDateControl.DateFormatType = dateType;
+                    SetupDateControls();
                     break;
                 case FieldDataTypes.Bool:
                     if (CheckCondition())

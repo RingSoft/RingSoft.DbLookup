@@ -44,6 +44,7 @@ namespace RingSoft.DbMaintenance
         public FieldDataTypes FormulaValueType { get; set; }
         public LookupDefinitionBase LookupDefinition { get; set; }
         public string TableDescription { get; set; }
+        public DateFilterTypes DateFilterType { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
@@ -275,6 +276,42 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private TextComboBoxControlSetup _dateFilterTypeComboBoxControlSetup;
+
+        public TextComboBoxControlSetup DateFilterTypeComboBoxControlSetup
+        {
+            get => _dateFilterTypeComboBoxControlSetup;
+            set
+            {
+                if (_dateFilterTypeComboBoxControlSetup == value)
+                    return;
+
+                _dateFilterTypeComboBoxControlSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TextComboBoxItem _dateFilterTypeComboBoxItem;
+
+        public TextComboBoxItem DateFilterTypeComboBoxItem
+        {
+            get => _dateFilterTypeComboBoxItem;
+            set
+            {
+                if (_dateFilterTypeComboBoxItem == value)
+                    return;
+
+                _dateFilterTypeComboBoxItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateFilterTypes DateFilterType
+        {
+            get => (DateFilterTypes)DateFilterTypeComboBoxItem.NumericValue;
+            set => DateFilterTypeComboBoxItem = DateFilterTypeComboBoxControlSetup.GetItem((int)value);
+        }
+
         private DateTime? _dateSearchValue;
 
         public DateTime? DateSearchValue
@@ -287,6 +324,38 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
                 _dateSearchValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private IntegerEditControlSetup _dateValueSetup;
+
+        public IntegerEditControlSetup DateValueSetup
+        {
+            get => _dateValueSetup;
+            set
+            {
+                if (_dateValueSetup == value)
+                {
+                    return;
+                }
+                _dateValueSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _dateValue;
+
+        public int DateValue
+        {
+            get => _dateValue;
+            set
+            {
+                if (_dateValue == value)
+                {
+                    return;
+                }
+                _dateValue = value;
                 OnPropertyChanged();
             }
         }
@@ -378,6 +447,7 @@ namespace RingSoft.DbMaintenance
         {
             if (_formAdd)
             {
+                DateFilterType = DateFilterTypes.SpecificDate;
                 return;
             }
 
@@ -455,6 +525,7 @@ namespace RingSoft.DbMaintenance
                     DateTime searchDateTime = DateTime.MinValue;
                     DateTime.TryParse(FilterReturn.SearchValue, out searchDateTime);
                     DateSearchValue = searchDateTime;
+                    DateFilterType = FilterReturn.DateFilterType;
                     break;
                 case FieldDataTypes.Bool:
                     TrueFalseValue = FilterReturn.SearchValue.ToBool();
@@ -503,6 +574,9 @@ namespace RingSoft.DbMaintenance
             ValueComboBoxSetup = new TextComboBoxControlSetup();
             //ValueComboBoxSetup.LoadFromEnum<TrueFalseValues>();
             
+            DateFilterTypeComboBoxControlSetup = new TextComboBoxControlSetup();
+            DateFilterTypeComboBoxControlSetup.LoadFromEnum<DateFilterTypes>();
+
             FormulaValueComboBoxSetup.LoadFromEnum<FieldDataTypes>();
             FormulaValueType = FieldDataTypes.String;
 

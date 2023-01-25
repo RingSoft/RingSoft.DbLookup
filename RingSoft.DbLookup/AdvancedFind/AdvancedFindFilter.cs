@@ -1,7 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
+    public enum DateFilterTypes
+    {
+        [Description("Specific Date")]
+        SpecificDate = 0,
+        [Description("Day(s) Ago")]
+        Days = 1,
+        [Description("Week(s) Ago")]
+        Weeks = 2,
+        [Description("Month(s) Ago")]
+        Months = 3,
+        [Description("Year(s) Ago")]
+        Years = 4,
+    }
     public class AdvancedFindFilter
     {
         [Required]
@@ -52,5 +66,8 @@ namespace RingSoft.DbLookup.AdvancedFind
         public byte RightParentheses { get; set; }
 
         public byte EndLogic { get; set; }
+
+        [DefaultValue(0)]
+        public byte DateFilterType { get; set; }
     }
 }

@@ -63,6 +63,10 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Operand)
                 .HasDescription("Condition").IsEnum<Conditions>();
+
+            _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.DateFilterType)
+                .IsEnum<DateFilterTypes>();
+
             _lookupContext.AdvancedFindFilters.IsAdvancedFind = true;
 
             _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.DateTime)

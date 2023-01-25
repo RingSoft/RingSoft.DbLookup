@@ -28,6 +28,7 @@ namespace RingSoft.DbLookup.EfCore
             builder.Property(p => p.SearchForAdvancedFindId).HasColumnType(DbConstants.IntegerColumnType);
             builder.Property(p => p.FormulaDataType).HasColumnType(DbConstants.ByteColumnType);
             builder.Property(p => p.FormulaDisplayValue).HasColumnType(DbConstants.StringColumnType);
+            builder.Property(p => p.DateFilterType).HasColumnType(DbConstants.ByteColumnType);
 
             builder.HasOne(p => p.AdvancedFind)
                 .WithMany(p => p.Filters).HasForeignKey(p => p.AdvancedFindId)

@@ -142,6 +142,18 @@ namespace RingSoft.DbLookup.TableProcessing
             Conditions condition,
             string value)
         {
+            if (fieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime)
+                {
+                    var date = value.ToDate();
+                    if (date != null)
+                    {
+                        value = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
+                    }
+                }
+            }
+
             var fieldFilter = new FieldFilterDefinition
             {
                 TableFilterDefinition = this,

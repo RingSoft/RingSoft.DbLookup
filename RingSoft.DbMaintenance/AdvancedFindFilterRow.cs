@@ -26,6 +26,7 @@ namespace RingSoft.DbMaintenance
 
         public Conditions Condition { get; set; }
         public string SearchValue { get; private set; }
+        public string DisplaySearchValue { get; private set; }
         public FilterItemDefinition FilterItemDefinition { get; internal set; }
         public FieldDefinition FieldDefinition { get; private set; }
         public string Formula { get; private set; }
@@ -233,8 +234,33 @@ namespace RingSoft.DbMaintenance
             base.SetCellValue(value);
         }
 
+        private void SetCellValueFromLookupReturn(AdvancedFilterReturn filterReturn)
+        {
+            Condition = filterReturn.Condition;
+            SearchValue = filterReturn.SearchValue;
+            FieldDefinition = filterReturn.FieldDefinition;
+            ConvertDate();
+        }
+
+        private void ConvertDate()
+        {
+            if (FieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime)
+                {
+                    var date = SearchValue.ToDate();
+                    if (date != null)
+                    {
+                        //SearchValue = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
+                        DisplaySearchValue = date.Value.FormatDateValue(dateField.DateType);
+                    }
+                }
+            }
+
+        }
         private void SetCellValueProcessField(AdvancedFindFilterCellProps filterProps, FieldFilterDefinition filter)
         {
+            SetCellValueFromLookupReturn(filterProps.FilterReturn);
             filter.Value = SearchValue;
             filter.Condition = Condition;
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -701,6 +727,7 @@ namespace RingSoft.DbMaintenance
             {
                 searchValue = SearchValue;
             }
+
             var searchValueText = MakeBeginSearchValueText();
             if (FieldDefinition != null)
             {
@@ -786,7 +813,14 @@ namespace RingSoft.DbMaintenance
                 case Conditions.NotEqualsNull:
                     break;
                 default:
-                    result = FieldDefinition.FormatValue(searchValue);
+                    if (DisplaySearchValue.IsNullOrEmpty())
+                    {
+                        result = FieldDefinition.FormatValue(searchValue);
+                    }
+                    else
+                    {
+                        result = DisplaySearchValue;
+                    }
                     break;
             }
             return result;
@@ -842,8 +876,7 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
         {
-            Condition = advancedFilterReturn.Condition;
-            SearchValue = advancedFilterReturn.SearchValue;
+            SetCellValueFromLookupReturn(advancedFilterReturn);
             var fieldDefinition = advancedFilterReturn.FieldDefinition;
             //if (fieldDefinition == null)
             //{

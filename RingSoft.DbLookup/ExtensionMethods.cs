@@ -185,5 +185,15 @@ namespace RingSoft.DbLookup
             
             return result;
         }
+
+        public static DateTime? ToDate(this string value)
+        {
+            DateTime? result = null;
+            if (DateTime.TryParse(value, null, out var newDate))
+            {
+                result = newDate;
+            }
+            return result;
+        }
     }
 }

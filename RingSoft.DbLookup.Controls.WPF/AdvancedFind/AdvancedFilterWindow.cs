@@ -84,6 +84,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public Button CancelButton { get; set; }
 
         private bool _formAdd;
+        private bool _loading = true;
 
         public AdvancedFilterReturn FilterReturn { get; set; }
 
@@ -98,6 +99,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 ViewModel.LoadWindow();
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                _loading = false;
             };
         }
         public void Initialize(DbLookup.AdvancedFind.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
@@ -195,13 +197,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             DateFilterTypeComboBoxControl.SelectionChanged += (sender, args) =>
             {
                 SetupDateControls();
-                if (DateValueControl.Visibility == Visibility.Visible)
+                if (!_loading)
                 {
-                    DateValueControl.Focus();
-                }
-                if (SearchForDateControl.Visibility == Visibility.Visible)
-                {
-                    SearchForDateControl.Focus();
+                    if (DateValueControl.Visibility == Visibility.Visible)
+                    {
+                        DateValueControl.Focus();
+                    }
+
+                    if (SearchForDateControl.Visibility == Visibility.Visible)
+                    {
+                        SearchForDateControl.Focus();
+                    }
                 }
             };
             //if (_formAdd)

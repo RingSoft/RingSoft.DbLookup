@@ -170,8 +170,13 @@ namespace RingSoft.DbLookup.AdvancedFind
                     if (field.ParentJoinForeignKeyDefinition != null &&
                         field.ParentJoinForeignKeyDefinition.PrimaryTable != null && field.AllowRecursion
                         && field.ParentJoinForeignKeyDefinition.PrimaryTable.CanViewTable)
-                        AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
-                            field.ParentJoinForeignKeyDefinition, treeRoot);
+                    {
+                        if (field.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                        {
+                            AddTreeItem(field.ParentJoinForeignKeyDefinition.PrimaryTable, treeRoot.Items,
+                                field.ParentJoinForeignKeyDefinition, treeRoot);
+                        }
+                    }
                 }
 
                 AddFormulaToTree(treeItems, null);
@@ -467,9 +472,15 @@ namespace RingSoft.DbLookup.AdvancedFind
             {
                 if (childNodes.IndexOf(child) == 0)
                 {
-                    var newInclude = LookupDefinition.Include(child.FieldDefinition);
-                    includeJoin = ProcessInclude(includeJoin, newInclude);
-                    result.LookupJoin = includeJoin;
+                    if (child.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        if (child.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                        {
+                            var newInclude = LookupDefinition.Include(child.FieldDefinition);
+                            includeJoin = ProcessInclude(includeJoin, newInclude);
+                            result.LookupJoin = includeJoin;
+                        }
+                    }
                 }
 
                 if (childNodes.IndexOf(child) == childNodes.Count - 1)
@@ -616,14 +627,27 @@ namespace RingSoft.DbLookup.AdvancedFind
                 }
                 else
                 {
+                    var addColumnFromJoin = false;
                     if (child.FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
-                        includeJoin = LookupDefinition.Include(child.FieldDefinition.ParentJoinForeignKeyDefinition
-                            .FieldJoins[0].ForeignField);
-                        column = includeJoin.AddVisibleColumnDefinition(caption, selectedTreeViewItem.FieldDefinition,
-                            percentWidth);
+                        if (child.FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                        {
+                            includeJoin = LookupDefinition.Include(child.FieldDefinition.ParentJoinForeignKeyDefinition
+                                .FieldJoins[0].ForeignField);
+                        }
+                        else
+                        {
+                            addColumnFromJoin = false;
+                        }
+
+                        if (includeJoin != null)
+                        {
+                            column = includeJoin.AddVisibleColumnDefinition(caption, selectedTreeViewItem.FieldDefinition,
+                                percentWidth);
+                            addColumnFromJoin = true;
+                        }
                     }
-                    else
+                    if (!addColumnFromJoin)
                     {
                         column = LookupDefinition.AddVisibleColumnDefinition(caption, child.FieldDefinition, percentWidth, "");
                     }

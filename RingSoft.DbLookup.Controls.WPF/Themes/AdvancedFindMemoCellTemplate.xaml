@@ -22,7 +22,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <dec:StringEditControl Grid.Row="0" Grid.Column="0" x:Name="TextBox" VerticalContentAlignment="Center"/>
+                                <dec:StringEditControl Grid.Row="0" Grid.Column="0" x:Name="TextBox" VerticalContentAlignment="Center" BorderThickness="0"/>
                                 <Button x:Name="Button" Grid.Row="0" Grid.Column="1" Width="20" IsTabStop="False" Content="..." VerticalAlignment="Center"/>
                             </Grid>
                         </StackPanel>

@@ -192,6 +192,7 @@ CREATE TABLE [AdvancedFindFilters] (
 , [CustomDate] bit NULL
 , [RightParentheses] [tinyint] NULL
 , [EndLogic] [tinyint] NULL
+, [DateFilterType] [tinyint] DEFAULT 0 NOT NULL
 , CONSTRAINT [PK_AdvancedFindFilters] PRIMARY KEY ([AdvancedFindId],[FilterId])
 , FOREIGN KEY ([AdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 , FOREIGN KEY ([SearchForAdvancedFindId]) REFERENCES [AdvancedFinds] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION

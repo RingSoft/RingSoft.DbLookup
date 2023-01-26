@@ -302,7 +302,7 @@ namespace RingSoft.DbMaintenance
                     var date = SearchValue.ToDate();
                     if (date != null)
                     {
-                        //SearchValue = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
+                        SearchValue = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
 
                         DisplaySearchValue = date.Value.FormatDateValue(dateField.DateType, false);
                         DateSearchValue = DisplaySearchValue;
@@ -319,6 +319,7 @@ namespace RingSoft.DbMaintenance
             switch (DateFilterType)
             {
                 case DateFilterTypes.SpecificDate:
+                    DisplaySearchValue = string.Empty;
                     break;
                 default:
                     var enumTranslation = new EnumFieldTranslation();
@@ -563,15 +564,22 @@ namespace RingSoft.DbMaintenance
 
             filterReturn.Condition = Condition;
             filterReturn.SearchValue = SearchValue;
-            filterReturn.DateFilterType = DateFilterType;
-            switch (DateFilterType)
+            if (FieldDefinition is DateFieldDefinition dateFieldDefinition 
+                || (!Formula.IsNullOrEmpty() && FormulaDataType == FieldDataTypes.DateTime))
             {
-                case DateFilterTypes.SpecificDate:
-                    filterReturn.SearchValue = DateSearchValue;
-                    break;
-                default:
-                    filterReturn.SearchValue = DateFilterValue.ToString();
-                    break;
+                filterReturn.DateFilterType = DateFilterType;
+                switch (DateFilterType)
+                {
+                    case DateFilterTypes.SpecificDate:
+                        if (!DateSearchValue.IsNullOrEmpty())
+                        {
+                            filterReturn.SearchValue = DateSearchValue;
+                        }
+                        break;
+                    default:
+                        filterReturn.SearchValue = DateFilterValue.ToString();
+                        break;
+                }
             }
 
             filterReturn.Formula = Formula;

@@ -219,7 +219,8 @@ CREATE TABLE [dbo].[AdvancedFindFilters](
   [SearchForAdvancedFindId] [int] NULL,
   [CustomDate] [bit] NULL,
   [RightParentheses] [tinyint] NULL,
-  [EndLogic] [tinyint] NULL
+  [EndLogic] [tinyint] NULL,
+  [DateFilterType] [tinyint] NULL
  CONSTRAINT [PK_AdvancedFindFilter] PRIMARY KEY CLUSTERED 
 (
 	[AdvancedFindId] ASC,

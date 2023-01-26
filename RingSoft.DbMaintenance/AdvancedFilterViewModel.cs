@@ -472,26 +472,37 @@ namespace RingSoft.DbMaintenance
             if (FieldDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 var process = false;
-                switch (Condition)
+                var useLookup = true;
+                if (FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
                 {
-                    case Conditions.Equals:
-                    case Conditions.NotEquals:
-                        process = true;
-                        break;
-                }
-
-                if (process)
-                {
-                    SearchValueAutoFillValue =
-                        LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
-                            FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                    switch (Condition)
+                    {
+                        case Conditions.Equals:
+                        case Conditions.NotEquals:
+                            process = true;
+                            break;
+                    }
                 }
                 else
                 {
-                    SearchValueAutoFillValue =
-                        new AutoFillValue(
-                            new PrimaryKeyValue(FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable),
-                            FilterReturn.SearchValue);
+                    useLookup = false;
+                }
+
+                //if (useLookup)
+                {
+                    if (process)
+                    {
+                        SearchValueAutoFillValue =
+                            LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
+                                FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable, FilterReturn.SearchValue);
+                    }
+                    else
+                    {
+                        SearchValueAutoFillValue =
+                            new AutoFillValue(
+                                new PrimaryKeyValue(FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable),
+                                FilterReturn.SearchValue);
+                    }
                 }
             }
 

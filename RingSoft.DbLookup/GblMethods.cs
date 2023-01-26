@@ -59,7 +59,7 @@ namespace RingSoft.DbLookup
             //}
 
             //var table = new PrintingInputHeaderTable
-            //{
+            //{;
             //    RowId = 1,
             //    StringField01 = "RingSoft"
             //};

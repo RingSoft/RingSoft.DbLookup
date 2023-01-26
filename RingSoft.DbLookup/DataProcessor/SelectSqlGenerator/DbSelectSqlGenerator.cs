@@ -557,6 +557,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 tableField =
                     $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
             var sqlValue = FormatValueForSqlWhereItem(whereItem);
+            if (whereItem is WhereFormulaItem whereFormula && whereFormula.ValueType == ValueTypes.DateTime)
+            {
+                sqlValue = ConvertValueToSqlText(whereItem.Value, whereFormula.ValueType, whereFormula.DateType);
+            }
+            
             var condition = GenerateConditionSqlText(whereItem, tableField);
             var sql = "(\r\n";
             sql += $"\t{FormatFormulaSqlText(formula, "\t")}\r\n";

@@ -708,7 +708,7 @@ namespace RingSoft.DbLookup.QueryBuilder
                 Condition = condition,
                 Value = value,
                 ValueType = valueType,
-                Formula = formula
+                Formula = formula,
             };
 
             _whereItems.Add(whereItem);

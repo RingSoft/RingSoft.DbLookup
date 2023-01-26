@@ -10,6 +10,7 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbMaintenance
 {
@@ -36,6 +37,9 @@ namespace RingSoft.DbMaintenance
         public string PrimaryField { get; set; }
         public FieldDefinition ParentFieldDefinition { get; private set; }
         public string FormulaDisplayValue { get; private set; }
+        public DateFilterTypes DateFilterType { get; private set; }
+        public int DateFilterValue { get; set; }
+        public string DateSearchValue { get; private set; }
 
         public TextComboBoxControlSetup EndLogicsSetup { get; private set; }
 
@@ -182,10 +186,43 @@ namespace RingSoft.DbMaintenance
                     }
                     else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
                     {
+                        SetCellValueFromLookupReturn(filterProps.FilterReturn);
                         formulaFilter.Condition = filterProps.FilterReturn.Condition;
                         Condition = filterProps.FilterReturn.Condition;
+                        var setValue = true;
                         FormulaDataType = formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
-                        SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
+                        switch (FormulaDataType)
+                        {
+                            case FieldDataTypes.DateTime:
+                                switch (DateFilterType)
+                                {
+                                    case DateFilterTypes.SpecificDate:
+                                        setValue = true;
+                                        break;
+                                    default:
+                                        setValue = false;
+                                        var dateString =
+                                            LookupDefinitionBase.ProcessSearchValue(
+                                                filterProps.FilterReturn.SearchValue, DateFilterType);
+                                        var date = dateString.ToDate();
+                                        DateSearchValue = date.Value.FormatDateValue(DbDateTypes.DateOnly, false);
+                                        SearchValue = formulaFilter.FilterValue = DateSearchValue;
+
+                                        break;
+                                }
+                                break;
+                            default:
+                                setValue = true;
+                                break;
+                        }
+                        if (setValue)
+                        {
+                            SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
+                        }
+                        else
+                        {
+                            
+                        }
                         if (!filterProps.FilterReturn.Formula.IsNullOrEmpty())
                         {
                             var formula = filterProps.FilterReturn.Formula;
@@ -234,16 +271,30 @@ namespace RingSoft.DbMaintenance
             base.SetCellValue(value);
         }
 
-        private void SetCellValueFromLookupReturn(AdvancedFilterReturn filterReturn)
+        public void SetCellValueFromLookupReturn(AdvancedFilterReturn filterReturn)
         {
             Condition = filterReturn.Condition;
             SearchValue = filterReturn.SearchValue;
             FieldDefinition = filterReturn.FieldDefinition;
-            ConvertDate();
+            FormulaDataType = filterReturn.FormulaValueType;
+
+
+            ConvertDate(filterReturn);
         }
 
-        private void ConvertDate()
+        private void ConvertDate(AdvancedFilterReturn filterReturn)
         {
+            DateFilterType = filterReturn.DateFilterType;
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    break;
+                default:
+                    DateFilterValue = SearchValue.ToInt();
+                    SearchValue = LookupDefinitionBase.ProcessSearchValue(SearchValue, DateFilterType);
+                    break;
+            }
+
             if (FieldDefinition is DateFieldDefinition dateField)
             {
                 if (dateField.ConvertToLocalTime)
@@ -252,12 +303,37 @@ namespace RingSoft.DbMaintenance
                     if (date != null)
                     {
                         //SearchValue = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
-                        DisplaySearchValue = date.Value.FormatDateValue(dateField.DateType);
+
+                        DisplaySearchValue = date.Value.FormatDateValue(dateField.DateType, false);
+                        DateSearchValue = DisplaySearchValue;
                     }
                 }
+
             }
 
+            GetDateDisplayValue();
         }
+
+        private void GetDateDisplayValue()
+        {
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    break;
+                default:
+                    var enumTranslation = new EnumFieldTranslation();
+                    enumTranslation.LoadFromEnum<DateFilterTypes>();
+                    var typeTrans = enumTranslation.TypeTranslations.FirstOrDefault(p =>
+                        p.NumericValue == (int)DateFilterType);
+                    if (typeTrans != null)
+                    {
+                        DisplaySearchValue = $"{DateFilterValue} {typeTrans.TextValue}";
+                    }
+
+                    break;
+            }
+        }
+
         private void SetCellValueProcessField(AdvancedFindFilterCellProps filterProps, FieldFilterDefinition filter)
         {
             SetCellValueFromLookupReturn(filterProps.FilterReturn);
@@ -327,6 +403,15 @@ namespace RingSoft.DbMaintenance
         {
             var lookupFilterResult = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
             Path = entity.Path;
+            DateFilterType = (DateFilterTypes)entity.DateFilterType;
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    break;
+                default:
+                    DateFilterValue = entity.SearchForValue.ToInt();
+                    break;
+            }
             if (lookupFilterResult != null && lookupFilterResult.FilterItemDefinition != null)
             {
                 Table = lookupFilterResult.FilterItemDefinition.TableDescription;
@@ -466,16 +551,11 @@ namespace RingSoft.DbMaintenance
         {
             var filterReturn = new AdvancedFilterReturn();
             filterReturn.Condition = Condition;
-            filterReturn.SearchValue = SearchValue;
             filterReturn.PrimaryFieldDefinition = ParentFieldDefinition;
 
             if (FieldDefinition == null)
             {
                 filterReturn.PrimaryTableName = Table;
-            }
-            else
-            {
-                
             }
 
             filterReturn.FieldDefinition = FieldDefinition;
@@ -483,6 +563,16 @@ namespace RingSoft.DbMaintenance
 
             filterReturn.Condition = Condition;
             filterReturn.SearchValue = SearchValue;
+            filterReturn.DateFilterType = DateFilterType;
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    filterReturn.SearchValue = DateSearchValue;
+                    break;
+                default:
+                    filterReturn.SearchValue = DateFilterValue.ToString();
+                    break;
+            }
 
             filterReturn.Formula = Formula;
             filterReturn.FormulaValueType = FormulaDataType;
@@ -518,6 +608,19 @@ namespace RingSoft.DbMaintenance
 
             entity.Operand = (byte) Condition;
             entity.SearchForValue = SearchValue;
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    if (!DateSearchValue.IsNullOrEmpty())
+                    {
+                        entity.SearchForValue = DateSearchValue;
+                    }
+                    break;
+                default:
+                    entity.SearchForValue = DateFilterValue.ToString();
+                    break;
+            }
+
             entity.RightParentheses = (byte)RightParenthesesCount;
 
             //if (ParentFieldDefinition != null)
@@ -531,6 +634,7 @@ namespace RingSoft.DbMaintenance
             entity.Formula = Formula;
             entity.FormulaDisplayValue = FormulaDisplayValue;
             entity.FormulaDataType = (byte)FormulaDataType;
+            entity.DateFilterType = (byte)DateFilterType;
         }
 
         public void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
@@ -560,7 +664,20 @@ namespace RingSoft.DbMaintenance
                 //Table = fieldFilterDefinition.FieldDefinition.TableDefinition.Description;
                 Field = fieldFilterDefinition.FieldDefinition.Description;
                 Condition = fieldFilterDefinition.Condition;
+                if (fieldFilterDefinition.FieldDefinition is DateFieldDefinition dateFieldDefinition)
+                {
+                    if (dateFieldDefinition.ConvertToLocalTime)
+                    {
+                        var dateValue = fieldFilterDefinition.Value.ToDate();
+                        if (dateValue != null)
+                        {
+                            DateSearchValue = dateValue.Value.ToLocalTime()
+                                .FormatDateValue(dateFieldDefinition.DateType);
+                        }
+                    }
+                }
                 SearchValue = fieldFilterDefinition.Value;
+                GetDateDisplayValue();
 
                 if (isFixed)
                 {
@@ -636,6 +753,7 @@ namespace RingSoft.DbMaintenance
                 SearchValue = formulaFilter.FilterValue;
                 Condition = formulaFilter.Condition.GetValueOrDefault();
                 FormulaDataType = formulaFilter.DataType;
+                GetDateDisplayValue();
                 if (isFixed)
                 {
 
@@ -674,6 +792,7 @@ namespace RingSoft.DbMaintenance
 
 
             }
+            MakeSearchValueText();
             MakeSearchValueText();
         }
 
@@ -726,6 +845,11 @@ namespace RingSoft.DbMaintenance
             if (searchValue.IsNullOrEmpty())
             {
                 searchValue = SearchValue;
+            }
+
+            if (!DisplaySearchValue.IsNullOrEmpty())
+            {
+                searchValue = DisplaySearchValue;
             }
 
             var searchValueText = MakeBeginSearchValueText();

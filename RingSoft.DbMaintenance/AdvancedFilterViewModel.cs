@@ -461,6 +461,7 @@ namespace RingSoft.DbMaintenance
                     Formula = FilterReturn.Formula;
                     FormulaValueType = fieldDataType = FilterReturn.FormulaValueType;
                     FormulaDisplayValue = FilterReturn.FormulaDisplayValue;
+                    ProcessDateReturn();
 
                     break;
                 default:
@@ -522,10 +523,8 @@ namespace RingSoft.DbMaintenance
                     DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
                     break;
                 case FieldDataTypes.DateTime:
-                    DateTime searchDateTime = DateTime.MinValue;
-                    DateTime.TryParse(FilterReturn.SearchValue, out searchDateTime);
-                    DateSearchValue = searchDateTime;
-                    DateFilterType = FilterReturn.DateFilterType;
+                    ProcessDateReturn();
+
                     break;
                 case FieldDataTypes.Bool:
                     TrueFalseValue = FilterReturn.SearchValue.ToBool();
@@ -534,6 +533,49 @@ namespace RingSoft.DbMaintenance
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        private void ProcessDateReturn()
+        {
+            var process = false;
+            switch (Type)
+            {
+                case TreeViewType.Field:
+                    if (FieldDefinition is DateFieldDefinition)
+                    {
+                        process = true;
+                    }
+                    break;
+                case TreeViewType.AdvancedFind:
+                    break;
+                case TreeViewType.Formula:
+                    if (FormulaValueType == FieldDataTypes.DateTime)
+                    {
+                        process = true;
+                    }
+                    break;
+                case TreeViewType.ForeignTable:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            if (!process)
+            {
+                return;
+            }
+            DateFilterType = FilterReturn.DateFilterType;
+            DateTime searchDateTime = DateTime.MinValue;
+            switch (FilterReturn.DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    DateTime.TryParse(FilterReturn.SearchValue, out searchDateTime);
+                    DateSearchValue = searchDateTime;
+                    break;
+                default:
+                    DateValue = FilterReturn.SearchValue.ToInt();
+                    break;
+            }
+        }
+
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             Type = treeViewItem.Type;
@@ -824,13 +866,27 @@ namespace RingSoft.DbMaintenance
                     result.SearchValue = DecimalSearchValueDecimal.ToString();
                     break;
                 case FieldDataTypes.DateTime:
-                    result.SearchValue = DateSearchValue.ToString();
+                    SetDateProperties(result);
                     break;
                 case FieldDataTypes.Bool:
                     result.SearchValue = ValueComboBoxItem.NumericValue.ToString();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SetDateProperties(AdvancedFilterReturn result)
+        {
+            result.DateFilterType = DateFilterType;
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    result.SearchValue = DateSearchValue.ToString();
+                    break;
+                default:
+                    result.SearchValue = DateValue.ToString();
+                    break;
             }
         }
 

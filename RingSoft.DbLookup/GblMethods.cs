@@ -137,22 +137,43 @@ namespace RingSoft.DbLookup
             return returnString;
         }
 
-        public static string FormatDateValue(this DateTime value, DbDateTypes dateType)
+        public static string FormatDateValue(this DateTime value, DbDateTypes dateType, bool fullString = true)
         {
             string formatString;
-            switch (dateType)
+            if (fullString)
             {
-                case DbDateTypes.DateOnly:
-                    formatString = "MM/dd/yyyy";
-                    break;
-                case DbDateTypes.DateTime:
-                    formatString = "MM/dd/yyyy hh:mm:ss tt";
-                    break;
-                case DbDateTypes.Millisecond:
-                    formatString = "MM/dd/yyyy hh:mm:ss tt.fff";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value), value, null);
+                switch (dateType)
+                {
+                    case DbDateTypes.DateOnly:
+                        formatString = "MM/dd/yyyy";
+                        break;
+                    case DbDateTypes.DateTime:
+                        formatString = "MM/dd/yyyy hh:mm:ss tt";
+                        break;
+                    case DbDateTypes.Millisecond:
+                        formatString = "MM/dd/yyyy hh:mm:ss tt.fff";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
+                }
+            }
+            else
+            {
+                switch (dateType)
+                {
+                    case DbDateTypes.DateOnly:
+                        formatString = "M/d/yyyy";
+                        break;
+                    case DbDateTypes.DateTime:
+                        formatString = "M/d/yyyy hh:mm:ss tt";
+                        break;
+                    case DbDateTypes.Millisecond:
+                        formatString = "M/d/yyyy hh:mm:ss tt.fff";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
+
+                }
             }
 
             return value.ToString(formatString);

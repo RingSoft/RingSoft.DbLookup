@@ -51,7 +51,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 CellProps = new AdvancedFindFilterCellProps(Row, ColumnId, Text, filterWindow.FilterReturn);
                 if (Row is AdvancedFindFilterRow advancedFindFilterRow)
                 {
-                    advancedFindFilterRow.Condition = CellProps.FilterReturn.Condition;
+                    advancedFindFilterRow.SetCellValueFromLookupReturn(filterWindow.FilterReturn);
+                    //advancedFindFilterRow.Condition = CellProps.FilterReturn.Condition;
                     advancedFindFilterRow.MakeSearchValueText(CellProps.FilterReturn.SearchValue);
                     Control.TextBox.Text = advancedFindFilterRow.SearchValueText;
                 }

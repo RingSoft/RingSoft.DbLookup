@@ -195,6 +195,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             DateFilterTypeComboBoxControl.SelectionChanged += (sender, args) =>
             {
                 SetupDateControls();
+                if (DateValueControl.Visibility == Visibility.Visible)
+                {
+                    DateValueControl.Focus();
+                }
+                if (SearchForDateControl.Visibility == Visibility.Visible)
+                {
+                    SearchForDateControl.Focus();
+                }
             };
             //if (_formAdd)
             {
@@ -406,7 +414,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     }
 
                     var dateType = DateFormatTypes.DateOnly;
-                    switch (dateField.DateType)
+                    var dbDateType = DbDateTypes.DateOnly;
+                    if (dateField != null)
+                    {
+                        dbDateType = dateField.DateType;
+                    }
+                    switch (dbDateType)
                     {
                         case DbDateTypes.DateOnly:
                             dateType = DateFormatTypes.DateOnly;

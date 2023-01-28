@@ -80,5 +80,10 @@ namespace RingSoft.DbMaintenance
         {
             return true;
         }
+
+        public void PrintOutput(PrinterSetupArgs printerSetupArgs)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -46,5 +46,7 @@ namespace RingSoft.DbMaintenance
         bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter);
 
         bool CheckDeleteTables(DeleteTables deleteTables);
+
+        void PrintOutput(PrinterSetupArgs printerSetupArgs);
     }
 }

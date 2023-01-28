@@ -1575,5 +1575,10 @@ namespace RingSoft.DbLookup.Lookup
             
             OutputData(0, LookupScrollPositions.Disabled);
         }
+
+        public void GetPrintData(LookupDefinitionBase lookupDefinition)
+        {
+
+        }
     }
 }

@@ -47,48 +47,35 @@ namespace RingSoft.DbLookup
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
         {
-            //PrintingInteropGlobals.Input = new PrintingInput();
-            //PrintingInteropGlobals.Input.PrinterInputDir = SystemGlobals.ProgramDataFolder;
-            //PrintingInteropGlobals.Properties = new PrintingProperties();
+            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportType = ReportTypes.Details;
+            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportOutputType = ReportOutputTypes.Screen;
+            //PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(1, "RingSoft Caption");
+            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportTitle = "Test";
 
-            //PrintingInteropGlobals.Properties.ReportType = ReportTypes.Summary;
-            //var result = PrintingInteropGlobals.ProcessPrintingPropertiesFileJson();
+            //var headerChunk = new List<PrintingInputHeaderRow>();
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var headerRow = new PrintingInputHeaderRow
+            //    {
+            //        RowKey = i.ToString(),
+            //    };
+            //    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow, 1, "RingSoft");
+            //    headerChunk.Add(headerRow);
+            //}
+            //PrintingInteropGlobals.HeaderProcessor.AddChunk(headerChunk, PrintingInteropGlobals.PropertiesProcessor.Properties);
+            //var result = PrintingInteropGlobals.WriteJsons(SystemGlobals.ProgramDataFolder);
             //if (!string.IsNullOrEmpty(result))
             //{
             //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
             //}
 
-            //var table = new PrintingInputHeaderTable
-            //{;
-            //    RowId = 1,
-            //    StringField01 = "RingSoft"
-            //};
-            //PrintingInteropGlobals.HeaderTable.Add(table);
-            //result = PrintingInteropGlobals.ProcessHeaderFileJson();
-            //if (!string.IsNullOrEmpty(result))
-            //{
-            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
-            //}
-
-            //result = PrintingInteropGlobals.ProcessInput();
-            //if (!string.IsNullOrEmpty(result))
-            //{
-            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
-            //}
-
+            //var arguments = new List<string>();
+            //arguments.Add("-p");
+            //arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
             //var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
-            //if (System.IO.File.Exists(jsonFile))
-            //{
-            //    var test = System.IO.File.ReadAllText(jsonFile);
-            //    var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
-            //    var arguments = new List<string>();
-            //    arguments.Add("-p");
-            //    arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
-
-            //    System.Diagnostics.Process.Start(printInput.ExePath, arguments);
-            //}
-
-
+            //var test = System.IO.File.ReadAllText(jsonFile);
+            //var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
+            //System.Diagnostics.Process.Start(printInput.ExePath, arguments);
 
             if (isCurrency)
                 return $"C{decimals}";

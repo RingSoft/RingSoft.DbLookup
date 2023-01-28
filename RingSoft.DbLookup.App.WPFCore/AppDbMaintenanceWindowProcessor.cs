@@ -20,6 +20,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override Button CloseButton { get; set; }
         public override Button NextButton { get; set; }
         public override Button PreviousButton { get; set; }
+        public override Button PrintButton { get; set; }
         public override BaseWindow MaintenanceWindow { get; set; }
         public override Control MaintenanceButtonsControl { get; set; }
 
@@ -39,6 +40,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             CloseButton = dbMaintenanceButtons.CloseButton;
             NextButton = dbMaintenanceButtons.NextButton;
             PreviousButton = dbMaintenanceButtons.PreviousButton;
+            PrintButton = dbMaintenanceButtons.PrintButton;
 
             SetupControl(view);
         }

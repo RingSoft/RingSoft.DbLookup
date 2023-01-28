@@ -25,6 +25,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public abstract Button CloseButton { get; set; }
         public abstract Button NextButton { get; set;  }
         public abstract Button PreviousButton { get; set; }
+        public abstract Button PrintButton { get; set; }
 
         public abstract BaseWindow MaintenanceWindow { get; set; }
 
@@ -50,6 +51,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             FindButton.Command = ViewModel.FindCommand;
             SelectButton.Command = ViewModel.SelectCommand;
             NextButton.Command = ViewModel.NextCommand;
+            PrintButton.Command = ViewModel.PrintCommand;
             CloseButton.Click += (_, _) => CloseWindow();
 
             MaintenanceWindow.ShowInTaskbar = false;
@@ -282,6 +284,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return false;
         }
 
+        public void PrintOutput(PrinterSetupArgs printerSetupArgs)
+        {
+            ViewModel.ProcessPrintOutputData(printerSetupArgs);
+        }
+
         public virtual void SetWindowReadOnlyMode()
         {
             SaveButton.IsEnabled = DeleteButton.IsEnabled = NewButton.IsEnabled = false;
@@ -316,7 +323,5 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }
         }
-
-        
     }
 }

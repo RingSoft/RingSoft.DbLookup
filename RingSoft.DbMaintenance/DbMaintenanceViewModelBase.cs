@@ -4,7 +4,9 @@ using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
@@ -41,7 +43,7 @@ namespace RingSoft.DbMaintenance
     /// The base class for database maintenance operations.
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public abstract class DbMaintenanceViewModelBase : INotifyPropertyChanged
+    public abstract class DbMaintenanceViewModelBase : INotifyPropertyChanged, IPrintProcessor
     {
         /// <summary>
         /// Gets the table definition.
@@ -315,6 +317,7 @@ namespace RingSoft.DbMaintenance
         public RelayCommand NewCommand { get; private set; }
         public RelayCommand FindCommand { get; private set; }
         public RelayCommand SelectCommand { get; private set; }
+        public RelayCommand PrintCommand { get; private set; }
 
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
         public event EventHandler InitializeEvent;
@@ -337,6 +340,7 @@ namespace RingSoft.DbMaintenance
             NewCommand = new RelayCommand(OnNewButton){IsEnabled = NewButtonEnabled};
             FindCommand = new RelayCommand(OnFindButton);
             SelectCommand = new RelayCommand(OnSelectButton){IsEnabled = SelectButtonEnabled};
+            PrintCommand = new RelayCommand(PrintOutput);
 
             NewButtonEnabled = SaveButtonEnabled = true;
         }
@@ -509,6 +513,37 @@ namespace RingSoft.DbMaintenance
         {
             CheckDirtyMessageShown?.Invoke(this, e);
         }
+
+        protected virtual void PrintOutput()
+        {
+            Processor.PrintOutput(CreatePrinterSetupArgs());
+        }
+
+        protected PrinterSetupArgs CreatePrinterSetupArgs()
+        {
+            var printLookup = FindButtonLookupDefinition.Clone();
+            var printerSetupArgs = new PrinterSetupArgs
+            {
+                CodeAutoFillSetup = KeyAutoFillSetup,
+                CodeAutoFillValue = KeyAutoFillValue,
+                LookupDefinition = printLookup,
+                DataProcessor = this,
+            };
+            SetupPrinterArgs(printerSetupArgs);
+
+            return printerSetupArgs;
+        }
+
+        protected virtual void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs)
+        {
+
+        }
+        public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
+        {
+            
+        }
+
+        public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;
 
         /// <summary>
         /// Executed when a property value has changed.

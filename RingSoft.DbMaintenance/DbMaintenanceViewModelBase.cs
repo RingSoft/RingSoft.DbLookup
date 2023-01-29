@@ -643,30 +643,27 @@ namespace RingSoft.DbMaintenance
                     var columnMapId = 0;
                     foreach (var columnMap in printerSetupArgs.ColumnMaps)
                     {
-                        if (columnMapId < 14)
+                        var value = outputTableRow.GetRowValue(columnMap.FieldName);
+                        value = columnMap.ColumnDefinition.FormatValue(value);
+                        switch (columnMap.ColumnType)
                         {
-                            var value = outputTableRow.GetRowValue(columnMap.FieldName);
-                            value = columnMap.ColumnDefinition.FormatValue(value);
-                            switch (columnMap.ColumnType)
-                            {
-                                case PrintColumnTypes.String:
-                                    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow
-                                        , columnMap.StringFieldIndex, value);
-                                    break;
-                                case PrintColumnTypes.Number:
-                                    PrintingInteropGlobals.HeaderProcessor.SetNumberValue(headerRow
-                                        , columnMap.NumericFieldIndex, value);
-                                    break;
-                                case PrintColumnTypes.Memo:
-                                    PrintingInteropGlobals.HeaderProcessor.SetMemoValue(headerRow
-                                        , columnMap.MemoFieldIndex, value);
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-
-                            columnMapId++;
+                            case PrintColumnTypes.String:
+                                PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow
+                                    , columnMap.StringFieldIndex, value);
+                                break;
+                            case PrintColumnTypes.Number:
+                                PrintingInteropGlobals.HeaderProcessor.SetNumberValue(headerRow
+                                    , columnMap.NumericFieldIndex, value);
+                                break;
+                            case PrintColumnTypes.Memo:
+                                PrintingInteropGlobals.HeaderProcessor.SetMemoValue(headerRow
+                                    , columnMap.MemoFieldIndex, value);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
+
+                        columnMapId++;
                     }
                     headerRows.Add(headerRow);
                 }

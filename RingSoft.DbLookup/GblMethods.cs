@@ -47,36 +47,6 @@ namespace RingSoft.DbLookup
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
         {
-            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportType = ReportTypes.Details;
-            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportOutputType = ReportOutputTypes.Screen;
-            //PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(1, "RingSoft Caption");
-            //PrintingInteropGlobals.PropertiesProcessor.Properties.ReportTitle = "Test";
-
-            //var headerChunk = new List<PrintingInputHeaderRow>();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    var headerRow = new PrintingInputHeaderRow
-            //    {
-            //        RowKey = i.ToString(),
-            //    };
-            //    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow, 1, "RingSoft");
-            //    headerChunk.Add(headerRow);
-            //}
-            //PrintingInteropGlobals.HeaderProcessor.AddChunk(headerChunk, PrintingInteropGlobals.PropertiesProcessor.Properties);
-            //var result = PrintingInteropGlobals.WriteJsons(SystemGlobals.ProgramDataFolder);
-            //if (!string.IsNullOrEmpty(result))
-            //{
-            //    ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
-            //}
-
-            //var arguments = new List<string>();
-            //arguments.Add("-p");
-            //arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
-            //var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
-            //var test = System.IO.File.ReadAllText(jsonFile);
-            //var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
-            //System.Diagnostics.Process.Start(printInput.ExePath, arguments);
-
             if (isCurrency)
                 return $"C{decimals}";
 
@@ -387,6 +357,60 @@ namespace RingSoft.DbLookup
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fieldDataType), fieldDataType, null);
             }
+        }
+
+        public static void PrintReport(PrinterSetupArgs printInfo)
+        {
+            PrintingInteropGlobals.PropertiesProcessor.Properties = printInfo.PrintingProperties;
+            printInfo.PrintingProperties.ReportType = ReportTypes.Details;
+            printInfo.PrintingProperties.ReportOutputType = ReportOutputTypes.Screen;
+            printInfo.PrintingProperties.ReportTitle = "Test";
+
+            //var headerChunk = new List<PrintingInputHeaderRow>();
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var headerRow = new PrintingInputHeaderRow
+            //    {
+            //        RowKey = i.ToString(),
+            //    };
+            //    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow, 1, "RingSoft");
+            //    headerChunk.Add(headerRow);
+            //}
+            //PrintingInteropGlobals.HeaderProcessor.AddChunk(headerChunk, PrintingInteropGlobals.PropertiesProcessor.Properties);
+
+            var result = PrintingInteropGlobals.WriteJsons();
+            if (!string.IsNullOrEmpty(result))
+            {
+                ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
+            }
+
+            var arguments = new List<string>();
+            arguments.Add("-p");
+            arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
+            var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
+            var test = System.IO.File.ReadAllText(jsonFile);
+            var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
+            System.Diagnostics.Process.Start(printInput.ExePath, arguments);
+        }
+
+        public static string FormatValueForPrinterRowKey(FieldDataTypes fieldDataType, string value)
+        {
+            switch (fieldDataType)
+            {
+                case FieldDataTypes.Integer:
+                    var numberFormat = GetNumFormat(0, false);
+                    var intValue = value.ToInt();
+                    return intValue.ToString("00000000");
+                case FieldDataTypes.Decimal:
+                    var decimalValue = value.ToDecimal();
+                    return decimalValue.ToString("00000000N2");
+                case FieldDataTypes.DateTime:
+                    var date = value.ToDate();
+                    return date?.ToString("O");
+                case FieldDataTypes.Bool:
+                    return value.ToBool().ToString();
+            }
+            return value;
         }
     }
 }

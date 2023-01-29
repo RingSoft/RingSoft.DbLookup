@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup
 {
+    public enum PrintColumnTypes
+    {
+        String = 0,
+        Number = 1,
+        Memo = 2,
+    }
     public interface IPrintProcessor
     {
         void ProcessPrintOutputData(PrinterSetupArgs setupArgs);
@@ -24,6 +31,46 @@ namespace RingSoft.DbLookup
 
         public int TableIdBeingProcessed { get; set; }
     }
+
+    public class PrintingColumnMap
+    {
+        public LookupColumnDefinitionBase ColumnDefinition { get; private set; }
+
+        public string FieldName { get; private set; }
+
+        public int StringFieldIndex { get; private set; }
+
+        public int NumericFieldIndex { get; private set; }
+
+        public int MemoFieldIndex { get; private set; }
+
+        public PrintColumnTypes ColumnType { get; private set; }
+
+        public void MapString(LookupColumnDefinitionBase column, int index, string fieldName)
+        {
+            StringFieldIndex = index;
+            ColumnDefinition = column;
+            FieldName = fieldName;
+            ColumnType = PrintColumnTypes.String;
+        }
+
+        public void MapNumber(LookupColumnDefinitionBase column, int index, string fieldName)
+        {
+            NumericFieldIndex = index;
+            ColumnDefinition = column;
+            FieldName = fieldName;
+            ColumnType = PrintColumnTypes.Number;
+        }
+
+        public void MapMemo(LookupColumnDefinitionBase column, int index, string fieldName)
+        {
+            MemoFieldIndex = index;
+            ColumnDefinition = column;
+            FieldName = fieldName;
+            ColumnType = PrintColumnTypes.Memo;
+        }
+
+    }
     public class PrinterSetupArgs
     {
         public AutoFillSetup CodeAutoFillSetup { get; set; }
@@ -40,10 +87,12 @@ namespace RingSoft.DbLookup
 
         public IPrintProcessor DataProcessor { get; set; }
 
+        public List<PrintingColumnMap> ColumnMaps { get; private set; } = new List<PrintingColumnMap>();
 
         public PrinterSetupArgs()
         {
             PrintingProperties = new PrintingProperties();
+            PrintingInteropGlobals.PropertiesProcessor.Properties = PrintingProperties;
         }
     }
 }

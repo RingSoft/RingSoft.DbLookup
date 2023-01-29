@@ -159,6 +159,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler<LookupDataChangedArgs> LookupDataChanged;
 
+        public event EventHandler<LookupDataChangedArgs> PrintDataChanged;
+
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
@@ -180,6 +182,7 @@ namespace RingSoft.DbLookup.Lookup
         private bool _countingRecords;
         private int _countProcess;
         private bool _searchForChanging;
+        private bool _printMode;
 
         private void OutputData(int selectedRowIndex, LookupScrollPositions currentPosition)
         {
@@ -666,7 +669,7 @@ namespace RingSoft.DbLookup.Lookup
             if (GetNextRecords(LookupResultsDataTable.Rows[startIndex], LookupControl.PageSize, newDataTable, "GotoNextRecord"))
             {
                 var newStartIndex = startIndex - (LookupControl.PageSize - newDataTable.Rows.Count);
-                if (recordCount > 1 && newDataTable.Rows.Count < LookupControl.PageSize && newStartIndex >= 0)
+                if (recordCount > 1 && newDataTable.Rows.Count < LookupControl.PageSize && newStartIndex >= 0 && !_printMode)
                 {
                     newDataTable = LookupResultsDataTable.Clone();
                     GetNextRecords(LookupResultsDataTable.Rows[newStartIndex],
@@ -682,6 +685,13 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     LookupResultsDataTable = newDataTable;
                     OutputData(selectedRowIndex, LookupScrollPositions.Middle);
+                }
+
+                if (newDataTable.Rows.Count < LookupControl.PageSize && _printMode)
+                {
+                    LookupResultsDataTable = newDataTable;
+                    OutputData(selectedRowIndex, LookupScrollPositions.Bottom);
+
                 }
             }
         }
@@ -1043,8 +1053,11 @@ namespace RingSoft.DbLookup.Lookup
                             nextCheckTable, "SetScrollPosition");
                         break;
                     case LookupScrollPositions.Bottom:
-                        GetPreviousRecords(LookupResultsDataTable.Rows[0],
-                            1, prevCheckTable, "SetScrollPosition");
+                        if (!_printMode)
+                        {
+                            GetPreviousRecords(LookupResultsDataTable.Rows[0],
+                                1, prevCheckTable, "SetScrollPosition");
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(currentPosition), currentPosition, null);
@@ -1059,6 +1072,13 @@ namespace RingSoft.DbLookup.Lookup
                 else
                 {
                     ScrollPosition = LookupScrollPositions.Top;
+                }
+            }
+            else
+            {
+                if (_printMode)
+                {
+                    ScrollPosition = LookupScrollPositions.Bottom;
                 }
             }
         }
@@ -1576,9 +1596,24 @@ namespace RingSoft.DbLookup.Lookup
             OutputData(0, LookupScrollPositions.Disabled);
         }
 
-        public void GetPrintData(LookupDefinitionBase lookupDefinition)
+        public void GetPrintData()
         {
-
+            _printMode = true;
+            LookupDataChanged += (sender, args) =>
+            {
+                PrintDataChanged?.Invoke(this, args);
+                if (args.OutputTable.Rows.Count <  LookupControl.PageSize 
+                    || args.ScrollPosition == LookupScrollPositions.Bottom 
+                    || args.Abort)
+                {
+                    _printMode = false;
+                }
+                else
+                {
+                    GotoNextPage();
+                }
+            };
+            GetInitData();
         }
     }
 }

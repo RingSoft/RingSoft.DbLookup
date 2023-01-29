@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using System.ComponentModel;
+using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
@@ -534,13 +540,153 @@ namespace RingSoft.DbMaintenance
             return printerSetupArgs;
         }
 
-        protected virtual void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs)
+        protected virtual void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs, int stringFieldIndex = 1
+            , int numericFieldIndex = 1, int memoFieldIndex = 1)
         {
+            printerSetupArgs.LookupDefinition.AddAllFieldsAsHiddenColumns();
 
+            foreach (var hiddenColumn in printerSetupArgs.LookupDefinition.HiddenColumns)
+            {
+                var columnMap = new PrintingColumnMap();
+                switch (hiddenColumn.DataType)
+                {
+                    case FieldDataTypes.String:
+                        if (hiddenColumn is LookupFieldColumnDefinition stringColumn)
+                        {
+                            if (stringColumn.FieldDefinition is StringFieldDefinition stringField)
+                            {
+                                if (stringField.MemoField)
+                                {
+                                    MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                                    memoFieldIndex++;
+                                }
+                                else
+                                {
+                                    MapStringField(columnMap, hiddenColumn, stringFieldIndex);
+                                    stringFieldIndex++;
+                                }
+                            }
+                            else
+                            {
+                                MapStringField(columnMap, hiddenColumn, stringFieldIndex);
+                                stringFieldIndex++;
+                            }
+                        }
+                        else
+                        {
+                            MapStringField(columnMap, hiddenColumn, stringFieldIndex);
+                            stringFieldIndex++;
+                        }
+                        break;
+                    case FieldDataTypes.Integer:
+                    case FieldDataTypes.DateTime:
+                    case FieldDataTypes.Bool:
+                        MapStringField(columnMap, hiddenColumn, stringFieldIndex);
+                        stringFieldIndex++;
+                        break;
+                    case FieldDataTypes.Decimal:
+                        columnMap.MapNumber(hiddenColumn, numericFieldIndex,
+                            hiddenColumn.SelectSqlAlias);
+                        PrintingInteropGlobals.PropertiesProcessor.SetNumberCaption(numericFieldIndex,
+                            hiddenColumn.Caption);
+                        numericFieldIndex++;
+                        break;
+                    case FieldDataTypes.Memo:
+                        MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                        memoFieldIndex++;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                printerSetupArgs.ColumnMaps.Add(columnMap);
+            }
         }
+
+        private static void MapMemoField(int memoFieldIndex, PrintingColumnMap columnMap,
+            LookupColumnDefinitionBase hiddenColumn)
+        {
+            columnMap.MapMemo(hiddenColumn, memoFieldIndex,
+                hiddenColumn.SelectSqlAlias);
+            PrintingInteropGlobals.PropertiesProcessor.SetMemoCaption(memoFieldIndex,
+                hiddenColumn.Caption);
+        }
+
+        private static void MapStringField(PrintingColumnMap columnMap, LookupColumnDefinitionBase lookupColumn,
+            int stringFieldIndex)
+        {
+            columnMap.MapString(lookupColumn, stringFieldIndex, lookupColumn.SelectSqlAlias);
+            PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(stringFieldIndex, lookupColumn.Caption);
+        }
+
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
         {
-            
+            var lookupUi = new LookupUserInterface
+            {
+                PageSize = 10,
+            };
+            var abort = false;
+            var lookupData = new LookupDataBase(printerSetupArgs.LookupDefinition, lookupUi);
+            var page = 0;
+            lookupData.PrintDataChanged += (sender, args) =>
+            {
+                if (page > 3)
+                {
+                    args.Abort = true;
+                }
+
+                var headerRows = new List<PrintingInputHeaderRow>();
+                foreach (DataRow outputTableRow in args.OutputTable.Rows)
+                {
+                    var headerRow = new PrintingInputHeaderRow();
+                    headerRow.RowKey = lookupData.LookupDefinition.InitialSortColumnDefinition
+                        .FormatColumnForHeaderRowKey(outputTableRow);
+                    var columnMapId = 0;
+                    foreach (var columnMap in printerSetupArgs.ColumnMaps)
+                    {
+                        if (columnMapId < 14)
+                        {
+                            var value = outputTableRow.GetRowValue(columnMap.FieldName);
+                            value = columnMap.ColumnDefinition.FormatValue(value);
+                            switch (columnMap.ColumnType)
+                            {
+                                case PrintColumnTypes.String:
+                                    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow
+                                        , columnMap.StringFieldIndex, value);
+                                    break;
+                                case PrintColumnTypes.Number:
+                                    PrintingInteropGlobals.HeaderProcessor.SetNumberValue(headerRow
+                                        , columnMap.NumericFieldIndex, value);
+                                    break;
+                                case PrintColumnTypes.Memo:
+                                    PrintingInteropGlobals.HeaderProcessor.SetMemoValue(headerRow
+                                        , columnMap.MemoFieldIndex, value);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+
+                            columnMapId++;
+                        }
+                    }
+                    headerRows.Add(headerRow);
+                }
+
+                var result = PrintingInteropGlobals.HeaderProcessor.AddChunk(headerRows, printerSetupArgs.PrintingProperties);
+                if (!result.IsNullOrEmpty())
+                {
+                    abort = true;
+                    ControlsGlobals.UserInterface.ShowMessageBox(result, "Print Error!", RsMessageBoxIcons.Error);
+                    args.Abort = true;
+                }
+
+                page++;
+            };
+            //DbDataProcessor.ShowSqlStatementWindow();
+            lookupData.GetPrintData();
+            if (!abort)
+            {
+                GblMethods.PrintReport(printerSetupArgs);
+            }
         }
 
         public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -257,6 +258,17 @@ namespace RingSoft.DbLookup.Lookup
         public override string ToString()
         {
             return Caption;
+        }
+
+        public virtual string FormatColumnForHeaderRowKey(DataRow dataRow)
+        {
+            var key = dataRow.GetRowValue(SelectSqlAlias);
+            key = GblMethods.FormatValueForPrinterRowKey(DataType, key);
+            
+            var primaryKeyValue = new PrimaryKeyValue(LookupDefinition.TableDefinition);
+            primaryKeyValue.PopulateFromDataRow(dataRow);
+            key += primaryKeyValue.KeyString;
+            return key;
         }
     }
 }

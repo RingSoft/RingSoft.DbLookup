@@ -44,6 +44,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public bool SearchForChanging { get; internal set; }
 
+        public bool Abort { get; set; }
+
         internal LookupDataChangedArgs(DataTable outputTable, int selectedRowIndex, LookupScrollPositions scrollPosition)
         {
             OutputTable = outputTable;

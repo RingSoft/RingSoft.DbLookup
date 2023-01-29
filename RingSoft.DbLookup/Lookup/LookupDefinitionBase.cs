@@ -260,7 +260,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition)
+        internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition, string alias = "")
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -270,27 +270,30 @@ namespace RingSoft.DbLookup.Lookup
 
             var columnDefinition = new LookupFieldColumnDefinition(fieldDefinition)
             {
-                LookupDefinition = this
+                LookupDefinition = this,
+                JoinQueryTableAlias = alias
             };
 
             _hiddenColumns.Add(columnDefinition);
             return columnDefinition;
         }
 
-        internal LookupFormulaColumnDefinition AddHiddenColumn(string formula, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition AddHiddenColumn(string formula, FieldDataTypes dataType, string alias = "")
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
             var columnDefinition = new LookupFormulaColumnDefinition(formula, dataType)
             {
-                LookupDefinition = this
+                LookupDefinition = this,
+                JoinQueryTableAlias = alias
             };
 
             _hiddenColumns.Add(columnDefinition);
             return columnDefinition;
         }
 
-        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition, double percentWidth, string alias)
+        public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition
+            , double percentWidth, string alias)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -871,6 +874,53 @@ namespace RingSoft.DbLookup.Lookup
             }
             result = date.ToString();
             return result;
+        }
+
+        public void AddAllFieldsAsHiddenColumns()
+        {
+            foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
+            {
+                LookupColumnDefinitionBase column = null;
+                if (fieldDefinition.ParentJoinForeignKeyDefinition != null
+                    && fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                {
+                    var join = Joins.FirstOrDefault(p =>
+                        p.ForeignKeyDefinition == fieldDefinition.ParentJoinForeignKeyDefinition);
+
+                    if (join == null)
+                    {
+                        join = new TableFieldJoinDefinition
+                        {
+
+                            ForeignKeyDefinition = fieldDefinition.ParentJoinForeignKeyDefinition,
+                            ParentObject = null,
+                            JoinType = JoinTypes.InnerJoin
+                        };
+                        if (fieldDefinition.AllowNulls)
+                        {
+                            join.JoinType = JoinTypes.LeftOuterJoin;
+                        }
+
+                        AddJoin(join);
+                    }
+                    var lookupColumn = join.ForeignKeyDefinition.FieldJoins[0].PrimaryField.TableDefinition
+                        .LookupDefinition.InitialOrderByColumn;
+
+                    if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                    {
+                        column = AddHiddenColumn(lookupFieldColumn.FieldDefinition, join.Alias);
+                    }
+                    else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
+                    {
+                        column = AddHiddenColumn(lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType, join.Alias);
+                    }
+                }
+                else
+                {
+                    column = AddHiddenColumn(fieldDefinition);
+                }
+                column.Caption = fieldDefinition.Description;
+            }
         }
     }
 }

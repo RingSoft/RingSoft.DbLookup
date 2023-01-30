@@ -544,24 +544,26 @@ namespace RingSoft.DbMaintenance
 
             foreach (var hiddenColumn in printerSetupArgs.LookupDefinition.HiddenColumns)
             {
-                var columnMap = new PrintingColumnMap();
-                switch (hiddenColumn.DataType)
-                {
-                    case FieldDataTypes.String:
-                        if (hiddenColumn is LookupFieldColumnDefinition stringColumn)
+                var columnMap = MapLookupColumns(ref stringFieldIndex, ref numericFieldIndex, ref memoFieldIndex, hiddenColumn);
+                printerSetupArgs.ColumnMaps.Add(columnMap);
+            }
+        }
+
+        public static PrintingColumnMap MapLookupColumns(ref int stringFieldIndex, ref int numericFieldIndex,
+            ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn)
+        {
+            var columnMap = new PrintingColumnMap();
+            switch (hiddenColumn.DataType)
+            {
+                case FieldDataTypes.String:
+                    if (hiddenColumn is LookupFieldColumnDefinition stringColumn)
+                    {
+                        if (stringColumn.FieldDefinition is StringFieldDefinition stringField)
                         {
-                            if (stringColumn.FieldDefinition is StringFieldDefinition stringField)
+                            if (stringField.MemoField)
                             {
-                                if (stringField.MemoField)
-                                {
-                                    MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
-                                    memoFieldIndex++;
-                                }
-                                else
-                                {
-                                    MapStringField(columnMap, hiddenColumn, stringFieldIndex);
-                                    stringFieldIndex++;
-                                }
+                                MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                                memoFieldIndex++;
                             }
                             else
                             {
@@ -574,29 +576,36 @@ namespace RingSoft.DbMaintenance
                             MapStringField(columnMap, hiddenColumn, stringFieldIndex);
                             stringFieldIndex++;
                         }
-                        break;
-                    case FieldDataTypes.Integer:
-                    case FieldDataTypes.DateTime:
-                    case FieldDataTypes.Bool:
+                    }
+                    else
+                    {
                         MapStringField(columnMap, hiddenColumn, stringFieldIndex);
                         stringFieldIndex++;
-                        break;
-                    case FieldDataTypes.Decimal:
-                        columnMap.MapNumber(hiddenColumn, numericFieldIndex,
-                            hiddenColumn.SelectSqlAlias);
-                        PrintingInteropGlobals.PropertiesProcessor.SetNumberCaption(numericFieldIndex,
-                            hiddenColumn.Caption);
-                        numericFieldIndex++;
-                        break;
-                    case FieldDataTypes.Memo:
-                        MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
-                        memoFieldIndex++;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-                printerSetupArgs.ColumnMaps.Add(columnMap);
+                    }
+
+                    break;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.DateTime:
+                case FieldDataTypes.Bool:
+                    MapStringField(columnMap, hiddenColumn, stringFieldIndex);
+                    stringFieldIndex++;
+                    break;
+                case FieldDataTypes.Decimal:
+                    columnMap.MapNumber(hiddenColumn, numericFieldIndex,
+                        hiddenColumn.SelectSqlAlias);
+                    PrintingInteropGlobals.PropertiesProcessor.SetNumberCaption(numericFieldIndex,
+                        hiddenColumn.Caption);
+                    numericFieldIndex++;
+                    break;
+                case FieldDataTypes.Memo:
+                    MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                    memoFieldIndex++;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
+            return columnMap;
         }
 
         private static void MapMemoField(int memoFieldIndex, PrintingColumnMap columnMap,
@@ -616,6 +625,11 @@ namespace RingSoft.DbMaintenance
         }
 
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
+        {
+            ProcessLookupPrintOutput(printerSetupArgs);
+        }
+
+        public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs)
         {
             var lookupUi = new LookupUserInterface
             {
@@ -665,6 +679,7 @@ namespace RingSoft.DbMaintenance
 
                         columnMapId++;
                     }
+
                     headerRows.Add(headerRow);
                 }
 

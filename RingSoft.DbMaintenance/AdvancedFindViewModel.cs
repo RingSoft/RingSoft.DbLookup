@@ -36,6 +36,8 @@ namespace RingSoft.DbMaintenance
         int GetRecordCount(bool showRecordCount);
 
         void SetAddOnFlyFocus();
+
+        void PrintOutput(PrinterSetupArgs printerSetup);
     }
 
     //public class TreeViewFormulaData
@@ -298,6 +300,8 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand RefreshNowCommand { get; set; }
 
+        public RelayCommand PrintLookupOutputCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -402,6 +406,12 @@ namespace RingSoft.DbMaintenance
             RefreshSettingsCommand = new RelayCommand(ShowRefreshSettings);
 
             RefreshNowCommand = new RelayCommand(RefreshNow);
+
+            PrintLookupOutputCommand = new RelayCommand((() =>
+            {
+                var advFindPrintProcessor = new AdvancedFindPrinterProcessor(this);
+                advFindPrintProcessor.PrintOutput();
+            }));
         }
 
         protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,

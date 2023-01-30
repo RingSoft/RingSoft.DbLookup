@@ -15,6 +15,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <Button Grid.Row="0" Grid.Column="0" x:Name="ImportDefaultLookupButton" Content="Import Default Lookup"/>
@@ -24,6 +25,8 @@
         <Button Grid.Row="0" Grid.Column="1" x:Name="SqlViewerButton" Content="View SQL Statement"/>
 
         <Button Grid.Row="1" Grid.Column="1" x:Name="RefreshSettingsButton" Content="Refresh Settings"/>
+
+        <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" x:Name="PrintLookupOutputButton" Content="Print Lookup Output"/>
 
     </Grid>
 </UserControl>

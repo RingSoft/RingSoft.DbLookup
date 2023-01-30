@@ -200,6 +200,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             LookupControl.Focus();
         }
 
+        public void PrintOutput(PrinterSetupArgs printerSetup)
+        {
+            LookupControlsGlobals.PrintDocument(printerSetup);
+        }
+
         public void LockTable(bool lockValue)
         {
             TableComboBoxControl.IsEnabled = !lockValue;

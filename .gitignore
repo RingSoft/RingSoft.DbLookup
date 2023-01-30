@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 /RingSoft.DbLookup.App.Library.EfCore/MegaDb/MegaDbLookupContextEfCore.cs
 /RingSoft.DbMaintenance/AdvancedFindViewModel.cs
+/RingSoft.DbLookup.App.WPFCore/RingSoft.DbLookup.App.WPFCore.csproj

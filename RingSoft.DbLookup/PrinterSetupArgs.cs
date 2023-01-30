@@ -89,6 +89,8 @@ namespace RingSoft.DbLookup
 
         public List<PrintingColumnMap> ColumnMaps { get; private set; } = new List<PrintingColumnMap>();
 
+        public PrintingProcessingViewModel PrintingProcessingViewModel { get; internal set; }
+
         public PrinterSetupArgs()
         {
             PrintingProperties = new PrintingProperties();

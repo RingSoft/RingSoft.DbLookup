@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup;
-using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookup.QueryBuilder;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Runtime.CompilerServices;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
@@ -624,12 +621,15 @@ namespace RingSoft.DbMaintenance
             {
                 PageSize = 10,
             };
-            var abort = false;
             var lookupData = new LookupDataBase(printerSetupArgs.LookupDefinition, lookupUi);
+
+            printerSetupArgs.PrintingProcessingViewModel.UpdateStatus(0, 0, ProcessTypes.CountingHeaderRecords);
+            var totalRecords = lookupData.GetRecordCountWait();
+
             var page = 0;
             lookupData.PrintDataChanged += (sender, args) =>
             {
-                if (page > 3)
+                if (printerSetupArgs.PrintingProcessingViewModel.Abort)
                 {
                     args.Abort = true;
                 }
@@ -671,19 +671,17 @@ namespace RingSoft.DbMaintenance
                 var result = PrintingInteropGlobals.HeaderProcessor.AddChunk(headerRows, printerSetupArgs.PrintingProperties);
                 if (!result.IsNullOrEmpty())
                 {
-                    abort = true;
+                    printerSetupArgs.PrintingProcessingViewModel.Abort = true;
                     ControlsGlobals.UserInterface.ShowMessageBox(result, "Print Error!", RsMessageBoxIcons.Error);
                     args.Abort = true;
                 }
 
-                page++;
+                page += headerRows.Count;
+                printerSetupArgs.PrintingProcessingViewModel
+                    .UpdateStatus(page, totalRecords, ProcessTypes.ImportHeader);
             };
             //DbDataProcessor.ShowSqlStatementWindow();
             lookupData.GetPrintData();
-            if (!abort)
-            {
-                GblMethods.PrintReport(printerSetupArgs);
-            }
         }
 
         public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;

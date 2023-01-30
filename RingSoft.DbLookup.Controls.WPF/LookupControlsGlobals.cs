@@ -14,19 +14,29 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public static Window GetActiveWindow()
         {
-            var activeWindow = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            var activeWindow = WPFControlsGlobals.ActiveWindow;
             return activeWindow;
         }
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             var activeWindow = GetActiveWindow();
-            activeWindow.Dispatcher.Invoke(() =>
+            if (activeWindow == null)
             {
                 var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
                 dataProcessResultWindow.Owner = activeWindow;
                 dataProcessResultWindow.ShowInTaskbar = false;
                 dataProcessResultWindow.ShowDialog();
-            });
+            }
+            else
+            {
+                activeWindow.Dispatcher.Invoke(() =>
+                {
+                    var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
+                    dataProcessResultWindow.Owner = activeWindow;
+                    dataProcessResultWindow.ShowInTaskbar = false;
+                    dataProcessResultWindow.ShowDialog();
+                });
+            }
         }
 
         public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
@@ -114,5 +124,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
 
+        public static void PrintDocument(PrinterSetupArgs printerSetupArgs)
+        {
+            var window = new PrintingProcessingWindow(printerSetupArgs);
+            var activeWindow = ActiveWindow;
+            window.Owner = activeWindow;
+            window.ShowInTaskbar = false;
+            window.ShowDialog();
+        }
     }
 }

@@ -359,40 +359,6 @@ namespace RingSoft.DbLookup
             }
         }
 
-        public static void PrintReport(PrinterSetupArgs printInfo)
-        {
-            PrintingInteropGlobals.PropertiesProcessor.Properties = printInfo.PrintingProperties;
-            printInfo.PrintingProperties.ReportType = ReportTypes.Details;
-            printInfo.PrintingProperties.ReportOutputType = ReportOutputTypes.Screen;
-            printInfo.PrintingProperties.ReportTitle = "Test";
-
-            //var headerChunk = new List<PrintingInputHeaderRow>();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    var headerRow = new PrintingInputHeaderRow
-            //    {
-            //        RowKey = i.ToString(),
-            //    };
-            //    PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow, 1, "RingSoft");
-            //    headerChunk.Add(headerRow);
-            //}
-            //PrintingInteropGlobals.HeaderProcessor.AddChunk(headerChunk, PrintingInteropGlobals.PropertiesProcessor.Properties);
-
-            var result = PrintingInteropGlobals.WriteJsons();
-            if (!string.IsNullOrEmpty(result))
-            {
-                ControlsGlobals.UserInterface.ShowMessageBox(result, "Error", RsMessageBoxIcons.Error);
-            }
-
-            var arguments = new List<string>();
-            arguments.Add("-p");
-            arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
-            var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
-            var test = System.IO.File.ReadAllText(jsonFile);
-            var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
-            System.Diagnostics.Process.Start(printInput.ExePath, arguments);
-        }
-
         public static string FormatValueForPrinterRowKey(FieldDataTypes fieldDataType, string value)
         {
             switch (fieldDataType)

@@ -286,7 +286,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
-            ViewModel.ProcessPrintOutputData(printerSetupArgs);
+            LookupControlsGlobals.PrintDocument(printerSetupArgs);
         }
 
         public virtual void SetWindowReadOnlyMode()

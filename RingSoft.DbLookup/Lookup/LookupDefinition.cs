@@ -154,6 +154,7 @@ namespace RingSoft.DbLookup.Lookup
                 ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(),
                 relatedProperty.ReturnType.Name);
             returnEntity.ParentField = returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
+            
             //ChildField =
             //    returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
             return returnEntity;

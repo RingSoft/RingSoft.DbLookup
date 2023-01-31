@@ -507,7 +507,7 @@ namespace RingSoft.DbLookup.Lookup
             if (!entity.Path.IsNullOrEmpty())
             {
                 var type = TreeViewType.Field;
-                if (!entity.Formula.IsNullOrEmpty())
+                if (!entity.Formula.IsNullOrEmpty() && fieldToProcess == null)
                 {
                     type = TreeViewType.Formula;
                 }

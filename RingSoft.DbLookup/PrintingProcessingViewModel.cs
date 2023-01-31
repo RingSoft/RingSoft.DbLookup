@@ -66,10 +66,15 @@ namespace RingSoft.DbLookup
             View = view;
             PrinterSetupArgs = printerSetupArgs;
             printerSetupArgs.PrintingProcessingViewModel = this;
+            PrintingInteropGlobals.DeleteAllChunks();
             await Task.Run(() =>
             {
                 PrinterSetupArgs.DataProcessor.ProcessPrintOutputData(printerSetupArgs);
-                if (!Abort)
+                if (Abort)
+                {
+                    View.CloseWindow();
+                }
+                else
                 {
                     LaunchPrinter();
                 }

@@ -23,13 +23,6 @@ namespace RingSoft.DbMaintenance
 
         public void ProcessPrintOutputData(PrinterSetupArgs setupArgs)
         {
-            var lookupUserInterface = new LookupUserInterface()
-            {
-                PageSize = 10,
-                SearchType = LookupSearchTypes.Equals,
-                SearchText = string.Empty,
-            };
-
             var stringFieldIndex = 1;
             var numericFieldIndex = 1;
             var memoFieldIndex = 1;

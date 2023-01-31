@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -15,6 +18,8 @@ namespace RingSoft.DbLookup.Lookup
     public class LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>  : LookupJoin
         where TLookupEntity : new() where TEntity : new() where TRelatedEntity : class
     {
+        public TableFieldJoinDefinition ParentJoinDefinition { get; internal set; }
+
         private LookupDefinition<TLookupEntity, TEntity> _lookupEntityDefinition;
 
         internal LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition,
@@ -32,7 +37,7 @@ namespace RingSoft.DbLookup.Lookup
         private void SetJoinDefinition(TableDefinitionBase tableDefinition, string propertyName, string propertyType)
         {
             var foreignFieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(f => f.ParentJoinForeignKeyDefinition != null &&
-                                                                                              f.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName == propertyName);
+                f.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName == propertyName);
 
             if (foreignFieldDefinition == null)
             {
@@ -80,9 +85,25 @@ namespace RingSoft.DbLookup.Lookup
             //columnDefinition.ChildField = relatedField;
             columnDefinition.ChildField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
             columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            columnDefinition.ParentObject = this;
 
             return columnDefinition;
         }
+
+        //protected override void MakeColumnPath(LookupFieldColumnDefinition columnDefinition)
+        //{
+        //    var childJoinField = ChildJoinField;
+        //    var path = columnDefinition.FieldDefinition.MakePath();
+        //    var parentObject = columnDefinition.ParentObject;
+        //    while (parentObject != null && parentObject.ChildJoinField != null)
+        //    {
+        //        path = parentObject.ChildJoinField.MakePath() + path;
+        //        parentObject = parentObject.ParentObject;
+        //    }
+            
+        //    path = ParentField.MakePath() + path;
+        //    columnDefinition.Path = path;
+        //}
 
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             string caption, string formula, double percentWidth, FieldDataTypes dataType)
@@ -137,8 +158,12 @@ namespace RingSoft.DbLookup.Lookup
 
             var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TParentRelatedEntity>(_lookupEntityDefinition);
             returnEntity.JoinDefinition = JoinDefinition;
+
             returnEntity.SetJoinDefinition(parentTable, relatedPropertyName, relatedPropertyType);
-            returnEntity.ParentField = ParentField;
+
+            //returnEntity.ParentField = ParentField;
+            returnEntity.ParentField = returnEntity.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
+            returnEntity.ParentObject = this;
 
             return returnEntity;
         }

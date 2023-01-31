@@ -113,6 +113,13 @@ namespace RingSoft.DbLookup.Lookup
             var columnDefinition = LookupDefinition.AddVisibleColumnDefinition(caption, fieldDefinition, percentWidth, "");
             columnDefinition.ParentObject = this;
             columnDefinition.ParentField = ParentField;
+            MakeColumnPath(columnDefinition);
+            columnDefinition.JoinQueryTableAlias = JoinDefinition.Alias;
+            return columnDefinition;
+        }
+
+        protected void MakeColumnPath(LookupFieldColumnDefinition columnDefinition)
+        {
             var path = string.Empty;
             var joinParent = columnDefinition.ParentObject;
             while (joinParent != null && joinParent.ParentField != null)
@@ -120,9 +127,8 @@ namespace RingSoft.DbLookup.Lookup
                 path = joinParent.ParentField.MakePath() + path;
                 joinParent = joinParent.ParentObject;
             }
+
             columnDefinition.Path = path;
-            columnDefinition.JoinQueryTableAlias = JoinDefinition.Alias;
-            return columnDefinition;
         }
 
         private void ValidateFieldDefinition(FieldDefinition fieldDefinition)

@@ -157,8 +157,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             var productInclude =  OrderDetailsLookup.Include(p => p.Product);
 
             productInclude.AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
-            productInclude.Include(p => p.Category)
-                .AddVisibleColumnDefinition(p => p.CategoryName, "Category", p => p.CategoryName, 20);
+
+            var categoryInclude = productInclude.Include(p => p.Category);
+                
+            categoryInclude.AddVisibleColumnDefinition(p => p.CategoryName, "Category", p => p.CategoryName, 20);
             OrderDetailsLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 10);
             OrderDetailsLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 10);
 

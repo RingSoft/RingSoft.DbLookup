@@ -113,6 +113,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                CancelButton.Focus();
             });
         }
 

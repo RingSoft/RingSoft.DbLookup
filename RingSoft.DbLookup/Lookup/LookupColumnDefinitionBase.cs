@@ -232,6 +232,7 @@ namespace RingSoft.DbLookup.Lookup
         }
         public FieldDefinition ChildField { get; set; }
         public FieldDefinition ParentField { get; set; }
+        public FieldDefinition ChildJoinField { get; set; }
 
         public LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null)
         {

@@ -203,6 +203,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return formulaFilter;
         }
 
+        internal FieldFilterDefinition AddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
+            string value)
+        {
+            return CreateAddFixedFilter(fieldDefinition, condition, value);
+        }
+
         public FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
@@ -301,6 +307,11 @@ namespace RingSoft.DbLookup.TableProcessing
             var index = _userFilterDefinitions.IndexOf(oldFilterItemDefinition);
             _userFilterDefinitions.Remove(oldFilterItemDefinition);
             _userFilterDefinitions.Insert(index, newFilterItemDefinition);
+        }
+
+        public void RemoveFixedFilter(FilterItemDefinition filterItem)
+        {
+            _fixedFilterDefinitions.Remove(filterItem);
         }
 
     internal void ProcessQuery(SelectQuery query)

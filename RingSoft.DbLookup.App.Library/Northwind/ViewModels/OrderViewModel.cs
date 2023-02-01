@@ -842,5 +842,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (!e.Cancel)
                 ViewModelInput.OrderViewModels.Remove(this);
         }
+
+        protected override void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs, int stringFieldIndex = 1, 
+            int numericFieldIndex = 1, int memoFieldIndex = 1)
+        {
+            if (MaintenanceMode == DbMaintenanceModes.EditMode)
+            {
+                var order = new Order()
+                {
+                    OrderID = OrderId
+                };
+                var orderSetup = new AutoFillSetup(FindButtonLookupDefinition);
+                printerSetupArgs.CodeAutoFillValue = orderSetup.GetAutoFillValueForIdValue(OrderId);
+            }
+            base.SetupPrinterArgs(printerSetupArgs, stringFieldIndex, numericFieldIndex, memoFieldIndex);
+        }
     }
 }

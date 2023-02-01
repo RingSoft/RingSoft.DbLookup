@@ -1,6 +1,8 @@
 ﻿using System;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
@@ -18,6 +20,22 @@ namespace RingSoft.DbMaintenance
 
         public void PrintOutput()
         {
+            if (AdvancedFindViewModel.KeyAutoFillValue.Text.IsNullOrEmpty())
+            {
+                var message = "You must specify a Name to print report.";
+                var caption = "Validation Error";
+                AdvancedFindViewModel.View.OnValidationFail(
+                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Name), message,
+                    caption);
+                return;
+            }
+            PrinterSetup.PrintingProperties.ReportTitle =
+                $"{AdvancedFindViewModel.KeyAutoFillValue.Text} Lookup Report";
+            PrinterSetup.PrintingProperties.ReportType = ReportTypes.Details;
+            PrinterSetup.PrintingProperties.PrintCurrentCode = false;
+            PrinterSetup.PrintingProperties.BeginCode = "Start";
+            PrinterSetup.PrintingProperties.EndCode = "End";
+
             AdvancedFindViewModel.View.PrintOutput(PrinterSetup);
         }
 

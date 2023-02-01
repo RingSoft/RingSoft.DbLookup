@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.TableProcessing;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup
@@ -73,9 +74,9 @@ namespace RingSoft.DbLookup
     }
     public class PrinterSetupArgs
     {
-        public AutoFillSetup CodeAutoFillSetup { get; set; }
-
         public AutoFillValue CodeAutoFillValue { get; set; }
+
+        public string CodeDescription { get; set; }
 
         public LookupDefinitionBase LookupDefinition { get; set; }
 
@@ -89,12 +90,28 @@ namespace RingSoft.DbLookup
 
         public List<PrintingColumnMap> ColumnMaps { get; private set; } = new List<PrintingColumnMap>();
 
+        public List<FilterItemDefinition> ReportFilters { get; private set; } = new List<FilterItemDefinition>();
+
         public PrintingProcessingViewModel PrintingProcessingViewModel { get; internal set; }
 
         public PrinterSetupArgs()
         {
             PrintingProperties = new PrintingProperties();
             PrintingInteropGlobals.PropertiesProcessor.Properties = PrintingProperties;
+        }
+
+        public void ClearReportFilters()
+        {
+            foreach (var genericCodeFilter in ReportFilters)
+            {
+                LookupDefinition.FilterDefinition.RemoveFixedFilter(genericCodeFilter);
+            }
+            ReportFilters.Clear();
+        }
+
+        public void AddReportFilter(FilterItemDefinition filter)
+        {
+            ReportFilters.Add(filter);
         }
     }
 }

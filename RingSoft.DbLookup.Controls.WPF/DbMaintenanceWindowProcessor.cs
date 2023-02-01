@@ -286,7 +286,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
-            LookupControlsGlobals.PrintDocument(printerSetupArgs);
+            var filterWindow = new GenericReportFilterWindow(printerSetupArgs);
+            filterWindow.Owner = MaintenanceWindow;
+            filterWindow.ShowInTaskbar = false;
+            filterWindow.ShowDialog();
         }
 
         public virtual void SetWindowReadOnlyMode()

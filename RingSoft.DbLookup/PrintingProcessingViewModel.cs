@@ -72,7 +72,7 @@ namespace RingSoft.DbLookup
                 PrinterSetupArgs.DataProcessor.ProcessPrintOutputData(printerSetupArgs);
                 if (Abort)
                 {
-                    View.CloseWindow();
+                    ClearInputData();
                 }
                 else
                 {
@@ -92,9 +92,7 @@ namespace RingSoft.DbLookup
         private async void LaunchPrinter()
         {
             PrintingInteropGlobals.PropertiesProcessor.Properties = PrinterSetupArgs.PrintingProperties;
-            PrinterSetupArgs.PrintingProperties.ReportType = ReportTypes.Details;
             PrinterSetupArgs.PrintingProperties.ReportOutputType = ReportOutputTypes.Screen;
-            PrinterSetupArgs.PrintingProperties.ReportTitle = "Test";
 
             var result = PrintingInteropGlobals.WriteJsons();
             if (!string.IsNullOrEmpty(result))
@@ -170,13 +168,21 @@ namespace RingSoft.DbLookup
                 if (Abort || (headerFinished && detailsFinished))
                 {
                     AbortProcess();
-                    View.CloseWindow();
+                    ClearInputData();
                 }
             };
             if (!Abort)
             {
                 _timer.Start();
             }
+        }
+
+        private void ClearInputData()
+        {
+            PrinterSetupArgs.ClearReportFilters();
+            PrinterSetupArgs.PrintingProperties.HeaderChunkCount =
+                PrinterSetupArgs.PrintingProperties.DetailsChunkCount = 0;
+            View.CloseWindow();
         }
 
         private void AbortProcess()

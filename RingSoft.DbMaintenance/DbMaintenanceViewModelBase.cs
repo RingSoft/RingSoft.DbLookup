@@ -527,11 +527,12 @@ namespace RingSoft.DbMaintenance
             var printLookup = FindButtonLookupDefinition.Clone();
             var printerSetupArgs = new PrinterSetupArgs
             {
-                CodeAutoFillSetup = KeyAutoFillSetup,
                 CodeAutoFillValue = KeyAutoFillValue,
                 LookupDefinition = printLookup,
                 DataProcessor = this,
+                CodeDescription = TableDefinitionBase.RecordDescription,
             };
+            printerSetupArgs.PrintingProperties.ReportTitle = $"{TableDefinitionBase.Description} Report";
             SetupPrinterArgs(printerSetupArgs);
 
             return printerSetupArgs;

@@ -101,7 +101,22 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <value>
         /// The record description.
         /// </value>
-        public string RecordDescription { get; internal set; }
+        private string _recordDescription;
+
+        public string RecordDescription
+        {
+            get
+            {
+                if (_recordDescription.IsNullOrEmpty())
+                {
+                    var newDescription = Description.TrimEnd('s');
+                    return newDescription;
+                }
+
+                return _recordDescription;
+            }
+            internal set => _recordDescription = value;
+        }
 
         public List<FieldDefinition> ChildFields { get; set; } = new List<FieldDefinition>();
 

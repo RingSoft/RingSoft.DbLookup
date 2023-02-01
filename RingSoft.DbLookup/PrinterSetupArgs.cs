@@ -76,6 +76,8 @@ namespace RingSoft.DbLookup
     {
         public AutoFillValue CodeAutoFillValue { get; set; }
 
+        public AutoFillSetup CodeAutoFillSetup { get; set; }
+
         public string CodeDescription { get; set; }
 
         public LookupDefinitionBase LookupDefinition { get; set; }

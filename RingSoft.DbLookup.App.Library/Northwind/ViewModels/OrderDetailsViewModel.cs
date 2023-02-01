@@ -353,5 +353,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (!e.Cancel)
                 ViewModelInput.OrderDetailsViewModels.Remove(this);
         }
+
+        protected override void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs, int stringFieldIndex = 1, int numericFieldIndex = 1,
+            int memoFieldIndex = 1)
+        {
+            printerSetupArgs.CodeAutoFillSetup = null;
+            base.SetupPrinterArgs(printerSetupArgs, stringFieldIndex, numericFieldIndex, memoFieldIndex);
+        }
     }
 }

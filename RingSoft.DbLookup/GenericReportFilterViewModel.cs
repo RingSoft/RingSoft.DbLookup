@@ -260,7 +260,14 @@ namespace RingSoft.DbLookup
         {
             View = view;
             PrinterSetup = printerSetup;
-
+            if (printerSetup.CodeAutoFillSetup == null
+                || printerSetup.LookupDefinition.InitialSortColumnDefinition.DataType != FieldDataTypes.String)
+            {
+                printerSetup.PrintingProperties.ReportType = ReportTypes.Details;
+                view.PrintOutput();
+                view.CloseWindow();
+                return;
+            }
             CurrentAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);
             BeginAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);
             EndAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);

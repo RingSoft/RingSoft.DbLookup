@@ -531,6 +531,7 @@ namespace RingSoft.DbMaintenance
             var printerSetupArgs = new PrinterSetupArgs
             {
                 CodeAutoFillValue = KeyAutoFillValue,
+                CodeAutoFillSetup = KeyAutoFillSetup,
                 LookupDefinition = printLookup,
                 DataProcessor = this,
                 CodeDescription = TableDefinitionBase.RecordDescription,

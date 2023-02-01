@@ -104,8 +104,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override string GetReportText()
         {
-            var result = ReportDescription + " ";
-            result += GetConditionText(Condition) + " ";
+            var result = GetConditionText(Condition) + " ";
             result += FieldDefinition.GetUserValue(Value);
             return result;
         }

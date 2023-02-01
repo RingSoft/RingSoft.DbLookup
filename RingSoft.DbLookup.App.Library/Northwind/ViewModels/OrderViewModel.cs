@@ -853,6 +853,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     OrderID = OrderId
                 };
                 var orderSetup = new AutoFillSetup(FindButtonLookupDefinition);
+                printerSetupArgs.CodeAutoFillSetup = orderSetup;
                 printerSetupArgs.CodeAutoFillValue = orderSetup.GetAutoFillValueForIdValue(OrderId);
             }
             base.SetupPrinterArgs(printerSetupArgs, stringFieldIndex, numericFieldIndex, memoFieldIndex);

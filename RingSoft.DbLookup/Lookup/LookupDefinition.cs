@@ -101,7 +101,8 @@ namespace RingSoft.DbLookup.Lookup
             string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth, string alias)
         {
             var field = TableDefinition.GetPropertyField(entityProperty.GetFullPropertyName());
-            return AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth, alias);
+            var result = AddVisibleColumnDefinition(lookupEntityProperty, caption, field, percentWidth, alias);
+            return result;
         }
 
         /// <summary>

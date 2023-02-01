@@ -241,7 +241,6 @@ namespace RingSoft.DbMaintenance
                         FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
                         Field = $"{filterProps.FilterReturn.FormulaDisplayValue} Formula";
                         FilterItemDefinition.ReportDescription = Field;
-                        formulaFilter.ReportDescription = FormulaDisplayValue;
                     }
                     Manager.ViewModel.RecordDirty = true;
                     MakeSearchValueText();

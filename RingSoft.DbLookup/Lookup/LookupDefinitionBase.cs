@@ -774,12 +774,12 @@ namespace RingSoft.DbLookup.Lookup
         private void SetFilterProperties(AdvancedFindFilter entity, 
             FilterItemDefinition filterItemDefinition, TreeViewItem foundItem, bool isAdvFind = false)
         {
-            filterItemDefinition.ReportDescription = foundItem.Name;
             filterItemDefinition.LeftParenthesesCount = entity.LeftParentheses;
             filterItemDefinition.RightParenthesesCount = entity.RightParentheses;
             filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
             if (foundItem != null)
             {
+                filterItemDefinition.ReportDescription = foundItem.Name;
                 if (foundItem.Parent != null)
                 {
                     filterItemDefinition.TableDescription = foundItem.Parent.Name;
@@ -923,8 +923,10 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
-                        column = AddHiddenColumn(lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType, join.Alias);
+                        column = AddHiddenColumn(lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType,
+                            join.Alias);
                     }
+                
                 }
                 else
                 {

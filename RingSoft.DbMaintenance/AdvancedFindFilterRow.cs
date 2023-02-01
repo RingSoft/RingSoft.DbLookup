@@ -240,6 +240,8 @@ namespace RingSoft.DbMaintenance
 
                         FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
                         Field = $"{filterProps.FilterReturn.FormulaDisplayValue} Formula";
+                        FilterItemDefinition.ReportDescription = Field;
+                        formulaFilter.ReportDescription = FormulaDisplayValue;
                     }
                     Manager.ViewModel.RecordDirty = true;
                     MakeSearchValueText();
@@ -277,7 +279,6 @@ namespace RingSoft.DbMaintenance
             SearchValue = filterReturn.SearchValue;
             FieldDefinition = filterReturn.FieldDefinition;
             FormulaDataType = filterReturn.FormulaValueType;
-
 
             ConvertDate(filterReturn);
         }
@@ -960,50 +961,7 @@ namespace RingSoft.DbMaintenance
 
         private string MakeBeginSearchValueText()
         {
-            var searchValue = string.Empty;
-            switch (Condition)
-            {
-                case Conditions.Equals:
-                    searchValue = "= ";
-                    break;
-                case Conditions.NotEquals:
-                    searchValue = "<> ";
-                    break;
-                case Conditions.GreaterThan:
-                    searchValue = "> ";
-                    break;
-                case Conditions.GreaterThanEquals:
-                    searchValue = ">= ";
-                    break;
-                case Conditions.LessThan:
-                    searchValue = "< ";
-                    break;
-                case Conditions.LessThanEquals:
-                    searchValue = "<= ";
-                    break;
-                case Conditions.Contains:
-                    searchValue = "Contains ";
-                    break;
-                case Conditions.NotContains:
-                    searchValue = "Does Not Contain ";
-                    break;
-                case Conditions.EqualsNull:
-                    searchValue = "Equals NULL";
-                    break;
-                case Conditions.NotEqualsNull:
-                    searchValue = "Does Not Equal NULL";
-                    break;
-                case Conditions.BeginsWith:
-                    searchValue = "Begins With ";
-                    break;
-                case Conditions.EndsWith:
-                    searchValue = "Ends With ";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return searchValue;
+            return DbLookup.TableProcessing.FilterItemDefinition.GetConditionText(Condition);
         }
 
         public void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
@@ -1063,6 +1021,7 @@ namespace RingSoft.DbMaintenance
                 FormulaDisplayValue = advancedFilterReturn.FormulaDisplayValue;
                 FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(Formula,
                     Condition, SearchValue, alias, advancedFilterReturn.FormulaValueType);
+                FilterItemDefinition.ReportDescription = Field;
             }
 
             MakeSearchValueText();
@@ -1094,6 +1053,7 @@ namespace RingSoft.DbMaintenance
                             Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
                                 fieldToSearch, Condition, SearchValue);
 
+                        FilterItemDefinition.ReportDescription = fieldDefinition.Description;
                         if (includeResult.LookupJoin != null)
                         {
                             FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;

@@ -249,5 +249,25 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             return TableDefinition.TableName + "@" + FieldName + ";";
         }
+
+        public string GetUserValue(string dbIdValue)
+        {
+            var result = string.Empty;
+            if (TableDefinition.PrimaryKeyFields.Contains(this) && TableDefinition.PrimaryKeyFields.Count == 1)
+            {
+                result = TableDefinition.Context
+                    .OnAutoFillTextRequest(TableDefinition, dbIdValue).Text;
+            }
+            else if (ParentJoinForeignKeyDefinition != null)
+            {
+                result = TableDefinition.Context
+                    .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue).Text;
+            }
+            else
+            {
+                result = FormatValue(dbIdValue);
+            }
+            return result;
+        }
     }
 }

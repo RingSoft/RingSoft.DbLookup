@@ -37,6 +37,22 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
+        public override string GetReportText()
+        {
+            var result = string.Empty;
+            var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
+            if (advancedFind != null)
+            {
+                foreach (var advancedFindFilter in advancedFind.Filters)
+                {
+                    var filterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
+                    result += filterReturn.FilterItemDefinition.GetReportText();
+                    result.TrimRight("\r\n");
+                }
+            }
+            return result;
+        }
+
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
             , ref WhereItem lastWhereItem, bool fromAdvancedFind, AdvancedFindTree tree = null)
         {

@@ -8,7 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
@@ -595,7 +598,7 @@ namespace RingSoft.DbMaintenance
                     columnMap.MapNumber(hiddenColumn, numericFieldIndex,
                         hiddenColumn.SelectSqlAlias);
                     PrintingInteropGlobals.PropertiesProcessor.SetNumberCaption(numericFieldIndex,
-                        hiddenColumn.Caption);
+                        hiddenColumn.Caption.Replace("\n", " "));
                     numericFieldIndex++;
                     break;
                 case FieldDataTypes.Memo:
@@ -615,14 +618,15 @@ namespace RingSoft.DbMaintenance
             columnMap.MapMemo(hiddenColumn, memoFieldIndex,
                 hiddenColumn.SelectSqlAlias);
             PrintingInteropGlobals.PropertiesProcessor.SetMemoCaption(memoFieldIndex,
-                hiddenColumn.Caption);
+                hiddenColumn.Caption.Replace("\r\n", " "));
         }
 
         private static void MapStringField(PrintingColumnMap columnMap, LookupColumnDefinitionBase lookupColumn,
             int stringFieldIndex)
         {
             columnMap.MapString(lookupColumn, stringFieldIndex, lookupColumn.SelectSqlAlias);
-            PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(stringFieldIndex, lookupColumn.Caption);
+            PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(stringFieldIndex,
+                lookupColumn.Caption.Replace("\r\n", " "));
         }
 
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
@@ -698,6 +702,56 @@ namespace RingSoft.DbMaintenance
             };
             //DbDataProcessor.ShowSqlStatementWindow();
             lookupData.GetPrintData();
+            MakeAdditionalFilter(printerSetupArgs);
+        }
+
+        public static void MakeAdditionalFilter(PrinterSetupArgs printerSetupArgs)
+        {
+            var fixedText = GetFiltersText(printerSetupArgs.LookupDefinition.FilterDefinition
+                    .FixedFilters.ToList(), printerSetupArgs);
+
+            var userText = GetFiltersText(printerSetupArgs.LookupDefinition.FilterDefinition.UserFilters.ToList(),
+                printerSetupArgs);
+
+            var result = string.Empty;
+            if (!fixedText.IsNullOrEmpty() && !userText.IsNullOrEmpty())
+            {
+                result = $"({fixedText}) AND\r\n({userText})";
+            }
+            else
+            {
+                result = fixedText + userText;
+            }
+            printerSetupArgs.PrintingProperties.AdditionalFilter = result;
+        }
+
+        private static string GetFiltersText(List<FilterItemDefinition> filterItemDefinitions, PrinterSetupArgs printerSetupArgs)
+        {
+            var result = string.Empty;
+            var count = filterItemDefinitions.Count;
+            if (count == 0)
+            {
+                return result;
+            }
+            var enumTranslation = new EnumFieldTranslation();
+            enumTranslation.LoadFromEnum<EndLogics>();
+            foreach (var filterItem in filterItemDefinitions)
+            {
+                if (!printerSetupArgs.ReportFilters.Contains(filterItem))
+                {
+                    var lParen = GblMethods.StringDuplicate("(", filterItem.LeftParenthesesCount);
+                    result += filterItem.ReportDescription + " ";
+                    result += filterItem.GetReportText();
+                    var rParen = GblMethods.StringDuplicate("(", filterItem.RightParenthesesCount);
+                    result = lParen + result + rParen;
+                    if (filterItemDefinitions.IndexOf(filterItem) < count - 1)
+                    {
+                        result += " " + enumTranslation.TypeTranslations
+                            .FirstOrDefault(p => p.NumericValue == (int)filterItem.EndLogic).TextValue + "\r\n";
+                    }
+                }
+            }
+            return result;
         }
 
         public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;

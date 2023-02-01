@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿using MySqlX.XDevAPI.Common;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
@@ -7,7 +8,6 @@ namespace RingSoft.DbLookup.TableProcessing
     {
         public override FilterItemTypes Type => FilterItemTypes.Formula;
 
-        public string Description { get; internal set; }
         /// <summary>
         /// Gets the formula.
         /// </summary>
@@ -24,6 +24,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string Alias { get; set; }
 
+        public string Description { get; set; }
+
         internal FormulaFilterDefinition()
         {
             
@@ -37,6 +39,13 @@ namespace RingSoft.DbLookup.TableProcessing
             FilterValue = sourceFormulaItem.FilterValue;
 
             base.CopyFrom(source);
+        }
+
+        public override string GetReportText()
+        {
+            var result = GetConditionText(Condition.Value) + " ";
+            result += FilterValue;
+            return result;
         }
 
         public override string ToString()

@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿using MySqlX.XDevAPI.Common;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -99,6 +100,14 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             base.CopyFrom(source);
+        }
+
+        public override string GetReportText()
+        {
+            var result = ReportDescription + " ";
+            result += GetConditionText(Condition) + " ";
+            result += FieldDefinition.GetUserValue(Value);
+            return result;
         }
 
         public override string ToString()

@@ -159,7 +159,8 @@ namespace RingSoft.DbLookup.TableProcessing
                 TableFilterDefinition = this,
                 FieldDefinition = fieldDefinition,
                 Condition = condition,
-                Value = value
+                Value = value,
+                ReportDescription = fieldDefinition.Description
             };
 
             return fieldFilter;

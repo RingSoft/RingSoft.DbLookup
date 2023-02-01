@@ -724,6 +724,13 @@ namespace RingSoft.DbLookup.Lookup
             {
                 result.FieldDefinition = filterField;
             }
+            else
+            {
+                if (filterItemDefinition is FormulaFilterDefinition formulaFilter)
+                {
+                    formulaFilter.ReportDescription = entity.FormulaDisplayValue + " Formula";
+                }
+            }
             
             return result;
         }
@@ -767,6 +774,7 @@ namespace RingSoft.DbLookup.Lookup
         private void SetFilterProperties(AdvancedFindFilter entity, 
             FilterItemDefinition filterItemDefinition, TreeViewItem foundItem, bool isAdvFind = false)
         {
+            filterItemDefinition.ReportDescription = foundItem.Name;
             filterItemDefinition.LeftParenthesesCount = entity.LeftParentheses;
             filterItemDefinition.RightParenthesesCount = entity.RightParentheses;
             filterItemDefinition.EndLogic = (EndLogics)entity.EndLogic;
@@ -784,9 +792,12 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     else
                     {
-                        if (filterItemDefinition is FormulaFilterDefinition formulaFilter && !entity.Path.IsNullOrEmpty())
+                        if (filterItemDefinition is FormulaFilterDefinition formulaFilter)
                         {
-                            filterItemDefinition.TableDescription = foundItem.Name;
+                            if (!entity.Path.IsNullOrEmpty())
+                            {
+                                filterItemDefinition.TableDescription = foundItem.Name;
+                            }
                         }
                         else
                         {

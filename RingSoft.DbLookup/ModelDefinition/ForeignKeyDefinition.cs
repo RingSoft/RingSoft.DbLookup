@@ -80,7 +80,8 @@ namespace RingSoft.DbLookup.ModelDefinition
             var found = false;
             foreach (var foreignKeyFieldJoin in FieldJoins)
             {
-                found = foreignKeyDefinition.FieldJoins.Any(p => p.ForeignField == foreignKeyFieldJoin.ForeignField);
+                found = foreignKeyDefinition.FieldJoins.Any(p => 
+                    p.ForeignField == foreignKeyFieldJoin.ForeignField);
                 if (found)
                 {
                     found = foreignKeyDefinition.FieldJoins.Any(p =>

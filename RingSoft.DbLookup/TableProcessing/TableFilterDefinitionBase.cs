@@ -470,8 +470,19 @@ namespace RingSoft.DbLookup.TableProcessing
             if (lastWhere == null)
             {
                 queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
-                lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldDefinition.FieldName,
-                    fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldDefinition.ValueType, dateType);
+
+                if (fieldFilterDefinition.FormulaToSearch.IsNullOrEmpty())
+                {
+                    lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldToSearch.FieldName,
+                        fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldToSearch.ValueType,
+                        dateType);
+                }
+                else
+                {
+                    lastWhere = query.AddWhereItemFormula(fieldFilterDefinition.FormulaToSearch,
+                        fieldFilterDefinition.Condition, value, ValueTypes.String);
+                }
+
                 lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);
                 result.Add(lastWhere);
             }

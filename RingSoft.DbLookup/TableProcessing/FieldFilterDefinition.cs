@@ -1,5 +1,6 @@
 ﻿using System;
 using MySqlX.XDevAPI.Common;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -67,6 +68,23 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string Path { get; internal set; }
 
+        private FieldDefinition _fieldToSearch;
+
+        public FieldDefinition FieldToSearch
+        {
+            get
+            {
+                if (_fieldToSearch == null)
+                {
+                    return FieldDefinition;
+                }
+                return _fieldToSearch;
+            }
+            internal set => _fieldToSearch = value;
+        }
+
+        public string FormulaToSearch { get; internal set; }
+
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
@@ -107,7 +125,19 @@ namespace RingSoft.DbLookup.TableProcessing
         public override string GetReportText()
         {
             var result = GetConditionText(Condition) + " ";
-            result += FieldDefinition.GetUserValue(Value);
+            
+            switch (Condition)
+            {
+                case Conditions.Equals:
+                case Conditions.NotEquals:
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    result += FieldDefinition.GetUserValue(Value);
+                    break;
+                default:
+                    result += Value;
+                    break;
+            }
             return result;
         }
 
@@ -123,10 +153,22 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            var includeResult =
-                treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
+            ProcessIncludeResult includeResult = null;
+            if (treeViewItem.Parent == null)
+            {
+                includeResult =
+                    treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
 
-            JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            }
+            else
+            {
+                includeResult =
+                    treeViewItem.BaseTree.MakeIncludes(treeViewItem.Parent, "", false);
+
+                JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            }
+
             Condition = filterReturn.Condition;
             Value = filterReturn.SearchValue;
 
@@ -136,30 +178,49 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotEquals:
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
+                    FormulaToSearch = string.Empty;
+                    FieldToSearch = FieldDefinition;
+                    JoinDefinition = includeResult.LookupJoin.JoinDefinition;
                     break;
                 default:
-                    if (filterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
                     {
-                        var textColumn = filterReturn.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                        var textColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
                             .LookupDefinition.InitialSortColumnDefinition;
 
-                        FilterItemDefinition newFilter = null;
-                        if (textColumn is LookupFieldColumnDefinition fieldColumn)
+                        var fieldToSearch = textColumn.GetFieldForColumn();
+                        if (fieldToSearch == null)
                         {
-                            FieldDefinition = fieldColumn.FieldDefinition;
+                            if (treeViewItem.Parent != null)
+                            {
+                                SetJoinDefinition(treeViewItem, treeViewItem.FieldDefinition);
+                            }
+
+                            FormulaToSearch = textColumn.GetFormulaForColumn();
+                            FormulaToSearch = FormulaToSearch.Replace("{Alias}", JoinDefinition.Alias);
                         }
-                        else if (textColumn is LookupFormulaColumnDefinition formulaColumn)
+                        else
                         {
-                            newFilter = TableFilterDefinition.CreateFormulaFilter(
-                                formulaColumn.OriginalFormula, formulaColumn.DataType, Condition,
-                                Value, JoinDefinition.Alias);
+                            SetJoinDefinition(treeViewItem, fieldToSearch);
+
+                            FieldToSearch = fieldToSearch;
                         }
-                        TableFilterDefinition.ReplaceUserFilter(this, newFilter);
                     }
                     break;
             }
 
             base.LoadFromFilterReturn(filterReturn, treeViewItem);
+        }
+
+        private void SetJoinDefinition(TreeViewItem treeViewItem, FieldDefinition fieldToSearch)
+        {
+            var newTreeViewItem = treeViewItem.BaseTree.FindFieldInTree(treeViewItem.BaseTree.TreeRoot, fieldToSearch);
+            if (newTreeViewItem != null)
+            {
+                var includeResult = treeViewItem.BaseTree.MakeIncludes(newTreeViewItem, "", false);
+
+                JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            }
         }
 
         public override AdvancedFilterReturn SaveToFilterReturn()

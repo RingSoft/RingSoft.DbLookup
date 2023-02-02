@@ -400,7 +400,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (_joinsList.All(p => p.Alias != lookupFieldJoin.Alias))
             {
-                //if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
+                if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
                 {
                     _joinsList.Add(lookupFieldJoin);
                     return lookupFieldJoin;

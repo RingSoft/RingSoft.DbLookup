@@ -378,5 +378,10 @@ namespace RingSoft.DbLookup.Lookup
             ConvertToLocalTime = value;
             return this;
         }
+
+        internal override string GetFormulaForColumn()
+        {
+            return OriginalFormula;
+        }
     }
 }

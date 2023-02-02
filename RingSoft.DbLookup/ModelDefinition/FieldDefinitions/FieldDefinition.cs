@@ -253,6 +253,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public string GetUserValue(string dbIdValue)
         {
             var result = string.Empty;
+            
             if (TableDefinition.PrimaryKeyFields.Contains(this))
             {
                 result = TableDefinition.Context

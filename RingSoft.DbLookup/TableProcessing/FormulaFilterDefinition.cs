@@ -28,8 +28,6 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string Description { get; set; }
 
-        internal FieldDefinition FieldDefinition { get; set; }
-
         internal FormulaFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             

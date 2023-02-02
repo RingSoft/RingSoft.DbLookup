@@ -167,9 +167,8 @@ namespace RingSoft.DbLookup.TableProcessing
             return new AdvancedFindFilter();
         }
 
-        public virtual void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        public virtual void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-
         }
 
         public virtual AdvancedFilterReturn SaveToFilterReturn()
@@ -213,6 +212,5 @@ namespace RingSoft.DbLookup.TableProcessing
 
             return tableDefinition;
         }
-
     }
 }

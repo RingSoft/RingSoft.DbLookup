@@ -1,4 +1,5 @@
-﻿using MySqlX.XDevAPI.Common;
+﻿using System;
+using MySqlX.XDevAPI.Common;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -120,9 +121,45 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.SaveToEntity(lookupDefinition);
         }
 
-        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            base.LoadFromFilterReturn(filterReturn);
+            var includeResult =
+                treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
+
+            JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            Condition = filterReturn.Condition;
+            Value = filterReturn.SearchValue;
+
+            switch (Condition)
+            {
+                case Conditions.Equals:
+                case Conditions.NotEquals:
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    break;
+                default:
+                    if (filterReturn.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        var textColumn = filterReturn.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                            .LookupDefinition.InitialSortColumnDefinition;
+
+                        FilterItemDefinition newFilter = null;
+                        if (textColumn is LookupFieldColumnDefinition fieldColumn)
+                        {
+                            FieldDefinition = fieldColumn.FieldDefinition;
+                        }
+                        else if (textColumn is LookupFormulaColumnDefinition formulaColumn)
+                        {
+                            newFilter = TableFilterDefinition.CreateFormulaFilter(
+                                formulaColumn.OriginalFormula, formulaColumn.DataType, Condition,
+                                Value, JoinDefinition.Alias);
+                        }
+                        TableFilterDefinition.ReplaceUserFilter(this, newFilter);
+                    }
+                    break;
+            }
+
+            base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
         public override AdvancedFilterReturn SaveToFilterReturn()

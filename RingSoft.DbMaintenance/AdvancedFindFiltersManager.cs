@@ -42,7 +42,7 @@ namespace RingSoft.DbMaintenance
 
         protected override DataEntryGridRow GetNewRow()
         {
-            return new AdvancedFindFilterRow(this);
+            return null;
         }
 
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
@@ -50,31 +50,31 @@ namespace RingSoft.DbMaintenance
         {
             if (entity.Formula.IsNullOrEmpty())
             {
-                var tableDefinition =
-                    ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.EntityName == entity.TableName);
+                return new AdvancedFindFieldFilterRow(this);
+                //var tableDefinition =
+                //    ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                //        p.EntityName == entity.TableName);
 
-                if (tableDefinition != null)
-                {
-                    var fieldDefinition =
-                        tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
-
-                    var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
-                    if (foundTreeViewItem == null || !tableDefinition.CanViewTable)
-                    {
-                        ViewModel.ReadOnlyMode = true;
-                        return null;
-                    }
-                }
-                //else
+                //if (tableDefinition != null)
                 //{
-                //    ViewModel.ReadOnlyMode = true;
-                //    return null;
+                //    var fieldDefinition =
+                //        tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+
+                //    var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
+                //    if (foundTreeViewItem == null || !tableDefinition.CanViewTable)
+                //    {
+                //        ViewModel.ReadOnlyMode = true;
+                //        return null;
+                //    }
                 //}
-            }
+            } 
             if (entity.SearchForAdvancedFindId == null)
             {
-                return new AdvancedFindFilterRow(this);
+                if (entity.Formula.IsNullOrEmpty())
+                {
+                    return new AdvancedFindFieldFilterRow(this);
+                }
+                //return new AdvancedFindFilterRow(this);
             }
 
             return new AdvancedFindAfFilterRow(this);
@@ -97,7 +97,22 @@ namespace RingSoft.DbMaintenance
                 var rowIndex = 0;
                 foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
                 {
-                    var row = GetNewRow() as AdvancedFindFilterRow;
+                    AdvancedFindFilterRow row = null;
+
+                    switch (fixedFilter.Type)
+                    {
+                        case FilterItemTypes.Field:
+                            row = new AdvancedFindFieldFilterRow(this);
+                            break;
+                        case FilterItemTypes.Formula:
+                            break;
+                        case FilterItemTypes.AdvancedFind:
+                            row = new AdvancedFindAfFilterRow(this);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
                     row.LoadFromFilterDefinition(fixedFilter, true, rowIndex);
                     AddRow(row);
                     if (rowIndex == lookupDefinition.FilterDefinition.FixedFilters.Count - 1)
@@ -113,24 +128,21 @@ namespace RingSoft.DbMaintenance
 
         public void LoadNewUserFilter(AdvancedFilterReturn filterReturn)
         {
-            var row = GetNewRow() as AdvancedFindFilterRow;
-            if (filterReturn != null)
-            {
-                row.Path = ViewModel.SelectedTreeViewItem.MakePath();
-                row.LoadFromFilterReturn(filterReturn);
-            }
-
-            //if (ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Any() &&
-            //    ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count ==
-            //    Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed == true).Count())
+            //var row = GetNewRow() as AdvancedFindFilterRow;
+            //if (filterReturn != null)
             //{
-            //    var lastFilterRow =
-            //        Rows[ViewModel.LookupDefinition.FilterDefinition.FixedFilters.Count - 1] as
-            //            AdvancedFindFilterRow;
-            //    lastFilterRow.FinishOffFilter(true, false);
+            //    row.Path = ViewModel.SelectedTreeViewItem.MakePath();
+            //    row.LoadFromFilterReturn(filterReturn);
             //}
-            ProcessLastFilterRow(false, Rows.LastOrDefault() as AdvancedFindFilterRow);
 
+            //ProcessLastFilterRow(false, Rows.LastOrDefault() as AdvancedFindFilterRow);
+
+            AdvancedFindFilterRow row = null;
+            if (filterReturn.Formula.IsNullOrEmpty())
+            {
+                row = new AdvancedFindFieldFilterRow(this);
+            }
+            row.LoadFromFilterReturn(filterReturn);
             AddRow(row);
             ProcessLastFilterRow(true, Rows.LastOrDefault() as AdvancedFindFilterRow);
             Grid?.RefreshGridView();

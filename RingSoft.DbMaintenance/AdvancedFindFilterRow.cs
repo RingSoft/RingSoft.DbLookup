@@ -14,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbMaintenance
 {
-    public class AdvancedFindFilterRow : DbMaintenanceDataEntryGridRow<AdvancedFindFilter>
+    public abstract class AdvancedFindFilterRow : DbMaintenanceDataEntryGridRow<AdvancedFindFilter>
     {
         public AdvancedFindFiltersManager Manager { get; set; }
 
@@ -51,6 +51,8 @@ namespace RingSoft.DbMaintenance
 
         public string Path { get; internal set; }
 
+        public AdvancedFilterReturn FilterReturn { get; set; }
+
         private FieldDefinition _searchAutoFillField;
 
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)
@@ -77,7 +79,7 @@ namespace RingSoft.DbMaintenance
                     return new DataEntryGridTextCellProps(this, columnId, Field);
 
                 case AdvancedFindFiltersManager.FilterColumns.Search:
-                    return new AdvancedFindFilterCellProps(this, columnId, SearchValueText, MakeFilterReturn());
+                    return new AdvancedFindFilterCellProps(this, columnId, SearchValueText, FilterReturn);
 
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
                     return new AdvancedFilterParenthesesCellProps(this, columnId,
@@ -141,8 +143,7 @@ namespace RingSoft.DbMaintenance
                         base.SetCellValue(value);
                         return;
                     }
-                    Condition = filterProps.FilterReturn.Condition;
-                    SearchValue = filterProps.FilterReturn.SearchValue;
+                    LoadFromFilterReturn(filterProps.FilterReturn);
 
                     //if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
                     //{
@@ -180,71 +181,71 @@ namespace RingSoft.DbMaintenance
                     //        }
                     //    }
                     //}
-                    if (FieldDefinition != null)
-                    {
-                        SetCellValueProcessField(filterProps, FilterItemDefinition as FieldFilterDefinition);
-                    }
-                    else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
-                    {
-                        SetCellValueFromLookupReturn(filterProps.FilterReturn);
-                        formulaFilter.Condition = filterProps.FilterReturn.Condition;
-                        Condition = filterProps.FilterReturn.Condition;
-                        var setValue = true;
-                        FormulaDataType = formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
-                        switch (FormulaDataType)
-                        {
-                            case FieldDataTypes.DateTime:
-                                switch (DateFilterType)
-                                {
-                                    case DateFilterTypes.SpecificDate:
-                                        setValue = true;
-                                        break;
-                                    default:
-                                        setValue = false;
-                                        var dateString =
-                                            LookupDefinitionBase.ProcessSearchValue(
-                                                filterProps.FilterReturn.SearchValue, DateFilterType);
-                                        var date = dateString.ToDate();
-                                        DateSearchValue = date.Value.FormatDateValue(DbDateTypes.DateOnly, false);
-                                        SearchValue = formulaFilter.FilterValue = DateSearchValue;
+                    //if (FieldDefinition != null)
+                    //{
+                    //    SetCellValueProcessField(filterProps, FilterItemDefinition as FieldFilterDefinition);
+                    //}
+                    //else if (FilterItemDefinition is FormulaFilterDefinition formulaFilter)
+                    //{
+                    //    SetCellValueFromLookupReturn(filterProps.FilterReturn);
+                    //    formulaFilter.Condition = filterProps.FilterReturn.Condition;
+                    //    Condition = filterProps.FilterReturn.Condition;
+                    //    var setValue = true;
+                    //    FormulaDataType = formulaFilter.DataType = filterProps.FilterReturn.FormulaValueType;
+                    //    switch (FormulaDataType)
+                    //    {
+                    //        case FieldDataTypes.DateTime:
+                    //            switch (DateFilterType)
+                    //            {
+                    //                case DateFilterTypes.SpecificDate:
+                    //                    setValue = true;
+                    //                    break;
+                    //                default:
+                    //                    setValue = false;
+                    //                    var dateString =
+                    //                        LookupDefinitionBase.ProcessSearchValue(
+                    //                            filterProps.FilterReturn.SearchValue, DateFilterType);
+                    //                    var date = dateString.ToDate();
+                    //                    DateSearchValue = date.Value.FormatDateValue(DbDateTypes.DateOnly, false);
+                    //                    SearchValue = formulaFilter.FilterValue = DateSearchValue;
 
-                                        break;
-                                }
-                                break;
-                            default:
-                                setValue = true;
-                                break;
-                        }
-                        if (setValue)
-                        {
-                            SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
-                        }
-                        else
-                        {
+                    //                    break;
+                    //            }
+                    //            break;
+                    //        default:
+                    //            setValue = true;
+                    //            break;
+                    //    }
+                    //    if (setValue)
+                    //    {
+                    //        SearchValue = formulaFilter.FilterValue = filterProps.FilterReturn.SearchValue;
+                    //    }
+                    //    else
+                    //    {
                             
-                        }
-                        if (!filterProps.FilterReturn.Formula.IsNullOrEmpty())
-                        {
-                            var formula = filterProps.FilterReturn.Formula;
+                    //    }
+                    //    if (!filterProps.FilterReturn.Formula.IsNullOrEmpty())
+                    //    {
+                    //        var formula = filterProps.FilterReturn.Formula;
 
-                            Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
-                            PrimaryTable = filterProps.FilterReturn.PrimaryTableName;
-                            if (ParentFieldDefinition != null)
-                            {
-                                Table = ParentFieldDefinition.Description;
-                                PrimaryTable = ParentFieldDefinition.TableDefinition.TableName;
-                                PrimaryField = ParentFieldDefinition.FieldName;
-                            }
+                    //        Formula = formulaFilter.Formula = filterProps.FilterReturn.Formula;
+                    //        PrimaryTable = filterProps.FilterReturn.PrimaryTableName;
+                    //        if (ParentFieldDefinition != null)
+                    //        {
+                    //            Table = ParentFieldDefinition.Description;
+                    //            PrimaryTable = ParentFieldDefinition.TableDefinition.TableName;
+                    //            PrimaryField = ParentFieldDefinition.FieldName;
+                    //        }
 
-                        }
+                    //    }
 
-                        FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
-                        Field = $"{filterProps.FilterReturn.FormulaDisplayValue} Formula";
-                        FilterItemDefinition.ReportDescription = Field;
-                    }
-                    Manager.ViewModel.RecordDirty = true;
-                    MakeSearchValueText();
-                    Manager.ViewModel.RefreshLookup();
+                    //    FormulaDisplayValue = filterProps.FilterReturn.FormulaDisplayValue;
+                    //    Field = $"{filterProps.FilterReturn.FormulaDisplayValue} Formula";
+                    //    FilterItemDefinition.ReportDescription = Field;
+                    //}
+                    //Manager.ViewModel.RecordDirty = true;
+                    //MakeSearchValueText();
+                    //Manager.ViewModel.RefreshLookup();
                     break;
                 case AdvancedFindFiltersManager.FilterColumns.RightParentheses:
                     var rightParenthesesValue = value as DataEntryGridTextCellProps;
@@ -274,12 +275,7 @@ namespace RingSoft.DbMaintenance
 
         public void SetCellValueFromLookupReturn(AdvancedFilterReturn filterReturn)
         {
-            Condition = filterReturn.Condition;
-            SearchValue = filterReturn.SearchValue;
-            FieldDefinition = filterReturn.FieldDefinition;
-            FormulaDataType = filterReturn.FormulaValueType;
-
-            ConvertDate(filterReturn);
+            LoadFromFilterReturn(filterReturn);
         }
 
         private void ConvertDate(AdvancedFilterReturn filterReturn)
@@ -645,7 +641,7 @@ namespace RingSoft.DbMaintenance
             entity.DateFilterType = (byte)DateFilterType;
         }
 
-        public void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
+        public virtual void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
         {
             FilterItemDefinition = filter;
             FilterItemDefinition newFilter = null;
@@ -850,112 +846,113 @@ namespace RingSoft.DbMaintenance
 
         public void MakeSearchValueText(string searchValue = "")
         {
-            if (searchValue.IsNullOrEmpty())
-            {
-                searchValue = SearchValue;
-            }
+            SearchValueText = FilterItemDefinition.GetReportText();
+        //    if (searchValue.IsNullOrEmpty())
+        //    {
+        //        searchValue = SearchValue;
+        //    }
 
-            if (!DisplaySearchValue.IsNullOrEmpty())
-            {
-                searchValue = DisplaySearchValue;
-            }
+        //    if (!DisplaySearchValue.IsNullOrEmpty())
+        //    {
+        //        searchValue = DisplaySearchValue;
+        //    }
 
-            var searchValueText = MakeBeginSearchValueText();
-            if (FieldDefinition != null)
-            {
-                TableDefinitionBase tableToSearch = null;
-                var makeSearchValueText = true;
-                if (AutoFillField != null)
-                {
-                    tableToSearch = AutoFillField.TableDefinition;
-                    if (AutoFillField.ParentJoinForeignKeyDefinition != null)
-                    {
-                        tableToSearch = AutoFillField.ParentJoinForeignKeyDefinition.PrimaryTable;
-                    }
-                }
-                else
-                {
-                    tableToSearch = FieldDefinition.TableDefinition;
-                }
-                switch (Condition)
-                {
-                    case Conditions.Equals:
-                    case Conditions.NotEquals:
-                        if (AutoFillField != null)
-                        {
-                            var searchAutoFillValue =
-                                Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
-                            if (searchAutoFillValue != null)
-                            {
-                                searchValueText += searchAutoFillValue.Text;
-                                makeSearchValueText = false;
-                            }
-                        }
+        //    var searchValueText = MakeBeginSearchValueText();
+        //    if (FieldDefinition != null)
+        //    {
+        //        TableDefinitionBase tableToSearch = null;
+        //        var makeSearchValueText = true;
+        //        if (AutoFillField != null)
+        //        {
+        //            tableToSearch = AutoFillField.TableDefinition;
+        //            if (AutoFillField.ParentJoinForeignKeyDefinition != null)
+        //            {
+        //                tableToSearch = AutoFillField.ParentJoinForeignKeyDefinition.PrimaryTable;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            tableToSearch = FieldDefinition.TableDefinition;
+        //        }
+        //        switch (Condition)
+        //        {
+        //            case Conditions.Equals:
+        //            case Conditions.NotEquals:
+        //                if (AutoFillField != null)
+        //                {
+        //                    var searchAutoFillValue =
+        //                        Manager.ViewModel.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(tableToSearch, searchValue);
+        //                    if (searchAutoFillValue != null)
+        //                    {
+        //                        searchValueText += searchAutoFillValue.Text;
+        //                        makeSearchValueText = false;
+        //                    }
+        //                }
 
-                        break;
-                    default:
-                        searchValueText += MakeEndSearchValueText(searchValue);
+        //                break;
+        //            default:
+        //                searchValueText += MakeEndSearchValueText(searchValue);
 
-                        makeSearchValueText = false;
-                        break;
-                }
-                if (makeSearchValueText)
-                {
-                    searchValueText += MakeEndSearchValueText(searchValue);
-                }
-            }
-            else
-            {
-                searchValueText = $"{searchValueText} {searchValue}";
-            }
-            SearchValueText = searchValueText;
-        }
+        //                makeSearchValueText = false;
+        //                break;
+        //        }
+        //        if (makeSearchValueText)
+        //        {
+        //            searchValueText += MakeEndSearchValueText(searchValue);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        searchValueText = $"{searchValueText} {searchValue}";
+        //    }
+        //    SearchValueText = searchValueText;
+        //}
 
-        private string MakeEndSearchValueText(string searchValue)
-        {
-            var result = string.Empty;
-            if (FieldDefinition is IntegerFieldDefinition integerField)
-            {
-                if (integerField.EnumTranslation != null)
-                {
-                    var item = integerField.EnumTranslation.TypeTranslations.FirstOrDefault(p =>
-                        p.NumericValue == searchValue.ToInt());
-                    result = item.TextValue;
-                    return result;
-                }
-            }
-            else if (FieldDefinition is BoolFieldDefinition boolField)
-            {
-                var boolItem = searchValue.ToBool();
-                if (boolItem)
-                {
-                    result = "True";
-                }
-                else
-                {
-                    result = "False";
-                }
+        //private string MakeEndSearchValueText(string searchValue)
+        //{
+        //    var result = string.Empty;
+        //    if (FieldDefinition is IntegerFieldDefinition integerField)
+        //    {
+        //        if (integerField.EnumTranslation != null)
+        //        {
+        //            var item = integerField.EnumTranslation.TypeTranslations.FirstOrDefault(p =>
+        //                p.NumericValue == searchValue.ToInt());
+        //            result = item.TextValue;
+        //            return result;
+        //        }
+        //    }
+        //    else if (FieldDefinition is BoolFieldDefinition boolField)
+        //    {
+        //        var boolItem = searchValue.ToBool();
+        //        if (boolItem)
+        //        {
+        //            result = "True";
+        //        }
+        //        else
+        //        {
+        //            result = "False";
+        //        }
 
-                return result;
-            }
+        //        return result;
+        //    }
 
-            switch (Condition)
-            {
-                case Conditions.EqualsNull:
-                case Conditions.NotEqualsNull:
-                    break;
-                default:
-                    if (DisplaySearchValue.IsNullOrEmpty())
-                    {
-                        result = FieldDefinition.FormatValue(searchValue);
-                    }
-                    else
-                    {
-                        result = DisplaySearchValue;
-                    }
-                    break;
-            }
-            return result;
+        //    switch (Condition)
+        //    {
+        //        case Conditions.EqualsNull:
+        //        case Conditions.NotEqualsNull:
+        //            break;
+        //        default:
+        //            if (DisplaySearchValue.IsNullOrEmpty())
+        //            {
+        //                result = FieldDefinition.FormatValue(searchValue);
+        //            }
+        //            else
+        //            {
+        //                result = DisplaySearchValue;
+        //            }
+        //            break;
+        //    }
+        //    return result;
         }
 
         private string MakeBeginSearchValueText()
@@ -963,199 +960,201 @@ namespace RingSoft.DbMaintenance
             return DbLookup.TableProcessing.FilterItemDefinition.GetConditionText(Condition);
         }
 
-        public void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
+        public virtual void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
         {
-            SetCellValueFromLookupReturn(advancedFilterReturn);
-            var fieldDefinition = advancedFilterReturn.FieldDefinition;
-            //if (fieldDefinition == null)
-            //{
-            //    fieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
+            Condition = advancedFilterReturn.Condition;
+            SearchValue = advancedFilterReturn.SearchValue;
+            FilterReturn = advancedFilterReturn;
 
-            //    if (fieldDefinition == null)
-            //    {
-            //        Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-            //    }
+            MakeSearchValueText();
+
+            //SetCellValueFromLookupReturn(advancedFilterReturn);
+            //var fieldDefinition = advancedFilterReturn.FieldDefinition;
+            //Table = advancedFilterReturn.TableDescription;
+            //ParentFieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
+            //if (ParentFieldDefinition != null)
+            //{
+            //    PrimaryTable = ParentFieldDefinition.TableDefinition.TableName;
+            //    PrimaryField = ParentFieldDefinition.FieldName;
+            //}
+
+            //FieldDefinition = fieldDefinition;
+            //var foundTreeItem =
+            //    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+
+            //ProcessIncludeResult includeResult = null;
+            //if (foundTreeItem != null)
+            //    includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+
+            //if (advancedFilterReturn.Formula.IsNullOrEmpty())
+            //{
+            //    LoadFromFilterResultField(fieldDefinition, foundTreeItem, includeResult);
             //}
             //else
             //{
-            //    Table = fieldDefinition.TableDefinition.Description;
+            //    //PrimaryTable = Table = advancedFilterReturn.PrimaryTableName;
+            //    Field = $"{advancedFilterReturn.FormulaDisplayValue} Formula";
+            //    var alias = Manager.ViewModel.LookupDefinition.TableDefinition.TableName;
+            //    if (includeResult?.LookupJoin != null)
+            //    {
+            //        alias = includeResult.LookupJoin.JoinDefinition.Alias;
+            //    }
+
+            //    Formula = advancedFilterReturn.Formula;
+            //    FormulaDisplayValue = advancedFilterReturn.FormulaDisplayValue;
+            //    FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(Formula,
+            //        Condition, SearchValue, alias, advancedFilterReturn.FormulaValueType);
+            //    FilterItemDefinition.ReportDescription = Field;
             //}
-            Table = advancedFilterReturn.TableDescription;
-            ParentFieldDefinition = advancedFilterReturn.PrimaryFieldDefinition;
-            //if (fieldDefinition != null)
-            //{
-            //    PrimaryTable = fieldDefinition.TableDefinition.TableName;
-            //    PrimaryField = fieldDefinition.FieldName;
-            //}
-            if (ParentFieldDefinition != null)
-            {
-                //Table = ParentFieldDefinition.Description;
-                PrimaryTable = ParentFieldDefinition.TableDefinition.TableName;
-                PrimaryField = ParentFieldDefinition.FieldName;
-            }
 
-            FieldDefinition = fieldDefinition;
-            var foundTreeItem =
-                Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
-
-            ProcessIncludeResult includeResult = null;
-            if (foundTreeItem != null)
-                includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
-
-            if (advancedFilterReturn.Formula.IsNullOrEmpty())
-            {
-                LoadFromFilterResultField(fieldDefinition, foundTreeItem, includeResult);
-            }
-            else
-            {
-                //PrimaryTable = Table = advancedFilterReturn.PrimaryTableName;
-                Field = $"{advancedFilterReturn.FormulaDisplayValue} Formula";
-                var alias = Manager.ViewModel.LookupDefinition.TableDefinition.TableName;
-                if (includeResult?.LookupJoin != null)
-                {
-                    alias = includeResult.LookupJoin.JoinDefinition.Alias;
-                }
-
-                Formula = advancedFilterReturn.Formula;
-                FormulaDisplayValue = advancedFilterReturn.FormulaDisplayValue;
-                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(Formula,
-                    Condition, SearchValue, alias, advancedFilterReturn.FormulaValueType);
-                FilterItemDefinition.ReportDescription = Field;
-            }
-
-            MakeSearchValueText();
-            Manager?.Grid?.RefreshGridView();
-            //Manager.ViewModel.ResetLookup();
+            //MakeSearchValueText();
+            //Manager?.Grid?.RefreshGridView();
+            ////Manager.ViewModel.ResetLookup();
         }
 
-        private void LoadFromFilterResultField(FieldDefinition fieldDefinition, TreeViewItem foundTreeItem,
-            ProcessIncludeResult includeResult)
-        {
-            Field = fieldDefinition.Description;
+        //private void LoadFromFilterResultField(FieldDefinition fieldDefinition, TreeViewItem foundTreeItem,
+        //    ProcessIncludeResult includeResult)
+        //{
+        //    Field = fieldDefinition.Description;
 
-            //fieldDefinition = foundTreeItem.FieldDefinition;
-            if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-            {
-                switch (Condition)
-                {
-                    case Conditions.Equals:
-                    case Conditions.NotEquals:
-                    case Conditions.EqualsNull:
-                    case Conditions.NotEqualsNull:
-                        var fieldToSearch = fieldDefinition;
-                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
-                        {
-                            fieldToSearch = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
-                        }
+        //    //fieldDefinition = foundTreeItem.FieldDefinition;
+        //    if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+        //    {
+        //        switch (Condition)
+        //        {
+        //            case Conditions.Equals:
+        //            case Conditions.NotEquals:
+        //            case Conditions.EqualsNull:
+        //            case Conditions.NotEqualsNull:
+        //                var fieldToSearch = fieldDefinition;
+        //                if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+        //                {
+        //                    fieldToSearch = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+        //                }
 
-                        FilterItemDefinition =
-                            Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                fieldToSearch, Condition, SearchValue);
+        //                FilterItemDefinition =
+        //                    Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+        //                        fieldToSearch, Condition, SearchValue);
 
-                        FilterItemDefinition.ReportDescription = fieldDefinition.Description;
-                        if (includeResult.LookupJoin != null)
-                        {
-                            FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-                        }
-                        if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
-                        {
-                            AutoFillField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
-                            _searchAutoFillField = fieldDefinition;
-                        }
+        //                FilterItemDefinition.ReportDescription = fieldDefinition.Description;
+        //                if (includeResult.LookupJoin != null)
+        //                {
+        //                    FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+        //                }
+        //                if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+        //                {
+        //                    AutoFillField = fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
+        //                    _searchAutoFillField = fieldDefinition;
+        //                }
 
-                        break;
-                    default:
-                        if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                        {
-                            switch (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
-                                        .InitialSortColumnDefinition.ColumnType)
-                            {
-                                case LookupColumnTypes.Field:
-                                    var initialSortColumnField =
-                                        foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
-                                            .LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
-                                    if (initialSortColumnField != null)
-                                    {
-                                        fieldDefinition = initialSortColumnField.FieldDefinition;
-                                        foundTreeItem =
-                                            Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
-                                        includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
-                                    }
+        //                break;
+        //            default:
+        //                if (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+        //                {
+        //                    switch (foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
+        //                                .InitialSortColumnDefinition.ColumnType)
+        //                    {
+        //                        case LookupColumnTypes.Field:
+        //                            var initialSortColumnField =
+        //                                foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+        //                                    .LookupDefinition.InitialSortColumnDefinition as LookupFieldColumnDefinition;
+        //                            if (initialSortColumnField != null)
+        //                            {
+        //                                fieldDefinition = initialSortColumnField.FieldDefinition;
+        //                                foundTreeItem =
+        //                                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+        //                                includeResult = Manager.ViewModel.MakeIncludes(foundTreeItem, "", false);
+        //                            }
 
-                                    FilterItemDefinition =
-                                        Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                            fieldDefinition, Condition, SearchValue);
-                                    if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
-                                    {
-                                        if (FieldDefinition != null)
-                                        {
-                                            fieldFilter.ParentField = FieldDefinition;
-                                        }
-                                    }
+        //                            FilterItemDefinition =
+        //                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+        //                                    fieldDefinition, Condition, SearchValue);
+        //                            if (FilterItemDefinition is FieldFilterDefinition fieldFilter)
+        //                            {
+        //                                if (FieldDefinition != null)
+        //                                {
+        //                                    fieldFilter.ParentField = FieldDefinition;
+        //                                }
+        //                            }
 
-                                    if (includeResult.LookupJoin != null)
-                                    {
-                                        FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-                                    }
+        //                            if (includeResult.LookupJoin != null)
+        //                            {
+        //                                FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+        //                            }
 
-                                    break;
+        //                            break;
 
-                                case LookupColumnTypes.Formula:
-                                    var initialSortColumnFormula =
-                                        foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
-                                            .LookupDefinition
-                                            .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
-                                    
-                                    switch (Condition)
-                                    {
-                                        case Conditions.EqualsNull:
-                                        case Conditions.NotEqualsNull:
-                                            if (fieldDefinition.ParentJoinForeignKeyDefinition != null && fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
-                                            {
-                                                fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition
-                                                    .ForeignKeyFieldJoins[0].PrimaryField;
-                                            }
-                                            FilterItemDefinition =
-                                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                                    fieldDefinition, Condition, SearchValue);
-                                            if (includeResult.LookupJoin != null &&
-                                                fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
-                                            {
-                                                FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-                                            }
+        //                        case LookupColumnTypes.Formula:
+        //                            var initialSortColumnFormula =
+        //                                foundTreeItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+        //                                    .LookupDefinition
+        //                                    .InitialSortColumnDefinition as LookupFormulaColumnDefinition;
 
-                                            break;
-                                        default:
-                                            FilterItemDefinition = 
-                                                Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
-                                                initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
-                                                includeResult.LookupJoin.JoinDefinition.Alias);
-                                            break;
-                                    }
-                                    break;
-                                    //if (foundTreeItem.Parent != null)
-                                    //{
-                                    //    fieldDefinition = foundTreeItem.Parent.FieldDefinition;
-                                    //}
+        //                            switch (Condition)
+        //                            {
+        //                                case Conditions.EqualsNull:
+        //                                case Conditions.NotEqualsNull:
+        //                                    if (fieldDefinition.ParentJoinForeignKeyDefinition != null && fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
+        //                                    {
+        //                                        fieldDefinition = fieldDefinition.ParentJoinForeignKeyDefinition
+        //                                            .ForeignKeyFieldJoins[0].PrimaryField;
+        //                                    }
+        //                                    FilterItemDefinition =
+        //                                        Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+        //                                            fieldDefinition, Condition, SearchValue);
+        //                                    if (includeResult.LookupJoin != null &&
+        //                                        fieldDefinition.TableDefinition != Manager.ViewModel.LookupDefinition.TableDefinition)
+        //                                    {
+        //                                        FilterItemDefinition.JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+        //                                    }
 
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                        }
+        //                                    break;
+        //                                default:
+        //                                    FilterItemDefinition = 
+        //                                        Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+        //                                        initialSortColumnFormula.OriginalFormula, Condition, SearchValue,
+        //                                        includeResult.LookupJoin.JoinDefinition.Alias);
+        //                                    break;
+        //                            }
+        //                            break;
+        //                            //if (foundTreeItem.Parent != null)
+        //                            //{
+        //                            //    fieldDefinition = foundTreeItem.Parent.FieldDefinition;
+        //                            //}
 
-                        break;
-                }
-            }
-            else
-            {
-                FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(fieldDefinition, Condition,
-                    SearchValue);
+        //                        default:
+        //                            throw new ArgumentOutOfRangeException();
+        //                    }
+        //                }
 
-                FilterItemDefinition.JoinDefinition = includeResult.LookupJoin?.JoinDefinition;
-            }
-        }
+        //                break;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(fieldDefinition, Condition,
+        //            SearchValue);
+
+        //        FilterItemDefinition.JoinDefinition = includeResult.LookupJoin?.JoinDefinition;
+        //    }
+        //}
 
         public override bool AllowUserDelete => !IsFixed;
+
+        protected void SetupTable(TreeViewItem selectedTreeViewItem)
+        {
+            if (selectedTreeViewItem != null)
+            {
+                if (selectedTreeViewItem.Parent == null)
+                {
+                    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                }
+                else
+                {
+                    Table = selectedTreeViewItem.Parent.Name;
+                }
+            }
+        }
 
         public override void Dispose()
         {

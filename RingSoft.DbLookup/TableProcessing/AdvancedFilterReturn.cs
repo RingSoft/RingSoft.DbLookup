@@ -18,6 +18,6 @@ namespace RingSoft.DbLookup.TableProcessing
         public LookupDefinitionBase LookupDefinition { get; set; }
         public string TableDescription { get; set; }
         public DateFilterTypes DateFilterType { get; set; }
-
+        public string Path { get; set; }
     }
 }

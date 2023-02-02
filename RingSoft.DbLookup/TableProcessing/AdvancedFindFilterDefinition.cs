@@ -71,9 +71,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.SaveToEntity(lookupDefinition);
         }
 
-        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            base.LoadFromFilterReturn(filterReturn);
+            base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
         public override AdvancedFilterReturn SaveToFilterReturn()

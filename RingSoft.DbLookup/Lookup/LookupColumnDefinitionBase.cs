@@ -2,6 +2,7 @@
 using System.Data;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -270,6 +271,11 @@ namespace RingSoft.DbLookup.Lookup
             primaryKeyValue.PopulateFromDataRow(dataRow);
             key += primaryKeyValue.KeyString;
             return key;
+        }
+
+        internal virtual FieldDefinition GetFieldDefinitionForColumn()
+        {
+            return null;
         }
     }
 }

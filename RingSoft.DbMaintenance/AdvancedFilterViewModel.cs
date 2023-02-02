@@ -391,6 +391,7 @@ namespace RingSoft.DbMaintenance
         public FieldDefinition FieldDefinition { get; set; }
         public FieldDefinition ParentFieldDefinition { get; set; }
         public TreeViewType Type { get; set; }
+        public string Path { get; set; }
 
         public event EventHandler <ValidationFailArgs> OnValidationFail;
 
@@ -402,6 +403,7 @@ namespace RingSoft.DbMaintenance
 
         public void Initialize(AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
         {
+            Path = filterReturn.Path;
             FilterReturn = filterReturn;
             FieldDefinition = filterReturn.FieldDefinition;
             if (filterReturn.Formula.IsNullOrEmpty())
@@ -576,6 +578,7 @@ namespace RingSoft.DbMaintenance
 
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
+            Path = treeViewItem.MakePath();
             Type = treeViewItem.Type;
             FieldDefinition = treeViewItem.FieldDefinition;
             Initialize(lookupDefinition);
@@ -780,6 +783,7 @@ namespace RingSoft.DbMaintenance
         public AdvancedFilterReturn GetAdvancedFilterReturn()
         {
             var result = new AdvancedFilterReturn();
+            result.Path = Path;
             if (Condition.HasValue)
             {
                 result.Condition = Condition.Value;

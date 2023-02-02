@@ -1,6 +1,7 @@
 ﻿using MySqlX.XDevAPI.Common;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
@@ -26,6 +27,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public string Alias { get; set; }
 
         public string Description { get; set; }
+
+        internal FieldDefinition FieldDefinition { get; set; }
 
         internal FormulaFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
@@ -59,9 +62,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.SaveToEntity(lookupDefinition);
         }
 
-        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            base.LoadFromFilterReturn(filterReturn);
+            base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
         public override AdvancedFilterReturn SaveToFilterReturn()

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -48,6 +49,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public AutoFillControl EndingControl { get; private set; }
 
+        public Label ReportTypeLabel { get; private set; }
+        public TextComboBoxControl ReportTypeControl { get; private set; }
+
         static GenericReportFilterWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(GenericReportFilterWindow), new FrameworkPropertyMetadata(typeof(GenericReportFilterWindow)));
@@ -58,6 +62,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (s, e) =>
             {
                 ViewModel.Initialize(this, printerSetup);
+                Title = $"{printerSetup.CodeDescription} Report Filter Options";
             };
         }
 
@@ -70,6 +75,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             CurrentControl = GetTemplateChild(nameof(CurrentControl)) as AutoFillControl;
             BeginningControl = GetTemplateChild(nameof(BeginningControl)) as AutoFillControl;
             EndingControl = GetTemplateChild(nameof(EndingControl)) as AutoFillControl;
+            ReportTypeLabel = GetTemplateChild(nameof(ReportTypeLabel)) as Label;
+            ReportTypeControl = GetTemplateChild(nameof(ReportTypeControl)) as TextComboBoxControl;
 
             base.OnApplyTemplate();
         }
@@ -78,6 +85,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             BeginningControl.IsEnabled = EndingControl.IsEnabled = !ViewModel.IsCurrentOnly;
             CurrentControl.IsEnabled = ViewModel.IsCurrentOnly;
+            if (ViewModel.PrinterSetup.PrintingProperties.ReportType == ReportTypes.Custom)
+            {
+                ReportTypeLabel.Visibility = ReportTypeControl.Visibility = Visibility.Collapsed;
+            }
         }
 
         public void CloseWindow()

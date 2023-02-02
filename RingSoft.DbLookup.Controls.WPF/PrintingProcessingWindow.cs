@@ -55,7 +55,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public StringReadOnlyBox PartTextControl { get; private set; }
 
+        public ProgressBar PartProgressBar { get; private set; }
+
         public StringReadOnlyBox CurrentControl { get; private set; }
+
+        public ProgressBar CurrentProgressBar { get; private set; }
 
         public Button CancelButton { get; private set; }
 
@@ -70,6 +74,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 DataEntryControls.WPF.ControlsUserInterface.SetActiveWindow(this);
                 ViewModel.Initialize(this, printerSetupArgs);
+                Title = $"{printerSetupArgs.CodeDescription} Report Data Processing";
             };
         }
 
@@ -78,7 +83,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             Border = GetTemplateChild(nameof(Border)) as Border;
             ViewModel = Border.TryFindResource("ViewModel") as PrintingProcessingViewModel;
             PartTextControl = GetTemplateChild(nameof(PartTextControl)) as StringReadOnlyBox;
+            PartProgressBar = GetTemplateChild(nameof(PartProgressBar)) as ProgressBar;
             CurrentControl = GetTemplateChild(nameof(CurrentControl)) as StringReadOnlyBox;
+            CurrentProgressBar = GetTemplateChild(nameof(CurrentProgressBar)) as ProgressBar;
             CancelButton = GetTemplateChild(nameof(CancelButton)) as Button;
 
             base.OnApplyTemplate();
@@ -90,12 +97,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             var enumTranslation = new EnumFieldTranslation();
             enumTranslation.LoadFromEnum<ProcessTypes>();
             var enumItem = enumTranslation.TypeTranslations.FirstOrDefault(p => p.NumericValue == part);
+            var totalParts = enumTranslation.TypeTranslations.Max(p => p.NumericValue);
+
             var currentRecord =
                 GblMethods.FormatValue(FieldDataTypes.Integer, ViewModel.RecordBeingProcessed.ToString());
             var totalRecords = GblMethods.FormatValue(FieldDataTypes.Integer, ViewModel.TotalRecordCount.ToString());
 
             Dispatcher.Invoke(() =>
             {
+                PartProgressBar.Maximum = totalParts;
+                PartProgressBar.Minimum = 0;
+                PartProgressBar.Value = enumItem.NumericValue;
                 PartTextControl.Text = enumItem.TextValue;
                 switch (ViewModel.ProcessType)
                 {
@@ -104,11 +116,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                     case ProcessTypes.OpeningApp:
                         CurrentControl.Text = string.Empty;
                         break;
+                    case ProcessTypes.StartingReport:
+                        ViewModel.AbortCommand.IsEnabled = false;
+                        CurrentControl.Text = string.Empty;
+                        break;
                     case ProcessTypes.ImportHeader:
                     case ProcessTypes.ImportDetails:
                     case ProcessTypes.ProcessReportHeader:
                     case ProcessTypes.ProcessReportDetails:
                         CurrentControl.Text = $"Processing Item {currentRecord} out of {totalRecords}";
+                        CurrentProgressBar.Maximum = ViewModel.TotalRecordCount;
+                        CurrentProgressBar.Minimum = 0;
+                        CurrentProgressBar.Value = ViewModel.RecordBeingProcessed;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

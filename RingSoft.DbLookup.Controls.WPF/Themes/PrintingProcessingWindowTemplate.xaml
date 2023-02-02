@@ -29,6 +29,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -36,11 +37,15 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="0" x:Name="PartTextControl" Width="300"/>
+                                <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="0" x:Name="PartTextControl" Width="300" HorizontalAlignment="Center"/>
 
-                                <dec:StringReadOnlyBox Grid.Row="2" Grid.Column="0" x:Name="CurrentControl" Width="300"/>
+                                <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="PartProgressBar" Height ="20" Width="300"/>
 
-                                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+                                <dec:StringReadOnlyBox Grid.Row="2" Grid.Column="0" x:Name="CurrentControl" Width="300" HorizontalAlignment="Center"/>
+
+                                <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CurrentProgressBar" Height="20" Width="300"/>
+
+                                <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" >
 
                                     <Button x:Name="CancelButton" Content="_Cancel" HorizontalAlignment="Right" Command="{Binding AbortCommand}"/>
 

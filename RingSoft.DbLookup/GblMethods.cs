@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
@@ -377,6 +378,26 @@ namespace RingSoft.DbLookup
                     return value.ToBool().ToString();
             }
             return value;
+        }
+
+        public static string GetPrintingInputExeFileName()
+        {
+            var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
+            var fileInfo = new FileInfo(jsonFile);
+            if (!fileInfo.Exists)
+            {
+                return string.Empty;
+            }
+            return jsonFile;
+        }
+
+        public static bool ValidatePrintingFile()
+        {
+            if (GetPrintingInputExeFileName().IsNullOrEmpty())
+            {
+                
+            }
+            return true;
         }
     }
 }

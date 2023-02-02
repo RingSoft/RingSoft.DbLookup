@@ -246,7 +246,7 @@ namespace RingSoft.DbLookup.Lookup
             var query = GetQuery();
 
             query.DebugMessage = "LookupData.GetInitData";
-            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
 
             if (getDataResult.ResultCode == GetDataResultCodes.Success)
             {
@@ -299,7 +299,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             query.DebugMessage = "LookupData.SelectPrimaryKey";
-            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
 
             if (getDataResult.ResultCode == GetDataResultCodes.Success)
             {
@@ -807,7 +807,7 @@ namespace RingSoft.DbLookup.Lookup
 
                         query.SetMaxRecords(recordCount);
                         query.DebugMessage = $"LookupData.{debugMessage}.GetNextRecords";
-                        var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+                        var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
                         if (result.ResultCode == GetDataResultCodes.Success)
                         {
                             foreach (DataRow dataRow in result.DataSet.Tables[0].Rows)
@@ -919,7 +919,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 baseQuery.SetMaxRecords(recordCount);
                 baseQuery.DebugMessage = $"LookupData.{debugMessage}.GetPreviousRecords";
-                var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(baseQuery);
+                var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(baseQuery, !_printMode);
                 if (result.ResultCode == GetDataResultCodes.Success)
                 {
                     foreach (DataRow dataRow in result.DataSet.Tables[0].Rows)
@@ -1005,7 +1005,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             query.DebugMessage = $"LookupData.{debugMessage}.HasMoreThan1Record?";
-            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
             if (result.ResultCode == GetDataResultCodes.Success && result.DataSet.Tables[0].Rows.Count > 1)
                 return true;
 
@@ -1019,7 +1019,7 @@ namespace RingSoft.DbLookup.Lookup
             query.AddWhereItemFormula(formula, Conditions.Equals, searchValue, valueType);
 
             query.DebugMessage = $"LookupData.{debugMessage}.HasMoreThan1Record?";
-            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
             if (result.ResultCode == GetDataResultCodes.Success && result.DataSet.Tables[0].Rows.Count > 1)
                 return true;
 
@@ -1146,7 +1146,7 @@ namespace RingSoft.DbLookup.Lookup
             SetupBaseQuery(query, true);
 
             query.DebugMessage = "LookupData.GotoBottom";
-            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
 
             if (getDataResult.ResultCode == GetDataResultCodes.Success)
             {
@@ -1223,7 +1223,7 @@ namespace RingSoft.DbLookup.Lookup
                 return;
 
             query.DebugMessage = "LookupData.GetSearchEqualsData";
-            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
             if (result.ResultCode != GetDataResultCodes.Success)
                 return;
 
@@ -1576,7 +1576,7 @@ namespace RingSoft.DbLookup.Lookup
                 return result;
 
             query.DebugMessage = "LookupData.SelectPrimaryKey";
-            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query);
+            var getDataResult = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);
 
             if (getDataResult.ResultCode == GetDataResultCodes.Success)
             {

@@ -268,9 +268,21 @@ namespace RingSoft.DbLookup
                 view.CloseWindow();
                 return;
             }
-            CurrentAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);
-            BeginAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);
-            EndAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition);
+            CurrentAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
+            BeginAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
+            EndAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
 
             PrintCurrentCodeLabel = $" Print Current {printerSetup.CodeDescription} Only";
             CurrentCodeLabel = $"Current {printerSetup.CodeDescription}";
@@ -321,6 +333,10 @@ namespace RingSoft.DbLookup
 
             PrinterSetup.PrintingProperties.PrintCurrentCode = IsCurrentOnly;
             PrinterSetup.PrintingProperties.ReportType = ReportType;
+            PrinterSetup.PrintingProperties.CurrentCodeOnlyCaption = PrintCurrentCodeLabel;
+            PrinterSetup.PrintingProperties.CurrentCodeCaption = CurrentCodeLabel;
+            PrinterSetup.PrintingProperties.BeginCodeCaption = BeginCodeLabel;
+            PrinterSetup.PrintingProperties.EndCodeCaption = EndCodeLabel;
 
             View.PrintOutput();
         }

@@ -58,9 +58,9 @@
                                 <lc:AutoFillControl Grid.Row="2" Grid.Column="2" x:Name="EndingControl" Width="200" Setup="{Binding EndAutoFillSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="{Binding EndAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 
-                                <Label Grid.Row="3" Grid.Column="1" Content="Report Type"/>
+                                <Label Grid.Row="3" Grid.Column="1" x:Name="ReportTypeLabel" Content="Report Type"/>
 
-                                <dec:TextComboBoxControl Grid.Row="3" Grid.Column="2" Width="100" HorizontalAlignment="Left" Setup="{Binding ReportTypeBoxControlSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ReportTypeBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <dec:TextComboBoxControl Grid.Row="3" Grid.Column="2" Width="100" x:Name="ReportTypeControl" HorizontalAlignment="Left" Setup="{Binding ReportTypeBoxControlSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ReportTypeBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,5,0,0">
 

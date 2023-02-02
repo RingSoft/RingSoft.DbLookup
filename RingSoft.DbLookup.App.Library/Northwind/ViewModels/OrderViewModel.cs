@@ -19,6 +19,7 @@ using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using Google.Protobuf.WellKnownTypes;
 using RingSoft.DbLookup.DataProcessor;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -853,7 +854,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     OrderID = OrderId
                 };
                 var orderSetup = new AutoFillSetup(FindButtonLookupDefinition);
-                printerSetupArgs.CodeAutoFillSetup = orderSetup;
                 printerSetupArgs.CodeAutoFillValue = orderSetup.GetAutoFillValueForIdValue(OrderId);
             }
             base.SetupPrinterArgs(printerSetupArgs, stringFieldIndex, numericFieldIndex, memoFieldIndex);

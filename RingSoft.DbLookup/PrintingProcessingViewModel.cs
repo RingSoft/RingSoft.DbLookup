@@ -5,8 +5,9 @@ using RingSoft.Printing.Interop;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace RingSoft.DbLookup
 {
@@ -26,6 +27,8 @@ namespace RingSoft.DbLookup
         ProcessReportHeader = 5,
         [Description("Processing Detail Chunks")]
         ProcessReportDetails = 6,
+        [Description("Starting Report")]
+        StartingReport = 7,
     }
     public interface IPrintingProcessingView
     {
@@ -182,12 +185,17 @@ namespace RingSoft.DbLookup
             PrinterSetupArgs.ClearReportFilters();
             PrinterSetupArgs.PrintingProperties.HeaderChunkCount =
                 PrinterSetupArgs.PrintingProperties.DetailsChunkCount = 0;
+            if (!Abort)
+            {
+                ProcessType = ProcessTypes.StartingReport;
+                View.UpdateStatus();
+                Thread.Sleep(new TimeSpan(0,0,0,5));
+            }
             View.CloseWindow();
         }
 
         private void AbortProcess()
         {
-            Timer timer;
             PrintingInteropGlobals.PropertiesProcessor.SetChunkAbort();
             _timer.Stop();
             _timer.Enabled = false;

@@ -11,6 +11,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -31,20 +32,6 @@ namespace RingSoft.DbMaintenance
     public class ValidationFailArgs
     {
         public ValidationFailControls Control { get; set; }
-    }
-    public class AdvancedFilterReturn
-    {
-        public FieldDefinition FieldDefinition { get; set; }
-        public string PrimaryTableName { get; set; }
-        public FieldDefinition PrimaryFieldDefinition { get; set; }
-        public Conditions Condition { get; set; }
-        public string SearchValue { get; set; }
-        public string Formula { get; set; }
-        public string FormulaDisplayValue { get; set; }
-        public FieldDataTypes FormulaValueType { get; set; }
-        public LookupDefinitionBase LookupDefinition { get; set; }
-        public string TableDescription { get; set; }
-        public DateFilterTypes DateFilterType { get; set; }
     }
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {

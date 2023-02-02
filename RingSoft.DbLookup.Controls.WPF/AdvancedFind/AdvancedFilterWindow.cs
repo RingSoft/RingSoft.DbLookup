@@ -16,6 +16,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 using RingSoft.DbMaintenance;
 using TreeViewItem = System.Windows.Controls.TreeViewItem;
 

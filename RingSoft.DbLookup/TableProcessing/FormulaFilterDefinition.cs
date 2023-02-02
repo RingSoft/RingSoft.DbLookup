@@ -1,4 +1,5 @@
 ﻿using MySqlX.XDevAPI.Common;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -26,7 +27,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string Description { get; set; }
 
-        internal FormulaFilterDefinition()
+        internal FormulaFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
         }
@@ -46,6 +47,26 @@ namespace RingSoft.DbLookup.TableProcessing
             var result = GetConditionText(Condition.Value) + " ";
             result += FilterValue;
             return result;
+        }
+
+        public override void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        {
+            base.LoadFromEntity(entity, lookupDefinition);
+        }
+
+        public override AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        {
+            return base.SaveToEntity(lookupDefinition);
+        }
+
+        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        {
+            base.LoadFromFilterReturn(filterReturn);
+        }
+
+        public override AdvancedFilterReturn SaveToFilterReturn()
+        {
+            return base.SaveToFilterReturn();
         }
 
         public override string ToString()

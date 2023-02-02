@@ -548,6 +548,14 @@ namespace RingSoft.DbLookup.Lookup
             TreeViewItem parentTreeItem = null)
         {
             var result = new LookupFilterReturn();
+            if (entity.SearchForAdvancedFindId != null)
+            {
+                var advancedFindFilterDefinition = new AdvancedFindFilterDefinition(FilterDefinition);
+                advancedFindFilterDefinition.LoadFromEntity(entity, this);
+                result.FilterItemDefinition = advancedFindFilterDefinition;
+                return result;
+            }
+
             FilterItemDefinition filterItemDefinition = null;
             if (entity.SearchForAdvancedFindId != null)
             {

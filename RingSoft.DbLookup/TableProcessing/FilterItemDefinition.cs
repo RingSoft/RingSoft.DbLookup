@@ -1,6 +1,11 @@
 ﻿using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
+using System.Linq;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -68,6 +73,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string ReportDescription { get; set; }
 
+        public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
+        {
+            TableFilterDefinition = tableFilterDefinition;
+        }
+
         internal virtual void CopyFrom(FilterItemDefinition source)
         {
             LeftParenthesesCount = source.LeftParenthesesCount;
@@ -128,5 +138,81 @@ namespace RingSoft.DbLookup.TableProcessing
 
             return searchValue;
         }
+
+        public virtual void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        {
+            LeftParenthesesCount = entity.LeftParentheses;
+            RightParenthesesCount = entity.RightParentheses;
+            EndLogic = (EndLogics)entity.EndLogic;
+            TableFilterDefinition.AddUserFilter(this);
+            //else
+            {
+                //if (filterItemDefinition is FormulaFilterDefinition formulaFilter)
+                //{
+                //    if (!entity.Path.IsNullOrEmpty())
+                //    {
+                //        filterItemDefinition.TableDescription = foundItem.Name;
+                //    }
+                //}
+                //else
+                //{
+                //    filterItemDefinition.TableDescription = TableDefinition.Description;
+                //}
+            }
+
+        }
+
+        public virtual AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        {
+            return new AdvancedFindFilter();
+        }
+
+        public virtual void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        {
+
+        }
+
+        public virtual AdvancedFilterReturn SaveToFilterReturn()
+        {
+            return new AdvancedFilterReturn();
+        }
+
+        protected internal TableDefinitionBase GetTableFieldForFilter(LookupDefinitionBase lookupDefinition,
+            AdvancedFindFilter entity, out FieldDefinition fieldDefinition,
+            out FieldDefinition filterField)
+        {
+            var tableDefinition =
+                lookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                    p.EntityName == entity.TableName);
+
+            fieldDefinition = null;
+            filterField = null;
+            if (!entity.FieldName.IsNullOrEmpty())
+            {
+                filterField = fieldDefinition =
+                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+            }
+
+            TableDefinitionBase primaryTable = null;
+            FieldDefinition primaryField = null;
+            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
+            {
+                primaryTable =
+                    lookupDefinition.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.TableName == entity.PrimaryTableName);
+
+                primaryField =
+                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
+
+                if (fieldDefinition == null)
+                {
+                    tableDefinition = primaryTable;
+                    fieldDefinition = primaryField;
+                }
+            }
+
+            return tableDefinition;
+        }
+
     }
 }

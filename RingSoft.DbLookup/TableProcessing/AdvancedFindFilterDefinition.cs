@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.AdvancedFind;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 using System.Collections.Generic;
@@ -16,12 +17,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string Path { get; internal set; }
 
-        public AdvancedFindFilterDefinition(LookupDefinitionBase lookupDefinition)
-        {
-            LookupDefinition = lookupDefinition;
-        }
-
-        internal AdvancedFindFilterDefinition()
+        internal AdvancedFindFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
         }
@@ -53,6 +49,38 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        public override void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        {
+            if (entity.Path.IsNullOrEmpty())
+            {
+                TableDescription = lookupDefinition.TableDefinition.Description;
+            }
+            else
+            {
+                var afItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path,
+                    TreeViewType.AdvancedFind);
+                TableDescription = afItem.Name;
+            }
+            AdvancedFindId = entity.AdvancedFindId;
+            LookupDefinition = lookupDefinition;
+            base.LoadFromEntity(entity, lookupDefinition);
+        }
+
+        public override AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        {
+            return base.SaveToEntity(lookupDefinition);
+        }
+
+        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn)
+        {
+            base.LoadFromFilterReturn(filterReturn);
+        }
+
+        public override AdvancedFilterReturn SaveToFilterReturn()
+        {
+            return base.SaveToFilterReturn();
+        }
+
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
             , ref WhereItem lastWhereItem, bool fromAdvancedFind, AdvancedFindTree tree = null)
         {
@@ -68,7 +96,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
                     if (advancedFindFilter.SearchForAdvancedFindId != null)
                     {
-                        var newAdvancedFindFilter = new AdvancedFindFilterDefinition(LookupDefinition);
+                        var newAdvancedFindFilter = new AdvancedFindFilterDefinition(LookupDefinition.FilterDefinition);
+                        newAdvancedFindFilter.LookupDefinition = LookupDefinition;
                         newAdvancedFindFilter.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
                         newAdvancedFindFilter.TableFilterDefinition = TableFilterDefinition;
                         newAdvancedFindFilter.Path = Path;

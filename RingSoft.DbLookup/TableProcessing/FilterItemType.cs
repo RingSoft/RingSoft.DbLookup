@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -36,6 +37,10 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             EndLogic = endLogic;
             return (TFilterItem)this;
+        }
+
+        protected FilterItemType(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
+        {
         }
     }
 }

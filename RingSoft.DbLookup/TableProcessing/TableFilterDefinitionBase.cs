@@ -93,6 +93,11 @@ namespace RingSoft.DbLookup.TableProcessing
             _userFilterDefinitions.Clear();
         }
 
+        internal void AddUserFilter(FilterItemDefinition filterItem)
+        {
+            _userFilterDefinitions.Add(filterItem);
+        }
+
         /// <summary>
         /// Clears this filter and copies the source filter data to this object.
         /// </summary>
@@ -120,13 +125,13 @@ namespace RingSoft.DbLookup.TableProcessing
                 switch (sourceFilter.Type)
                 {
                     case FilterItemTypes.Field:
-                        newFilterItem = new FieldFilterDefinition();
+                        newFilterItem = new FieldFilterDefinition(this);
                         break;
                     case FilterItemTypes.Formula:
-                        newFilterItem = new FormulaFilterDefinition();
+                        newFilterItem = new FormulaFilterDefinition(this);
                         break;
                     case FilterItemTypes.AdvancedFind:
-                        newFilterItem = new AdvancedFindFilterDefinition();
+                        newFilterItem = new AdvancedFindFilterDefinition(this);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -154,9 +159,8 @@ namespace RingSoft.DbLookup.TableProcessing
                 }
             }
 
-            var fieldFilter = new FieldFilterDefinition
+            var fieldFilter = new FieldFilterDefinition(this)
             {
-                TableFilterDefinition = this,
                 FieldDefinition = fieldDefinition,
                 Condition = condition,
                 Value = value,
@@ -174,9 +178,8 @@ namespace RingSoft.DbLookup.TableProcessing
                 formula = formula.Replace("{Alias}", alias);
             }
 
-            var formulaFilter = new FormulaFilterDefinition
+            var formulaFilter = new FormulaFilterDefinition(this)
             {
-                TableFilterDefinition = this,
                 Formula = formula,
                 Condition = condition,
                 FilterValue = value,
@@ -283,7 +286,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public AdvancedFindFilterDefinition AddUserFilter(int advancedFindId, LookupDefinitionBase lookupDefinition,
             string path, bool addToUsersFilters = true)
         {
-            var advancedFindFilter = new AdvancedFindFilterDefinition(lookupDefinition)
+            var advancedFindFilter = new AdvancedFindFilterDefinition(this)
             {
                 AdvancedFindId = advancedFindId,
                 Path = path

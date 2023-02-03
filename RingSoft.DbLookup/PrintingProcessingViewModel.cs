@@ -110,7 +110,12 @@ namespace RingSoft.DbLookup
 
             var arguments = new List<string>();
             arguments.Add("-p");
-            arguments.Add($"{SystemGlobals.ProgramDataFolder}{PrintingInteropGlobals.InputFileName}");
+            var programDataFolder = SystemGlobals.ProgramDataFolder;
+            if (!programDataFolder.EndsWith("\\"))
+            {
+                programDataFolder += "\\";
+            }
+            arguments.Add($"{programDataFolder}{PrintingInteropGlobals.InputFileName}");
             var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
             var test = System.IO.File.ReadAllText(jsonFile);
             var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);

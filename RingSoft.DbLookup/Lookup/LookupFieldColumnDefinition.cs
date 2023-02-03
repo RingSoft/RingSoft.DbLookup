@@ -181,7 +181,7 @@ namespace RingSoft.DbLookup.Lookup
             return base.SetupDefaultHorizontalAlignment();
         }
 
-        internal override FieldDefinition GetFieldForColumn()
+        public override FieldDefinition GetFieldForColumn()
         {
             return FieldDefinition;
         }

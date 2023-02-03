@@ -67,7 +67,18 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The join definition.
         /// </value>
-        public TableFieldJoinDefinition JoinDefinition { get; set; }
+        
+        private TableFieldJoinDefinition _joinDefinition;
+
+        public TableFieldJoinDefinition JoinDefinition
+        {
+            get { return _joinDefinition; }
+            set
+            {
+                _joinDefinition = value;
+            }
+        }
+
 
         public string TableDescription { get; set; }
 

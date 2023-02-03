@@ -32,6 +32,7 @@ namespace RingSoft.DbMaintenance
         public string Field { get; set; }
         public string Name { get; set; }
         public double PercentWidth { get; set; }
+
         public LookupFieldColumnDefinition LookupFieldColumnDefinition { get; set; }
         public LookupFormulaColumnDefinition LookupFormulaColumnDefinition { get; set; }
         public LookupColumnDefinitionBase LookupColumnDefinition { get; set; }

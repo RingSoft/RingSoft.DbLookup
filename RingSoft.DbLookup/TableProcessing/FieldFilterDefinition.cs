@@ -130,9 +130,11 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 case Conditions.Equals:
                 case Conditions.NotEquals:
+                    result += FieldDefinition.GetUserValue(Value);
+                    break;
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
-                    result += FieldDefinition.GetUserValue(Value);
+                    result = result.Trim();
                     break;
                 default:
                     result += Value;
@@ -153,24 +155,25 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            ProcessIncludeResult includeResult = null;
-            if (treeViewItem.Parent == null)
-            {
-                includeResult =
-                    treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
+            Condition = filterReturn.Condition;
+            Value = filterReturn.SearchValue;
 
-                JoinDefinition = includeResult.LookupJoin.JoinDefinition;
-            }
-            else
+            ProcessFoundTreeItem(treeViewItem);
+
+            base.LoadFromFilterReturn(filterReturn, treeViewItem);
+        }
+
+        private void ProcessFoundTreeItem(TreeViewItem treeViewItem)
+        {
+            Path = treeViewItem.MakePath();
+            ProcessIncludeResult includeResult = null;
+            if (treeViewItem.Parent != null)
             {
                 includeResult =
                     treeViewItem.BaseTree.MakeIncludes(treeViewItem.Parent, "", false);
 
                 JoinDefinition = includeResult.LookupJoin.JoinDefinition;
             }
-
-            Condition = filterReturn.Condition;
-            Value = filterReturn.SearchValue;
 
             switch (Condition)
             {
@@ -179,8 +182,16 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
                     FormulaToSearch = string.Empty;
-                    FieldToSearch = FieldDefinition;
-                    JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                    FieldToSearch = null;
+                    if (treeViewItem.Parent == null)
+                    {
+                        JoinDefinition = null;
+                    }
+                    else
+                    {
+                        if (includeResult != null) JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+                    }
+
                     break;
                 default:
                     if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -191,10 +202,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         var fieldToSearch = textColumn.GetFieldForColumn();
                         if (fieldToSearch == null)
                         {
-                            if (treeViewItem.Parent != null)
-                            {
-                                SetJoinDefinition(treeViewItem, treeViewItem.FieldDefinition);
-                            }
+                            SetJoinDefinition(treeViewItem, treeViewItem.FieldDefinition);
 
                             FormulaToSearch = textColumn.GetFormulaForColumn();
                             FormulaToSearch = FormulaToSearch.Replace("{Alias}", JoinDefinition.Alias);
@@ -206,16 +214,21 @@ namespace RingSoft.DbLookup.TableProcessing
                             FieldToSearch = fieldToSearch;
                         }
                     }
+
                     break;
             }
-
-            base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
         private void SetJoinDefinition(TreeViewItem treeViewItem, FieldDefinition fieldToSearch)
         {
-            var newTreeViewItem = treeViewItem.BaseTree.FindFieldInTree(treeViewItem.BaseTree.TreeRoot, fieldToSearch);
-            if (newTreeViewItem != null)
+            var newTreeViewItem = treeViewItem.BaseTree.FindFieldInTree(treeViewItem.Items, fieldToSearch);
+            if (newTreeViewItem == null)
+            {
+                var includeResult = treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
+
+                JoinDefinition = includeResult.LookupJoin.JoinDefinition;
+            }
+            else
             {
                 var includeResult = treeViewItem.BaseTree.MakeIncludes(newTreeViewItem, "", false);
 

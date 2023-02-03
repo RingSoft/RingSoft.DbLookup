@@ -46,7 +46,16 @@ namespace RingSoft.DbLookup.TableProcessing
         public override string GetReportText()
         {
             var result = GetConditionText(Condition.Value) + " ";
-            result += FilterValue;
+            switch (Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    result = result.Trim();
+                    break;
+                default:
+                    result += FilterValue;
+                    break;
+            }
             return result;
         }
 

@@ -30,7 +30,18 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The join query table alias.
         /// </value>
-        public string JoinQueryTableAlias { get; set; }
+        private string _joinAlias;
+
+        public string JoinQueryTableAlias
+        {
+            get { return _joinAlias; }
+            set
+            {
+                var test = LookupDefinition.TableDefinition.TableName;
+                _joinAlias = value;
+            }
+        }
+
 
         /// <summary>
         /// Gets the type of the column.
@@ -278,7 +289,7 @@ namespace RingSoft.DbLookup.Lookup
             return string.Empty;
         }
 
-        internal virtual FieldDefinition GetFieldForColumn()
+        public virtual FieldDefinition GetFieldForColumn()
         {
             return null;
         }

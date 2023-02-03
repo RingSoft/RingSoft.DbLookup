@@ -86,6 +86,7 @@ namespace RingSoft.DbLookup.Lookup
             columnDefinition.ChildField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
             columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
             columnDefinition.ParentObject = this;
+            columnDefinition.Path = MakePath() + relatedField.MakePath();
 
             return columnDefinition;
         }

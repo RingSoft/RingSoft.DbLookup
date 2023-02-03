@@ -611,7 +611,8 @@ namespace RingSoft.DbLookup.AdvancedFind
                              .PrimaryField.TableDefinition.LookupDefinition
                              .InitialSortColumnDefinition is LookupFormulaColumnDefinition lookupFormulaColumn)
                 {
-                    lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
+                    //Corrupts column formula/alias
+                    //lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
                     var formula = lookupFormulaColumn.OriginalFormula;
                     column = includeJoin.AddVisibleColumnDefinition(caption,
                         formula, percentWidth, lookupFormulaColumn.DataType);

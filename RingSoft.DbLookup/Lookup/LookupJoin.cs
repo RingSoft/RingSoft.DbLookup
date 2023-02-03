@@ -213,5 +213,10 @@ namespace RingSoft.DbLookup.Lookup
             get => _joinType;
             set => _joinType = value;
         }
+
+        public override string ToString()
+        {
+            return JoinDefinition.ForeignKeyDefinition.ToString();
+        }
     }
 }

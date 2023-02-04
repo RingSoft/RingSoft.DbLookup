@@ -49,5 +49,22 @@ namespace RingSoft.DbMaintenance
             
             base.LoadFromFilterReturn(advancedFilterReturn);
         }
+
+        public override void LoadFromEntity(AdvancedFindFilter entity)
+        {
+            if (!entity.Path.IsNullOrEmpty())
+            {
+                var treeViewItem =
+                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path);
+
+                if (treeViewItem != null)
+                {
+                    SetupTable(treeViewItem);
+                    Field = treeViewItem.Name;
+                }
+            }
+
+            base.LoadFromEntity(entity);
+        }
     }
 }

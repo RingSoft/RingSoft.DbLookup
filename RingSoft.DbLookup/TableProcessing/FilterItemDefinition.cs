@@ -84,6 +84,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string ReportDescription { get; set; }
 
+        public string Path { get; internal set; }
+
+        public abstract TreeViewType TreeViewType { get; }
+
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
@@ -150,12 +154,27 @@ namespace RingSoft.DbLookup.TableProcessing
             return searchValue;
         }
 
-        public virtual void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public virtual bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
         {
             LeftParenthesesCount = entity.LeftParentheses;
             RightParenthesesCount = entity.RightParentheses;
             EndLogic = (EndLogics)entity.EndLogic;
-            TableFilterDefinition.AddUserFilter(this);
+            //TableFilterDefinition.AddUserFilter(this);
+
+            var process = false;
+            if (!entity.Path.IsNullOrEmpty())
+            {
+                var treeViewItem =
+                    lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, TreeViewType);
+                process = treeViewItem != null;
+            }
+            if (!process)
+            {
+                var message = "This advanced find is corrupt. Please delete it.";
+                var caption = "Corrupt Advanced Find.";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Error);
+            }
+            return true;
             //else
             {
                 //if (filterItemDefinition is FormulaFilterDefinition formulaFilter)
@@ -173,18 +192,21 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
-        public virtual AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        public virtual void SaveToEntity(AdvancedFindFilter entity)
         {
-            return new AdvancedFindFilter();
+            entity.Path = Path;
+            entity.LeftParentheses = (byte)LeftParenthesesCount;
+            entity.RightParentheses = (byte)RightParenthesesCount;
+            entity.EndLogic = (byte)EndLogic;
         }
 
         public virtual void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
         }
 
-        public virtual AdvancedFilterReturn SaveToFilterReturn()
+        public virtual void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
-            return new AdvancedFilterReturn();
+            filterReturn.Path = Path;
         }
 
         protected internal TableDefinitionBase GetTableFieldForFilter(LookupDefinitionBase lookupDefinition,

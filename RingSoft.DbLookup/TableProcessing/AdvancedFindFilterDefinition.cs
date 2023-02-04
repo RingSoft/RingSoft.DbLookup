@@ -11,12 +11,13 @@ namespace RingSoft.DbLookup.TableProcessing
     {
         public override FilterItemTypes Type => FilterItemTypes.AdvancedFind;
 
+        public override TreeViewType TreeViewType => TreeViewType.AdvancedFind;
+
         public int AdvancedFindId { get; set; }
 
         public LookupDefinitionBase LookupDefinition { get; private set; }
 
-        public string Path { get; internal set; }
-
+        
         internal AdvancedFindFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
@@ -42,14 +43,14 @@ namespace RingSoft.DbLookup.TableProcessing
                 foreach (var advancedFindFilter in advancedFind.Filters)
                 {
                     var filterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
-                    result += filterReturn.FilterItemDefinition.GetReportText();
+                    result += filterReturn.GetReportText();
                     result.TrimRight("\r\n");
                 }
             }
             return result;
         }
 
-        public override void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
         {
             if (entity.Path.IsNullOrEmpty())
             {
@@ -63,22 +64,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
             AdvancedFindId = entity.AdvancedFindId;
             LookupDefinition = lookupDefinition;
-            base.LoadFromEntity(entity, lookupDefinition);
-        }
-
-        public override AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
-        {
-            return base.SaveToEntity(lookupDefinition);
+            return base.LoadFromEntity(entity, lookupDefinition);
         }
 
         public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             base.LoadFromFilterReturn(filterReturn, treeViewItem);
-        }
-
-        public override AdvancedFilterReturn SaveToFilterReturn()
-        {
-            return base.SaveToFilterReturn();
         }
 
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
@@ -90,7 +81,7 @@ namespace RingSoft.DbLookup.TableProcessing
             var filters = advancedFind.Filters.ToList();
             FilterItemDefinition lastFilter = null;
             {
-                LookupFilterReturn advFindFilterReturn = null;
+                FilterItemDefinition advFindFilterReturn = null;
                 foreach (var advancedFindFilter in filters)
                 {
 
@@ -110,9 +101,9 @@ namespace RingSoft.DbLookup.TableProcessing
                     else
                     {
                         var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
-                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false, foundTreeItem);
+                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
                         TableFilterDefinitionBase.ProcessFieldJoins(query, LookupDefinition.Joins);
-                        wheres.AddRange(TableFilterDefinition.ProcessFilter(query, advFindFilterReturn.FilterItemDefinition,
+                        wheres.AddRange(TableFilterDefinition.ProcessFilter(query, advFindFilterReturn,
                             ref lastWhereItem, ref firstWhereItem, tree));
                     }
                 }

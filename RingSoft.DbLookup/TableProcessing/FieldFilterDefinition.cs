@@ -66,8 +66,6 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        public string Path { get; internal set; }
-
         private FieldDefinition _fieldToSearch;
 
         public FieldDefinition FieldToSearch
@@ -101,6 +99,8 @@ namespace RingSoft.DbLookup.TableProcessing
             return this;
         }
 
+        public override TreeViewType TreeViewType => TreeViewType.Field;
+
         internal override void CopyFrom(FilterItemDefinition source)
         {
             var fieldFilterDefinition = (FieldFilterDefinition) source;
@@ -125,7 +125,10 @@ namespace RingSoft.DbLookup.TableProcessing
         public override string GetReportText()
         {
             var result = GetConditionText(Condition) + " ";
-            
+            if (Value.IsNullOrEmpty())
+            {
+                return result;
+            }
             switch (Condition)
             {
                 case Conditions.Equals:
@@ -143,21 +146,40 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public override void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
         {
-            base.LoadFromEntity(entity, lookupDefinition);
+            if (!entity.Path.IsNullOrEmpty())
+            {
+                var treeViewItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path);
+                if (treeViewItem != null)
+                {
+                    FieldDefinition = treeViewItem.FieldDefinition;
+                    ProcessFoundTreeItem(treeViewItem);
+                }
+            }
+
+            Condition = (Conditions)entity.Operand;
+            Value = entity.SearchForValue;
+            if (Value.IsNullOrEmpty())
+            {
+                return false;
+            }
+            return base.LoadFromEntity(entity, lookupDefinition);
         }
 
-        public override AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        public override void SaveToEntity(AdvancedFindFilter entity)
         {
-            return base.SaveToEntity(lookupDefinition);
+            entity.SearchForValue = Value;
+            entity.Operand = (byte)Condition;
+
+            base.SaveToEntity(entity);
         }
 
         public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             Condition = filterReturn.Condition;
             Value = filterReturn.SearchValue;
-
+            
             ProcessFoundTreeItem(treeViewItem);
 
             base.LoadFromFilterReturn(filterReturn, treeViewItem);
@@ -236,9 +258,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        public override AdvancedFilterReturn SaveToFilterReturn()
+        public override void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
-            return base.SaveToFilterReturn();
+            filterReturn.Condition = Condition;
+            filterReturn.FieldDefinition = FieldDefinition;
+            filterReturn.SearchValue = Value;
+            base.SaveToFilterReturn(filterReturn);
         }
 
         public override string ToString()

@@ -72,6 +72,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public IDbMaintenanceProcessor Processor { get; set; }
 
         private bool _notifyFromFormulaExists;
+        private bool _nameTabKeyPressed;
         public bool ShowFromFormulaEditor(ref string fromFormula)
         {
             var editor = new DataEntryGridMemoEditor(new DataEntryGridMemoValue(0){Text = fromFormula});
@@ -288,11 +289,22 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (NameAutoFillControl != null)
             {
                 Processor.RegisterFormKeyControl(NameAutoFillControl);
+                NameAutoFillControl.KeyDown += (sender, args) =>
+                {
+                    if (args.Key == Key.Tab && !LookupControlsGlobals.IsShiftKeyDown())
+                    {
+                        if (!TableComboBoxControl.IsEnabled)
+                        {
+                            _nameTabKeyPressed = true;
+                        }
+                    }
+                };
             }
+
+            Border.GotFocus += Border_GotFocus;
 
             if (!_templateApplied)
             {
-                Border.GotFocus += Border_GotFocus;
                 TreeView.GotFocus += TreeView_GotFocus;
             }
 
@@ -312,14 +324,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private void Border_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (!TableComboBoxControl.IsEnabled)
+            if (_nameTabKeyPressed)
             {
-                if (!_templateApplied)
-                {
-                    TreeView.Focus();
-                }
-
-                _templateApplied = true;
+                _nameTabKeyPressed = false;
+                TreeView.Focus();
             }
         }
 

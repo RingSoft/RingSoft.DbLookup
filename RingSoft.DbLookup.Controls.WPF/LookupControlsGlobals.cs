@@ -7,6 +7,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using System.Linq;
+using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -131,6 +132,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             window.Owner = activeWindow;
             window.ShowInTaskbar = false;
             window.ShowDialog();
+        }
+
+        public static bool IsShiftKeyDown()
+        {
+            if (Keyboard.IsKeyDown(Key.LeftShift))
+            {
+                return true;
+            }
+
+            return Keyboard.IsKeyDown(Key.RightShift);
         }
     }
 }

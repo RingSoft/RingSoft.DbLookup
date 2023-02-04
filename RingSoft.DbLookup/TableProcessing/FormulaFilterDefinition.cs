@@ -33,6 +33,8 @@ namespace RingSoft.DbLookup.TableProcessing
             
         }
 
+        public override TreeViewType TreeViewType => TreeViewType.Formula;
+
         internal override void CopyFrom(FilterItemDefinition source)
         {
             var sourceFormulaItem = (FormulaFilterDefinition) source;
@@ -59,24 +61,20 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public override void LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
         {
-            base.LoadFromEntity(entity, lookupDefinition);
+            return false;
+            return base.LoadFromEntity(entity, lookupDefinition);
         }
 
-        public override AdvancedFindFilter SaveToEntity(LookupDefinitionBase lookupDefinition)
+        public override void SaveToEntity(AdvancedFindFilter entity)
         {
-            return base.SaveToEntity(lookupDefinition);
+            base.SaveToEntity(entity);
         }
 
         public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             base.LoadFromFilterReturn(filterReturn, treeViewItem);
-        }
-
-        public override AdvancedFilterReturn SaveToFilterReturn()
-        {
-            return base.SaveToFilterReturn();
         }
 
         public override string ToString()

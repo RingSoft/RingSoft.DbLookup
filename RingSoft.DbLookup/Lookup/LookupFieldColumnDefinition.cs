@@ -83,6 +83,7 @@ namespace RingSoft.DbLookup.Lookup
                 JoinQueryTableAlias = sourceFieldColumn.JoinQueryTableAlias;
                 Distinct = sourceFieldColumn.Distinct;
                 ParentField = sourceFieldColumn.ParentField;
+                var test = this;
             }
             base.CopyFrom(source);
         }
@@ -192,13 +193,27 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
-            var newColumn = new LookupFieldColumnDefinition(FieldDefinition);
+            LookupColumnDefinitionBase newColumn = new LookupFieldColumnDefinition(FieldDefinition);
 
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                var initColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
+                    .InitialSortColumnDefinition;
+
+                var formula = initColumn.GetFormulaForColumn();
+                if (!formula.IsNullOrEmpty())
+                {
+                    newColumn = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                }
+
+            }
             if (Path.IsNullOrEmpty())
             {
                 Path = FieldDefinition.MakePath();
             }
 
+            newColumn.LookupDefinition = lookupDefinition;
+            //newColumn.JoinQueryTableAlias = JoinQueryTableAlias;
             ProcessNewVisibleColumn(newColumn, lookupDefinition);
 
             base.AddNewColumnDefinition(lookupDefinition);
@@ -207,6 +222,16 @@ namespace RingSoft.DbLookup.Lookup
         internal override string LoadFromTreeViewItem(TreeViewItem item)
         {
             LookupDefinition = item.BaseTree.LookupDefinition;
+            var formula = CheckForeignFormula(item);
+            if (!formula.IsNullOrEmpty())
+            {
+                return formula;
+            }
+            return base.LoadFromTreeViewItem(item);
+        }
+
+        private string CheckForeignFormula(TreeViewItem item)
+        {
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 var initialColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
@@ -235,7 +260,8 @@ namespace RingSoft.DbLookup.Lookup
                     }
                 }
             }
-            return base.LoadFromTreeViewItem(item);
+
+            return string.Empty;
         }
     }
 }

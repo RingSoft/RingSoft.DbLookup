@@ -88,6 +88,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public abstract TreeViewType TreeViewType { get; }
 
+        public bool IsFixed { get; internal set; }
+
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;

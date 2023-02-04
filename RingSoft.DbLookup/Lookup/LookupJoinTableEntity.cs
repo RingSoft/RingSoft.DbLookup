@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using Google.Protobuf.Collections;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
@@ -120,6 +121,8 @@ namespace RingSoft.DbLookup.Lookup
                 columnDefinition.PrimaryField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;
             }
             columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
+            columnDefinition.ParentObject = this;
+            MakeColumnPath(columnDefinition);
 
             return columnDefinition;
         }

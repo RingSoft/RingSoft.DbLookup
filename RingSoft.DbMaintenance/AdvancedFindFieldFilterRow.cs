@@ -19,11 +19,7 @@ namespace RingSoft.DbMaintenance
                 var path = fieldFilter.Path;
                 if (path.IsNullOrEmpty())
                 {
-
-                }
-                else
-                {
-
+                    Field = fieldFilter.FieldDefinition.Description;
                 }
             }
             base.LoadFromFilterDefinition(filter, isFixed, rowIndex);

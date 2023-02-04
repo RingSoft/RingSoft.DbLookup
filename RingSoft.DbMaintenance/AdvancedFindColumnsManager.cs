@@ -67,6 +67,10 @@ namespace RingSoft.DbMaintenance
                 {
                     newRow = new AdvancedFindFieldColumnRow(this);
                 }
+                else if (column is LookupFormulaColumnDefinition)
+                {
+                    newRow = new AdvancedFindFormulaColumnRow(this);
+                }
                 
                 newRow.LoadFromColumnDefinition(column);
                 AddRow(newRow);
@@ -82,9 +86,18 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
-            var columnRow = GetNewRow() as AdvancedFindColumnRow;
+            AdvancedFindColumnRow columnRow = null;
+            if (column is LookupFieldColumnDefinition)
+            {
+                columnRow = new AdvancedFindFieldColumnRow(this);
+            }
+            else if (column is LookupFormulaColumnDefinition)
+            {
+                columnRow = new AdvancedFindFormulaColumnRow(this);
+            }
             columnRow?.LoadFromColumnDefinition(column);
             AddRow(columnRow);
+            Grid?.RefreshGridView();
         }
 
         public override void RemoveRow(DataEntryGridRow rowToDelete)

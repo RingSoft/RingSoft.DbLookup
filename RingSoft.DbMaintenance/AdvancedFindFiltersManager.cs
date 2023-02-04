@@ -105,6 +105,7 @@ namespace RingSoft.DbMaintenance
                             row = new AdvancedFindFieldFilterRow(this);
                             break;
                         case FilterItemTypes.Formula:
+                            row = new AdvancedFindFormulaFilterRow(this);
                             break;
                         case FilterItemTypes.AdvancedFind:
                             row = new AdvancedFindAfFilterRow(this);

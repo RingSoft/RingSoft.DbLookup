@@ -111,11 +111,17 @@ namespace RingSoft.DbLookup.AdvancedFind
                     result = new LookupFieldColumnDefinition(FieldDefinition);
                     break;
                 case TreeViewType.Formula:
+                    result = new LookupFormulaColumnDefinition("", FieldDataTypes.String);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            result.LoadFromTreeViewItem(this);
+            var formula = result.LoadFromTreeViewItem(this);
+            if (!formula.IsNullOrEmpty())
+            {
+                result = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                result.LoadFromTreeViewItem(this);
+            }
             return result;
         }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -344,7 +350,10 @@ namespace RingSoft.DbLookup.AdvancedFind
                 case TreeViewType.Field:
                     break;
                 default:
-                    result = result.Items.FirstOrDefault(p => p.Type == type);
+                    if (result.FieldDefinition.AllowRecursion)
+                    {
+                        result = result.Items.FirstOrDefault(p => p.Type == type);
+                    }
                     break;
             }
             return result;

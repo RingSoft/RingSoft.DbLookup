@@ -214,20 +214,24 @@ namespace RingSoft.DbMaintenance
             //    Table = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable.Description;
             //}
             Table = column.TableDescription;
+            if (Table.IsNullOrEmpty())
+            {
+                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            }
             Field = column.FieldDescription;
 
             Name = column.Caption;
             PercentWidth = column.PercentWidth / 100;
-            if (LookupFormulaColumnDefinition != null)
-            {
-                SetFormulaTableField();
-            }
+            //if (LookupFormulaColumnDefinition != null)
+            //{
+            //    SetFormulaTableField();
+            //}
 
-            if (LookupFieldColumnDefinition != null)
-            {
-                //Field = LookupFieldColumnDefinition.FieldDefinition.Description;
-                TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
-            }
+            //if (LookupFieldColumnDefinition != null)
+            //{
+            //    //Field = LookupFieldColumnDefinition.FieldDefinition.Description;
+            //    TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
+            //}
         }
 
         private void SetFormulaTableField()

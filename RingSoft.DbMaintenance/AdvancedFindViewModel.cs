@@ -757,6 +757,7 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
+            LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 visibleColumn.AddNewColumnDefinition(LookupDefinition);
@@ -947,19 +948,19 @@ namespace RingSoft.DbMaintenance
             FiltersManager.LoadFromLookupDefinition(lookupDefinition);
             ColumnsManager.LoadFromLookupDefinition(LookupDefinition);
 
-            if (lookupDefinition.InitialOrderByColumn != lookupDefinition.InitialSortColumnDefinition)
-            {
-                var initialSortColumnIndex = lookupDefinition.VisibleColumns.ToList()
-                    .IndexOf(lookupDefinition.InitialOrderByColumn);
-                if (initialSortColumnIndex != -1)
-                {
-                    LookupDefinition.InitialOrderByColumn = LookupDefinition.VisibleColumns[initialSortColumnIndex];
-                }
-            }
-            LookupDefinition.InitialOrderByType = lookupDefinition.InitialOrderByType;
-            AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = 
-                AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
-                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
+            //if (lookupDefinition.InitialOrderByColumn != lookupDefinition.InitialSortColumnDefinition)
+            //{
+            //    var initialSortColumnIndex = lookupDefinition.VisibleColumns.ToList()
+            //        .IndexOf(lookupDefinition.InitialOrderByColumn);
+            //    if (initialSortColumnIndex != -1)
+            //    {
+            //        LookupDefinition.InitialOrderByColumn = LookupDefinition.VisibleColumns[initialSortColumnIndex];
+            //    }
+            //}
+            //LookupDefinition.InitialOrderByType = lookupDefinition.InitialOrderByType;
+            //AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = 
+            //    AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+            //        ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
             ResetLookup();
         }
 

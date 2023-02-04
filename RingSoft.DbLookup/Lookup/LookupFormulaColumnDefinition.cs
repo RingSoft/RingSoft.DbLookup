@@ -386,5 +386,28 @@ namespace RingSoft.DbLookup.Lookup
         {
             return OriginalFormula;
         }
+
+        public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
+        {
+            var newColumn = new LookupFormulaColumnDefinition(OriginalFormula, DataType);
+
+            newColumn.LookupDefinition = lookupDefinition;
+            newColumn.JoinQueryTableAlias = JoinQueryTableAlias;
+            ProcessNewVisibleColumn(newColumn, lookupDefinition);
+            var test = this;
+
+            base.AddNewColumnDefinition(lookupDefinition);
+        }
+
+        internal override string LoadFromTreeViewItem(TreeViewItem item)
+        {
+            var result = base.LoadFromTreeViewItem(item);
+            if (item.FieldDefinition != null && !item.FieldDefinition.AllowRecursion)
+            {
+                TableDescription = item.Name;
+            }
+
+            return result;
+        }
     }
 }

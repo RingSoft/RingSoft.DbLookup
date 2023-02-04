@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        protected void MakeColumnPath(LookupFieldColumnDefinition columnDefinition)
+        protected void MakeColumnPath(LookupColumnDefinitionBase columnDefinition)
         {
             var path = string.Empty;
             var joinParent = columnDefinition.ParentObject;

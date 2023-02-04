@@ -36,7 +36,14 @@ namespace RingSoft.DbLookup.Lookup
 
         public string JoinQueryTableAlias
         {
-            get { return _joinAlias; }
+            get
+            {
+                if (!_joinAlias.IsNullOrEmpty())
+                {
+                    
+                }
+                return _joinAlias;
+            }
             set
             {
                 var test = LookupDefinition.TableDefinition.TableName;
@@ -314,23 +321,26 @@ namespace RingSoft.DbLookup.Lookup
                 columnDefinition.CopyFrom(this);
             }
 
-            var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType);
-            if (foundTreeItem != null)
+            if (!Path.IsNullOrEmpty())
             {
-                if (foundTreeItem.Parent == null)
+                var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType);
+                if (foundTreeItem != null)
                 {
-                    columnDefinition.TableDescription = lookupDefinition.TableDefinition.Description;
-                }
-                else
-                {
-                    columnDefinition.TableDescription = foundTreeItem.Parent.Name;
-                }
+                    if (foundTreeItem.Parent == null)
+                    {
+                        columnDefinition.TableDescription = lookupDefinition.TableDefinition.Description;
+                    }
+                    else
+                    {
+                        columnDefinition.TableDescription = foundTreeItem.Parent.Name;
+                    }
 
-                columnDefinition.FieldDescription = foundTreeItem.Name;
-                var joinResult = lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
-                if (joinResult != null && joinResult.LookupJoin != null)
-                {
-                    JoinQueryTableAlias = joinResult.LookupJoin.JoinDefinition.Alias;
+                    columnDefinition.FieldDescription = foundTreeItem.Name;
+                    var joinResult = lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
+                    if (joinResult != null && joinResult.LookupJoin != null)
+                    {
+                        columnDefinition.JoinQueryTableAlias = joinResult.LookupJoin.JoinDefinition.Alias;
+                    }
                 }
             }
 

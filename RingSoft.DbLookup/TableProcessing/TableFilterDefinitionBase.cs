@@ -195,6 +195,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
             _fixedFilterDefinitions.Add(fieldFilter);
+            fieldFilter.IsFixed = true;
             return fieldFilter;
         }
 
@@ -204,6 +205,7 @@ namespace RingSoft.DbLookup.TableProcessing
             var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value);
             formulaFilter.Description = description;
             _fixedFilterDefinitions.Add(formulaFilter);
+            formulaFilter.IsFixed = true;
             return formulaFilter;
         }
 

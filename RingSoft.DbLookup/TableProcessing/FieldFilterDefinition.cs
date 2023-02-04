@@ -192,7 +192,7 @@ namespace RingSoft.DbLookup.TableProcessing
             if (treeViewItem.Parent != null)
             {
                 includeResult =
-                    treeViewItem.BaseTree.MakeIncludes(treeViewItem.Parent, "", false);
+                    treeViewItem.BaseTree.MakeIncludes(treeViewItem.Parent);
 
                 JoinDefinition = includeResult.LookupJoin.JoinDefinition;
             }
@@ -246,13 +246,13 @@ namespace RingSoft.DbLookup.TableProcessing
             var newTreeViewItem = treeViewItem.BaseTree.FindFieldInTree(treeViewItem.Items, fieldToSearch);
             if (newTreeViewItem == null)
             {
-                var includeResult = treeViewItem.BaseTree.MakeIncludes(treeViewItem, "", false);
+                var includeResult = treeViewItem.BaseTree.MakeIncludes(treeViewItem);
 
                 JoinDefinition = includeResult.LookupJoin.JoinDefinition;
             }
             else
             {
-                var includeResult = treeViewItem.BaseTree.MakeIncludes(newTreeViewItem, "", false);
+                var includeResult = treeViewItem.BaseTree.MakeIncludes(newTreeViewItem);
 
                 JoinDefinition = includeResult.LookupJoin.JoinDefinition;
             }

@@ -718,138 +718,141 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
-            switch (SelectedTreeViewItem.Type)
-            {
-                case TreeViewType.Field:
-                    var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition;
-                    ColumnsManager.LoadFromColumnDefinition(column);
-                    RecordDirty = true;
-                    break;
-                case TreeViewType.Formula:
-                    if (View.ShowFormulaEditor(SelectedTreeViewItem))
-                    {
-                        RecordDirty = true;
-                        var formulaColumn =
-                            MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition as
-                                LookupFormulaColumnDefinition;
-                        formulaColumn.UpdateCaption("<No Caption>");
-                        formulaColumn.HasDataType(SelectedTreeViewItem.FormulaData.DataType);
-                        formulaColumn.HasDecimalFieldType(
-                            (DecimalFieldTypes) (int) SelectedTreeViewItem.FormulaData.DecimalFormatType);
-                        ColumnsManager.LoadFromColumnDefinition(formulaColumn);
-                    }
+            //switch (SelectedTreeViewItem.Type)
+            //{
+            //    case TreeViewType.Field:
+            //        var column = MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition;
+            //        ColumnsManager.LoadFromColumnDefinition(column);
+            //        RecordDirty = true;
+            //        break;
+            //    case TreeViewType.Formula:
+            //        if (View.ShowFormulaEditor(SelectedTreeViewItem))
+            //        {
+            //            RecordDirty = true;
+            //            var formulaColumn =
+            //                MakeIncludes(SelectedTreeViewItem, SelectedTreeViewItem.Name).ColumnDefinition as
+            //                    LookupFormulaColumnDefinition;
+            //            formulaColumn.UpdateCaption("<No Caption>");
+            //            formulaColumn.HasDataType(SelectedTreeViewItem.FormulaData.DataType);
+            //            formulaColumn.HasDecimalFieldType(
+            //                (DecimalFieldTypes) (int) SelectedTreeViewItem.FormulaData.DecimalFormatType);
+            //            ColumnsManager.LoadFromColumnDefinition(formulaColumn);
+            //        }
 
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            //        break;
+            //    default:
+            //        throw new ArgumentOutOfRangeException();
+            //}
 
             ResetLookup();
         }
 
-        public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem, string columnCaption = "",
-            bool createColumn = true, double percentWidth = 20)
+        public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem)
         {
-            return LookupDefinition.AdvancedFindTree.MakeIncludes(selectedItem, columnCaption, createColumn, percentWidth);
+            return LookupDefinition.AdvancedFindTree.MakeIncludes(selectedItem);
         }
 
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
-            if (!lookupDefinition.FromFormula.IsNullOrEmpty())
-            {
-                LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
-                View.NotifyFromFormulaExists = true;
-            }
-            else
-            {
-                View.NotifyFromFormulaExists = false;
-            }
-
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
-                var parent = visibleColumn.ParentObject;
-                var lookupFieldColumn = visibleColumn as LookupFieldColumnDefinition;
-                var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
-                TreeViewItem foundTreeItem = null;
-                var createColumn = true;
-                LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
-                LookupColumnDefinitionBase newLookupColumnDefinition = null;
-                switch (visibleColumn.ColumnType)
-                {
-                    case LookupColumnTypes.Field:
-                        if (lookupFieldColumn.Path.IsNullOrEmpty())
-                        {
-                            foundTreeItem = FindFieldInTree(TreeRoot, lookupFieldColumn.FieldDefinition);
-                        }
-                        else
-                        {
-                            foundTreeItem = AdvancedFindTree.ProcessFoundTreeViewItem(lookupFieldColumn.Path);
-                        }
-                        break;
-                    case LookupColumnTypes.Formula:
-                        if (parent == null)
-                        {
-                            var newFormulaColumn = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
-                                lookupFormulaColumn.OriginalFormula, visibleColumn.PercentWidth,
-                                lookupFormulaColumn.DataType, "");
-                            newLookupFormulaColumnDefinition = newFormulaColumn;
-                            createColumn = false;
-                            newFormulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
-                            newFormulaColumn.HasConvertToLocalTime(lookupFormulaColumn
-                                .ConvertToLocalTime);
-                            newFormulaColumn.HasDateType(lookupFormulaColumn.DateType);
-                            newFormulaColumn.HasDateFormatString(string.Empty);
-                        }
-                        else
-                        {
-                            if (parent is LookupJoin lookupJoin)
-                            {
-                                foundTreeItem = FindFieldInTree(TreeRoot,
-                                    lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField);
-                            }
-
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                if (createColumn)
-                {
-                    if (lookupFormulaColumn != null)
-                    {
-                        var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, false);
-                        if (includeResult != null && includeResult.LookupJoin != null)
-                        {
-                            newLookupColumnDefinition = includeResult.LookupJoin.AddVisibleColumnDefinition(lookupFormulaColumn.Caption,
-                                lookupFormulaColumn.Formula, lookupFormulaColumn.PercentWidth,
-                                lookupFormulaColumn.DataType);
-                            newLookupFormulaColumnDefinition = newLookupColumnDefinition as LookupFormulaColumnDefinition;
-                        }
-                    }
-                    else
-                    {
-                        var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn, visibleColumn.PercentWidth);
-                        newLookupColumnDefinition = includeResult.ColumnDefinition;
-                    }
-                }
-
-
-                if (newLookupFormulaColumnDefinition != null && lookupFormulaColumn != null)
-                {
-                    newLookupColumnDefinition = newLookupFormulaColumnDefinition;
-                    newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
-
-                }
-
-                if (visibleColumn.ContentTemplateId != null)
-                    newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
-
-                newLookupColumnDefinition.DoShowNegativeValuesInRed(visibleColumn.ShowNegativeValuesInRed);
-                newLookupColumnDefinition.DoShowPositiveValuesInGreen(visibleColumn.ShowPositiveValuesInGreen);
+                visibleColumn.AddNewColumnDefinition(LookupDefinition);
             }
+            //if (!lookupDefinition.FromFormula.IsNullOrEmpty())
+            //{
+            //    LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
+            //    View.NotifyFromFormulaExists = true;
+            //}
+            //else
+            //{
+            //    View.NotifyFromFormulaExists = false;
+            //}
+
+            //foreach (var visibleColumn in lookupDefinition.VisibleColumns)
+            //{
+            //    var parent = visibleColumn.ParentObject;
+            //    var lookupFieldColumn = visibleColumn as LookupFieldColumnDefinition;
+            //    var lookupFormulaColumn = visibleColumn as LookupFormulaColumnDefinition;
+            //    TreeViewItem foundTreeItem = null;
+            //    var createColumn = true;
+            //    LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
+            //    LookupColumnDefinitionBase newLookupColumnDefinition = null;
+            //    switch (visibleColumn.ColumnType)
+            //    {
+            //        case LookupColumnTypes.Field:
+            //            if (lookupFieldColumn.Path.IsNullOrEmpty())
+            //            {
+            //                foundTreeItem = FindFieldInTree(TreeRoot, lookupFieldColumn.FieldDefinition);
+            //            }
+            //            else
+            //            {
+            //                foundTreeItem = AdvancedFindTree.ProcessFoundTreeViewItem(lookupFieldColumn.Path);
+            //            }
+            //            break;
+            //        case LookupColumnTypes.Formula:
+            //            if (parent == null)
+            //            {
+            //                var newFormulaColumn = LookupDefinition.AddVisibleColumnDefinition(visibleColumn.Caption,
+            //                    lookupFormulaColumn.OriginalFormula, visibleColumn.PercentWidth,
+            //                    lookupFormulaColumn.DataType, "");
+            //                newLookupFormulaColumnDefinition = newFormulaColumn;
+            //                createColumn = false;
+            //                newFormulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
+            //                newFormulaColumn.HasConvertToLocalTime(lookupFormulaColumn
+            //                    .ConvertToLocalTime);
+            //                newFormulaColumn.HasDateType(lookupFormulaColumn.DateType);
+            //                newFormulaColumn.HasDateFormatString(string.Empty);
+            //            }
+            //            else
+            //            {
+            //                if (parent is LookupJoin lookupJoin)
+            //                {
+            //                    foundTreeItem = FindFieldInTree(TreeRoot,
+            //                        lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField);
+            //                }
+
+            //            }
+
+            //            break;
+            //        default:
+            //            throw new ArgumentOutOfRangeException();
+            //    }
+
+            //    if (createColumn)
+            //    {
+            //        if (lookupFormulaColumn != null)
+            //        {
+            //            var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, false);
+            //            if (includeResult != null && includeResult.LookupJoin != null)
+            //            {
+            //                newLookupColumnDefinition = includeResult.LookupJoin.AddVisibleColumnDefinition(lookupFormulaColumn.Caption,
+            //                    lookupFormulaColumn.Formula, lookupFormulaColumn.PercentWidth,
+            //                    lookupFormulaColumn.DataType);
+            //                newLookupFormulaColumnDefinition = newLookupColumnDefinition as LookupFormulaColumnDefinition;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            var includeResult = MakeIncludes(foundTreeItem, visibleColumn.Caption, createColumn, visibleColumn.PercentWidth);
+            //            newLookupColumnDefinition = includeResult.ColumnDefinition;
+            //        }
+            //    }
+
+
+            //    if (newLookupFormulaColumnDefinition != null && lookupFormulaColumn != null)
+            //    {
+            //        newLookupColumnDefinition = newLookupFormulaColumnDefinition;
+            //        newLookupFormulaColumnDefinition.DecimalFieldType = lookupFormulaColumn.DecimalFieldType;
+
+            //    }
+
+            //    if (visibleColumn.ContentTemplateId != null)
+            //        newLookupColumnDefinition.HasContentTemplateId((int)visibleColumn.ContentTemplateId);
+
+            //    newLookupColumnDefinition.DoShowNegativeValuesInRed(visibleColumn.ShowNegativeValuesInRed);
+            //    newLookupColumnDefinition.DoShowPositiveValuesInGreen(visibleColumn.ShowPositiveValuesInGreen);
+            //}
             //    LookupFormulaColumnDefinition newLookupFormulaColumnDefinition = null;
             //    LookupColumnDefinitionBase newLookupColumnDefinition = null;
 

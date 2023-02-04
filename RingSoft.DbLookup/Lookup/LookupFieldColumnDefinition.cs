@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
@@ -184,6 +185,20 @@ namespace RingSoft.DbLookup.Lookup
         public override FieldDefinition GetFieldForColumn()
         {
             return FieldDefinition;
+        }
+
+        public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
+        {
+            var newColumn = new LookupFieldColumnDefinition(FieldDefinition);
+
+            if (Path.IsNullOrEmpty())
+            {
+                Path = FieldDefinition.MakePath();
+            }
+
+            ProcessNewVisibleColumn(newColumn, lookupDefinition);
+
+            base.AddNewColumnDefinition(lookupDefinition);
         }
     }
 }

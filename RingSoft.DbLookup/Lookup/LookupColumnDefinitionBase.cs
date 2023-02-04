@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
@@ -160,6 +162,7 @@ namespace RingSoft.DbLookup.Lookup
             ParentField = source.ParentField;
             TableDescription = source.TableDescription;
             FieldDescription = source.FieldDescription;
+
             Path = source.Path;
         }
 
@@ -292,6 +295,36 @@ namespace RingSoft.DbLookup.Lookup
         public virtual FieldDefinition GetFieldForColumn()
         {
             return null;
+        }
+
+        public virtual void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
+        {
+            
+        }
+
+        protected internal void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition
+            , LookupDefinitionBase lookupDefinition)
+        {
+            columnDefinition.LookupDefinition = lookupDefinition;
+            columnDefinition.CopyFrom(this);
+
+            var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+            if (foundTreeItem != null)
+            {
+                if (foundTreeItem.Parent == null)
+                {
+                    columnDefinition.TableDescription = lookupDefinition.TableDefinition.Description;
+                }
+                else
+                {
+                    columnDefinition.TableDescription = foundTreeItem.Parent.Name;
+                }
+
+                columnDefinition.FieldDescription = foundTreeItem.Name;
+                lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
+            }
+
+            lookupDefinition.AddVisibleColumnDefinition(columnDefinition);
         }
     }
 }

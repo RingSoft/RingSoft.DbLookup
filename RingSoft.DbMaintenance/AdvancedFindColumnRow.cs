@@ -13,7 +13,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbMaintenance
 {
-    public class AdvancedFindColumnRow : DbMaintenanceDataEntryGridRow<AdvancedFindColumn>, IDisposable
+    public abstract class AdvancedFindColumnRow : DbMaintenanceDataEntryGridRow<AdvancedFindColumn>, IDisposable
     {
         public const int TableColumnId = 1;
         public const int FieldColumnId = 2;
@@ -52,10 +52,6 @@ namespace RingSoft.DbMaintenance
                 case AdvancedFindColumnColumns.Table:
                     return new DataEntryGridTextCellProps(this, columnId, Table);
                 case AdvancedFindColumnColumns.Field:
-                    if (LookupFormulaColumnDefinition != null)
-                    {
-                        return new AdvancedFindColumnFormulaCellProps(this, columnId, LookupFormulaColumnDefinition);
-                    }
                     return new DataEntryGridTextCellProps(this, columnId, Field);
                 case AdvancedFindColumnColumns.Name:
                     return new AdvancedFindMemoCellProps(this, columnId, Name){FormMode = AdvancedFindMemoCellProps.MemoFormMode.Caption, ReadOnlyMode = false};
@@ -86,14 +82,6 @@ namespace RingSoft.DbMaintenance
                         State = DataEntryGridCellStates.Disabled
                     };
                 case AdvancedFindColumnColumns.Field:
-                    if (LookupFormulaColumnDefinition != null)
-                    {
-                        return new DataEntryGridCellStyle
-                        {
-                            State = DataEntryGridCellStates.Enabled
-                        };
-
-                    }
                     return new DataEntryGridCellStyle
                     {
                         State = DataEntryGridCellStates.Disabled
@@ -215,8 +203,6 @@ namespace RingSoft.DbMaintenance
         public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
             LookupColumnDefinition = column;
-            LookupFieldColumnDefinition = column as LookupFieldColumnDefinition;
-            LookupFormulaColumnDefinition = column as LookupFormulaColumnDefinition;
 
             //if (column.ParentObject == null)
             //{

@@ -211,6 +211,7 @@ namespace RingSoft.DbLookup.Lookup
             ParentObject = source.ParentObject;
             ChildField = source.ChildField;
             AllowAddOnTheFly = source.AllowAddOnTheFly;
+            AdvancedFindTree = source.AdvancedFindTree;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)
@@ -390,6 +391,12 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        internal void AddVisibleColumnDefinition(LookupColumnDefinitionBase lookupColumn)
+        {
+            ProcessVisibleColumnDefinition(lookupColumn);
+            _visibleColumns.Add(lookupColumn);
+        }
+
         internal void ProcessVisibleColumnDefinition(LookupColumnDefinitionBase columnDefinition)
         {
             if (InitialSortColumnDefinition == null)
@@ -462,86 +469,87 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupColumnDefinitionBase LoadFromAdvFindColumnEntity(AdvancedFindColumn entity)
         {
-            var tableDefinition =
-                TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                    p.EntityName == entity.TableName);
+            return null;
+            //var tableDefinition =
+            //    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+            //        p.EntityName == entity.TableName);
             
-            FieldDefinition fieldDefinition = null;
-            var fieldDescription = string.Empty;
-            if (!entity.FieldName.IsNullOrEmpty())
-            {
-                fieldDefinition =
-                    tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
-                fieldDescription = fieldDefinition.Description;
-            }
-            else if (!entity.Formula.IsNullOrEmpty())
-            {
-                fieldDescription = "<Formula>";
-            }
+            //FieldDefinition fieldDefinition = null;
+            //var fieldDescription = string.Empty;
+            //if (!entity.FieldName.IsNullOrEmpty())
+            //{
+            //    fieldDefinition =
+            //        tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+            //    fieldDescription = fieldDefinition.Description;
+            //}
+            //else if (!entity.Formula.IsNullOrEmpty())
+            //{
+            //    fieldDescription = "<Formula>";
+            //}
 
-            TableDefinitionBase primaryTable = null;
-            FieldDefinition primaryField = null;
-            if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
-            {
-                primaryTable =
-                    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.EntityName == entity.PrimaryTableName);
+            //TableDefinitionBase primaryTable = null;
+            //FieldDefinition primaryField = null;
+            //if (!entity.PrimaryTableName.IsNullOrEmpty() && !entity.PrimaryFieldName.IsNullOrEmpty())
+            //{
+            //    primaryTable =
+            //        TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+            //            p.EntityName == entity.PrimaryTableName);
 
-                primaryField =
-                    primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
+            //    primaryField =
+            //        primaryTable.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.PrimaryFieldName);
 
-                if (fieldDefinition == null)
-                {
-                    tableDefinition = primaryTable;
-                    fieldDefinition = primaryField;
-                }
-            }
+            //    if (fieldDefinition == null)
+            //    {
+            //        tableDefinition = primaryTable;
+            //        fieldDefinition = primaryField;
+            //    }
+            //}
 
-            var fieldToProcess = fieldDefinition;
-            if (primaryField != null)
-            {
-                fieldToProcess = primaryField;
-            }
+            //var fieldToProcess = fieldDefinition;
+            //if (primaryField != null)
+            //{
+            //    fieldToProcess = primaryField;
+            //}
 
-            TreeViewItem foundTreeViewItem = null;
-            if (!entity.Path.IsNullOrEmpty())
-            {
-                var type = TreeViewType.Field;
-                if (!entity.Formula.IsNullOrEmpty() && fieldToProcess == null)
-                {
-                    type = TreeViewType.Formula;
-                }
-                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, type);
-            }
-            else
-            {
-                foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldToProcess,
-                    (FieldDataTypes)entity.FieldDataType, (DecimalEditFormatTypes)entity.DecimalFormatType);
-            }
+            //TreeViewItem foundTreeViewItem = null;
+            //if (!entity.Path.IsNullOrEmpty())
+            //{
+            //    var type = TreeViewType.Field;
+            //    if (!entity.Formula.IsNullOrEmpty() && fieldToProcess == null)
+            //    {
+            //        type = TreeViewType.Formula;
+            //    }
+            //    foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, type);
+            //}
+            //else
+            //{
+            //    foundTreeViewItem = AdvancedFindTree.ProcessFoundTreeViewItem(entity.Formula, fieldToProcess,
+            //        (FieldDataTypes)entity.FieldDataType, (DecimalEditFormatTypes)entity.DecimalFormatType);
+            //}
 
-            if (!entity.Formula.IsNullOrEmpty())
-            {
-                foundTreeViewItem.FormulaData = new TreeViewFormulaData
-                {
-                    Formula = entity.Formula,
-                    DataType = (FieldDataTypes)entity.FieldDataType,
-                    DecimalFormatType = (DecimalEditFormatTypes)entity.DecimalFormatType,
-                };
+            //if (!entity.Formula.IsNullOrEmpty())
+            //{
+            //    foundTreeViewItem.FormulaData = new TreeViewFormulaData
+            //    {
+            //        Formula = entity.Formula,
+            //        DataType = (FieldDataTypes)entity.FieldDataType,
+            //        DecimalFormatType = (DecimalEditFormatTypes)entity.DecimalFormatType,
+            //    };
 
-            }
-            var result = AdvancedFindTree.MakeIncludes(foundTreeViewItem, entity.Caption).ColumnDefinition;
-            result.FieldDescription = fieldDescription;
-            result.PercentWidth = entity.PercentWidth * 100;
+            //}
+            //var result = AdvancedFindTree.MakeIncludes(foundTreeViewItem, entity.Caption).ColumnDefinition;
+            //result.FieldDescription = fieldDescription;
+            //result.PercentWidth = entity.PercentWidth * 100;
 
-            if (result is LookupFormulaColumnDefinition lookupFormulaColumn)
-            {
-                lookupFormulaColumn.HasDataType((FieldDataTypes)entity.FieldDataType);
-                if (entity.DecimalFormatType > 0)
-                {
-                    lookupFormulaColumn.DecimalFieldType = (DecimalFieldTypes)entity.DecimalFormatType;
-                }
-            }
-            return result;
+            //if (result is LookupFormulaColumnDefinition lookupFormulaColumn)
+            //{
+            //    lookupFormulaColumn.HasDataType((FieldDataTypes)entity.FieldDataType);
+            //    if (entity.DecimalFormatType > 0)
+            //    {
+            //        lookupFormulaColumn.DecimalFieldType = (DecimalFieldTypes)entity.DecimalFormatType;
+            //    }
+            //}
+            //return result;
         }
 
         public FilterItemDefinition LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true,

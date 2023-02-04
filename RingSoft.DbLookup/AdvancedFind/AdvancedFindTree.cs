@@ -101,6 +101,23 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
             return result;
         }
+
+        public LookupColumnDefinitionBase CreateColumn()
+        {
+            LookupColumnDefinitionBase result = null;
+            switch (Type)
+            {
+                case TreeViewType.Field:
+                    result = new LookupFieldColumnDefinition(FieldDefinition);
+                    break;
+                case TreeViewType.Formula:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            result.LoadFromTreeViewItem(this);
+            return result;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -129,6 +129,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public string Path { get; internal set; }
 
+        public abstract TreeViewType TreeViewType { get; }
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
@@ -303,12 +305,16 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         protected internal void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition
-            , LookupDefinitionBase lookupDefinition)
+            , LookupDefinitionBase lookupDefinition, bool copyFrom = true)
         {
             columnDefinition.LookupDefinition = lookupDefinition;
-            columnDefinition.CopyFrom(this);
 
-            var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+            if (copyFrom)
+            {
+                columnDefinition.CopyFrom(this);
+            }
+
+            var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType);
             if (foundTreeItem != null)
             {
                 if (foundTreeItem.Parent == null)
@@ -321,10 +327,28 @@ namespace RingSoft.DbLookup.Lookup
                 }
 
                 columnDefinition.FieldDescription = foundTreeItem.Name;
-                lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
+                var joinResult = lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
+                if (joinResult != null && joinResult.LookupJoin != null)
+                {
+                    JoinQueryTableAlias = joinResult.LookupJoin.JoinDefinition.Alias;
+                }
             }
 
             lookupDefinition.AddVisibleColumnDefinition(columnDefinition);
+        }
+
+        internal virtual string LoadFromTreeViewItem(TreeViewItem item)
+        {
+            Path = item.MakePath();
+            Caption = item.Name;
+            PercentWidth = 20;
+            ProcessNewVisibleColumn(this, item.BaseTree.LookupDefinition, false);
+            return string.Empty;
+        }
+
+        public virtual string GetSelectFormula()
+        {
+            return string.Empty;
         }
     }
 }

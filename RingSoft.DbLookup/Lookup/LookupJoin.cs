@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The lookup definition.
         /// </value>
-        public LookupDefinitionBase LookupDefinition { get; }
+        public LookupDefinitionBase LookupDefinition { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupJoin"/> class.

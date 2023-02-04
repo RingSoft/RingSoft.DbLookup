@@ -718,6 +718,8 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
+            var column = SelectedTreeViewItem.CreateColumn();
+            ColumnsManager.LoadFromColumnDefinition(column);
             //switch (SelectedTreeViewItem.Type)
             //{
             //    case TreeViewType.Field:

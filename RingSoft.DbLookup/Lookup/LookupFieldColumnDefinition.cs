@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
@@ -167,6 +168,8 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        public override TreeViewType TreeViewType => TreeViewType.Field;
+
         protected override LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
         {
             if (DataType == FieldDataTypes.Integer)
@@ -199,6 +202,40 @@ namespace RingSoft.DbLookup.Lookup
             ProcessNewVisibleColumn(newColumn, lookupDefinition);
 
             base.AddNewColumnDefinition(lookupDefinition);
+        }
+
+        internal override string LoadFromTreeViewItem(TreeViewItem item)
+        {
+            LookupDefinition = item.BaseTree.LookupDefinition;
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                var initialColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
+                    .InitialSortColumnDefinition;
+
+                var formula = initialColumn.GetFormulaForColumn();
+                if (!formula.IsNullOrEmpty())
+                {
+                    return formula;
+                }
+
+                if (initialColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    CopyFrom(initialColumn);
+                    LookupDefinition = item.BaseTree.LookupDefinition;
+                    SetFieldDefinition(lookupFieldColumn.FieldDefinition);
+                    var path = item.MakePath() + FieldDefinition.MakePath();
+                    var newItem = item.BaseTree.ProcessFoundTreeViewItem(path);
+                    if (newItem != null)
+                    {
+                        var newFieldResult = item.BaseTree.MakeIncludes(newItem);
+                        if (newFieldResult != null)
+                        {
+                            JoinQueryTableAlias = newFieldResult.LookupJoin.JoinDefinition.Alias;
+                        }
+                    }
+                }
+            }
+            return base.LoadFromTreeViewItem(item);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.DataProcessor;
@@ -176,6 +177,8 @@ namespace RingSoft.DbLookup.Lookup
 
             SetupColumn();
         }
+
+        public override TreeViewType TreeViewType => TreeViewType.Formula;
 
         internal override void CopyFrom(LookupColumnDefinitionBase source)
         {

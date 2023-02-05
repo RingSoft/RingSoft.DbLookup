@@ -254,10 +254,14 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             var result = string.Empty;
             
-            if (TableDefinition.PrimaryKeyFields.Contains(this))
+            if (TableDefinition.PrimaryKeyFields.Contains(this) && TableDefinition.PrimaryKeyFields.Count <= 1)
             {
-                result = TableDefinition.Context
-                    .OnAutoFillTextRequest(TableDefinition, dbIdValue).Text;
+                var autoFillValue = TableDefinition.Context
+                    .OnAutoFillTextRequest(TableDefinition, dbIdValue);
+                if (autoFillValue != null)
+                {
+                    result = autoFillValue.Text;
+                }
             }
             else if (ParentJoinForeignKeyDefinition != null)
             {

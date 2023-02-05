@@ -503,7 +503,8 @@ namespace RingSoft.DbMaintenance
                     StringSearchValue = FilterReturn.SearchValue;
                     break;
                 case FieldDataTypes.Integer:
-                    if (FieldDefinition is IntegerFieldDefinition integerField)
+                    var integerField = FieldDefinition as IntegerFieldDefinition;
+                    if (integerField != null)
                     {
                         if (integerField.EnumTranslation != null)
                         {
@@ -517,6 +518,10 @@ namespace RingSoft.DbMaintenance
                         {
                             IntegerSearchValue = FilterReturn.SearchValue.ToInt();
                         }
+                    }
+                    else
+                    {
+                            IntegerSearchValue = FilterReturn.SearchValue.ToInt();
                     }
                     break;
                 case FieldDataTypes.Decimal:

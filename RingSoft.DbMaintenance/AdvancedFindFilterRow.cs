@@ -514,30 +514,37 @@ namespace RingSoft.DbMaintenance
                 AllowSave = false;
             }
             FilterItemDefinition = filter;
-            if (filter.Path.IsNullOrEmpty())
+            if (!filter.TableDescription.IsNullOrEmpty())
             {
-                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                Table = filter.TableDescription;
+                Field = filter.FieldDescription;
             }
             else
             {
-                var foundItem =
-                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
-                        filter.TreeViewType);
-                if (foundItem != null)
+                if (filter.Path.IsNullOrEmpty())
                 {
-                    if (foundItem.Parent != null)
+                    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                }
+                else
+                {
+                    var foundItem =
+                        Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
+                            filter.TreeViewType);
+                    if (foundItem != null)
                     {
-                        Table = foundItem.Parent.Name;
-                    }
-                    else
-                    {
-                        Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-                    }
+                        if (foundItem.Parent != null)
+                        {
+                            Table = foundItem.Parent.Name;
+                        }
+                        else
+                        {
+                            Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                        }
 
-                    Field = foundItem.Name;
+                        Field = foundItem.Name;
+                    }
                 }
             }
-
 
             IsFixed = filter.IsFixed;
             if (filter.IsFixed && filter.TableFilterDefinition.FixedFilters.ToList().IndexOf(filter) == 0)
@@ -616,7 +623,11 @@ namespace RingSoft.DbMaintenance
 
         protected void SetupTable(TreeViewItem selectedTreeViewItem)
         {
-            if (selectedTreeViewItem != null)
+            if (selectedTreeViewItem == null)
+            {
+                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+            }
+            else
             {
                 if (selectedTreeViewItem.Parent == null)
                 {

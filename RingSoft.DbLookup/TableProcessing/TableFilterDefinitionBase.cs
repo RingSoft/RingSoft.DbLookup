@@ -98,6 +98,11 @@ namespace RingSoft.DbLookup.TableProcessing
             _userFilterDefinitions.Add(filterItem);
         }
 
+        internal void AddFixedFilter(FilterItemDefinition filterItem)
+        {
+            _fixedFilterDefinitions.Add(filterItem);
+        }
+
         /// <summary>
         /// Clears this filter and copies the source filter data to this object.
         /// </summary>

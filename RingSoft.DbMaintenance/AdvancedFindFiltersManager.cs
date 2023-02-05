@@ -146,8 +146,19 @@ namespace RingSoft.DbMaintenance
             {
                 row = new AdvancedFindFieldFilterRow(this);
             }
+            else
+            {
+                row = new AdvancedFindFormulaFilterRow(this);
+            }
             row.LoadFromFilterReturn(filterReturn);
             AddRow(row);
+            
+            if (Rows.Count > 1)
+            {
+                var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+                advancedRows[Rows.Count - 2].FinishOffFilter(false, false);
+            }
+
             ProcessLastFilterRow(true, Rows.LastOrDefault() as AdvancedFindFilterRow);
             Grid?.RefreshGridView();
             ViewModel.ResetLookup();

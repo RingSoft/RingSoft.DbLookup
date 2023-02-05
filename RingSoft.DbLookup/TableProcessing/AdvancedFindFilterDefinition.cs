@@ -72,6 +72,16 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
+        public override FilterItemDefinition GetNewFilterItemDefinition()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override string GetNewPath()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
             , ref WhereItem lastWhereItem, bool fromAdvancedFind, AdvancedFindTree tree = null)
         {

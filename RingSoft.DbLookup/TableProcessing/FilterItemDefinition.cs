@@ -83,6 +83,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public string TableDescription { get; set; }
 
+        public string FieldDescription { get; set; }
+
         public string ReportDescription { get; set; }
 
         public string Path { get; internal set; }
@@ -371,5 +373,43 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        public abstract FilterItemDefinition GetNewFilterItemDefinition();
+
+        internal abstract string GetNewPath();
+
+        public void CopyToNewFilter(LookupDefinitionBase lookupDefinition)
+        {
+            var newFilter = GetNewFilterItemDefinition();
+            if (newFilter != null)
+            {
+                newFilter.CopyFrom(this);
+                lookupDefinition.FilterDefinition.AddFixedFilter(newFilter);
+                if (Path.IsNullOrEmpty())
+                {
+                    //if (JoinDefinition != null)
+                    //{
+                    //    TableDescription = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
+                    //}
+                    Path = GetNewPath();
+                }
+                GetJoins(lookupDefinition, newFilter);
+            }
+        }
+
+        private void GetJoins(LookupDefinitionBase lookupDefinition, FilterItemDefinition newFilter)
+        {
+            var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+            if (foundItem != null)
+            {
+                var index = lookupDefinition.FilterDefinition.Joins.Count;
+                var join = lookupDefinition.AdvancedFindTree.MakeIncludes(foundItem).LookupJoin;
+                if (join != null)
+                {
+                    newFilter.JoinDefinition = join.JoinDefinition;
+                }
+
+                TableDescription = foundItem.Name;
+            }
+        }
     }
 }

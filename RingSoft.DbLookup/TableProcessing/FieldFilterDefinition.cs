@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
@@ -325,6 +326,33 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             return value;
+        }
+
+        public override FilterItemDefinition GetNewFilterItemDefinition()
+        {
+            var result = new FieldFilterDefinition(TableFilterDefinition);
+            
+            return result;
+        }
+
+        internal override string GetNewPath()
+        {
+            //var path = FieldDefinition.MakePath();
+            var path = string.Empty;
+            var parentObject = JoinDefinition?.ParentObject;
+            while (parentObject != null)
+            {
+                path = parentObject.MakePath() + path;
+                parentObject = parentObject.ParentObject;
+            }
+            var test = this;
+            if (JoinDefinition != null)
+            {
+                path += JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
+            }
+            
+            FieldDescription = FieldDefinition.Description;
+            return path;// + FieldDefinition.MakePath();
         }
     }
 }

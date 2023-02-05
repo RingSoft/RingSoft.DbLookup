@@ -111,7 +111,15 @@ namespace RingSoft.DbLookup.AdvancedFind
                     result = new LookupFieldColumnDefinition(FieldDefinition);
                     break;
                 case TreeViewType.Formula:
-                    result = new LookupFormulaColumnDefinition("", FieldDataTypes.String);
+                    var newFormula = string.Empty;
+                    var formatType = FieldDataTypes.String;
+                    if (FormulaData != null)
+                    {
+                        newFormula = FormulaData.Formula;
+                        formatType = FormulaData.DataType;
+
+                    }
+                    result = new LookupFormulaColumnDefinition(newFormula, formatType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

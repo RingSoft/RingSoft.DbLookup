@@ -387,6 +387,7 @@ namespace RingSoft.DbLookup.Lookup
             Caption = entity.Caption;
             PercentWidth = entity.PercentWidth;
             var test = this;
+            HorizontalAlignment = SetupDefaultHorizontalAlignment();
         }
     }
 }

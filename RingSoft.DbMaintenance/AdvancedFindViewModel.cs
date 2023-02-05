@@ -718,6 +718,13 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
+            if (SelectedTreeViewItem.Type == TreeViewType.Formula)
+            {
+                if (!View.ShowFormulaEditor(SelectedTreeViewItem))
+                {
+                    return;
+                }
+            }
             var column = SelectedTreeViewItem.CreateColumn();
             ColumnsManager.LoadFromColumnDefinition(column);
             //switch (SelectedTreeViewItem.Type)

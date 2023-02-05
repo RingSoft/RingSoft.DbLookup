@@ -29,6 +29,10 @@ namespace RingSoft.DbMaintenance
             {
                 result = new AdvancedFindFieldColumnRow(this);
             }
+            else
+            {
+                result = new AdvancedFindFormulaColumnRow(this);
+            }
             return result;
         }
             //if (entity.Formula.IsNullOrEmpty())

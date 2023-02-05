@@ -202,7 +202,7 @@ namespace RingSoft.DbMaintenance
             //}
         }
 
-        public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
+        public virtual void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
             LookupColumnDefinition = column;
 

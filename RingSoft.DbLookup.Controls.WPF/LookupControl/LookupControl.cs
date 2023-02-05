@@ -592,6 +592,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             var columnHeader = new GridViewColumnHeader { Content = caption }; // + "\r\nLine2\r\nLine3"};
             columnHeader.Click += GridViewColumnHeaderClickedHandler;
 
+            if (width < 0)
+            {
+                width = 20;
+            }
             var gridColumn = new GridViewColumn
             {
                 Header = columnHeader,

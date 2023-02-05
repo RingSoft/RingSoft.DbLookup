@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition;
@@ -180,7 +181,7 @@ namespace RingSoft.DbLookup.Lookup
 
         internal LookupFormulaColumnDefinition()
         {
-            
+            _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
         }
 
         public override TreeViewType TreeViewType => TreeViewType.Formula;
@@ -422,6 +423,40 @@ namespace RingSoft.DbLookup.Lookup
                 return Formula;
             }
             return base.ToString();
+        }
+
+        public override void SaveToEntity(AdvancedFindColumn entity)
+        {
+            entity.Formula = OriginalFormula;
+            entity.FieldDataType = (byte)DataType;
+            entity.PrimaryFieldName = Description;
+            var dateTypeInt = (int)DateType;
+            entity.PrimaryTableName = dateTypeInt.ToString();
+
+            base.SaveToEntity(entity);
+        }
+
+        internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
+        {
+            Formula = entity.Formula;
+            _dataType = (FieldDataTypes)entity.FieldDataType;
+            Description = entity.PrimaryFieldName;
+            DateType = (DbDateTypes)entity.PrimaryTableName.ToInt();
+
+            Path = entity.Path;
+            if (Path.IsNullOrEmpty())
+            {
+                var foundItem = lookupDefinition.AdvancedFindTree.TreeRoot
+                    .FirstOrDefault(p => p.Type == TreeViewType.Formula);
+
+                if (foundItem != null)
+                {
+                    LoadFromTreeViewItem(foundItem);
+                }
+            }
+
+            var test = this;
+            base.LoadFromEntity(entity, lookupDefinition);
         }
     }
 }

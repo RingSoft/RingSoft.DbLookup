@@ -508,6 +508,11 @@ namespace RingSoft.DbMaintenance
 
         public virtual void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
         {
+            IsFixed = isFixed;
+            if (isFixed)
+            {
+                AllowSave = false;
+            }
             FilterItemDefinition = filter;
             if (filter.Path.IsNullOrEmpty())
             {
@@ -589,7 +594,7 @@ namespace RingSoft.DbMaintenance
 
         public void MakeSearchValueText(string searchValue = "")
         {
-            SearchValueText = FilterItemDefinition.GetReportText();
+            SearchValueText = FilterItemDefinition.GetReportText(Manager.ViewModel.LookupDefinition);
  
         }
 

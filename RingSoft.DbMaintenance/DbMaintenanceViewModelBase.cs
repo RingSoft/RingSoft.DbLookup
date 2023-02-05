@@ -709,7 +709,7 @@ namespace RingSoft.DbMaintenance
         public static void MakeAdditionalFilter(PrinterSetupArgs printerSetupArgs)
         {
             var fixedText = GetFiltersText(printerSetupArgs.LookupDefinition.FilterDefinition
-                    .FixedFilters.ToList(), printerSetupArgs);
+                .FixedFilters.ToList(), printerSetupArgs);
 
             var userText = GetFiltersText(printerSetupArgs.LookupDefinition.FilterDefinition.UserFilters.ToList(),
                 printerSetupArgs);
@@ -742,7 +742,7 @@ namespace RingSoft.DbMaintenance
                 {
                     var lParen = GblMethods.StringDuplicate("(", filterItem.LeftParenthesesCount);
                     result += filterItem.ReportDescription + " ";
-                    result += filterItem.GetReportText();
+                    result += filterItem.GetReportText(printerSetupArgs.LookupDefinition, true);
                     var rParen = GblMethods.StringDuplicate("(", filterItem.RightParenthesesCount);
                     result = lParen + result + rParen;
                     if (filterItemDefinitions.IndexOf(filterItem) < count - 1)

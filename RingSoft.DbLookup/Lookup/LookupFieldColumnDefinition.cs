@@ -75,6 +75,10 @@ namespace RingSoft.DbLookup.Lookup
             SetupColumn();
         }
 
+        internal LookupFieldColumnDefinition()
+        {
+
+        }
 
         internal override void CopyFrom(LookupColumnDefinitionBase source)
         {
@@ -271,6 +275,23 @@ namespace RingSoft.DbLookup.Lookup
                 return FieldDefinition.Description;
             }
             return base.ToString();
+        }
+
+        internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
+        {
+            TreeViewItem foundItem = null;
+            if (!entity.Path.IsNullOrEmpty())
+            {
+                foundItem =
+                    lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, TreeViewType.Field);
+            }
+
+            if (foundItem != null)
+            {
+                SetFieldDefinition(foundItem.FieldDefinition);
+            }
+            var test = this;
+            base.LoadFromEntity(entity, lookupDefinition);
         }
     }
 }

@@ -40,8 +40,9 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (!_joinAlias.IsNullOrEmpty())
                 {
-                    
+
                 }
+
                 return _joinAlias;
             }
             set
@@ -154,6 +155,7 @@ namespace RingSoft.DbLookup.Lookup
                     return LookupColumnAlignmentTypes.Left;
             }
         }
+
         internal virtual void CopyFrom(LookupColumnDefinitionBase source)
         {
             Caption = source.Caption;
@@ -249,11 +251,13 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (Caption == "Difference" && value == null)
                 {
-                    
+
                 }
+
                 _parent = value;
             }
         }
+
         public FieldDefinition ChildField { get; set; }
         public FieldDefinition ParentField { get; set; }
         public FieldDefinition ChildJoinField { get; set; }
@@ -263,7 +267,8 @@ namespace RingSoft.DbLookup.Lookup
             throw new NotImplementedException();
         }
 
-        public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
+        public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption,
+            FieldDefinition fieldDefinition,
             double percentWidth)
         {
             return null;
@@ -289,7 +294,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             var key = dataRow.GetRowValue(SelectSqlAlias);
             key = GblMethods.FormatValueForPrinterRowKey(DataType, key);
-            
+
             var primaryKeyValue = new PrimaryKeyValue(LookupDefinition.TableDefinition);
             primaryKeyValue.PopulateFromDataRow(dataRow);
             key += primaryKeyValue.KeyString;
@@ -308,7 +313,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public virtual void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
-            
+
         }
 
         protected internal void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition
@@ -359,6 +364,29 @@ namespace RingSoft.DbLookup.Lookup
         public virtual string GetSelectFormula()
         {
             return string.Empty;
+        }
+
+        public virtual void SaveToEntity(AdvancedFindColumn entity)
+        {
+            entity.Path = Path;
+            entity.Caption = Caption;
+            entity.PercentWidth = PercentWidth;
+        }
+
+        internal virtual void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
+        {
+            Path = entity.Path;
+            if (!Path.IsNullOrEmpty())
+            {
+                var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType);
+                if (foundItem != null)
+                {
+                    LoadFromTreeViewItem(foundItem);
+                }
+            }
+            Caption = entity.Caption;
+            PercentWidth = entity.PercentWidth;
+            var test = this;
         }
     }
 }

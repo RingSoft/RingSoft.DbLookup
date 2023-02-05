@@ -757,7 +757,15 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
-            LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
+            if (!lookupDefinition.FromFormula.IsNullOrEmpty())
+            {
+                LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
+                View.NotifyFromFormulaExists = true;
+            }
+            else
+            {
+                View.NotifyFromFormulaExists = false;
+            }
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 visibleColumn.AddNewColumnDefinition(LookupDefinition);

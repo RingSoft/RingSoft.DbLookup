@@ -85,7 +85,10 @@ namespace RingSoft.DbMaintenance
             if (creatingNew)
             {
                 _resetLookup = false;
-                foreach (var dataEntryGridRow in Rows.ToList())
+                var nonFixedRows = Rows.OfType<AdvancedFindFilterRow>()
+                    .Where(p => p.IsFixed == false);
+
+                foreach (var dataEntryGridRow in nonFixedRows.ToList())
                 {
                     RemoveRow(dataEntryGridRow);
                 }

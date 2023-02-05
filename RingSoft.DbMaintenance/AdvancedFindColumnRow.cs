@@ -136,27 +136,28 @@ namespace RingSoft.DbMaintenance
         public override void LoadFromEntity(AdvancedFindColumn entity)
         {
             LookupColumnDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindColumnEntity(entity);
-            Name = entity.Caption;
-            var percentWidth = (double)entity.PercentWidth * 100;
-            PercentWidth = percentWidth / 100;
+            LoadFromColumnDefinition(LookupColumnDefinition);
+            //Name = entity.Caption;
+            //var percentWidth = (double)entity.PercentWidth * 100;
+            //PercentWidth = percentWidth / 100;
 
-            Table = LookupColumnDefinition.TableDescription;
-            Field = LookupColumnDefinition.FieldDescription;
+            //Table = LookupColumnDefinition.TableDescription;
+            //Field = LookupColumnDefinition.FieldDescription;
 
-            if (LookupColumnDefinition != null)
-            {
-                if (LookupColumnDefinition is LookupFormulaColumnDefinition)
-                {
-                    LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
-                    SetFormulaTableField();
-                }
-                else
-                {
-                    LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
-                    TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
+            //if (LookupColumnDefinition != null)
+            //{
+            //    if (LookupColumnDefinition is LookupFormulaColumnDefinition)
+            //    {
+            //        LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
+            //        SetFormulaTableField();
+            //    }
+            //    else
+            //    {
+            //        LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
+            //        TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
 
-                }
-            }
+            //    }
+            //}
         }
 
         public override bool ValidateRow()
@@ -168,36 +169,37 @@ namespace RingSoft.DbMaintenance
         {
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.ColumnId = rowIndex + 1;
-            var tableDefinition = TableDefinition;
-            entity.TableName = tableDefinition.EntityName;
-            entity.Path = LookupColumnDefinition.Path;
+            LookupColumnDefinition.SaveToEntity(entity);
+            //var tableDefinition = TableDefinition;
+            //entity.TableName = tableDefinition.EntityName;
+            //entity.Path = LookupColumnDefinition.Path;
 
-            if (LookupColumnDefinition.ParentObject != null)
-            {
-                var lookupJoin = LookupColumnDefinition.ParentObject as LookupJoin;
-                var primaryTableDefinition = lookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-                entity.PrimaryTableName = primaryTableDefinition.EntityName;
-                var primaryField = lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-                if (primaryField != null)
-                {
-                    entity.PrimaryFieldName = primaryField.FieldName;
-                }
-            }
-            entity.Caption = Name;
-            entity.PercentWidth = PercentWidth;
-            if (LookupFormulaColumnDefinition != null)
-            {
-                entity.Formula = LookupFormulaColumnDefinition.OriginalFormula;
-                entity.FieldDataType = (byte) LookupFormulaColumnDefinition.DataType;
-                entity.DecimalFormatType = (byte) LookupFormulaColumnDefinition.DecimalFieldType;
-            }
-            else
-            {
-                if (LookupFieldColumnDefinition != null)
-                {
-                    entity.FieldName = LookupFieldColumnDefinition.FieldDefinition.FieldName;
-                }
-            }
+            //if (LookupColumnDefinition.ParentObject != null)
+            //{
+            //    var lookupJoin = LookupColumnDefinition.ParentObject as LookupJoin;
+            //    var primaryTableDefinition = lookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
+            //    entity.PrimaryTableName = primaryTableDefinition.EntityName;
+            //    var primaryField = lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
+            //    if (primaryField != null)
+            //    {
+            //        entity.PrimaryFieldName = primaryField.FieldName;
+            //    }
+            //}
+            //entity.Caption = Name;
+            //entity.PercentWidth = PercentWidth;
+            //if (LookupFormulaColumnDefinition != null)
+            //{
+            //    entity.Formula = LookupFormulaColumnDefinition.OriginalFormula;
+            //    entity.FieldDataType = (byte) LookupFormulaColumnDefinition.DataType;
+            //    entity.DecimalFormatType = (byte) LookupFormulaColumnDefinition.DecimalFieldType;
+            //}
+            //else
+            //{
+            //    if (LookupFieldColumnDefinition != null)
+            //    {
+            //        entity.FieldName = LookupFieldColumnDefinition.FieldDefinition.FieldName;
+            //    }
+            //}
         }
 
         public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)

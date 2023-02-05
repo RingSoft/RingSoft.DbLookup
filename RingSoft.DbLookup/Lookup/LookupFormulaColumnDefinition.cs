@@ -178,6 +178,11 @@ namespace RingSoft.DbLookup.Lookup
             SetupColumn();
         }
 
+        internal LookupFormulaColumnDefinition()
+        {
+            
+        }
+
         public override TreeViewType TreeViewType => TreeViewType.Formula;
 
         internal override void CopyFrom(LookupColumnDefinitionBase source)

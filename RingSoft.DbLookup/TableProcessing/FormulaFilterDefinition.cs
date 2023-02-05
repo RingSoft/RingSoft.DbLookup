@@ -45,9 +45,15 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
-        public override string GetReportText()
+        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
         {
-            var result = GetConditionText(Condition.Value) + " ";
+            var result = string.Empty;
+            if (printMode)
+            {
+                result += GetReportBeginTextPrintMode(lookupDefinition);
+            }
+
+            result += GetConditionText(Condition.Value) + " ";
             switch (Condition)
             {
                 case Conditions.EqualsNull:

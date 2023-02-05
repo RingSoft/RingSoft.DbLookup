@@ -145,9 +145,14 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
-        public override string GetReportText()
+        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
         {
-            var result = GetConditionText(Condition) + " ";
+            var result = string.Empty;
+            if (printMode)
+            {
+                result += GetReportBeginTextPrintMode(lookupDefinition);
+            }
+            result += GetConditionText(Condition) + " ";
             var setUserValue = ValueType != ValueTypes.DateTime;
 
             switch (Condition)
@@ -189,8 +194,8 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             Condition = (Conditions)entity.Operand;
-            Value = entity.SearchForValue;
-            if (Value.IsNullOrEmpty())
+            var value = entity.SearchForValue;
+            if (value.IsNullOrEmpty())
             {
                 return false;
             }
@@ -199,7 +204,6 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override void SaveToEntity(AdvancedFindFilter entity)
         {
-            entity.SearchForValue = Value;
             entity.Operand = (byte)Condition;
 
             base.SaveToEntity(entity);

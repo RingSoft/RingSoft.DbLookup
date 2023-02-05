@@ -143,7 +143,7 @@ namespace RingSoft.DbLookup.TableProcessing
             DateFilterValue = source.DateFilterValue;
         }
 
-        public abstract string GetReportText();
+        public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false);
 
         public string GetDateReportText()
         {
@@ -222,8 +222,8 @@ namespace RingSoft.DbLookup.TableProcessing
             LeftParenthesesCount = entity.LeftParentheses;
             RightParenthesesCount = entity.RightParentheses;
             EndLogic = (EndLogics)entity.EndLogic;
-            //TableFilterDefinition.AddUserFilter(this);
-
+            DateFilterType = (DateFilterTypes)entity.DateFilterType;
+            Value = GetSearchValue(entity.SearchForValue);
             var process = false;
             if (!entity.Path.IsNullOrEmpty())
             {
@@ -261,6 +261,15 @@ namespace RingSoft.DbLookup.TableProcessing
             entity.LeftParentheses = (byte)LeftParenthesesCount;
             entity.RightParentheses = (byte)RightParenthesesCount;
             entity.EndLogic = (byte)EndLogic;
+            entity.DateFilterType = (byte)DateFilterType;
+            if (DateFilterType != DateFilterTypes.SpecificDate)
+            {
+                entity.SearchForValue = DateFilterValue.ToString();
+            }
+            else
+            {
+                entity.SearchForValue = DisplayValue;
+            }
         }
 
         public virtual string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
@@ -268,6 +277,14 @@ namespace RingSoft.DbLookup.TableProcessing
             var searchValue = filterReturn.SearchValue;
             DateFilterType = filterReturn.DateFilterType;
 
+            searchValue = GetSearchValue(searchValue);
+
+            return searchValue;
+
+        }
+
+        protected internal string GetSearchValue(string searchValue)
+        {
             if (ValueType == ValueTypes.DateTime)
             {
                 DisplayValue = searchValue;
@@ -275,12 +292,16 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             return searchValue;
-
         }
 
         public virtual void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
             filterReturn.Path = Path;
+            filterReturn.DateFilterType = DateFilterType;
+            if (DateFilterType != DateFilterTypes.SpecificDate)
+            {
+                filterReturn.SearchValue = DateFilterValue.ToString();
+            }
         }
 
         protected internal TableDefinitionBase GetTableFieldForFilter(LookupDefinitionBase lookupDefinition,
@@ -331,6 +352,23 @@ namespace RingSoft.DbLookup.TableProcessing
                     return LookupDefinitionBase.ProcessSearchValue(value, DateFilterType);
             }
             return value;
+        }
+
+        protected internal virtual string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
+        {
+            var result = string.Empty;
+            TreeViewItem foundItem = null;
+
+            if (!Path.IsNullOrEmpty())
+            {
+                foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType);
+            }
+
+            if (foundItem != null)
+            {
+                result += $"{foundItem.Name} ";
+            }
+            return result;
         }
 
     }

@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
-        public override string GetReportText()
+        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
         {
             var result = string.Empty;
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
@@ -43,7 +43,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 foreach (var advancedFindFilter in advancedFind.Filters)
                 {
                     var filterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
-                    result += filterReturn.GetReportText();
+                    result += filterReturn.GetReportText(lookupDefinition, printMode);
                     result.TrimRight("\r\n");
                 }
             }

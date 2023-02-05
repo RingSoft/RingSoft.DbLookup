@@ -469,7 +469,17 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupColumnDefinitionBase LoadFromAdvFindColumnEntity(AdvancedFindColumn entity)
         {
-            return null;
+            LookupColumnDefinitionBase lookupColumn = null;
+            if (entity.Formula.IsNullOrEmpty())
+            {
+                lookupColumn = new LookupFieldColumnDefinition();
+            }
+            else
+            {
+                lookupColumn = new LookupFormulaColumnDefinition();
+            }
+            lookupColumn.LoadFromEntity(entity, this);
+            return lookupColumn;
             //var tableDefinition =
             //    TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
             //        p.EntityName == entity.TableName);

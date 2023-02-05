@@ -263,5 +263,14 @@ namespace RingSoft.DbLookup.Lookup
 
             return string.Empty;
         }
+
+        public override string ToString()
+        {
+            if (Caption.IsNullOrEmpty())
+            {
+                return FieldDefinition.Description;
+            }
+            return base.ToString();
+        }
     }
 }

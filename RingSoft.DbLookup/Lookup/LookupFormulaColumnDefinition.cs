@@ -409,5 +409,14 @@ namespace RingSoft.DbLookup.Lookup
 
             return result;
         }
+
+        public override string ToString()
+        {
+            if (Caption.IsNullOrEmpty())
+            {
+                return Formula;
+            }
+            return base.ToString();
+        }
     }
 }

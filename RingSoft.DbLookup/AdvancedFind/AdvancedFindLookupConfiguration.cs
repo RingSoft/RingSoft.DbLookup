@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.RecordLocking;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {

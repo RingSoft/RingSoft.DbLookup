@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
@@ -8,6 +10,20 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
+    public enum DateFilterTypes
+    {
+        [Description("Specific Date")]
+        SpecificDate = 0,
+        [Description("Day(s) Ago")]
+        Days = 1,
+        [Description("Week(s) Ago")]
+        Weeks = 2,
+        [Description("Month(s) Ago")]
+        Months = 3,
+        [Description("Year(s) Ago")]
+        Years = 4,
+    }
+
     /// <summary>
     /// Represents a filter field item in a table filter definition.
     /// </summary>
@@ -22,7 +38,22 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The field definition.
         /// </value>
-        public FieldDefinition FieldDefinition { get; set; }
+        private FieldDefinition _fieldDefinition;
+
+        public FieldDefinition FieldDefinition
+        {
+            get => _fieldDefinition;
+            internal set
+            {
+                _fieldDefinition = value;
+                ValueType = _fieldDefinition.ValueType;
+                if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
+                {
+                    DateType = dateFieldDefinition.DateType;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets the condition.
@@ -31,14 +62,6 @@ namespace RingSoft.DbLookup.TableProcessing
         /// The condition.
         /// </value>
         public Conditions Condition { get; set; }
-
-        /// <summary>
-        /// Gets the value to filter.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public string Value { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the search is case sensitive.
@@ -125,24 +148,31 @@ namespace RingSoft.DbLookup.TableProcessing
         public override string GetReportText()
         {
             var result = GetConditionText(Condition) + " ";
-            if (Value.IsNullOrEmpty())
-            {
-                return result;
-            }
+            var setUserValue = ValueType != ValueTypes.DateTime;
+
             switch (Condition)
             {
                 case Conditions.Equals:
                 case Conditions.NotEquals:
-                    result += FieldDefinition.GetUserValue(Value);
+                    if (setUserValue)
+                    {
+                        result += FieldDefinition.GetUserValue(Value);
+                    }
+                    else
+                    {
+                        result += GetDateReportText();
+                    }
                     break;
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
                     result = result.Trim();
                     break;
                 default:
-                    result += Value;
+                    var dateSearchValue = GetDateReportText();
+                    result += dateSearchValue;
                     break;
             }
+
             return result;
         }
 
@@ -175,14 +205,17 @@ namespace RingSoft.DbLookup.TableProcessing
             base.SaveToEntity(entity);
         }
 
-        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
+        public override string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             Condition = filterReturn.Condition;
             Value = filterReturn.SearchValue;
-            
+
             ProcessFoundTreeItem(treeViewItem);
 
-            base.LoadFromFilterReturn(filterReturn, treeViewItem);
+            var result = base.LoadFromFilterReturn(filterReturn, treeViewItem);
+            Value = result;
+
+            return result;
         }
 
         private void ProcessFoundTreeItem(TreeViewItem treeViewItem)
@@ -269,6 +302,25 @@ namespace RingSoft.DbLookup.TableProcessing
         public override string ToString()
         {
             return FieldDefinition.ToString();
+        }
+
+        protected internal override string ConvertDate(string value)
+        {
+            value = base.ConvertDate(value);
+            if (FieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime)
+                {
+                    var date = value.ToDate();
+                    if (date != null)
+                    {
+                        return date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
+                    }
+                }
+
+            }
+
+            return value;
         }
     }
 }

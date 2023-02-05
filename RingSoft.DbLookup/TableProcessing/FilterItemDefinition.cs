@@ -6,6 +6,7 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using Google.Protobuf.WellKnownTypes;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -90,6 +91,39 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public bool IsFixed { get; internal set; }
 
+        /// <summary>
+        /// Gets the value to filter.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        public string Value { get; internal set; }
+
+        private string _displayValue;
+
+        public string DisplayValue
+        {
+            get
+            {
+                if (_displayValue.IsNullOrEmpty())
+                {
+                    return Value;
+                }
+                return _displayValue;
+            }
+            set { _displayValue = value; }
+        }
+
+
+
+        public DateFilterTypes DateFilterType { get; private set; }
+
+        public int DateFilterValue { get; private set; }
+
+        public ValueTypes ValueType { get; set; }
+
+        public DbDateTypes DateType { get; internal set; }
+
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
@@ -104,9 +138,36 @@ namespace RingSoft.DbLookup.TableProcessing
             EndLogic = source.EndLogic;
             TableDescription = source.TableDescription;
             ReportDescription = source.ReportDescription;
+            ValueType = source.ValueType;
+            DateFilterType = source.DateFilterType;
+            DateFilterValue = source.DateFilterValue;
         }
 
         public abstract string GetReportText();
+
+        public string GetDateReportText()
+        {
+            var result = string.Empty;
+            if (ValueType == ValueTypes.DateTime)
+            {
+                if (DateFilterType == DateFilterTypes.SpecificDate)
+                {
+                    var date = DisplayValue.ToDate();
+                    if (date.HasValue)
+                    {
+                        return date.Value.FormatDateValue(DateType, false);
+                    }
+                }
+                var enumTrans = new EnumFieldTranslation();
+                enumTrans.LoadFromEnum<DateFilterTypes>();
+                var typeTranslation = enumTrans.TypeTranslations.FirstOrDefault(p => p.NumericValue == (int)DateFilterType);
+                if (typeTranslation != null)
+                {
+                    return $"{DateFilterValue} {typeTranslation.TextValue}";
+                }
+            }
+            return result;
+        }
 
         public static string GetConditionText(Conditions condition)
         {
@@ -202,8 +263,19 @@ namespace RingSoft.DbLookup.TableProcessing
             entity.EndLogic = (byte)EndLogic;
         }
 
-        public virtual void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
+        public virtual string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
+            var searchValue = filterReturn.SearchValue;
+            DateFilterType = filterReturn.DateFilterType;
+
+            if (ValueType == ValueTypes.DateTime)
+            {
+                DisplayValue = searchValue;
+                searchValue = ConvertDate(searchValue);
+            }
+
+            return searchValue;
+
         }
 
         public virtual void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
@@ -247,5 +319,19 @@ namespace RingSoft.DbLookup.TableProcessing
 
             return tableDefinition;
         }
+
+        protected internal virtual string ConvertDate(string value)
+        {
+            switch (DateFilterType)
+            {
+                case DateFilterTypes.SpecificDate:
+                    break;
+                default:
+                    DateFilterValue = value.ToInt();
+                    return LookupDefinitionBase.ProcessSearchValue(value, DateFilterType);
+            }
+            return value;
+        }
+
     }
 }

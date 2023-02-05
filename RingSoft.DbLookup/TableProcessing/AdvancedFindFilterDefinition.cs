@@ -67,9 +67,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.LoadFromEntity(entity, lookupDefinition);
         }
 
-        public override void LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
+        public override string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
-            base.LoadFromFilterReturn(filterReturn, treeViewItem);
+            return base.LoadFromFilterReturn(filterReturn, treeViewItem);
         }
 
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem

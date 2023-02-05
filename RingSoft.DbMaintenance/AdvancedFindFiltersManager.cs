@@ -70,9 +70,9 @@ namespace RingSoft.DbMaintenance
             } 
             if (entity.SearchForAdvancedFindId == null)
             {
-                if (entity.Formula.IsNullOrEmpty())
+                if (!entity.Formula.IsNullOrEmpty())
                 {
-                    return new AdvancedFindFieldFilterRow(this);
+                    return new AdvancedFindFormulaFilterRow(this);
                 }
                 //return new AdvancedFindFilterRow(this);
             }

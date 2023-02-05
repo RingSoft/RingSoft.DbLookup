@@ -200,7 +200,9 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 return false;
             }
-            return base.LoadFromEntity(entity, lookupDefinition);
+            var result = base.LoadFromEntity(entity, lookupDefinition);
+            TableFilterDefinition.AddUserFilter(this);
+            return result;
         }
 
         public override void SaveToEntity(AdvancedFindFilter entity)

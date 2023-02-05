@@ -227,7 +227,11 @@ namespace RingSoft.DbLookup.TableProcessing
             DateFilterType = (DateFilterTypes)entity.DateFilterType;
             Value = GetSearchValue(entity.SearchForValue);
             var process = false;
-            if (!entity.Path.IsNullOrEmpty())
+            if (entity.Path.IsNullOrEmpty())
+            {
+                process = true;
+            }
+            else
             {
                 var treeViewItem =
                     lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, TreeViewType);

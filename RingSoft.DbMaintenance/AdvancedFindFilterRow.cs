@@ -294,7 +294,7 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity, false);
             if (filter != null)
             {
                 FilterItemDefinition = filter;
@@ -541,7 +541,10 @@ namespace RingSoft.DbMaintenance
                             Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
                         }
 
-                        Field = foundItem.Name;
+                        if (Field.IsNullOrEmpty())
+                        {
+                            Field = foundItem.Name;
+                        }
                     }
                 }
             }

@@ -46,6 +46,20 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
+        protected internal override string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
+        {
+            if (!Path.IsNullOrEmpty())
+            {
+                var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+                if (foundItem != null)
+                {
+                    return $"{foundItem.Name}.{Description}";
+                }
+
+            }
+            return $"{lookupDefinition.TableDefinition.Description}.{Description} Formula ";
+        }
+
         public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
         {
             var result = string.Empty;
@@ -70,13 +84,37 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
         {
-            return false;
-            return base.LoadFromEntity(entity, lookupDefinition);
+            Formula = entity.Formula;
+            Description = entity.FormulaDisplayValue;
+            DataType = (FieldDataTypes)entity.FormulaDataType;
+            Condition = (Conditions)entity.Operand;
+            FilterValue = entity.SearchForValue;
+            Path = entity.Path;
+
+            var result = base.LoadFromEntity(entity, lookupDefinition);
+
+            if (Path.IsNullOrEmpty())
+            {
+                Alias = TableFilterDefinition.TableDefinition.TableName;
+            }
+            else
+            {
+                var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType.Formula);
+                Alias = lookupDefinition.AdvancedFindTree.MakeIncludes(foundItem).LookupJoin.JoinDefinition.Alias;
+            }
+
+            return result;
         }
 
         public override void SaveToEntity(AdvancedFindFilter entity)
         {
+            entity.Formula = Formula;
+            entity.FormulaDisplayValue = Description;
+            entity.FormulaDataType = (byte)DataType;
+            entity.Operand = (byte)Condition.Value;
+
             base.SaveToEntity(entity);
+            entity.SearchForValue = FilterValue;
         }
 
         public override string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
@@ -97,7 +135,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 Alias = treeViewItem.BaseTree.MakeIncludes(treeViewItem).LookupJoin.JoinDefinition.Alias;
             }
             var value = base.LoadFromFilterReturn(filterReturn, treeViewItem);
-            Value = value;
+            DisplayValue = Value = value;
             return value;
         }
 
@@ -109,7 +147,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public override void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
             filterReturn.Formula = Formula;
-            filterReturn.Condition = Condition.Value;
+            if (Condition != null) filterReturn.Condition = Condition.Value;
             filterReturn.FormulaDisplayValue = Description;
             filterReturn.FormulaValueType = DataType;
             filterReturn.SearchValue = FilterValue;

@@ -579,13 +579,16 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
-                //var formulaFilter = new FormulaFilterDefinition(FilterDefinition);
-                result = null;
+                var formulaFilter = new FormulaFilterDefinition(FilterDefinition);
+                result = formulaFilter;
             }
 
             if (result != null && result.LoadFromEntity(entity, this))
             {
-                FilterDefinition.AddUserFilter(result);
+                if (addFilterToLookup)
+                {
+                    FilterDefinition.AddUserFilter(result);
+                }
             }
             //if (entity.SearchForAdvancedFindId != null)
             //{

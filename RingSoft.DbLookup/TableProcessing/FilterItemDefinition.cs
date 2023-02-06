@@ -219,30 +219,36 @@ namespace RingSoft.DbLookup.TableProcessing
             return searchValue;
         }
 
-        public virtual bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public virtual bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition, string path = "")
         {
             LeftParenthesesCount = entity.LeftParentheses;
             RightParenthesesCount = entity.RightParentheses;
             EndLogic = (EndLogics)entity.EndLogic;
             DateFilterType = (DateFilterTypes)entity.DateFilterType;
             Value = GetSearchValue(entity.SearchForValue);
-            var process = false;
-            if (entity.Path.IsNullOrEmpty())
-            {
-                process = true;
-            }
-            else
-            {
-                var treeViewItem =
-                    lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path, TreeViewType);
-                process = treeViewItem != null;
-            }
-            if (!process)
-            {
-                var message = "This advanced find is corrupt. Please delete it.";
-                var caption = "Corrupt Advanced Find.";
-                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Error);
-            }
+            Path = entity.Path;
+            //var process = false;
+            //if (entity.Path.IsNullOrEmpty())
+            //{
+            //    process = true;
+            //}
+            //else
+            //{
+            //    var newPath = entity.Path;
+            //    if (entity.Path != path)
+            //    {
+            //        newPath = path + entity.Path;
+            //    }
+            //    var treeViewItem =
+            //        lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(newPath, TreeViewType);
+            //    process = treeViewItem != null;
+            //}
+            //if (!process)
+            //{
+            //    var message = "This advanced find is corrupt. Please delete it.";
+            //    var caption = "Corrupt Advanced Find.";
+            //    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Error);
+            //}
             return true;
             //else
             {

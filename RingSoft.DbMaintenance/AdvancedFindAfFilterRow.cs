@@ -18,12 +18,15 @@ namespace RingSoft.DbMaintenance
 
         public AutoFillValue AutoFillValue { get; set; }
 
-        public AdvancedFindFilterDefinition Filter { get; set; }
+        //public AdvancedFindFilterDefinition Filter { get; set; }
 
         public int AdvancedFindId { get; set; }
 
-        public AdvancedFindAfFilterRow(AdvancedFindFiltersManager manager, FieldDefinition primaryFieldDefinition = null) : base(manager)
+        public AdvancedFindAfFilterRow(AdvancedFindFiltersManager manager
+            , string path
+            , FieldDefinition primaryFieldDefinition = null) : base(manager)
         {
+            Path = path;
             SetupTableField(primaryFieldDefinition);
         }
 
@@ -53,6 +56,18 @@ namespace RingSoft.DbMaintenance
                 Table = primaryTable.Description;
             }
 
+            var path = Path;
+            if (!path.IsNullOrEmpty())
+            {
+                var foundItem = Manager.ViewModel.AdvancedFindTree.ProcessFoundTreeViewItem(path);
+                if (foundItem != null)
+                {
+                    if (foundItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        primaryTable = foundItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
+                    }
+                }
+            }
             lookup.FilterDefinition.AddFixedFilter(p => p.Table, Conditions.Equals, primaryTable.EntityName);
             if (Manager.ViewModel.AdvancedFindId != 0)
             {
@@ -110,25 +125,26 @@ namespace RingSoft.DbMaintenance
 
         private void CreateFilterDefinition()
         {
+            var filter = FilterItemDefinition as AdvancedFindFilterDefinition;
             if (AutoFillValue != null && AutoFillValue.IsValid())
             {
                 var advancedFindId = AutoFillValue
                     .PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
-                
-                if (Filter == null)
+
+                if (FilterItemDefinition == null)
                 {
-                    FilterItemDefinition = Filter = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
+                    FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
                         Manager.ViewModel.LookupDefinition, Path);
                 }
                 else
                 {
-                    Filter.AdvancedFindId = advancedFindId;
+                    filter.AdvancedFindId = advancedFindId;
                 }
                 AdvancedFindId = advancedFindId;
             }
-            else if (Filter != null)
+            else if (filter != null)
             {
-                Manager.ViewModel.LookupDefinition.FilterDefinition.RemoveUserFilter(Filter);
+                Manager.ViewModel.LookupDefinition.FilterDefinition.RemoveUserFilter(filter);
             }
         }
 
@@ -138,29 +154,34 @@ namespace RingSoft.DbMaintenance
             {
                 entity.SearchForAdvancedFindId = AutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
             }
-            
+            entity.Path = Path;
             base.SaveToEntity(entity, rowIndex);
         }
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
+            FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
+
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds, entity.SearchForAdvancedFindId.ToString());
+            Path = entity.Path;
 
+            //Path = entity.Path;
             //CreateFilterDefinition();
 
-            base.LoadFromEntity(entity);
-            var test = this;
-            if (ParentFieldDefinition?.ParentJoinForeignKeyDefinition != null)
-            {
-                SetupTableField(ParentFieldDefinition);
-            }
-            if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
-            {
-                Filter = advancedFindFilter;
-                //Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
-            }
-            
+            //base.LoadFromEntity(entity);
+            //var test = this;
+            //if (ParentFieldDefinition?.ParentJoinForeignKeyDefinition != null)
+            //{
+            //    SetupTableField(ParentFieldDefinition);
+            //}
+            //if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
+            //{
+            //    Filter = advancedFindFilter;
+            //    //Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
+            //}
+
             //SetupTableField(ParentFieldDefinition);
             //Manager.ViewModel.ResetLookup();
         }

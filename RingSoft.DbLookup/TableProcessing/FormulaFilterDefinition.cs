@@ -82,7 +82,8 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition,
+            string path = "")
         {
             Formula = entity.Formula;
             Description = entity.FormulaDisplayValue;

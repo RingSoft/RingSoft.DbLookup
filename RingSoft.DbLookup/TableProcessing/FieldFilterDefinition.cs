@@ -162,7 +162,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotEquals:
                     if (setUserValue)
                     {
-                        result += FieldDefinition.GetUserValue(Value);
+                        if (FieldDefinition != null) result += FieldDefinition.GetUserValue(Value);
                     }
                     else
                     {
@@ -174,19 +174,30 @@ namespace RingSoft.DbLookup.TableProcessing
                     result = result.Trim();
                     break;
                 default:
-                    var dateSearchValue = GetDateReportText();
-                    result += dateSearchValue;
+                    if (ValueType == ValueTypes.DateTime)
+                    {
+                        var dateSearchValue = GetDateReportText();
+                        result += dateSearchValue;
+                    }
+                    else
+                    {
+                        result += Value;
+                    }
+
                     break;
             }
 
             return result;
         }
 
-        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition,
+            string path = "")
         {
-            if (!entity.Path.IsNullOrEmpty())
+            Path = entity.Path;
+            var newPath = GetNewPath();
+            if (!newPath.IsNullOrEmpty())
             {
-                var treeViewItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path);
+                var treeViewItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(newPath);
                 if (treeViewItem != null)
                 {
                     FieldDefinition = treeViewItem.FieldDefinition;
@@ -200,8 +211,7 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 return false;
             }
-            var result = base.LoadFromEntity(entity, lookupDefinition);
-            TableFilterDefinition.AddUserFilter(this);
+            var result = base.LoadFromEntity(entity, lookupDefinition, path);
             return result;
         }
 
@@ -352,8 +362,11 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 path += JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
             }
-            
-            FieldDescription = FieldDefinition.Description;
+
+            if (path.IsNullOrEmpty())
+            {
+                path = Path;
+            }
             return path;// + FieldDefinition.MakePath();
         }
     }

@@ -294,7 +294,7 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity, false);
+            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity, false, null);
             if (filter != null)
             {
                 FilterItemDefinition = filter;
@@ -513,38 +513,31 @@ namespace RingSoft.DbMaintenance
             {
                 AllowSave = false;
             }
+            Path = filter.Path;
             FilterItemDefinition = filter;
-            if (!filter.TableDescription.IsNullOrEmpty())
+            if (filter.Path.IsNullOrEmpty())
             {
-                Table = filter.TableDescription;
-                Field = filter.FieldDescription;
+                Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
             }
             else
             {
-                if (filter.Path.IsNullOrEmpty())
+                var foundItem =
+                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
+                        filter.TreeViewType);
+                if (foundItem != null)
                 {
-                    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-                }
-                else
-                {
-                    var foundItem =
-                        Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
-                            filter.TreeViewType);
-                    if (foundItem != null)
+                    if (foundItem.Parent != null)
                     {
-                        if (foundItem.Parent != null)
-                        {
-                            Table = foundItem.Parent.Name;
-                        }
-                        else
-                        {
-                            Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-                        }
+                        Table = foundItem.Parent.Name;
+                    }
+                    else
+                    {
+                        Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
+                    }
 
-                        if (Field.IsNullOrEmpty())
-                        {
-                            Field = foundItem.Name;
-                        }
+                    if (Field.IsNullOrEmpty())
+                    {
+                        Field = foundItem.Name;
                     }
                 }
             }

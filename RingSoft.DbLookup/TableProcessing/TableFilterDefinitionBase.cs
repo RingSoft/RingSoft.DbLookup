@@ -299,6 +299,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 Path = path
             };
             advancedFindFilter.TableFilterDefinition = this;
+            advancedFindFilter.LookupDefinition = lookupDefinition;
             if (addToUsersFilters)
             {
                 _userFilterDefinitions.Add(advancedFindFilter);
@@ -443,7 +444,7 @@ namespace RingSoft.DbLookup.TableProcessing
             var queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
 
             var dateType = DbDateTypes.DateOnly;
-            if (fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.DateTime)
+            if (fieldFilterDefinition.FieldDefinition != null && fieldFilterDefinition.FieldDefinition.FieldDataType == FieldDataTypes.DateTime)
             {
                 var dateField = fieldFilterDefinition.FieldDefinition as DateFieldDefinition;
                 if (dateField != null)

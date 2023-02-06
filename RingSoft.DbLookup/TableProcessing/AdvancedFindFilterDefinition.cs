@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public int AdvancedFindId { get; set; }
 
-        public LookupDefinitionBase LookupDefinition { get; private set; }
+        public LookupDefinitionBase LookupDefinition { get; internal set; }
 
         
         internal AdvancedFindFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
@@ -36,6 +36,9 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
         {
+            if (!printMode)
+                return string.Empty;
+
             var result = string.Empty;
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
             if (advancedFind != null)
@@ -50,7 +53,8 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition)
+        public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition,
+            string path = "")
         {
             if (entity.Path.IsNullOrEmpty())
             {
@@ -62,7 +66,9 @@ namespace RingSoft.DbLookup.TableProcessing
                     TreeViewType.AdvancedFind);
                 TableDescription = afItem.Name;
             }
-            AdvancedFindId = entity.AdvancedFindId;
+
+            if (entity.SearchForAdvancedFindId != null) 
+                AdvancedFindId = entity.SearchForAdvancedFindId.Value;
             LookupDefinition = lookupDefinition;
             return base.LoadFromEntity(entity, lookupDefinition);
         }
@@ -110,8 +116,12 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     else
                     {
-                        var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
-                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
+                        var newPath = Path + advancedFindFilter.Path;
+                        //var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+                        
+                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false
+                        , null, Path);
+                        
                         TableFilterDefinitionBase.ProcessFieldJoins(query, LookupDefinition.Joins);
                         wheres.AddRange(TableFilterDefinition.ProcessFilter(query, advFindFilterReturn,
                             ref lastWhereItem, ref firstWhereItem, tree));

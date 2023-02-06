@@ -17,7 +17,7 @@ namespace RingSoft.DbMaintenance
             if (filter is FieldFilterDefinition fieldFilter)
             {
                 var path = fieldFilter.Path;
-                if (path.IsNullOrEmpty())
+                if (path.IsNullOrEmpty() && fieldFilter.FieldDefinition != null)
                 {
                     Field = fieldFilter.FieldDefinition.Description;
                 }
@@ -48,6 +48,9 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
+            FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
+
             if (!entity.Path.IsNullOrEmpty())
             {
                 var treeViewItem =

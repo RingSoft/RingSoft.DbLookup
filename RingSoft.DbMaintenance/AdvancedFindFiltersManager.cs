@@ -48,7 +48,7 @@ namespace RingSoft.DbMaintenance
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
             AdvancedFindFilter entity)
         {
-            if (entity.Formula.IsNullOrEmpty())
+            if (entity.Formula.IsNullOrEmpty() && entity.SearchForAdvancedFindId == null)
             {
                 return new AdvancedFindFieldFilterRow(this);
                 //var tableDefinition =
@@ -77,7 +77,9 @@ namespace RingSoft.DbMaintenance
                 //return new AdvancedFindFilterRow(this);
             }
 
-            return new AdvancedFindAfFilterRow(this);
+            return new AdvancedFindAfFilterRow(this, entity.Path)
+            {
+            };
         }
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition, bool creatingNew = false)
@@ -111,7 +113,7 @@ namespace RingSoft.DbMaintenance
                             row = new AdvancedFindFormulaFilterRow(this);
                             break;
                         case FilterItemTypes.AdvancedFind:
-                            row = new AdvancedFindAfFilterRow(this);
+                            row = new AdvancedFindAfFilterRow(this, fixedFilter.Path);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -263,8 +265,10 @@ namespace RingSoft.DbMaintenance
 
         public void AddAdvancedFindFilterRow(FieldDefinition field = null)
         {
-            var row = new AdvancedFindAfFilterRow(this, field);
-            row.Path = ViewModel.SelectedTreeViewItem.MakePath();
+            var row = new AdvancedFindAfFilterRow(this
+                , ViewModel.SelectedTreeViewItem.MakePath()
+                , field);
+            
             AddRow(row);
             if (Rows.Count > 1)
             {

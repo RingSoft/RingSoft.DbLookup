@@ -563,7 +563,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         public FilterItemDefinition LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true,
-            TreeViewItem parentTreeItem = null)
+            TreeViewItem parentTreeItem = null, string path = "")
         {
             FilterItemDefinition result = null;
 
@@ -572,9 +572,20 @@ namespace RingSoft.DbLookup.Lookup
                 var advancedFindFilter = new AdvancedFindFilterDefinition(FilterDefinition);
                 result = advancedFindFilter;
             }
-            if (entity.Formula.IsNullOrEmpty())
+            else if (entity.Formula.IsNullOrEmpty())
             {
                 var fieldFilter = new FieldFilterDefinition(FilterDefinition);
+                var newPath = path + entity.Path;
+                if (!newPath.IsNullOrEmpty())
+                {
+                    var foundItem = AdvancedFindTree.ProcessFoundTreeViewItem(newPath, TreeViewType.Field);
+                    if (foundItem != null)
+                    {
+                        fieldFilter.FieldDefinition = foundItem.FieldDefinition;
+                        var lookupJoin = AdvancedFindTree.MakeIncludes(foundItem).LookupJoin;
+                        fieldFilter.JoinDefinition = lookupJoin?.JoinDefinition;
+                    }
+                }
                 result = fieldFilter;
             }
             else
@@ -583,7 +594,7 @@ namespace RingSoft.DbLookup.Lookup
                 result = formulaFilter;
             }
 
-            if (result != null && result.LoadFromEntity(entity, this))
+            if (result != null && result.LoadFromEntity(entity, this, path))
             {
                 if (addFilterToLookup)
                 {

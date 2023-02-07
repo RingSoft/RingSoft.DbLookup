@@ -723,6 +723,7 @@ namespace RingSoft.DbMaintenance
             {
                 result = fixedText + userText;
             }
+
             printerSetupArgs.PrintingProperties.AdditionalFilter = result;
         }
 
@@ -735,19 +736,20 @@ namespace RingSoft.DbMaintenance
                 return result;
             }
             var index = 0;
+            var found = false;
             foreach (var filterItem in filterItemDefinitions)
             {
                 if (!printerSetupArgs.ReportFilters.Contains(filterItem))
                 {
                     result += filterItem.GetPrintText(printerSetupArgs.LookupDefinition);
+                    var end = index == filterItemDefinitions.Count - 1;
+
+                    if (!end)
+                    {
+                        result += filterItem.PrintEndLogicText();
+                    }
                 }
 
-                var end = index == filterItemDefinitions.Count - 1;
-
-                if (!end)
-                {
-                    result += filterItem.PrintEndLogicText();
-                }
                 index++;
             }
             return result;

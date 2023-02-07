@@ -134,11 +134,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 return;
             }
-            var window = new PrintingProcessingWindow(printerSetupArgs);
-            var activeWindow = ActiveWindow;
-            window.Owner = activeWindow;
-            window.ShowInTaskbar = false;
-            window.ShowDialog();
+
+            var optionsWindow = new PrintSetupWindow(printerSetupArgs);
+            optionsWindow.Owner = ActiveWindow;
+            optionsWindow.ShowInTaskbar = false;
+            optionsWindow.ShowDialog();
         }
 
         public static bool IsShiftKeyDown()

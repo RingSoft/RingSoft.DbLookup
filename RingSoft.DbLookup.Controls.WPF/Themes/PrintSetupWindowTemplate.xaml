@@ -1,0 +1,118 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+                    xmlns:vm="clr-namespace:RingSoft.DbLookup;assembly=RingSoft.DbLookup"
+                    xmlns:print="clr-namespace:RingSoft.Printing.Interop;assembly=RingSoft.Printing.Interop"
+                    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
+
+    <dec:ComparisonConverter x:Key="ComparisonConverter" />
+
+    <Style TargetType="{x:Type local:PrintSetupWindow}">
+        <Setter Property="Title" Value="Print Setup"/>
+        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:PrintSetupWindow}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            x:Name="Border">
+
+                        <Border.Resources>
+                            <vm:PrinterSetupViewModel x:Key="ViewModel"/>
+                        </Border.Resources>
+
+                        <AdornerDecorator>
+
+                            <Grid DataContext="{DynamicResource ViewModel}" Margin="5">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Row="0" Grid.Column="0" Content="Select your output option for the report you are creating now."/>
+
+                                <Grid Grid.Row="1" Grid.Column="0">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="3*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <RadioButton Grid.Column="0" Content="Printer" IsChecked="{Binding Path=OutputType, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static print:ReportOutputTypes.Printer}, Mode=TwoWay}" />
+
+                                    <RadioButton Grid.Column="1" Content="Screen" IsChecked="{Binding Path=OutputType, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static print:ReportOutputTypes.Screen}, Mode=TwoWay}"/>
+
+                                    <RadioButton Grid.Column="2" Content="File" IsChecked="{Binding Path=OutputType, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static print:ReportOutputTypes.File}, Mode=TwoWay}"/>
+
+                                </Grid>
+
+                                <StackPanel Grid.Row="2" Grid.Column="0" x:Name="FilePanel" Orientation="Horizontal" Margin="0,5">
+
+                                    <dec:StringEditControl Width="350"/>
+
+                                    <Button Content="..." Width="20" IsTabStop="False"/>
+
+                                </StackPanel>
+
+                                <!--<Grid Grid.Row="3" Grid.Column="0" x:Name="NumberCopiesGrid">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Content="Number of Copies"/>
+
+                                    <dec:IntegerEditControl Grid.Row="0" Grid.Column="1" Width="50" MinimumValue="1"/>
+
+                                </Grid>-->
+
+                                <Grid Grid.Row="3" Grid.Column="0" x:Name="FileTypeGrid">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Content="File Type"/>
+
+                                    <dec:TextComboBoxControl Grid.Row="0" Grid.Column="1"/>
+
+                                </Grid>
+
+                                <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Right">
+
+                                    <Button Content="_OK" Width="50" Command="{Binding OkCommand}" IsDefault="True"/>
+
+                                    <Button Content="_Cancel" Command="{Binding CancelCommand}" Width="50" Margin="5,0,0,0" IsCancel="True"/>
+
+                                </StackPanel>
+                            </Grid>
+
+                        </AdornerDecorator>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -95,7 +95,6 @@ namespace RingSoft.DbLookup
         private async void LaunchPrinter()
         {
             PrintingInteropGlobals.PropertiesProcessor.Properties = PrinterSetupArgs.PrintingProperties;
-            PrinterSetupArgs.PrintingProperties.ReportOutputType = ReportOutputTypes.Screen;
 
             var result = PrintingInteropGlobals.WriteJsons();
             if (!string.IsNullOrEmpty(result))

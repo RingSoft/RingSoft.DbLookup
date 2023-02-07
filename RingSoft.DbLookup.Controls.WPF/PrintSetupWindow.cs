@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -85,6 +87,59 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void CloseWindow()
         {
             Close();
+        }
+
+        public void UpdateView()
+        {
+            
+        }
+
+        public string GetFile()
+        {
+            var file = new FileInfo(ViewModel.OutputFileName);
+            var folder = file.Directory;
+            var folderName = string.Empty;
+            if (folder != null)
+            {
+                folderName = folder.ToString();
+            }
+
+            if (folderName.IsNullOrEmpty())
+            {
+                folderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+
+            if (!folderName.EndsWith("\\"))
+            {
+                folderName += "\\";
+            }
+
+            var extension = ViewModel.GetExtension();
+            if (extension != null)
+            {
+                extension = extension.TrimStart('.');
+            }
+
+            var fileName = string.Empty;
+            if (file != null)
+            {
+                fileName = file.Name;
+            }
+            var saveFileDialog = new SaveFileDialog
+            {
+                FileName = fileName,
+                InitialDirectory = folderName,
+                DefaultExt = extension,
+                Filter = $"{ViewModel.FileTypeComboBoxItem.TextValue}|*.{extension}"
+            };
+
+            var result = saveFileDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                return saveFileDialog.FileName;
+            }
+
+            return ViewModel.OutputFileName;
         }
     }
 }

@@ -62,9 +62,9 @@
 
                                 <StackPanel Grid.Row="2" Grid.Column="0" x:Name="FilePanel" Orientation="Horizontal" Margin="0,5">
 
-                                    <dec:StringEditControl Width="350"/>
+                                    <dec:StringEditControl Width="350" Text="{Binding OutputFileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                    <Button Content="..." Width="20" IsTabStop="False"/>
+                                    <Button Content="..." Width="20" IsTabStop="False" Command="{Binding FileCommand}"/>
 
                                 </StackPanel>
 
@@ -94,7 +94,7 @@
 
                                     <Label Grid.Row="0" Grid.Column="0" Content="File Type"/>
 
-                                    <dec:TextComboBoxControl Grid.Row="0" Grid.Column="1"/>
+                                    <dec:TextComboBoxControl Grid.Row="0" Grid.Column="1" Setup="{Binding FileTypeBoxControlSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding FileTypeComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 </Grid>
 

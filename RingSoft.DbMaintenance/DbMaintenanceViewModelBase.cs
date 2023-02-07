@@ -734,23 +734,21 @@ namespace RingSoft.DbMaintenance
             {
                 return result;
             }
-            var enumTranslation = new EnumFieldTranslation();
-            enumTranslation.LoadFromEnum<EndLogics>();
+            var index = 0;
             foreach (var filterItem in filterItemDefinitions)
             {
                 if (!printerSetupArgs.ReportFilters.Contains(filterItem))
                 {
-                    var lParen = GblMethods.StringDuplicate("(", filterItem.LeftParenthesesCount);
-                    result += filterItem.ReportDescription + " ";
-                    result += filterItem.GetReportText(printerSetupArgs.LookupDefinition, true);
-                    var rParen = GblMethods.StringDuplicate("(", filterItem.RightParenthesesCount);
-                    result = lParen + result + rParen;
-                    if (filterItemDefinitions.IndexOf(filterItem) < count - 1)
-                    {
-                        result += " " + enumTranslation.TypeTranslations
-                            .FirstOrDefault(p => p.NumericValue == (int)filterItem.EndLogic).TextValue + "\r\n";
-                    }
+                    result += filterItem.GetPrintText(printerSetupArgs.LookupDefinition);
                 }
+
+                var end = index == filterItemDefinitions.Count - 1;
+
+                if (!end)
+                {
+                    result += filterItem.PrintEndLogicText();
+                }
+                index++;
             }
             return result;
         }

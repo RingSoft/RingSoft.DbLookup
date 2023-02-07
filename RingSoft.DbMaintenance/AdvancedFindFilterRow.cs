@@ -172,6 +172,7 @@ namespace RingSoft.DbMaintenance
         public void SetCellValueFromLookupReturn(AdvancedFilterReturn filterReturn)
         {
             LoadFromFilterReturn(filterReturn);
+            Manager.ViewModel.RefreshLookup();
         }
 
         private void ConvertDate(AdvancedFilterReturn filterReturn)
@@ -294,7 +295,8 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity, false, null);
+            var filter = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity, true, null);
+            LoadFromFilterDefinition(filter, false, entity.FilterId);
             if (filter != null)
             {
                 FilterItemDefinition = filter;
@@ -597,7 +599,7 @@ namespace RingSoft.DbMaintenance
 
         public void MakeSearchValueText(string searchValue = "")
         {
-            SearchValueText = FilterItemDefinition.GetReportText(Manager.ViewModel.LookupDefinition);
+            SearchValueText = FilterItemDefinition.GetReportText(Manager.ViewModel.LookupDefinition, false);
  
         }
 

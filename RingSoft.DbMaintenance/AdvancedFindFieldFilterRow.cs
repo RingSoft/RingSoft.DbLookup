@@ -48,8 +48,9 @@ namespace RingSoft.DbMaintenance
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
-            LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
+            //Base does this
+            //FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            //LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
 
             if (!entity.Path.IsNullOrEmpty())
             {

@@ -20,7 +20,7 @@ namespace RingSoft.DbMaintenance
 
         public void PrintOutput()
         {
-            if (AdvancedFindViewModel.KeyAutoFillValue.Text.IsNullOrEmpty())
+            if (AdvancedFindViewModel.KeyAutoFillValue == null || AdvancedFindViewModel.KeyAutoFillValue.Text.IsNullOrEmpty())
             {
                 var message = "You must specify a Name to print report.";
                 var caption = "Validation Error";

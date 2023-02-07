@@ -471,7 +471,7 @@ namespace RingSoft.DbMaintenance
             ResetLookup();
             View.LockTable(true);
 
-            ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+            PrintLookupOutputCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                 ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
 
             Clearing = false;
@@ -645,7 +645,7 @@ namespace RingSoft.DbMaintenance
 
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
-            AddColumnCommand.IsEnabled = 
+            PrintLookupOutputCommand.IsEnabled = AddColumnCommand.IsEnabled = 
                 AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
 
@@ -697,7 +697,7 @@ namespace RingSoft.DbMaintenance
             AdvancedFindTree.LookupDefinition = LookupDefinition;
             ColumnsManager?.SetupForNewRecord();
             FiltersManager?.SetupForNewRecord();
-            RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled =
+            PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled =
                 ApplyToLookupCommand.IsEnabled = ShowSqlCommand.IsEnabled = false;
         }
 
@@ -992,7 +992,7 @@ namespace RingSoft.DbMaintenance
                 var test = LookupDefinition;
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
                 ProcessRefresh();
-                ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
+                PrintLookupOutputCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
             }
         }

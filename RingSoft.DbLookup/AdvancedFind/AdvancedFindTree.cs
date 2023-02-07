@@ -349,7 +349,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     {
                         result = result.Items.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
                     }
-                }
+        }
                 path = path.RightStr(path.Length - (sepPos + 1));
             }
 

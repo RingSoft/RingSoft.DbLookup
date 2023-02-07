@@ -60,12 +60,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return $"{lookupDefinition.TableDefinition.Description}.{Description} Formula ";
         }
 
-        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
+        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode)
         {
             var result = string.Empty;
             if (printMode)
             {
-                result += GetReportBeginTextPrintMode(lookupDefinition);
+                result += GetReportBeginTextPrintMode(lookupDefinition) + " ";
             }
 
             result += GetConditionText(Condition.Value) + " ";

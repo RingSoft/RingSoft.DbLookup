@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
-        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
+        public override string GetReportText(LookupDefinitionBase lookupDefinition,bool printMode)
         {
             if (!printMode)
                 return string.Empty;
@@ -43,10 +43,28 @@ namespace RingSoft.DbLookup.TableProcessing
             var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
             if (advancedFind != null)
             {
+                var index = 0;
                 foreach (var advancedFindFilter in advancedFind.Filters)
                 {
+                    var test = this;
+                    advancedFindFilter.Path = Path + advancedFindFilter.Path;
                     var filterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false);
-                    result += filterReturn.GetReportText(lookupDefinition, printMode);
+                    var recursive = false;
+                    if (filterReturn is AdvancedFindFilterDefinition)
+                    {
+                        recursive = true;
+                    }
+                    result += filterReturn.GetPrintText(lookupDefinition);
+
+                    var end = index == advancedFind.Filters.Count - 1;
+
+                    if (!end)
+                    {
+                        result += filterReturn.PrintEndLogicText();
+                    }
+
+                    index++;
+                    
                     result.TrimRight("\r\n");
                 }
             }
@@ -100,14 +118,16 @@ namespace RingSoft.DbLookup.TableProcessing
                 FilterItemDefinition advFindFilterReturn = null;
                 foreach (var advancedFindFilter in filters)
                 {
+                    var newPath = Path + advancedFindFilter.Path;
 
                     if (advancedFindFilter.SearchForAdvancedFindId != null)
                     {
                         var newAdvancedFindFilter = new AdvancedFindFilterDefinition(LookupDefinition.FilterDefinition);
+                        newAdvancedFindFilter.Path = newPath;
                         newAdvancedFindFilter.LookupDefinition = LookupDefinition;
                         newAdvancedFindFilter.AdvancedFindId = advancedFindFilter.SearchForAdvancedFindId.Value;
                         newAdvancedFindFilter.TableFilterDefinition = TableFilterDefinition;
-                        newAdvancedFindFilter.Path = Path;
+                        //newAdvancedFindFilter.Path = Path;
                         var newWheres = newAdvancedFindFilter.ProcessAdvancedFind(query, ref firstWhereItem, ref lastWhereItem,
                                 true,
                                 tree);
@@ -116,7 +136,6 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     else
                     {
-                        var newPath = Path + advancedFindFilter.Path;
                         //var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
                         
                         advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false

@@ -146,12 +146,19 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
-        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false)
+        protected internal override string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
+        {
+            var result = $"{FieldDefinition.TableDefinition.Description}.{FieldDefinition.Description}";
+            return result;
+            //return base.GetReportBeginTextPrintMode(lookupDefinition);
+        }
+
+        public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode)
         {
             var result = string.Empty;
             if (printMode)
             {
-                result += GetReportBeginTextPrintMode(lookupDefinition);
+                result += GetReportBeginTextPrintMode(lookupDefinition) + " ";
             }
             result += GetConditionText(Condition) + " ";
             var setUserValue = ValueType != ValueTypes.DateTime;
@@ -349,6 +356,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal override string GetNewPath()
         {
+            if (!Path.IsNullOrEmpty())
+            {
+                return Path;
+            }
             //var path = FieldDefinition.MakePath();
             var path = string.Empty;
             var parentObject = JoinDefinition?.ParentObject;
@@ -358,9 +369,12 @@ namespace RingSoft.DbLookup.TableProcessing
                 parentObject = parentObject.ParentObject;
             }
             var test = this;
-            if (JoinDefinition != null)
+            if (FieldDefinition.TableDefinition != TableFilterDefinition.TableDefinition)
             {
-                path += JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
+                if (JoinDefinition != null)
+                {
+                    path += JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.MakePath();
+                }
             }
 
             if (path.IsNullOrEmpty())

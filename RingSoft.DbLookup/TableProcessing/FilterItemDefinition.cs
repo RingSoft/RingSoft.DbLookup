@@ -7,6 +7,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using Google.Protobuf.WellKnownTypes;
+using MySqlX.XDevAPI.Common;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -145,7 +146,28 @@ namespace RingSoft.DbLookup.TableProcessing
             DateFilterValue = source.DateFilterValue;
         }
 
-        public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode = false);
+        public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode);
+
+        public string GetPrintText(LookupDefinitionBase lookupDefinition)
+        {
+            var lParen = GblMethods.StringDuplicate("(", LeftParenthesesCount);
+            var result = GetReportText(lookupDefinition, true);
+            var rParen = GblMethods.StringDuplicate("(", RightParenthesesCount);
+            result = lParen + result + rParen;
+
+            return result;
+        }
+
+        public string PrintEndLogicText()
+        {
+            var enumTranslation = new EnumFieldTranslation();
+            enumTranslation.LoadFromEnum<EndLogics>();
+
+            var result = " " + enumTranslation.TypeTranslations
+                .FirstOrDefault(p => p.NumericValue == (int)EndLogic).TextValue + "\r\n";
+
+            return result;
+        }
 
         public string GetDateReportText()
         {
@@ -378,6 +400,14 @@ namespace RingSoft.DbLookup.TableProcessing
 
             if (foundItem != null)
             {
+                if (foundItem.Parent != null)
+                {
+                    result += $"{foundItem.Parent.Name}.";
+                }
+                else
+                {
+                    result += $"{foundItem.FieldDefinition.TableDefinition.Description}.";
+                }
                 result += $"{foundItem.Name} ";
             }
             return result;

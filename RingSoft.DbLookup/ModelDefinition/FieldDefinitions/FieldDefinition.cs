@@ -265,8 +265,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
             else if (ParentJoinForeignKeyDefinition != null)
             {
-                result = TableDefinition.Context
-                    .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue).Text;
+                var requestResult = TableDefinition.Context
+                    .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue);
+                result = requestResult?.Text;
+                if (result.IsNullOrEmpty())
+                {
+                    result = dbIdValue;
+                }
             }
             else
             {

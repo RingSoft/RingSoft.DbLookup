@@ -51,11 +51,11 @@ namespace RingSoft.DbMaintenance
             base.LoadFromFilterReturn(advancedFilterReturn);
         }
 
-        public override void LoadFromEntity(AdvancedFindFilter entity)
-        {
-            FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
-            LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
-            base.LoadFromEntity(entity);
-        }
+        //public override void LoadFromEntity(AdvancedFindFilter entity)
+        //{
+        //    FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+        //    LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
+        //    base.LoadFromEntity(entity);
+        //}
     }
 }

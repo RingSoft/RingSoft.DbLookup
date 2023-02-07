@@ -154,18 +154,27 @@ namespace RingSoft.DbMaintenance
             {
                 entity.SearchForAdvancedFindId = AutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value.ToInt();
             }
-            entity.Path = Path;
+
+            var newPath = Path;
+            //var foundItem = Manager.ViewModel.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType.Field);
+            //if (foundItem != null)
+            //{
+            //    newPath = foundItem.FieldDefinition.MakePath();
+            //}
+            entity.Path = newPath;
             base.SaveToEntity(entity, rowIndex);
         }
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
-            LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
+            //FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
+            //LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
 
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds, entity.SearchForAdvancedFindId.ToString());
             Path = entity.Path;
+
+            base.LoadFromEntity(entity);
 
             //Path = entity.Path;
             //CreateFilterDefinition();

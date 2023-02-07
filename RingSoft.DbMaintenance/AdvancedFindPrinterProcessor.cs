@@ -31,6 +31,7 @@ namespace RingSoft.DbMaintenance
             }
             PrinterSetup.PrintingProperties.ReportTitle =
                 $"{AdvancedFindViewModel.KeyAutoFillValue.Text} Lookup Report";
+
             PrinterSetup.PrintingProperties.ReportType = ReportTypes.Details;
             PrinterSetup.PrintingProperties.PrintCurrentCode = false;
             PrinterSetup.PrintingProperties.BeginCode = "Start";

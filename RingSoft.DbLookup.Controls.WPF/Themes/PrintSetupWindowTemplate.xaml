@@ -68,7 +68,7 @@
 
                                 </StackPanel>
 
-                                <!--<Grid Grid.Row="3" Grid.Column="0" x:Name="NumberCopiesGrid">
+                                <Grid Grid.Row="3" Grid.Column="0" x:Name="NumberCopiesGrid">
 
                                     <Grid.ColumnDefinitions>
 
@@ -79,9 +79,9 @@
 
                                     <Label Grid.Row="0" Grid.Column="0" Content="Number of Copies"/>
 
-                                    <dec:IntegerEditControl Grid.Row="0" Grid.Column="1" Width="50" MinimumValue="1"/>
+                                    <dec:IntegerEditControl Grid.Row="0" Grid.Column="1" Width="50" MinimumValue="1" Value="{Binding NumberOfCopies, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                </Grid>-->
+                                </Grid>
 
                                 <Grid Grid.Row="3" Grid.Column="0" x:Name="FileTypeGrid">
 

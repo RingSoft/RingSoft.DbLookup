@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -54,6 +55,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public PrinterSetupViewModel ViewModel { get; private set; }
 
+        public StackPanel FilePanel { get; private set; }
+
+        public Grid NumberCopiesGrid { get; private set; }
+
+        public Grid FileTypeGrid { get; private set; }
+
         static PrintSetupWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PrintSetupWindow), new FrameworkPropertyMetadata(typeof(PrintSetupWindow)));
@@ -71,6 +78,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             ViewModel = Border.TryFindResource("ViewModel") as PrinterSetupViewModel;
+            FilePanel = GetTemplateChild(nameof(FilePanel)) as StackPanel;
+            NumberCopiesGrid = GetTemplateChild(nameof(NumberCopiesGrid)) as Grid;
+            FileTypeGrid = GetTemplateChild(nameof(FileTypeGrid)) as Grid;
 
             base.OnApplyTemplate();
         }
@@ -91,7 +101,28 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void UpdateView()
         {
-            
+            NumberCopiesGrid.Visibility = Visibility.Collapsed;
+            FileTypeGrid.Visibility = Visibility.Collapsed;
+
+            switch (ViewModel.OutputType)
+            {
+                case ReportOutputTypes.Printer:
+                    FilePanel.IsEnabled = false;
+                    NumberCopiesGrid.Visibility = Visibility.Visible;
+                    NumberCopiesGrid.IsEnabled = true;
+                    break;
+                case ReportOutputTypes.Screen:
+                    FilePanel.IsEnabled = false;
+                    NumberCopiesGrid.Visibility = Visibility.Visible;
+                    NumberCopiesGrid.IsEnabled = false;
+                    break;
+                case ReportOutputTypes.File:
+                    FilePanel.IsEnabled = true;
+                    FileTypeGrid.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public string GetFile()

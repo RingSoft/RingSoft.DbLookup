@@ -54,6 +54,21 @@ namespace RingSoft.DbLookup
             }
         }
 
+        private int _numberOfCopies;
+
+        public int NumberOfCopies
+        {
+            get => _numberOfCopies;
+            set
+            {
+                if (_numberOfCopies == value)
+                    return;
+
+                _numberOfCopies = value;
+                OnPropertyChanged();
+            }
+        }
+
         private TextComboBoxControlSetup _fileTypeBoxControlSetup;
 
         public TextComboBoxControlSetup FileTypeBoxControlSetup
@@ -124,12 +139,18 @@ namespace RingSoft.DbLookup
             PrinterSetupArgs = printerSetupArgs;
             OutputType = ReportOutputTypes.Printer;
             FileType = ExportFileTypes.Pdf;
+            NumberOfCopies = 1;
+
             View.UpdateView();
         }
 
         private void OnOk()
         {
             PrinterSetupArgs.PrintingProperties.ReportOutputType = OutputType;
+            PrinterSetupArgs.PrintingProperties.ExportFileType = FileType;
+
+            PrinterSetupArgs.PrintingProperties.ExportPathFileName = OutputFileName;
+            PrinterSetupArgs.PrintingProperties.NumberOfCopies = NumberOfCopies;
             View.PrintOutput();
         }
 
@@ -143,7 +164,7 @@ namespace RingSoft.DbLookup
             if (fileName.IsNullOrEmpty())
             {
                 var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                fileName = $"{PrinterSetupArgs.CodeDescription}{extension}";
+                fileName = $"{PrinterSetupArgs.PrintingProperties.ReportTitle}{extension}";
                 OutputFileName = $"{folder}\\{fileName}";
             }
             else

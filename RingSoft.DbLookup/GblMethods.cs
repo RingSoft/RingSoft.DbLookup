@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -395,7 +396,20 @@ namespace RingSoft.DbLookup
         {
             if (GetPrintingInputExeFileName().IsNullOrEmpty())
             {
-                
+                var message =
+                    "The RingSoft printing app has not been installed. Would you like to download and install it?";
+                var caption = "Printing";
+                if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) ==
+                    MessageBoxButtonsResult.Yes)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "http://ringsoft.site/printing/",
+                        UseShellExecute = true
+                    });
+                }
+
+                return false;
             }
             return true;
         }

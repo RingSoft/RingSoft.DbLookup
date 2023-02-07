@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Media;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.DataProcessor;
@@ -7,6 +8,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -127,6 +129,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public static void PrintDocument(PrinterSetupArgs printerSetupArgs)
         {
+
+            if (!GblMethods.ValidatePrintingFile())
+            {
+                return;
+            }
             var window = new PrintingProcessingWindow(printerSetupArgs);
             var activeWindow = ActiveWindow;
             window.Owner = activeWindow;

@@ -137,27 +137,6 @@ namespace RingSoft.DbMaintenance
         {
             LookupColumnDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindColumnEntity(entity);
             LoadFromColumnDefinition(LookupColumnDefinition);
-            //Name = entity.Caption;
-            //var percentWidth = (double)entity.PercentWidth * 100;
-            //PercentWidth = percentWidth / 100;
-
-            //Table = LookupColumnDefinition.TableDescription;
-            //Field = LookupColumnDefinition.FieldDescription;
-
-            //if (LookupColumnDefinition != null)
-            //{
-            //    if (LookupColumnDefinition is LookupFormulaColumnDefinition)
-            //    {
-            //        LookupFormulaColumnDefinition = LookupColumnDefinition as LookupFormulaColumnDefinition;
-            //        SetFormulaTableField();
-            //    }
-            //    else
-            //    {
-            //        LookupFieldColumnDefinition = LookupColumnDefinition as LookupFieldColumnDefinition;
-            //        TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
-
-            //    }
-            //}
         }
 
         public override bool ValidateRow()
@@ -170,51 +149,12 @@ namespace RingSoft.DbMaintenance
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
             entity.ColumnId = rowIndex + 1;
             LookupColumnDefinition.SaveToEntity(entity);
-            //var tableDefinition = TableDefinition;
-            //entity.TableName = tableDefinition.EntityName;
-            //entity.Path = LookupColumnDefinition.Path;
-
-            //if (LookupColumnDefinition.ParentObject != null)
-            //{
-            //    var lookupJoin = LookupColumnDefinition.ParentObject as LookupJoin;
-            //    var primaryTableDefinition = lookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-            //    entity.PrimaryTableName = primaryTableDefinition.EntityName;
-            //    var primaryField = lookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-            //    if (primaryField != null)
-            //    {
-            //        entity.PrimaryFieldName = primaryField.FieldName;
-            //    }
-            //}
-            //entity.Caption = Name;
-            //entity.PercentWidth = PercentWidth;
-            //if (LookupFormulaColumnDefinition != null)
-            //{
-            //    entity.Formula = LookupFormulaColumnDefinition.OriginalFormula;
-            //    entity.FieldDataType = (byte) LookupFormulaColumnDefinition.DataType;
-            //    entity.DecimalFormatType = (byte) LookupFormulaColumnDefinition.DecimalFieldType;
-            //}
-            //else
-            //{
-            //    if (LookupFieldColumnDefinition != null)
-            //    {
-            //        entity.FieldName = LookupFieldColumnDefinition.FieldDefinition.FieldName;
-            //    }
-            //}
         }
 
         public virtual void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
             LookupColumnDefinition = column;
 
-            //if (column.ParentObject == null)
-            //{
-            //    Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
-            //}
-            //else
-            //{
-            //    var lookupJoin = column.ParentObject as LookupJoin;
-            //    Table = lookupJoin.JoinDefinition.ForeignKeyDefinition.PrimaryTable.Description;
-            //}
             Table = column.TableDescription;
             if (Table.IsNullOrEmpty())
             {
@@ -224,16 +164,6 @@ namespace RingSoft.DbMaintenance
 
             Name = column.Caption;
             PercentWidth = column.PercentWidth / 100;
-            //if (LookupFormulaColumnDefinition != null)
-            //{
-            //    SetFormulaTableField();
-            //}
-
-            //if (LookupFieldColumnDefinition != null)
-            //{
-            //    //Field = LookupFieldColumnDefinition.FieldDefinition.Description;
-            //    TableDefinition = LookupFieldColumnDefinition.FieldDefinition.TableDefinition;
-            //}
         }
 
         private void SetFormulaTableField()

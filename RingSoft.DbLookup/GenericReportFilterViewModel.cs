@@ -332,7 +332,11 @@ namespace RingSoft.DbLookup
             }
 
             PrinterSetup.PrintingProperties.PrintCurrentCode = IsCurrentOnly;
-            PrinterSetup.PrintingProperties.ReportType = ReportType;
+            if (PrinterSetup.PrintingProperties.ReportType != ReportTypes.Custom)
+            {
+                PrinterSetup.PrintingProperties.ReportType = ReportType;
+            }
+
             PrinterSetup.PrintingProperties.CurrentCodeOnlyCaption = PrintCurrentCodeLabel;
             PrinterSetup.PrintingProperties.CurrentCodeCaption = CurrentCodeLabel;
             PrinterSetup.PrintingProperties.BeginCodeCaption = BeginCodeLabel;

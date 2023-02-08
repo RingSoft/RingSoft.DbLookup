@@ -701,7 +701,7 @@ namespace RingSoft.DbMaintenance
                 printerSetupArgs.PrintingProcessingViewModel
                     .UpdateStatus(page, totalRecords, ProcessTypes.ImportHeader);
             };
-            //DbDataProcessor.ShowSqlStatementWindow();
+            
             lookupData.GetPrintData();
             MakeAdditionalFilter(printerSetupArgs);
         }

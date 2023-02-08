@@ -976,7 +976,7 @@ namespace RingSoft.DbLookup.Lookup
                         AddJoin(join);
                     }
                     var lookupColumn = join.ForeignKeyDefinition.FieldJoins[0].PrimaryField.TableDefinition
-                        .LookupDefinition.InitialOrderByColumn;
+                        .LookupDefinition.InitialSortColumnDefinition;
 
                     if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
                     {
@@ -987,13 +987,17 @@ namespace RingSoft.DbLookup.Lookup
                         column = AddHiddenColumn(lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType,
                             join.Alias);
                     }
-                
+
                 }
                 else
                 {
                     column = AddHiddenColumn(fieldDefinition);
                 }
-                column.Caption = fieldDefinition.Description;
+
+                if (column != null)
+                {
+                    column.Caption = fieldDefinition.Description;
+                }
             }
         }
     }

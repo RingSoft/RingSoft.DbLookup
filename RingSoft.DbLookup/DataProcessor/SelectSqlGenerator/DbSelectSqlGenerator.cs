@@ -532,6 +532,10 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// <returns></returns>
         protected virtual string GenerateWhereItemSqlFieldNameText(WhereItem whereItem)
         {
+            if (whereItem is WhereFormulaItem whereFormulaItem)
+            {
+                return whereFormulaItem.Formula;
+            }
             var sqlFieldName =
                 $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
             return sqlFieldName;
@@ -561,9 +565,20 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             {
                 sqlValue = ConvertValueToSqlText(whereItem.Value, whereFormula.ValueType, whereFormula.DateType);
             }
-            
+
+            switch (whereItem.Condition)
+            {
+                case Conditions.EqualsNull:
+                case Conditions.NotEqualsNull:
+                    sqlValue = string.Empty;
+                    break;
+                default:
+                    break;
+            }
             var condition = GenerateConditionSqlText(whereItem, tableField);
             var sql = "(\r\n";
+            formula = GenerateWhereItemSqlFieldNameText(whereItem);
+
             sql += $"\t{FormatFormulaSqlText(formula, "\t")}\r\n";
             sql += $") {condition} {sqlValue}";
             return sql;

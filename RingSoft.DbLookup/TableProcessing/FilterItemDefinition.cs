@@ -144,6 +144,7 @@ namespace RingSoft.DbLookup.TableProcessing
             ValueType = source.ValueType;
             DateFilterType = source.DateFilterType;
             DateFilterValue = source.DateFilterValue;
+            IsFixed = source.IsFixed;
         }
 
         public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode);

@@ -65,6 +65,10 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         protected override string GenerateWhereItemSqlFieldNameText(WhereItem whereItem)
         {
             var fieldName = base.GenerateWhereItemSqlFieldNameText(whereItem);
+            if (whereItem is WhereFormulaItem whereFormulaItem)
+            {
+                fieldName = whereFormulaItem.Formula;
+            }
             switch (whereItem.ValueType)
             {
                 case ValueTypes.DateTime:

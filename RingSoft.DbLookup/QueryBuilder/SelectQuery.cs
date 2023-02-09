@@ -700,8 +700,12 @@ namespace RingSoft.DbLookup.QueryBuilder
         }
 
         internal WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, string value,
-            ValueTypes valueType)
+            ValueTypes valueType, DbDateTypes dateType = DbDateTypes.DateOnly)
         {
+            if (formula == "VersionDate")
+            {
+                
+            }
             var whereItem = new WhereFormulaItem
             {
                 Table = BaseTable,
@@ -709,6 +713,7 @@ namespace RingSoft.DbLookup.QueryBuilder
                 Value = value,
                 ValueType = valueType,
                 Formula = formula,
+                DateType = dateType,
             };
 
             _whereItems.Add(whereItem);

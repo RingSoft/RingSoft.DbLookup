@@ -407,7 +407,7 @@ namespace RingSoft.DbLookup.Lookup
                     if (SortColumnDefinition is LookupFormulaColumnDefinition sortFormulaColumnDefinition)
                     {
                         query.AddWhereItemFormula(sortFormulaColumnDefinition.Formula, condition, searchText,
-                            sortFormulaColumnDefinition.ValueType);
+                            sortFormulaColumnDefinition.ValueType, sortFormulaColumnDefinition.DateType);
                     }
 
                     break;
@@ -962,7 +962,7 @@ namespace RingSoft.DbLookup.Lookup
                     if (lookupColumnType is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
                         return HasMoreThan1Record(searchValue, lookupFormulaColumn.Formula, query,
-                            lookupFormulaColumn.ValueType, debugMessage);
+                            lookupFormulaColumn.ValueType, debugMessage, lookupFormulaColumn.DateType);
                     }
                     break;
             }
@@ -1013,10 +1013,10 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         private bool HasMoreThan1Record(string searchValue, string formula, SelectQuery query, ValueTypes valueType,
-            string debugMessage)
+            string debugMessage, DbDateTypes dateType)
         {
             query.SetMaxRecords(2);
-            query.AddWhereItemFormula(formula, Conditions.Equals, searchValue, valueType);
+            query.AddWhereItemFormula(formula, Conditions.Equals, searchValue, valueType, dateType);
 
             query.DebugMessage = $"LookupData.{debugMessage}.HasMoreThan1Record?";
             var result = LookupDefinition.TableDefinition.Context.DataProcessor.GetData(query, !_printMode);

@@ -221,6 +221,10 @@ namespace RingSoft.DbMaintenance
             if (isFixed)
             {
                 AllowSave = false;
+                if (rowIndex == 0)
+                {
+                    LeftParenthesesCount++;
+                }
             }
             Path = filter.Path;
             FilterItemDefinition = filter;
@@ -251,15 +255,15 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-            LeftParenthesesCount = filter.LeftParenthesesCount;
-            RightParenthesesCount = filter.RightParenthesesCount;
+            LeftParenthesesCount += filter.LeftParenthesesCount;
+            RightParenthesesCount += filter.RightParenthesesCount;
             EndLogics = filter.EndLogic;
 
             IsFixed = filter.IsFixed;
-            if (filter.IsFixed && filter.TableFilterDefinition.FixedFilters.ToList().IndexOf(filter) == 0)
-            {
-                LeftParenthesesCount++;
-            }
+            //if (filter.IsFixed && filter.TableFilterDefinition.FixedFilters.ToList().IndexOf(filter) == 0)
+            //{
+            //    LeftParenthesesCount++;
+            //}
             
             MakeSearchValueText();
         }

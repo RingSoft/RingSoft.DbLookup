@@ -68,17 +68,25 @@ namespace RingSoft.DbLookup.TableProcessing
                 result += GetReportBeginTextPrintMode(lookupDefinition) + " ";
             }
 
-            result += GetConditionText(Condition.Value) + " ";
-            switch (Condition)
+            if (Condition == null)
             {
-                case Conditions.EqualsNull:
-                case Conditions.NotEqualsNull:
-                    result = result.Trim();
-                    break;
-                default:
-                    result += FilterValue;
-                    break;
+                result = "<Complex Formula>";
             }
+            else
+            {
+                result += GetConditionText(Condition.Value) + " ";
+                switch (Condition)
+                {
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        result = result.Trim();
+                        break;
+                    default:
+                        result += FilterValue;
+                        break;
+                }
+            }
+
             return result;
         }
 

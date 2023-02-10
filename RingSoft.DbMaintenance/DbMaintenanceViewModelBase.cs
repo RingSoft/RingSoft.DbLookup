@@ -763,7 +763,6 @@ namespace RingSoft.DbMaintenance
                     }
                 }
 
-                result = result.TrimEnd(endText.ToCharArray());
                 index++;
             }
 

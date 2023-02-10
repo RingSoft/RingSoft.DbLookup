@@ -153,7 +153,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             var lParen = GblMethods.StringDuplicate("(", LeftParenthesesCount);
             var result = GetReportText(lookupDefinition, true);
-            var rParen = GblMethods.StringDuplicate("(", RightParenthesesCount);
+            var rParen = GblMethods.StringDuplicate(")", RightParenthesesCount);
             result = lParen + result + rParen;
 
             return result;

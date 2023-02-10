@@ -750,8 +750,10 @@ namespace RingSoft.DbMaintenance
             var found = false;
             foreach (var filterItem in filterItemDefinitions)
             {
+                var endText = string.Empty;
                 if (!printerSetupArgs.ReportFilters.Contains(filterItem))
                 {
+                    endText = filterItem.PrintEndLogicText();
                     result += filterItem.GetPrintText(printerSetupArgs.LookupDefinition);
                     var end = index == filterItemDefinitions.Count - 1;
 
@@ -761,8 +763,10 @@ namespace RingSoft.DbMaintenance
                     }
                 }
 
+                result = result.TrimEnd(endText.ToCharArray());
                 index++;
             }
+
             return result;
         }
 

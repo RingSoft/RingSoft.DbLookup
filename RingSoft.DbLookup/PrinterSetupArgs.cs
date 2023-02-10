@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.TableProcessing;
@@ -17,20 +18,22 @@ namespace RingSoft.DbLookup
     {
         void ProcessPrintOutputData(PrinterSetupArgs setupArgs);
 
-        event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;
+        event EventHandler<PrinterDataProcessedEventArgs> PrintProcessingHeader;
+
+        void NotifyProcessingHeader(PrinterDataProcessedEventArgs args);
     }
 
     public class PrinterDataProcessedEventArgs
     {
-        public ChunkType ChunkType { get; set; }
+        public PrinterSetupArgs PrinterSetup { get; set; }
 
-        public int RecordCount { get; set; }
+        public LookupDataChangedArgs LookupDataChangedArgs { get; set; }
 
-        public int ProcessingRecord { get; set; }
+        public PrintingInputHeaderRow HeaderRow { get; set; }
 
-        public int TotalTables { get; set; }
+        public LookupDataBase LookupData { get; set; }
 
-        public int TableIdBeingProcessed { get; set; }
+        public DataRow OutputRow { get; set; }
     }
 
     public class PrintingColumnMap

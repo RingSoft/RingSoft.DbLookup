@@ -632,10 +632,10 @@ namespace RingSoft.DbMaintenance
 
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
         {
-            ProcessLookupPrintOutput(printerSetupArgs);
+            ProcessLookupPrintOutput(printerSetupArgs, this);
         }
 
-        public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs)
+        public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs, IPrintProcessor printProcessor)
         {
             var lookupUi = new LookupUserInterface
             {
@@ -687,6 +687,17 @@ namespace RingSoft.DbMaintenance
                     }
 
                     headerRows.Add(headerRow);
+
+                    var dataProcessedArgs = new PrinterDataProcessedEventArgs
+                    {
+                        HeaderRow = headerRow,
+                        LookupDataChangedArgs = args,
+                        PrinterSetup = printerSetupArgs,
+                        LookupData = lookupData,
+                        OutputRow = outputTableRow,
+                    };
+
+                    printProcessor.NotifyProcessingHeader(dataProcessedArgs);
                 }
 
                 var result = PrintingInteropGlobals.HeaderProcessor.AddChunk(headerRows, printerSetupArgs.PrintingProperties);
@@ -755,7 +766,11 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
-        public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;
+        public event EventHandler<PrinterDataProcessedEventArgs> PrintProcessingHeader;
+        public void NotifyProcessingHeader(PrinterDataProcessedEventArgs args)
+        {
+            PrintProcessingHeader?.Invoke(this, args);
+        }
 
         /// <summary>
         /// Executed when a property value has changed.

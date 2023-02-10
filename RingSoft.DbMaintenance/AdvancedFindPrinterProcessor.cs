@@ -55,9 +55,13 @@ namespace RingSoft.DbMaintenance
 
             setupArgs.LookupDefinition = AdvancedFindViewModel.LookupDefinition;
 
-            DbMaintenanceViewModelBase.ProcessLookupPrintOutput(setupArgs);
+            DbMaintenanceViewModelBase.ProcessLookupPrintOutput(setupArgs, this);
         }
 
-        public event EventHandler<PrinterDataProcessedEventArgs> ProcessingRecord;
+        public event EventHandler<PrinterDataProcessedEventArgs> PrintProcessingHeader;
+        public void NotifyProcessingHeader(PrinterDataProcessedEventArgs args)
+        {
+            PrintProcessingHeader?.Invoke(this, args);
+        }
     }
 }

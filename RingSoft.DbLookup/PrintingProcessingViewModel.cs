@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup
             var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
             var test = System.IO.File.ReadAllText(jsonFile);
             var printInput = JsonConvert.DeserializeObject<PrintingInitializer>(test);
-            FileInfo outputFile = new FileInfo($"{SystemGlobals.ProgramDataFolder}{PrinterPropertiesProcessor.ChunkOutputFileName}");
+            FileInfo outputFile = new FileInfo($"{SystemGlobals.ProgramDataFolder}\\{PrinterPropertiesProcessor.ChunkOutputFileName}");
             
             System.Diagnostics.Process.Start(printInput.ExePath, arguments);
             var outputFileExists = outputFile.Exists;
@@ -139,43 +139,54 @@ namespace RingSoft.DbLookup
             _timer.Elapsed += (sender, args) =>
             {
                 var chunkBeingProcessed = PrintingInteropGlobals.PropertiesProcessor.GetChunkProcessed();
-                switch (chunkBeingProcessed.ChunkType)
-                {
-                    case ChunkType.Header:
-                        TotalRecordCount = headerChunks;
-                        RecordBeingProcessed = chunkBeingProcessed.ChunkId + 1;
-                        ProcessType = ProcessTypes.ProcessReportHeader;
-                        headerFinished = headerChunks == chunkBeingProcessed.ChunkId + 1;
-                        if (headerChunks <= 1)
-                        {
-                            headerFinished = true;
-                        }
-
-                        if (detailsChunks == 0)
-                        {
-                            detailsFinished = true;
-                        }
-                        break;
-                    case ChunkType.Details:
-                        TotalRecordCount = detailsChunks;
-                        RecordBeingProcessed = chunkBeingProcessed.ChunkId + 1;
-                        ProcessType = ProcessTypes.ProcessReportDetails;
-                        detailsFinished = detailsChunks == chunkBeingProcessed.ChunkId + 1;
-                        if (detailsChunks <= 1)
-                        {
-                            detailsFinished = true;
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                View.UpdateStatus();
-
-                if (Abort || (headerFinished && detailsFinished))
+                if (chunkBeingProcessed == null)
                 {
                     AbortProcess();
-                    ClearInputData();
+                }
+                else
+                {
+                    switch (chunkBeingProcessed.ChunkType)
+                    {
+                        case ChunkType.Header:
+                            TotalRecordCount = headerChunks;
+                            RecordBeingProcessed = chunkBeingProcessed.ChunkId + 1;
+                            ProcessType = ProcessTypes.ProcessReportHeader;
+                            headerFinished = headerChunks == chunkBeingProcessed.ChunkId + 1;
+                            if (headerChunks <= 1)
+                            {
+                                headerFinished = true;
+                            }
+
+                            if (detailsChunks == 0)
+                            {
+                                detailsFinished = true;
+                            }
+
+                            break;
+                        case ChunkType.Details:
+                            TotalRecordCount = detailsChunks;
+                            RecordBeingProcessed = chunkBeingProcessed.ChunkId + 1;
+                            ProcessType = ProcessTypes.ProcessReportDetails;
+                            detailsFinished = detailsChunks == chunkBeingProcessed.ChunkId + 1;
+                            if (detailsChunks <= 1)
+                            {
+                                detailsFinished = true;
+                            }
+
+                            headerFinished = true;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+
+                    View.UpdateStatus();
+
+                    if (Abort || (headerFinished && detailsFinished))
+                    {
+                        AbortProcess();
+                        ClearInputData();
+                    }
                 }
             };
             if (!Abort)

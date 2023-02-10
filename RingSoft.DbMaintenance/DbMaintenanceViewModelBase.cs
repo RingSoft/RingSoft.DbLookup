@@ -747,10 +747,9 @@ namespace RingSoft.DbMaintenance
                 return result;
             }
             var index = 0;
-            var found = false;
+            var endText = string.Empty;
             foreach (var filterItem in filterItemDefinitions)
             {
-                var endText = string.Empty;
                 if (!printerSetupArgs.ReportFilters.Contains(filterItem))
                 {
                     endText = filterItem.PrintEndLogicText();
@@ -762,8 +761,17 @@ namespace RingSoft.DbMaintenance
                         result += filterItem.PrintEndLogicText();
                     }
                 }
-
                 index++;
+            }
+
+            if (!endText.IsNullOrEmpty() && !result.IsNullOrEmpty())
+            {
+                var indexOfEnd = result.LastIndexOf(endText);
+                if (indexOfEnd != -1)
+                {
+                    result = result.LeftStr(indexOfEnd);
+                }
+
             }
 
             return result;

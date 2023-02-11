@@ -644,7 +644,7 @@ namespace RingSoft.DbMaintenance
             var lookupData = new LookupDataBase(printerSetupArgs.LookupDefinition, lookupUi);
 
             printerSetupArgs.PrintingProcessingViewModel.UpdateStatus(0, 0, ProcessTypes.CountingHeaderRecords);
-            var totalRecords = lookupData.GetRecordCountWait();
+            printerSetupArgs.TotalRecords = lookupData.GetRecordCountWait();
 
             var page = 0;
             lookupData.PrintDataChanged += (sender, args) =>
@@ -710,7 +710,7 @@ namespace RingSoft.DbMaintenance
 
                 page += headerRows.Count;
                 printerSetupArgs.PrintingProcessingViewModel
-                    .UpdateStatus(page, totalRecords, ProcessTypes.ImportHeader);
+                    .UpdateStatus(page, printerSetupArgs.TotalRecords, ProcessTypes.ImportHeader);
             };
             
             lookupData.GetPrintData();

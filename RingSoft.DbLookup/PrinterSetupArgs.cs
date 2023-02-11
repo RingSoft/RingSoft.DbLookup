@@ -99,6 +99,8 @@ namespace RingSoft.DbLookup
 
         public PrintingProcessingViewModel PrintingProcessingViewModel { get; internal set; }
 
+        public int TotalRecords { get; set; }
+
         public PrinterSetupArgs()
         {
             PrintingProperties = new PrintingProperties();

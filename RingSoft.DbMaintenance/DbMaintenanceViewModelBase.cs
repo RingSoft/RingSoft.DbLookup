@@ -664,7 +664,7 @@ namespace RingSoft.DbMaintenance
                     foreach (var columnMap in printerSetupArgs.ColumnMaps)
                     {
                         var value = outputTableRow.GetRowValue(columnMap.FieldName);
-                        value = columnMap.ColumnDefinition.FormatValue(value);
+                        value = columnMap.ColumnDefinition.FormatValueForColumnMap(value);
                         switch (columnMap.ColumnType)
                         {
                             case PrintColumnTypes.String:
@@ -769,7 +769,11 @@ namespace RingSoft.DbMaintenance
                 var indexOfEnd = result.LastIndexOf(endText);
                 if (indexOfEnd != -1)
                 {
-                    result = result.LeftStr(indexOfEnd);
+                    var rightText = result.GetRightText(indexOfEnd, 0);
+                    if (indexOfEnd + rightText.Length == indexOfEnd + endText.Length)
+                    {
+                        result = result.LeftStr(indexOfEnd);
+                    }
                 }
 
             }

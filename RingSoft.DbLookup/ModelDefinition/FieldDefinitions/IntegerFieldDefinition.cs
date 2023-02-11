@@ -137,5 +137,28 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
             return this;
         }
+
+        public override string GetUserValue(string dbIdValue)
+        {
+            if (ParentJoinForeignKeyDefinition == null && EnumTranslation != null)
+            {
+                var enumText = EnumTranslation.TypeTranslations.FirstOrDefault(p => p.NumericValue == dbIdValue.ToInt())
+                    .TextValue;
+                return enumText;
+            }
+            return base.GetUserValue(dbIdValue);
+        }
+
+        public override string FormatValueForColumnMap(string value)
+        {
+            if (EnumTranslation != null)
+            {
+                var enumField = EnumTranslation.TypeTranslations
+                    .FirstOrDefault(p => p.NumericValue == value.ToInt());
+                return enumField.TextValue;
+            }
+
+            return base.FormatValueForColumnMap(value);
+        }
     }
 }

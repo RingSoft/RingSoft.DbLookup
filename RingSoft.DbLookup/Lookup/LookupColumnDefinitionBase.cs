@@ -389,5 +389,10 @@ namespace RingSoft.DbLookup.Lookup
             var test = this;
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
         }
+
+        public virtual string FormatValueForColumnMap(string value)
+        {
+            return FormatValue(value);
+        }
     }
 }

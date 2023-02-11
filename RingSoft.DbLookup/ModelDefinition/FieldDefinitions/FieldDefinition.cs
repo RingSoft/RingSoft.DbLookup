@@ -250,7 +250,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return TableDefinition.TableName + "@" + FieldName + ";";
         }
 
-        public string GetUserValue(string dbIdValue)
+        public virtual string GetUserValue(string dbIdValue)
         {
             var result = string.Empty;
             
@@ -278,6 +278,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 result = FormatValue(dbIdValue);
             }
             return result;
+        }
+
+        public virtual string FormatValueForColumnMap(string value)
+        {
+            return FormatValue(value);
         }
     }
 }

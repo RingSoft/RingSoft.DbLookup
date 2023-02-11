@@ -398,6 +398,7 @@ namespace RingSoft.DbMaintenance
         private TextComboBoxControlSetup _stringFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
         private TextComboBoxControlSetup _memoFieldComboBoxControlSetup = new TextComboBoxControlSetup();
+        private TextComboBoxControlSetup _enumFieldComboBoxControlSetup = new TextComboBoxControlSetup();
 
         private bool _formAdd;
 
@@ -629,6 +630,42 @@ namespace RingSoft.DbMaintenance
             FormulaValueType = FieldDataTypes.String;
 
             _stringFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+
+            _enumFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.Contains));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.NotContains));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.GreaterThan));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.GreaterThanEquals));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.LessThan));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.LessThanEquals));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.BeginsWith));
+
+            _enumFieldComboBoxControlSetup.Items.Remove(
+                _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
+                    p.NumericValue == (int)Conditions.EndsWith));
+
+
             _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
 
             _numericFieldComboBoxControlSetup.Items.Remove(
@@ -729,6 +766,7 @@ namespace RingSoft.DbMaintenance
                                     setup.LoadFromEnum(integerField.EnumTranslation);
                                     ValueComboBoxItem = null;
                                     ValueComboBoxSetup = setup;
+                                    ConditionComboBoxSetup = _enumFieldComboBoxControlSetup;
                                 }
                             }
                             break;

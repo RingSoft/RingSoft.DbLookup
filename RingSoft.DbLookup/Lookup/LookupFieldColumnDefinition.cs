@@ -293,5 +293,10 @@ namespace RingSoft.DbLookup.Lookup
             var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
         }
+
+        public override string FormatValueForColumnMap(string value)
+        {
+            return FieldDefinition.FormatValueForColumnMap(value);
+        }
     }
 }

@@ -27,6 +27,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupRefresher()
         {
+        }
+
+        public void StartRefresh()
+        {
             _timer = new System.Timers.Timer(1000);
             _timer.Elapsed += _timer_Elapsed;
             _timer.Enabled = true;

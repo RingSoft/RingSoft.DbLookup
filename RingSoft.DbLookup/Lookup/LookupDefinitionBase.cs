@@ -146,7 +146,7 @@ namespace RingSoft.DbLookup.Lookup
             FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
         }
 
-        public LookupDefinitionBase(int advancedFindId)
+        public LookupDefinitionBase(int advancedFindId, LookupRefresher lookupRefresher)
         {
             Entity = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
             TableDefinition =
@@ -172,6 +172,14 @@ namespace RingSoft.DbLookup.Lookup
             {
                 LoadFromAdvFindFilter(advancedFindFilter);
             }
+
+            if (Entity.RedAlert != null) lookupRefresher.RedAlert = Entity.RedAlert.Value;
+            if (Entity.Disabled != null) lookupRefresher.Disabled = Entity.Disabled.Value;
+            if (Entity.RefreshCondition != null)
+                lookupRefresher.RefreshCondition = (Conditions)Entity.RefreshCondition.Value;
+            if (Entity.RefreshRate != null) lookupRefresher.RefreshRate = (RefreshRate)Entity.RefreshRate.Value;
+            if (Entity.RefreshValue != null) lookupRefresher.RefreshValue = Entity.RefreshValue.Value;
+            if (Entity.YellowAlert != null) lookupRefresher.YellowAlert = Entity.YellowAlert.Value;
         }
 
         protected virtual LookupDefinitionBase BaseClone()

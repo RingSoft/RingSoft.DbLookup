@@ -44,7 +44,8 @@ namespace RingSoft.DbLookup.Lookup
             base.FilterDefinition = FilterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
         }
 
-        public LookupDefinition(TableDefinition<TEntity> tableDefinition, int advancedFindId) : base(advancedFindId)
+        public LookupDefinition(TableDefinition<TEntity> tableDefinition, int advancedFindId
+            , LookupRefresher lookupRefresher) : base(advancedFindId, lookupRefresher)
         {
             if (base.TableDefinition.EntityName != tableDefinition.EntityName)
             {

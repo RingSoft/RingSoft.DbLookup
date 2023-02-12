@@ -348,6 +348,8 @@ namespace RingSoft.DbMaintenance
             }
 
             LookupRefresher = new LookupRefresher();
+            LookupRefresher.StartRefresh();
+
             AdvancedFindTree = new AdvancedFindTree(LookupDefinition);
             AdvancedFindTree.SelectedTreeItemChanged += (sender, item) => OnTreeViewItemSelected(item);
             LookupRefresher.SetAlertLevelEvent += LookupRefresher_SetAlertLevelEvent;

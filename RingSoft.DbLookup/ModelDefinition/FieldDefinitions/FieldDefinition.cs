@@ -258,7 +258,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             {
                 var autoFillValue = TableDefinition.Context
                     .OnAutoFillTextRequest(TableDefinition, dbIdValue);
-                if (autoFillValue != null)
+                if (autoFillValue == null)
+                {
+                    result = "<Not Found>";
+                }
+                else
                 {
                     result = autoFillValue.Text;
                 }
@@ -270,7 +274,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                 result = requestResult?.Text;
                 if (result.IsNullOrEmpty())
                 {
-                    result = dbIdValue;
+                    result = "<Not Found>";
                 }
             }
             else

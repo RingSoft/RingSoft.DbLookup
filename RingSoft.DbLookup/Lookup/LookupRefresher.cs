@@ -183,6 +183,14 @@ namespace RingSoft.DbLookup.Lookup
 
         }
 
+        public string GetRecordCountMessage(int recordCount, string name)
+        {
+            var formattedCount = GblMethods.FormatValue(FieldDataTypes.Integer,
+                recordCount.ToString(), GblMethods.GetNumFormat(0, false));
+            var message =
+                $"There are {formattedCount} records in the {name} Advanced Find.";
+            return message;
+        }
 
         public void Dispose()
         {

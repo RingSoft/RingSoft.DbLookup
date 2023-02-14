@@ -123,6 +123,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public AdvancedFind.AdvancedFind Entity { get; internal set; }
 
+        public event EventHandler WindowClosed;
+
         public LookupDefinitionBase HasFromFormula(string value)
         {
             FromFormula = value;
@@ -1016,6 +1018,11 @@ namespace RingSoft.DbLookup.Lookup
                     column.Caption = fieldDefinition.Description;
                 }
             }
+        }
+
+        public void FireCloseEvent()
+        {
+            WindowClosed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

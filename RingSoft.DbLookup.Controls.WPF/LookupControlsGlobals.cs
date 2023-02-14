@@ -54,7 +54,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 maintenanceWindow.Owner = activeWindow;
                 maintenanceWindow.ShowInTaskbar = false;
                 maintenanceWindow.Loaded += (sender, args) => maintenanceWindow.Processor.InitializeFromLookupData(e);
-                maintenanceWindow.Closed += (sender, args) => activeWindow.Activate();
+                maintenanceWindow.Closed += (sender, args) =>
+                {
+                    activeWindow.Activate();
+                    e.LookupData.LookupDefinition.FireCloseEvent();
+                };
                 maintenanceWindow.Show();
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==

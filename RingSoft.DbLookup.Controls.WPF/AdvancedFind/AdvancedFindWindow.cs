@@ -73,6 +73,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private bool _notifyFromFormulaExists;
         private bool _nameTabKeyPressed;
+        private bool _refreshAfterLoad;
+
         public bool ShowFromFormulaEditor(ref string fromFormula)
         {
             var editor = new DataEntryGridMemoEditor(new DataEntryGridMemoValue(0){Text = fromFormula});
@@ -182,6 +184,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 if (ViewModel.LookupDefinition != null && showRecordCount)
                 {
+                    if (LookupControl.LookupData == null)
+                    {
+                        _refreshAfterLoad = true;
+                        return recordCount;
+                    }
                     recordCount = LookupControl.LookupData.GetRecordCountWait();
                     //var countQuerySet = new QuerySet();
                     //ViewModel.LookupDefinition.GetCountQuery(countQuerySet, "Count");
@@ -276,6 +283,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             if (LookupControl != null)
             {
+                LookupControl.Loaded += (sender, args) =>
+                {
+                    if (_refreshAfterLoad)
+                    {
+                        GetRecordCount(true);
+                    }
+                };
                 LookupControl.ColumnWidthChanged += (sender, args) =>
                 {
                     if (ViewModel.LookupDefinition.VisibleColumns.Contains(args.ColumnDefinition))

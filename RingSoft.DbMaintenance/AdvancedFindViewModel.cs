@@ -384,12 +384,8 @@ namespace RingSoft.DbMaintenance
         private void LookupRefresher_SetAlertLevelEvent(object sender, RefreshAlertLevelArgs e)
         {
 
-            var formattedCount = GblMethods.FormatValue(FieldDataTypes.Integer,
-                _recordCount.ToString(), GblMethods.GetNumFormat(0, false));
-            var message =
-                $"There are {formattedCount} records in the {KeyAutoFillValue?.Text} Advanced Find.";
+            var message = LookupRefresher.GetRecordCountMessage(_recordCount, KeyAutoFillValue?.Text);
             View.SetAlertLevel(e.AlertLevel, message, LookupRefresher.RefreshRate != RefreshRate.None, _recordCount);
-
         }
 
         public void CreateCommands()
@@ -1133,6 +1129,7 @@ namespace RingSoft.DbMaintenance
             if (!keyDown)
             {
                 View.ResetViewForNewRecord();
+                View.ResetViewForNewRecord();
             }
         }
 
@@ -1169,7 +1166,13 @@ namespace RingSoft.DbMaintenance
                 return;
             }
 
-            _recordCount = View.GetRecordCount(true);
+            var lookupUi = new LookupUserInterface
+            {
+                PageSize = 1,
+            };
+            var lookupData = new LookupDataBase(LookupDefinition, lookupUi);
+
+            _recordCount = lookupData.GetRecordCountWait();
             if (_recordCount == 0 && LookupRefresher.RefreshRate == RefreshRate.None)
             {
                 return;

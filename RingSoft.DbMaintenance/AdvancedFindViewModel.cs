@@ -999,12 +999,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        public void RefreshLookup()
+        public void RefreshLookup(bool refreshCount = true)
         {
             if (ValidateLookup())
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Refresh, null, AdvancedFindInput?.InputParameter);
-                ProcessRefresh();
+                if (refreshCount)
+                {
+                    ProcessRefresh();
+                }
             }
         }
 
@@ -1173,6 +1176,7 @@ namespace RingSoft.DbMaintenance
             }
 
             LookupRefresher.UpdateRecordCount(_recordCount);
+            RefreshLookup(false);
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

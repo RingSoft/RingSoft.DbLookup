@@ -921,7 +921,7 @@ namespace RingSoft.DbLookup.Lookup
         public static string ProcessSearchValue(string searchValue, DateFilterTypes filterType)
         {
             var result = searchValue;
-            var date = DateTime.Today;
+            var date = DateTime.Now;
             var searchUnits = 0;
             switch (filterType)
             {
@@ -948,6 +948,15 @@ namespace RingSoft.DbLookup.Lookup
                     break;
                 case DateFilterTypes.Years:
                     date = date.AddYears(searchUnits);
+                    break;
+                case DateFilterTypes.Hours:
+                    date = date.AddHours(searchUnits);
+                    break;
+                case DateFilterTypes.Minutes:
+                    date = date.AddMinutes(searchUnits);
+                    break;
+                case DateFilterTypes.Seconds:
+                    date = date.AddSeconds(searchUnits);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(filterType), filterType, null);

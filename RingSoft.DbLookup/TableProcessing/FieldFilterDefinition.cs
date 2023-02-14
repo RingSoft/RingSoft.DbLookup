@@ -23,6 +23,12 @@ namespace RingSoft.DbLookup.TableProcessing
         Months = 3,
         [Description("Year(s) Ago")]
         Years = 4,
+        [Description("Hour(s) Ago")]
+        Hours = 5,
+        [Description("Minute(s) Ago")]
+        Minutes = 6,
+        [Description("Second(s) Ago")]
+        Seconds = 7,
     }
 
     /// <summary>
@@ -216,7 +222,14 @@ namespace RingSoft.DbLookup.TableProcessing
             var value = entity.SearchForValue;
             if (value.IsNullOrEmpty())
             {
-                return false;
+                switch (Condition)
+                {
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEqualsNull:
+                        break;
+                    default:
+                        return false;
+                }
             }
             var result = base.LoadFromEntity(entity, lookupDefinition, path);
             return result;

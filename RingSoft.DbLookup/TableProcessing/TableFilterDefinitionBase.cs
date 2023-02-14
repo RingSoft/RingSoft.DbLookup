@@ -408,7 +408,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     if (formulaFilter.Condition != null && !formulaFilter.FilterValue.IsNullOrEmpty())
                     {
                         lastWhere = query.AddWhereItemFormula(formula, (Conditions) formulaFilter.Condition,
-                            formulaFilter.FilterValue, valueType);
+                            formulaFilter.GetSearchValue(formulaFilter.FilterValue), valueType);
                     }
                     else
                     {
@@ -482,13 +482,13 @@ namespace RingSoft.DbLookup.TableProcessing
                 if (fieldFilterDefinition.FormulaToSearch.IsNullOrEmpty())
                 {
                     lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldToSearch.FieldName,
-                        fieldFilterDefinition.Condition, value, fieldFilterDefinition.FieldToSearch.ValueType,
+                        fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value), fieldFilterDefinition.FieldToSearch.ValueType,
                         dateType);
                 }
                 else
                 {
                     lastWhere = query.AddWhereItemFormula(fieldFilterDefinition.FormulaToSearch,
-                        fieldFilterDefinition.Condition, value, ValueTypes.String);
+                        fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value), ValueTypes.String);
                 }
 
                 lastWhere.IsCaseSensitive(fieldFilterDefinition.CaseSensitive);

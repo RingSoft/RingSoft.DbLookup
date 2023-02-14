@@ -315,7 +315,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             if (TreeView.SelectedItem == null)
             {
-                if (ViewModel.AdvancedFindTree != null)
+                if (ViewModel.AdvancedFindTree != null && ViewModel.AdvancedFindTree.TreeRoot.Count > 0)
                 {
                     ViewModel.AdvancedFindTree.TreeRoot[0].IsSelected = true;
                 }

@@ -248,7 +248,11 @@ namespace RingSoft.DbLookup.TableProcessing
             RightParenthesesCount = entity.RightParentheses;
             EndLogic = (EndLogics)entity.EndLogic;
             DateFilterType = (DateFilterTypes)entity.DateFilterType;
-            Value = GetSearchValue(entity.SearchForValue);
+            Value = entity.SearchForValue;
+            if (ValueType == ValueTypes.DateTime && DateFilterType != DateFilterTypes.SpecificDate)
+            {
+                DateFilterValue = Value.ToInt();
+            }
             Path = entity.Path;
             //var process = false;
             //if (entity.Path.IsNullOrEmpty())
@@ -312,13 +316,17 @@ namespace RingSoft.DbLookup.TableProcessing
             var searchValue = filterReturn.SearchValue;
             DateFilterType = filterReturn.DateFilterType;
 
-            searchValue = GetSearchValue(searchValue);
+            if (ValueType == ValueTypes.DateTime && DateFilterType != DateFilterTypes.SpecificDate)
+            {
+                DateFilterValue = searchValue.ToInt();
+            }
+            //searchValue = GetSearchValue(searchValue);
 
             return searchValue;
 
         }
 
-        protected internal string GetSearchValue(string searchValue)
+        public virtual string GetSearchValue(string searchValue)
         {
             if (ValueType == ValueTypes.DateTime)
             {

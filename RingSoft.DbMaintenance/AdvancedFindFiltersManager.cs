@@ -97,7 +97,10 @@ namespace RingSoft.DbMaintenance
                 _resetLookup = true;
             }
 
-            if (lookupDefinition != null)
+            var fixedRows = Rows.OfType<AdvancedFindFilterRow>()
+                .Where(p => p.IsFixed);
+
+            if (lookupDefinition != null && !fixedRows.Any())
             {
                 var rowIndex = 0;
                 foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)

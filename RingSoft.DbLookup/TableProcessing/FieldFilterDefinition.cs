@@ -207,6 +207,8 @@ namespace RingSoft.DbLookup.TableProcessing
             string path = "")
         {
             Path = entity.Path;
+            Condition = (Conditions)entity.Operand;
+
             var newPath = GetNewPath();
             if (!newPath.IsNullOrEmpty())
             {
@@ -218,7 +220,6 @@ namespace RingSoft.DbLookup.TableProcessing
                 }
             }
 
-            Condition = (Conditions)entity.Operand;
             var value = entity.SearchForValue;
             if (value.IsNullOrEmpty())
             {

@@ -69,7 +69,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <param name="lookupDefinition">The lookup definition.</param>
         public AutoFillSetup(LookupDefinitionBase lookupDefinition)
         {
-            LookupDefinition = lookupDefinition.Clone();
+            LookupDefinition = lookupDefinition;
         }
 
         public AutoFillValue GetAutoFillValueForIdValue(string idValue)

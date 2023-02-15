@@ -269,13 +269,25 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
             else if (ParentJoinForeignKeyDefinition != null)
             {
+                
+                
                 var requestResult = TableDefinition.Context
                     .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue);
                 result = requestResult?.Text;
                 if (result.IsNullOrEmpty())
                 {
-                    result = "<Not Found>";
+                    if (ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                    {
+                        result = "<Not Found>";
+                    }
+                    else
+                    {
+                        result = dbIdValue;
+                    }
                 }
+                
+
+                return result;
             }
             else
             {

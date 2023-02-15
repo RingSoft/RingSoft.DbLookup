@@ -601,5 +601,28 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        public void LoadFixedFromLookup(TableFilterDefinitionBase filterDefinition)
+        {
+            foreach (var filterDefinitionFixedFilter in filterDefinition.FixedFilters)
+            {
+                FilterItemDefinition newFilter = null;
+                switch (filterDefinitionFixedFilter.Type)
+                {
+                    case FilterItemTypes.Field:
+                        newFilter = new FieldFilterDefinition(this);
+                        break;
+                    case FilterItemTypes.Formula:
+                        newFilter = new FormulaFilterDefinition(this);
+                        break;
+                    case FilterItemTypes.AdvancedFind:
+                        newFilter = new AdvancedFindFilterDefinition(this);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                newFilter.CopyFrom(filterDefinitionFixedFilter);
+                _fixedFilterDefinitions.Add(newFilter);
+            }
+        }
     }
 }

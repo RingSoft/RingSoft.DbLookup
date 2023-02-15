@@ -231,12 +231,14 @@ namespace RingSoft.DbLookup.Lookup
             {
                 return formula;
             }
+
+            var test = this;
             return base.LoadFromTreeViewItem(item);
         }
 
         private string CheckForeignFormula(TreeViewItem item)
         {
-            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
             {
                 var initialColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
                     .InitialSortColumnDefinition;

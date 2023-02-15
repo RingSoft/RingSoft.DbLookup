@@ -90,6 +90,11 @@ namespace RingSoft.DbLookup.Lookup
 
         public void UpdateRecordCount(int recordCount)
         {
+            if (RefreshRate == RefreshRate.None)
+            {
+                SetAlertLevel(AlertLevels.Green);
+                return;
+            }
             var level = AlertLevels.Green;
             switch (RefreshCondition)
             {

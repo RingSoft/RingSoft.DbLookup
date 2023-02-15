@@ -948,15 +948,19 @@ namespace RingSoft.DbLookup.Lookup
                 case DateFilterTypes.SpecificDate:
                     break;
                 case DateFilterTypes.Days:
+                    date = DateTime.Today;
                     date = date.AddDays(searchUnits);
                     break;
                 case DateFilterTypes.Weeks:
+                    date = DateTime.Today;
                     date = date.AddDays(searchUnits * 7);
                     break;
                 case DateFilterTypes.Months:
+                    date = DateTime.Today;
                     date = date.AddMonths(searchUnits);
                     break;
                 case DateFilterTypes.Years:
+                    date = DateTime.Today;
                     date = date.AddYears(searchUnits);
                     break;
                 case DateFilterTypes.Hours:

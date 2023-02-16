@@ -266,9 +266,9 @@ namespace RingSoft.DbLookup
             return null;
         }
 
-        public bool CopyData(DbDataProcessor destinationProcessor)
+        public string CopyData(DbDataProcessor destinationProcessor)
         {
-            return true;
+            return string.Empty;
         }
     }
 }

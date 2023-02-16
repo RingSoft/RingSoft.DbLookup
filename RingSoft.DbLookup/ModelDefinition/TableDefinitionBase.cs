@@ -468,5 +468,15 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        public string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
+        {
+            var args = new CopyProcedureArgs
+            {
+                TableDefinitionBeingProcessed = this,
+                TableIdBeingProcessed = tableIndex,
+            };
+            Context.FireCopyProcedureEvent(args);
+            return string.Empty;
+        }
     }
 }

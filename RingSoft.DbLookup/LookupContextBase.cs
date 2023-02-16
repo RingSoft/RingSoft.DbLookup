@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
@@ -268,7 +269,29 @@ namespace RingSoft.DbLookup
 
         public string CopyData(DbDataProcessor destinationProcessor)
         {
+            var tableIndex = 0;
+            var tablesToProcess = TableDefinitions.OrderBy(p => p.PriorityLevel);
+            foreach (var tableDefinition in tablesToProcess)
+            {
+                tableIndex++;
+                if (tableDefinition.Description == "Users")
+                {
+                    
+                }
+                var result = tableDefinition.CopyDataTo(destinationProcessor, tableIndex);
+                if (!result.IsNullOrEmpty())
+                {
+                    return result;
+                }
+            }
+
             return string.Empty;
+        }
+
+        internal void FireCopyProcedureEvent(CopyProcedureArgs args)
+        {
+            args.TotalTables = TableDefinitions.Count;
+            CopyProcedureEvent?.Invoke(this, args);
         }
     }
 }

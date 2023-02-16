@@ -10,6 +10,18 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
+    public class CopyProcedureArgs
+    {
+        public TableDefinitionBase TableDefinitionBeingProcessed { get; internal set; }
+
+        public int TotalTables { get; internal set; }
+
+        public int TableIdBeingProcessed { get; internal set; }
+
+        public int RecordBeingProcessed { get; internal set; }
+
+        public int TotalRecords { get; internal set; }
+    }
     public class CanProcessTableArgs
     {
         public TableDefinitionBase TableDefinition { get; private set; }
@@ -109,6 +121,8 @@ namespace RingSoft.DbLookup
         public event EventHandler<TableDefinitionValue> GetAutoFillText;
 
         public event EventHandler<CanProcessTableArgs> CanProcessTableEvent;
+
+        public event EventHandler<CopyProcedureArgs> CopyProcedureEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
 
@@ -250,6 +264,11 @@ namespace RingSoft.DbLookup
         public virtual UserAutoFill GetUserAutoFill(string userName)
         {
             return null;
+        }
+
+        public bool CopyData(DbDataProcessor destinationProcessor)
+        {
+            return true;
         }
     }
 }

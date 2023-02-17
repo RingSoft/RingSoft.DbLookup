@@ -866,7 +866,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 initialText = Setup.LookupDefinition.InitialOrderByColumn.GetTextForColumn(Value.PrimaryKeyValue);
             }
             PrimaryKeyValue readOnlyPrimaryKeyValue = null;
-            if (_readOnlyMode)
+            if (_readOnlyMode && Value != null)
             {
                 readOnlyPrimaryKeyValue = Value.PrimaryKeyValue;
             }
@@ -927,7 +927,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
         }
-
+        
         public void SetReadOnlyMode(bool readOnlyValue)
         {
             _readOnlyMode = readOnlyValue;

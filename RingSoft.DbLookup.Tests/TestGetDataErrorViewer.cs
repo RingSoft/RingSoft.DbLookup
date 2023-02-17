@@ -23,6 +23,11 @@ namespace RingSoft.DbLookup.Tests
             
         }
 
+        public object GetOwnerWindow()
+        {
+            return null;
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

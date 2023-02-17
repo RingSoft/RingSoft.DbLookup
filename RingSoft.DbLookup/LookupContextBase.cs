@@ -193,6 +193,11 @@ namespace RingSoft.DbLookup
                 DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
                 return;
             }
+
+            if (e.OwnerWindow == null)
+            {
+                DbDataProcessor.UserInterface.GetOwnerWindow();
+            }
             DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
             LookupAddView?.Invoke(this, e);
         }

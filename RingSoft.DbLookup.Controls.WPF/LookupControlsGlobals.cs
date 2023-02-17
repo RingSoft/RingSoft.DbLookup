@@ -93,6 +93,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public object GetOwnerWindow()
+        {
+            return GetActiveWindow();
+        }
+
         //private void ShowAddOnTheFlyWindow(AdvancedFindWindow maintenanceWindow, LookupAddViewArgs e)
         //{
         //    if (e.OwnerWindow is Window ownerWindow)

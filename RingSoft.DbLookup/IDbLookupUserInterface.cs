@@ -19,6 +19,8 @@ namespace RingSoft.DbLookup
         void ShowAddOnTheFlyWindow(LookupAddViewArgs e);
 
         void PlaySystemSound(RsMessageBoxIcons icon);
+
+        object GetOwnerWindow();
     }
 
     internal class DefaultUserInterface : IDbLookupUserInterface
@@ -36,6 +38,11 @@ namespace RingSoft.DbLookup
         public void PlaySystemSound(RsMessageBoxIcons icon)
         {
             
+        }
+
+        public object GetOwnerWindow()
+        {
+            return null;
         }
     }
 }

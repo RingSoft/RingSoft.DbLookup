@@ -218,6 +218,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
         }
 
+        public object GetOwnerWindow()
+        {
+            return LookupControlsGlobals.ActiveWindow;
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

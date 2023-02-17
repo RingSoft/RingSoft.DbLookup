@@ -979,13 +979,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        public void AddAllFieldsAsHiddenColumns()
+        public void AddAllFieldsAsHiddenColumns(bool copyData = false)
         {
             foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
             {
                 LookupColumnDefinitionBase column = null;
                 if (fieldDefinition.ParentJoinForeignKeyDefinition != null
-                    && fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
+                    && fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1 && !copyData)
                 {
                     var join = Joins.FirstOrDefault(p =>
                         p.ForeignKeyDefinition == fieldDefinition.ParentJoinForeignKeyDefinition);

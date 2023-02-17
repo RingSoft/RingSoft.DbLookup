@@ -274,10 +274,6 @@ namespace RingSoft.DbLookup
             foreach (var tableDefinition in tablesToProcess)
             {
                 tableIndex++;
-                if (tableDefinition.Description == "Users")
-                {
-                    
-                }
                 var result = tableDefinition.CopyDataTo(destinationProcessor, tableIndex);
                 if (!result.IsNullOrEmpty())
                 {

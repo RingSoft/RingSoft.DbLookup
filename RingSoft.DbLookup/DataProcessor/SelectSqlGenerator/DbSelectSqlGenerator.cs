@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
@@ -904,7 +905,69 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
 
+        public virtual string GenerateInsertSqlStatement(InsertDataStatement insertDataStatement)
+        {
+            var table = FormatSqlObject(insertDataStatement.TableDefinition.TableName);
+
+            var fields = string.Empty;
+            var values = string.Empty;
+
+            foreach (var sqlData in insertDataStatement.SqlDatas)
+            {
+                fields += $"{FormatSqlObject(sqlData.FieldName)}, ";
+                values += $"{ConvertValueToSqlText(sqlData.FieldValue, sqlData.ValueType, sqlData.DateType)}, ";
+            }
+
+            var lastFieldIndex = fields.LastIndexOf(", ");
+            fields = fields.LeftStr(lastFieldIndex);
+            var lastValueIndex = values.LastIndexOf(", ");
+            values = values.LeftStr(lastValueIndex);
+
+            var result = $"INSERT INTO {table} ({fields}) VALUES ({values})";
+
+            return result;
+        }
+
+        public virtual List<string> GenerateUpdateSql(UpdateDataStatement updateDataStatement)
+        {
+            var result = new List<string>();
+            var table = FormatSqlObject(updateDataStatement.PrimaryKeyValue.TableDefinition.TableName);
+            var pkFields = string.Empty;
+            var primaryKeyWhere = string.Empty;
+            var pkIndex = 0;
+            foreach (var primaryKeyValueField in updateDataStatement.PrimaryKeyValue.KeyValueFields)
+            {
+                var dateType = DbDateTypes.DateOnly;
+                if (primaryKeyValueField.FieldDefinition is DateFieldDefinition dateField)
+                {
+                    dateType = dateField.DateType;
+                }
+                var pkClause = $"{FormatSqlObject(primaryKeyValueField.FieldDefinition.FieldName)} = ";
+                pkClause += ConvertValueToSqlText(primaryKeyValueField.Value,
+                    primaryKeyValueField.FieldDefinition.ValueType, dateType);
+
+                if (pkIndex == 0)
+                {
+                    primaryKeyWhere += $"{pkClause}";
+                }
+                else
+                {
+                    primaryKeyWhere += $" AND {pkClause}";
+                }
+                pkIndex++;
+            }
+            foreach (var sqlData in updateDataStatement.SqlDatas)
+            {
+                var field = $"{FormatSqlObject(sqlData.FieldName)}";
+                var value = $"{ConvertValueToSqlText(sqlData.FieldValue, sqlData.ValueType, sqlData.DateType)}";
+
+                var sql = $"UPDATE {table} SET {field} = {value} WHERE {primaryKeyWhere}";
+                result.Add(sql);
+            }
+
+            return result;
         }
     }
 }

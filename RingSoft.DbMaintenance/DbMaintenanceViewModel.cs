@@ -130,6 +130,10 @@ namespace RingSoft.DbMaintenance
         private bool _lookupReadOnlyMode;
         private AutoFillValue _readOnlyAutoFillValue;
 
+        protected virtual void SetupViewLookupDefinition( LookupDefinitionBase lookupDefinition)
+        {
+
+        }
         protected internal override void InternalInitialize()
         {
             if (TableDefinition == null)
@@ -143,6 +147,7 @@ namespace RingSoft.DbMaintenance
 
             var tableLookupDefinition = TableDefinition.LookupDefinition.Clone();
             Setup(tableLookupDefinition);
+            SetupViewLookupDefinition(ViewLookupDefinition);
             _lookupData = new LookupDataBase(ViewLookupDefinition, this);
 
             _lookupData.LookupDataChanged += _lookupData_LookupDataChanged;

@@ -164,7 +164,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (Value != null)
                 {
-                    var value = lookupWindow.LookupControl.LookupData.SelectedPrimaryKeyValue.KeyValueFields[0].Value;
+                    var value = Value.PrimaryKeyValue.KeyValueFields[0].Value;
                     Value =
                         Setup.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
                             Setup.LookupDefinition.TableDefinition, value);

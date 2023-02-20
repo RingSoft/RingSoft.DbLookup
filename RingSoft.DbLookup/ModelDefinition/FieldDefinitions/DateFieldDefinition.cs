@@ -97,7 +97,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <exception cref="ArgumentOutOfRangeException">value - null</exception>
         public override string FormatValue(string value)
         {
-            return FormatDateValue(value, DateFormatString, DateType, Culture, ConvertToLocalTime);
+            var convertToLocalTime = ConvertToLocalTime;
+            if (!convertToLocalTime)
+            {
+                convertToLocalTime = SystemGlobals.ConvertAllDatesToUniversalTime;
+            }
+
+            return FormatDateValue(value, DateFormatString, DateType, Culture, convertToLocalTime);
         }
 
         public static string FormatDateValue(string dateValue, string dateFormatString, DbDateTypes dateType,

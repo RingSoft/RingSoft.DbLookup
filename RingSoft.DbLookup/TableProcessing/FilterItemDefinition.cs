@@ -125,7 +125,25 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public ValueTypes ValueType { get; set; }
 
-        public DbDateTypes DateType { get; internal set; }
+        private DbDateTypes? _dateType;
+            
+        public DbDateTypes DateType
+        {
+            get
+            {
+                if (_dateType == null)
+                {
+                    if (SystemGlobals.ConvertAllDatesToUniversalTime)
+                    {
+                        return DbDateTypes.DateTime;
+                    }
+                    return DbDateTypes.DateOnly;
+                }
+
+                return _dateType.Value;
+            }
+            internal set => _dateType = value;
+        }
 
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
@@ -332,6 +350,16 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 DisplayValue = searchValue;
                 searchValue = ConvertDate(searchValue);
+                if (SystemGlobals.ConvertAllDatesToUniversalTime)
+                {
+                    var date = searchValue.ToDate();
+                    if (date != null)
+                    {
+                        searchValue = date.Value.ToUniversalTime().FormatDateValue(DbDateTypes.DateTime);
+                    }
+
+                }
+
             }
 
             return searchValue;
@@ -392,7 +420,8 @@ namespace RingSoft.DbLookup.TableProcessing
                     break;
                 default:
                     DateFilterValue = value.ToInt();
-                    return LookupDefinitionBase.ProcessSearchValue(value, DateFilterType);
+                    var result = LookupDefinitionBase.ProcessSearchValue(value, DateFilterType);
+                    return result;
             }
             return value;
         }

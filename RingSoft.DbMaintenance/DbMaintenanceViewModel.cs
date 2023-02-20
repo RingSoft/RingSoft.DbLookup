@@ -166,6 +166,7 @@ namespace RingSoft.DbMaintenance
                 if (filter != null)
                 {
                     _lookupData.LookupDefinition.FilterDefinition.CopyFrom(filter);
+                    _lookupData.LookupDefinition.FilterDefinition.ClearUserFilters();
                     if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
                     {
                         foreach (var joinDefinition in LookupAddViewArgs.LookupData.LookupDefinition.Joins)
@@ -182,7 +183,10 @@ namespace RingSoft.DbMaintenance
         protected virtual TableFilterDefinitionBase GetAddViewFilter()
         {
             if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
-                return LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
+            {
+                var result = LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
+                return result;
+            }
 
             return null;
         }
@@ -1120,7 +1124,7 @@ namespace RingSoft.DbMaintenance
                 return;
             }
 
-            if (!_selectingRecord && LookupAddViewArgs != null && RecordsChanged)
+            if (LookupAddViewArgs != null)
                 LookupAddViewArgs.CallBackToken.OnRefreshData();
         }
 

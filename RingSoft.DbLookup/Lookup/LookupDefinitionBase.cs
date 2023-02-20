@@ -13,11 +13,9 @@ using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup
 {
-    public class LookupFilterReturn
+    public class LookupWindowReturnArgs
     {
-        public FilterItemDefinition FilterItemDefinition { get; set; }
-
-        public FieldDefinition FieldDefinition { get; set; }
+        public LookupDataBase LookupData { get; internal set; }
     }
 
     /// <summary>
@@ -123,7 +121,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public AdvancedFind.AdvancedFind Entity { get; internal set; }
 
-        public event EventHandler WindowClosed;
+        public event EventHandler<LookupWindowReturnArgs> WindowClosed;
 
         public LookupDefinitionBase HasFromFormula(string value)
         {
@@ -915,7 +913,8 @@ namespace RingSoft.DbLookup.Lookup
             return 0;
         }
 
-        public void ShowAddOnTheFlyWindow(PrimaryKeyValue selectedPrimaryKeyValue = null, object addViewParameter = null, object ownerWindow = null)
+        public void ShowAddOnTheFlyWindow(PrimaryKeyValue selectedPrimaryKeyValue = null
+            , object addViewParameter = null, object ownerWindow = null)
         {
             var addNewRecordProcessor =
                 new AddOnTheFlyProcessor(this)
@@ -1032,9 +1031,9 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        public void FireCloseEvent()
+        public void FireCloseEvent(LookupDataBase lookupData)
         {
-            WindowClosed?.Invoke(this, EventArgs.Empty);
+            WindowClosed?.Invoke(this, new LookupWindowReturnArgs(){LookupData = lookupData});
         }
     }
 }

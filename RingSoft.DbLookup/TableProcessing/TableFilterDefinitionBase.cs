@@ -405,10 +405,21 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
 
                     var formula = formulaFilter.Formula.Replace("{Alias}", formulaFilter.Alias);
-                    if (formulaFilter.Condition != null && !formulaFilter.FilterValue.IsNullOrEmpty())
+                    var addFilter = true;
+                    switch (formulaFilter.Condition)
+                    {
+                        case Conditions.EqualsNull:
+                        case Conditions.NotEqualsNull:
+                            break;
+                        default:
+                            addFilter = !formulaFilter.FilterValue.IsNullOrEmpty();
+                            break;
+                    }
+                    if (formulaFilter.Condition != null && addFilter)
                     {
                         lastWhere = query.AddWhereItemFormula(formula, (Conditions) formulaFilter.Condition,
-                            formulaFilter.GetSearchValue(formulaFilter.FilterValue), valueType);
+                            formulaFilter.GetSearchValue(formulaFilter.FilterValue), valueType
+                            , formulaFilter.DateType);
                     }
                     else
                     {

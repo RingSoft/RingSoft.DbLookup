@@ -173,7 +173,8 @@ namespace RingSoft.DbLookup.Lookup
             _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
             _dataType = dataType;
 
-            DateFormatString = LookupDefaults.DefaultDateCulture.DateTimeFormat.ShortDatePattern;
+            DateType = DbDateTypes.DateTime;
+            //DateFormatString = LookupDefaults.DefaultDateCulture.DateTimeFormat.ShortDatePattern;
             DecimalCount = LookupDefaults.DefaultDecimalCount;
 
             SetupColumn();
@@ -293,7 +294,12 @@ namespace RingSoft.DbLookup.Lookup
                     return DecimalFieldDefinition.FormatNumericValue(value, NumberFormatString, DecimalFieldType,
                         DecimalCount, ColumnCulture);
                 case FieldDataTypes.DateTime:
-                    return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture, ConvertToLocalTime);
+                    var convertToLocalTime = ConvertToLocalTime;
+                    if (!convertToLocalTime)
+                    {
+                        convertToLocalTime = SystemGlobals.ConvertAllDatesToUniversalTime;
+                    }
+                    return DateFieldDefinition.FormatDateValue(value, DateFormatString, DateType, ColumnCulture, convertToLocalTime);
                 case FieldDataTypes.Bool:
                     break;
                 default:

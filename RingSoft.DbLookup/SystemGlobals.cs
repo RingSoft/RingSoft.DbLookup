@@ -1,6 +1,7 @@
 ﻿using System;
 using Org.BouncyCastle.Crypto.Tls;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup
@@ -64,5 +65,9 @@ namespace RingSoft.DbLookup
 
 
         public static AlertLevels WindowAlertLevel { get; set; }
+
+        public static bool ConvertAllDatesToUniversalTime { get; set; }
+
+        public static DbDateTypes AllDatesFormat { get; set; } = DbDateTypes.DateOnly;
     }
 }

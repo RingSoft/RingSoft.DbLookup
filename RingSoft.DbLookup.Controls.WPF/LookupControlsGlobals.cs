@@ -25,10 +25,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             var activeWindow = GetActiveWindow();
             if (activeWindow == null)
             {
-                var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
-                dataProcessResultWindow.Owner = activeWindow;
-                dataProcessResultWindow.ShowInTaskbar = false;
-                dataProcessResultWindow.ShowDialog();
+                //var dataProcessResultWindow = new DataProcessResultWindow(dataProcessResult);
+                //dataProcessResultWindow.Owner = activeWindow;
+                //dataProcessResultWindow.ShowInTaskbar = false;
+                //dataProcessResultWindow.ShowDialog();
             }
             else
             {
@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 maintenanceWindow.Closed += (sender, args) =>
                 {
                     activeWindow.Activate();
-                    e.LookupData.LookupDefinition.FireCloseEvent();
+                    e.LookupData.LookupDefinition.FireCloseEvent(e.LookupData);
                 };
                 maintenanceWindow.Show();
             }

@@ -60,12 +60,11 @@ namespace RingSoft.DbLookup
 
             args.CallBackToken.RefreshData += (sender, eventArgs) =>
             {
+                LookupDefinition.FireCloseEvent(lookupData);
                 if (lookupData.SelectedPrimaryKeyValue == null || !lookupData.SelectedPrimaryKeyValue.IsValid)
                 {
                     lookupData.RefreshData();
                 }
-
-                LookupDefinition.FireCloseEvent();
             };
             return args;
         }

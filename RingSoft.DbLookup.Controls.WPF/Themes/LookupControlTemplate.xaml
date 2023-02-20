@@ -68,7 +68,7 @@
                                 <dec:StringReadOnlyBox x:Name="RecordCountControl" HorizontalAlignment="Right"/>
                                 <dec:WaitSpinner x:Name="Spinner" Height="16" Width="16" Visibility="Collapsed" Margin="5" EllipseSize="4" />
                             </StackPanel>
-                            <Button x:Name="AdvancedFindButton" Grid.Row="2" Content="Ad_vanced Find" Width="100" HorizontalAlignment="Left" IsTabStop="False"/>
+                            <Button x:Name="AdvancedFindButton" Grid.Row="2" Content="Advanced F_ind" Width="100" HorizontalAlignment="Left" IsTabStop="False"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -82,7 +82,15 @@ namespace RingSoft.DbLookup.TableProcessing
                         result = result.Trim();
                         break;
                     default:
-                        result += FilterValue;
+                        if (ValueType == ValueTypes.DateTime)
+                        {
+                            var dateSearchValue = GetDateReportText();
+                            result += dateSearchValue;
+                        }
+                        else
+                        {
+                            result += Value;
+                        }
                         break;
                 }
             }
@@ -99,6 +107,7 @@ namespace RingSoft.DbLookup.TableProcessing
             Condition = (Conditions)entity.Operand;
             FilterValue = entity.SearchForValue;
             Path = entity.Path;
+            ValueType = DataType.ConvertFieldTypeIntoValueType();
 
             var result = base.LoadFromEntity(entity, lookupDefinition);
 
@@ -123,7 +132,7 @@ namespace RingSoft.DbLookup.TableProcessing
             entity.Operand = (byte)Condition.Value;
 
             base.SaveToEntity(entity);
-            entity.SearchForValue = FilterValue;
+            //entity.SearchForValue = FilterValue;
         }
 
         public override string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
@@ -134,6 +143,7 @@ namespace RingSoft.DbLookup.TableProcessing
             DataType = filterReturn.FormulaValueType;
             Path = filterReturn.Path;
             FilterValue = filterReturn.SearchValue;
+            ValueType = filterReturn.FormulaValueType.ConvertFieldTypeIntoValueType();
 
             if (Path.IsNullOrEmpty())
             {

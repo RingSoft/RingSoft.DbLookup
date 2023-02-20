@@ -196,7 +196,7 @@ namespace RingSoft.DbLookup
 
             if (e.OwnerWindow == null)
             {
-                DbDataProcessor.UserInterface.GetOwnerWindow();
+                e.OwnerWindow = DbDataProcessor.UserInterface.GetOwnerWindow();
             }
             DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
             LookupAddView?.Invoke(this, e);

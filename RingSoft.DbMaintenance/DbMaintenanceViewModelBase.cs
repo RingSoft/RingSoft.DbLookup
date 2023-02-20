@@ -177,7 +177,7 @@ namespace RingSoft.DbMaintenance
                 if (_selectButtonEnabled == value)
                     return;
                 SelectCommand.IsEnabled = _selectButtonEnabled = value;
-                OnPropertyChanged(nameof(SelectButtonEnabled));
+                OnPropertyChanged(nameof(SelectButtonEnabled), false);
             }
         }
 

@@ -347,7 +347,7 @@ namespace RingSoft.DbLookup.TableProcessing
             value = base.ConvertDate(value);
             if (FieldDefinition is DateFieldDefinition dateField)
             {
-                if (dateField.ConvertToLocalTime)
+                if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
                 {
                     var date = value.ToDate();
                     if (date != null)

@@ -73,7 +73,7 @@
         /// <value>
         /// The owner window.
         /// </value>
-        public object OwnerWindow { get; }
+        public object OwnerWindow { get; set; }
 
         /// <summary>
         /// Gets the new record's primary key value object.  Used to add a new record in a Db maintenance window with multiple primary key fields.

@@ -260,7 +260,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (_readOnlyMode)
                 args.AllowEdit = true;
 
-            args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
+            args.CallBackToken.RefreshData += (o, eventArgs) =>
+            {
+                LookupCallBackRefreshData(args.CallBackToken.LookupData);
+            };
 
             LookupView?.Invoke(this, args);
             if (!args.Handled)
@@ -287,7 +290,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupReadOnlyMode = _readOnlyMode,
                 ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue
             };
-            args.CallBackToken.RefreshData += (o, eventArgs) => LookupCallBackRefreshData();
+            args.CallBackToken.RefreshData += (o, eventArgs) =>
+            {
+                LookupCallBackRefreshData(args.CallBackToken.LookupData);
+            };
 
             LookupView?.Invoke(this, args);
             if (!args.Handled)
@@ -339,7 +345,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             e.Handled = true;
         }
 
-        private void LookupCallBackRefreshData()
+        private void LookupCallBackRefreshData(LookupDataBase lookupData)
         {
             if (LookupControl == null)
                 return;

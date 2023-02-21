@@ -253,12 +253,26 @@ namespace RingSoft.DbLookup.AutoFill
         public void OnDeleteKeyDown()
         {
             var text = AutoFillControl.EditText;
+            if (text.IsNullOrEmpty() || AutoFillControl.SelectionStart > text.Length - 1)
+            {
+                return;
+            }
+
+            var newText = string.Empty;
+            var setText = true;
+            if (AutoFillControl.SelectionLength == text.Length)
+            {
+                setText = false;
+            }
             var selectionStart = AutoFillControl.SelectionStart;
             var selectionLength = AutoFillControl.SelectionLength;
 
-            var leftText = text.LeftStr(selectionStart);
-            var rightText = GetRightText(text, selectionStart, selectionLength);
-            var newText = leftText + rightText;
+            if (setText)
+            {
+                var leftText = text.LeftStr(selectionStart);
+                var rightText = GetRightText(text, selectionStart + 1, selectionLength);
+                newText = leftText + rightText;
+            }
 
             GetContainsBoxDataTable(newText);
             AutoFillControl.EditText = newText;

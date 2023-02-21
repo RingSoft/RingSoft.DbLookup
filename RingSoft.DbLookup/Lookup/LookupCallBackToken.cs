@@ -7,11 +7,17 @@ namespace RingSoft.DbLookup.Lookup
     /// </summary>
     public class LookupCallBackToken
     {
+        public LookupDataBase LookupData { get; set; }
+
+
         /// <summary>
         /// Occurs when the child window changes the underlying data source.
         /// </summary>
         public event EventHandler RefreshData;
 
+        public LookupCallBackToken()
+        {
+        }
         /// <summary>
         /// Invokes the RefreshData event.
         /// </summary>

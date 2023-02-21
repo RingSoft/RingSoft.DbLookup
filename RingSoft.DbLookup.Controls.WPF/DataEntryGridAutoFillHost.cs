@@ -14,6 +14,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public override bool AllowReadOnlyEdit => true;
 
+        public bool EditMode { get; private set; }
+
         public DataEntryGridAutoFillCellProps AutoFillCellProps { get; private set; }
 
         private bool _gridReadOnlyMode;
@@ -54,6 +56,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (controlPrimaryKeyIsValid != cellPrimaryKeyIsValid)
                     return true;
 
+                if (Control.Value.Text != AutoFillCellProps.AutoFillValue.Text)
+                {
+                    return true;
+                }
                 if (controlPrimaryKeyIsValid)
                 {
                     return !Control.Value.PrimaryKeyValue.IsEqualTo(AutoFillCellProps.AutoFillValue
@@ -138,6 +144,23 @@ namespace RingSoft.DbLookup.Controls.WPF
                 case Key.Down:
                     if (Control.ContainsBoxIsOpen)
                         return false;
+                    break;
+                case Key.Left:
+                    if (EditMode && Control.SelectionStart > 0)
+                    {
+                        return false;
+                    }
+                    break;
+                case Key.Right:
+                    if (EditMode && Control.SelectionStart < Control.EditText.Length)
+                    {
+                        return false;
+                    }
+                    break;
+                case Key.F2:
+                    EditMode = true;
+                    Control.SelectionStart = Control.EditText.Length;
+                    Control.SelectionLength = 0;
                     break;
             }
             return base.CanGridProcessKey(key);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost;
@@ -14,7 +15,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
         public AdvancedFindMemoCellProps OriginalCellProps { get; set; }
 
+        public bool EditMode { get; private set; }
+
         private bool _dataChanged;
+        private bool _memoMode;
         
         public DataEntryGridAdvancedFindMemoHost(DataEntryGrid grid) : base(grid)
         {
@@ -90,16 +94,48 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
                 if (cellProps.Text.Contains('\n'))
                 {
+                    _memoMode = true;
                     Control.TextBox.IsReadOnly = true;
                     Control.TextBox.Text = "<Multi-Line Caption>";
                 }
                 else
                 {
                     Control.TextBox.Text = cellProps.Text;
+                    _memoMode = false;
                 }
 
 
             }
+        }
+
+        public override bool CanGridProcessKey(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    if (EditMode && Control.TextBox.SelectionStart > 0)
+                    {
+                        return false;
+                    }
+                    break;
+                case Key.Right:
+                    if (EditMode && Control.TextBox.SelectionStart < Control.Text.Length)
+                    {
+                        return false;
+                    }
+                    break;
+                case Key.F2:
+                    if (_memoMode)
+                    {
+                        return true;
+                    }
+                    EditMode = true;
+                    Control.TextBox.SelectionStart = Control.Text.Length;
+                    Control.TextBox.SelectionLength = 0;
+                    break;
+
+            }
+            return base.CanGridProcessKey(key);
         }
     }
 }

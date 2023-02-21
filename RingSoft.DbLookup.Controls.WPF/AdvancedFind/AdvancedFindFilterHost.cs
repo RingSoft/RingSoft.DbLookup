@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
@@ -61,6 +62,16 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 _dirty = true;
                 OnUpdateSource(CellProps);
             }
+        }
+
+        public override bool CanGridProcessKey(Key key)
+        {
+            switch (key)
+            {
+                case Key.F2:
+                    return true;
+            }
+            return base.CanGridProcessKey(key);
         }
     }
 }

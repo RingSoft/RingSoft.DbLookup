@@ -171,7 +171,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var orderDetails = Manager.Rows.OfType<OrderDetailsGridRow>();
 
             var existingRow = orderDetails.FirstOrDefault(f => f.ProductId == product.ProductID);
-            if (existingRow != null)
+            if (existingRow != null && existingRow != this)
             {
                 var message = $"'{productValue.Text}' already exists in this order.  Do you wish to modify it instead?";
                 if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Duplicate Product detected.") ==

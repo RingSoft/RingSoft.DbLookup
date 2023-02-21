@@ -565,6 +565,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                     };
                     Context.FireCopyProcedureEvent(args);
                 };
+
                 lookupData.GetPrintData();
 
                 if (updateSqls.Any())

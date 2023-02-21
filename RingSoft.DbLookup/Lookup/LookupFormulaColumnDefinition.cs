@@ -438,6 +438,7 @@ namespace RingSoft.DbLookup.Lookup
             entity.PrimaryFieldName = Description;
             var dateTypeInt = (int)DateType;
             entity.PrimaryTableName = dateTypeInt.ToString();
+            entity.DecimalFormatType = (byte)DecimalFieldType;
 
             base.SaveToEntity(entity);
         }
@@ -448,7 +449,26 @@ namespace RingSoft.DbLookup.Lookup
             _dataType = (FieldDataTypes)entity.FieldDataType;
             Description = entity.PrimaryFieldName;
             DateType = (DbDateTypes)entity.PrimaryTableName.ToInt();
-
+            DecimalFieldType = (DecimalFieldTypes)entity.DecimalFormatType;
+            switch (_dataType)
+            {
+                case FieldDataTypes.Decimal:
+                    switch (DecimalFieldType)
+                    {
+                        case DecimalFieldTypes.Decimal:
+                            DecimalCount = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalDigits;
+                            break;
+                        case DecimalFieldTypes.Currency:
+                            DecimalCount = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits;
+                            break;
+                        case DecimalFieldTypes.Percent:
+                            DecimalCount = CultureInfo.CurrentCulture.NumberFormat.PercentDecimalDigits;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    break;
+            }
             Path = entity.Path;
             if (Path.IsNullOrEmpty())
             {

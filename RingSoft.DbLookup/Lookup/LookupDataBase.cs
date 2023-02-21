@@ -780,7 +780,7 @@ namespace RingSoft.DbLookup.Lookup
             var originalRecordsCount = recordCount;
             if (query.WhereItems.Any())
             {
-                while (lastWhereIndex >= 0 && recordCount > 0)
+                while (lastWhereIndex >= 0 && recordCount > 0 && query.WhereItems.Count > 0)
                 {
                     {
                         var lastWhereItem = query.WhereItems[query.WhereItems.Count - 1];
@@ -849,6 +849,10 @@ namespace RingSoft.DbLookup.Lookup
                     GetQueryTableForColumn(query, SortColumnDefinition), $"{debugMessage}.GetLastWhereIndex");
 
             }
+            else
+            {
+                
+            }
 
 
             if (hasMoreThan1Record)
@@ -864,7 +868,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            if (hasMoreThan1Record)
+            if (hasMoreThan1Record || SortColumnDefinition == null)
             {
                 foreach (var primaryKeyField in LookupDefinition.TableDefinition.PrimaryKeyFields)
                 {

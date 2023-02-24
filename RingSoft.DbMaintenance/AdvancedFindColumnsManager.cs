@@ -12,6 +12,8 @@ namespace RingSoft.DbMaintenance
     {
         public new AdvancedFindViewModel ViewModel { get; set; }
 
+        private bool _addingNewRow;
+
         public AdvancedFindColumnsManager(AdvancedFindViewModel viewModel) : base(viewModel)
         {
             ViewModel = viewModel;
@@ -19,7 +21,24 @@ namespace RingSoft.DbMaintenance
 
         protected override DataEntryGridRow GetNewRow()
         {
-            return new AdvancedFindNewColumnRow(this);
+            var result = new AdvancedFindNewColumnRow(this);
+            var oldNewRow = Rows.FirstOrDefault(p => p.IsNew);
+            if (oldNewRow != null)
+            {
+                var oldRowIndex = Rows.IndexOf(oldNewRow);
+                _addingNewRow = true;
+                RemoveRow(oldNewRow);
+                _addingNewRow = false;
+            }
+
+            return result;
+        }
+
+        public void AddNewRow()
+        {
+            var newRow = GetNewRow();
+            AddRow(newRow, -1);
+            Grid?.RefreshGridView();
         }
 
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindColumn> ConstructNewRowFromEntity(AdvancedFindColumn entity)
@@ -136,6 +155,14 @@ namespace RingSoft.DbMaintenance
 
         public override void RemoveRow(DataEntryGridRow rowToDelete)
         {
+            if (rowToDelete.IsNew)
+            {
+                if (!_addingNewRow)
+                {
+                    AddNewRow();
+                }
+            }
+
             base.RemoveRow(rowToDelete);
         }
     }

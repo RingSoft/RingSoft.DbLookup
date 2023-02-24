@@ -360,6 +360,11 @@ namespace RingSoft.DbLookup.TableProcessing
                 //        .SetRightParenthesesCount(filterDefinition.RightParenthesesCount);
 
                 //}
+                if (wheres.Count > 0)
+                {
+                    wheres[0].LeftParenthesesCount++;
+                    wheres[wheres.Count - 1].RightParenthesesCount ++;
+                }
             }
 
             //if (wheres.Count >= 1) wheres[0].SetLeftParenthesesCount(wheres[0].LeftParenthesesCount + 1);

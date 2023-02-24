@@ -6,6 +6,9 @@ namespace RingSoft.DbMaintenance
         where TEntity : new()
     {
         public bool AllowSave { get; protected set; } = true;
+
+        public bool IsFixed { get; protected set; }
+
         //private DbMaintenanceDataEntryGridManager<TEntity> _dbMaintenanceDataEntryGridManager;
 
         protected DbMaintenanceDataEntryGridRow(DbMaintenanceDataEntryGridManager<TEntity> manager) : base(manager)

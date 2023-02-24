@@ -780,7 +780,7 @@ namespace RingSoft.DbMaintenance
                 visibleColumn.AddNewColumnDefinition(LookupDefinition);
             }
 
-            LookupDefinition.FilterDefinition.ClearFixedFilters();
+            //LookupDefinition.FilterDefinition.ClearFixedFilters();
             foreach (var fixedFilter in lookupDefinition.FilterDefinition.FixedFilters)
             {
                 fixedFilter.CopyToNewFilter(LookupDefinition);

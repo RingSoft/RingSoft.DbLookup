@@ -34,6 +34,7 @@ namespace RingSoft.DbMaintenance
         public AdvancedFindViewModel ViewModel { get; set; }
 
         private bool _resetLookup = true;
+        private bool _addingNewRow;
 
         public AdvancedFindFiltersManager(AdvancedFindViewModel viewModel) : base(viewModel)
         {
@@ -42,7 +43,17 @@ namespace RingSoft.DbMaintenance
 
         protected override DataEntryGridRow GetNewRow()
         {
-            return null;
+            var result = new AdvancedFindNewFilterRow(this);
+            var oldNewRow = Rows.FirstOrDefault(p => p.IsNew);
+            if (oldNewRow != null)
+            {
+                var oldRowIndex = Rows.IndexOf(oldNewRow);
+                _addingNewRow = true;
+                RemoveRow(oldNewRow);
+                _addingNewRow = false;
+            }
+
+            return result;
         }
 
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
@@ -127,7 +138,7 @@ namespace RingSoft.DbMaintenance
                     if (rowIndex == lookupDefinition.FilterDefinition.FixedFilters.Count - 1)
                     {
                         var theEnd = !lookupDefinition.FilterDefinition.UserFilters.Any();
-                        row.FinishOffFilter(true, theEnd);
+                        FinishOffFilter();
                     }
 
                     rowIndex++;
@@ -156,17 +167,66 @@ namespace RingSoft.DbMaintenance
                 row = new AdvancedFindFormulaFilterRow(this);
             }
             row.LoadFromFilterReturn(filterReturn);
-            AddRow(row);
-            
-            if (Rows.Count > 1)
+            var newIndex = GetNewRowIndex();
+            var fixedRows = Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed).ToList()
+                ;
+            if (newIndex < Rows.Count - 1)
             {
-                var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
-                advancedRows[Rows.Count - 2].FinishOffFilter(false, false);
+                var firstNewRow = Rows[newIndex];
+                if (firstNewRow.IsNew)
+                {
+                    RemoveRow(firstNewRow);
+                    AddNewRow();
+                }
             }
 
-            ProcessLastFilterRow(true, Rows.LastOrDefault() as AdvancedFindFilterRow);
+            AddRow(row, newIndex);
+            
+            //if (Rows.Count > 1)
+            //{
+            //    var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+            //}
+
+            FinishOffFilter();
             Grid?.RefreshGridView();
             ViewModel.ResetLookup();
+        }
+
+        public int GetNewRowIndex()
+        {
+            var result = -1;
+            if (Rows.Any())
+            {
+                var lastRowIndex = GetLastRowIndex();
+                result = lastRowIndex;
+                //if (lastRowIndex != Rows.Count - 1)
+                //{
+                //    result = lastRowIndex;
+                //}
+            }
+            return result;
+        }
+
+        protected override bool CanInsertRow(int startIndex)
+        {
+            if (startIndex >= 0)
+            {
+                var rows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+                var rowToInsert = rows[startIndex];
+                if (rowToInsert.IsFixed || rowToInsert.IsNew)
+                {
+                    return false;
+                }
+            }
+
+            return base.CanInsertRow(startIndex);
+        }
+
+        private int GetLastRowIndex()
+        {
+            var lastRow = Rows.FirstOrDefault(p => p.IsNew);
+            var lastRowIndex = Rows.IndexOf(lastRow);
+            return lastRowIndex;
         }
 
         public override void LoadGrid(IEnumerable<AdvancedFindFilter> entityList)
@@ -182,7 +242,7 @@ namespace RingSoft.DbMaintenance
                     {
                         if (rowIndex < Rows.Count - 1)
                         {
-                            advancedFindFilterRow.FinishOffFilter(false, false);
+                            FinishOffFilter();
                         }
 
                         rowIndex++;
@@ -190,7 +250,7 @@ namespace RingSoft.DbMaintenance
                 }
 
                 var lastRow = Rows.LastOrDefault() as AdvancedFindFilterRow;
-                lastRow?.FinishOffFilter(false, true);
+                FinishOffFilter();
             }
             Grid?.RefreshGridView();
             //ViewModel.ResetLookup();
@@ -201,7 +261,7 @@ namespace RingSoft.DbMaintenance
             if (Rows.Any())
             {
                 var lastFilterRow = Rows.Last() as AdvancedFindFilterRow;
-                lastFilterRow.FinishOffFilter(false, theEnd);
+                FinishOffFilter();
             }
         }
 
@@ -211,11 +271,12 @@ namespace RingSoft.DbMaintenance
             {
                 if (Rows.Any())
                 {
-                    ProcessLastFilterRow(true, Rows.Last() as AdvancedFindFilterRow);
+                    FinishOffFilter();
                     if (_resetLookup)
                     {
                         ViewModel.ResetLookup();
                     }
+
                 }
                 
             }
@@ -224,24 +285,64 @@ namespace RingSoft.DbMaintenance
 
         protected override void ClearRows(bool addRowToBottom = true)
         {
+            var filterRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+            var fixedRows = filterRows.Where(p => p.IsFixed);
+            base.ClearRows(addRowToBottom);
             _resetLookup = false;
-            var filterRows = Rows.OfType<AdvancedFindFilterRow>();
-            var userRows = filterRows.Where(p => p.IsFixed == false).ToList();
-            
-            foreach (var filterRow in userRows)
-            {
-                filterRow.Clearing = true;
-                RemoveRow(filterRow);
-            }
+            var userRows = filterRows.Where(p => p.IsFixed == false
+                && p.IsNew == false).ToList();
 
+            var insertIndex = 0;
+            foreach (var fixedRow in fixedRows)
+            {
+                AddRow(fixedRow, insertIndex);
+                var count = Rows.Count;
+                insertIndex++;
+            }
+            //if (Rows.Any())
+            //{
+            //    var lastFilterRow = Rows.Last() as AdvancedFindFilterRow;
+            //    lastFilterRow.FinishOffFilter(false, true);
+            //    Grid?.RefreshGridView();
+
+            //}
+            FinishOffFilter();
+            _resetLookup = true;
+        }
+
+        private void FinishOffFilter()
+        {
             if (Rows.Any())
             {
-                var lastFilterRow = Rows.Last() as AdvancedFindFilterRow;
-                lastFilterRow.FinishOffFilter(false, true);
-                Grid?.RefreshGridView();
+                var newRows = Rows.OfType<AdvancedFindFilterRow>()
+                    .Where(p => p.IsNew == false);
 
+                if (newRows.Count() > 0)
+                {
+                    var lastRow = newRows.Last();
+                    lastRow.FinishOffFilter(lastRow.IsFixed, true);
+                }
+
+                var nonFixedindex = 0;
+                var nonNewRows = Rows.OfType<AdvancedFindFilterRow>().Where(p => !p.IsNew);
+                var lastUserRow = nonNewRows.LastOrDefault();
+                foreach (var nonFixedRow in nonNewRows)
+                {
+                    if (nonFixedindex < nonNewRows.Count() && nonNewRows.Count() > 1
+                        && nonFixedRow != lastUserRow)
+                    {
+                        nonFixedRow.FinishOffFilter(nonFixedRow.IsFixed, false);
+                    }
+                    else if (lastUserRow == nonFixedRow)
+                    {
+                        nonFixedRow.FinishOffFilter(nonFixedRow.IsFixed, true);
+                    }
+                    {
+                        
+                    }
+                    nonFixedindex++;
+                }
             }
-            _resetLookup = true;
         }
 
         public bool ValidateParentheses()
@@ -276,7 +377,7 @@ namespace RingSoft.DbMaintenance
             if (Rows.Count > 1)
             {
                 var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
-                advancedRows[Rows.Count - 2].FinishOffFilter(false, false);
+                FinishOffFilter();
             }
             Grid?.RefreshGridView();
             Grid?.GotoCell(row, (int)FilterColumns.Search);
@@ -324,6 +425,25 @@ namespace RingSoft.DbMaintenance
             }
 
             return true;
+        }
+
+        public void AddNewRow()
+        {
+            var newRow = GetNewRow();
+            AddRow(newRow, -1);
+            Grid?.RefreshGridView();
+        }
+
+        public override void RemoveRow(DataEntryGridRow rowToDelete)
+        {
+            if (rowToDelete.IsNew)
+            {
+                if (!_addingNewRow)
+                {
+                    AddNewRow();
+                }
+            }
+            base.RemoveRow(rowToDelete);
         }
     }
 }

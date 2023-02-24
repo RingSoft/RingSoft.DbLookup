@@ -26,7 +26,6 @@ namespace RingSoft.DbMaintenance
         public string DisplaySearchValue { get; private set; }
         public FilterItemDefinition FilterItemDefinition { get; internal set; }
         public FieldDefinition FieldDefinition { get; private set; }
-        public bool IsFixed { get; private set; }
         public string PrimaryTable { get; set; }
         public string PrimaryField { get; set; }
         public FieldDefinition ParentFieldDefinition { get; private set; }
@@ -46,6 +45,8 @@ namespace RingSoft.DbMaintenance
         public string Path { get; internal set; }
 
         public AdvancedFilterReturn FilterReturn { get; set; }
+
+        private bool _fixedParenthesesSet = false;
 
         private FieldDefinition _searchAutoFillField;
 
@@ -217,6 +218,7 @@ namespace RingSoft.DbMaintenance
 
         public virtual void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
         {
+            IsNew = false;
             IsFixed = isFixed;
             if (isFixed)
             {
@@ -270,9 +272,10 @@ namespace RingSoft.DbMaintenance
 
         public void FinishOffFilter(bool isFixed, bool theEnd)
         {
-            if (isFixed)
+            if (isFixed && !_fixedParenthesesSet && theEnd)
             {
                 RightParenthesesCount++;
+                _fixedParenthesesSet = true;
             }
 
             if (theEnd)
@@ -305,6 +308,7 @@ namespace RingSoft.DbMaintenance
 
         public virtual void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
         {
+            IsNew = false;
             Condition = advancedFilterReturn.Condition;
             SearchValue = advancedFilterReturn.SearchValue;
             FilterReturn = advancedFilterReturn;

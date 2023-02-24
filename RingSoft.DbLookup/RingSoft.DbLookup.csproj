@@ -27,4 +27,8 @@
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\RingSoft.DataEntryControls\RingSoft.DataEntryControls.Engine\RingSoft.DataEntryControls.Engine.csproj" />
+  </ItemGroup>
+
 </Project>

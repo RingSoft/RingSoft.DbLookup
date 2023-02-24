@@ -105,7 +105,7 @@
 
                                     <Label Grid.Row="4" Grid.Column="4" Content="Filters"/>
 
-                                    <deg:DataEntryGrid Grid.Row="5" Grid.Column="4" Manager="{Binding FiltersManager}" DataEntryCanUserAddRows="False" >
+                                    <deg:DataEntryGrid Grid.Row="5" Grid.Column="4" Manager="{Binding FiltersManager}" >
                                         <deg:DataEntryGrid.Columns>
 
                                             <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50" Alignment="Center"/>

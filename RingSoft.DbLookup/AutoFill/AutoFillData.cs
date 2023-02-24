@@ -270,7 +270,13 @@ namespace RingSoft.DbLookup.AutoFill
             if (setText)
             {
                 var leftText = text.LeftStr(selectionStart);
-                var rightText = GetRightText(text, selectionStart + 1, selectionLength);
+                var selectedText = text.MidStr(selectionStart, selectionLength);
+                var rightStart = selectionStart + selectionLength;
+                if (selectionLength == 0)
+                {
+                    rightStart++;
+                }
+                var rightText = text.GetRightText(rightStart, 0);
                 newText = leftText + rightText;
             }
 

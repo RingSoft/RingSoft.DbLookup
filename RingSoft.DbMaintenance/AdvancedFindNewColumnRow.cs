@@ -7,6 +7,7 @@ namespace RingSoft.DbMaintenance
     {
         public AdvancedFindNewColumnRow(AdvancedFindColumnsManager manager) : base(manager)
         {
+            IsNew = true;
         }
 
         public override DataEntryGridCellProps GetCellProps(int columnId)

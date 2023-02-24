@@ -325,8 +325,10 @@ namespace RingSoft.DbLookup.Lookup
                 JoinQueryTableAlias = alias
             };
 
-            ProcessVisibleColumnDefinition(column);
-            _visibleColumns.Add(column);
+            //ProcessVisibleColumnDefinition(column);
+            //_visibleColumns.Add(column);
+            AddVisibleColumnDefinition(column);
+            
             column.ChildField = fieldDefinition.TableDefinition.PrimaryKeyFields[0];
             return column;
         }
@@ -403,19 +405,26 @@ namespace RingSoft.DbLookup.Lookup
 
             //if (join != null)
             //    column.JoinQueryTableAlias = join.Alias;
-            _visibleColumns.Add(column);
+            AddVisibleColumnDefinition(column);
             return column;
         }
 
         internal void AddVisibleColumnDefinition(LookupColumnDefinitionBase lookupColumn)
         {
             ProcessVisibleColumnDefinition(lookupColumn);
-            _visibleColumns.Add(lookupColumn);
+            if (lookupColumn.ColumnIndexToAdd >= 0)
+            {
+                _visibleColumns.Insert(lookupColumn.ColumnIndexToAdd, lookupColumn);
+            }
+            else
+            {
+                _visibleColumns.Add(lookupColumn);
+            }
         }
 
         internal void ProcessVisibleColumnDefinition(LookupColumnDefinitionBase columnDefinition)
         {
-            if (InitialSortColumnDefinition == null)
+            if (InitialSortColumnDefinition == null || columnDefinition.ColumnIndexToAdd == 0)
                 InitialSortColumnDefinition = columnDefinition;
         }
 

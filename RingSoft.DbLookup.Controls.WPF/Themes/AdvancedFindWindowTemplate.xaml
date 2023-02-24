@@ -88,7 +88,7 @@
 
                                     <Label Grid.Row="2" Grid.Column="4" Content="Columns"/>
 
-                                    <deg:DataEntryGrid Grid.Row="3" Grid.Column="4" Manager="{Binding ColumnsManager}" DataEntryCanUserAddRows="False">
+                                    <deg:DataEntryGrid Grid.Row="3" Grid.Column="4" Manager="{Binding ColumnsManager}">
                                         <deg:DataEntryGrid.Columns>
 
                                             <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>

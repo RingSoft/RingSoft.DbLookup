@@ -72,10 +72,11 @@ namespace RingSoft.DbMaintenance
 
         public List<TEntity> GetEntityList()
         {
-            if (Grid == null)
-                return null;
+            if (Grid != null)
+            {
+                Grid.CommitCellEdit();
+            }
 
-            Grid.CommitCellEdit();
             var result = new List<TEntity>();
             var rowIndex = 0;
             foreach (var dataEntryGridRow in Rows)

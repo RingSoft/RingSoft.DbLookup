@@ -19,7 +19,7 @@ namespace RingSoft.DbMaintenance
 
         protected override DataEntryGridRow GetNewRow()
         {
-            return new AdvancedFindFieldColumnRow(this);
+            return new AdvancedFindNewColumnRow(this);
         }
 
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindColumn> ConstructNewRowFromEntity(AdvancedFindColumn entity)
@@ -77,7 +77,7 @@ namespace RingSoft.DbMaintenance
                 }
                 
                 newRow.LoadFromColumnDefinition(column);
-                AddRow(newRow);
+                AddRow(newRow, Rows.Count - 1);
             }
         }
 
@@ -99,9 +99,39 @@ namespace RingSoft.DbMaintenance
             {
                 columnRow = new AdvancedFindFormulaColumnRow(this);
             }
+
+            var newColumnRows = Rows.Where(p => p.IsNew == true);
+            var newColumnRow = newColumnRows.FirstOrDefault();
+            var startIndex = GetNewColumnIndex();
+            if (newColumnRow != null)
+            {
+                startIndex = Rows.IndexOf(newColumnRow);
+                if (startIndex < Rows.Count - 1)
+                {
+                    RemoveRow(newColumnRow);
+                }
+            }
+            
             columnRow?.LoadFromColumnDefinition(column);
-            AddRow(columnRow);
+            AddRow(columnRow, startIndex);
             Grid?.RefreshGridView();
+        }
+
+        public int GetNewColumnIndex()
+        {
+            var newColumnRows = Rows.Where(p => p.IsNew == true);
+            var newColumnRow = newColumnRows.FirstOrDefault();
+            var startIndex = Rows.Count - 1;
+            if (newColumnRow != null)
+            {
+                startIndex = Rows.IndexOf(newColumnRow);
+                if (Rows.Count == 1)
+                {
+                    startIndex = -1;
+                }
+
+            }
+            return startIndex;
         }
 
         public override void RemoveRow(DataEntryGridRow rowToDelete)

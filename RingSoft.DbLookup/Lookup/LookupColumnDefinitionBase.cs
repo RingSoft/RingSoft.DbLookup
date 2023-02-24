@@ -139,6 +139,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract TreeViewType TreeViewType { get; }
 
+        public int ColumnIndexToAdd { get; internal set; } = -1;
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
@@ -173,7 +175,6 @@ namespace RingSoft.DbLookup.Lookup
             ParentField = source.ParentField;
             TableDescription = source.TableDescription;
             FieldDescription = source.FieldDescription;
-
             Path = source.Path;
         }
 
@@ -349,6 +350,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
+            
             lookupDefinition.AddVisibleColumnDefinition(columnDefinition);
         }
 

@@ -9,7 +9,10 @@ using System.Text;
 using Newtonsoft.Json;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.Printing.Interop;
+using Google.Protobuf.WellKnownTypes;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup
 {
@@ -257,7 +260,7 @@ namespace RingSoft.DbLookup
                 }
                 else if (property.PropertyType == typeof(int) 
                          || property.PropertyType == typeof(int?)
-                         || property.PropertyType.BaseType == typeof(Enum))
+                         || property.PropertyType.BaseType == typeof(System.Enum))
                 {
                     int checkValue;
                     if (Int32.TryParse(value, out checkValue))
@@ -308,7 +311,7 @@ namespace RingSoft.DbLookup
             return String.Empty;
         }
 
-        public static FieldDataTypes GetFieldDataTypeForType(Type type)
+        public static FieldDataTypes GetFieldDataTypeForType(System.Type type)
         {
             if (type == typeof(DateTime)
                 || type == typeof(DateTime?))
@@ -413,5 +416,78 @@ namespace RingSoft.DbLookup
             }
             return true;
         }
+
+        public static bool DoRecordLock(PrimaryKeyValue primaryKey)
+        {
+            var result = true;
+
+            var recordLockTableField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
+            var recordLockPkField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
+            var recordLockDateField =
+                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
+            var recordLockUserField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
+
+            var sqlDatas = new List<SqlData>();
+            var sqlData = new SqlData(recordLockTableField.FieldName,
+                primaryKey.TableDefinition.TableName, ValueTypes.String);
+            sqlDatas.Add(sqlData);
+            sqlData = new SqlData(recordLockPkField.FieldName, primaryKey.KeyString, ValueTypes.String);
+            sqlDatas.Add(sqlData);
+            sqlData = new SqlData(recordLockDateField.FieldName, GetNowDateText(), ValueTypes.DateTime,
+                DbDateTypes.Millisecond);
+            sqlDatas.Add(sqlData);
+            sqlData = new SqlData(recordLockUserField.FieldName, SystemGlobals.UserName, ValueTypes.String);
+            sqlDatas.Add(sqlData);
+
+            var selectQuery = new SelectQuery(recordLockTableField.TableDefinition.TableName);
+            selectQuery.AddWhereItem(recordLockTableField.FieldName, Conditions.Equals,
+                primaryKey.TableDefinition.TableName);
+
+            selectQuery.AddWhereItem(recordLockPkField.FieldName, Conditions.Equals, primaryKey.KeyString);
+
+            var getDataResult = primaryKey.TableDefinition.Context.DataProcessor.GetData(selectQuery);
+            if (getDataResult.ResultCode == GetDataResultCodes.Success)
+            {
+                var sql = string.Empty;
+                if (getDataResult.DataSet.Tables[0].Rows.Count >= 1)
+                {
+                    var dataRow = getDataResult.DataSet.Tables[0].Rows[0];
+                    var recordLockPrimaryKey = new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+                    recordLockPrimaryKey.PopulateFromDataRow(dataRow);
+                    var updateStatement = new UpdateDataStatement(recordLockPrimaryKey);
+                    foreach (var data in sqlDatas)
+                    {
+                        updateStatement.AddSqlData(data);
+                    }
+
+                    sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateUpdateSql(
+                        updateStatement);
+                }
+                else
+                {
+                    var insertStatement = new InsertDataStatement(recordLockPkField.TableDefinition);
+                    foreach (var data in sqlDatas)
+                    {
+                        insertStatement.AddSqlData(data);
+                    }
+
+                    sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateInsertSqlStatement(
+                        insertStatement);
+                }
+                result = primaryKey.TableDefinition.Context.DataProcessor.ExecuteSql(sql).ResultCode == GetDataResultCodes.Success;
+            }
+            
+            return result;
+        }
+
+        public static string GetNowDateText()
+        {
+            var newDate = DateTime.Now.ToUniversalTime();
+            var dateText = newDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return dateText;
+        }
+
     }
 }

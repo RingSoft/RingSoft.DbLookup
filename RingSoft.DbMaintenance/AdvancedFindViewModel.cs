@@ -725,7 +725,9 @@ namespace RingSoft.DbMaintenance
                     return;
                 }
             }
-            var column = SelectedTreeViewItem.CreateColumn();
+
+            var startIndex = ColumnsManager.GetNewColumnIndex();
+            var column = SelectedTreeViewItem.CreateColumn(startIndex);
             ColumnsManager.LoadFromColumnDefinition(column);
             //switch (SelectedTreeViewItem.Type)
             //{

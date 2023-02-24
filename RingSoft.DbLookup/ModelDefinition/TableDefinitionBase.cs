@@ -546,7 +546,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                         sqlList.Add(destinationProcessor.SqlGenerator.GenerateInsertSqlStatement(insertStatement));
                         if (updateStatement.SqlDatas.Any())
                         {
-                            updateSqls.AddRange(destinationProcessor.SqlGenerator.GenerateUpdateSql(updateStatement));
+                            updateSqls.Add(destinationProcessor.SqlGenerator.GenerateUpdateSql(updateStatement));
                         }
                     }
 

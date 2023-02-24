@@ -102,7 +102,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             return result;
         }
 
-        public LookupColumnDefinitionBase CreateColumn()
+        public LookupColumnDefinitionBase CreateColumn(int index = -1)
         {
             LookupColumnDefinitionBase result = null;
             switch (Type)
@@ -124,10 +124,12 @@ namespace RingSoft.DbLookup.AdvancedFind
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            result.ColumnIndexToAdd = index;
             var formula = result.LoadFromTreeViewItem(this);
             if (!formula.IsNullOrEmpty())
             {
                 result = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                result.ColumnIndexToAdd = index;
                 result.LoadFromTreeViewItem(this);
             }
             return result;

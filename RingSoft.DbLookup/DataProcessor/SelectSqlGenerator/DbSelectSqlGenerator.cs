@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json.Linq;
 
 namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {
@@ -930,9 +932,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return result;
         }
 
-        public virtual List<string> GenerateUpdateSql(UpdateDataStatement updateDataStatement)
+        public virtual string GenerateUpdateSql(UpdateDataStatement updateDataStatement)
         {
-            var result = new List<string>();
+            var result = string.Empty ;
             var table = FormatSqlObject(updateDataStatement.PrimaryKeyValue.TableDefinition.TableName);
             var pkFields = string.Empty;
             var primaryKeyWhere = string.Empty;
@@ -958,16 +960,21 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
                 }
                 pkIndex++;
             }
+
+            var updateString = string.Empty;
             foreach (var sqlData in updateDataStatement.SqlDatas)
             {
                 var field = $"{FormatSqlObject(sqlData.FieldName)}";
                 var value = $"{ConvertValueToSqlText(sqlData.FieldValue, sqlData.ValueType, sqlData.DateType)}";
 
-                var sql = $"UPDATE {table} SET {field} = {value} WHERE {primaryKeyWhere}";
-                result.Add(sql);
+                updateString += $"{field} = {value}, ";
+                //result.Add(sql);
             }
+            var lastValueIndex = updateString.LastIndexOf(", ");
+            updateString = updateString.LeftStr(lastValueIndex);
 
-            return result;
+            var sql = $"UPDATE {table} SET {updateString} WHERE {primaryKeyWhere}";
+            return sql;
         }
     }
 }

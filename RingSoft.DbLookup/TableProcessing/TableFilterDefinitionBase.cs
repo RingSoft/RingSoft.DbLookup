@@ -275,23 +275,40 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
-            string value)
+            string value, int index = -1)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
-            _userFilterDefinitions.Add(fieldFilter);
+            InternalAddUserFilter(index, fieldFilter);
+
             return fieldFilter;
         }
 
+        private void InternalAddUserFilter(int index, FilterItemDefinition filter)
+        {
+            if (_userFilterDefinitions.Count < index)
+            {
+                index = -1;
+            }
+            if (index == -1)
+            {
+                _userFilterDefinitions.Add(filter);
+            }
+            else
+            {
+                _userFilterDefinitions.Insert(index, filter);
+            }
+        }
+
         public FormulaFilterDefinition AddUserFilter(string formula, Conditions condition, string value = "",
-            string alias = "", FieldDataTypes dataType = FieldDataTypes.String)
+            string alias = "", FieldDataTypes dataType = FieldDataTypes.String, int index = -1)
         {
             var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value, alias);
-            _userFilterDefinitions.Add(formulaFilter);
+            InternalAddUserFilter(index, formulaFilter);
             return formulaFilter;
         }
 
         public AdvancedFindFilterDefinition AddUserFilter(int advancedFindId, LookupDefinitionBase lookupDefinition,
-            string path, bool addToUsersFilters = true)
+            string path, bool addToUsersFilters = true, int index = -1)
         {
             var advancedFindFilter = new AdvancedFindFilterDefinition(this)
             {
@@ -302,7 +319,7 @@ namespace RingSoft.DbLookup.TableProcessing
             advancedFindFilter.LookupDefinition = lookupDefinition;
             if (addToUsersFilters)
             {
-                _userFilterDefinitions.Add(advancedFindFilter);
+                InternalAddUserFilter(index, advancedFindFilter);
             }
 
             return advancedFindFilter;

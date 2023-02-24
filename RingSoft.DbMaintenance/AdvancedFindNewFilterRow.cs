@@ -46,5 +46,10 @@ namespace RingSoft.DbMaintenance
         {
             return new DataEntryGridCellStyle { State = DataEntryGridCellStates.Disabled };
         }
+
+        public override void Dispose()
+        {
+            //base.Dispose();
+        }
     }
 }

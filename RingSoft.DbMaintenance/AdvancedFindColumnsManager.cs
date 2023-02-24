@@ -153,6 +153,22 @@ namespace RingSoft.DbMaintenance
             return startIndex;
         }
 
+        public override bool IsDeleteOk(int rowIndex)
+        {
+            var rows = Rows.OfType<AdvancedFindColumnRow>().ToList();
+            var row = rows[rowIndex];
+            if (rowIndex == Rows.Count - 1 && row.IsNew)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            //return base.IsDeleteOk(rowIndex);
+        }
+
+
         public override void RemoveRow(DataEntryGridRow rowToDelete)
         {
             if (rowToDelete.IsNew)

@@ -19,5 +19,6 @@ namespace RingSoft.DbLookup.TableProcessing
         public string TableDescription { get; set; }
         public DateFilterTypes DateFilterType { get; set; }
         public string Path { get; set; }
+        public int NewIndex { get; set; } = -1;
     }
 }

@@ -43,7 +43,11 @@ namespace RingSoft.DbMaintenance
                 FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition
                     .AddUserFilter(advancedFilterReturn.Formula
                     , advancedFilterReturn.Condition
-                    , advancedFilterReturn.SearchValue);
+                    , advancedFilterReturn.SearchValue
+                    , ""
+                    , advancedFilterReturn.FormulaValueType
+                    , GetNewFilterIndex()
+);
             }
 
             FilterItemDefinition.LoadFromFilterReturn(advancedFilterReturn, treeViewItem);

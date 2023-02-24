@@ -157,6 +157,7 @@ namespace RingSoft.DbMaintenance
 
             //ProcessLastFilterRow(false, Rows.LastOrDefault() as AdvancedFindFilterRow);
 
+            filterReturn.NewIndex = GetNewRowIndex();
             AdvancedFindFilterRow row = null;
             if (filterReturn.Formula.IsNullOrEmpty())
             {
@@ -167,9 +168,13 @@ namespace RingSoft.DbMaintenance
                 row = new AdvancedFindFormulaFilterRow(this);
             }
             row.LoadFromFilterReturn(filterReturn);
+            AddNewFilterRow(row);
+        }
+
+        public void AddNewFilterRow(AdvancedFindFilterRow row)
+        {
             var newIndex = GetNewRowIndex();
-            var fixedRows = Rows.OfType<AdvancedFindFilterRow>().Where(p => p.IsFixed).ToList()
-                ;
+
             if (newIndex < Rows.Count - 1)
             {
                 var firstNewRow = Rows[newIndex];
@@ -181,7 +186,7 @@ namespace RingSoft.DbMaintenance
             }
 
             AddRow(row, newIndex);
-            
+
             //if (Rows.Count > 1)
             //{
             //    var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
@@ -272,10 +277,10 @@ namespace RingSoft.DbMaintenance
                 if (Rows.Any())
                 {
                     FinishOffFilter();
-                    if (_resetLookup)
-                    {
-                        ViewModel.ResetLookup();
-                    }
+                    //if (_resetLookup )
+                    //{
+                    //    ViewModel.ResetLookup();
+                    //}
 
                 }
                 
@@ -373,13 +378,13 @@ namespace RingSoft.DbMaintenance
                 , ViewModel.SelectedTreeViewItem.MakePath()
                 , field);
             
-            AddRow(row);
+            AddNewFilterRow(row);
             if (Rows.Count > 1)
             {
                 var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
                 FinishOffFilter();
             }
-            Grid?.RefreshGridView();
+            //Grid?.RefreshGridView();
             Grid?.GotoCell(row, (int)FilterColumns.Search);
         }
 
@@ -432,6 +437,22 @@ namespace RingSoft.DbMaintenance
             var newRow = GetNewRow();
             AddRow(newRow, -1);
             Grid?.RefreshGridView();
+        }
+
+        public override bool IsDeleteOk(int rowIndex)
+        {
+            var rows = Rows.OfType<AdvancedFindFilterRow>().ToList();
+            var row = rows[rowIndex];
+            if (rowIndex == Rows.Count - 1 && row.IsNew)
+            {
+                return false;
+            }
+            else if (!row.IsFixed)
+            {
+                return true;
+            }
+
+            return base.IsDeleteOk(rowIndex);
         }
 
         public override void RemoveRow(DataEntryGridRow rowToDelete)

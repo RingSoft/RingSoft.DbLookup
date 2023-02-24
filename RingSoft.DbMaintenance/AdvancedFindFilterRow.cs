@@ -306,6 +306,15 @@ namespace RingSoft.DbMaintenance
  
         }
 
+        protected virtual int GetNewFilterIndex()
+        {
+            var result = Manager.GetNewRowIndex();
+            var fixedItems = Manager.Rows.OfType<AdvancedFindFilterRow>()
+                .Where(p => p.IsFixed)
+                .ToList();
+            return result - fixedItems.Count;
+        }
+
         public virtual void LoadFromFilterReturn(AdvancedFilterReturn advancedFilterReturn)
         {
             IsNew = false;
@@ -343,10 +352,35 @@ namespace RingSoft.DbMaintenance
                 FilterItemDefinition.TableFilterDefinition.RemoveUserFilter(FilterItemDefinition);
             if (!Manager.ViewModel.Clearing)
             {
-                Manager.ViewModel.ResetLookup();
+                if (ValidateParentheses())
+                {
+                    Manager.ViewModel.ResetLookup();
+                }
             }
 
             base.Dispose();
+        }
+
+        private bool ValidateParentheses()
+        {
+            if (FilterItemDefinition != null)
+            {
+                var leftParenCount = 0;
+                var rightParenCount = 0;
+                foreach (var userFilter in FilterItemDefinition.TableFilterDefinition.UserFilters)
+                {
+                    leftParenCount += userFilter.LeftParenthesesCount;
+                    rightParenCount += userFilter.RightParenthesesCount;
+                }
+
+                if (leftParenCount != rightParenCount)
+                {
+                    Manager.ViewModel.ClearLookup(false);
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -6,11 +6,11 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -1020,17 +1020,33 @@ namespace RingSoft.DbMaintenance
             {
                 if (!FiltersManager.ValidateAdvancedFind())
                 {
-                    var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-                    command.ClearColumns = true;
-                    command.ResetSearchFor = true;
-                    LookupCommand = command;
+                    ClearLookup();
                     return false;
                 }
 
                 return true;
             }
+            else
+            {
+                ClearLookup(false);
+            }
 
             return false;
+        }
+
+        public void ClearLookup(bool clearColumns = true)
+        {
+            if (clearColumns)
+            {
+                var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                command.ClearColumns = true;
+                command.ResetSearchFor = true;
+                LookupCommand = command;
+            }
+            else
+            {
+                LookupCommand = GetLookupCommand(LookupCommands.Clear);
+            }
         }
 
         private void ShowFromFormulaEditor()

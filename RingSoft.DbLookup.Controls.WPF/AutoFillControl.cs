@@ -881,12 +881,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (Popup != null)
                     popupIsOpen = Popup.IsOpen;
 
-                var value = Value.PrimaryKeyValue.KeyValueFields[0].Value;
-                Value =
-                    Setup.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
-                        Setup.LookupDefinition.TableDefinition, value);
+                if (Value != null)
+                {
+                    var value = Value.PrimaryKeyValue.KeyValueFields[0].Value;
+                    Value =
+                        Setup.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
+                            Setup.LookupDefinition.TableDefinition, value);
 
-                EditText = Value.Text;
+                    EditText = Value.Text;
+                }
 
                 _autoFillData.RefreshData(popupIsOpen);
             };

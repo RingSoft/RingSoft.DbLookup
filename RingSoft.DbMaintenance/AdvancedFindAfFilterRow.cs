@@ -134,7 +134,7 @@ namespace RingSoft.DbMaintenance
                 if (FilterItemDefinition == null)
                 {
                     FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
-                        Manager.ViewModel.LookupDefinition, Path);
+                        Manager.ViewModel.LookupDefinition, Path, true, GetNewFilterIndex());
                 }
                 else
                 {
@@ -146,6 +146,15 @@ namespace RingSoft.DbMaintenance
             {
                 Manager.ViewModel.LookupDefinition.FilterDefinition.RemoveUserFilter(filter);
             }
+        }
+
+        protected override int GetNewFilterIndex()
+        {
+            var result = Manager.Rows.IndexOf(this);
+            var fixedItems = Manager.Rows.OfType<AdvancedFindFilterRow>()
+                .Where(p => p.IsFixed)
+                .ToList();
+            return result - fixedItems.Count;
         }
 
         public override void SaveToEntity(AdvancedFindFilter entity, int rowIndex)

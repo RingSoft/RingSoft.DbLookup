@@ -122,7 +122,7 @@ namespace RingSoft.DbLookup.DataProcessor
 
         private string GenerateConnectionString()
         {
-            var connectionString = $"data source={Server};initial catalog={Database};";
+            var connectionString = $"data source={Server};initial catalog={Database};Pooling=false;";
 
             switch (SecurityType)
             {

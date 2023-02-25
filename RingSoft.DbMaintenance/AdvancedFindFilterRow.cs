@@ -239,7 +239,7 @@ namespace RingSoft.DbMaintenance
                 var foundItem =
                     Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
                         filter.TreeViewType);
-                if (foundItem != null)
+                if (foundItem != null && Table.IsNullOrEmpty())
                 {
                     if (foundItem.Parent != null)
                     {

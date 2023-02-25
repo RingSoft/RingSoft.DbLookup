@@ -205,5 +205,10 @@ namespace RingSoft.DbLookup
                     ?.Value;
             }
         }
+
+        public bool CreateRecordLock()
+        {
+            return GblMethods.DoRecordLock(this);
+        }
     }
 }

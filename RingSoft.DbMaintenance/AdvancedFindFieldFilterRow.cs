@@ -16,11 +16,15 @@ namespace RingSoft.DbMaintenance
         {
             if (filter is FieldFilterDefinition fieldFilter)
             {
-                var path = fieldFilter.Path;
-                if (path.IsNullOrEmpty() && fieldFilter.FieldDefinition != null)
-                {
+                //var path = fieldFilter.Path;
+                //if (path.IsNullOrEmpty() && fieldFilter.FieldDefinition != null)
+                //{
                     Field = fieldFilter.FieldDefinition.Description;
-                }
+                    if (fieldFilter.JoinDefinition != null)
+                    {
+                        Table = fieldFilter.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
+                    }
+                    //}
             }
             base.LoadFromFilterDefinition(filter, isFixed, rowIndex);
         }

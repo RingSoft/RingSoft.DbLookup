@@ -109,6 +109,7 @@ namespace RingSoft.DbLookup.DataProcessor
                 FilePath += "\\";
 
             var connectionString = $"Data Source={FilePath}{FileName};";
+            connectionString += "Pooling=false;";
             if (!Password.IsNullOrEmpty())
                 connectionString += $"Password={Password};";
 

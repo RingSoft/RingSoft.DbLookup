@@ -888,7 +888,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                         Setup.LookupDefinition.TableDefinition.Context.OnAutoFillTextRequest(
                             Setup.LookupDefinition.TableDefinition, value);
 
-                    EditText = Value.Text;
+                    if (Value != null)
+                    {
+                        EditText = Value.Text;
+                    }
                 }
 
                 _autoFillData.RefreshData(popupIsOpen);

@@ -27,7 +27,10 @@ namespace RingSoft.DbLookup.App.Library.EfCore
                 var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(idValue.ToInt());
                 var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees
                     .GetPrimaryKeyValueFromEntity(employee);
-                return new AutoFillValue(primaryKeyValue, employee.FirstName + " " + employee.LastName);
+                if (employee != null)
+                {
+                    return new AutoFillValue(primaryKeyValue, employee.FirstName + " " + employee.LastName);
+                }
             }
             //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
             //{

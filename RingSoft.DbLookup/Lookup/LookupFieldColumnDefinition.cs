@@ -201,15 +201,21 @@ namespace RingSoft.DbLookup.Lookup
 
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
-                var initColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
-                    .InitialSortColumnDefinition;
-
-                var formula = initColumn.GetFormulaForColumn();
-                if (!formula.IsNullOrEmpty())
+                LookupColumnDefinitionBase initColumn = null;
+                if (FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition != null)
                 {
-                    newColumn = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                    initColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
+                        .InitialSortColumnDefinition;
                 }
 
+                if (initColumn != null)
+                {
+                    var formula = initColumn.GetFormulaForColumn();
+                    if (!formula.IsNullOrEmpty())
+                    {
+                        newColumn = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                    }
+                }
             }
             if (Path.IsNullOrEmpty())
             {

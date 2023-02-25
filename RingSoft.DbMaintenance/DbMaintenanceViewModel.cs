@@ -1003,10 +1003,16 @@ namespace RingSoft.DbMaintenance
                                 {
                                     if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
                                     {
-                                        if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
-                                                rootChild, deleteTable))
+                                        var existingField = deleteTables.Tables.FirstOrDefault(p =>
+                                            p.ChildField == tableDefinitionChildField);
+                                        if (existingField == null)
                                         {
-                                            return false;
+                                            if (!ProcessDeleteChildField(tables, tableDefinitionChildField,
+                                                    deleteTables, childField,
+                                                    rootChild, deleteTable))
+                                            {
+                                                return false;
+                                            }
                                         }
                                     }
                                 }
@@ -1060,9 +1066,11 @@ namespace RingSoft.DbMaintenance
             var sqls = new List<string>();
             var tables = deleteTables.Tables
                 .OrderByDescending(p => p.ChildField.TableDefinition.PriorityLevel);
+
+            var childFieldsProcessed = new List<FieldDefinition>();
             foreach (var deleteTable in tables)
             {
-                ProcessDeleteChildren(deleteTable, sqls);
+                ProcessDeleteChildren(deleteTable, sqls, childFieldsProcessed);
             }
 
             var result = deleteTables.PrimaryKeyValue.TableDefinition.Context.DataProcessor.ExecuteSqls(sqls);
@@ -1079,7 +1087,8 @@ namespace RingSoft.DbMaintenance
 
         }
 
-        private void ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls)
+        private void ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls
+            , List<FieldDefinition> childFieldsProcessed)
         {
             if (deleteTable.ChildField.TableDefinition.ChildFields.Any())
             {
@@ -1088,8 +1097,13 @@ namespace RingSoft.DbMaintenance
                     var childTable = deleteTable.Parent.Tables.FirstOrDefault(p => p.ChildField.TableDefinition == childField.TableDefinition);
                     if (childTable != null && childTable.ChildField.AllowRecursion)
                     {
-                        ProcessDeleteChildren(childTable, sqls);
-                        childTable.Processed = true;
+                        var processedChildField = childFieldsProcessed.FirstOrDefault(childField);
+                        if (processedChildField == null)
+                        {
+                            ProcessDeleteChildren(childTable, sqls, childFieldsProcessed);
+                            childTable.Processed = true;
+                            childFieldsProcessed.Add(childField);
+                        }
                     }
                 }
             }

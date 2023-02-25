@@ -728,6 +728,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override bool SaveEntity(Order entity)
         {
             var orderDetails = DetailsGridManager.GetEntityList();
+            if (!GridMode)
+            {
+                orderDetails = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetails(OrderId);
+            }
             return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveOrder(entity, orderDetails);
         }
 

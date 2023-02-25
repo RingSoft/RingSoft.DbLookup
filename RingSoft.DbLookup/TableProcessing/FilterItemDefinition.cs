@@ -78,6 +78,7 @@ namespace RingSoft.DbLookup.TableProcessing
             set
             {
                 _joinDefinition = value;
+                SetTableDescription();
             }
         }
 
@@ -164,6 +165,16 @@ namespace RingSoft.DbLookup.TableProcessing
             DateFilterValue = source.DateFilterValue;
             IsFixed = source.IsFixed;
         }
+
+        public void SetTableDescription()
+        {
+            if (JoinDefinition != null && JoinDefinition.ForeignKeyDefinition != null)
+            {
+                TableDescription = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
+            }
+
+        }
+
 
         public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode);
 
@@ -486,7 +497,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     newFilter.JoinDefinition = join.JoinDefinition;
                 }
 
-                TableDescription = foundItem.Name;
+                //TableDescription = foundItem.Name;
             }
         }
     }

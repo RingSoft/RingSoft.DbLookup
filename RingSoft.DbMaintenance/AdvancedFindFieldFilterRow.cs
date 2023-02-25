@@ -20,9 +20,10 @@ namespace RingSoft.DbMaintenance
                 //if (path.IsNullOrEmpty() && fieldFilter.FieldDefinition != null)
                 //{
                     Field = fieldFilter.FieldDefinition.Description;
-                    if (fieldFilter.JoinDefinition != null)
+                    //if (fieldFilter.JoinDefinition != null)
                     {
-                        Table = fieldFilter.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
+                        //Table = fieldFilter.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
+                        Table = fieldFilter.TableDescription;
                     }
                     //}
             }

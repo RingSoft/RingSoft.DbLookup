@@ -53,7 +53,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
                 if (foundItem != null)
                 {
-                    return $"{foundItem.Name}.{Description}";
+                    return $"{foundItem.Name}.{Description} Formula";
                 }
 
             }

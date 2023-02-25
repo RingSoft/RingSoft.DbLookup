@@ -87,13 +87,11 @@ namespace RingSoft.DbLookup.TableProcessing
         public bool CastEnumValueAsInt { get; internal set; } = true;
 
         private FieldDefinition _parentField;
+
         public FieldDefinition ParentField
         {
             get => _parentField;
-            set
-            {
-                _parentField = value;
-            }
+            set { _parentField = value; }
         }
 
         private FieldDefinition _fieldToSearch;
@@ -106,6 +104,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 {
                     return FieldDefinition;
                 }
+
                 return _fieldToSearch;
             }
             internal set => _fieldToSearch = value;
@@ -115,7 +114,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
-            
+
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal override void CopyFrom(FilterItemDefinition source)
         {
-            var fieldFilterDefinition = (FieldFilterDefinition) source;
+            var fieldFilterDefinition = (FieldFilterDefinition)source;
             FieldDefinition = fieldFilterDefinition.FieldDefinition;
             Condition = fieldFilterDefinition.Condition;
             Value = fieldFilterDefinition.Value;
@@ -146,6 +145,7 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 JoinDefinition = new TableFieldJoinDefinition();
                 JoinDefinition.CopyFrom(fieldFilterDefinition.JoinDefinition);
+                SetTableDescription();
                 TableFilterDefinition.AddJoin(JoinDefinition);
             }
 
@@ -154,7 +154,9 @@ namespace RingSoft.DbLookup.TableProcessing
 
         protected internal override string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
         {
-            var result = $"{FieldDefinition.TableDefinition.Description}.{FieldDefinition.Description}";
+            var tableDescription = TableDescription;
+
+            var result = $"{tableDescription}.{FieldDefinition.Description}";
             return result;
             //return base.GetReportBeginTextPrintMode(lookupDefinition);
         }

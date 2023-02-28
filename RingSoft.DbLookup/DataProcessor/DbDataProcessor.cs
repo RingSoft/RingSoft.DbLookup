@@ -58,6 +58,11 @@ namespace RingSoft.DbLookup.DataProcessor
         /// </value>
         public static IDbLookupUserInterface UserInterface { get; set; }
 
+        public static bool DontDisplayExceptions { get; set; }
+
+        public static string LastException { get; private set; }
+
+
         internal static bool ShowSqlWindow => _showSqlWindow;
 
 
@@ -385,6 +390,11 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="debugMessage">The debug message.</param>
         public static void DisplayDataException(Exception exception, string debugMessage)
         {
+            if (DontDisplayExceptions)
+            {
+                LastException = exception.Message;
+                return;
+            }
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
             ControlsGlobals.UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
         }

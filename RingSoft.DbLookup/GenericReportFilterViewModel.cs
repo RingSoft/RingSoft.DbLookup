@@ -25,6 +25,17 @@ namespace RingSoft.DbLookup
 
         void FocusControl(GenericFocusControls control);
     }
+
+    public class GenericReportLookupFilterInput
+    {
+        public LookupDefinitionBase LookupDefinitionToFilter { get; set; }
+
+        public AutoFillValue KeyAutoFillValue { get; set; }
+
+        public string CodeNameToFilter { get; set; }
+
+        public string ProcessText { get; set; }
+    }
     public class GenericReportFilterViewModel : INotifyPropertyChanged
     {
         private bool _isCurrentOnly;
@@ -245,6 +256,10 @@ namespace RingSoft.DbLookup
 
         public RelayCommand CancelCommand { get; private set; }
 
+        public bool LookupMode { get; private set; }
+
+        public LookupDefinitionBase LookupToFilter { get; private set; }
+
         private bool _loading = true;
 
         public GenericReportFilterViewModel()
@@ -256,10 +271,33 @@ namespace RingSoft.DbLookup
             }));
         }
 
+        public void Initialize(IGenericReportFilterView view, GenericReportLookupFilterInput input)
+        {
+            LookupMode = true;
+            LookupToFilter = input.LookupDefinitionToFilter;
+            View = view;
+
+            if (input.KeyAutoFillValue.IsValid())
+            {
+                CurrentAutoFillValue = input.KeyAutoFillValue;
+                IsCurrentOnly = true;
+            }
+            Initialize();
+
+            PrintCurrentCodeLabel = $" {input.ProcessText} Current {input.CodeNameToFilter} Only";
+            CurrentCodeLabel = $"Current {input.CodeNameToFilter}";
+            BeginCodeLabel = $"Beginning {input.CodeNameToFilter}";
+            EndCodeLabel = $"Ending {input.CodeNameToFilter}";
+
+            _loading = false;
+        }
+
         public void Initialize(IGenericReportFilterView view, PrinterSetupArgs printerSetup)
         {
             View = view;
             PrinterSetup = printerSetup;
+            LookupToFilter = printerSetup.LookupDefinition;
+
             if (printerSetup.CodeAutoFillSetup == null
                 || printerSetup.LookupDefinition.InitialSortColumnDefinition.DataType != FieldDataTypes.String)
             {
@@ -268,21 +306,13 @@ namespace RingSoft.DbLookup
                 view.CloseWindow();
                 return;
             }
-            CurrentAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
+
+            if (printerSetup.CodeAutoFillValue.IsValid())
             {
-                AllowLookupAdd = false,
-                AllowLookupView = false
-            };
-            BeginAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
-            {
-                AllowLookupAdd = false,
-                AllowLookupView = false
-            };
-            EndAutoFillSetup = new AutoFillSetup(printerSetup.LookupDefinition)
-            {
-                AllowLookupAdd = false,
-                AllowLookupView = false
-            };
+                CurrentAutoFillValue = printerSetup.CodeAutoFillValue;
+                IsCurrentOnly = true;
+            }
+            Initialize();
 
             PrintCurrentCodeLabel = $" Print Current {printerSetup.CodeDescription} Only";
             CurrentCodeLabel = $"Current {printerSetup.CodeDescription}";
@@ -295,12 +325,26 @@ namespace RingSoft.DbLookup
             ReportTypeBoxControlSetup.Items.Remove(item);
             ReportType = ReportTypes.Details;
 
-            if (printerSetup.CodeAutoFillValue.IsValid())
-            {
-                CurrentAutoFillValue = printerSetup.CodeAutoFillValue;
-                IsCurrentOnly = true;
-            }
+            _loading = false;
+        }
 
+        private void Initialize()
+        {
+            CurrentAutoFillSetup = new AutoFillSetup(LookupToFilter)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
+            BeginAutoFillSetup = new AutoFillSetup(LookupToFilter)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
+            EndAutoFillSetup = new AutoFillSetup(LookupToFilter)
+            {
+                AllowLookupAdd = false,
+                AllowLookupView = false
+            };
             View.RefreshView();
             if (IsCurrentOnly)
             {
@@ -311,7 +355,6 @@ namespace RingSoft.DbLookup
                 View.FocusControl(GenericFocusControls.Start);
             }
 
-            _loading = false;
         }
 
         private void OnOk()
@@ -331,18 +374,25 @@ namespace RingSoft.DbLookup
                 ProcessBeginEndCode(EndAutoFillValue, false);
             }
 
-            PrinterSetup.PrintingProperties.PrintCurrentCode = IsCurrentOnly;
-            if (PrinterSetup.PrintingProperties.ReportType != ReportTypes.Custom)
+            if (LookupMode)
             {
-                PrinterSetup.PrintingProperties.ReportType = ReportType;
+                View.CloseWindow();
             }
+            else
+            {
+                PrinterSetup.PrintingProperties.PrintCurrentCode = IsCurrentOnly;
+                if (PrinterSetup.PrintingProperties.ReportType != ReportTypes.Custom)
+                {
+                    PrinterSetup.PrintingProperties.ReportType = ReportType;
+                }
 
-            PrinterSetup.PrintingProperties.CurrentCodeOnlyCaption = PrintCurrentCodeLabel;
-            PrinterSetup.PrintingProperties.CurrentCodeCaption = CurrentCodeLabel;
-            PrinterSetup.PrintingProperties.BeginCodeCaption = BeginCodeLabel;
-            PrinterSetup.PrintingProperties.EndCodeCaption = EndCodeLabel;
+                PrinterSetup.PrintingProperties.CurrentCodeOnlyCaption = PrintCurrentCodeLabel;
+                PrinterSetup.PrintingProperties.CurrentCodeCaption = CurrentCodeLabel;
+                PrinterSetup.PrintingProperties.BeginCodeCaption = BeginCodeLabel;
+                PrinterSetup.PrintingProperties.EndCodeCaption = EndCodeLabel;
 
-            View.PrintOutput();
+                View.PrintOutput();
+            }
         }
 
         private bool Validate()
@@ -395,36 +445,50 @@ namespace RingSoft.DbLookup
             if (start)
             {
                 condition = Conditions.GreaterThanEquals;
+                
                 var beginText = "Start";
                 if (autoFillValue != null && !autoFillValue.Text.IsNullOrEmpty())
                 {
                     filterText = beginText = autoFillValue.Text;
                 }
-                PrinterSetup.PrintingProperties.BeginCode = beginText;
+
+                if (!LookupMode)
+                    PrinterSetup.PrintingProperties.BeginCode = beginText;
+                
             }
-            else 
+            else
             {
                 var endText = "End";
                 if (autoFillValue != null && !autoFillValue.Text.IsNullOrEmpty())
                 {
                     filterText = endText = autoFillValue.Text;
                 }
-                PrinterSetup.PrintingProperties.EndCode = endText;
+                if (!LookupMode)
+                    PrinterSetup.PrintingProperties.EndCode = endText;
             }
 
             if (!filterText.IsNullOrEmpty())
             {
-                if (PrinterSetup.LookupDefinition.InitialSortColumnDefinition
+                if (LookupToFilter.InitialSortColumnDefinition
                     is LookupFormulaColumnDefinition lookupFormulaColumn)
                 {
-                    PrinterSetup.AddReportFilter(PrinterSetup.LookupDefinition.FilterDefinition.AddFixedFilter(lookupFormulaColumn.Description,
+                    var filter = LookupToFilter.FilterDefinition.AddFixedFilter(lookupFormulaColumn.Description,
                         condition, filterText, lookupFormulaColumn.Formula,
-                        lookupFormulaColumn.DataType));
+                        lookupFormulaColumn.DataType);
+                    if (!LookupMode)
+                    {
+                        PrinterSetup.AddReportFilter(filter);
+                    }
                 }
-                else if (PrinterSetup.LookupDefinition.InitialSortColumnDefinition
+                else if (LookupToFilter.InitialSortColumnDefinition
                          is LookupFieldColumnDefinition lookupFieldColumn)
                 {
-                    PrinterSetup.AddReportFilter(PrinterSetup.LookupDefinition.FilterDefinition.AddFixedFilter(lookupFieldColumn.FieldDefinition, condition, filterText));
+                    var filter = LookupToFilter.FilterDefinition.AddFixedFilter(lookupFieldColumn.FieldDefinition,
+                        condition, filterText);
+                    if (!LookupMode)
+                    {
+                        PrinterSetup.AddReportFilter(filter);
+                    }
                 }
             }
         }
@@ -433,25 +497,38 @@ namespace RingSoft.DbLookup
         {
             if (CurrentAutoFillValue.IsValid())
             {
-                if (PrinterSetup.LookupDefinition.InitialSortColumnDefinition
+                if (LookupToFilter.InitialSortColumnDefinition
                     is LookupFormulaColumnDefinition lookupFormulaColumn)
                 {
                     var description = lookupFormulaColumn.Caption;
-                    PrinterSetup.AddReportFilter(PrinterSetup.LookupDefinition.FilterDefinition.AddFixedFilter(description, Conditions.Equals,
+                    var filter = LookupToFilter.FilterDefinition.AddFixedFilter(description,
+                        Conditions.Equals,
                         CurrentAutoFillValue.Text, lookupFormulaColumn.Formula,
-                        lookupFormulaColumn.DataType));
+                        lookupFormulaColumn.DataType);
+
+                    if (!LookupMode)
+                    {
+                        PrinterSetup.AddReportFilter(filter);
+                    }
                 }
-                else if (PrinterSetup.LookupDefinition.InitialSortColumnDefinition
+                else if (LookupToFilter.InitialSortColumnDefinition
                          is LookupFieldColumnDefinition lookupFieldColumn)
                 {
                     foreach (var keyValueField in CurrentAutoFillValue.PrimaryKeyValue.KeyValueFields)
                     {
-                        PrinterSetup.AddReportFilter(PrinterSetup.LookupDefinition.FilterDefinition.AddFixedFilter(keyValueField.FieldDefinition,
-                            Conditions.Equals, keyValueField.Value));
+                        var filter = LookupToFilter.FilterDefinition.AddFixedFilter(keyValueField.FieldDefinition,
+                            Conditions.Equals, keyValueField.Value);
+                        if (!LookupMode)
+                        {
+                            PrinterSetup.AddReportFilter(filter);
+                        }
                     }
                 }
 
-                PrinterSetup.PrintingProperties.CurrentCode = CurrentAutoFillValue.Text;
+                if (!LookupMode)
+                {
+                    PrinterSetup.PrintingProperties.CurrentCode = CurrentAutoFillValue.Text;
+                }
             }
         }
 

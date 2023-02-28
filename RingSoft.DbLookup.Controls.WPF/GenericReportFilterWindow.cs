@@ -66,6 +66,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        public GenericReportFilterWindow(GenericReportLookupFilterInput input)
+        {
+            Loaded += (sender, args) =>
+            {
+                ViewModel.Initialize(this, input);
+                Title = $"{input.CodeNameToFilter} {input.ProcessText} Filter Options";
+            };
+        }
+
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -85,9 +94,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             BeginningControl.IsEnabled = EndingControl.IsEnabled = !ViewModel.IsCurrentOnly;
             CurrentControl.IsEnabled = ViewModel.IsCurrentOnly;
-            if (ViewModel.PrinterSetup.PrintingProperties.ReportType == ReportTypes.Custom)
+            if (ViewModel.LookupMode)
             {
                 ReportTypeLabel.Visibility = ReportTypeControl.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                if (ViewModel.PrinterSetup.PrintingProperties.ReportType == ReportTypes.Custom)
+                {
+                    ReportTypeLabel.Visibility = ReportTypeControl.Visibility = Visibility.Collapsed;
+                }
             }
         }
 

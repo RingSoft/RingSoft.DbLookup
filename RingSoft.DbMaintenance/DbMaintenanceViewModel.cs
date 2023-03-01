@@ -236,6 +236,34 @@ namespace RingSoft.DbMaintenance
 
         protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
+            var selectedPrimaryKeyValue = LookupAddViewArgs.SelectedPrimaryKeyValue;
+            if (addViewPrimaryKeyValue.TableDefinition != TableDefinition && TableDefinition.PrimaryKeyFields.Count == 1)
+            {
+                var pkField = TableDefinition.PrimaryKeyFields[0];
+                var value = addViewPrimaryKeyValue.KeyValueFields[0].Value;
+                var primaryField = addViewPrimaryKeyValue.TableDefinition.FieldDefinitions
+                    .FirstOrDefault(p => p.ParentJoinForeignKeyDefinition != null 
+                                         && p.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField == pkField);
+
+                var selectQuery = new SelectQuery(addViewPrimaryKeyValue.TableDefinition.TableName);
+                selectQuery.SetMaxRecords(1);
+                var joinTable = selectQuery.AddPrimaryJoinTable(JoinTypes.InnerJoin, TableDefinition.TableName);
+                joinTable.AddJoinField(pkField.FieldName, primaryField.FieldName);
+                selectQuery.AddSelectColumn(primaryField.FieldName);
+                selectQuery.AddWhereItem(addViewPrimaryKeyValue.KeyValueFields[0].FieldDefinition.FieldName
+                    , Conditions.Equals, value);
+                var getTableResult = TableDefinition.Context.DataProcessor.GetData(selectQuery);
+                if (getTableResult.ResultCode == GetDataResultCodes.Success)
+                {
+                    var table = getTableResult.DataSet.Tables[0];
+                    if (table.Rows.Count > 0)
+                    {
+                        var newPrimaryKey = new PrimaryKeyValue(TableDefinition);
+                        newPrimaryKey.LoadFromIdValue(table.Rows[0].GetRowValue(primaryField.FieldName));
+                        selectedPrimaryKeyValue = newPrimaryKey;
+                    }
+                }
+            }
             var result = addViewPrimaryKeyValue;
             switch (LookupAddViewArgs.LookupFormMode)
             {
@@ -252,15 +280,15 @@ namespace RingSoft.DbMaintenance
                     }
                     break;
                 case LookupFormModes.View:
-                    if (LookupAddViewArgs.SelectedPrimaryKeyValue != null)
+                    if (selectedPrimaryKeyValue != null)
                     {
-                        result = LookupAddViewArgs.SelectedPrimaryKeyValue;
+                        result = selectedPrimaryKeyValue;
                     }
                     break;
             }
 
-            if (result.TableDefinition != TableDefinition)
-                throw new Exception($"The Add/View's Primary Key Definition's Table Definition '{result.TableDefinition}' does not match this Table Definition ('{TableDefinition}').  You must override GetAddViewPrimaryKeyValue and return a PrimaryKeyValue whose Table Definition is '{TableDefinition}'.");
+            //if (result.TableDefinition != TableDefinition)
+            //    throw new Exception($"The Add/View's Primary Key Definition's Table Definition '{result.TableDefinition}' does not match this Table Definition ('{TableDefinition}').  You must override GetAddViewPrimaryKeyValue and return a PrimaryKeyValue whose Table Definition is '{TableDefinition}'.");
 
             return result;
         }

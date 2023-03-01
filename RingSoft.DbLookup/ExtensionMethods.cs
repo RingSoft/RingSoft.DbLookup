@@ -171,6 +171,7 @@ namespace RingSoft.DbLookup
 
         public static AutoFillValue GetAutoFillValue(this TableDefinitionBase tableDefinition, string primaryKeyString)
         {
+            var test = tableDefinition.GetAutoFillValue(primaryKeyString);
             return tableDefinition.Context.OnAutoFillTextRequest(tableDefinition, primaryKeyString);
         }
 

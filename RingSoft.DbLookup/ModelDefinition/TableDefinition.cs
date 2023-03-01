@@ -7,7 +7,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -375,6 +377,27 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
             return primaryKeyValue;
         }
+
+        public AutoFillValue GetAutoFillValueText(TEntity entity, string pkString)
+        {
+            var primaryKey = new PrimaryKeyValue(this);
+            primaryKey.LoadFromPrimaryString(pkString);
+            if (primaryKey.KeyValueFields.Count > 1)
+            {
+                return Context.OnAutoFillTextRequest(this, pkString);
+            }
+
+            var textValue = string.Empty;
+            if (LookupDefinition != null
+                && LookupDefinition.InitialSortColumnDefinition != null
+                && LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+            {
+                textValue = GblMethods.GetPropertyValue(entity, lookupFieldColumn.FieldDefinition.PropertyName);
+            }
+            var result = new AutoFillValue(primaryKey, textValue);
+            return result;
+        }
+
 
         /// <summary>
         /// Validates the entity.

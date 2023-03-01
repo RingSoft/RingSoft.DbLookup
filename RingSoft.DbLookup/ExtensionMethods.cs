@@ -3,6 +3,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
@@ -175,6 +176,22 @@ namespace RingSoft.DbLookup
             return tableDefinition.Context.OnAutoFillTextRequest(tableDefinition, primaryKeyString);
         }
 
+        public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue)
+            where TEntity : new()
+        {
+            if (!autoFillValue.IsValid())
+            {
+                return new TEntity();
+            }
+            var table = autoFillValue.PrimaryKeyValue.TableDefinition;
+            if (table is TableDefinition<TEntity> fullTable)
+            {
+                return GetEntity<TEntity>(autoFillValue, fullTable);
+            }
+
+            return new TEntity();
+        }
+
         public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue,
             TableDefinition<TEntity> tableDefinition) where TEntity : new()
         {
@@ -224,5 +241,22 @@ namespace RingSoft.DbLookup
 
             return result;
         }
+        public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity) where TEntity : new()
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+            var table = SystemGlobals.LookupContext.TableDefinitions
+                .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
+            if (table is TableDefinition<TEntity> fullTable)
+            {
+                return fullTable.GetAutoFillValue(entity);
+            }
+
+            var primaryKey = new PrimaryKeyValue(table);
+            return new AutoFillValue(primaryKey, string.Empty);
+        }
+
     }
 }

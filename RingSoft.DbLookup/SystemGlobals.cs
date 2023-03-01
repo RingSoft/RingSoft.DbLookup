@@ -69,5 +69,19 @@ namespace RingSoft.DbLookup
         public static bool ConvertAllDatesToUniversalTime { get; set; }
 
         public static DbDateTypes AllDatesFormat { get; set; } = DbDateTypes.DateOnly;
+
+        private static LookupContextBase _lookupContext;
+        public static LookupContextBase LookupContext
+        {
+            get
+            {
+                if (_lookupContext == null)
+                {
+                    throw new Exception("Need to set SystemGlobals.LookupContext");
+                }
+                return _lookupContext;
+            }
+            set => _lookupContext = value;
+        }
     }
 }

@@ -12,6 +12,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup.ModelDefinition
 {
@@ -378,22 +379,31 @@ namespace RingSoft.DbLookup.ModelDefinition
             return primaryKeyValue;
         }
 
-        public AutoFillValue GetAutoFillValueText(TEntity entity, string pkString)
+        public AutoFillValue GetAutoFillValue(TEntity entity, string pkString = "")
         {
-            var primaryKey = new PrimaryKeyValue(this);
-            primaryKey.LoadFromPrimaryString(pkString);
-            if (primaryKey.KeyValueFields.Count > 1)
+            if (PrimaryKeyFields.Count > 1)
             {
                 return Context.OnAutoFillTextRequest(this, pkString);
             }
 
+            var primaryKey = new PrimaryKeyValue(this);
+
             var textValue = string.Empty;
-            if (LookupDefinition != null
-                && LookupDefinition.InitialSortColumnDefinition != null
-                && LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+
+            if (entity != null)
             {
-                textValue = GblMethods.GetPropertyValue(entity, lookupFieldColumn.FieldDefinition.PropertyName);
+
+                primaryKey.KeyValueFields[0].Value =
+                    GblMethods.GetPropertyValue(entity, PrimaryKeyFields[0].PropertyName);
+
+                if (LookupDefinition != null
+                    && LookupDefinition.InitialSortColumnDefinition != null
+                    && LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    textValue = GblMethods.GetPropertyValue(entity, lookupFieldColumn.FieldDefinition.PropertyName);
+                }
             }
+
             var result = new AutoFillValue(primaryKey, textValue);
             return result;
         }

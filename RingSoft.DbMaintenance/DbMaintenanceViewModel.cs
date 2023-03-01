@@ -252,6 +252,7 @@ namespace RingSoft.DbMaintenance
                 selectQuery.AddSelectColumn(primaryField.FieldName);
                 selectQuery.AddWhereItem(addViewPrimaryKeyValue.KeyValueFields[0].FieldDefinition.FieldName
                     , Conditions.Equals, value);
+                
                 var getTableResult = TableDefinition.Context.DataProcessor.GetData(selectQuery);
                 if (getTableResult.ResultCode == GetDataResultCodes.Success)
                 {

@@ -74,6 +74,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// The description.
         /// </value>
         private string _description;
+
         public string Description
         {
             get
@@ -90,12 +91,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
                     return newDescription;
                 }
+
                 return _description;
             }
-            internal set
-            {
-                _description = value;
-            }
+            internal set { _description = value; }
         }
 
         public virtual int? SearchForHostId { get; private set; }
@@ -103,10 +102,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public int LookupControlColumnId { get; internal set; }
 
         public bool AllowRecursion { get; private set; } = true;
-        
+
         public bool UpdateOnly { get; private set; }
 
         public bool AllowUserNulls { get; private set; } = true;
+
+        public bool SkipPrint { get; private set; }
 
         internal FieldDefinition()
         {
@@ -124,6 +125,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             {
                 throw new ArgumentException($"Field name '{fieldName}' already exists in this table.");
             }
+
             FieldName = fieldName;
         }
 
@@ -253,7 +255,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public virtual string GetUserValue(string dbIdValue)
         {
             var result = string.Empty;
-            
+
             if (TableDefinition.PrimaryKeyFields.Contains(this) && TableDefinition.PrimaryKeyFields.Count <= 1)
             {
                 var autoFillValue = TableDefinition.Context
@@ -269,8 +271,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
             else if (ParentJoinForeignKeyDefinition != null)
             {
-                
-                
+
+
                 var requestResult = TableDefinition.Context
                     .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue);
                 result = requestResult?.Text;
@@ -285,7 +287,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                         result = dbIdValue;
                     }
                 }
-                
+
 
                 return result;
             }
@@ -293,6 +295,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             {
                 result = FormatValue(dbIdValue);
             }
+
             return result;
         }
 
@@ -300,5 +303,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             return FormatValue(value);
         }
-    }
+
+        internal void DoSkipPrint(bool value = true)
+        {
+            SkipPrint = value;
+        }
+}
 }

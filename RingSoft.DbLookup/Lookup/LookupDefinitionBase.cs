@@ -991,6 +991,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
             {
+                if (!copyData && fieldDefinition.SkipPrint)
+                {
+                    continue;
+                }
                 LookupColumnDefinitionBase column = null;
                 if (fieldDefinition.ParentJoinForeignKeyDefinition != null
                     && fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1 && !copyData)

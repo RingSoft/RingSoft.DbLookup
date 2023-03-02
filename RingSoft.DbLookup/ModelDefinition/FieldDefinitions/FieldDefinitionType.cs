@@ -68,5 +68,11 @@
             base.CanSetNull(value);
             return (TFieldDefinition)this;
         }
+
+        public TFieldDefinition DoSkipPrint(bool value = true)
+        {
+            base.DoSkipPrint(value);
+            return (TFieldDefinition)this;
+        }
     }
 }

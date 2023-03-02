@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Renci.SshNet.Messages;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -262,6 +263,8 @@ namespace RingSoft.DbLookup
 
         public bool DialogReesult { get; private set; }
 
+        public GenericReportLookupFilterInput LookupInput { get; private set; }
+
         private bool _loading = true;
 
         public GenericReportFilterViewModel()
@@ -278,7 +281,7 @@ namespace RingSoft.DbLookup
             LookupMode = true;
             LookupToFilter = input.LookupDefinitionToFilter;
             View = view;
-
+            LookupInput = input;
             if (input.KeyAutoFillValue.IsValid())
             {
                 CurrentAutoFillValue = input.KeyAutoFillValue;
@@ -435,21 +438,42 @@ namespace RingSoft.DbLookup
                     endText = EndAutoFillValue.Text;
                 }
 
-                if (!beginText.IsNullOrEmpty() && !endText.IsNullOrEmpty())
+                var codeDescription = string.Empty;
+                if (LookupMode)
                 {
-                    var compare = endText.CompareTo(beginText);
-                    
-                    if (compare == -1)
-                    {
-                        var message =
-                            $"The Ending {PrinterSetup.CodeDescription} cannot be greater than the Beginning {PrinterSetup.CodeDescription}";
-                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                        View.FocusControl(GenericFocusControls.Start);
-                        return false;
-                    }
+                    codeDescription = LookupInput.CodeNameToFilter;
+                }
+                else
+                {
+                    codeDescription = PrinterSetup.CodeDescription;
+                }
+                if (!ValBeginEndText(beginText, endText, caption, codeDescription))
+                {
+                    View.FocusControl(GenericFocusControls.Start);
+                    return false;
                 }
             }
             return AdditionalValidate();
+        }
+
+        protected virtual bool ValBeginEndText(string beginText, string endText, string caption
+        , string codeDescription)
+        {
+            if (!beginText.IsNullOrEmpty() && !endText.IsNullOrEmpty())
+            {
+                var compare = endText.CompareTo(beginText);
+
+                if (compare == -1)
+                {
+                    var message =
+                        $"The Ending {codeDescription} cannot be greater than the Beginning {codeDescription}";
+
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         protected virtual bool AdditionalValidate()

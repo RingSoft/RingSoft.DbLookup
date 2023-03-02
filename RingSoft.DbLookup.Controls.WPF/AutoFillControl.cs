@@ -836,6 +836,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
+            if (e.Text == "\t")
+            {
+                return;
+            }
+
             var newText = e.Text;
             switch (CharacterCasing)
             {

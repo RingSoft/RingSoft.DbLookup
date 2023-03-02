@@ -260,6 +260,8 @@ namespace RingSoft.DbLookup
 
         public LookupDefinitionBase LookupToFilter { get; private set; }
 
+        public bool DialogReesult { get; private set; }
+
         private bool _loading = true;
 
         public GenericReportFilterViewModel()
@@ -286,10 +288,15 @@ namespace RingSoft.DbLookup
 
             PrintCurrentCodeLabel = $" {input.ProcessText} Current {input.CodeNameToFilter} Only";
             CurrentCodeLabel = $"Current {input.CodeNameToFilter}";
-            BeginCodeLabel = $"Beginning {input.CodeNameToFilter}";
-            EndCodeLabel = $"Ending {input.CodeNameToFilter}";
+            SetupStartEndLabels(input);
 
             _loading = false;
+        }
+
+        protected virtual void SetupStartEndLabels(GenericReportLookupFilterInput input)
+        {
+            BeginCodeLabel = $"Beginning {input.CodeNameToFilter}";
+            EndCodeLabel = $"Ending {input.CodeNameToFilter}";
         }
 
         public void Initialize(IGenericReportFilterView view, PrinterSetupArgs printerSetup)
@@ -357,6 +364,11 @@ namespace RingSoft.DbLookup
 
         }
 
+        protected virtual void SetupFilter()
+        {
+
+        }
+
         private void OnOk()
         {
             if (!Validate())
@@ -374,8 +386,10 @@ namespace RingSoft.DbLookup
                 ProcessBeginEndCode(EndAutoFillValue, false);
             }
 
+            SetupFilter();
             if (LookupMode)
             {
+                DialogReesult = true;
                 View.CloseWindow();
             }
             else
@@ -435,6 +449,11 @@ namespace RingSoft.DbLookup
                     }
                 }
             }
+            return AdditionalValidate();
+        }
+
+        protected virtual bool AdditionalValidate()
+        {
             return true;
         }
 

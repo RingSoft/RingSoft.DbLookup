@@ -120,20 +120,16 @@ namespace RingSoft.DbLookup
 
         public static string ConvertPropertyNameToDescription(this string propertyName)
         {
-            var newDescription = propertyName;
+            var newDescription = string.Empty;
             var index = 0;
             var propertyNameCharArry = propertyName.ToCharArray();
             foreach (var c in propertyNameCharArry)
             {
+                newDescription += c;
                 if (char.IsUpper(c) && index > 0)
                 {
-                    if (index < propertyNameCharArry.Length - 1)
-                    {
-                        if (propertyNameCharArry[index - 1] != ' ')
-                        {
-                            newDescription = newDescription.Replace(c.ToString(), " " + c);
-                        }
-                    }
+                    newDescription = newDescription.Insert(index, " ");
+                    index++;
                 }
                 index++;
             }

@@ -1357,7 +1357,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             return null;
         }
 
-        private double GetWidthFromPercent(Control control, double percentWidth)
+        public static double GetWidthFromPercent(Control control, double percentWidth)
         {
             double width = 0;
             if (percentWidth > 0)

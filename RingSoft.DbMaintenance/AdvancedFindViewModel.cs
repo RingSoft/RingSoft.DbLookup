@@ -144,63 +144,109 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private TextComboBoxControlSetup _tableComboBoxSetup;
+        //private TextComboBoxControlSetup _tableComboBoxSetup;
 
-        public TextComboBoxControlSetup TableComboBoxSetup
+        //public TextComboBoxControlSetup TableComboBoxSetup
+        //{
+        //    get => _tableComboBoxSetup;
+        //    set
+        //    {
+        //        if (_tableComboBoxSetup == value)
+        //        {
+        //            return;
+        //        }
+
+        //        _tableComboBoxSetup = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+        //private int _tableIndex;
+
+        //public int TableIndex
+        //{
+        //    get => _tableIndex;
+        //    set
+        //    {
+        //        if (_tableIndex == value)
+        //        {
+        //            return;
+        //        }
+
+        //        _tableIndex = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+        //private TextComboBoxItem _selectedTableBoxItem;
+
+        //public TextComboBoxItem SelectedTableBoxItem
+        //{
+        //    get => _selectedTableBoxItem;
+        //    set
+        //    {
+        //        if (_selectedTableBoxItem == value)
+        //        {
+        //            return;
+        //        }
+
+        //        _selectedTableBoxItem = value;
+        //        if (_selectedTableBoxItem != null)
+        //        {
+        //            var table = TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+        //                p.Description == _selectedTableBoxItem.TextValue);
+        //            LoadTree(table.TableName);
+        //        }
+
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+        private ListControlDataSourceItem _tableItem;
+
+        public ListControlDataSourceItem TableItem
         {
-            get => _tableComboBoxSetup;
+            get => _tableItem;
             set
             {
-                if (_tableComboBoxSetup == value)
-                {
+                if (_tableItem == value)
                     return;
-                }
 
-                _tableComboBoxSetup = value;
+                _tableItem = value;
                 OnPropertyChanged();
             }
         }
 
-        private int _tableIndex;
+        private ListControlSetup _tableSetup;
 
-        public int TableIndex
+        public ListControlSetup TableSetup
         {
-            get => _tableIndex;
+            get => _tableSetup;
             set
             {
-                if (_tableIndex == value)
-                {
+                if (_tableSetup == value) 
                     return;
-                }
 
-                _tableIndex = value;
+                _tableSetup = value;
                 OnPropertyChanged();
             }
         }
 
-        private TextComboBoxItem _selectedTableBoxItem;
+        private ListControlDataSource _tableDataSource;
 
-        public TextComboBoxItem SelectedTableBoxItem
+        public ListControlDataSource TableDataSource
         {
-            get => _selectedTableBoxItem;
+            get => _tableDataSource;
             set
             {
-                if (_selectedTableBoxItem == value)
-                {
+                if (_tableDataSource == value)
                     return;
-                }
 
-                _selectedTableBoxItem = value;
-                if (_selectedTableBoxItem != null)
-                {
-                    var table = TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.Description == _selectedTableBoxItem.TextValue);
-                    LoadTree(table.TableName);
-                }
-
+                _tableDataSource = value;
                 OnPropertyChanged();
             }
         }
+
 
         private ObservableCollection<TreeViewItem> _treeRoot;
 
@@ -332,19 +378,19 @@ namespace RingSoft.DbMaintenance
                     AdvancedFindInput = advancedFindInput;
                 }
             }
-            
-            TableComboBoxSetup = new TextComboBoxControlSetup();
-            var index = 0;
-            foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context
-                         .TableDefinitions.OrderBy(p => p.Description))
+
+            //TableComboBoxSetup = new TextComboBoxControlSetup();
+            //var index = 0;
+            TableSetup = new ListControlSetup();
+            TableDataSource = new ListControlDataSource();
+            var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 100);
+
+            foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
             {
                 if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
                 {
-                    TableComboBoxSetup.Items.Add(new TextComboBoxItem()
-                        {NumericValue = index, TextValue = contextTableDefinition.Description});
+                    TableDataSource.AddDataItem(dataColumn, contextTableDefinition.Description);
                 }
-
-                index++;
             }
 
             LookupRefresher = new LookupRefresher();
@@ -360,7 +406,7 @@ namespace RingSoft.DbMaintenance
 
             if (AdvancedFindInput != null)
             {
-                TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == AdvancedFindInput.LockTable.Description);
+                //TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == AdvancedFindInput.LockTable.Description);
                 ViewLookupDefinition.FilterDefinition.AddFixedFilter(
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p =>
                         p.Table), Conditions.Equals,
@@ -446,8 +492,8 @@ namespace RingSoft.DbMaintenance
 
             var tableDefinition =
                 TableDefinition.Context.TableDefinitions.FirstOrDefault(p => p.EntityName == entity.Table);
-            var comboItem = TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == tableDefinition.Description);
-            TableIndex = TableComboBoxSetup.Items.IndexOf(comboItem);
+            //var comboItem = TableComboBoxSetup.Items.FirstOrDefault(p => p.TextValue == tableDefinition.Description);
+            //TableIndex = TableComboBoxSetup.Items.IndexOf(comboItem);
             CreateLookupDefinition();
 
             if (!entity.FromFormula.IsNullOrEmpty())
@@ -578,7 +624,7 @@ namespace RingSoft.DbMaintenance
             if (!ValidateLookup())
                 return false;
 
-            if (SelectedTableBoxItem == null)
+            if (TableItem == null)
             {
                 var message = "You must select a table before saving.";
                 var caption = "Invalid Table";
@@ -603,7 +649,7 @@ namespace RingSoft.DbMaintenance
             advancedFind.FromFormula = LookupDefinition?.FromFormula;
 
             advancedFind.Table = TableDefinition.Context.TableDefinitions
-                .FirstOrDefault(p => p.Description == SelectedTableBoxItem?.TextValue)
+                .FirstOrDefault(p => p.Description == TableItem?.DataItem)
                 ?.EntityName;
 
             advancedFind.RefreshRate = (byte)LookupRefresher.RefreshRate;
@@ -622,8 +668,6 @@ namespace RingSoft.DbMaintenance
             AdvancedFindId = 0;
             if (AdvancedFindInput == null || AdvancedFindInput.LockTable == null)
             {
-                TableIndex = -1;
-                SelectedTableBoxItem = null;
                 SelectedTreeViewItem = null;
                 TreeRoot?.Clear();
             }
@@ -647,7 +691,7 @@ namespace RingSoft.DbMaintenance
                 AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
 
-            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = SelectedTableBoxItem != null;
+            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = TableItem != null;
 
             ClearRefresh();
             LockTable();
@@ -677,11 +721,11 @@ namespace RingSoft.DbMaintenance
 
         public void CreateLookupDefinition()
         {
-            if (SelectedTableBoxItem != null)
+            if (TableItem != null)
             {
                 var tableDefinition =
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.Description == SelectedTableBoxItem.TextValue);
+                        p.Description == TableItem.DataItem);
 
                 var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
@@ -1100,7 +1144,7 @@ namespace RingSoft.DbMaintenance
         private void ImportDefaultLookup()
         {
             var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
-            if (SelectedTableBoxItem != null)
+            if (TableItem != null)
             {
                 CreateLookupDefinition();
                 var lookupDefinition= LookupDefinition.TableDefinition.LookupDefinition;

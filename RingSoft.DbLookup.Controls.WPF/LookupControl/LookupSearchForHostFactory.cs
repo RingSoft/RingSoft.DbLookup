@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -28,6 +29,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             searchForHost.InternalInitialize(columnDefinition);
 
             return searchForHost;
+        }
+
+        internal LookupSearchForHost CreateSearchForHost(FieldDataTypes fieldDataType)
+        {
+            var hostId = ConvertFieldDataTypeToSearchForHostId(fieldDataType);
+            var searchForHost = CreateSearchForHost(hostId);
+            searchForHost.InternalInitialize();
+
+            return searchForHost;
+
         }
 
         public static int ConvertFieldDataTypeToSearchForHostId(FieldDataTypes dataType)

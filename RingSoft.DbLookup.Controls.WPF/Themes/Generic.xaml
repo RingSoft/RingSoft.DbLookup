@@ -18,6 +18,9 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/PrintingProcessingWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/GenericReportFilterWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/PrintSetupWindowTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/GenericReportFilterWindowTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/ListControlTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
 
 </ResourceDictionary>

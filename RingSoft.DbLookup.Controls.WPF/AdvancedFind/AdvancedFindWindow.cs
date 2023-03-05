@@ -59,7 +59,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public Border Border { get; set; }
         public AutoFillControl NameAutoFillControl { get; set; }
         public TreeView TreeView { get; set; }
-        public TextComboBoxControl TableComboBoxControl { get; set; }
+        //public TextComboBoxControl TableComboBoxControl { get; set; }
+
+        public ListControl TableListControl { get; set; }
+
         public LookupControl LookupControl { get; set; }
         public NotificationButton NotificationButton { get; set; }
         public bool ApplyToLookupDefinition { get; set; }
@@ -216,7 +219,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void LockTable(bool lockValue)
         {
-            TableComboBoxControl.IsEnabled = !lockValue;
+            TableListControl.IsEnabled = !lockValue;
         }
 
         static AdvancedFindWindow()
@@ -254,7 +257,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 if (args.InputParameter is AdvancedFindInput advancedFindInput)
                 {
-                    TableComboBoxControl.IsEnabled = false;
+                    TableListControl.IsEnabled = false;
                     if (!advancedFindInput.LookupWidth.Equals(0))
                     {
                         LookupControl.MinWidth = 0;
@@ -277,7 +280,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
             TreeView = GetTemplateChild(nameof(TreeView)) as TreeView;
-            TableComboBoxControl = GetTemplateChild(nameof(TableComboBoxControl)) as TextComboBoxControl;
+            TableListControl = GetTemplateChild(nameof(TableListControl)) as ListControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
             NotificationButton = GetTemplateChild(nameof(NotificationButton)) as NotificationButton;
 
@@ -307,7 +310,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     if (args.Key == Key.Tab && !LookupControlsGlobals.IsShiftKeyDown())
                     {
-                        if (!TableComboBoxControl.IsEnabled)
+                        if (!TableListControl.IsEnabled)
                         {
                             _nameTabKeyPressed = true;
                         }
@@ -355,7 +358,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             if (fieldDefinition == SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Table))
             {
-                TableComboBoxControl.Focus();
+                TableListControl.Focus();
             }
         }
 

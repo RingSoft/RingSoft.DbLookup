@@ -1137,7 +1137,25 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                     else
                     {
-                        cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                        var formattedValue = cellValue.ToString();
+                        if (lookupColumn.LookupColumnDefinition.SearchForHostId.HasValue)
+                        {
+                            var newValue = LookupControlsGlobals.LookupControlSearchForFactory.FormatValue(
+                                lookupColumn.LookupColumnDefinition.SearchForHostId.Value, cellValue.ToString());
+
+                            if (newValue == formattedValue)
+                            {
+                                cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                            }
+                            else
+                            {
+                                cellValue = newValue;
+                            }
+                        }
+                        else
+                        {
+                            cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+                        }
                     }
                     
                     newDataRow[lookupColumn.DataColumnName] = cellValue;

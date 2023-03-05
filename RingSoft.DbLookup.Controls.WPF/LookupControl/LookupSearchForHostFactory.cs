@@ -70,5 +70,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return new LookupSearchForStringHost();
         }
+
+        public virtual string FormatValue(int hostId, string value)
+        {
+            return value;
+        }
     }
 }

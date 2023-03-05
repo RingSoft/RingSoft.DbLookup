@@ -76,7 +76,31 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         ///   <c>true</c> if case sensitive; otherwise, <c>false</c>.
         /// </value>
-        public bool CaseSensitive { get; internal set; }
+        private bool _caseSensitive;
+
+        public bool CaseSensitive
+        {
+            get
+            {
+                switch (ValueType)
+                {
+                    case ValueTypes.Numeric:
+                    case ValueTypes.DateTime:
+                    case ValueTypes.Bool:
+                        return false;
+                    case ValueTypes.String:
+                    case ValueTypes.Memo:
+                        return _caseSensitive;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+            }
+            internal set
+            {
+                _caseSensitive = value;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether to cast enum value as int.
@@ -114,7 +138,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
-
+            
         }
 
         /// <summary>

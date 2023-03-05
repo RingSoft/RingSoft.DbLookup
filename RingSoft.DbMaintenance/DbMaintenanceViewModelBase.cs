@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using RingSoft.Printing.Interop;
@@ -664,7 +665,18 @@ namespace RingSoft.DbMaintenance
                     foreach (var columnMap in printerSetupArgs.ColumnMaps)
                     {
                         var value = outputTableRow.GetRowValue(columnMap.FieldName);
-                        value = columnMap.ColumnDefinition.FormatValueForColumnMap(value);
+                        var originalValue = value;
+                        if (columnMap.ColumnDefinition.SearchForHostId.HasValue)
+                        {
+                            value = DbDataProcessor.UserInterface.FormatValue(value,
+                                columnMap.ColumnDefinition.SearchForHostId.Value);
+                        }
+
+                        if (value == originalValue)
+                        {
+                            value = columnMap.ColumnDefinition.FormatValueForColumnMap(value);
+                        }
+
                         switch (columnMap.ColumnType)
                         {
                             case PrintColumnTypes.String:

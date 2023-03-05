@@ -223,6 +223,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             return LookupControlsGlobals.ActiveWindow;
         }
 
+        public string FormatValue(string value, int hostId)
+        {
+            return value;
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

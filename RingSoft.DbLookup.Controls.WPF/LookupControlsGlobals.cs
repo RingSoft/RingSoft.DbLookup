@@ -98,6 +98,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return GetActiveWindow();
         }
 
+        public string FormatValue(string value, int hostId)
+        {
+            return LookupControlsGlobals.LookupControlSearchForFactory.FormatValue(hostId, value);
+        }
+
         //private void ShowAddOnTheFlyWindow(AdvancedFindWindow maintenanceWindow, LookupAddViewArgs e)
         //{
         //    if (e.OwnerWindow is Window ownerWindow)

@@ -28,6 +28,11 @@ namespace RingSoft.DbLookup.Tests
             return null;
         }
 
+        public string FormatValue(string value, int hostId)
+        {
+            return value;
+        }
+
         public void SetWindowCursor(WindowCursorTypes cursor)
         {
             

@@ -2,6 +2,7 @@
 using System.Data;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
@@ -393,6 +394,18 @@ namespace RingSoft.DbLookup.Lookup
 
         public virtual string FormatValueForColumnMap(string value)
         {
+            if (SearchForHostId != null)
+            {
+                var newValue = DbDataProcessor.UserInterface.FormatValue(value, SearchForHostId.Value);
+                if (newValue == value)
+                {
+                    return FormatValue(value);
+                }
+            }
+            else
+            {
+                return FormatValue(value);
+            }
             return FormatValue(value);
         }
     }

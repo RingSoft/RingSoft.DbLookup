@@ -89,7 +89,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         public override string FormatOrderByTableFieldSql(string orderByTableFieldSql, OrderBySegment orderBySegment)
         {
             if (!orderBySegment.CaseSensitive)
+            {
                 return $"{orderByTableFieldSql} COLLATE NOCASE";
+            }
 
             return base.FormatOrderByTableFieldSql(orderByTableFieldSql, orderBySegment);
         }

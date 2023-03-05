@@ -27,6 +27,8 @@ namespace RingSoft.DbLookup
     {
         public ListControlColumn SortColumn { get; set; }
 
+        public OrderByTypes OrderByType { get; set; }
+
         public IReadOnlyList<ListControlColumn> ColumnList => _columns.AsReadOnly();
 
         private List<ListControlColumn> _columns = new List<ListControlColumn>();

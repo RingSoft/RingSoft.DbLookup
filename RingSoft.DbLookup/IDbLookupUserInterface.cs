@@ -21,6 +21,8 @@ namespace RingSoft.DbLookup
         void PlaySystemSound(RsMessageBoxIcons icon);
 
         object GetOwnerWindow();
+
+        string FormatValue(string value, int hostId);
     }
 
     internal class DefaultUserInterface : IDbLookupUserInterface
@@ -43,6 +45,11 @@ namespace RingSoft.DbLookup
         public object GetOwnerWindow()
         {
             return null;
+        }
+
+        public string FormatValue(string value, int hostId)
+        {
+            return value;
         }
     }
 }

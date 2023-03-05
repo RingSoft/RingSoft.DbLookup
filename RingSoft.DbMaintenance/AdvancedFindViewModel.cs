@@ -391,9 +391,7 @@ namespace RingSoft.DbMaintenance
             //var index = 0;
             TableSetup = new ListControlSetup();
             TableDataSource = new ListControlDataSource();
-            var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 50);
-            var dataColumn2 = TableSetup.AddColumn(2, "Decimal", FieldDataTypes.Decimal, 50);
-            var dataValue2 = (decimal)0;
+            var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 95);
             var index = 1;
 
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
@@ -402,8 +400,6 @@ namespace RingSoft.DbMaintenance
                 if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
                 {
                     tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
-                    dataValue2 = Decimal.Add(dataValue2, (decimal)1.11);
-                    tableRow.AddColumn(dataColumn2, dataValue2.ToString());
                 }
                 TableDataSource.AddRow(tableRow);
                 index++;

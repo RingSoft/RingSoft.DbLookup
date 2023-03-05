@@ -156,9 +156,34 @@ namespace RingSoft.DbLookup.Controls.WPF
             ScrollBar.Scroll += ScrollBar_Scroll;
             ScrollBar.PreviewMouseDown += (sender, args) => { _preScrollThumbPosition = ScrollBar.Value; };
             ListView.SizeChanged += (sender, args) => LookupControlSizeChanged();
-            
+            ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
+            ListView.SelectionChanged += ListView_SelectionChanged;
+            ListView.MouseDoubleClick += (sender, args) => { OnEnter(); };
+            ListView.PreviewMouseWheel += ListView_PreviewMouseWheel;
+
+
             base.OnApplyTemplate();
         }
+
+        private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Delta > 0)
+                ViewModel.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
+            else
+                ViewModel.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
+        }
+
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var index = ListView.Items.IndexOf(e.AddedItems[0] ?? throw new InvalidOperationException());
+                ViewModel.SetSelectedIndex(index);
+            }
+        }
+
 
         private void LookupControlSizeChanged()
         {
@@ -334,14 +359,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (ListView == null)
                 return;
 
-            //LookupData.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+            //ViewModel.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
 
             //Comment out below code block when debugging mouse wheel.
 
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
             {
-                ViewModel.GetNextPage( ViewModel.PageSize - 1);
+                ViewModel.GetNextPage(ViewModel.PageSize - 1);
                 ListView.SelectedIndex = ViewModel.SelectedIndex;
             }
             else
@@ -356,7 +381,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (ListView == null)
                 return;
 
-            //LookupData.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+            //ViewModel.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
 
             //Comment out below code block when debugging mouse wheel.
 
@@ -367,7 +392,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ListView.SelectedIndex = ViewModel.SelectedIndex;
             }
             else
+            {
                 ListView.SelectedIndex = 0;
+                ViewModel.SetSelectedIndex(ListView.SelectedIndex);
+            }
         }
 
         private void OnEnd(bool checkSelectedIndex = true)
@@ -379,11 +407,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
             {
-                
-                //LookupData.GotoBottom();
+                ViewModel.GoEnd();
             }
             else
+            {
                 ListView.SelectedIndex = ListView.Items.Count - 1;
+                ViewModel.SetSelectedIndex(ListView.SelectedIndex);
+            }
         }
 
         private void OnHome(bool checkSelectedIndex = true)
@@ -395,7 +425,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (selIndex <= 0 || !checkSelectedIndex)
             {
-
+                ViewModel.GoHome();
             }
             else
                 ListView.SelectedIndex = 0;
@@ -530,8 +560,27 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
+            var orderByType = ViewModel.ControlSetup.OrderByType;
             _sortColumn = ViewModel.ControlSetup.ColumnList[columnIndex];
-            ViewModel.GetInitData(_sortColumn);
+            if (_sortColumn == ViewModel.ControlSetup.SortColumn)
+            {
+                switch (orderByType)
+                {
+                    case OrderByTypes.Ascending:
+                        ViewModel.ChangeOrderByType(OrderByTypes.Descending, _sortColumn);
+                        break;
+                    case OrderByTypes.Descending:
+                        ViewModel.ChangeOrderByType(OrderByTypes.Ascending, _sortColumn);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                ViewModel.ChangeOrderByType(OrderByTypes.Ascending, _sortColumn);
+            }
+
             var headerClicked = LookupGridView.Columns[columnIndex].Header as GridViewColumnHeader;
             if (headerClicked == null)
                 return;

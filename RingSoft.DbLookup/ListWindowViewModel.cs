@@ -8,6 +8,8 @@ using System.Runtime.InteropServices.ComTypes;
 using MySqlX.XDevAPI.Relational;
 using Org.BouncyCastle.Utilities;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup
 {
@@ -85,6 +87,7 @@ namespace RingSoft.DbLookup
         public ScrollPositions ScrollPosition { get; private set; }
 
         private List<ListControlDataSourceRow> _orderedList;
+        private List<ListControlDataSourceRow> _ascList;
         private List<ListControlColumn> _orderByList = new List<ListControlColumn>();
         private List<ListControlDataSourceRow> _currentPage = new List<ListControlDataSourceRow>();
         private string _initSearchText;
@@ -107,6 +110,8 @@ namespace RingSoft.DbLookup
         , ListControlDataSourceRow selectedRow)
         {
             ControlSetup = setup;
+            ControlSetup.OrderByType = OrderByTypes.Ascending;
+            ControlSetup.SortColumn = ControlSetup.ColumnList[0];
             DataSource = dataSource;
             View = view;
             view.InitializeListView();
@@ -124,14 +129,44 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public void ChangeOrderByType(OrderByTypes orderByType, ListControlColumn column)
+        {
+            ControlSetup.OrderByType = orderByType;
+            GetInitData(column);
+            SelectedItem = _orderedList[0];
+            SelectedIndex = 0;
+        }
+
         public void GetInitData(ListControlColumn sortColumn)
         {
             ControlSetup.SortColumn = sortColumn;
             var sortColumnIndex = ControlSetup.GetIndexOfColumn(ControlSetup.SortColumn);
-            _orderedList = DataSource.Items.OrderBy(p => p.DataCells[sortColumnIndex].GetSortValue()).ToList();
+
+            _ascList = DataSource.Items
+                .OrderBy(p => p.DataCells[sortColumnIndex].GetSortValue()).ToList();
+
+
+            switch (ControlSetup.OrderByType)
+            {
+                case OrderByTypes.Ascending:
+                    _orderedList = DataSource.Items
+                        .OrderBy(p => p.DataCells[sortColumnIndex].GetSortValue()).ToList();
+                    break;
+                case OrderByTypes.Descending:
+                    _orderedList = DataSource.Items
+                        .OrderByDescending(p => p.DataCells[sortColumnIndex].GetSortValue()).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             if (PageSize > 0)
             {
-                var rows = _orderedList.GetRange(0, PageSize);
+                var size = PageSize;
+                if (size > _orderedList.Count)
+                {
+                    size = _orderedList.Count;
+                }
+                var rows = _orderedList.GetRange(0, size);
                 _currentPage.Clear();
                 _currentPage.AddRange(rows);
                 OutputData(rows);
@@ -189,8 +224,29 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public void GoHome()
+        {
+            _currentPage = GetTopPage();
+            SetSelectedIndex(0);
+            OutputData(_currentPage);
+        }
+
+        public void GoEnd()
+        {
+            _currentPage = GetBottomPage();
+            SetSelectedIndex(_currentPage.Count - 1);
+            OutputData(_currentPage);
+        }
+
         private void OnSearchForChanged(string searchForText)
         {
+            if (searchForText.IsNullOrEmpty())
+            {
+                _currentPage = GetTopPage();
+                SetSelectedIndex(0);
+                OutputData(_currentPage);
+                return;
+            }
             var topPage = new List<ListControlDataSourceRow>();
             var bottomPage = new List<ListControlDataSourceRow>();
 
@@ -203,20 +259,49 @@ namespace RingSoft.DbLookup
             switch (ControlSetup.SortColumn.DataType)
             {
                 case FieldDataTypes.String:
-                    selectedRow = _orderedList.FirstOrDefault(p => p.DataCells[sortColumnIndex].TextValue
-                        .CompareTo(searchForText) >= 0);
+                    switch (ControlSetup.OrderByType)
+                    {
+                        case OrderByTypes.Ascending:
+                            selectedRow = _orderedList.FirstOrDefault(p => p.DataCells[sortColumnIndex].TextValue
+                                .CompareTo(searchForText) >= 0);
+                            break;
+                        case OrderByTypes.Descending:
+                            selectedRow = _ascList.FirstOrDefault(p => p.DataCells[sortColumnIndex].TextValue
+                                .CompareTo(searchForText) >= 0);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    selectedRow = _orderedList.FirstOrDefault(p => p.DataCells[sortColumnIndex].NumericValue >=
-                                                                   searchForText.ToDecimal());
-
+                    switch (ControlSetup.OrderByType)
+                    {
+                        case OrderByTypes.Ascending:
+                            selectedRow = _orderedList.FirstOrDefault(p => p.DataCells[sortColumnIndex].NumericValue >=
+                                                                           searchForText.ToDecimal());
+                            break;
+                        case OrderByTypes.Descending:
+                            selectedRow = _ascList.FirstOrDefault(p => p.DataCells[sortColumnIndex].NumericValue >=
+                                                                           searchForText.ToDecimal());
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
             var selectedIndex = _orderedList.IndexOf(selectedRow);
+
+            if (_orderedList.Count < PageSize)
+            {
+                SetSelectedIndex(selectedIndex);
+                View.FillListView();
+                return;
+            }
+
             if (selectedIndex >= 0)
             {
                 if (selectedIndex == 0)
@@ -279,6 +364,12 @@ namespace RingSoft.DbLookup
         private List<ListControlDataSourceRow> GetTopPage()
         {
             List<ListControlDataSourceRow> topPage;
+            if (_orderedList.Count < PageSize)
+            {
+                _currentPage = _orderedList;
+                return _orderedList;
+            }
+
             topPage = _orderedList.GetRange(0, PageSize);
             _currentPage.Clear();
             _currentPage.AddRange(topPage);
@@ -300,8 +391,38 @@ namespace RingSoft.DbLookup
             SelectedItem = _currentPage[index];
         }
 
+        public void OnMouseWheelForward()
+        {
+            var newSelectedRowIndex = 3;
+
+            if (ScrollPosition == ScrollPositions.Bottom)
+            {
+                return;
+            }
+            SetSelectedIndex(newSelectedRowIndex);
+            GetNextPage(newSelectedRowIndex);
+        }
+
+        public void OnMouseWheelBack()
+        {
+            var newSelectedRowIndex = _currentPage.Count - 3;
+            if (newSelectedRowIndex < 0)
+            {
+                _currentPage = GetTopPage();
+                SetSelectedIndex(0);
+                OutputData(_currentPage);
+                return;
+            }
+            GetPreviousPage(newSelectedRowIndex);
+        }
+
         public void GetNextPage(int startingIndex)
         {
+            if (_orderedList.Count < PageSize)
+            {
+                return;
+            }
+
             var index = _orderedList.IndexOf(SelectedItem);
             List<ListControlDataSourceRow> nextPage = null;
             if (index + PageSize > _orderedList.Count && startingIndex > 0)
@@ -335,6 +456,11 @@ namespace RingSoft.DbLookup
 
         public void GetPreviousPage(int startingIndex)
         {
+            if (_orderedList.Count < PageSize)
+            {
+                return;
+            }
+
             var upArrow = startingIndex == _currentPage.Count - 1;
             var index = _orderedList.IndexOf(SelectedItem);
             List<ListControlDataSourceRow> previousPage = null;

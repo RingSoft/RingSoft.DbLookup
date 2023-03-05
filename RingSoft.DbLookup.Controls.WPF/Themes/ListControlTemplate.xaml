@@ -25,7 +25,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <dec:StringEditControl x:Name="TextBox" VerticalContentAlignment="Center" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <dec:StringEditControl x:Name="TextBox" VerticalContentAlignment="Center" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
                                 <Button x:Name="Button" Grid.Column="1" Width="20" IsTabStop="False" Command="{Binding ShowLookupCommand}">
                                     <Image Source="{StaticResource ListButtonImage}"></Image>
                                 </Button>
@@ -43,6 +43,7 @@
     </Style>
 
     <Style TargetType="{x:Type local:ListWindow}">
+        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ListWindow}">
@@ -79,7 +80,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled"  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" AlternationCount="2">
+                                    <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="400" Height="300" AlternationCount="2">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="{x:Type ListViewItem}">
                                                 <Setter Property="IsTabStop" Value="False" />
@@ -108,8 +109,8 @@
                                     <ScrollBar x:Name="ScrollBar" Grid.Column="1" Maximum="100" Minimum="0" ViewportSize="10"/>
                                 </Grid>
                                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Name="SelectButton" Width="100" Content="_Select" Margin="0,0,5,0"/>
-                                    <Button Name="CloseButton" Width="100"  Content="_Close"/>
+                                    <Button Name="SelectButton" Width="100" Content="_Select" Margin="0,0,5,0" Command="{Binding SelectCommand}" IsDefault="True"/>
+                                    <Button Name="CloseButton" Width="100"  Content="_Close" Command="{Binding CloseCommand}" IsCancel="True"/>
                                 </StackPanel>
 
                             </Grid>

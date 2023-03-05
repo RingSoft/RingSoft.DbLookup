@@ -20,6 +20,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected override void Initialize(StringEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
+            
+        }
+
+        protected override void Initialize(StringEditControl control)
+        {
             Control.TextChanged += (sender, args) => OnTextChanged();
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,9 @@ namespace RingSoft.DbLookup
 {
     public interface IListControlView
     {
-        ListControlDataSourceItem ShowLookupWindow();
+        ListControlDataSourceRow ShowLookupWindow();
+
+        void SelectDataRow(ListControlDataSourceRow selectedRow);
     }
     public class ListControlColumn
     {
@@ -17,11 +20,12 @@ namespace RingSoft.DbLookup
         public string Caption { get; internal set; }
         public double PercentWidth { get; internal set; }
         public FieldDataTypes DataType { get; internal set; }
+        public string ColumnName => $"COLUMN{ColumnId}";
     }
 
     public class ListControlSetup
     {
-        public ListControlColumn InitialSortColumn { get; set; }
+        public ListControlColumn SortColumn { get; set; }
 
         public IReadOnlyList<ListControlColumn> ColumnList => _columns.AsReadOnly();
 
@@ -37,44 +41,105 @@ namespace RingSoft.DbLookup
                 PercentWidth = percentWidth,
             };
             _columns.Add(column);
-            if (InitialSortColumn == null)
+            if (SortColumn == null)
             {
-                InitialSortColumn = column;
+                SortColumn = column;
             }
             return column;
         }
 
         public int GetIndexOfColumn(ListControlColumn listControlColumn)
         {
-            var lookupColumn = _columns.FirstOrDefault(listControlColumn);
-            return _columns.IndexOf(lookupColumn);
+            return _columns.IndexOf(listControlColumn);
         }
 
 
     }
 
-    public class ListControlDataSourceItem
+    public class ListControlDataCell
     {
+        public string TextValue { get; internal set; }
+
+        public decimal NumericValue { get; internal set; }
+
         public ListControlColumn Column { get; internal set; }
 
-        public string DataItem { get; internal set; }
+        public object GetSortValue()
+        {
+            switch (Column.DataType)
+            {
+                case FieldDataTypes.String:
+                    return TextValue;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.Decimal:
+                    return NumericValue;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override string ToString()
+        {
+            switch (Column.DataType)
+            {
+                case FieldDataTypes.String:
+                    return TextValue;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.Decimal:
+                    return NumericValue.ToString();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+    public class ListControlDataSourceRow
+    {
+        public IReadOnlyList<ListControlColumn> Columns => _columns.AsReadOnly();
+
+        public IReadOnlyList<ListControlDataCell> DataCells => _dataCells.AsReadOnly();
+
+        private List<ListControlColumn> _columns = new List<ListControlColumn>();
+        private List<ListControlDataCell> _dataCells = new List<ListControlDataCell>();
+        public string GetCellItem(int columnIndex)
+        {
+            return DataCells[columnIndex].TextValue;
+        }
+
+        public void AddColumn(ListControlColumn column, string value)
+        {
+            _columns.Add(column);
+            var cell = new ListControlDataCell();
+            switch (column.DataType)
+            {
+                case FieldDataTypes.String:
+                    cell.TextValue = value;
+                    break;
+                case FieldDataTypes.Integer:
+                case FieldDataTypes.Decimal:
+                    cell.NumericValue = value.ToDecimal();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            cell.Column = column;
+            _dataCells.Add(cell);
+        }
+
+        public override string ToString()
+        {
+            return DataCells[0].TextValue;
+        }
     }
 
     public class ListControlDataSource
     {
-        public IReadOnlyList<ListControlDataSourceItem> Items => _dataSourceItems.AsReadOnly();
+        public IReadOnlyList<ListControlDataSourceRow> Items => _dataSourceItems.AsReadOnly();
 
-        private List<ListControlDataSourceItem> _dataSourceItems = new List<ListControlDataSourceItem>();
+        private List<ListControlDataSourceRow> _dataSourceItems = new List<ListControlDataSourceRow>();
 
-        public ListControlDataSourceItem AddDataItem(ListControlColumn column, string dataValue)
+        public void AddRow(ListControlDataSourceRow item)
         {
-            var dataItem = new ListControlDataSourceItem
-            {
-                Column = column,
-                DataItem = dataValue,
-            };
-            _dataSourceItems.Add(dataItem);
-            return dataItem;
+            _dataSourceItems.Add(item);
         }
     }
     public class ListControlViewModel : INotifyPropertyChanged
@@ -99,7 +164,21 @@ namespace RingSoft.DbLookup
 
         public ListControlSetup Setup { get; set; }
 
-        public ListControlDataSourceItem SelectedDataItem { get; set; }
+        private ListControlDataSourceRow _selectedDataRow;
+
+        public ListControlDataSourceRow SelectedDataRow
+        {
+            get => _selectedDataRow;
+            set
+            {
+                if (_selectedDataRow == value)
+                {
+                    return;
+                }
+                _selectedDataRow = value;
+                View.SelectDataRow(_selectedDataRow);
+            }
+        }
 
         public IListControlView View { get; private set; }
 
@@ -109,7 +188,11 @@ namespace RingSoft.DbLookup
         {
             ShowLookupCommand = new RelayCommand(() =>
             {
-                SelectedDataItem = View.ShowLookupWindow();
+                var selectedRow = View.ShowLookupWindow();
+                if (selectedRow != null)
+                {
+                    SelectedDataRow = selectedRow;
+                }
             });
         }
 

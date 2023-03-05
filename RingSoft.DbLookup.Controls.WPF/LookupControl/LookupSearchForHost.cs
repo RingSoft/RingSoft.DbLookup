@@ -20,6 +20,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             base.InternalInitialize(columnDefinition);
             Initialize(Control, columnDefinition);
+            Initialize(Control);
         }
 
         internal override void InternalInitialize()
@@ -28,9 +29,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.Control = Control;
 
             base.InternalInitialize();
+            Initialize(Control);
         }
 
         protected abstract void Initialize(TControl control, LookupColumnDefinitionBase columnDefinition);
+        protected abstract void Initialize(TControl control);
     }
     public abstract class LookupSearchForHost
     {

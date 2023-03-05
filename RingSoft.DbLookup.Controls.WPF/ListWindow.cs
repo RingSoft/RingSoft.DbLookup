@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Media;
 using System.Reflection;
@@ -95,25 +96,49 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
         }
+        public ObservableCollection<LookupColumnBase> LookupColumns { get; }
 
         private DataTable _dataSource = new DataTable("DataSourceTable");
-        ListSortDirection _lastDirection = ListSortDirection.Ascending;
-        GridViewColumnHeader _lastHeaderClicked;
+        private ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        private GridViewColumnHeader _lastHeaderClicked;
         private ListControlColumn _sortColumn;
+        private double _itemHeight;
+        private Size _oldSize;
+        private bool _outputting;
+        private double _preScrollThumbPosition;
 
         static ListWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ListWindow), new FrameworkPropertyMetadata(typeof(ListWindow)));
         }
 
-        public ListWindow(ListControlSetup setup, ListControlDataSource dataSource)
+        public ListWindow(ListControlSetup setup, ListControlDataSource dataSource, ListControlDataSourceRow selectedRow)
         {
+            var loaded = false;
             Loaded += (sender, args) =>
             {
-                SnugWidth = 500;
-                SnugHeight = 500;
-                SnugWindow();
-                ViewModel.Initialize(setup, dataSource, this);
+                ViewModel.Initialize(setup, dataSource, this, selectedRow);
+                if (selectedRow != null)
+                {
+                    _outputting = true;
+                    SearchForHost.SearchText = selectedRow.GetCellItem(0);
+                    SearchForHost.SelectAll();
+                    _outputting = false;
+                }
+                _oldSize = new Size(Width, Height);
+                loaded = true;
+            };
+            SizeChanged += (sender, args) =>
+            {
+                if (ListView != null && loaded)
+                {
+                    var widthDif = Width - _oldSize.Width;
+                    var heightDif = Height - _oldSize.Height;
+                    ListView.Width = ListView.ActualWidth + widthDif;
+                    ListView.Height = ListView.ActualHeight + heightDif;
+                }
+
+                _oldSize = args.NewSize;
             };
         }
 
@@ -128,9 +153,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupGridView = GetTemplateChild(nameof(LookupGridView)) as GridView;
             ScrollBar = GetTemplateChild(nameof(ScrollBar)) as ScrollBar;
 
+            ScrollBar.Scroll += ScrollBar_Scroll;
+            ScrollBar.PreviewMouseDown += (sender, args) => { _preScrollThumbPosition = ScrollBar.Value; };
+            ListView.SizeChanged += (sender, args) => LookupControlSizeChanged();
+            
             base.OnApplyTemplate();
         }
 
+        private void LookupControlSizeChanged()
+        {
+            var pageSize = GetPageSize(false);
+            ViewModel.PageSize = pageSize;
+        }
         public void CloseWindow()
         {
             Close();
@@ -143,6 +177,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
+            if (!_outputting)
+            {
+                ViewModel.SearchText = SearchForHost.SearchText;
+            }
         }
 
         private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -258,12 +296,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (selIndex >= ListView.Items.Count - 1)
             {
                 {
-                    //LookupData.GotoNextRecord();
+                    ViewModel.GetNextPage(0);
+                    ListView.SelectedIndex = ViewModel.SelectedIndex;
+
                 }
             }
             else
             {
                 ListView.SelectedIndex = selIndex + 1;
+                ViewModel.SetSelectedIndex(ListView.SelectedIndex);
             }
         }
 
@@ -276,12 +317,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (selIndex <= 0)
             {
                 {
-                    //LookupData.GotoPreviousRecord();
+                    ViewModel.GetPreviousPage(ViewModel.CurrentPage.Count - 1);
+                    ListView.SelectedIndex = ViewModel.SelectedIndex;
                 }
             }
             else
             {
                 ListView.SelectedIndex = selIndex - 1;
+                ViewModel.SetSelectedIndex(ListView.SelectedIndex);
+
             }
         }
 
@@ -297,10 +341,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
             {
-                //LookupData.GotoNextPage();
+                ViewModel.GetNextPage( ViewModel.PageSize - 1);
+                ListView.SelectedIndex = ViewModel.SelectedIndex;
             }
             else
+            {
                 ListView.SelectedIndex = ListView.Items.Count - 1;
+                ViewModel.SetSelectedIndex(ListView.SelectedIndex);
+            }
         }
 
         private void OnPageUp(bool checkSelectedIndex = true)
@@ -315,7 +363,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0 || !checkSelectedIndex)
             {
-                //LookupData.GotoPreviousPage();
+                ViewModel.GetPreviousPage(0);
+                ListView.SelectedIndex = ViewModel.SelectedIndex;
             }
             else
                 ListView.SelectedIndex = 0;
@@ -354,6 +403,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool OnEnter()
         {
+            ViewModel.SelectCommand.Execute(null);
             return true;
         }
 
@@ -374,6 +424,59 @@ namespace RingSoft.DbLookup.Controls.WPF
             SetActiveColumn(0, FieldDataTypes.String);
         }
 
+        public void FillListView()
+        {
+            _outputting = true;
+            ListView.ItemsSource = ViewModel.OutputTable.DefaultView;
+            ListView.SelectedIndex = ViewModel.SelectedIndex;
+            switch (ViewModel.ScrollPosition)
+            {
+                case ScrollPositions.Top:
+                    ScrollBar.Value = 0;
+                    break;
+                case ScrollPositions.Middle:
+                    ScrollBar.Value = 50;
+                    break;
+                case ScrollPositions.Bottom:
+                    ScrollBar.Value = 100;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            _outputting = false;
+        }
+
+        private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            e.Handled = true;
+            switch (e.ScrollEventType)
+            {
+                case ScrollEventType.SmallDecrement:
+                    OnUpArrow();
+                    break;
+                case ScrollEventType.SmallIncrement:
+                    OnDownArrow();
+                    break;
+                case ScrollEventType.LargeDecrement:
+                    OnPageUp(false);
+                    break;
+                case ScrollEventType.LargeIncrement:
+                    OnPageDown(false);
+                    break;
+                case ScrollEventType.EndScroll:
+                    var newValue = (int)Math.Ceiling(e.NewValue);
+                    var scrollBarMinimum = (int)Math.Ceiling(ScrollBar.Minimum);
+
+                    if (newValue == scrollBarMinimum)
+                        OnHome(false);
+                    else if (e.NewValue + ScrollBar.LargeChange >= ScrollBar.Maximum)
+                        OnEnd(false);
+                    else
+                        ScrollBar.Value = _preScrollThumbPosition;
+                    break;
+            }
+        }
+
         private void AddColumnToGrid(ListControlColumn column, double width)
         {
             var gridColumn = AddGridViewColumn(column.Caption, width, $"COLUMN{column.ColumnId}");
@@ -389,13 +492,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 width = 20;
             }
+            var template = new DataTemplate();
+            var factory = new FrameworkElementFactory(typeof(TextBlock));
+            factory.SetBinding(TextBlock.TextProperty, new Binding(dataColumnName));
+            template.VisualTree = factory;
+
             var gridColumn = new GridViewColumn
             {
                 Header = columnHeader,
                 Width = width,
+                CellTemplate = template
             };
             LookupGridView?.Columns.Add(gridColumn);
-            _dataSource.Columns.Add(dataColumnName);
 
             return gridColumn;
         }
@@ -423,6 +531,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             _sortColumn = ViewModel.ControlSetup.ColumnList[columnIndex];
+            ViewModel.GetInitData(_sortColumn);
             var headerClicked = LookupGridView.Columns[columnIndex].Header as GridViewColumnHeader;
             if (headerClicked == null)
                 return;
@@ -604,6 +713,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var factory = new FrameworkElementFactory(typeof(TextBlock));
             factory.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Center);
 
+            ListView.UpdateLayout();
             var binding = new Binding(TextBlock.TextProperty.Name);
             binding.RelativeSource = new RelativeSource(RelativeSourceMode.TemplatedParent);
             binding.Path = new PropertyPath(nameof(GridViewColumnHeader.Content));
@@ -630,6 +740,76 @@ namespace RingSoft.DbLookup.Controls.WPF
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
         }
 
+        private int GetPageSize(bool setOriginalPageSize = true)
+        {
+            if (ListView == null || LookupGridView == null)
+                return 10;
+
+            ListView.UpdateLayout();
+            if (_itemHeight <= 0 || ListView.Items.Count == 0)
+            {
+                //ListView.ItemsSource = null;
+                var addBlankRow = ListView.Items.Count <= 0;
+                if (addBlankRow)
+                {
+                    ListView.Items.Add("text");
+                }
+                ListView.UpdateLayout();
+                var item = ListView.Items.GetItemAt(0);
+
+                var containerItem = ListView.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (containerItem is ListViewItem listViewItem)
+                {
+                    _itemHeight = listViewItem.ActualHeight;
+                }
+
+                if (addBlankRow)
+                    ListView.Items.Clear();
+            }
+
+            ListView.UpdateLayout();
+            var totalHeight = ListView.ActualHeight;
+            GridViewHeaderRowPresenter header = (GridViewHeaderRowPresenter)LookupGridView.GetType()
+                .GetProperty("HeaderRowPresenter", BindingFlags.NonPublic | BindingFlags.Instance)
+                ?.GetValue(LookupGridView);
+
+            if (header != null)
+                totalHeight -= header.ActualHeight;
+
+            double items = 10;
+            if (_itemHeight > 0)
+                items = totalHeight / _itemHeight;
+
+            var pageSize = (int)(Math.Floor(items)) - 1;
+
+            var scrollViewer = FindVisualChild<ScrollViewer>(ListView);
+
+            if (scrollViewer != null && scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
+                pageSize -= 1;
+
+            return pageSize;
+
+        }
+
+        private TChildItem FindVisualChild<TChildItem>(DependencyObject obj)
+            where TChildItem : DependencyObject
+
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child is TChildItem)
+                    return (TChildItem)child;
+                else
+                {
+                    TChildItem childOfChild = FindVisualChild<TChildItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
 
     }
 }

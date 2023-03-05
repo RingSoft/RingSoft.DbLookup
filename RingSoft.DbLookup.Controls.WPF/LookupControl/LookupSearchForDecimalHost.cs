@@ -23,12 +23,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             return new DecimalEditControl();
         }
 
+
         protected override void Initialize(DecimalEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
-            control.AllowNullValue = true;
-            control.ValueChanged += (sender, args) => OnTextChanged();
-            control.TextAlignment = TextAlignment.Left;
-
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
@@ -57,6 +54,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+        }
+
+        protected override void Initialize(DecimalEditControl control)
+        {
+            control.AllowNullValue = true;
+            control.ValueChanged += (sender, args) => OnTextChanged();
+            control.TextAlignment = TextAlignment.Left;
 
             if (DefaultWidth != null)
             {

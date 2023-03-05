@@ -57,7 +57,7 @@
 
                                     <!--<dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="TableComboBoxControl" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>-->
 
-                                    <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataItem="{Binding TableItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding TableRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                     <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="Refresh Now"/>
 

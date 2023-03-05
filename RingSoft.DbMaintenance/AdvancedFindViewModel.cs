@@ -202,17 +202,25 @@ namespace RingSoft.DbMaintenance
         //    }
         //}
 
-        private ListControlDataSourceItem _tableItem;
+        private ListControlDataSourceRow _tableRow;
 
-        public ListControlDataSourceItem TableItem
+        public ListControlDataSourceRow TableRow
         {
-            get => _tableItem;
+            get => _tableRow;
             set
             {
-                if (_tableItem == value)
+                if (_tableRow == value)
                     return;
 
-                _tableItem = value;
+                _tableRow = value;
+                if (TableRow != null)
+                {
+                    var table = TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+                        p.Description == TableRow.GetCellItem(0));
+                    LoadTree(table.TableName);
+                }
+
+
                 OnPropertyChanged();
             }
         }
@@ -383,14 +391,22 @@ namespace RingSoft.DbMaintenance
             //var index = 0;
             TableSetup = new ListControlSetup();
             TableDataSource = new ListControlDataSource();
-            var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 100);
+            var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 50);
+            var dataColumn2 = TableSetup.AddColumn(2, "Decimal", FieldDataTypes.Decimal, 50);
+            var dataValue2 = (decimal)0;
+            var index = 1;
 
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
             {
+                var tableRow = new ListControlDataSourceRow();
                 if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
                 {
-                    TableDataSource.AddDataItem(dataColumn, contextTableDefinition.Description);
+                    tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
+                    dataValue2 = Decimal.Add(dataValue2, (decimal)1.11);
+                    tableRow.AddColumn(dataColumn2, dataValue2.ToString());
                 }
+                TableDataSource.AddRow(tableRow);
+                index++;
             }
 
             LookupRefresher = new LookupRefresher();
@@ -412,7 +428,12 @@ namespace RingSoft.DbMaintenance
                         p.Table), Conditions.Equals,
                     AdvancedFindInput.LockTable.EntityName);
                 if (AdvancedFindInput.LookupDefinition != null)
+                {
+                    TableRow = TableDataSource.Items.FirstOrDefault(p =>
+                        p.DataCells[0].TextValue == AdvancedFindInput.LookupDefinition.TableDefinition.Description);
+                    CreateLookupDefinition();
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
+                }
             }
             //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
             if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
@@ -476,6 +497,9 @@ namespace RingSoft.DbMaintenance
                 {
                     return null;
                 }
+                TableRow = TableDataSource.Items.FirstOrDefault(p => p.GetCellItem(0)
+                                                                     == tableDefinition.Description);
+
             }
             AdvancedFindId = advancedFind.Id;
 
@@ -624,7 +648,7 @@ namespace RingSoft.DbMaintenance
             if (!ValidateLookup())
                 return false;
 
-            if (TableItem == null)
+            if (TableRow == null)
             {
                 var message = "You must select a table before saving.";
                 var caption = "Invalid Table";
@@ -649,7 +673,7 @@ namespace RingSoft.DbMaintenance
             advancedFind.FromFormula = LookupDefinition?.FromFormula;
 
             advancedFind.Table = TableDefinition.Context.TableDefinitions
-                .FirstOrDefault(p => p.Description == TableItem?.DataItem)
+                .FirstOrDefault(p => p.Description == TableRow?.GetCellItem(0))
                 ?.EntityName;
 
             advancedFind.RefreshRate = (byte)LookupRefresher.RefreshRate;
@@ -671,6 +695,7 @@ namespace RingSoft.DbMaintenance
                 SelectedTreeViewItem = null;
                 TreeRoot?.Clear();
             }
+            TableRow = null;
 
             ReadOnlyMode = false;
 
@@ -691,7 +716,7 @@ namespace RingSoft.DbMaintenance
                 AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                     ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
 
-            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = TableItem != null;
+            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = TableRow != null;
 
             ClearRefresh();
             LockTable();
@@ -721,11 +746,11 @@ namespace RingSoft.DbMaintenance
 
         public void CreateLookupDefinition()
         {
-            if (TableItem != null)
+            if (TableRow != null)
             {
                 var tableDefinition =
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions.FirstOrDefault(p =>
-                        p.Description == TableItem.DataItem);
+                        p.Description == TableRow.GetCellItem(0));
 
                 var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
@@ -1144,7 +1169,7 @@ namespace RingSoft.DbMaintenance
         private void ImportDefaultLookup()
         {
             var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
-            if (TableItem != null)
+            if (TableRow != null)
             {
                 CreateLookupDefinition();
                 var lookupDefinition= LookupDefinition.TableDefinition.LookupDefinition;

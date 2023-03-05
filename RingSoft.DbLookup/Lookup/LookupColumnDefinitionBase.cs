@@ -47,7 +47,6 @@ namespace RingSoft.DbLookup.Lookup
             }
             set
             {
-                var test = LookupDefinition.TableDefinition.TableName;
                 _joinAlias = value;
             }
         }

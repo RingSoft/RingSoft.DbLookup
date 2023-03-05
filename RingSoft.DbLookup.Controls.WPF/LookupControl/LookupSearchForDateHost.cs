@@ -53,8 +53,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected override void Initialize(DateEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
-            Control.AllowNullValue = true;
-            Control.PlayValidationSoundOnLostFocus = false;
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
@@ -83,6 +81,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException();
             }
 
+        }
+
+        protected override void Initialize(DateEditControl control)
+        {
+            Control.AllowNullValue = true;
+            Control.PlayValidationSoundOnLostFocus = false;
+
             Control.ValueChanged += (sender, args) =>
             {
                 if (Control.Value != _currentValue)
@@ -99,7 +104,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     if (DefaultDateOnlyWidth != null)
                     {
                         Control.HorizontalAlignment = HorizontalAlignment.Left;
-                        Control.Width = (double) DefaultDateOnlyWidth;
+                        Control.Width = (double)DefaultDateOnlyWidth;
                     }
 
                     break;
@@ -108,7 +113,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     if (DefaultDateTimeWidth != null)
                     {
                         Control.HorizontalAlignment = HorizontalAlignment.Left;
-                        Control.Width = (double) DefaultDateTimeWidth;
+                        Control.Width = (double)DefaultDateTimeWidth;
                     }
 
                     break;

@@ -75,23 +75,31 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        public static readonly DependencyProperty DataItemProperty =
-            DependencyProperty.Register("DataItem", typeof(ListControlDataSourceItem), typeof(ListControl),
-                new FrameworkPropertyMetadata(DataItemChangedCallback));
+        public static readonly DependencyProperty DataRowProperty =
+            DependencyProperty.Register("DataRow", typeof(ListControlDataSourceRow), typeof(ListControl),
+                new FrameworkPropertyMetadata(DataRowChangedCallback));
 
-        public ListControlDataSourceItem DataItem
+        public ListControlDataSourceRow DataRow
         {
-            get { return (ListControlDataSourceItem)GetValue(DataItemProperty); }
-            set { SetValue(DataItemProperty, value); }
+            get { return (ListControlDataSourceRow)GetValue(DataRowProperty); }
+            set { SetValue(DataRowProperty, value); }
         }
 
-        private static void DataItemChangedCallback(DependencyObject obj,
+        private static void DataRowChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
             var listControl = (ListControl)obj;
             if (listControl._controlLoaded)
             {
-                listControl.ViewModel.Text = listControl.DataItem.DataItem;
+                if (listControl.DataRow == null)
+                {
+                    listControl.ViewModel.Text = string.Empty;
+                }
+                else
+                {
+                    listControl.ViewModel.Text = listControl.DataRow.GetCellItem(0);
+                    listControl.TextBox.SelectAll();
+                }
             }
         }
 
@@ -122,7 +130,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.Initialize(this);
                 ViewModel.Setup = Setup;
                 ViewModel.DataSource = DataSource;
-                ViewModel.Text = DataItem?.DataItem;
+                ViewModel.Text = DataRow?.GetCellItem(0);
             };
             GotFocus += (sender, args) =>
             {
@@ -158,13 +166,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnKeyDown(e);
         }
 
-        public ListControlDataSourceItem ShowLookupWindow()
+        public ListControlDataSourceRow ShowLookupWindow()
         {
-            var window = new ListWindow(ViewModel.Setup, ViewModel.DataSource);
+            var window = new ListWindow(ViewModel.Setup, ViewModel.DataSource, DataRow);
             window.Owner = Window.GetWindow(this);
             window.ShowInTaskbar = false;
             window.ShowDialog();
+            if (window.ViewModel.DialogResult)
+            {
+                return window.ViewModel.SelectedItem;
+            }
             return null;
+        }
+
+        public void SelectDataRow(ListControlDataSourceRow selectedIRow)
+        {
+            DataRow = selectedIRow;
         }
     }
 }

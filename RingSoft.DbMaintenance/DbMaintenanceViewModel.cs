@@ -477,6 +477,7 @@ namespace RingSoft.DbMaintenance
                 LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
                 Processor.CloseWindow();
                 LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
+                LookupAddViewArgs.CallBackToken.OnRefreshData();
             }
         }
 

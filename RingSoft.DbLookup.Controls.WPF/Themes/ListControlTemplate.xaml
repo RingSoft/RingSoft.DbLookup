@@ -1,12 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
-                    xmlns:vm="clr-namespace:RingSoft.DbLookup;assembly=RingSoft.DbLookup"
-                    xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+                        xmlns:vm="clr-namespace:RingSoft.DbLookup;assembly=RingSoft.DbLookup"
+                        xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
     <BitmapImage x:Key="ListButtonImage" UriSource="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"/>
 
     <Style TargetType="{x:Type local:ListControl}">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ListControl}">
@@ -63,7 +64,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -80,7 +81,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="400" Height="300" AlternationCount="2">
+                                    <ListView x:Name="ListView" IsTabStop="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="600" Height="400" AlternationCount="2">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="{x:Type ListViewItem}">
                                                 <Setter Property="IsTabStop" Value="False" />

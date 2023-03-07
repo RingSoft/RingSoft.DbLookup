@@ -77,6 +77,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private bool _notifyFromFormulaExists;
         private bool _nameTabKeyPressed;
         private bool _refreshAfterLoad;
+        private bool _treeHasFocus;
 
         public bool ShowFromFormulaEditor(ref string fromFormula)
         {
@@ -217,6 +218,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             LookupControlsGlobals.PrintDocument(printerSetup);
         }
 
+        public void CheckTableIsFocused()
+        {
+            if (TableListControl.IsKeyboardFocusWithin)
+            {
+                NameAutoFillControl.Focus();
+            }
+        }
+
         public void LockTable(bool lockValue)
         {
             TableListControl.IsEnabled = !lockValue;
@@ -310,13 +319,28 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 {
                     if (args.Key == Key.Tab && !LookupControlsGlobals.IsShiftKeyDown())
                     {
-                        if (!TableListControl.IsEnabled)
+                        if (NameAutoFillControl.Value.IsValid())
                         {
                             _nameTabKeyPressed = true;
                         }
                     }
                 };
             }
+
+            //if (TableListControl != null)
+            //{
+            //    TableListControl.KeyDown += (sender, args) =>
+            //    {
+            //        if (args.Key == Key.Tab && !LookupControlsGlobals.IsShiftKeyDown())
+            //        {
+            //            if (ViewModel.AdvancedFindTree == null 
+            //                || ViewModel.AdvancedFindTree.TreeRoot == null)
+            //            {
+            //                NameAutoFillControl.Focus();
+            //            }
+            //        }
+            //    };
+            //}
 
             Border.GotFocus += Border_GotFocus;
 
@@ -330,12 +354,27 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         private void TreeView_GotFocus(object sender, RoutedEventArgs e)
         {
+            var sendTab = true;
             if (TreeView.SelectedItem == null)
             {
-                if (ViewModel.AdvancedFindTree != null && ViewModel.AdvancedFindTree.TreeRoot.Count > 0)
+                if (ViewModel.AdvancedFindTree != null)
                 {
-                    ViewModel.AdvancedFindTree.TreeRoot[0].IsSelected = true;
+                    if (ViewModel.AdvancedFindTree.TreeRoot != null)
+                    {
+                        if (ViewModel.AdvancedFindTree.TreeRoot.Count > 0)
+                        {
+                            _treeHasFocus = true;
+                            ViewModel.AdvancedFindTree.TreeRoot[0].IsSelected = true;
+                            _treeHasFocus = false;
+                            sendTab = false;
+                        }
+                    }
                 }
+            }
+
+            if (sendTab && !_treeHasFocus)
+            {
+                WPFControlsGlobals.SendKey(Key.Tab);
             }
         }
 

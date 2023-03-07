@@ -39,6 +39,8 @@ namespace RingSoft.DbMaintenance
         void SetAddOnFlyFocus();
 
         void PrintOutput(PrinterSetupArgs printerSetup);
+
+        void CheckTableIsFocused();
     }
 
     //public class TreeViewFormulaData
@@ -502,6 +504,7 @@ namespace RingSoft.DbMaintenance
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, advancedFind.Name);
 
             ReadOnlyMode = false;
+            View.LockTable(true);
             return advancedFind;
         }
 
@@ -533,7 +536,6 @@ namespace RingSoft.DbMaintenance
             ProcessRefresh();
 
             ResetLookup();
-            View.LockTable(true);
 
             PrintLookupOutputCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
                 ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
@@ -772,8 +774,13 @@ namespace RingSoft.DbMaintenance
             {
                 throw new ApplicationException("SystemGlobals.AdvancedFindDbProcessor has not been set.");
             }
-            return SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
+            var result = SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
                 FiltersManager.GetEntityList());
+            if (result)
+            {
+                View.CheckTableIsFocused();
+            }
+            return result;
         }
 
         protected override bool DeleteEntity()

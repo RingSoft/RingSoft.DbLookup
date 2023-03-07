@@ -5,6 +5,7 @@ using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -39,9 +40,9 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public class DeleteRecordWindow : BaseWindow, IDeleteRecordView
     {
-        public TabControl TabControl { get; private set; }
+        //public TabControl TabControl { get; private set; }
         public Border Border { get; set; }
-        public StackPanel SingleTabPanel { get; private set; }
+        //public StackPanel SingleTabPanel { get; private set; }
         public TextBlock SingleTextBlock { get; private set; }
         public DeleteRecordViewModel ViewModel { get; private set; }
         public CheckBox DeleteAllCheckBox { get; set; }
@@ -62,44 +63,44 @@ namespace RingSoft.DbLookup.Controls.WPF
             Loaded += (sender, args) =>
             {
                 ViewModel.Initialize(this, deleteTables);
-                if (deleteTables.Tables.Count == 1)
-                {
-                    TabControl.Visibility = Visibility.Collapsed;
-                    DeleteAllCheckBox.Visibility = Visibility.Collapsed;
-                    var deleteTable = deleteTables.Tables[0];
-                    var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
-                    deleteTable.Description =
-                        $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                    SingleTextBlock.Text = deleteTable.Description;
+                //if (deleteTables.Tables.Count == 1)
+                //{
+                //    //TabControl.Visibility = Visibility.Collapsed;
+                //    DeleteAllCheckBox.Visibility = Visibility.Collapsed;
+                //    var deleteTable = deleteTables.Tables[0];
+                //    var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
+                //    deleteTable.Description =
+                //        $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                //    SingleTextBlock.Text = deleteTable.Description;
 
-                    DeleteTabs.Add(deleteTab);
-                    SingleTabPanel.Children.Add(deleteTab);
-                    deleteTab.Loaded += (o, eventArgs) =>
-                    {
-                        deleteTab.SetInitialFocusCheckBox();
-                    };
-                }
-                else
-                {
-                    SingleTabPanel.Visibility = Visibility.Collapsed;
-                    foreach (var deleteTable in DeleteTables.Tables)
-                    {
-                        var tabItem = new TabItem();
-                        deleteTable.Description =
-                            $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                        var textBlockHeader = new TextBlock { Text = deleteTable.Description };
-                        textBlockHeader.Margin = new Thickness(5);
-                        tabItem.Header = textBlockHeader;
-                        var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
-                        DeleteTabs.Add(deleteTab);
-                        tabItem.Content = deleteTab;
-                        var left = tabItem.Margin.Left;
-                        var bottom = tabItem.Margin.Bottom;
-                        var right = tabItem.Margin.Right;
-                        tabItem.Margin = new Thickness(left, 2, right, bottom);
-                        TabControl.Items.Add(tabItem);
-                    }
-                }
+                //    DeleteTabs.Add(deleteTab);
+                //    SingleTabPanel.Children.Add(deleteTab);
+                //    deleteTab.Loaded += (o, eventArgs) =>
+                //    {
+                //        deleteTab.SetInitialFocusCheckBox();
+                //    };
+                //}
+                //else
+                //{
+                //    //SingleTabPanel.Visibility = Visibility.Collapsed;
+                //    foreach (var deleteTable in DeleteTables.Tables)
+                //    {
+                //        //var tabItem = new TabItem();
+                //        //deleteTable.Description =
+                //        //    $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
+                //        //var textBlockHeader = new TextBlock { Text = deleteTable.Description };
+                //        //textBlockHeader.Margin = new Thickness(5);
+                //        //tabItem.Header = textBlockHeader;
+                //        //var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
+                //        //DeleteTabs.Add(deleteTab);
+                //        //tabItem.Content = deleteTab;
+                //        //var left = tabItem.Margin.Left;
+                //        //var bottom = tabItem.Margin.Bottom;
+                //        //var right = tabItem.Margin.Right;
+                //        //tabItem.Margin = new Thickness(left, 2, right, bottom);
+                //        //TabControl.Items.Add(tabItem);
+                //    }
+                //}
 
                 DeleteAllCheckBox.Focus();
             };
@@ -110,8 +111,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             Border = GetTemplateChild(nameof(Border)) as Border;
             DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
 
-            TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
-            SingleTabPanel = GetTemplateChild(nameof(SingleTabPanel)) as StackPanel;
+            //TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
+            //SingleTabPanel = GetTemplateChild(nameof(SingleTabPanel)) as StackPanel;
             SingleTextBlock = GetTemplateChild(nameof(SingleTextBlock)) as TextBlock;
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
 

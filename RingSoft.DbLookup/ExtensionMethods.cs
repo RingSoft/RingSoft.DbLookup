@@ -123,14 +123,25 @@ namespace RingSoft.DbLookup
             var newDescription = string.Empty;
             var index = 0;
             var propertyNameCharArry = propertyName.ToCharArray();
+            var previousChar = ' ';
             foreach (var c in propertyNameCharArry)
             {
                 newDescription += c;
                 if (char.IsUpper(c) && index > 0)
                 {
-                    newDescription = newDescription.Insert(index, " ");
-                    index++;
+                    var addSpace = !char.IsUpper(previousChar);
+
+                    if (addSpace)
+                    {
+                        if (newDescription[index - 1] != ' ')
+                        {
+                            newDescription = newDescription.Insert(index, " ");
+                        }
+
+                        index++;
+                    }
                 }
+                previousChar = c;
                 index++;
             }
 

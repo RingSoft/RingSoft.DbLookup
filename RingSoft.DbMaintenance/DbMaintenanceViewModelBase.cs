@@ -273,7 +273,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         /// The maintenance mode.
         /// </value>
-        protected DbMaintenanceModes MaintenanceMode { get; set; }
+        public DbMaintenanceModes MaintenanceMode { get; protected set; }
 
         private bool _recordDirty;
 

@@ -60,9 +60,9 @@ namespace RingSoft.DbLookup
 
     public class ListControlDataCell
     {
-        public string TextValue { get; internal set; }
+        public string TextValue { get; set; }
 
-        public decimal NumericValue { get; internal set; }
+        public decimal NumericValue { get; set; }
 
         public ListControlColumn Column { get; internal set; }
 

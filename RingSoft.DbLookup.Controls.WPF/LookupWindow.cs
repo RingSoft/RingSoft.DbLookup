@@ -161,6 +161,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool _readOnlyMode;
         private PrimaryKeyValue _readOnlyPrimaryKeyValue;
+        private Size _oldSize;
 
         static LookupWindow()
         {
@@ -170,6 +171,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor, PrimaryKeyValue readOnlyValue = null)
         {
+            var loaded = false;
             _readOnlyPrimaryKeyValue = readOnlyValue;
             DataContext = this;
 
@@ -201,8 +203,22 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     SelectButton.Visibility = Visibility.Collapsed;
                 }
-
+                _oldSize = new Size(Width, Height);
+                loaded = true;
                 LookupControl?.Focus();
+            };
+
+            SizeChanged += (sender, args) =>
+            {
+                if (LookupControl != null && loaded)
+                {
+                    var widthDif = Width - _oldSize.Width;
+                    var heightDif = Height - _oldSize.Height;
+                    LookupControl.Width = LookupControl.ActualWidth + widthDif;
+                    LookupControl.Height = LookupControl.ActualHeight + heightDif;
+                }
+
+                _oldSize = args.NewSize;
             };
         }
 
@@ -212,6 +228,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupControl.RefreshData(false, _initialSearchFor, null, 
                 true, InitialSearchForPrimaryKeyValue);
             LookupControl.AddViewParameter = AddViewParameter;
+
         }
 
         public void Reload()

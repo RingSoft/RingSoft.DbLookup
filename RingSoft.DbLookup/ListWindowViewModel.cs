@@ -297,8 +297,9 @@ namespace RingSoft.DbLookup
 
             if (_orderedList.Count < PageSize)
             {
+                _currentPage = _orderedList;
                 SetSelectedIndex(selectedIndex);
-                View.FillListView();
+                OutputData(_currentPage);
                 return;
             }
 

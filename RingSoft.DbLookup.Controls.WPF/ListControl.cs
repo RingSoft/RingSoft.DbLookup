@@ -94,6 +94,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (listControl.DataRow == null)
                 {
                     listControl.ViewModel.Text = string.Empty;
+                    listControl.ViewModel.SelectedDataRow = null;
                 }
                 else
                 {

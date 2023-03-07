@@ -45,7 +45,6 @@
     <Style TargetType="{x:Type local:DeleteRecordWindow}">
         <Setter Property="Title" Value="Delete Record"/>
         <Setter Property="SizeToContent" Value="WidthAndHeight"/>
-        <Setter Property="ResizeMode" Value="NoResize"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DeleteRecordWindow}">
@@ -92,11 +91,11 @@
 
                                     <lc:ListControl Grid.Row="0" Grid.Column="1" Width="200" Setup="{Binding TableSetup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding SelectedDeleteTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                    <CheckBox Grid.Row="0" Grid.Column="2" x:Name="ItemDeleteAllCheckBox" IsChecked="{Binding ItemProceessed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="{Binding ProcessCaption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" x:Name="ItemDeleteAllCheckBox" IsChecked="{Binding ItemProceessed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Content="{Binding ProcessCaption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 </Grid>
 
-                                <lc:LookupControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Width="600" Height="400" LookupDefinition="{Binding LookupDefinition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <lc:LookupControl Grid.Row="4" Grid.Column="0" x:Name="LookupControl" Grid.ColumnSpan="4" Width="600" Height="400" LookupDefinition="{Binding LookupDefinition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 
                                 <!--<TabControl Grid.Row="3" x:Name="TabControl" MinWidth="600" MinHeight="400" MaxWidth="600"/>-->

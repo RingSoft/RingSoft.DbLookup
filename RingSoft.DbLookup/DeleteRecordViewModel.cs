@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Google.Protobuf.WellKnownTypes;
 using Org.BouncyCastle.Utilities;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
@@ -12,12 +13,6 @@ namespace RingSoft.DbLookup
     public interface IDeleteRecordView
     {
         void CloseWindow(bool result);
-
-        //void SetAllDataDelete(bool value);
-
-        //void SetAllDataNull(bool value);
-
-        //void SetFocusToTable(DeleteTable deleteTable);
     }
 
     public class DeleteTableWindowData
@@ -92,8 +87,9 @@ namespace RingSoft.DbLookup
                 if (_selectedDeleteTable == value)
                     return;
 
+                PreSetActiveTable(SelectedDeleteTable);
                 _selectedDeleteTable = value;
-                SetTableLookup(value);
+                SetNewActiveTable(SelectedDeleteTable);
                 OnPropertyChanged();
             }
         }
@@ -139,6 +135,7 @@ namespace RingSoft.DbLookup
                     return;
 
                 _itemProcessed = value;
+                PreSetActiveTable(SelectedDeleteTable);
                 OnPropertyChanged();
             }
         }
@@ -197,7 +194,7 @@ namespace RingSoft.DbLookup
                 var tableRow = new ListControlDataSourceRow();
                 tableRow.AddColumn(dataColumn, deleteTable.ChildField.TableDefinition.Description);
                 tableRow.AddColumn(column2, deleteTable.ChildField.Description);
-                tableRow.AddColumn(column3, "False");
+                tableRow.AddColumn(column3, false.ToString());
                 TableDataSource.AddRow(tableRow);
                 //tableRow.DataCells[2].TextValue = "True";
 
@@ -208,6 +205,8 @@ namespace RingSoft.DbLookup
                 deleteLookupData.DeleteRecordItem.Initialize(deleteTable);
                 deleteLookupData.ItemRow = tableRow;
                 deleteLookupData.DeleteTable = deleteTable;
+                deleteTable.Description = deleteTable.ChildField.TableDefinition.Description 
+                    + "\r\n" + deleteTable.ChildField.Description;
                 Items.Add(deleteLookupData);
 
             }
@@ -221,11 +220,16 @@ namespace RingSoft.DbLookup
             {
                 if (item.AllowSetNull)
                 {
-                    ProcessCaption = $"Set All the {item.DeleteTable.ChildField.TableDefinition.Description}'s Related Data to NULL";
+                    ProcessCaption = $"Set All the {item.DeleteTable.Description}s Related Data to NULL";
                 }
                 else
                 {
-                    ProcessCaption = $"Delete All the {item.DeleteTable.ChildField.TableDefinition.Description}'s Related Data";
+                    var description = item.DeleteTable.ChildField.TableDefinition.Description;
+                    if (!description.EndsWith('s'))
+                    {
+                        description += 's';
+                    }
+                    ProcessCaption = $"Delete All the {description} Related Data";
                 }
                 LookupDefinition = item.DeleteRecordItem.LookupDefinition;
                 LookupCommand = new LookupCommand(LookupCommands.Reset);
@@ -257,6 +261,12 @@ namespace RingSoft.DbLookup
 
         public bool ValidateDeleteTable(DeleteTable deleteTable)
         {
+            if (DeleteAllData == true)
+            {
+                return true;
+            }
+
+            var item = Items.FirstOrDefault(p => p.DeleteTable == deleteTable);
             var getDataResult = deleteTable.ChildField.TableDefinition.Context.DataProcessor.GetData(deleteTable.Query);
             if (getDataResult.ResultCode != GetDataResultCodes.Success)
             {
@@ -270,16 +280,16 @@ namespace RingSoft.DbLookup
                 if (hasData && !deleteTable.ChildField.TableDefinition.CanEditTabe)
                 {
                     var message = $"You are not allowed to edit data in the {tableDescription} table. Delete Denied!";
-                    //View.SetFocusToTable(deleteTable);
+                    SetFocusToTable(deleteTable);
                     ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                     return false;
                 }
 
-                if (hasData && deleteTable.NullAllData == false)
+                if (hasData && !item.Processed)
                 {
                     var message =
                         $"There is data left in the {tableDescription} table. You must edit the table or check Set All Values to NULL before continuing.";
-                    //View.SetFocusToTable(deleteTable);
+                    SetFocusToTable(deleteTable);
                     ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                     return false;
                 }
@@ -289,21 +299,51 @@ namespace RingSoft.DbLookup
                 if (hasData && !deleteTable.ChildField.TableDefinition.CanDeleteTable)
                 {
                     var message = $"You are not allowed to delete data in the {tableDescription} table. Delete Denied!";
-                    //View.SetFocusToTable(deleteTable);
+                    SetFocusToTable(deleteTable);
                     ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                     return false;
                 }
 
-                if (hasData && deleteTable.DeleteAllData == false)
+                if (hasData && !item.Processed)
                 {
                     var message =
                         $"There is data left in the {tableDescription} table. You must edit the table or check Delete All Records before continuing.";
-                    //View.SetFocusToTable(deleteTable);
+                    SetFocusToTable(deleteTable);
                     ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                     return false;
                 }
             }
             return true;
+        }
+
+        private void SetFocusToTable(DeleteTable deleteTable)
+        {
+            var item = Items.FirstOrDefault(p => p.DeleteTable == deleteTable);
+            if (item != null)
+            {
+                SelectedDeleteTable = item.ItemRow;
+            }
+        }
+
+        private void PreSetActiveTable(ListControlDataSourceRow oldRow)
+        {
+            var item = Items.FirstOrDefault(p => p.ItemRow == oldRow);
+            if (item != null)
+            {
+                item.Processed = ItemProceessed;
+                oldRow.DataCells[2].TextValue = ItemProceessed.ToString();
+            }
+
+        }
+
+        private void SetNewActiveTable(ListControlDataSourceRow newRow)
+        {
+            SetTableLookup(newRow);
+            var item = Items.FirstOrDefault(p => p.ItemRow == newRow);
+            if (item != null)
+            {
+                ItemProceessed = item.Processed;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -614,17 +614,20 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         if (!DesignerProperties.GetIsInDesignMode(this))
                         {
-
-                            var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
-                                .ElementAt(LookupGridView.Columns.IndexOf(gridColumn));
-
-                            lookupColumnDefinition?.UpdatePercentWidth(
-                                Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
-                            ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
+                            var index = LookupGridView.Columns.IndexOf(gridColumn);
+                            if (index != -1 && index < LookupGridView.Columns.Count)
                             {
-                                ColumnDefinition = lookupColumnDefinition,
-                                SizeChangedEventArgs = args
-                            });
+                                var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
+                                    .ElementAt(index);
+
+                                lookupColumnDefinition?.UpdatePercentWidth(
+                                    Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
+                                ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
+                                {
+                                    ColumnDefinition = lookupColumnDefinition,
+                                    SizeChangedEventArgs = args
+                                });
+                            }
                         }
                     }
                 };

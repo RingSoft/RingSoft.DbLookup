@@ -42,12 +42,11 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         //public TabControl TabControl { get; private set; }
         public Border Border { get; set; }
-        //public StackPanel SingleTabPanel { get; private set; }
-        public TextBlock SingleTextBlock { get; private set; }
         public DeleteRecordViewModel ViewModel { get; private set; }
-        public CheckBox DeleteAllCheckBox { get; set; }
+        public CheckBox DeleteAllCheckBox { get; private set; }
+        public LookupControl LookupControl { get; private set; }
 
-        public DeleteTables DeleteTables { get; private set; }
+        private Size _oldSize;
         public List<DeleteRecordWindowItemControl> DeleteTabs { get; private set; } =
             new List<DeleteRecordWindowItemControl>();
 
@@ -59,61 +58,34 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DeleteRecordWindow(DeleteTables deleteTables)
         {
-            DeleteTables = deleteTables;
+            var loaded = false;
             Loaded += (sender, args) =>
             {
                 ViewModel.Initialize(this, deleteTables);
-                //if (deleteTables.Tables.Count == 1)
-                //{
-                //    //TabControl.Visibility = Visibility.Collapsed;
-                //    DeleteAllCheckBox.Visibility = Visibility.Collapsed;
-                //    var deleteTable = deleteTables.Tables[0];
-                //    var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
-                //    deleteTable.Description =
-                //        $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                //    SingleTextBlock.Text = deleteTable.Description;
-
-                //    DeleteTabs.Add(deleteTab);
-                //    SingleTabPanel.Children.Add(deleteTab);
-                //    deleteTab.Loaded += (o, eventArgs) =>
-                //    {
-                //        deleteTab.SetInitialFocusCheckBox();
-                //    };
-                //}
-                //else
-                //{
-                //    //SingleTabPanel.Visibility = Visibility.Collapsed;
-                //    foreach (var deleteTable in DeleteTables.Tables)
-                //    {
-                //        //var tabItem = new TabItem();
-                //        //deleteTable.Description =
-                //        //    $"{deleteTable.ChildField.TableDefinition.Description}\r\n{deleteTable.ChildField.Description}";
-                //        //var textBlockHeader = new TextBlock { Text = deleteTable.Description };
-                //        //textBlockHeader.Margin = new Thickness(5);
-                //        //tabItem.Header = textBlockHeader;
-                //        //var deleteTab = new DeleteRecordWindowItemControl(deleteTable);
-                //        //DeleteTabs.Add(deleteTab);
-                //        //tabItem.Content = deleteTab;
-                //        //var left = tabItem.Margin.Left;
-                //        //var bottom = tabItem.Margin.Bottom;
-                //        //var right = tabItem.Margin.Right;
-                //        //tabItem.Margin = new Thickness(left, 2, right, bottom);
-                //        //TabControl.Items.Add(tabItem);
-                //    }
-                //}
 
                 DeleteAllCheckBox.Focus();
+                loaded = true;
             };
+            SizeChanged += (sender, args) =>
+            {
+                if (LookupControl != null && loaded)
+                {
+                    var widthDif = Width - _oldSize.Width;
+                    var heightDif = Height - _oldSize.Height;
+                    LookupControl.Width = LookupControl.ActualWidth + widthDif;
+                    LookupControl.Height = LookupControl.ActualHeight + heightDif;
+                }
+
+                _oldSize = args.NewSize;
+            };
+
         }
 
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             DeleteAllCheckBox = GetTemplateChild(nameof(DeleteAllCheckBox)) as CheckBox;
-
-            //TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
-            //SingleTabPanel = GetTemplateChild(nameof(SingleTabPanel)) as StackPanel;
-            SingleTextBlock = GetTemplateChild(nameof(SingleTextBlock)) as TextBlock;
+            LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
             ViewModel = Border.TryFindResource("ViewModel") as DeleteRecordViewModel;
 
             base.OnApplyTemplate();
@@ -123,43 +95,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             DialogResult = result;
             Close();
-        }
-
-        public void SetAllDataDelete(bool value)
-        {
-            foreach (var deleteTab in DeleteTabs)
-            {
-                if (deleteTab.ViewModel != null)
-                {
-                    deleteTab.ViewModel.DeleteAllRecords = value;
-                    deleteTab.ViewModel.NullAllRecords = value;
-                }
-            }
-
-        }
-
-        public void SetAllDataNull(bool value)
-        {
-            foreach (var deleteTab in DeleteTabs)
-            {
-                if (deleteTab.ViewModel != null)
-                {
-                    deleteTab.ViewModel.NullAllRecords = value;
-                }
-            }
-        }
-
-        public void SetFocusToTable(DeleteTable deleteTable)
-        {
-            var deleteItem = DeleteTabs.FirstOrDefault(p => p.DeleteTable == deleteTable);
-            if (deleteItem != null)
-            {
-                var tabItem = deleteItem.GetParentOfType<TabItem>();
-                if (tabItem != null)
-                {
-                    tabItem.Focus();
-                }
-            }
         }
     }
 }

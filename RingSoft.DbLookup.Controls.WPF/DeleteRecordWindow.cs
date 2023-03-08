@@ -72,8 +72,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     var widthDif = Width - _oldSize.Width;
                     var heightDif = Height - _oldSize.Height;
-                    LookupControl.Width = LookupControl.ActualWidth + widthDif;
-                    LookupControl.Height = LookupControl.ActualHeight + heightDif;
+                    if (Math.Round(widthDif) > 1)
+                    {
+                        LookupControl.Width = LookupControl.ActualWidth + widthDif;
+                    }
+
+                    if (Math.Round(heightDif) > 1)
+                    {
+                        LookupControl.Height = LookupControl.ActualHeight + heightDif;
+                    }
                 }
 
                 _oldSize = args.NewSize;

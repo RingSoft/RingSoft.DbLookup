@@ -104,9 +104,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         private ListControlColumn _sortColumn;
         private double _itemHeight;
         private Size _oldSize;
-        private bool _outputting;
         private double _preScrollThumbPosition;
-
+        
         static ListWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ListWindow), new FrameworkPropertyMetadata(typeof(ListWindow)));
@@ -115,15 +114,17 @@ namespace RingSoft.DbLookup.Controls.WPF
         public ListWindow(ListControlSetup setup, ListControlDataSource dataSource, ListControlDataSourceRow selectedRow)
         {
             var loaded = false;
+            var initPageSize = 0;
+            var sizeChangedRan = false;
             Loaded += (sender, args) =>
             {
-                ViewModel.Initialize(setup, dataSource, this, selectedRow);
-                if (selectedRow != null)
+                ViewModel.Initialize(setup, dataSource, this);
+                if (initPageSize > 0 && selectedRow != null)
                 {
-                    _outputting = true;
-                    SearchForHost.SearchText = selectedRow.GetCellItem(0);
+                    ViewModel.SelectRow(selectedRow, initPageSize);
+                    selectedRow = null;
+                    SearchForHost.SearchText = ViewModel.SearchText;
                     SearchForHost.SelectAll();
-                    _outputting = false;
                 }
                 _oldSize = new Size(Width, Height);
                 loaded = true;
@@ -139,6 +140,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
 
                 _oldSize = args.NewSize;
+                if (selectedRow != null)
+                {
+                    initPageSize = GetPageSize();
+                }
+
             };
         }
 
@@ -187,7 +193,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupControlSizeChanged()
         {
-            var pageSize = GetPageSize(false);
+            var pageSize = GetPageSize();
             ViewModel.PageSize = pageSize;
         }
         public void CloseWindow()
@@ -202,10 +208,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
-            if (!_outputting)
-            {
-                ViewModel.SearchText = SearchForHost.SearchText;
-            }
+            ViewModel.SearchText = SearchForHost.SearchText;
         }
 
         private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -456,7 +459,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void FillListView()
         {
-            _outputting = true;
             ListView.ItemsSource = ViewModel.OutputTable.DefaultView;
             ListView.SelectedIndex = ViewModel.SelectedIndex;
             switch (ViewModel.ScrollPosition)
@@ -473,7 +475,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            _outputting = false;
         }
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -789,7 +790,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
         }
 
-        private int GetPageSize(bool setOriginalPageSize = true)
+        private int GetPageSize()
         {
             if (ListView == null || LookupGridView == null)
                 return 10;

@@ -42,7 +42,10 @@ namespace RingSoft.DbLookup
                     return;
                 }
                 _searchText = value;
-                OnSearchForChanged(value);
+                if (!_dontSelectRowOnSearchChaged)
+                {
+                    OnSearchForChanged(value);
+                }
             }
         }
 
@@ -78,6 +81,8 @@ namespace RingSoft.DbLookup
             }
         }
 
+        private bool _dontSelectRowOnSearchChaged;
+
         public DataTable OutputTable { get; private set; } = new DataTable();
 
         public IReadOnlyList<ListControlDataSourceRow> OrderedList => _orderedList.AsReadOnly();
@@ -106,8 +111,7 @@ namespace RingSoft.DbLookup
             });
         }
 
-        public void Initialize(ListControlSetup setup, ListControlDataSource dataSource, IListWindowView view
-        , ListControlDataSourceRow selectedRow)
+        public void Initialize(ListControlSetup setup, ListControlDataSource dataSource, IListWindowView view)
         {
             ControlSetup = setup;
             ControlSetup.OrderByType = OrderByTypes.Ascending;
@@ -120,13 +124,18 @@ namespace RingSoft.DbLookup
                 OutputTable.Columns.Add($"COLUMN{listControlColumn.ColumnId}");
             }
             GetInitData(setup.SortColumn);
-            if (selectedRow != null)
-            {
-                if (PageSize == 0)
-                {
-                    _initSearchText = selectedRow.GetCellItem(0);
-                }
-            }
+        }
+
+        public void SelectRow(ListControlDataSourceRow selectedRow, int pageSize)
+        {
+            PageSize = pageSize;
+            
+            SelectRow(selectedRow);
+            SetSelectedIndex(_currentPage.IndexOf(selectedRow));
+            _dontSelectRowOnSearchChaged = true;
+            SearchText = selectedRow.DataCells[0].TextValue;
+            _initSearchText = SearchText;
+            _dontSelectRowOnSearchChaged = false;
         }
 
         public void ChangeOrderByType(OrderByTypes orderByType, ListControlColumn column)
@@ -217,10 +226,11 @@ namespace RingSoft.DbLookup
             {
                 GetInitData(ControlSetup.SortColumn);
             }
-            else
+            else if (SelectedItem != null)
             {
-                SearchText = _initSearchText;
-                _initSearchText = string.Empty;
+                //SearchText = _initSearchText;
+                //_initSearchText = string.Empty;
+                SelectRow(SelectedItem);
             }
         }
 
@@ -247,12 +257,6 @@ namespace RingSoft.DbLookup
                 OutputData(_currentPage);
                 return;
             }
-            var topPage = new List<ListControlDataSourceRow>();
-            var bottomPage = new List<ListControlDataSourceRow>();
-
-            var pageSize = (double)PageSize;
-            var topSize = GetTopSize();
-            var bottomSize = PageSize - topSize;
 
             ListControlDataSourceRow selectedRow = null;
             var sortColumnIndex = ControlSetup.GetIndexOfColumn(ControlSetup.SortColumn);
@@ -293,6 +297,17 @@ namespace RingSoft.DbLookup
                     throw new ArgumentOutOfRangeException();
             }
 
+            SelectRow(selectedRow);
+        }
+
+        private void SelectRow(ListControlDataSourceRow selectedRow)
+        {
+            var topPage = new List<ListControlDataSourceRow>();
+            var bottomPage = new List<ListControlDataSourceRow>();
+
+            var topSize = GetTopSize();
+            var bottomSize = PageSize - topSize;
+
             var selectedIndex = _orderedList.IndexOf(selectedRow);
 
             if (_orderedList.Count < PageSize)
@@ -316,6 +331,7 @@ namespace RingSoft.DbLookup
                         topSize = selectedIndex;
                         bottomSize = PageSize - topSize;
                     }
+
                     if (bottomSize + selectedIndex > _orderedList.Count)
                     {
                         topPage = GetBottomPage();

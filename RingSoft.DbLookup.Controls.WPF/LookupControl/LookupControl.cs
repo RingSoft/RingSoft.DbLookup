@@ -1829,6 +1829,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         }
                         else
                         {
+                            ResetColumnHeaderSort(0);
                             ClearLookupControl();
                             SearchForHost = null;
                             SearchForStackPanel.Children.Clear();
@@ -1860,7 +1861,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ShowRecordCountProps = false;
                 LookupData.ClearLookupData();
             }
-
+            
             if (EqualsRadioButton != null)
                 EqualsRadioButton.IsChecked = true;
 

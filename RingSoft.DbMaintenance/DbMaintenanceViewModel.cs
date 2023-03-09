@@ -42,6 +42,8 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
         where TEntity : new()
     {
+        public TEntity Entity { get; private set; }
+
         public int PageSize { get; } = 1;
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
@@ -319,8 +321,8 @@ namespace RingSoft.DbMaintenance
                 ChangingEntity = true;
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
                 LockDate = DateTime.Now;
-                var entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
-                if (entity == null)
+                Entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                if (Entity == null)
                 {
                     DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
                     ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
@@ -329,7 +331,7 @@ namespace RingSoft.DbMaintenance
                 }
                 if (!_savingRecord)
                 {
-                    LoadFromEntity(entity);
+                    LoadFromEntity(Entity);
                     Processor?.OnRecordSelected();
                 }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
@@ -756,7 +758,7 @@ namespace RingSoft.DbMaintenance
             return dateText;
         }
 
-        private bool CheckKeyValueTextChanged()
+        protected virtual bool CheckKeyValueTextChanged()
         {
             if (MaintenanceMode == DbMaintenanceModes.EditMode && _savedKeyAutoFillValue != null &&
                 KeyAutoFillValue != null && _savedKeyAutoFillValue.Text != KeyAutoFillValue.Text)

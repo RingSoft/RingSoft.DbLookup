@@ -58,7 +58,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             MaintenanceWindow.EnterToTab = true;
             MaintenanceButtonsControl.Margin = new Thickness(0, 0, 0, 2.5);
 
-            MaintenanceWindow.Loaded += (sender, args) => ViewModel.OnViewLoaded(View);
+            MaintenanceWindow.Loaded += (sender, args) =>
+            {
+                ViewModel.OnViewLoaded(View);
+            };
             MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
             //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }

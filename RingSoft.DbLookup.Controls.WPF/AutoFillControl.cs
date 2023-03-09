@@ -663,7 +663,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (_pendingAutoFillData)
             {
                 _onValuePropertySetting = true;
-                SetValue(Value.PrimaryKeyValue, Value.Text);
+                if (Value != null) SetValue(Value.PrimaryKeyValue, Value.Text);
                 _onValuePropertySetting = false;
                 _pendingAutoFillData = false;
             }
@@ -954,6 +954,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 TextBox.IsReadOnly = readOnlyValue;
                 TextBox.Focusable = !readOnlyValue;
+            }
+
+            if (!readOnlyValue && Button.IsFocused && TextBox != null)
+            {
+                TextBox.Focus();
             }
 
             //if (IsFocused)

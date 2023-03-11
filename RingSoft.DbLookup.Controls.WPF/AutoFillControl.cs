@@ -956,9 +956,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 TextBox.Focusable = !readOnlyValue;
             }
 
-            if (!readOnlyValue && Button.IsFocused && TextBox != null)
+            if (!readOnlyValue && TextBox != null)
             {
-                TextBox.Focus();
+                if (Button != null && Button.IsFocused)
+                {
+                    TextBox.Focus();
+                }
             }
 
             //if (IsFocused)

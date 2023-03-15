@@ -262,7 +262,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         return false;
                 }
             }
-            var result = base.LoadFromEntity(entity, lookupDefinition, path);
+            var result = base.LoadFromEntity(entity, lookupDefinition, Path);
             if (result)
             {
                 SetTableDescription();
@@ -447,16 +447,20 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override void SetTableDescription()
         {
-            if (JoinDefinition != null && JoinDefinition.ForeignKeyDefinition != null)
+            if (Path.IsNullOrEmpty())
             {
-                if (Path.IsNullOrEmpty())
+                base.SetTableDescription();
+            }
+            else if (BaseLookup != null)
+            {
+                var foundTreeItem = BaseLookup.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+                if (foundTreeItem != null)
                 {
-                    TableDescription = FieldDefinition.TableDefinition.Description;
-                }
-                else if (BaseLookup != null)
-                {
-                    var foundTreeItem = BaseLookup.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
-                    if (foundTreeItem != null && foundTreeItem.Parent != null)
+                    if (foundTreeItem.Parent == null)
+                    {
+                        TableDescription = FieldDefinition.TableDefinition.Description;
+                    }
+                    else
                     {
                         TableDescription = foundTreeItem.Parent.Name;
                     }

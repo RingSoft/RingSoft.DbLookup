@@ -976,6 +976,11 @@ namespace RingSoft.DbMaintenance
                                 firstField = parentTable.ChildField;
                                 parentField = parentTable.ParentField;
                                 parentTable = parentDeleteTable.ParentDeleteTable;
+                                var existingTable = deleteTables.Tables.Contains(parentTable);
+                                if (existingTable)
+                                {
+                                    break;
+                                }
                             }
                             joinTable = MakeJoinTable(topField, parentField, query, joinTable);
                         }

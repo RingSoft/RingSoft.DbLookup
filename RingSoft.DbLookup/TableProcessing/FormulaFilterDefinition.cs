@@ -4,6 +4,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using System;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -183,5 +184,15 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             return string.Empty;
         }
+
+        protected internal override DateTime ConvertToUniversalTime(DateTime date)
+        {
+            if (ValueType == ValueTypes.DateTime && SystemGlobals.ConvertAllDatesToUniversalTime)
+            {
+                date = date.ToUniversalTime();
+            }
+            return base.ConvertToUniversalTime(date);
+        }
+
     }
 }

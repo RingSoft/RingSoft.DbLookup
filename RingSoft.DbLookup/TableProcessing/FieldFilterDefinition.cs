@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -423,6 +424,18 @@ namespace RingSoft.DbLookup.TableProcessing
                 path = Path;
             }
             return path;// + FieldDefinition.MakePath();
+        }
+
+        protected internal override DateTime ConvertToUniversalTime(DateTime date)
+        {
+            if (FieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime)
+                {
+                    date = date.ToUniversalTime();
+                }
+            }
+            return base.ConvertToUniversalTime(date);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace RingSoft.DbMaintenance
                 }
                 
                 newRow.LoadFromColumnDefinition(column);
-                AddRow(newRow, Rows.Count - 1);
+                AddRow(newRow);
             }
         }
 

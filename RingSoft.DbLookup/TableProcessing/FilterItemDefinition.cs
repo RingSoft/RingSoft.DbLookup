@@ -356,6 +356,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        protected internal virtual DateTime ConvertToUniversalTime(DateTime date)
+        {
+            return date;
+        }
+
         public virtual string GetSearchValue(string searchValue)
         {
             if (ValueType == ValueTypes.DateTime)
@@ -367,7 +372,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     var date = searchValue.ToDate();
                     if (date != null)
                     {
-                        date = date.Value.ToUniversalTime();
+                        date = ConvertToUniversalTime(date.Value);
                         searchValue = date.Value.FormatDateValue(DbDateTypes.DateTime);
                     }
 

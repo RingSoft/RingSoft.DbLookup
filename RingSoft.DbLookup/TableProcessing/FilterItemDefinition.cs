@@ -167,7 +167,7 @@ namespace RingSoft.DbLookup.TableProcessing
             IsFixed = source.IsFixed;
         }
 
-        public void SetTableDescription()
+        public virtual void SetTableDescription()
         {
             if (JoinDefinition != null && JoinDefinition.ForeignKeyDefinition != null)
             {

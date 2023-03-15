@@ -94,10 +94,15 @@ namespace RingSoft.DbMaintenance
                 {
                     newRow = new AdvancedFindFormulaColumnRow(this);
                 }
-                
                 newRow.LoadFromColumnDefinition(column);
                 AddRow(newRow);
             }
+
+            AddNewRow();
+            //foreach (var column in lookupDefinition.VisibleColumns)
+            //{
+            //    LoadFromColumnDefinition(column);
+            //}
         }
 
         public void UpdateColumnWidth(LookupColumnDefinitionBase column)

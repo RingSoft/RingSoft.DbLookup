@@ -152,18 +152,6 @@ namespace RingSoft.DbLookup.TableProcessing
             Conditions condition,
             string value)
         {
-            if (fieldDefinition is DateFieldDefinition dateField)
-            {
-                if (dateField.ConvertToLocalTime)
-                {
-                    var date = value.ToDate();
-                    if (date != null)
-                    {
-                        value = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
-                    }
-                }
-            }
-
             var fieldFilter = new FieldFilterDefinition(this)
             {
                 FieldDefinition = fieldDefinition,
@@ -277,6 +265,18 @@ namespace RingSoft.DbLookup.TableProcessing
         public FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value, int index = -1)
         {
+            if (fieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime)
+                {
+                    var date = value.ToDate();
+                    if (date != null)
+                    {
+                        value = date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
+                    }
+                }
+            }
+
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
             InternalAddUserFilter(index, fieldFilter);
 

@@ -149,6 +149,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
+            TableDescription = tableFilterDefinition.TableDefinition.Description;
         }
 
         internal virtual void CopyFrom(FilterItemDefinition source)
@@ -366,7 +367,8 @@ namespace RingSoft.DbLookup.TableProcessing
                     var date = searchValue.ToDate();
                     if (date != null)
                     {
-                        searchValue = date.Value.ToUniversalTime().FormatDateValue(DbDateTypes.DateTime);
+                        date = date.Value.ToUniversalTime();
+                        searchValue = date.Value.FormatDateValue(DbDateTypes.DateTime);
                     }
 
                 }

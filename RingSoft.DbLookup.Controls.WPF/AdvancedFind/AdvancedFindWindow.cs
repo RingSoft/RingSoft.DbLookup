@@ -371,6 +371,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     }
                 }
             }
+            else
+            {
+                sendTab = false;
+            }
 
             if (sendTab && !_treeHasFocus)
             {

@@ -371,18 +371,19 @@ namespace RingSoft.DbLookup.TableProcessing
         protected internal override string ConvertDate(string value)
         {
             value = base.ConvertDate(value);
-            if (FieldDefinition is DateFieldDefinition dateField)
-            {
-                if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
-                {
-                    var date = value.ToDate();
-                    if (date != null)
-                    {
-                        return date.Value.ToUniversalTime().FormatDateValue(dateField.DateType);
-                    }
-                }
+            //if (FieldDefinition is DateFieldDefinition dateField)
+            //{
+            //    if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+            //    {
+            //        var date = value.ToDate();
+            //        if (date != null)
+            //        {
+            //            date = date.Value.ToUniversalTime();
+            //            return date.Value.FormatDateValue(dateField.DateType);
+            //        }
+            //    }
 
-            }
+            //}
 
             return value;
         }

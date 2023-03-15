@@ -113,6 +113,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     case ProcessTypes.CountingHeaderRecords:
                     case ProcessTypes.CountingDetailRecords:
+                        CurrentControl.Text = enumItem.TextValue;
+                        break;
                     case ProcessTypes.OpeningApp:
                         CurrentControl.Text = string.Empty;
                         break;

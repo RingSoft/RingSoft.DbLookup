@@ -1433,10 +1433,18 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (!_selectingRecord)
             {
-                if (LookupControl.SearchText.IsNullOrEmpty())
-                    GetInitData(true, true);
+                //03/16/2023
+                if (SelectedPrimaryKeyValue.IsValid)
+                {
+                    SelectPrimaryKey(SelectedPrimaryKeyValue);
+                }
                 else
-                    OnSearchForChange(LookupControl.SearchText);
+                {
+                    if (LookupControl.SearchText.IsNullOrEmpty())
+                        GetInitData(true, true);
+                    else
+                        OnSearchForChange(LookupControl.SearchText);
+                }
             }
             _selectingRecord = false;
         }

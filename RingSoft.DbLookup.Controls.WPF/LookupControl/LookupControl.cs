@@ -1739,7 +1739,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_selectedIndex >= 0)
                 {
                     var ownerWindow = Window.GetWindow(this);
-                    ownerWindow.Activated += OwnerWindow_Activated;
+                    //03/16/2023
+                    //ownerWindow.Activated += OwnerWindow_Activated;
                     LookupData.ViewSelectedRow(_selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
                     return true;
                 }
@@ -1750,11 +1751,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OwnerWindow_Activated(object sender, EventArgs e)
         {
+            var ownerWindow = Window.GetWindow(this);
+            ownerWindow.Activated -= OwnerWindow_Activated;
+
             if (!ForceRefreshOnActivate)
             {
                 return;
             }
-            //Peter Ringering - 09/25/2022 - E-273
+            //Peter Ringering - 09/25/2022 - E-273;
             RefreshData(false, "", LookupData.ParentWindowPrimaryKeyValue);
             if (SearchForHost != null && SearchForHost.SearchText.IsNullOrEmpty())
             {

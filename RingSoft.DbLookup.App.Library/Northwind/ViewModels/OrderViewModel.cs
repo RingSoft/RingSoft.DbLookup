@@ -403,16 +403,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        protected override string FindButtonInitialSearchFor
-        {
-            get
-            {
-                if (MaintenanceMode == DbMaintenanceModes.AddMode)
-                    return string.Empty;
+        //protected override string FindButtonInitialSearchFor
+        //{
+        //    get
+        //    {
+        //        if (MaintenanceMode == DbMaintenanceModes.AddMode)
+        //            return string.Empty;
 
-                return OrderDate.ToShortDateString();
-            }
-        }
+        //        return OrderDate.ToShortDateString();
+        //    }
+        //}
 
         private OrderDetailsGridManager _detailsGridManager;
 

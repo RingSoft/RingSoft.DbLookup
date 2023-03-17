@@ -443,8 +443,13 @@ namespace RingSoft.DbMaintenance
                         _lookupData.SelectedPrimaryKeyValue);
             }
 
+            var primaryKey = _lookupData.SelectedPrimaryKeyValue;
+            if (MaintenanceMode == DbMaintenanceModes.AddMode)
+            {
+                primaryKey = null;
+            }
             Processor.ShowFindLookupWindow(FindButtonLookupDefinition, false, false, searchText,
-                _lookupData.SelectedPrimaryKeyValue);
+                primaryKey);
 
             //if (!keyDown)
             //{

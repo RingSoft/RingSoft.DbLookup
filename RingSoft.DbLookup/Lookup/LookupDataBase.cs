@@ -1387,7 +1387,12 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
             {
-                _selectingRecord = true;
+                //03/17/2023
+                if (!lookupReadOnlyMode)
+                {
+                    _selectingRecord = true;
+                }
+
                 var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
                 {
                     ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,

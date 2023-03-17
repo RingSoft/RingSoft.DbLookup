@@ -439,7 +439,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SetupRecordCount(LookupData.RecordCount);
                 if (ListView != null)
                 {
-                    ListView.PreviewKeyDown += (sender, args) => { OnListViewKeyDown(args); };
+                    ListView.PreviewKeyDown += ListView_PreviewKeyDown;
                     ListView.SelectionChanged += ListView_SelectionChanged;
                     ListView.MouseDoubleClick += (sender, args) => { OnEnter(); };
                     ListView.PreviewMouseWheel += ListView_PreviewMouseWheel;
@@ -505,6 +505,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             _setupRan = _controlLoaded = true;
+        }
+
+        private void ListView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            OnListViewKeyDown(e);
         }
 
         private void SearchForControl_TextChanged(object sender, EventArgs e)
@@ -1193,7 +1198,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             if (ListView != null)
+            {
                 ListView.SelectedIndex = e.SelectedRowIndex;
+                var window = Window.GetWindow(this);
+                var focusedElement = FocusManager.GetFocusedElement(window);
+                if (focusedElement != null && focusedElement is Control focusedControl)
+                {
+                    if (focusedElement is ListViewItem listViewItem)
+                    {
+                        ListView.Focus();
+                    }
+                }
+            }
 
             var setupRecordCount = true;
             switch (SearchType)
@@ -1270,7 +1286,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             _currentPageSize = GetPageSize();
 
-            if (String.IsNullOrEmpty(initialSearchFor))
+            if (String.IsNullOrEmpty(initialSearchFor) && (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
                 LookupData.GetInitData();
             else
             {

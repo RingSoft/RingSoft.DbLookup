@@ -459,6 +459,8 @@ namespace RingSoft.DbMaintenance
 
             AddFilterCommand = new RelayCommand(AddFilter);
 
+            AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = SelectedTreeViewItem != null;
+
             FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
 
             ImportDefaultLookupCommand = new RelayCommand(ImportDefaultLookup);
@@ -646,6 +648,10 @@ namespace RingSoft.DbMaintenance
             if (!ValidateLookup())
                 return false;
 
+            if (!FiltersManager.ValidateGrid())
+            {
+                return false;
+            }
             if (TableRow == null)
             {
                 var message = "You must select a table before saving.";
@@ -1059,9 +1065,14 @@ namespace RingSoft.DbMaintenance
             ResetLookup();
         }
 
-        public void ResetLookup()
+        public void ResetLookup(bool validate = true)
         {
-            if (ValidateLookup())
+            var valResult = true;
+            if (validate)
+            {
+                valResult = ValidateLookup();
+            }
+            if (valResult)
             {
                 var test = LookupDefinition;
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
@@ -1092,7 +1103,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (!FiltersManager.ValidateAdvancedFind())
                 {
-                    ClearLookup();
+                    ClearLookup(false);
                     return false;
                 }
 

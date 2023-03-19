@@ -239,29 +239,34 @@ namespace RingSoft.DbLookup.TableProcessing
             Condition = (Conditions)entity.Operand;
             BaseLookup = lookupDefinition;
 
-            var newPath = GetNewPath();
-            if (!newPath.IsNullOrEmpty())
+            if (FieldDefinition != null)
             {
-                var treeViewItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(newPath);
-                if (treeViewItem != null)
+                var newPath = GetNewPath();
+
+                if (!newPath.IsNullOrEmpty())
                 {
-                    FieldDefinition = treeViewItem.FieldDefinition;
-                    ProcessFoundTreeItem(treeViewItem);
+                    var treeViewItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(newPath);
+                    if (treeViewItem != null)
+                    {
+                        FieldDefinition = treeViewItem.FieldDefinition;
+                        ProcessFoundTreeItem(treeViewItem);
+                    }
+                }
+
+                var value = entity.SearchForValue;
+                if (value.IsNullOrEmpty())
+                {
+                    switch (Condition)
+                    {
+                        case Conditions.EqualsNull:
+                        case Conditions.NotEqualsNull:
+                            break;
+                        default:
+                            return false;
+                    }
                 }
             }
 
-            var value = entity.SearchForValue;
-            if (value.IsNullOrEmpty())
-            {
-                switch (Condition)
-                {
-                    case Conditions.EqualsNull:
-                    case Conditions.NotEqualsNull:
-                        break;
-                    default:
-                        return false;
-                }
-            }
             var result = base.LoadFromEntity(entity, lookupDefinition, Path);
             if (result)
             {

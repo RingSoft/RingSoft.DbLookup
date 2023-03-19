@@ -19,13 +19,12 @@ namespace RingSoft.DbMaintenance
                 //var path = fieldFilter.Path;
                 //if (path.IsNullOrEmpty() && fieldFilter.FieldDefinition != null)
                 //{
+                if (fieldFilter.FieldDefinition != null)
+                {
                     Field = fieldFilter.FieldDefinition.Description;
-                    //if (fieldFilter.JoinDefinition != null)
-                    {
-                        //Table = fieldFilter.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField.Description;
-                        Table = fieldFilter.TableDescription;
-                    }
-                    //}
+                }
+
+                Table = fieldFilter.TableDescription;
             }
             base.LoadFromFilterDefinition(filter, isFixed, rowIndex);
         }

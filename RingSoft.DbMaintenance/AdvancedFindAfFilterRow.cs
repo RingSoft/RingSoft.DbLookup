@@ -165,43 +165,30 @@ namespace RingSoft.DbMaintenance
             }
 
             var newPath = Path;
-            //var foundItem = Manager.ViewModel.AdvancedFindTree.ProcessFoundTreeViewItem(Path, TreeViewType.Field);
-            //if (foundItem != null)
-            //{
-            //    newPath = foundItem.FieldDefinition.MakePath();
-            //}
             entity.Path = newPath;
             base.SaveToEntity(entity, rowIndex);
         }
 
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
-            //FilterItemDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindFilter(entity);
-            //LoadFromFilterDefinition(FilterItemDefinition, false, entity.FilterId);
-
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFinds, entity.SearchForAdvancedFindId.ToString());
             Path = entity.Path;
 
             base.LoadFromEntity(entity);
+        }
 
-            //Path = entity.Path;
-            //CreateFilterDefinition();
-
-            //base.LoadFromEntity(entity);
-            //var test = this;
-            //if (ParentFieldDefinition?.ParentJoinForeignKeyDefinition != null)
-            //{
-            //    SetupTableField(ParentFieldDefinition);
-            //}
-            //if (FilterItemDefinition is AdvancedFindFilterDefinition advancedFindFilter)
-            //{
-            //    Filter = advancedFindFilter;
-            //    //Filter.AdvancedFindId = advancedFindFilter.AdvancedFindId;
-            //}
-
-            //SetupTableField(ParentFieldDefinition);
-            //Manager.ViewModel.ResetLookup();
+        public override bool ValidateRow()
+        {
+            if (!AutoFillValue.IsValid())
+            {
+                var message = "Search For Advanced Find is invalid.";
+                var caption = "Validation Failure";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                Manager.Grid?.GotoCell(this, AdvancedFindFiltersManager.SearchColumnId);
+                return false;
+            }
+            return base.ValidateRow();
         }
     }
 }

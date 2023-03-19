@@ -396,6 +396,7 @@ namespace RingSoft.DbMaintenance
                 foreach (var advancedFindAfFilterRow in rows)
                 {
                     var advancedFindList = new List<int>();
+                    advancedFindList.Add(ViewModel.AdvancedFindId);
                     var advancedFindId = advancedFindAfFilterRow.AdvancedFindId;
                     if (!ValidateAdvancedFind(advancedFindList, advancedFindId))
                         return false;

@@ -210,7 +210,7 @@ namespace RingSoft.DbMaintenance
         public override void SaveToEntity(AdvancedFindFilter entity, int rowIndex)
         {
             entity.FilterId = rowIndex + 1;
-            FilterItemDefinition.SaveToEntity(entity);
+            FilterItemDefinition?.SaveToEntity(entity);
             {
 
             }
@@ -354,7 +354,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (ValidateParentheses())
                 {
-                    Manager.ViewModel.ResetLookup();
+                    Manager.ViewModel.ResetLookup(false);
                 }
             }
 

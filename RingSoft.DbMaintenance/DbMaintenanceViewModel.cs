@@ -1192,7 +1192,7 @@ namespace RingSoft.DbMaintenance
                 return;
             }
 
-            if (LookupAddViewArgs != null && !_selectingRecord)
+            if (LookupAddViewArgs != null && !_selectingRecord && RecordsChanged)
             {
                 LookupAddViewArgs.CallBackToken.OnRefreshData();
             }

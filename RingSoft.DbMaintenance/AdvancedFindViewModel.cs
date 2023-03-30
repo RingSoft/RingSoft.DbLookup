@@ -432,6 +432,10 @@ namespace RingSoft.DbMaintenance
                     CreateLookupDefinition();
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
                 }
+                else
+                {
+                    LockTableRow();
+                }
             }
             //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
             if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
@@ -439,6 +443,15 @@ namespace RingSoft.DbMaintenance
                 View.SetAddOnFlyFocus();
             }
             base.Initialize();
+        }
+
+        private void LockTableRow()
+        {
+            if (AdvancedFindInput != null)
+            {
+                TableRow = TableDataSource.Items.FirstOrDefault(p =>
+                    p.DataCells[0].TextValue == AdvancedFindInput.LockTable.Description);
+            }
         }
 
         private void LookupRefresher_RefreshRecordCountEvent(object sender, EventArgs e)
@@ -698,8 +711,8 @@ namespace RingSoft.DbMaintenance
             {
                 SelectedTreeViewItem = null;
                 TreeRoot?.Clear();
+                TableRow = null;
             }
-            TableRow = null;
 
             ReadOnlyMode = false;
 

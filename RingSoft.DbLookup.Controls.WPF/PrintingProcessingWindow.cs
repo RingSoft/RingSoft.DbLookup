@@ -148,10 +148,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void EnableAbortButton(bool enable)
         {
-            Dispatcher.Invoke(() =>
+            if (Dispatcher != null)
             {
-                CancelButton.IsEnabled = enable;
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    if (CancelButton != null)
+                        CancelButton.IsEnabled = enable;
+                });
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)

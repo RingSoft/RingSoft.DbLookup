@@ -1816,6 +1816,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                         }
                         break;
                     case LookupCommands.AddModify:
+                        if (!_setupRan)
+                        {
+                            SetupControl();
+                        }
                         var addViewParameter = command.AddViewParameter;
                         if (addViewParameter == null)
                             addViewParameter = this.AddViewParameter;

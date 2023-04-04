@@ -101,7 +101,21 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public int LookupControlColumnId { get; internal set; }
 
-        public bool AllowRecursion { get; private set; } = true;
+        public bool AllowRecursion
+        {
+            get
+            {
+                var result = true;
+                if (ParentJoinForeignKeyDefinition != null)
+                {
+                    if (ParentJoinForeignKeyDefinition.PrimaryTable == ParentJoinForeignKeyDefinition.ForeignTable)
+                    {
+                        return false;
+                    }
+                }
+                return result;
+            }
+        }
 
         public bool UpdateOnly { get; private set; }
 
@@ -222,11 +236,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             LookupControlColumnId = lookupControlColumnId;
         }
 
-        public FieldDefinition DoesAllowRecursion(bool value = true)
-        {
-            AllowRecursion = value;
-            return this;
-        }
+        //public FieldDefinition DoesAllowRecursion(bool value = true)
+        //{
+        //    AllowRecursion = value;
+        //    return this;
+        //}
 
         internal void SetUpdateOnly(bool value = true)
         {

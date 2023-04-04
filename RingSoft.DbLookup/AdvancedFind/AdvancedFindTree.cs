@@ -245,7 +245,8 @@ namespace RingSoft.DbLookup.AdvancedFind
                 treeItems.Add(treeChildItem);
 
                 if (tableFieldDefinition.ParentJoinForeignKeyDefinition != null &&
-                    tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null)
+                    tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != null
+                    && tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable != table)
                 {
                     //treeChildItem.PrimaryFieldDefinition = tableFieldDefinition.ParentJoinForeignKeyDefinition
                     //    .FieldJoins[0].PrimaryField;

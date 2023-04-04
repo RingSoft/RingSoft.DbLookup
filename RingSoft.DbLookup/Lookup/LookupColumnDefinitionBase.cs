@@ -334,7 +334,16 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     if (foundTreeItem.Parent == null)
                     {
-                        columnDefinition.TableDescription = lookupDefinition.TableDefinition.Description;
+                        if (foundTreeItem.FieldDefinition != null 
+                            && !foundTreeItem.FieldDefinition.AllowRecursion
+                            && columnDefinition.ColumnType == LookupColumnTypes.Formula)
+                        {
+                            columnDefinition.TableDescription = foundTreeItem.Name;
+                        }
+                        else
+                        {
+                            columnDefinition.TableDescription = lookupDefinition.TableDefinition.Description;
+                        }
                     }
                     else
                     {

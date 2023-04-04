@@ -258,8 +258,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             _lookupContext.Orders.GetFieldDefinition(p => p.Freight)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
-            _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor")
-                .DoesAllowRecursion(false);
+            _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor");
+                //.DoesAllowRecursion(false);
 
             _lookupContext.Employees.GetFieldDefinition(p => p.Notes).IsMemo();
 

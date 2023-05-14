@@ -106,8 +106,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     if (!disabled)
                     {
                         _taskbarIcon.ShowBalloonTip(title, message, baloonIcon);
-                        System.Threading.Thread.Sleep(5000);
-                        _taskbarIcon.HideBalloonTip();
+                        //System.Threading.Thread.Sleep(5000);
+                        //_taskbarIcon.HideBalloonTip();
                     }
 
                     return;

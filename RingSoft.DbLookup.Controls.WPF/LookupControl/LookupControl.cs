@@ -1829,7 +1829,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
                         else
                             LookupData.AddNewRow(Window.GetWindow(this), addViewParameter);
-                        RefreshData(command.ResetSearchFor, String.Empty, command.ParentWindowPrimaryKeyValue);
+                        RefreshData(command.ResetSearchFor, String.Empty, LookupData.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.Reset:
                         ClearLookupControl();

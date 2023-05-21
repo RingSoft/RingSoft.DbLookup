@@ -515,6 +515,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (_controlLoaded && Setup != null)
             {
                 _setupRan = false;
+                Setup.SetDirty = false;
                 SetupControl();
                 CreateContainsTemplate();
 
@@ -522,6 +523,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     Value = _pendingAutoFillValue;
                 }
+                Setup.SetDirty = true;
             }
 
             if (TextBox != null)
@@ -721,7 +723,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_onValuePropertySetting)
             {
                 _onAutoFillDataChanged = true;
-                Value = new AutoFillValue(_autoFillData.PrimaryKeyValue, EditText);
+                var newData = new AutoFillValue(_autoFillData.PrimaryKeyValue, EditText);
+                Value = newData;
                 _onAutoFillDataChanged = false;
             }
 

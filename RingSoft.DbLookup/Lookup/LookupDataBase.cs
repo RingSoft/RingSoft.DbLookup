@@ -19,6 +19,15 @@ namespace RingSoft.DbLookup.Lookup
         Bottom = 3
     }
 
+    public interface ILookupDataBase
+    {
+        event EventHandler<LookupDataChangedArgs> PrintDataChanged;
+
+        int GetRecordCountWait();
+
+        void GetPrintData();
+    }
+
     /// <summary>
     /// Arguments sent when the lookup's selected row index changes.
     /// </summary>
@@ -45,7 +54,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// The base class containing a lookup's data.
     /// </summary>
-    public class LookupDataBase
+    public class LookupDataBase : ILookupDataBase
     {
         /// <summary>
         /// Gets the lookup results data table.

@@ -3,6 +3,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.AutoFill;
@@ -264,5 +265,30 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
+        public static DataTable ConvertEnumerableToDataTable<TEntity>(this IEnumerable<TEntity> data) where TEntity : class, new()
+        {
+            var entityName = typeof(TEntity).Name;
+            var table = SystemGlobals.LookupContext.TableDefinitions
+                .FirstOrDefault(p => p.EntityName == entityName);
+
+            var result = new DataTable();
+            foreach (var fieldDefinition in table.FieldDefinitions)
+            {
+                result.Columns.Add(fieldDefinition.FieldName);
+            }
+
+            foreach (var entity in data)
+            {
+                var row = result.NewRow();
+                foreach (var fieldDefinition in table.FieldDefinitions)
+                {
+                    var value = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
+                    row[fieldDefinition.FieldName] = value;
+                }
+                result.Rows.Add(row);
+            }
+
+            return result;
+        }
     }
 }

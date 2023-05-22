@@ -876,13 +876,18 @@ namespace RingSoft.DbMaintenance
         /// <returns>
         /// The result.
         /// </returns>
-        public override DbMaintenanceResults DoDelete()
+        public override DbMaintenanceResults DoDelete(bool unitTestMode = false)
         {
             FireDeleteEvent();
             if (!DeleteCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
-
+            if (unitTestMode)
+            {
+                if (!DeleteEntity())
+                    return DbMaintenanceResults.DatabaseError;
+                return DbMaintenanceResults.Success;
+            }
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())
                 description = TableDefinition.ToString();

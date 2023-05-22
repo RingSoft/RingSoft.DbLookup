@@ -417,7 +417,7 @@ namespace RingSoft.DbMaintenance
         /// Executed when the Delete button is clicked.
         /// </summary>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults DoDelete();
+        public abstract DbMaintenanceResults DoDelete(bool unitTestMode = false);
 
         /// <summary>
         /// Executed when the Delete button is clicked.

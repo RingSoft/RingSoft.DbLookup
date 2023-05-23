@@ -35,6 +35,8 @@ namespace RingSoft.DbMaintenance
             var view = (TView)Activator.CreateInstance(typeof(TView));
             View = view;
 
+            ViewModel.CheckDirtyFlag = false;
+
             ViewModel.OnViewLoaded(View);
         }
 

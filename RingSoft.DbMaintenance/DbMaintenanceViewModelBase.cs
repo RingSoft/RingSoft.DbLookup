@@ -325,6 +325,7 @@ namespace RingSoft.DbMaintenance
         public RelayCommand FindCommand { get; private set; }
         public RelayCommand SelectCommand { get; private set; }
         public RelayCommand PrintCommand { get; private set; }
+        public bool CheckDirtyFlag { get; set; } = true;
 
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
         public event EventHandler InitializeEvent;

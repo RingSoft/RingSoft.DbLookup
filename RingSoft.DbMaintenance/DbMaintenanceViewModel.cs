@@ -843,6 +843,11 @@ namespace RingSoft.DbMaintenance
             if (ReadOnlyMode)
                 return true;
 
+            if (!CheckDirtyFlag)
+            {
+                return true;
+            }
+
             if (RecordDirty && SaveButtonEnabled)
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode && KeyAutoFillValue.IsValid())

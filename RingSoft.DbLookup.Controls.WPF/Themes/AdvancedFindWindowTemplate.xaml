@@ -27,6 +27,7 @@
                         <AdornerDecorator>
                             <DockPanel DataContext="{DynamicResource AdvancedFindViewModel}" Margin="5">
                                 <StackPanel x:Name="ButtonsPanel" DockPanel.Dock="Top"/>
+                                <lc:DbMaintenanceStatusBar x:Name="StatusBar" DockPanel.Dock="Bottom"/>
                                 <Grid Background="{TemplateBinding Background}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>

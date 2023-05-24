@@ -9,7 +9,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     public interface IDbMaintenanceProcessor : IDbMaintenanceDataProcessor
     {
         void Initialize(BaseWindow window, Control buttonsControl,
-            DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view);
+            DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null);
 
         void RegisterFormKeyControl(AutoFillControl keyAutoFillControl);
 

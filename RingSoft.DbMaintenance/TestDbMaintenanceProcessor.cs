@@ -85,5 +85,10 @@ namespace RingSoft.DbMaintenance
         {
             throw new NotImplementedException();
         }
+
+        public void SetSaveStatus(string message, AlertLevels alertLevel)
+        {
+            
+        }
     }
 }

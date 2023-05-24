@@ -48,5 +48,7 @@ namespace RingSoft.DbMaintenance
         bool CheckDeleteTables(DeleteTables deleteTables);
 
         void PrintOutput(PrinterSetupArgs printerSetupArgs);
+
+        void SetSaveStatus(string message, AlertLevels alertLevel);
     }
 }

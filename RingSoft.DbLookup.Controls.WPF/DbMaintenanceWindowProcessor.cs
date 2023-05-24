@@ -33,6 +33,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public IDbMaintenanceView View { get; set; }
 
+        public DbMaintenanceStatusBar StatusBar { get; set; }
+
 
         public virtual void SetupControl(IDbMaintenanceView view)
         {
@@ -90,12 +92,37 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public virtual void Initialize(BaseWindow window, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
-            IDbMaintenanceView view)
+            IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
             MaintenanceWindow = window;
             MaintenanceButtonsControl = buttonsControl;
             ViewModel = viewModel;
             View = view;
+            SetupStatusBar(viewModel, statusBar);
+        }
+
+        public void SetupStatusBar(DbMaintenanceViewModelBase viewModel, DbMaintenanceStatusBar statusBar)
+        {
+            if (statusBar == null)
+            {
+                return;
+            }
+            StatusBar = statusBar;
+            BindingOperations.SetBinding(statusBar, DbMaintenanceStatusBar.LastSavedDateProperty, new Binding
+            {
+                Source = viewModel,
+                Path = new PropertyPath(nameof(ViewModel.LastSavedDate)),
+                Mode = BindingMode.TwoWay
+            });
+
+        }
+
+        public void SetSaveStatus(string message, AlertLevels alertLevel)
+        {
+            if (StatusBar != null)
+            {
+                StatusBar.SetSaveStatus(message, alertLevel);
+            }
         }
 
         public virtual void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)

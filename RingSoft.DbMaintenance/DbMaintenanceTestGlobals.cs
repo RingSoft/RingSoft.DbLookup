@@ -144,5 +144,10 @@ namespace RingSoft.DbMaintenance
         {
             
         }
+
+        public void SetSaveStatus(string message, AlertLevels alertLevel)
+        {
+            
+        }
     }
 }

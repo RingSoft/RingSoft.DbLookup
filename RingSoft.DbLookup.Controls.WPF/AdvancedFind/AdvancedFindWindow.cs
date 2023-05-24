@@ -57,6 +57,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
         public StackPanel ButtonsPanel { get; set; }
         public Border Border { get; set; }
+        public DbMaintenanceStatusBar StatusBar { get; set; }
         public AutoFillControl NameAutoFillControl { get; set; }
         public TreeView TreeView { get; set; }
         //public TextComboBoxControl TableComboBoxControl { get; set; }
@@ -261,7 +262,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
 
             ViewModel.View = this;
-            Processor.Initialize(this, _buttonsControl, ViewModel, this);
+            Processor.Initialize(this, _buttonsControl, ViewModel, this, StatusBar);
             Processor.LookupAddView += (sender, args) =>
             {
                 if (args.InputParameter is AdvancedFindInput advancedFindInput)
@@ -287,6 +288,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
             ButtonsPanel = GetTemplateChild(nameof(ButtonsPanel)) as StackPanel;
+            StatusBar = GetTemplateChild(nameof(StatusBar)) as DbMaintenanceStatusBar;
             NameAutoFillControl = GetTemplateChild(nameof(NameAutoFillControl)) as AutoFillControl;
             TreeView = GetTemplateChild(nameof(TreeView)) as TreeView;
             TableListControl = GetTemplateChild(nameof(TableListControl)) as ListControl;

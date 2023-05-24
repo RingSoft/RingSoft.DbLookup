@@ -1,6 +1,8 @@
 ﻿using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
+using System.Windows.Controls.Primitives;
 
 namespace RingSoft.DbLookup.App.WPFCore.Northwind
 {
@@ -11,6 +13,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     {
         public override DbMaintenanceViewModelBase ViewModel => EmployeeViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
+        public override DbMaintenanceStatusBar DbStatusBar => StatusBar;
 
         public EmployeesWindow()
         {

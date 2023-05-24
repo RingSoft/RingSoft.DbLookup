@@ -1,4 +1,6 @@
-﻿using RingSoft.DbMaintenance;
+﻿using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbMaintenance;
+using System.Windows.Controls.Primitives;
 
 namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 {
@@ -9,6 +11,8 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
     {
         public override DbMaintenanceViewModelBase ViewModel => StockCostQuantityViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
+
+        public override DbMaintenanceStatusBar DbStatusBar => StatusBar;
 
         public StockCostQuantityWindow()
         {

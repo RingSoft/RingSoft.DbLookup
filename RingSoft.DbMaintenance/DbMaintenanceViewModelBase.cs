@@ -113,6 +113,22 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        private DateTime? _lastSavedDate;
+
+        public DateTime? LastSavedDate
+        {
+            get => _lastSavedDate;
+            set
+            {
+                if (_lastSavedDate == value)
+                    return;
+
+                _lastSavedDate = value;
+                OnPropertyChanged(null, false);
+            }
+        }
+
+
         /// <summary>
         /// Gets or sets the find button lookup definition.  By default it is the Lookup definition attached to the Table definition.
         /// </summary>

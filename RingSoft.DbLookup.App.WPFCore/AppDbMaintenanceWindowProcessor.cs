@@ -25,8 +25,9 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override Control MaintenanceButtonsControl { get; set; }
 
         public override void Initialize(BaseWindow window, Control buttonsControl,
-            DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view)
+            DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
+            SetupStatusBar(viewModel, statusBar);
             MaintenanceWindow = window;
             ViewModel = viewModel;
             MaintenanceButtonsControl = buttonsControl;

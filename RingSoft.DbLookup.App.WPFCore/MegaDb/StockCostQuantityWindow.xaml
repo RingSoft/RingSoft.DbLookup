@@ -6,6 +6,7 @@
         xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.MegaDb.ViewModels;assembly=RingSoft.DbLookup.App.Library"
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
+        xmlns:wpf="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
         Title="Stock Purchases" Height="225" Width="400">
@@ -14,6 +15,7 @@
     </Window.DataContext>
     <DockPanel>
         <app:DbMaintenanceButtonsControl x:Name="ButtonsControl" DockPanel.Dock="Top"/>
+        <wpf:DbMaintenanceStatusBar x:Name="StatusBar" DockPanel.Dock="Bottom"/>
         <Grid Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

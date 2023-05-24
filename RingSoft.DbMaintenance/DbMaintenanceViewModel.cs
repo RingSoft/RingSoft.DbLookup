@@ -14,7 +14,10 @@ using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Timers;
 using Renci.SshNet.Messages;
+using RingSoft.DbLookup.RecordLocking;
+using Ubiety.Dns.Core.Records;
 
 namespace RingSoft.DbMaintenance
 {
@@ -131,7 +134,45 @@ namespace RingSoft.DbMaintenance
         private bool _savingRecord;
         private bool _lookupReadOnlyMode;
         private AutoFillValue _readOnlyAutoFillValue;
+        private DateTime? _startDate;
+        private System.Timers.Timer _timer = new Timer(1000);
+        private bool _isActive = true;
 
+        public DbMaintenanceViewModel()
+        {
+            _startDate = DateTime.Now;
+            _timer.Elapsed += (sender, args) =>
+            {
+                if (Processor == null)
+                {
+                    return;
+                }
+                _timer.Stop();
+                if (_isActive == false)
+                {
+                    return;
+                }
+                var duration = DateTime.Now.Subtract(_startDate.Value.ToLocalTime());
+                var minutes = duration.TotalMinutes;
+
+                if (minutes > 10 && minutes < 20)
+                {
+                    Processor.SetSaveStatus("Don't forget to save this record.", AlertLevels.Yellow);
+                }
+                else if (minutes > 20)
+                {
+                    Processor.SetSaveStatus("Save this record ASAP!", AlertLevels.Red);
+                }
+                else
+                {
+                    Processor.SetSaveStatus("", AlertLevels.Green);
+                }
+
+                _timer.Start();
+            };
+            _timer.Enabled = true;
+            _timer.Start();
+        }
         protected virtual void SetupViewLookupDefinition( LookupDefinitionBase lookupDefinition)
         {
 
@@ -321,6 +362,8 @@ namespace RingSoft.DbMaintenance
                 ChangingEntity = true;
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
                 LockDate = DateTime.Now;
+                GetLastSavedDate(_lookupData.SelectedPrimaryKeyValue);
+
                 Entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
                 if (Entity == null)
                 {
@@ -500,6 +543,9 @@ namespace RingSoft.DbMaintenance
 
             ChangingEntity = true;
             ClearData();
+            Processor.SetSaveStatus("", AlertLevels.Green);
+            LastSavedDate = null;
+            _startDate = DateTime.Now;
             KeyAutoFillValue = new AutoFillValue(new PrimaryKeyValue(TableDefinition), string.Empty);
             ChangingEntity = false;
 
@@ -685,6 +731,7 @@ namespace RingSoft.DbMaintenance
                         }
                         break;
                 }
+                GetLastSavedDate(primaryKey);
 
                 //var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
                 //    .ExecuteSql(lockSql);
@@ -719,6 +766,31 @@ namespace RingSoft.DbMaintenance
             }
 
             return DbMaintenanceResults.Success;
+        }
+
+        private void GetLastSavedDate(PrimaryKeyValue primaryKey)
+        {
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            if (context != null)
+            {
+                var table = context.GetTable<RecordLock>();
+                if (table != null)
+                {
+                    var recordLock = table.FirstOrDefault(
+                        p => p.Table == TableDefinition.TableName
+                             && p.PrimaryKey == primaryKey.KeyString);
+                    if (recordLock == null)
+                    {
+                        LastSavedDate = _startDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        LastSavedDate = recordLock.LockDateTime.ToLocalTime();
+                    }
+                    Processor.SetSaveStatus("", AlertLevels.Green);
+                    _startDate = DateTime.Now;
+                }
+            }
         }
 
         private string GetUpdateLockSql(string table, DbSelectSqlGenerator sqlGenerator, StringFieldDefinition tableField,
@@ -1195,6 +1267,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
         public override void OnWindowClosing(CancelEventArgs e)
         {
+            _isActive = false;
             FireCloseEvent();
             if (!CheckDirty())
             {
@@ -1221,6 +1294,7 @@ namespace RingSoft.DbMaintenance
             MaintenanceMode = DbMaintenanceModes.EditMode;
 
             var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+
             LoadFromEntity(PopulatePrimaryKeyControls(entity, primaryKeyValue));
             
             OnLookupDataChanged();

@@ -63,6 +63,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         static DbMaintenanceStatusBar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(typeof(DbMaintenanceStatusBar)));
+
+            IsTabStopProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(false));
         }
 
         public override void OnApplyTemplate()

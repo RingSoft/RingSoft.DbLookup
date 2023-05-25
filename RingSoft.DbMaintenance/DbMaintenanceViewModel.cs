@@ -155,11 +155,11 @@ namespace RingSoft.DbMaintenance
                 var duration = DateTime.Now.Subtract(_startDate.Value.ToLocalTime());
                 var minutes = duration.TotalMinutes;
 
-                if (minutes > 10 && minutes < 20)
+                if (minutes > 10 && minutes < 20 && RecordDirty)
                 {
                     Processor.SetSaveStatus("Don't forget to save this record.", AlertLevels.Yellow);
                 }
-                else if (minutes > 20)
+                else if (minutes > 20 && RecordDirty)
                 {
                     Processor.SetSaveStatus("Save this record ASAP!", AlertLevels.Red);
                 }
@@ -1414,6 +1414,15 @@ namespace RingSoft.DbMaintenance
         protected virtual void OnViewModelOperationPreview(ViewModelOperationPreviewEventArgs<TEntity> e)
         {
             ViewModelOperationPreview?.Invoke(this, e);
+        }
+
+        protected override void OnRecordDirtyChanged(bool newValue)
+        {
+            if (newValue)
+            {
+                _startDate = DateTime.Now;
+            }
+            base.OnRecordDirtyChanged(newValue);
         }
 
         /// <summary>

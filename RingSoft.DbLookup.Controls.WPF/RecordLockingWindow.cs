@@ -104,9 +104,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        {
+            
+        }
+
         public void ResetViewForNewRecord()
         {
             
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return null;
         }
 
         public void SetupView()

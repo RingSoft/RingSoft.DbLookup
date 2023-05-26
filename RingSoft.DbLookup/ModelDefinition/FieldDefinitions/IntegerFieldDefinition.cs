@@ -107,12 +107,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </returns>
         public override bool ValidateValueForSavingToDb(string value)
         {
-            if (!AllowNulls)
-            {
-                var intValue = value.ToInt();
-                if (ParentJoinForeignKeyDefinition != null && intValue == 0)
-                    return false;
-            }
+            //if (!AllowNulls)
+            //{
+            //    var intValue = value.ToInt();
+            //    if (ParentJoinForeignKeyDefinition != null && intValue == 0)
+            //        return false;
+            //}
 
             return base.ValidateValueForSavingToDb(value);
         }

@@ -57,7 +57,7 @@ namespace RingSoft.DbMaintenance
         /// <value>
         /// The table definition.
         /// </value>
-        public abstract TableDefinition<TEntity> TableDefinition { get; }
+        public virtual TableDefinition<TEntity> TableDefinition { get; }
 
         public override sealed TableDefinitionBase TableDefinitionBase => TableDefinition;
 
@@ -140,6 +140,12 @@ namespace RingSoft.DbMaintenance
 
         public DbMaintenanceViewModel()
         {
+            if (TableDefinition == null)
+            {
+                TableDefinition = GblMethods.GetTableDefinition<TEntity>();
+
+            }
+
             _startDate = DateTime.Now;
             _timer.Elapsed += (sender, args) =>
             {
@@ -179,11 +185,6 @@ namespace RingSoft.DbMaintenance
         }
         protected internal override void InternalInitialize()
         {
-            if (TableDefinition == null)
-            {
-                throw new Exception("Table definition is null");
-
-            }
             if (TableDefinition.LookupDefinition == null)
                 throw new ArgumentException(
                     $"Table definition '{TableDefinition}' does not have a lookup definition setup.");
@@ -882,7 +883,44 @@ namespace RingSoft.DbMaintenance
         /// <returns></returns>
         protected virtual bool ValidateEntity(TEntity entity)
         {
-            return TableDefinition.ValidateEntity(entity, this);
+            if (!TableDefinition.ValidateEntity(entity, this))
+            {
+                return false;
+            }
+            var autoFills = View.GetAutoFills();
+            foreach (var dbAutoFillMap in autoFills)
+            {
+                if (dbAutoFillMap.AutoFillValue == KeyAutoFillValue)
+                {
+                    if (dbAutoFillMap.AutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
+                    {
+                        ProcessAutoFillValidationResponse(dbAutoFillMap);
+                        return false;
+                    }
+                }
+
+                if (!dbAutoFillMap.AutoFillValue.ValidateAutoFill(dbAutoFillMap.AutoFillSetup))
+                {
+                    ProcessAutoFillValidationResponse(dbAutoFillMap);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void ProcessAutoFillValidationResponse(DbAutoFillMap autoFillMap)
+        {
+            var caption = "Validation Fail";
+            var message = string.Empty;
+            if (autoFillMap.AutoFillSetup.ForeignField == null)
+            {
+                message = "Field has an invalid value.";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+            }
+            else
+            {
+                View.HandleAutoFillValFail(autoFillMap);
+            }
         }
 
         AutoFillValue IValidationSource.GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)

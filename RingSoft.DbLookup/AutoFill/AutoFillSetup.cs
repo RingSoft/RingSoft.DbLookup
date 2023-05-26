@@ -45,6 +45,8 @@ namespace RingSoft.DbLookup.AutoFill
 
         public bool SetDirty { get; set; } = true;
 
+        public FieldDefinition ForeignField { get; }
+
         /// <summary>
         /// Initializes a new instance of the class with a lookup definition that is attached to the primary table of the parent join definition of the foreign field definition parameter.
         /// </summary>
@@ -61,6 +63,8 @@ namespace RingSoft.DbLookup.AutoFill
 
             if (foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition == null)
                 throw new ArgumentException($"Parent table '{foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable}' does not have a lookup definition.  Make sure you attach it in the LookupContext.InitializeLookupDefinitions override and execute {foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable}.HasLookupDefinition()");
+
+            ForeignField = foreignKeyFieldDefinition;
 
             LookupDefinition = foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition.Clone();
         }

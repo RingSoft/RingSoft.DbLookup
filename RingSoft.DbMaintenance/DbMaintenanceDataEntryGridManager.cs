@@ -5,6 +5,7 @@ using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 
 namespace RingSoft.DbMaintenance
 {
+    //public class AutoFillMap
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DataEntryGridManager
         where TEntity : new()
     {
@@ -13,6 +14,11 @@ namespace RingSoft.DbMaintenance
         public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel)
         {
             ViewModel = viewModel;
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
         }
 
         public virtual void LoadGrid(IEnumerable<TEntity> entityList)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library;
@@ -30,6 +31,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         }
 
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
+        {
+            
+        }
+
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             
         }
@@ -73,6 +79,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         public void SetReadOnlyMode(bool readOnlyValue)
         {
             
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return null;
         }
 
         public void OnRecordSelect(LookupSelectArgs args)

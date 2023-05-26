@@ -40,8 +40,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     {
         public IOrderView OrderView { get; private set; }
 
-        public override TableDefinition<Order> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
+        //public override TableDefinition<Order> TableDefinition =>
+        //    RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
 
         #region Properties
 
@@ -637,24 +637,27 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             var order = new Order();
             order.OrderID = OrderId;
+            order.CustomerID = Customer.GetEntity<Customer>().CustomerID;
+            order.EmployeeID = Employee.GetEntity<Employee>().EmployeeID;
+            order.ShipVia = ShipVia.GetEntity<Shipper>().ShipperID;
 
-            if (Customer.IsValid())
-            {
-                var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
-                order.CustomerID = customer.CustomerID;
-            }
+            //if (Customer.IsValid())
+            //{
+            //    var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
+            //    order.CustomerID = customer.CustomerID;
+            //}
 
-            if (Employee.IsValid())
-            {
-                var employee = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(Employee.PrimaryKeyValue);
-                order.EmployeeID = employee.EmployeeID;
-            }
+            //if (Employee.IsValid())
+            //{
+            //    var employee = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(Employee.PrimaryKeyValue);
+            //    order.EmployeeID = employee.EmployeeID;
+            //}
 
-            if (ShipVia.IsValid())
-            {
-                var shipVia = _lookupContext.Shippers.GetEntityFromPrimaryKeyValue(ShipVia.PrimaryKeyValue);
-                order.ShipVia = shipVia.ShipperID;
-            }
+            //if (ShipVia.IsValid())
+            //{
+            //    var shipVia = _lookupContext.Shippers.GetEntityFromPrimaryKeyValue(ShipVia.PrimaryKeyValue);
+            //    order.ShipVia = shipVia.ShipperID;
+            //}
 
             order.OrderDate = OrderDate;
             order.RequiredDate = RequiredDate;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,8 +44,18 @@ namespace RingSoft.DbLookup.App.WPFCore
             Processor.OnValidationFail(fieldDefinition, text, caption);
         }
 
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        {
+            LookupControlsGlobals.HandleValFail(this, autoFillMap);
+        }
+
         public virtual void ResetViewForNewRecord()
         {
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return LookupControlsGlobals.GetAutoFills(this);
         }
 
 

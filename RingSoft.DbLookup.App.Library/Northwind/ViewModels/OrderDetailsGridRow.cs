@@ -35,7 +35,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             _manager = manager;
 
-            _productAutoFillSetup = new AutoFillSetup(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID))
+            _productAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID))
             {
                 AddViewParameter = _manager.OrderViewModel.ViewModelInput
             };
@@ -206,11 +206,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
             Discount = (decimal) entity.Discount;
-        }
-
-        public override bool ValidateRow()
-        {
-            return true;
         }
 
         public override void SaveToEntity(Order_Detail entity, int rowIndex)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -407,10 +408,20 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        {
+            LookupControlsGlobals.HandleValFail(this, autoFillMap);
+        }
+
         public void ResetViewForNewRecord()
         {
             NameAutoFillControl?.Focus();
             _templateApplied = false;
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return null;
         }
 
         public bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem)

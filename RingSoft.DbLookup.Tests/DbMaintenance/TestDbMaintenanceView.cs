@@ -2,6 +2,7 @@
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System;
+using System.Collections.Generic;
 
 namespace RingSoft.DbLookup.Tests.DbMaintenance
 {
@@ -11,6 +12,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             Console.WriteLine(text);
+        }
+
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        {
+            
         }
 
         public void ResetViewForNewRecord()
@@ -53,6 +59,11 @@ namespace RingSoft.DbLookup.Tests.DbMaintenance
         public void SetReadOnlyMode(bool readOnlyValue)
         {
             Console.WriteLine($"{nameof(SetReadOnlyMode)} method running");
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return null;
         }
 
         public void OnRecordSelect(LookupSelectArgs args)

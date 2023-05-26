@@ -10,6 +10,10 @@ using RingSoft.DbLookup.Lookup;
 using System.Linq;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Windows.Media;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -164,5 +168,43 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return Keyboard.IsKeyDown(Key.RightShift);
         }
+
+
+        public static void HandleValFail(Window window, DbAutoFillMap autoFillMap)
+        {
+            var caption = "Validation Fail";
+            var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.";
+
+            var controls = window.GetChildrenOfType<AutoFillControl>();
+            if (controls != null)
+            {
+                var foundControl = controls.FirstOrDefault(p => p.Setup == autoFillMap.AutoFillSetup);
+                if (foundControl != null)
+                {
+                    var tabItem = foundControl.GetParentOfType<TabItem>();
+                    if (tabItem != null)
+                    {
+
+                    }
+
+                    foundControl.Focus();
+                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                }
+            }
+        }
+
+        public static List<DbAutoFillMap> GetAutoFills(Window window)
+        {
+            var result = new List<DbAutoFillMap>();
+            var autoFills = window.GetChildrenOfType<AutoFillControl>();
+
+            foreach (var autoFillControl in autoFills)
+            {
+                result.Add(new DbAutoFillMap(autoFillControl.Setup, autoFillControl.Value));
+            }
+
+            return result;
+        }
+
     }
 }

@@ -13,6 +13,8 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.Printing.Interop;
 using Google.Protobuf.WellKnownTypes;
 using RingSoft.DbLookup.DataProcessor;
+using Enum = System.Enum;
+using Type = System.Type;
 
 namespace RingSoft.DbLookup
 {
@@ -260,7 +262,7 @@ namespace RingSoft.DbLookup
                 }
                 else if (property.PropertyType == typeof(int) 
                          || property.PropertyType == typeof(int?)
-                         || property.PropertyType.BaseType == typeof(System.Enum))
+                         || property.PropertyType.BaseType == typeof(Enum))
                 {
                     int checkValue;
                     if (Int32.TryParse(value, out checkValue))
@@ -311,7 +313,7 @@ namespace RingSoft.DbLookup
             return String.Empty;
         }
 
-        public static FieldDataTypes GetFieldDataTypeForType(System.Type type)
+        public static FieldDataTypes GetFieldDataTypeForType(Type type)
         {
             if (type == typeof(DateTime)
                 || type == typeof(DateTime?))
@@ -489,5 +491,19 @@ namespace RingSoft.DbLookup
             return dateText;
         }
 
+        public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : new()
+        {
+            TableDefinition<TEntity> tableDefinition = null;
+            var entityName = typeof(TEntity).Name;
+            var table = SystemGlobals.LookupContext.TableDefinitions
+                .FirstOrDefault(p => p.EntityName == entityName);
+
+            if (table is TableDefinition<TEntity> fullTable)
+            {
+                tableDefinition = fullTable;
+            }
+
+            return tableDefinition;
+        }
     }
 }

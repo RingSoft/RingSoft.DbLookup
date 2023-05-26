@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.DataProcessor;
@@ -288,6 +289,33 @@ namespace RingSoft.DbLookup
                 result.Rows.Add(row);
             }
 
+            return result;
+        }
+
+        public static bool ValidateAutoFill(this AutoFillValue autoFillValue, AutoFillSetup autoFillSetup)
+        {
+            var result = true;
+
+            if (autoFillSetup.ForeignField == null)
+            {
+                return result;
+            }
+
+            if (autoFillValue == null)
+            {
+                return autoFillSetup.ForeignField.AllowNulls;
+            }
+            if (!autoFillValue.IsValid())
+            {
+                if (!autoFillValue.Text.IsNullOrEmpty())
+                {
+                    return false;
+                }
+                else
+                {
+                    return autoFillSetup.ForeignField.AllowNulls;
+                }
+            }
             return result;
         }
     }

@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var configuration = new AdvancedFindLookupConfiguration(SystemGlobals.AdvancedFindLookupContext);
             configuration.InitializeModel();
             configuration.ConfigureLookups();
-
+            SystemGlobals.LookupContext = this;
         }
     }
 }

@@ -57,6 +57,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             var configuration = new AdvancedFindLookupConfiguration(SystemGlobals.AdvancedFindLookupContext);
             configuration.InitializeModel();
             configuration.ConfigureLookups();
+            SystemGlobals.LookupContext = this;
         }
 
     }

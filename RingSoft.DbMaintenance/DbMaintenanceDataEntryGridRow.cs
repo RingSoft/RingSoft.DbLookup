@@ -50,6 +50,9 @@ namespace RingSoft.DbMaintenance
                         {
                             var message = $"{description} has an invalid value";
                             var caption = "Validation Failure";
+                            Manager?.Grid.GotoCell(this, columnMap.ColumnId);
+                            ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                            return false;
                         }
                     }
                 }

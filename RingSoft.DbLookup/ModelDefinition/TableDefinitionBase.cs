@@ -140,6 +140,15 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        public bool CanAddToTable
+        {
+            get
+            {
+                return Context.CanAddToTable(this);
+            }
+        }
+
+
         public bool CanDeleteTable
         {
             get

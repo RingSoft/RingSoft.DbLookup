@@ -148,6 +148,10 @@ namespace RingSoft.DbLookup.Lookup
 
         protected virtual LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
         {
+            if (LookupDefinition == null)
+            {
+                return LookupColumnAlignmentTypes.Left;
+            }
             switch (DataType)
             {
                 case FieldDataTypes.Integer:

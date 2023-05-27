@@ -117,6 +117,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 autoFillControl.SetValue();
                 autoFillControl._onValuePropertySetting = false;
             }
+            autoFillControl.CheckButton();
         }
 
         public static readonly DependencyProperty IsDirtyProperty =
@@ -512,9 +513,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             SetDesignText();
 
+            CheckButton();
+
             if (_controlLoaded && Setup != null)
             {
                 _setupRan = false;
+                CheckButton();
                 Setup.SetDirty = false;
                 SetupControl();
                 CreateContainsTemplate();
@@ -544,6 +548,27 @@ namespace RingSoft.DbLookup.Controls.WPF
             Button.KeyDown += Button_KeyDown;
 
             base.OnApplyTemplate();
+        }
+
+        private void CheckButton()
+        {
+            if (Setup != null && _readOnlyMode && Button != null)
+            {
+                if (Setup.LookupDefinition.TableDefinition.CanViewTable)
+                {
+                    if (Button != null)
+                    {
+                        Button.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    if (Button != null)
+                    {
+                        Button.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
 
         private void Button_KeyDown(object sender, KeyEventArgs e)
@@ -623,6 +648,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
+            CheckButton();
             if (_autoFillData != null)
                 ClearValue();
 

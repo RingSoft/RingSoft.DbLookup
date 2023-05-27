@@ -27,6 +27,8 @@ namespace RingSoft.DbLookup
     {
         public TableDefinitionBase TableDefinition { get; private set; }
 
+        public bool AllowAdd { get; set; } = true;
+
         public bool AllowView { get; set; } = true;
 
         public bool AllowEdit { get; set; } = true;
@@ -106,6 +108,14 @@ namespace RingSoft.DbLookup
             CanProcessTableEvent?.Invoke(this, args);
             return args.AllowEdit;
         }
+
+        public bool CanAddToTable(TableDefinitionBase tableDefinition)
+        {
+            var args = new CanProcessTableArgs(tableDefinition);
+            CanProcessTableEvent?.Invoke(this, args);
+            return args.AllowAdd;
+        }
+
 
         public bool CanDeleteTable(TableDefinitionBase tableDefinition)
         {

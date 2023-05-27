@@ -80,6 +80,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected override void OnControlLoaded(AutoFillControl control, DataEntryGridEditingCellProps cellProps,
             DataEntryGridCellStyle cellStyle)
         {
+            Control.SetReadOnlyMode(true);
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;
             Control.Setup = AutoFillCellProps.AutoFillSetup;
             Control.Value = AutoFillCellProps.AutoFillValue;

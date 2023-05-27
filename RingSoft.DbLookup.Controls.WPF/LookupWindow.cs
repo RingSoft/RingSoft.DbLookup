@@ -199,6 +199,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
+                if (!LookupDefinition.TableDefinition.CanViewTable)
+                {
+                    ViewButton.Visibility = Visibility.Collapsed;
+                }
+
+                if (!LookupDefinition.TableDefinition.CanAddToTable)
+                {
+                    AddButton.Visibility = Visibility.Collapsed;
+                }
                 if (_readOnlyMode)
                 {
                     SelectButton.Visibility = Visibility.Collapsed;

@@ -47,7 +47,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public Button DropDownButton { get; set; }
 
         public static readonly DependencyProperty SetupProperty =
-            DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillReadOnlyControl));
+            DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillReadOnlyControl),
+                new FrameworkPropertyMetadata(SetupChangedCallback));
 
         /// <summary>
         /// Gets or sets the AutoFillSetup to determine how this control will behave.
@@ -59,6 +60,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             get { return (AutoFillSetup) GetValue(SetupProperty); }
             set { SetValue(SetupProperty, value); }
+        }
+
+        private static void SetupChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillReadOnlyControl)obj;
+            autoFillControl.CheckButton();
         }
 
         public static readonly DependencyProperty ValueProperty =
@@ -82,6 +90,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var autoFillControl = (AutoFillReadOnlyControl)obj;
             autoFillControl.SetValue();
+            autoFillControl.CheckButton();
         }
 
         public static readonly DependencyProperty DesignTextProperty =
@@ -222,5 +231,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        private void CheckButton()
+        {
+            if (Setup != null)
+            {
+                if (Setup.LookupDefinition.TableDefinition.CanViewTable)
+                {
+                    if (DropDownButton != null)
+                    {
+                        DropDownButton.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    if (DropDownButton != null)
+                    {
+                        DropDownButton.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+
+        }
     }
 }

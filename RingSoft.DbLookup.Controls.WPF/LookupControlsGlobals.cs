@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -175,36 +177,82 @@ namespace RingSoft.DbLookup.Controls.WPF
             var caption = "Validation Fail";
             var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.";
 
-            var controls = window.GetChildrenOfType<AutoFillControl>();
+            var controls = window.GetLogicalChildren<AutoFillControl>();
             if (controls != null)
             {
                 var foundControl = controls.FirstOrDefault(p => p.Setup == autoFillMap.AutoFillSetup);
                 if (foundControl != null)
                 {
-                    var tabItem = foundControl.GetParentOfType<TabItem>();
-                    if (tabItem != null)
+                    SetTabFocusToControl(foundControl);
+                    if (foundControl.GetLogicalParent<DataEntryGrid>() == null)
                     {
-
+                        foundControl.Focus();
+                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                     }
-
-                    foundControl.Focus();
-                    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                 }
+            }
+        }
+
+        public static void SetTabFocusToControl(this Control foundControl)
+        {
+            var tabItem = foundControl.GetLogicalParent<TabItem>();
+            if (tabItem != null)
+            {
+                var tabControl = foundControl.GetParentOfType<TabControl>();
+                if (tabControl != null)
+                {
+                    tabControl.SelectedItem = tabItem;
+                    tabControl.UpdateLayout();
+                }
+            }
+        }
+
+        public static void SelectTab(DataEntryGridManager gridManager)
+        {
+            if (gridManager.Grid is DataEntryGrid dataEntryGrid)
+            {
+                SetTabFocusToControl(dataEntryGrid);
             }
         }
 
         public static List<DbAutoFillMap> GetAutoFills(Window window)
         {
             var result = new List<DbAutoFillMap>();
-            var autoFills = window.GetChildrenOfType<AutoFillControl>();
+            var autoFills = window.GetLogicalChildren<AutoFillControl>();
 
-            foreach (var autoFillControl in autoFills)
-            {
-                result.Add(new DbAutoFillMap(autoFillControl.Setup, autoFillControl.Value));
-            }
+            FillAutoFillMaps(autoFills, result);
 
             return result;
         }
 
+        public static List<T> GetLogicalChildren<T>(this DependencyObject obj)
+            where T : DependencyObject
+
+        {
+            var result = new List<T>();
+            var children = LogicalTreeHelper.GetChildren(obj);
+            foreach (var child in children)
+            {
+
+                if (child is T)
+                    result.Add((T)child);
+                else if (child is DependencyObject dependencyChild)
+                {
+                    result.AddRange(GetLogicalChildren<T>(dependencyChild));
+                }
+            }
+            return result;
+        }
+        private static void FillAutoFillMaps(List<AutoFillControl> autoFills, List<DbAutoFillMap> result)
+        {
+            foreach (var autoFillControl in autoFills)
+            {
+                var dataEntryGrid = autoFillControl.GetParentOfType<DataEntryGrid>();
+                if (dataEntryGrid == null)
+                {
+                    result.Add(new DbAutoFillMap(autoFillControl.Setup, autoFillControl.Value));
+                }
+            }
+        }
     }
 }

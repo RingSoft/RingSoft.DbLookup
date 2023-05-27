@@ -48,7 +48,8 @@ namespace RingSoft.DbMaintenance
 
                         if (!autoFillCellProps.AutoFillValue.ValidateAutoFill(autoFillCellProps.AutoFillSetup))
                         {
-                            
+                            var message = $"{description} has an invalid value";
+                            var caption = "Validation Failure";
                         }
                     }
                 }

@@ -11,7 +11,7 @@ namespace RingSoft.DbMaintenance
     {
         public AutoFillSetup AutoFillSetup { get; }
 
-        public AutoFillValue AutoFillValue { get; }
+        public AutoFillValue AutoFillValue { get; } 
 
         public DbAutoFillMap(AutoFillSetup autoFillSetup, AutoFillValue autoFillValue)
         {

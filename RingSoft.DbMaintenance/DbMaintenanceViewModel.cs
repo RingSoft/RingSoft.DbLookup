@@ -890,7 +890,7 @@ namespace RingSoft.DbMaintenance
             var autoFills = View.GetAutoFills();
             foreach (var dbAutoFillMap in autoFills)
             {
-                if (dbAutoFillMap.AutoFillValue == KeyAutoFillValue)
+                if (dbAutoFillMap.AutoFillSetup == KeyAutoFillSetup)
                 {
                     if (dbAutoFillMap.AutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
                     {
@@ -898,11 +898,13 @@ namespace RingSoft.DbMaintenance
                         return false;
                     }
                 }
-
-                if (!dbAutoFillMap.AutoFillValue.ValidateAutoFill(dbAutoFillMap.AutoFillSetup))
+                else
                 {
-                    ProcessAutoFillValidationResponse(dbAutoFillMap);
-                    return false;
+                    if (!dbAutoFillMap.AutoFillValue.ValidateAutoFill(dbAutoFillMap.AutoFillSetup))
+                    {
+                        ProcessAutoFillValidationResponse(dbAutoFillMap);
+                        return false;
+                    }
                 }
             }
             return true;

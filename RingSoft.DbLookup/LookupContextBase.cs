@@ -35,6 +35,10 @@ namespace RingSoft.DbLookup
 
         public bool AllowDelete { get; set; } = true;
 
+        public bool DeleteMode { get; set; } = false;
+
+        public LookupDefinitionBase LookupDefinition { get; internal set; }
+
         public CanProcessTableArgs(TableDefinitionBase tableDefinition)
         {
             TableDefinition = tableDefinition;
@@ -117,9 +121,11 @@ namespace RingSoft.DbLookup
         }
 
 
-        public bool CanDeleteTable(TableDefinitionBase tableDefinition)
+        public bool CanDeleteTable(TableDefinitionBase tableDefinition, LookupDefinitionBase lookupDefinition)
         {
             var args = new CanProcessTableArgs(tableDefinition);
+            args.LookupDefinition = lookupDefinition;
+            args.DeleteMode = true;
             CanProcessTableEvent?.Invoke(this, args);
             return args.AllowDelete;
         }

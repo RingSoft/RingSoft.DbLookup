@@ -261,12 +261,11 @@ namespace RingSoft.DbLookup
 
         public bool ValidateDeleteTable(DeleteTable deleteTable)
         {
+            var item = Items.FirstOrDefault(p => p.DeleteTable == deleteTable);
             if (DeleteAllData == true)
             {
-                return true;
+                item.Processed = true;
             }
-
-            var item = Items.FirstOrDefault(p => p.DeleteTable == deleteTable);
             var getDataResult = deleteTable.ChildField.TableDefinition.Context.DataProcessor.GetData(deleteTable.Query);
             if (getDataResult.ResultCode != GetDataResultCodes.Success)
             {
@@ -296,7 +295,7 @@ namespace RingSoft.DbLookup
             }
             else
             {
-                if (hasData && !deleteTable.ChildField.TableDefinition.CanDeleteTable)
+                if (hasData && !deleteTable.ChildField.TableDefinition.CanDeleteTable(item.DeleteRecordItem.LookupDefinition))
                 {
                     var message = $"You are not allowed to delete data in the {tableDescription} table. Delete Denied!";
                     SetFocusToTable(deleteTable);

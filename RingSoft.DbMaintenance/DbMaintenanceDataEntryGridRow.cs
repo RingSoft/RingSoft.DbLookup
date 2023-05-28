@@ -29,34 +29,39 @@ namespace RingSoft.DbMaintenance
 
         public virtual bool ValidateRow()
         {
-            foreach (var columnMap in Manager.Columns)
+            if (Manager.Columns != null)
             {
-                var cellProps = GetCellProps(columnMap.ColumnId);
-                if (cellProps != null)
+                foreach (var columnMap in Manager.Columns)
                 {
-                    if (cellProps is DataEntryGridAutoFillCellProps autoFillCellProps)
+                    var cellProps = GetCellProps(columnMap.ColumnId);
+                    if (cellProps != null)
                     {
-                        var cellStyle = GetCellStyle(columnMap.ColumnId);
-                        var description = columnMap.ColumnName;
-                        if (cellStyle != null)
+                        if (cellProps is DataEntryGridAutoFillCellProps autoFillCellProps)
                         {
-                            if (!cellStyle.ColumnHeader.IsNullOrEmpty())
+                            var cellStyle = GetCellStyle(columnMap.ColumnId);
+                            var description = columnMap.ColumnName;
+                            if (cellStyle != null)
                             {
-                                description = cellStyle.ColumnHeader;
+                                if (!cellStyle.ColumnHeader.IsNullOrEmpty())
+                                {
+                                    description = cellStyle.ColumnHeader;
+                                }
                             }
-                        }
 
-                        if (!autoFillCellProps.AutoFillValue.ValidateAutoFill(autoFillCellProps.AutoFillSetup))
-                        {
-                            var message = $"{description} has an invalid value";
-                            var caption = "Validation Failure";
-                            Manager?.Grid.GotoCell(this, columnMap.ColumnId);
-                            ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                            return false;
+                            if (!autoFillCellProps.AutoFillValue.ValidateAutoFill(autoFillCellProps.AutoFillSetup))
+                            {
+                                var message = $"{description} has an invalid value";
+                                var caption = "Validation Failure";
+                                Manager?.Grid.GotoCell(this, columnMap.ColumnId);
+                                ControlsGlobals.UserInterface.ShowMessageBox(message, caption,
+                                    RsMessageBoxIcons.Exclamation);
+                                return false;
+                            }
                         }
                     }
                 }
             }
+
             return true;
         }
 

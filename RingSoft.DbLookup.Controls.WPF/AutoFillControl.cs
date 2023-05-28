@@ -890,6 +890,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void ShowLookupWindow()
         {
+            if (Button == null || Button.Visibility != Visibility.Visible)
+            {
+                return;
+            }
             var initialText = string.Empty;
             if (TextBox != null)
                 initialText = TextBox.Text;

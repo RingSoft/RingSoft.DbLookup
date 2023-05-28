@@ -888,25 +888,29 @@ namespace RingSoft.DbMaintenance
                 return false;
             }
             var autoFills = View.GetAutoFills();
-            foreach (var dbAutoFillMap in autoFills)
+            if (autoFills != null)
             {
-                if (dbAutoFillMap.AutoFillSetup == KeyAutoFillSetup)
+                foreach (var dbAutoFillMap in autoFills)
                 {
-                    if (dbAutoFillMap.AutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
+                    if (dbAutoFillMap.AutoFillSetup == KeyAutoFillSetup)
                     {
-                        ProcessAutoFillValidationResponse(dbAutoFillMap);
-                        return false;
+                        if (dbAutoFillMap.AutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
+                        {
+                            ProcessAutoFillValidationResponse(dbAutoFillMap);
+                            return false;
+                        }
                     }
-                }
-                else
-                {
-                    if (!dbAutoFillMap.AutoFillValue.ValidateAutoFill(dbAutoFillMap.AutoFillSetup))
+                    else
                     {
-                        ProcessAutoFillValidationResponse(dbAutoFillMap);
-                        return false;
+                        if (!dbAutoFillMap.AutoFillValue.ValidateAutoFill(dbAutoFillMap.AutoFillSetup))
+                        {
+                            ProcessAutoFillValidationResponse(dbAutoFillMap);
+                            return false;
+                        }
                     }
                 }
             }
+
             return true;
         }
 

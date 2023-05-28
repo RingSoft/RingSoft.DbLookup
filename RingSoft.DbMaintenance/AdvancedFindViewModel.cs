@@ -819,6 +819,7 @@ namespace RingSoft.DbMaintenance
 
             var startIndex = ColumnsManager.GetNewColumnIndex();
             var column = SelectedTreeViewItem.CreateColumn(startIndex);
+            column.AdjustColumnWidth = false;
             ColumnsManager.LoadFromColumnDefinition(column);
             //switch (SelectedTreeViewItem.Type)
             //{

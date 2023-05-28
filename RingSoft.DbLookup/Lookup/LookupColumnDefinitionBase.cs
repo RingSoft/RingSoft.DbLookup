@@ -141,6 +141,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public int ColumnIndexToAdd { get; internal set; } = -1;
 
+        public bool AdjustColumnWidth { get; set; } = true;
+
         protected internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();

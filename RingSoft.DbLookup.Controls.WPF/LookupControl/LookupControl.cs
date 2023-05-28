@@ -560,9 +560,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 foreach (var column in LookupDefinition.VisibleColumns)
                 {
+                    var percentWidth = column.PercentWidth;
+                    if (LookupDefinition.VisibleColumns.Count == 1 
+                        && column.AdjustColumnWidth)
+                    {
+                        percentWidth = 99;
+                    }
                     double columnWidth = 100;
                     if (ListView != null)
-                        columnWidth = GetWidthFromPercent(ListView, column.PercentWidth);
+                        columnWidth = GetWidthFromPercent(ListView, percentWidth);
 
                     if (column is LookupFieldColumnDefinition lookupFieldColumn)
                     {

@@ -243,9 +243,14 @@ namespace RingSoft.DbLookup
 
         public void GoEnd()
         {
-            _currentPage = GetBottomPage();
-            SetSelectedIndex(_currentPage.Count - 1);
-            OutputData(_currentPage);
+            if (ScrollPosition != ScrollPositions.Bottom 
+                && SelectedIndex == _currentPage.Count - 1
+                && PageSize == _currentPage.Count)
+            {
+                _currentPage = GetBottomPage();
+                SetSelectedIndex(_currentPage.Count - 1);
+                OutputData(_currentPage);
+            }
         }
 
         private void OnSearchForChanged(string searchForText)

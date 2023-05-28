@@ -554,8 +554,8 @@ namespace RingSoft.DbLookup.AutoFill
             ClearPrimaryKeyValue();
             PrimaryKeyValue.CopyFromPrimaryKeyValue(primaryKeyValue);
             AutoFillControl.EditText = text.IsNullOrEmpty()?string.Empty:text;
-            AutoFillControl.SelectionStart = 0;
-            AutoFillControl.SelectionLength = AutoFillControl.EditText.Length;
+            //AutoFillControl.SelectionStart = 0;
+            //AutoFillControl.SelectionLength = AutoFillControl.EditText.Length;
             OnOutput(refreshContainsList);
         }
 

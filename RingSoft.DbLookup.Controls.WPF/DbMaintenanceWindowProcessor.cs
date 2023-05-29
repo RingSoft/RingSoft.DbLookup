@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -122,6 +123,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (StatusBar != null)
             {
                 StatusBar.SetSaveStatus(message, alertLevel);
+            }
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            if (View is Window window)
+            {
+                return LookupControlsGlobals.GetAutoFills(window);
+            }
+            return null;
+        }
+
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        {
+            if (View is Window window)
+            {
+                LookupControlsGlobals.HandleValFail(window, autoFillMap);
             }
         }
 

@@ -7,28 +7,6 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbMaintenance
 {
-    public class DbAutoFillMap
-    {
-        public AutoFillSetup AutoFillSetup { get; }
-
-        public AutoFillValue AutoFillValue { get; } 
-
-        public DbAutoFillMap(AutoFillSetup autoFillSetup, AutoFillValue autoFillValue)
-        {
-            AutoFillSetup = autoFillSetup;
-            AutoFillValue = autoFillValue;
-        }
-
-        public override string ToString()
-        {
-            if (AutoFillSetup.ForeignField != null)
-            {
-                return AutoFillSetup.ForeignField.Description;
-            }
-
-            return base.ToString();
-        }
-    }
     public enum MessageButtons
     {
         Yes = 0,
@@ -48,15 +26,11 @@ namespace RingSoft.DbMaintenance
         /// <param name="caption">The message box caption.</param>
         void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption);
 
-        void HandleAutoFillValFail(DbAutoFillMap  autoFillMap);
-
         /// <summary>
         /// Reset the view for new record.
         /// </summary>
         void ResetViewForNewRecord();
 
         void SetReadOnlyMode(bool readOnlyValue);
-
-        List<DbAutoFillMap> GetAutoFills();
     }
 }

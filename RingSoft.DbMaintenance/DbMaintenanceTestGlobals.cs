@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using System;
+using System.Collections.Generic;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -146,6 +147,16 @@ namespace RingSoft.DbMaintenance
         }
 
         public void SetSaveStatus(string message, AlertLevels alertLevel)
+        {
+            
+        }
+
+        public List<DbAutoFillMap> GetAutoFills()
+        {
+            return null;
+        }
+
+        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             
         }

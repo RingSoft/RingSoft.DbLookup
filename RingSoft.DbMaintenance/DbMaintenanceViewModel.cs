@@ -887,7 +887,7 @@ namespace RingSoft.DbMaintenance
             {
                 return false;
             }
-            var autoFills = View.GetAutoFills();
+            var autoFills = Processor.GetAutoFills();
             if (autoFills != null)
             {
                 foreach (var dbAutoFillMap in autoFills)
@@ -925,7 +925,7 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
-                View.HandleAutoFillValFail(autoFillMap);
+                Processor.HandleAutoFillValFail(autoFillMap);
             }
         }
 

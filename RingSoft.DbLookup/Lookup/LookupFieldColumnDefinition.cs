@@ -23,13 +23,20 @@ namespace RingSoft.DbLookup.Lookup
         /// The type of the column.
         /// </value>
         public override LookupColumnTypes ColumnType => LookupColumnTypes.Field;
+
         /// <summary>
         /// Gets the type of the data.
         /// </summary>
         /// <value>
         /// The type of the data.
         /// </value>
-        public override FieldDataTypes DataType => FieldDefinition.FieldDataType;
+        public override FieldDataTypes DataType
+        {
+            get
+            {
+                return FieldDefinition.FieldDataType;
+            }
+        }
         /// <summary>
         /// Gets the select SQL alias.
         /// </summary>

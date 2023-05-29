@@ -628,8 +628,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                             var index = LookupGridView.Columns.IndexOf(gridColumn);
                             if (index != -1 && index < LookupGridView.Columns.Count)
                             {
-                                var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
-                                    .ElementAt(index);
+                                //var lookupColumnDefinition = LookupDefinition.VisibleColumns.ToList()
+                                //    .ElementAt(index);
+                                var lookupColumnDefinition = LookupColumns[index]
+                                    .LookupColumnDefinition;
 
                                 lookupColumnDefinition?.UpdatePercentWidth(
                                     Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
@@ -1022,7 +1024,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (SearchForHost != null && resetSortOrder)
                     SearchForHost.SearchText = String.Empty;
 
-                LookupData.OnColumnClick(columnIndex, resetSortOrder);
+                var sortColumn = LookupColumns[columnIndex];
+                var sortColumnIndex = columnIndex;
+                if (sortColumn != null && sortColumn.LookupColumnDefinition != null)
+                {
+                    var indexOfColumn = LookupDefinition.VisibleColumns.ToList()
+                        .IndexOf(sortColumn.LookupColumnDefinition);
+                    if (indexOfColumn != -1)
+                    {
+                        sortColumnIndex = indexOfColumn;
+                    }
+                }
+                LookupData.OnColumnClick(sortColumnIndex, resetSortOrder);
 
                 for (int i = 0; i < LookupGridView.Columns.Count; i++)
                 {
@@ -1070,7 +1083,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
                 else
                 {
-                    var lookupColumnDefinition = LookupDefinition.VisibleColumns[sortColumnIndex];
+                    //var lookupColumnDefinition = LookupDefinition.VisibleColumns[sortColumnIndex];
+                    var lookupColumnDefinition = LookupColumns[sortColumnIndex]
+                        .LookupColumnDefinition;
 
                     if (SearchForHost != null)
                     {

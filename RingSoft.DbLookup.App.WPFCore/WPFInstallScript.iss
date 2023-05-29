@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RingSoft WPF Database Lookup Demo"
-#define MyAppVersion "2.00.00"
+#define MyAppVersion "2.00.4"
 #define MyAppPublisher "RingSoft"
 #define MyAppURL "http://www.ringsoft.site/"
 #define MyAppExeName "RingSoft.DbLookup.App.WPFCore.exe"
@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{86E80544-D7E6-41A3-985B-951239ACF385}
+AppId={{22c2910a-4ef1-415d-b707-8b07bfe6da58}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -25,7 +25,7 @@ DisableProgramGroupPage=no
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Inno Install Output
-OutputBaseFilename=RingSoft.WPFDbLookupDemoApp.2.00.00
+OutputBaseFilename=RingSoft.WPFDbLookupDemoApp
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -37,8 +37,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net5.0-windows\*"; Excludes: "*.xml, *.sqlite"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net5.0-windows\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\DbLookupDemoApp\WPF\Northwind\"; Flags: ignoreversion
+Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net7.0-windows\*"; Excludes: "*.xml, *.sqlite"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net7.0-windows\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\DbLookupDemoApp\WPF\Northwind\"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

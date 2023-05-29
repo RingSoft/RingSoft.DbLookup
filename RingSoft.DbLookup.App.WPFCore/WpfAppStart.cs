@@ -26,7 +26,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                 return AppDomain.CurrentDomain.BaseDirectory;
 #else
                 return
-                    $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\DbLookup\\";
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\DbLookupDemoApp\\";
 #endif
             }
         }
@@ -46,7 +46,9 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override void StartApp(string appSection, string[] args)
         {
             SystemGlobals.ProgramDataFolder = ProgramDataFolder;
+            
             LookupControlsGlobals.InitUi();
+
             LookupControlsGlobals.LookupControlContentTemplateFactory =
                 new AppLookupContentTemplateFactory(_application);
 

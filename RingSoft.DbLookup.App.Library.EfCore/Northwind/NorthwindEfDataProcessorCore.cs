@@ -81,8 +81,10 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public bool SaveOrder(Order order, List<Order_Detail> details)
         {
+            var dataContext = SystemGlobals.DataRepository.GetDataContext();
+            var result = dataContext.SaveEntity(order, "Saving Order");
             var context = new NorthwindDbContextEfCore();
-            var result = context.SaveEntity(context.Orders, order, "Saving Order");
+            //var result = context.SaveEntity(context.Orders, order, "Saving Order");
             if (result && details != null)
             {
                 context.OrderDetails.RemoveRange(context.OrderDetails.Where(w => w.OrderID == order.OrderID));

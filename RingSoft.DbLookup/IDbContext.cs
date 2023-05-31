@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup
 {
     public interface IDbContext
     {
+        ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi)
+            where TEntity : class, new();
+
         bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class;
 
         bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class;

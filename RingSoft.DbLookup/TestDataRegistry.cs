@@ -69,6 +69,12 @@ namespace RingSoft.DbLookup
             return null;
         }
 
+        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
+        {
+            var table = GetTable<TEntity>();
+            return new TestLookupDataBase<TEntity>(table);
+        }
+
         public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
         {
             var table = GetList<TEntity>();
@@ -144,11 +150,6 @@ namespace RingSoft.DbLookup
         IDbContext DbLookup.IDataRepository.GetDataContext()
         {
             return DataContext;
-        }
-
-        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
-        {
-            return new TestLookupDataBase<TEntity>(DataContext.GetTable<TEntity>());
         }
 
         public void ClearData()

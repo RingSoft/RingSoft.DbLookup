@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.RecordLocking;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace RingSoft.DbLookup.EfCore
         public DbContext GetDbContextEf()
         {
             return this;
+        }
+
+        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
+        {
+            return new LookupDataBase(lookupDefinition, lookupUi);
         }
 
         public abstract IAdvancedFindDbContextEfCore GetNewDbContext();

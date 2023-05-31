@@ -7,7 +7,7 @@ namespace RingSoft.DbLookup
     {
         IDbContext GetDataContext();
 
-        ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi)
-        where TEntity : class, new();
+        //ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi)
+        //where TEntity : class, new();
     }
 }

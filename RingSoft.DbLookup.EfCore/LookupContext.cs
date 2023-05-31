@@ -2,8 +2,11 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.EfCore
 {
@@ -11,8 +14,16 @@ namespace RingSoft.DbLookup.EfCore
     /// A LookupContextBase derived object that is compatible with the Entity Framework Core.
     /// </summary>
     /// <seealso cref="LookupContextBase" />
-    public abstract class LookupContext : LookupContextBase
+    public abstract class LookupContext : LookupContextBase, IAdvancedFindLookupContext
     {
+        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
+        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
+        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+        public LookupContextBase Context => this;
+        public TableDefinition<RecordLock> RecordLocks { get; set; }
+
+        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
+        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
 
         /// <summary>
         /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
@@ -21,6 +32,30 @@ namespace RingSoft.DbLookup.EfCore
         /// The database context.
         /// </value>
         protected abstract DbContext DbContext { get; }
+
+        private bool _advInitalizing;
+
+        //protected override void InitializeAdvFind()
+        //{
+        
+
+        //    base.InitializeAdvFind();
+        //}
+
+        public override void Initialize()
+        {
+            if (_advInitalizing)
+            {
+                return;
+            }
+            base.Initialize();
+            SystemGlobals.AdvancedFindLookupContext = this;
+            _advInitalizing = true;
+            var configuration = new AdvancedFindLookupConfiguration(this);
+            configuration.InitializeModel();
+            configuration.ConfigureLookups();
+
+        }
 
         protected override void EfInitializeTableDefinitions()
         {

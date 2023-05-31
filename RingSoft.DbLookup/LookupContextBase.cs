@@ -161,10 +161,12 @@ namespace RingSoft.DbLookup
         /// Has the Entity Framework platform set up this object's table and field properties based on DbContext's model setup.
         /// Derived classes constructor must execute this method.
         /// </summary>
-        public void Initialize()
+        public virtual void Initialize()
         {
             if (!Initialized)
             {
+                InitializeAdvFind();
+
                 EfInitializeTableDefinitions();
 
                 EfInitializePrimaryKeys();
@@ -175,6 +177,11 @@ namespace RingSoft.DbLookup
 
                 InitializeLookupDefinitions();
             }
+        }
+
+        protected internal virtual void InitializeAdvFind()
+        {
+
         }
 
         protected abstract void EfInitializeTableDefinitions();

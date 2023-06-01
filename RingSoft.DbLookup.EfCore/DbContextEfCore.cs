@@ -21,18 +21,23 @@ namespace RingSoft.DbLookup.EfCore
             SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
         }
 
+        public virtual IAdvancedFindDbContextEfCore GetNewDbContext()
+        {
+            return GetNewDbContextEfCore();
+        }
+
+
         public DbContext GetDbContextEf()
         {
             return this;
         }
 
+        public abstract DbContextEfCore GetNewDbContextEfCore();
 
         public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
         {
             return new LookupDataBase(lookupDefinition, lookupUi);
         }
-
-        public abstract IAdvancedFindDbContextEfCore GetNewDbContext();
 
         public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class
         {

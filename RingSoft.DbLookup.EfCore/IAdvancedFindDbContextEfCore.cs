@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.EfCore
 
         DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
 
-        DbContext GetDbContextEf();
+        //DbContext GetDbContextEf();
 
         IAdvancedFindDbContextEfCore GetNewDbContext();
     }

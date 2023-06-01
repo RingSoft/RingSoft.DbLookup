@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup.EfCore
             var configuration = new AdvancedFindLookupConfiguration(this);
             configuration.InitializeModel();
             configuration.ConfigureLookups();
-
+            _advInitalizing = false;
         }
 
         protected override void EfInitializeTableDefinitions()

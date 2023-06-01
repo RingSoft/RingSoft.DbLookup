@@ -15,11 +15,17 @@ namespace RingSoft.DbLookup.EfCore
 
         public DbSet<RecordLock> RecordLocks { get; set; }
 
+        public DbContextEfCore()
+        {
+            EfCoreGlobals.DbAdvancedFindContextCore = this;
+            SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
+        }
 
         public DbContext GetDbContextEf()
         {
             return this;
         }
+
 
         public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
         {

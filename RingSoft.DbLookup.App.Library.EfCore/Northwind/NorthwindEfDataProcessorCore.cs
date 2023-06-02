@@ -10,6 +10,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindEfDataProcessorCore : INorthwindEfDataProcessor
     {
+        public void SetSystemGlobals()
+        {
+            
+        }
+
         public Customer GetCustomer(string customerId)
         {
             var context = new NorthwindDbContextEfCore();

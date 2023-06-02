@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
     /// <seealso cref="LookupJoin" />
     public class LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>  : LookupJoin
-        where TLookupEntity : new() where TEntity : new() where TRelatedEntity : class
+        where TLookupEntity : new() where TEntity :class,  new() where TRelatedEntity : class
     {
         public TableFieldJoinDefinition ParentJoinDefinition { get; internal set; }
 
@@ -52,6 +52,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             SetJoinDefinition(foreignFieldDefinition);
+            
         }
 
         /// <summary>
@@ -84,6 +85,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var columnDefinition = AddVisibleColumnDefinition(caption, relatedField, percentWidth);
             //columnDefinition.ChildField = relatedField;
+            columnDefinition.RelatedTableName = typeof(TRelatedEntity).FullName;
             columnDefinition.ChildField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
             columnDefinition.PropertyName = lookupEntityProperty.GetFullPropertyName();
             columnDefinition.ParentObject = this;

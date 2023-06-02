@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.TableProcessing
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="TableFilterDefinitionBase" />
     public class TableFilterDefinition<TEntity> : TableFilterDefinitionBase 
-        where TEntity : new()
+        where TEntity : class, new()
     {
         private TableDefinition<TEntity> _entityTableDefinition;
 
@@ -280,7 +280,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <returns></returns>
         public RelatedTableFilterDefinition<TRelatedEntity> Include<TRelatedEntity>(
             Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
-            where TRelatedEntity : new()
+            where TRelatedEntity : class, new()
         {
             var returnEntity = new RelatedTableFilterDefinition<TRelatedEntity>(this,
                 _entityTableDefinition, relatedProperty.GetFullPropertyName(), string.Empty);

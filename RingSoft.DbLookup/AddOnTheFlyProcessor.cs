@@ -82,7 +82,7 @@ namespace RingSoft.DbLookup
     }
 
     internal class AddOnTheFlyProcessor<TLookupEntity, TEntity> : AddOnTheFlyProcessor
-        where TLookupEntity : new() where TEntity : new()
+        where TLookupEntity : new() where TEntity : class, new()
     {
         private LookupDefinition<TLookupEntity, TEntity> _lookupDefinition;
         public AddOnTheFlyProcessor(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, string newText,

@@ -12,7 +12,7 @@ namespace RingSoft.DbLookup.TableProcessing
     /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
     /// <seealso cref="RelatedTableFilterDefinitionBase" />
     public class RelatedTableFilterDefinition<TRelatedEntity> : RelatedTableFilterDefinitionBase
-        where TRelatedEntity : new()
+        where TRelatedEntity : class, new()
     {
         private TableDefinition<TRelatedEntity> _entityTableDefinition;
 
@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <returns></returns>
         public RelatedTableFilterDefinition<TParentRelatedEntity> Include<TParentRelatedEntity>(
             Expression<Func<TRelatedEntity, TParentRelatedEntity>> relatedProperty)
-            where TParentRelatedEntity : new()
+            where TParentRelatedEntity : class, new()
         {
             var parentTable = TableFieldJoinDefinition.ForeignKeyDefinition.PrimaryTable;
 

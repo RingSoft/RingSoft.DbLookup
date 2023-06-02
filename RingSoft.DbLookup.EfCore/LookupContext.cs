@@ -1,15 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.RecordLocking;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.EfCore
 {
+    public class JoinInfo
+    {
+        public TableFieldJoinDefinition ParentJoin { get; set; }
+
+        public TableFieldJoinDefinition ChildJoin { get; set; }
+    }
     /// <summary>
     /// A LookupContextBase derived object that is compatible with the Entity Framework Core.
     /// </summary>
@@ -175,6 +186,107 @@ namespace RingSoft.DbLookup.EfCore
                     tableDefinition.AddFieldToPrimaryKey(fieldDefinition);
                 }
             }
+        }
+
+        public override void GetQuery<TEntity>(TableDefinition<TEntity> table, LookupDefinitionBase lookupDefinition)
+        {
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var query = context.GetTable<TEntity>();
+            var propertiesProcessed = new List<FieldDefinition>();
+
+            foreach (var joinDefinition in lookupDefinition.Joins)
+            {
+                var name = joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName;
+
+                var properties = typeof(TEntity).GetProperties();
+                var property =
+                    properties.FirstOrDefault(f => f.Name == name);
+                if (property != null)
+                {
+                    var navProperties = GetNavigationProperties(lookupDefinition, joinDefinition);
+                    var navigationProperty = string.Empty;
+
+                    foreach (var navProperty in navProperties)
+                    {
+                        if (navProperty.ParentJoin == joinDefinition)
+                        {
+                            navigationProperty = navProperty.ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
+                            navigationProperty +=
+                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
+                            query = query.Include(navigationProperty);
+                        }
+                        else
+                        {
+                            navigationProperty +=
+                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
+                            query = query.Include(navigationProperty);
+                        }
+                        
+                    }
+                }
+            }
+
+            var result = query.FirstOrDefault();
+            var lookupMaui = new LookupDataMaui<TEntity>();
+            lookupMaui.ProcessLookup(query, lookupDefinition);
+        }
+
+        private List<JoinInfo> GetNavigationProperties(LookupDefinitionBase lookupDefinition
+        , TableFieldJoinDefinition joinDefinition)
+        {
+            var result = new List<JoinInfo>();
+
+            var joins = lookupDefinition.Joins.Where(p =>
+                p.ForeignKeyDefinition.ForeignTable 
+                == joinDefinition.ForeignKeyDefinition.PrimaryTable).ToList();
+
+            if (joins.Any())
+            {
+                foreach (var join in joins)
+                {
+                    if (join.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowRecursion)
+                    {
+                        var subJoins = GetNavigationProperties(lookupDefinition, join);
+                        if (subJoins.Any())
+                        {
+                            var joinInfo = new JoinInfo()
+                            {
+                                ParentJoin = joinDefinition,
+                                ChildJoin = join
+                            };
+                            result.Add(joinInfo);
+                            result.AddRange(subJoins);
+                        }
+                        else
+                        {
+                            var joinInfo = new JoinInfo()
+                            {
+                                ParentJoin = joinDefinition,
+                                ChildJoin = join
+                            };
+                            result.Add(joinInfo);
+                        }
+                    }
+                    else
+                    {
+                        var joinInfo = new JoinInfo()
+                        {
+                            ParentJoin = joinDefinition,
+                            ChildJoin = join
+                        };
+                        result.Add(joinInfo);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private string GetNavProperty(TableFieldJoinDefinition joinDefinition
+            , string parentName)
+        {
+            var result = $"{parentName}.{joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName}";
+            return result;
         }
     }
 }

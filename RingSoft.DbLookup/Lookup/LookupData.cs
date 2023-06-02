@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TLookupEntity">The lookup entity.</typeparam>
     /// <typeparam name="TEntity">The entity</typeparam>
     public class LookupDataChangedArgs<TLookupEntity, TEntity> 
-        where TLookupEntity : new() where TEntity : new()
+        where TLookupEntity : new() where TEntity : class, new()
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         /// <summary>
@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="LookupDataBase" />
     public class LookupData<TLookupEntity, TEntity> : LookupDataBase 
-        where TLookupEntity : new() where TEntity : new()
+        where TLookupEntity : new() where TEntity : class, new()
     {
         /// <summary>
         /// Gets the lookup results list.

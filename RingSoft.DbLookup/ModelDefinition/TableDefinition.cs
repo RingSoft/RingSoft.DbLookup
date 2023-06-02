@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.ModelDefinition
     /// <typeparam name="TEntity">A database table class used in the Entity Framework.</typeparam>
     /// <seealso cref="TableDefinitionBase" />
     public sealed class TableDefinition<TEntity> : TableDefinitionBase
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public TableDefinition(LookupContextBase context, string tablePropertyName)
         {
@@ -478,5 +478,9 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
+        public override void QueryTable(LookupDefinitionBase lookupDefinition)
+        {
+            Context.GetQuery(this, lookupDefinition);
+        }
     }
 }

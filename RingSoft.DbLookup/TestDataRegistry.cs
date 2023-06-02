@@ -137,6 +137,11 @@ namespace RingSoft.DbLookup
         {
             return GetList<TEntity>().AsQueryable();
         }
+
+        public IQueryable GetTable(string tableName)
+        {
+            return null;
+        }
     }
 
     public class TestDataRepository : IDataRepository

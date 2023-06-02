@@ -587,5 +587,7 @@ namespace RingSoft.DbLookup.ModelDefinition
 
             return result;
         }
+
+        public abstract void QueryTable(LookupDefinitionBase lookupDefinition);
     }
 }

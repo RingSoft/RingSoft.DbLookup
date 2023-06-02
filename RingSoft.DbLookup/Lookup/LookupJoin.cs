@@ -72,7 +72,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 ForeignKeyDefinition = foreignFieldDefinition.ParentJoinForeignKeyDefinition,
                 ParentAlias = parentJoinAlias,
-                ParentObject = this
+                ParentObject = this,
             };
 
             if (!JoinDefinition.ParentAlias.IsNullOrEmpty())

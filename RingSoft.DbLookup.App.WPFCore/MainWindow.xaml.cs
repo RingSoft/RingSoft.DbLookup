@@ -66,6 +66,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.SetAdvancedFind();
+                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
                 var ordersWindow = new OrdersWindow();
                 ordersWindow.Owner = this;
                 ordersWindow.ShowDialog();
@@ -80,6 +81,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.SetAdvancedFind();
+                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
                 var ordersWindow = new OrdersGridWindow();
                 ordersWindow.Owner = this;
                 ordersWindow.ShowDialog();
@@ -91,6 +93,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
 
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.SetAdvancedFind();
+                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SetAdvancedFindDbContext();
                 var itemsWindow = new ItemsWindow();
                 itemsWindow.Owner = this;
                 itemsWindow.ShowDialog();
@@ -102,6 +105,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
 
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.SetAdvancedFind();
+                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SetAdvancedFindDbContext();
                 var stockMasterWindow = new StockMasterWindow();
                 stockMasterWindow.Owner = this;
                 stockMasterWindow.ShowDialog();

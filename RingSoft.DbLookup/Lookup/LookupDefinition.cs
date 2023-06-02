@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TEntity">The type of entity used by the Entity Framework platform.</typeparam>
     /// <seealso cref="LookupDefinitionBase" />
     public class LookupDefinition<TLookupEntity, TEntity> : LookupDefinitionBase
-        where TLookupEntity : new() where TEntity : new()
+        where TLookupEntity : new() where TEntity : class, new()
     {
         /// <summary>
         /// Gets the filter definition.
@@ -155,6 +155,7 @@ namespace RingSoft.DbLookup.Lookup
             var returnEntity = new LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>(this,
                 ((LookupDefinitionBase) this).TableDefinition, relatedProperty.GetFullPropertyName(),
                 relatedProperty.ReturnType.Name);
+            
             returnEntity.ParentField = returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
 
             //ChildField =

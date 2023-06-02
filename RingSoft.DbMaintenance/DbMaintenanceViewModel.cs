@@ -43,7 +43,7 @@ namespace RingSoft.DbMaintenance
     /// <seealso cref="DbMaintenanceViewModelBase" />
     /// <seealso cref="ILookupControl" />
     public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public TEntity Entity { get; private set; }
 

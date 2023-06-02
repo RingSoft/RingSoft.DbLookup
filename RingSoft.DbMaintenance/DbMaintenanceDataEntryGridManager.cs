@@ -7,7 +7,7 @@ namespace RingSoft.DbMaintenance
 {
     //public class AutoFillMap
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DataEntryGridManager
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public DbMaintenanceViewModelBase ViewModel { get; }
 

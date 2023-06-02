@@ -1278,6 +1278,7 @@ namespace RingSoft.DbMaintenance
 
         private void ProcessRefresh()
         {
+            //LookupDefinition.TableDefinition.QueryTable(LookupDefinition);
             if (LookupRefresher.RefreshRate == RefreshRate.None)
             {
                 return;

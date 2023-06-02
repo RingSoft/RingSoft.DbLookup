@@ -318,5 +318,8 @@ namespace RingSoft.DbLookup
             args.TotalTables = TableDefinitions.Count;
             CopyProcedureEvent?.Invoke(this, args);
         }
+
+        public abstract void GetQuery<TEntity>(TableDefinition<TEntity> table, LookupDefinitionBase lookupDefinition)
+            where TEntity : class, new();
     }
 }

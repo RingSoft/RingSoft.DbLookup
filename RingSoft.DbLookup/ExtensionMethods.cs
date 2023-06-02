@@ -185,7 +185,7 @@ namespace RingSoft.DbLookup
         }
 
         public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue)
-            where TEntity : new()
+            where TEntity : class, new()
         {
             if (!autoFillValue.IsValid())
             {
@@ -201,7 +201,7 @@ namespace RingSoft.DbLookup
         }
 
         public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue,
-            TableDefinition<TEntity> tableDefinition) where TEntity : new()
+            TableDefinition<TEntity> tableDefinition) where TEntity : class, new()
         {
             var result = new TEntity();
             if (autoFillValue.IsValid())
@@ -249,7 +249,7 @@ namespace RingSoft.DbLookup
 
             return result;
         }
-        public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity) where TEntity : new()
+        public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity) where TEntity : class, new()
         {
             if (entity == null)
             {
@@ -318,5 +318,6 @@ namespace RingSoft.DbLookup
             }
             return result;
         }
+
     }
 }

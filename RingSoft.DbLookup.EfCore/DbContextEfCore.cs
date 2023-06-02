@@ -1,9 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.RecordLocking;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+
+namespace Microsoft.EntityFrameworkCore
+{
+    public static partial class CustomExtensions
+    {
+        public static IQueryable Query(this DbContext context, string entityName) =>
+            context.Query(context.Model.FindEntityType(entityName).ClrType);
+
+        static readonly MethodInfo SetMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set), Type.EmptyTypes);
+
+        public static IQueryable Query(this DbContext context, Type entityType) =>
+            (IQueryable)SetMethod.MakeGenericMethod(entityType).Invoke(context, null);
+    }
+}
 
 namespace RingSoft.DbLookup.EfCore
 {
@@ -94,6 +110,11 @@ namespace RingSoft.DbLookup.EfCore
         {
             var dbSet = Set<TEntity>();
             return dbSet;
+        }
+
+        public IQueryable GetTable(string tableName)
+        {
+            return this.Query(tableName);
         }
     }
 }

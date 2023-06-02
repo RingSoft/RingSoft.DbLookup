@@ -265,6 +265,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        public string RelatedTableName { get; set; }
         public FieldDefinition ChildField { get; set; }
         public FieldDefinition ParentField { get; set; }
         public FieldDefinition ChildJoinField { get; set; }

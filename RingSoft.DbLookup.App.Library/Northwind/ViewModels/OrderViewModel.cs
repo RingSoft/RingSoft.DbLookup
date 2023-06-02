@@ -453,6 +453,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
+            
 
             OrderView = View as IOrderView ??
                              throw new ArgumentException(
@@ -531,7 +532,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             //    .Include(p => p.Category)
             //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
-
             ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == OrderId);
 
             return order;

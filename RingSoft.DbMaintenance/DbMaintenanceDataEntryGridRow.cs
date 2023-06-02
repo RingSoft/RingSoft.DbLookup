@@ -7,7 +7,7 @@ using RingSoft.DbLookup.ModelDefinition;
 namespace RingSoft.DbMaintenance
 {
     public abstract class DbMaintenanceDataEntryGridRow<TEntity> : DataEntryGridRow
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public TableDefinition<TEntity> TableDefinition { get; }
 

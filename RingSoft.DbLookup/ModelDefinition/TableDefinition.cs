@@ -360,6 +360,12 @@ namespace RingSoft.DbLookup.ModelDefinition
             return entity;
         }
 
+        public override object GetEntity()
+        {
+            var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
+            return entity;
+        }
+
         /// <summary>
         /// Gets the primary key value from entity.
         /// </summary>

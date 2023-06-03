@@ -313,6 +313,27 @@ namespace RingSoft.DbLookup
             return String.Empty;
         }
 
+        public static object GetProperty<T>(string propertyName)
+        {
+            var properties = typeof(T).GetProperties();
+            var property =
+                properties.FirstOrDefault(f => f.Name == propertyName);
+            if (property != null)
+                return property;
+            return null;
+        }
+
+        public static object GetProperty<T>(T parentProperty, string propertyName)
+        {
+            var properties = typeof(T).GetProperties();
+            var property =
+                properties.FirstOrDefault(f => f.Name == propertyName);
+            if (property != null)
+                return property;
+            return null;
+
+        }
+
         public static FieldDataTypes GetFieldDataTypeForType(Type type)
         {
             if (type == typeof(DateTime)

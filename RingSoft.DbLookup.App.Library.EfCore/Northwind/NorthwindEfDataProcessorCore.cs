@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.AdvancedFind;
@@ -42,10 +43,16 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             return context.DeleteEntity(context.Customers, customer, "Deleting Customer");
         }
 
+
         public Employee GetEmployee(int employeeId)
         {
             var context = new NorthwindDbContextEfCore();
-            return context.Employees.Include(i => i.Employee1).FirstOrDefault(f => f.EmployeeID == employeeId);
+
+            var result = context.Employees
+                .Include(i => i.Employee1)
+                .FirstOrDefault(f => f.EmployeeID == employeeId);
+
+            return result;
         }
 
         public bool SaveEmployee(Employee employee)
@@ -65,6 +72,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public Order GetOrder(int orderId, bool gridMode)
         {
             var context = new NorthwindDbContextEfCore();
+            var orders = context.Orders
+                .Where(p => (p.OrderDate > DateTime.Parse("01/01/1980") && p.OrderDate < DateTime.Parse("01/01/1998")));
 
             if (gridMode)
             {

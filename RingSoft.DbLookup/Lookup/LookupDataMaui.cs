@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,36 +11,179 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
 {
-    public class LookupDataMaui<TEntity> where TEntity : class, new()
+    public abstract class LookupDataMauiBase
     {
+        public abstract void GetInitData();
+    }
+    public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : class, new()
+    {
+        public IQueryable<TEntity> BaseQuery { get; }
+
+        public LookupDefinitionBase LookupDefinition { get; }
+
+        public IEnumerable<TEntity> CurrentList { get; private set; }
+
+        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition)
+        {
+            BaseQuery = query;
+            LookupDefinition = lookupDefinition;
+        }
+
         public void ProcessLookup(IQueryable<TEntity> query, LookupDefinitionBase lookup)
         {
+            var entity = query.FirstOrDefault();
+
+            //var newQuery = ApplyWhereInt(query, "Product.Supplier.SupplierID");
+            var newQuery = ApplyWhereDate(query, "OrderDate", DateTime.Parse("01/01/1998"));
+            newQuery = ApplyOrder(newQuery, "OrderDate", "OrderBy");
+            //var newQuery = ApplyWhereString(query, "Product.Supplier.CompanyName");
+            //newQuery = ApplyOrder(query, "Product.Supplier.CompanyName", "OrderBy");
+
             foreach (var filter in lookup.FilterDefinition.UserFilters)
             {
                 if (filter is FieldFilterDefinition fieldFilter 
                     && fieldFilter.FormulaToSearch.IsNullOrEmpty())
                 {
-                    var newQuery = ApplyWhere(query, "ProductID", "OrderBy");
-                    var result = newQuery.Take(5);
                     //var newObject = GetObject(fieldFilter.FieldDefinition.PropertyName, fieldFilter);
                 }
             }
         }
 
-        private IQueryable<TEntity> ApplyWhere(IQueryable<TEntity> source, string property, string methodName)
+        private IQueryable<TEntity> ApplyWhereInt(IQueryable<TEntity> source, string property)
         {
+            var newWhereMethod = GetWhereMethod();
+            var param = Expression.Parameter(typeof(TEntity), "p");
+            var returnExpression = GetPropertyExpression(property, param);
 
+            var value = Expression.Constant(2);
+            var body = Expression.Equal(returnExpression, value);
+            var whereLambda = Expression.Lambda<Func<TEntity, bool>>(body, param);
+
+            object whereResult = newWhereMethod
+                .Invoke(null, new object[] { source, whereLambda });
+
+            var whereQueryable = (IQueryable<TEntity>)whereResult;
+            whereQueryable = whereQueryable.Take(5);
+
+            return whereQueryable;
+        }
+
+        private IQueryable<TEntity> ApplyWhereDate(IQueryable<TEntity> source, string property, DateTime? date)
+        {
+            var newWhereMethod = GetWhereMethod();
+            var param = Expression.Parameter(typeof(TEntity), "(p");
+            var returnExpression = GetPropertyExpression(property, param);
+
+            var value = Expression.Constant(date, typeof(DateTime?));
+            var body = Expression.GreaterThan(returnExpression, value);
+            
+            var lessThanValue = Expression.Constant(DateTime.Parse("01/03/1998"), typeof(DateTime?));
+            var lessBody = Expression.LessThan(returnExpression, lessThanValue);
+            var andAlso = Expression.AndAlso(body, lessBody);
+
+            var whereLambda = Expression.Lambda<Func<TEntity, bool>>(andAlso, param);
+
+            object whereResult = newWhereMethod
+                .Invoke(null, new object[] { source, whereLambda });
+            var whereQueryable = (IQueryable<TEntity>)whereResult;
+
+            //whereQueryable = whereQueryable.Take(5);
+
+            return whereQueryable;
+        }
+
+
+        private static MethodInfo GetWhereMethod()
+        {
+            var methods = typeof(Queryable).GetMethods();
+            var whereMethod = methods
+                .Where(method => method.Name == "Where"
+                                 && method.IsGenericMethodDefinition
+                                 && method.GetGenericArguments().Length == 1
+                                 && method.GetParameters().Length == 2)
+                .FirstOrDefault();
+            var newWhereMethod = whereMethod.MakeGenericMethod(typeof(TEntity));
+            return newWhereMethod;
+        }
+
+        private IQueryable<TEntity> ApplyWhereString(IQueryable<TEntity> source, string property)
+        {
+            var newWhereMethod = GetWhereMethod();
+            var param = Expression.Parameter(typeof(TEntity), "p");
+            var returnExpression = GetPropertyExpression(property, param);
+
+            var comparsionString = "C";
+            Expression<Func<string>> idLambda = () => comparsionString;
+            var CallMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
+            Expression callExpr = Expression.Call(returnExpression, CallMethod, idLambda.Body);
+            Expression searchExpr = Expression.GreaterThanOrEqual(callExpr, Expression.Constant(0));
+
+            Expression<Func<TEntity, bool>> myLambda =
+                Expression.Lambda<Func<TEntity, bool>>(searchExpr, param);
+
+
+            object whereResult = newWhereMethod
+                .Invoke(null, new object[] { source, myLambda });
+
+
+            var whereQueryable = (IQueryable<TEntity>)whereResult;
+            whereQueryable = whereQueryable.Take(5);
+
+            return whereQueryable;
+
+        }
+
+        private static Expression GetPropertyExpression(string property, ParameterExpression param)
+        {
+            var first = true;
+            Expression returnExpression = null;
+            var properties = property.Split('.');
+            foreach (var newProperty in properties)
+            {
+                if (first)
+                {
+                    first = false;
+                    returnExpression = Expression.Property(param, newProperty);
+                }
+                else
+                {
+                    returnExpression = Expression.Property(returnExpression, newProperty);
+                }
+            }
+
+            return returnExpression;
+        }
+
+        static IQueryable<TEntity> ApplyOrder(IQueryable<TEntity> source, string property, string methodName)
+        {
             if (source == null)
                 throw new ArgumentNullException("source");
 
             if (string.IsNullOrEmpty(property))
                 return source;
 
+            var lambda = GetLambda(property);
 
-            string[] props = property.Split('.');
+            object result = typeof(Queryable).GetMethods().Single(
+                    method => method.Name == methodName
+                              && method.IsGenericMethodDefinition
+                              && method.GetGenericArguments().Length == 2
+                              && method.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(TEntity), GetType(property))
+                .Invoke(null, new object[] { source, lambda });
+
+            var queryAble = (IQueryable<TEntity>)result;
+            queryAble = queryAble.Take(5);
+            return queryAble;
+        }
+
+        private static LambdaExpression GetLambda(string property)
+        {
             Type type = typeof(TEntity);
             ParameterExpression arg = Expression.Parameter(type, "x");
             Expression expr = arg;
+
+            string[] props = property.Split('.');
             foreach (string prop in props)
             {
                 // use reflection (not ComponentModel) to mirror LINQ
@@ -49,68 +193,26 @@ namespace RingSoft.DbLookup.Lookup
             }
             Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TEntity), type);
             LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
-
-            var methods = typeof(Queryable).GetMethods();
-            var whereMethods = methods.Where(method => method.Name == "Where");
-            foreach (var whereMethod in whereMethods)
-            {
-                var genericArguments = whereMethod.GetGenericArguments();
-                var parameters = whereMethod.GetParameters();
-                if (parameters.Length == 2)
-                {
-                    var newWhereMethod = whereMethod.MakeGenericMethod(typeof(TEntity));
-                    var param = Expression.Parameter(typeof(TEntity), "p");
-                    
-                    Expression bExpression = Expression.Property(param, "Product");
-                    Expression numExpression = Expression.Property(bExpression, "Supplier");
-                    //Expression thirdExpression = Expression.Property(numExpression, "SupplierID");
-                    Expression thirdExpression = Expression.Property(numExpression, "CompanyName");
-
-                    var whereProperty = thirdExpression;
-                    //var value = Expression.Constant(2);
-                    //var body = Expression.Equal(whereProperty, value);
-                    //var whereLambda = Expression.Lambda<Func<TEntity, bool>>(body, param);
-
-                    var comparsionString = "C";
-                    Expression<Func<string>> idLambda = () => comparsionString;
-                    var CallMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
-                    Expression callExpr = Expression.Call(thirdExpression, CallMethod, idLambda.Body);
-                    Expression searchExpr = Expression.GreaterThanOrEqual(callExpr, Expression.Constant(0));
-
-                    Expression<Func<TEntity, bool>> myLambda =
-                        Expression.Lambda<Func<TEntity, bool>>(searchExpr, param);
-                    
-
-                    //object whereResult = newWhereMethod
-                    //    .Invoke(null, new object[] { source, whereLambda });
-                    object whereResult = newWhereMethod
-                        .Invoke(null, new object[] {source, myLambda });
-
-
-                    var whereQueryable = (IQueryable<TEntity>)whereResult;
-                    whereQueryable = whereQueryable.Take(5);
-                }
-            }
-
-            var orderByMethod = methods.Single(
-                method => method.Name == methodName
-                          && method.IsGenericMethodDefinition
-                          && method.GetGenericArguments().Length == 2
-                          && method.GetParameters().Length == 2);
-            var genericParams = orderByMethod.GetGenericArguments();
-            var orderParams = orderByMethod.GetParameters();
-            var makeOrderBy = orderByMethod
-                .MakeGenericMethod(typeof(TEntity), type);
-            object result = makeOrderBy
-                .Invoke(null, new object[] { source, lambda });
-            return (IQueryable<TEntity>)result;
+            return lambda;
         }
 
-        private static readonly MethodInfo StringComparisonExpressionMethodInfo =
-            typeof(string).GetMethod("Compare", new Type[] {
-                typeof(string), typeof(string), typeof(StringComparison)
-            });
+        private static Type GetType(string property)
+        {
+            Type type = typeof(TEntity);
+            ParameterExpression arg = Expression.Parameter(type, "x");
+            Expression expr = arg;
 
+            string[] props = property.Split('.');
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                expr = Expression.Property(expr, pi);
+                type = pi.PropertyType;
+            }
+            return type;
+
+        }
         private object GetObject(string propertyName, FieldFilterDefinition fieldFilter)
         {
             if (fieldFilter.JoinDefinition == null)
@@ -157,5 +259,22 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        public override void GetInitData()
+        {
+            foreach (var visibleColumn in LookupDefinition.VisibleColumns)
+            {
+                if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    var page = BaseQuery.Take(5);
+                    foreach (var entity in page)
+                    {
+                        var property = "Product";
+                        var product = GblMethods.GetPropertyObject(entity, "Product");
+                        var supplier = GblMethods.GetPropertyObject(product, "Supplier");
+                        var str = GblMethods.GetPropertyValue(supplier, "CompanyName");
+                    }
+                }
+            }
+        }
     }
 }

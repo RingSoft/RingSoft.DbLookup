@@ -15,6 +15,7 @@ using Google.Protobuf.WellKnownTypes;
 using RingSoft.DbLookup.DataProcessor;
 using Enum = System.Enum;
 using Type = System.Type;
+using System.Reflection;
 
 namespace RingSoft.DbLookup
 {
@@ -301,8 +302,9 @@ namespace RingSoft.DbLookup
 
         public static string GetPropertyValue<T>(T model, string propertyName) where T : new()
         {
+            var properties = model.GetType().GetProperties();
             var property =
-                model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
+                properties.FirstOrDefault(f => f.Name == propertyName);
             if (property != null)
             {
                 var value = property.GetValue(model);
@@ -311,6 +313,16 @@ namespace RingSoft.DbLookup
             }
 
             return String.Empty;
+        }
+
+        public static object GetPropertyObject<T>(T model, string propertyName)
+        {
+            var properties = model.GetType().GetProperties();
+            var property =
+                properties.FirstOrDefault(f => f.Name == propertyName);
+
+            object value = property.GetValue(model, null);
+            return value;
         }
 
         public static object GetProperty<T>(string propertyName)

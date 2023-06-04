@@ -588,7 +588,7 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
-        public abstract void QueryTable(LookupDefinitionBase lookupDefinition);
+        public abstract LookupDataMauiBase QueryTable(LookupDefinitionBase lookupDefinition);
 
         public abstract object GetEntity();
     }

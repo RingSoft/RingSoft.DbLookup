@@ -15,12 +15,6 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.EfCore
 {
-    public class JoinInfo
-    {
-        public TableFieldJoinDefinition ParentJoin { get; set; }
-
-        public TableFieldJoinDefinition ChildJoin { get; set; }
-    }
     /// <summary>
     /// A LookupContextBase derived object that is compatible with the Entity Framework Core.
     /// </summary>
@@ -189,7 +183,7 @@ namespace RingSoft.DbLookup.EfCore
         }
 
         public override LookupDataMauiBase GetQuery<TEntity>(TableDefinition<TEntity> table
-            , LookupDefinitionBase lookupDefinition
+            , LookupDefinitionBase lookupDefinition 
             , int pageSize)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -205,7 +199,7 @@ namespace RingSoft.DbLookup.EfCore
                     properties.FirstOrDefault(f => f.Name == name);
                 if (property != null)
                 {
-                    var navProperties = GetNavigationProperties(lookupDefinition, joinDefinition);
+                    var navProperties = joinDefinition.GetAllNavigationProperties(lookupDefinition);
                     var navigationProperty = string.Empty;
 
                     foreach (var navProperty in navProperties)
@@ -232,56 +226,6 @@ namespace RingSoft.DbLookup.EfCore
             return lookupMaui;
         }
 
-        private List<JoinInfo> GetNavigationProperties(LookupDefinitionBase lookupDefinition
-        , TableFieldJoinDefinition joinDefinition)
-        {
-            var result = new List<JoinInfo>();
-
-            var joins = lookupDefinition.Joins.Where(p =>
-                p.ForeignKeyDefinition.ForeignTable 
-                == joinDefinition.ForeignKeyDefinition.PrimaryTable).ToList();
-
-            if (joins.Any())
-            {
-                foreach (var join in joins)
-                {
-                    if (join.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowRecursion)
-                    {
-                        var subJoins = GetNavigationProperties(lookupDefinition, join);
-                        if (subJoins.Any())
-                        {
-                            var joinInfo = new JoinInfo()
-                            {
-                                ParentJoin = joinDefinition,
-                                ChildJoin = join
-                            };
-                            result.Add(joinInfo);
-                            result.AddRange(subJoins);
-                        }
-                        else
-                        {
-                            var joinInfo = new JoinInfo()
-                            {
-                                ParentJoin = joinDefinition,
-                                ChildJoin = join
-                            };
-                            result.Add(joinInfo);
-                        }
-                    }
-                    else
-                    {
-                        var joinInfo = new JoinInfo()
-                        {
-                            ParentJoin = joinDefinition,
-                            ChildJoin = join
-                        };
-                        result.Add(joinInfo);
-                    }
-                }
-            }
-
-            return result;
-        }
 
         private string GetNavProperty(TableFieldJoinDefinition joinDefinition
             , string parentName)

@@ -11,9 +11,18 @@ using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup
 {
+    /// <summary>
+    public class JoinInfo
+    {
+        public TableFieldJoinDefinition ParentJoin { get; set; }
+
+        public TableFieldJoinDefinition ChildJoin { get; set; }
+    }
+
     public static class ExtensionMethods
     {
 
@@ -316,6 +325,80 @@ namespace RingSoft.DbLookup
                     return autoFillSetup.ForeignField.AllowNulls;
                 }
             }
+            return result;
+        }
+
+        public static List<JoinInfo> GetNavigationProperties(this IJoinParent parentJoin)
+        {
+            var result = new List<JoinInfo>();
+            if (parentJoin is LookupJoin lookupJoin)
+            {
+                if (lookupJoin.JoinDefinition != null)
+                {
+                    var joinInfo = new JoinInfo
+                    {
+                        ParentJoin = lookupJoin.JoinDefinition,
+                    };
+                    result.Add(joinInfo);
+                }
+                if (parentJoin.ParentObject != null)
+                {
+                    var newProps = parentJoin.ParentObject.GetNavigationProperties();
+                    result.InsertRange(0, newProps);
+                }
+            }
+
+            return result;
+        }
+
+        public static List<JoinInfo> GetAllNavigationProperties(this TableFieldJoinDefinition joinDefinition
+            ,LookupDefinitionBase lookupDefinition)
+        {
+            var result = new List<JoinInfo>();
+
+            var joins = lookupDefinition.Joins.Where(p =>
+                p.ForeignKeyDefinition.ForeignTable
+                == joinDefinition.ForeignKeyDefinition.PrimaryTable).ToList();
+
+            if (joins.Any())
+            {
+                foreach (var join in joins)
+                {
+                    if (join.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowRecursion)
+                    {
+                        var subJoins = GetAllNavigationProperties(join, lookupDefinition);
+                        if (subJoins.Any())
+                        {
+                            var joinInfo = new JoinInfo()
+                            {
+                                ParentJoin = joinDefinition,
+                                ChildJoin = join
+                            };
+                            result.Add(joinInfo);
+                            result.AddRange(subJoins);
+                        }
+                        else
+                        {
+                            var joinInfo = new JoinInfo()
+                            {
+                                ParentJoin = joinDefinition,
+                                ChildJoin = join
+                            };
+                            result.Add(joinInfo);
+                        }
+                    }
+                    else
+                    {
+                        var joinInfo = new JoinInfo()
+                        {
+                            ParentJoin = joinDefinition,
+                            ChildJoin = join
+                        };
+                        result.Add(joinInfo);
+                    }
+                }
+            }
+
             return result;
         }
 

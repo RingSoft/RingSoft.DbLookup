@@ -484,5 +484,15 @@ namespace RingSoft.DbLookup.Lookup
             var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
         }
+
+        public override string GetDatabaseValue<TEntity>(TEntity entity)
+        {
+            return "Formula";
+        }
+
+        public override string GetFormattedValue<TEntity>(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

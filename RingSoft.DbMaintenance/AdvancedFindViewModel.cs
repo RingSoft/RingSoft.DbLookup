@@ -1278,8 +1278,8 @@ namespace RingSoft.DbMaintenance
 
         private void ProcessRefresh()
         {
-            var lookupMaui = LookupDefinition.TableDefinition.PageTable(LookupDefinition, 10);
-            lookupMaui.GetInitData();
+            //var lookupMaui = LookupDefinition.TableDefinition.PageTable(LookupDefinition, 10);
+            //lookupMaui.GetInitData();
 
             if (LookupRefresher.RefreshRate == RefreshRate.None)
             {

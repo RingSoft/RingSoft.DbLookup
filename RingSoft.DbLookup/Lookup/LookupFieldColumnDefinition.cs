@@ -307,8 +307,9 @@ namespace RingSoft.DbLookup.Lookup
             if (foundItem != null)
             {
                 SetFieldDefinition(foundItem.FieldDefinition);
+                ParentObject = foundItem.Include;
             }
-            var test = this;
+            //var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
         }
 
@@ -319,8 +320,34 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
-            ParentObject
-            throw new NotImplementedException();
+            var result = string.Empty;
+            var properties = ParentObject.GetNavigationProperties();
+            object propertyObject = null;
+
+            foreach (var property in properties)
+            {
+                if (propertyObject == null)
+                {
+                    propertyObject = GblMethods.GetPropertyObject(entity, property
+                        .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
+                }
+                else
+                {
+                    propertyObject = GblMethods.GetPropertyObject(propertyObject, property
+                        .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
+                }
+            }
+
+            if (propertyObject == null)
+            {
+                result = GblMethods.GetPropertyValue(entity, FieldDefinition.PropertyName);
+            }
+            else
+            {
+                result = GblMethods.GetPropertyValue(propertyObject, FieldDefinition.PropertyName);
+            }
+
+            return result;
         }
 
         public override string GetFormattedValue<TEntity>(TEntity entity)

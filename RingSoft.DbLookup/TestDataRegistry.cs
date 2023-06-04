@@ -12,7 +12,7 @@ namespace RingSoft.DbLookup
         public abstract void ClearData();
     }
 
-    public class DataRepositoryRegistryItem<TEntity> : DataRepositoryRegistryItemBase where TEntity : class
+    public class DataRepositoryRegistryItem<TEntity> : DataRepositoryRegistryItemBase where TEntity : new()
     {
         public List<TEntity> Table { get; private set; }
 
@@ -44,7 +44,7 @@ namespace RingSoft.DbLookup
             Entities.Add(entity);
         }
 
-        public List<TEntity> GetList<TEntity>() where TEntity : class
+        public List<TEntity> GetList<TEntity>() where TEntity : class, new()
         {
             var result = new List<TEntity>();
             var entity = Entities.FirstOrDefault(p => p.Entity == typeof(TEntity));
@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup
             return result;
         }
 
-        public IQueryable<TEntity> GetEntity<TEntity>() where TEntity : class
+        public IQueryable<TEntity> GetEntity<TEntity>() where TEntity : class, new()
         {
             var entity = Entities.FirstOrDefault(p => p.Entity == typeof(TEntity));
             if (entity != null)
@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup
             return new TestLookupDataBase<TEntity>(table);
         }
 
-        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             if (!table.Contains(entity))
@@ -85,12 +85,12 @@ namespace RingSoft.DbLookup
             return true;
         }
 
-        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return SaveNoCommitEntity(entity, message);
         }
 
-        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             if (table.Contains(entity))
@@ -100,12 +100,12 @@ namespace RingSoft.DbLookup
             return true;
         }
 
-        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return DeleteEntity(entity, message);
         }
 
-        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return SaveNoCommitEntity(entity, message);
         }
@@ -115,7 +115,7 @@ namespace RingSoft.DbLookup
             return true;
         }
 
-        public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class
+        public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             foreach (var entity in listToRemove)
@@ -127,13 +127,13 @@ namespace RingSoft.DbLookup
             }
         }
 
-        public void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class
+        public void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             table.AddRange(listToAdd);
         }
 
-        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new()
         {
             return GetList<TEntity>().AsQueryable();
         }

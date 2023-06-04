@@ -10,6 +10,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -352,7 +353,30 @@ namespace RingSoft.DbLookup.AdvancedFind
                     {
                         result = result.Items.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
                     }
-        }
+
+                    if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        var lookupJoin = new LookupJoin(LookupDefinition);
+                        var tableFieldJoin = new TableFieldJoinDefinition();
+                        tableFieldJoin.ForeignKeyDefinition = fieldDefinition.ParentJoinForeignKeyDefinition;
+                        lookupJoin.JoinDefinition = tableFieldJoin;
+
+                        if (result.Parent != null)
+                        {
+                            lookupJoin.ParentObject = result.Parent.Include;
+                        }
+                        result.Include = lookupJoin;
+                    }
+                    else
+                    {
+                        if (result.Parent != null)
+                        {
+                            var lookupJoin = new LookupJoin(LookupDefinition);
+                            lookupJoin.ParentObject = result.Parent.Include;
+                            result.Include = lookupJoin;
+                        }
+                    }
+                }
                 path = path.RightStr(path.Length - (sepPos + 1));
             }
 

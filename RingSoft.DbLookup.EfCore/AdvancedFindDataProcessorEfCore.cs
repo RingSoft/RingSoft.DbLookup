@@ -110,7 +110,7 @@ namespace RingSoft.DbLookup.EfCore
             return new LookupDataBase(lookupDefinition, lookupUi);
         }
 
-        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new()
         {
             var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
             var dbSet = context.GetTable<TEntity>();

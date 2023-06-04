@@ -13,23 +13,39 @@ namespace RingSoft.DbLookup.Lookup
 {
     public abstract class LookupDataMauiBase
     {
+        public int PageSize { get; }
+
+        public abstract int RowCount { get; }
+        
+        public LookupDefinitionBase LookupDefinition { get; }
+
+
+        public LookupDataMauiBase(LookupDefinitionBase lookupDefinition, int pageSize)
+        {
+            LookupDefinition = lookupDefinition;
+            PageSize = pageSize;
+        }
+
         public abstract void GetInitData();
+
+        public abstract string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column);
+
+        public abstract string GetDatabaseRowValue(int rowIndex, LookupColumnDefinitionBase column);
     }
-    public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : class, new()
+    public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : new()
     {
         public IQueryable<TEntity> BaseQuery { get; }
 
-        public LookupDefinitionBase LookupDefinition { get; }
+        public IQueryable<TEntity> ProcessedQuery { get; private set; }
 
         public List<TEntity> CurrentList { get; } = new List<TEntity>();
 
-        public int PageSize { get; }
+        public override int RowCount => CurrentList.Count;
 
         public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition, int pageSize)
+        : base(lookupDefinition, pageSize)
         {
             BaseQuery = query;
-            LookupDefinition = lookupDefinition;
-            PageSize = pageSize;
         }
 
         public void ProcessLookup(IQueryable<TEntity> query, LookupDefinitionBase lookup)
@@ -264,20 +280,29 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void GetInitData()
         {
-            foreach (var visibleColumn in LookupDefinition.VisibleColumns)
+            ProcessedQuery = BaseQuery.Take(PageSize);
+            CurrentList.Clear();
+
+            CurrentList.AddRange(ProcessedQuery);
+
+            for (int row = 0; row < RowCount; row++)
             {
-                if (visibleColumn is LookupFieldColumnDefinition lookupFieldColumn)
+                foreach (var visibleColumn in LookupDefinition.VisibleColumns)
                 {
-                    var page = BaseQuery.Take(5);
-                    foreach (var entity in page)
-                    {
-                        var property = "Product";
-                        var product = GblMethods.GetPropertyObject(entity, "Product");
-                        var supplier = GblMethods.GetPropertyObject(product, "Supplier");
-                        var str = GblMethods.GetPropertyValue(supplier, "CompanyName");
-                    }
+                    var value = GetDatabaseRowValue(row, visibleColumn);
                 }
             }
+        }
+
+        public override string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDatabaseRowValue(int rowIndex, LookupColumnDefinitionBase column)
+        {
+            var row = CurrentList[rowIndex];
+            return column.GetDatabaseValue(row);
         }
     }
 }

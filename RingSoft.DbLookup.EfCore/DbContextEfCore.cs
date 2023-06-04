@@ -55,13 +55,13 @@ namespace RingSoft.DbLookup.EfCore
             return new LookupDataBase(lookupDefinition, lookupUi);
         }
 
-        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             var result = GetDbContextEf().SaveEntity(Set<TEntity>(), entity, message);
             return result;
         }
 
-        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             var context = GetDbContextEf();
             if (!context.SaveNoCommitEntity(Set<TEntity>(), entity, message))
@@ -70,17 +70,17 @@ namespace RingSoft.DbLookup.EfCore
             return true;
         }
 
-        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return GetDbContextEf().DeleteEntity(Set<TEntity>(), entity, message);
         }
 
-        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return GetDbContextEf().DeleteNoCommitEntity(Set<TEntity>(), entity, message);
         }
 
-        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class
+        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             return GetDbContextEf().AddNewNoCommitEntity(Set<TEntity>(), entity, message);
         }
@@ -92,21 +92,21 @@ namespace RingSoft.DbLookup.EfCore
             return result;
         }
 
-        public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class
+        public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class, new()
         {
             var dbSet = Set<TEntity>();
 
             dbSet.RemoveRange(listToRemove);
         }
 
-        public void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class
+        public void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class, new()
         {
             var dbSet = Set<TEntity>();
 
             dbSet.AddRange(listToAdd);
         }
 
-        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new()
         {
             var dbSet = Set<TEntity>();
             return dbSet;

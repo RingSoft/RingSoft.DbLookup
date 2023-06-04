@@ -188,7 +188,9 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        public override LookupDataMauiBase GetQuery<TEntity>(TableDefinition<TEntity> table, LookupDefinitionBase lookupDefinition)
+        public override LookupDataMauiBase GetQuery<TEntity>(TableDefinition<TEntity> table
+            , LookupDefinitionBase lookupDefinition
+            , int pageSize)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
             var query = context.GetTable<TEntity>();
@@ -226,7 +228,7 @@ namespace RingSoft.DbLookup.EfCore
                 }
             }
 
-            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition);
+            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition, pageSize);
             return lookupMaui;
         }
 

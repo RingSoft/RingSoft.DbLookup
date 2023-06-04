@@ -21,12 +21,15 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupDefinitionBase LookupDefinition { get; }
 
-        public IEnumerable<TEntity> CurrentList { get; private set; }
+        public List<TEntity> CurrentList { get; } = new List<TEntity>();
 
-        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition)
+        public int PageSize { get; }
+
+        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition, int pageSize)
         {
             BaseQuery = query;
             LookupDefinition = lookupDefinition;
+            PageSize = pageSize;
         }
 
         public void ProcessLookup(IQueryable<TEntity> query, LookupDefinitionBase lookup)

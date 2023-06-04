@@ -316,5 +316,22 @@ namespace RingSoft.DbLookup.Lookup
         {
             return FieldDefinition.FormatValueForColumnMap(value);
         }
+
+        public override string GetDatabaseValue<TEntity>(TEntity entity)
+        {
+            ParentObject
+            throw new NotImplementedException();
+        }
+
+        public override string GetFormattedValue<TEntity>(TEntity entity)
+        {
+            var result = string.Empty;
+            var value = GetDatabaseValue(entity);
+            if (!value.IsNullOrEmpty())
+            {
+                result = FormatValue(value);
+            }
+            return result;
+        }
     }
 }

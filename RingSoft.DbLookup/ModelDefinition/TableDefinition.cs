@@ -484,9 +484,9 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
-        public override LookupDataMauiBase QueryTable(LookupDefinitionBase lookupDefinition)
+        public override LookupDataMauiBase PageTable(LookupDefinitionBase lookupDefinition, int pageSize)
         {
-            return Context.GetQuery(this, lookupDefinition);
+            return Context.GetQuery(this, lookupDefinition, pageSize);
         }
     }
 }

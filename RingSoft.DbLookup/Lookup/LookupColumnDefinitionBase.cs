@@ -424,5 +424,7 @@ namespace RingSoft.DbLookup.Lookup
             }
             return FormatValue(value);
         }
+
+        public abstract string GetDatabaseValue<TEntity>(TEntity entity) where TEntity : class, new();
     }
 }

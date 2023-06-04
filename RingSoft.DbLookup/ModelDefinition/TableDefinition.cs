@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.ModelDefinition
     /// <typeparam name="TEntity">A database table class used in the Entity Framework.</typeparam>
     /// <seealso cref="TableDefinitionBase" />
     public sealed class TableDefinition<TEntity> : TableDefinitionBase
-        where TEntity : class, new()
+        where TEntity : new()
     {
         public TableDefinition(LookupContextBase context, string tablePropertyName)
         {

@@ -186,44 +186,44 @@ namespace RingSoft.DbLookup.EfCore
             , LookupDefinitionBase lookupDefinition 
             , int pageSize)
         {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var query = context.GetTable<TEntity>();
-            var propertiesProcessed = new List<FieldDefinition>();
+            //var context = SystemGlobals.DataRepository.GetDataContext();
+            //var query = context.GetTable<TEntity>();
+            //var propertiesProcessed = new List<FieldDefinition>();
 
-            foreach (var joinDefinition in lookupDefinition.Joins)
-            {
-                var name = joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName;
+            //foreach (var joinDefinition in lookupDefinition.Joins)
+            //{
+            //    var name = joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName;
 
-                var properties = typeof(TEntity).GetProperties();
-                var property =
-                    properties.FirstOrDefault(f => f.Name == name);
-                if (property != null)
-                {
-                    var navProperties = joinDefinition.GetAllNavigationProperties(lookupDefinition);
-                    var navigationProperty = string.Empty;
+            //    var properties = typeof(TEntity).GetProperties();
+            //    var property =
+            //        properties.FirstOrDefault(f => f.Name == name);
+            //    if (property != null)
+            //    {
+            //        var navProperties = joinDefinition.GetAllNavigationProperties(lookupDefinition);
+            //        var navigationProperty = string.Empty;
 
-                    foreach (var navProperty in navProperties)
-                    {
-                        if (navProperty.ParentJoin == joinDefinition)
-                        {
-                            navigationProperty = navProperty.ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
-                            navigationProperty +=
-                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
-                            query = query.Include(navigationProperty);
-                        }
-                        else
-                        {
-                            navigationProperty +=
-                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
-                            query = query.Include(navigationProperty);
-                        }
+            //        foreach (var navProperty in navProperties)
+            //        {
+            //            if (navProperty.ParentJoin == joinDefinition)
+            //            {
+            //                navigationProperty = navProperty.ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
+            //                navigationProperty +=
+            //                    $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
+            //                query = query.Include(navigationProperty);
+            //            }
+            //            else
+            //            {
+            //                navigationProperty +=
+            //                    $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
+            //                query = query.Include(navigationProperty);
+            //            }
                         
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
 
-            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition, pageSize);
-            return lookupMaui;
+            //var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition, pageSize);
+            return null;
         }
 
 

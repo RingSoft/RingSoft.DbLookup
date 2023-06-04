@@ -322,6 +322,6 @@ namespace RingSoft.DbLookup
         public abstract LookupDataMauiBase GetQuery<TEntity>(TableDefinition<TEntity> table
             , LookupDefinitionBase lookupDefinition
             , int pageSize)
-            where TEntity : class, new();
+            where TEntity : new();
     }
 }

@@ -43,7 +43,7 @@ namespace RingSoft.DbMaintenance
     /// <seealso cref="DbMaintenanceViewModelBase" />
     /// <seealso cref="ILookupControl" />
     public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
-        where TEntity :class, new()
+        where TEntity : new()
     {
         public TEntity Entity { get; private set; }
 
@@ -142,7 +142,7 @@ namespace RingSoft.DbMaintenance
         {
             if (TableDefinition == null)
             {
-                TableDefinition = GblMethods.GetTableDefinition<TEntity>();
+                //TableDefinition = GblMethods.GetTableDefinition<TEntity>();
 
             }
 

@@ -21,10 +21,9 @@ namespace RingSoft.DbLookup.Lookup
 
         public event EventHandler LookupDataChanged;
 
-        public LookupDataMauiBase(LookupDefinitionBase lookupDefinition, int pageSize)
+        public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
-            PageSize = pageSize;
         }
 
         protected void FireLookupDataChangedEvent()
@@ -48,8 +47,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int RowCount => CurrentList.Count;
 
-        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition, int pageSize)
-        : base(lookupDefinition, pageSize)
+        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition)
+        : base(lookupDefinition)
         {
             BaseQuery = query;
         }

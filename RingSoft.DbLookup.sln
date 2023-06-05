@@ -24,8 +24,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RingSoft.DbLookup.App.WPFCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleDbApp", "SimpleDbApp\SimpleDbApp.csproj", "{7FBD5903-A3C7-4B7F-A57C-588828DBB741}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingSoft.DbLookupMAUI", "RingSoft.DbLookupMAUI\RingSoft.DbLookupMAUI.csproj", "{4F33306E-3FB5-4F5E-BF9A-671500B48610}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,10 +66,6 @@ Global
 		{7FBD5903-A3C7-4B7F-A57C-588828DBB741}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FBD5903-A3C7-4B7F-A57C-588828DBB741}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FBD5903-A3C7-4B7F-A57C-588828DBB741}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F33306E-3FB5-4F5E-BF9A-671500B48610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F33306E-3FB5-4F5E-BF9A-671500B48610}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F33306E-3FB5-4F5E-BF9A-671500B48610}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F33306E-3FB5-4F5E-BF9A-671500B48610}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -398,13 +398,17 @@ namespace RingSoft.DbMaintenance
 
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
             {
-                var tableRow = new ListControlDataSourceRow();
-                if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
+                if (contextTableDefinition.LookupDefinition != null)
                 {
-                    tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
+                    var tableRow = new ListControlDataSourceRow();
+                    if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
+                    {
+                        tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
+                    }
+
+                    TableDataSource.AddRow(tableRow);
+                    index++;
                 }
-                TableDataSource.AddRow(tableRow);
-                index++;
             }
 
             LookupRefresher = new LookupRefresher();

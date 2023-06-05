@@ -4,7 +4,7 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>7.14.1</Version>
+    <Version>7.14.2</Version>
     <Authors>Peter Ringering</Authors>
     <Description>Library to break up large volumes of database data into manageable chunks.  DO NOT install this seperately.  Install this as a part of RingSoft.DbLookup.Ef6 or RingSoft.DbLookup.EfCore.</Description>
     <Copyright></Copyright>

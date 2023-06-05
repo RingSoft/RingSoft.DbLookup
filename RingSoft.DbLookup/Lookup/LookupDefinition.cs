@@ -304,5 +304,10 @@ namespace RingSoft.DbLookup.Lookup
 
             return addNewRecordProcessor.ShowAddOnTheFlyWindow();
         }
+
+        public override LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, int pageSize)
+        {
+            return TableDefinition.Context.GetQuery<TEntity>(lookupDefinition, pageSize);
+        }
     }
 }

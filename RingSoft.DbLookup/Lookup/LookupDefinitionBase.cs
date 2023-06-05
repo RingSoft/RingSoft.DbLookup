@@ -1048,5 +1048,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             WindowClosed?.Invoke(this, new LookupWindowReturnArgs(){LookupData = lookupData});
         }
+
+        public virtual LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, int pageSize)
+        {
+            return null;
+        }
     }
 }

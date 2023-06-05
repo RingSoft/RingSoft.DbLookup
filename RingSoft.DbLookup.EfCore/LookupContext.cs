@@ -182,9 +182,8 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        public override LookupDataMauiBase GetQuery<TEntity>(TableDefinition<TEntity> table
-            , LookupDefinitionBase lookupDefinition 
-            , int pageSize)
+        public override LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition 
+            , int pageSize) where TEntity : class
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
             var query = context.GetTable<TEntity>();

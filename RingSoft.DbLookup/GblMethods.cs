@@ -524,7 +524,7 @@ namespace RingSoft.DbLookup
             return dateText;
         }
 
-        public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : class, new()
+        public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : new()
         {
             TableDefinition<TEntity> tableDefinition = null;
             var entityName = typeof(TEntity).Name;

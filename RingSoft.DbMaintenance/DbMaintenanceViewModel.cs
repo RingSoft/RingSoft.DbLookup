@@ -142,7 +142,7 @@ namespace RingSoft.DbMaintenance
         {
             if (TableDefinition == null)
             {
-                //TableDefinition = GblMethods.GetTableDefinition<TEntity>();
+                TableDefinition = GblMethods.GetTableDefinition<TEntity>();
 
             }
 

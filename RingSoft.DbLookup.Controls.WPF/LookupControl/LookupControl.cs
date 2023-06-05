@@ -1,6 +1,7 @@
 ﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -27,7 +28,121 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         Enabled = 1,
         Disabled = 2,
-        Done = 3 }
+        Done = 3
+    }
+
+    public class DataColumn
+    {
+        public int ColumnIndex { get; }
+
+        public string ColumnName { get; }
+
+        public DataColumn(int columnIndex, string columnName)
+        {
+            ColumnIndex = columnIndex;
+            ColumnName = columnName;
+        }
+    }
+
+    public class DataColumnMaps
+    {
+        public List<DataColumn> ColumnMaps { get; } = new List<DataColumn>();
+
+        public void AddColumn(string columnName)
+        {
+            var columnMap = new DataColumn(ColumnMaps.Count, columnName);
+            ColumnMaps.Add(columnMap);
+        }
+
+        public string GetVisibleColumnName(string dataColumnName)
+        {
+            var map = ColumnMaps.FirstOrDefault(p => p.ColumnName == dataColumnName);
+            var visibleColumnName = $"Column{map.ColumnIndex}";
+            return visibleColumnName;
+        }
+
+        public void ClearColumns()
+        {
+            ColumnMaps.Clear();
+        }
+}
+
+    public class DataItem
+    {
+        public string Column0 { get; set; }
+        public string Column1 { get; set; }
+        public string Column2 { get; set; }
+        public string Column3 { get; set; }
+        public string Column4 { get; set; }
+        public string Column5 { get; set; }
+        public string Column6 { get; set; }
+        public string Column7 { get; set; }
+        public string Column8 { get; set; }
+        public string Column9 { get; set; }
+
+        public DataColumnMaps ColumnMaps { get; }
+
+        public DataItem(DataColumnMaps columnMaps)
+        {
+            ColumnMaps = columnMaps;
+        }
+        
+        public string GetColumnValue(string columnName)
+        {
+            var column = ColumnMaps.ColumnMaps.FirstOrDefault(p => p.ColumnName == columnName);
+            var index = ColumnMaps.ColumnMaps.IndexOf(column);
+            switch (index)
+            {
+                case 0:
+                    return Column0;
+                case 1:
+                    return Column1;
+                case 2:
+                    return Column2;
+                case 3: return Column3;
+                case 4: return Column4;
+                case 5: return Column5;
+                case 6: return Column6;
+                case 7: return Column7;
+                case 8: return Column8;
+                case 9: return Column9;
+
+            }
+
+            return string.Empty;
+        }
+
+        public void SetColumnValue(string columnName, string value)
+        {
+            var column = ColumnMaps.ColumnMaps.FirstOrDefault(p => p.ColumnName == columnName);
+            var index = ColumnMaps.ColumnMaps.IndexOf(column);
+            switch (index)
+            {
+                case 0:
+                    Column0 = value;
+                    break;
+                case 1:
+                    Column1 = value;
+                    break;
+                case 2: Column2 = value;
+                    break;
+                case 3: Column3 = value;
+                    break;
+                case 4: Column4 = value;
+                    break;
+                case 5: Column5 = value;
+                    break;
+                case 6: Column6 = value;
+                    break;
+                case 7: Column7 = value;
+                    break;
+                case 8: Column8 = value;
+                    break;
+                case 9: Column9 = value;
+                    break;
+            }
+        }
+    }
     /// <summary>
     /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
     ///
@@ -260,6 +375,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public LookupDataBase LookupData { get; private set; }
 
+        public LookupDataMauiBase LookupDataMaui { get; private set; }
+
         public bool LookupWindowReadOnlyMode { get; internal set; }
 
         public object AddViewParameter { get; internal set; }
@@ -284,7 +401,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _setupRan;
         private int _originalPageSize;
         private int _currentPageSize;
-        private DataTable _dataSource = new DataTable("DataSourceTable");
+        //private DataTable _dataSource = new DataTable("DataSourceTable");
+        private DataColumnMaps _columnMaps = new DataColumnMaps();
+        private List<DataItem> _dataSource = new List<DataItem>();
+
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
         private double _preScrollThumbPosition;
@@ -419,7 +539,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             //    throw new ArgumentException(
             //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            if (LookupData != null)
+            if (LookupData != null && LookupDataMaui != null)
             {
                 ClearLookupControl();
                 LookupColumns.Clear();
@@ -427,9 +547,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (LookupDefinition != null)
             {
+                LookupDataMaui =
+                    LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition,
+                        _currentPageSize);
 
                 LookupData = new LookupDataBase(LookupDefinition, this);
-                LookupData.LookupDataChanged += LookupData_LookupDataChanged;
+
+                LookupDataMaui.LookupDataChanged += LookupDataMaui_LookupDataChanged;
+                //LookupData.LookupDataChanged += LookupData_LookupDataChanged;
                 LookupData.DataSourceChanged += LookupData_DataSourceChanged;
                 LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
             }
@@ -466,7 +591,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             LookupGridView?.Columns.Clear();
 
-            _dataSource.Columns.Clear();
+            _columnMaps.ClearColumns();
+            _dataSource.Clear();
 
             if (LookupColumns.Any())
                 MergeLookupDefinition();
@@ -607,14 +733,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 width = 20;
             }
+            _columnMaps.AddColumn(dataColumnName);
+            var columnName = _columnMaps.GetVisibleColumnName(dataColumnName);
             var gridColumn = new GridViewColumn
             {
                 Header = columnHeader,
                 Width = width,
-                CellTemplate = lookupColumn.GetCellDataTemplate(this, dataColumnName, this.IsDesignMode())
+                CellTemplate = lookupColumn.GetCellDataTemplate(this, columnName, this.IsDesignMode()),
+                DisplayMemberBinding = new Binding(columnName),
             };
             LookupGridView?.Columns.Add(gridColumn);
-            _dataSource.Columns.Add(dataColumnName);
+            
 
             if (LookupGridView != null && ListView != null)
             {
@@ -813,8 +942,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
 
             LookupGridView?.Columns.Clear();
-            _dataSource.Rows.Clear();
-            _dataSource.Columns.Clear();
+            _dataSource.Clear();
 
             var index = 1;
 
@@ -857,22 +985,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             //Must get page size before clearing the data source.  Otherwise we get exceptions if column PropertyName is invalid.
             _currentPageSize = GetPageSize(false);
-            _dataSource.Rows.Clear();
+            _dataSource.Clear();
 
             for (var i = 0; i < _currentPageSize; i++)
             {
-                var newDataRow = _dataSource.NewRow();
+                var dataItem = new DataItem(_columnMaps);
+                //var newDataRow = _dataSource.NewRow();
                 foreach (var column in LookupColumns)
                 {
                     var cellValue = column.DesignText;
-                    newDataRow[column.DataColumnName] = cellValue;
+                    //newDataRow[column.DataColumnName] = cellValue;
+                    dataItem.SetColumnValue(column.DataColumnName, cellValue);
                 }
 
-                _dataSource.Rows.Add(newDataRow);
+                _dataSource.Add(dataItem);
             }
 
             if (ListView != null)
-                ListView.ItemsSource = _dataSource.DefaultView;
+                ListView.ItemsSource = _dataSource;
         }
 
         private void Column_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1151,124 +1281,145 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private void LookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)
+        private void LookupDataMaui_LookupDataChanged(object sender, EventArgs e)
         {
-            _dataSource.Rows.Clear();
-            foreach (DataRow dataRow in e.OutputTable.Rows)
+            ListView.Items.Clear();
+
+            if (sender is LookupDataMauiBase lookupDataMaui)
             {
-                var newDataRow = _dataSource.NewRow();
-                foreach (var lookupColumn in LookupColumns)
+                for (int row = 0; row < lookupDataMaui.RowCount; row++)
                 {
-                    var cellValue = dataRow.GetRowValue(lookupColumn.DataColumnName);
-                    if (cellValue.IsNullOrEmpty() &&
-                        (lookupColumn.KeepNullEmpty || lookupColumn.LookupColumnDefinition.KeepNullEmpty))
+                    ListViewItem item = null;
+                    var dataItem = new DataItem(_columnMaps);
+                    foreach (var lookupColumn in LookupColumns)
                     {
+                        var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);
+                        dataItem.SetColumnValue(lookupColumn.DataColumnName, value);
                     }
-                    else
-                    {
-                        var formattedValue = cellValue.ToString();
-                        if (lookupColumn.LookupColumnDefinition.SearchForHostId.HasValue)
-                        {
-                            var newValue = LookupControlsGlobals.LookupControlSearchForFactory.FormatValue(
-                                lookupColumn.LookupColumnDefinition.SearchForHostId.Value, cellValue.ToString());
-
-                            if (newValue == formattedValue)
-                            {
-                                cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
-                            }
-                            else
-                            {
-                                cellValue = newValue;
-                            }
-                        }
-                        else
-                        {
-                            cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
-                        }
-                    }
-                    
-                    newDataRow[lookupColumn.DataColumnName] = cellValue;
-                }
-
-                _dataSource.Rows.Add(newDataRow);
-            }
-
-            if (ListView != null)
-                ListView.ItemsSource = _dataSource.DefaultView;
-
-            if (ScrollBar != null)
-            {
-                ScrollBar.IsEnabled = true;
-                switch (e.ScrollPosition)
-                {
-                    case LookupScrollPositions.Disabled:
-                        ScrollBar.IsEnabled = false;
-                        break;
-                    case LookupScrollPositions.Top:
-                        ScrollBar.Value = ScrollBar.Minimum;
-                        break;
-                    case LookupScrollPositions.Middle:
-                        SetScrollThumbToMiddle();
-                        break;
-                    case LookupScrollPositions.Bottom:
-                        ScrollBar.Value = ScrollBar.Maximum;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    ListView.Items.Add(dataItem);
                 }
             }
-
-            if (ListView != null)
-            {
-                ListView.SelectedIndex = e.SelectedRowIndex;
-                var window = Window.GetWindow(this);
-                var focusedElement = FocusManager.GetFocusedElement(window);
-                if (focusedElement != null && focusedElement is Control focusedControl)
-                {
-                    if (focusedElement is ListViewItem listViewItem)
-                    {
-                        ListView.Focus();
-                    }
-                }
-            }
-
-            var setupRecordCount = true;
-            switch (SearchType)
-            {
-                case LookupSearchTypes.Equals:
-                    if (e.CountingRecords)
-                        setupRecordCount = false;
-                    break;
-                case LookupSearchTypes.Contains:
-                    if (!e.SearchForChanging)
-                        setupRecordCount = false;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (ShowRecordCountWait || ShowRecordCountProps)
-            {
-                GetRecordCountWait();
-            }
-
-            if (setupRecordCount)
-            {
-            }
-            if (ShowRecordCountProps)
-            {
-                SetupRecordCount(LookupData.GetRecordCountWait());
-            }
-            else
-            {
-                if (setupRecordCount )
-                {
-                    SetupRecordCount(LookupData.RecordCount);
-                }
-                
-            }
-
         }
+
+
+        //private void LookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)
+        //{
+        //    _dataSource.Rows.Clear();
+        //    foreach (DataRow dataRow in e.OutputTable.Rows)
+        //    {
+        //        var newDataRow = _dataSource.NewRow();
+        //        foreach (var lookupColumn in LookupColumns)
+        //        {
+        //            var cellValue = dataRow.GetRowValue(lookupColumn.DataColumnName);
+        //            if (cellValue.IsNullOrEmpty() &&
+        //                (lookupColumn.KeepNullEmpty || lookupColumn.LookupColumnDefinition.KeepNullEmpty))
+        //            {
+        //            }
+        //            else
+        //            {
+        //                var formattedValue = cellValue.ToString();
+        //                if (lookupColumn.LookupColumnDefinition.SearchForHostId.HasValue)
+        //                {
+        //                    var newValue = LookupControlsGlobals.LookupControlSearchForFactory.FormatValue(
+        //                        lookupColumn.LookupColumnDefinition.SearchForHostId.Value, cellValue.ToString());
+
+        //                    if (newValue == formattedValue)
+        //                    {
+        //                        cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+        //                    }
+        //                    else
+        //                    {
+        //                        cellValue = newValue;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
+        //                }
+        //            }
+                    
+        //            newDataRow[lookupColumn.DataColumnName] = cellValue;
+        //        }
+
+        //        _dataSource.Rows.Add(newDataRow);
+        //    }
+
+        //    if (ListView != null)
+        //        ListView.ItemsSource = _dataSource.DefaultView;
+
+        //    if (ScrollBar != null)
+        //    {
+        //        ScrollBar.IsEnabled = true;
+        //        switch (e.ScrollPosition)
+        //        {
+        //            case LookupScrollPositions.Disabled:
+        //                ScrollBar.IsEnabled = false;
+        //                break;
+        //            case LookupScrollPositions.Top:
+        //                ScrollBar.Value = ScrollBar.Minimum;
+        //                break;
+        //            case LookupScrollPositions.Middle:
+        //                SetScrollThumbToMiddle();
+        //                break;
+        //            case LookupScrollPositions.Bottom:
+        //                ScrollBar.Value = ScrollBar.Maximum;
+        //                break;
+        //            default:
+        //                throw new ArgumentOutOfRangeException();
+        //        }
+        //    }
+
+        //    if (ListView != null)
+        //    {
+        //        ListView.SelectedIndex = e.SelectedRowIndex;
+        //        var window = Window.GetWindow(this);
+        //        var focusedElement = FocusManager.GetFocusedElement(window);
+        //        if (focusedElement != null && focusedElement is Control focusedControl)
+        //        {
+        //            if (focusedElement is ListViewItem listViewItem)
+        //            {
+        //                ListView.Focus();
+        //            }
+        //        }
+        //    }
+
+        //    var setupRecordCount = true;
+        //    switch (SearchType)
+        //    {
+        //        case LookupSearchTypes.Equals:
+        //            if (e.CountingRecords)
+        //                setupRecordCount = false;
+        //            break;
+        //        case LookupSearchTypes.Contains:
+        //            if (!e.SearchForChanging)
+        //                setupRecordCount = false;
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException();
+        //    }
+
+        //    if (ShowRecordCountWait || ShowRecordCountProps)
+        //    {
+        //        GetRecordCountWait();
+        //    }
+
+        //    if (setupRecordCount)
+        //    {
+        //    }
+        //    if (ShowRecordCountProps)
+        //    {
+        //        SetupRecordCount(LookupData.GetRecordCountWait());
+        //    }
+        //    else
+        //    {
+        //        if (setupRecordCount )
+        //        {
+        //            SetupRecordCount(LookupData.RecordCount);
+        //        }
+                
+        //    }
+
+        //}
 
         private void SetScrollThumbToMiddle()
         {
@@ -1307,8 +1458,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             _currentPageSize = GetPageSize();
 
-            if (String.IsNullOrEmpty(initialSearchFor) && (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
-                LookupData.GetInitData();
+            if (String.IsNullOrEmpty(initialSearchFor) &&
+                (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
+            {
+                //LookupData.GetInitData();
+                LookupDataMaui.GetInitData(_currentPageSize);
+            }
             else
             {
                 if (SearchForHost != null)
@@ -1880,7 +2035,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                             SearchForStackPanel.Children.Clear();
                             LookupColumns.Clear();
                             LookupGridView?.Columns.Clear();
-                            _dataSource.Columns.Clear();
+                            _columnMaps.ClearColumns();
+                            _dataSource.Clear();
                             SetupRecordCount(0);
                             UpdateLayout();
                             SetActiveColumn(-1, FieldDataTypes.String);

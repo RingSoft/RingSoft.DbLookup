@@ -13,12 +13,13 @@ namespace RingSoft.DbLookup.Lookup
 {
     public abstract class LookupDataMauiBase
     {
-        public int PageSize { get; }
+        public int PageSize { get; protected set; }
 
         public abstract int RowCount { get; }
         
         public LookupDefinitionBase LookupDefinition { get; }
 
+        public event EventHandler LookupDataChanged;
 
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition, int pageSize)
         {
@@ -26,7 +27,12 @@ namespace RingSoft.DbLookup.Lookup
             PageSize = pageSize;
         }
 
-        public abstract void GetInitData();
+        protected void FireLookupDataChangedEvent()
+        {
+            LookupDataChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public abstract void GetInitData(int pageSize);
 
         public abstract string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column);
 
@@ -278,25 +284,21 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
-        public override void GetInitData()
+        public override void GetInitData(int pageSize)
         {
+            PageSize = pageSize;
             ProcessedQuery = BaseQuery.Take(PageSize);
             CurrentList.Clear();
 
             CurrentList.AddRange(ProcessedQuery);
 
-            for (int row = 0; row < RowCount; row++)
-            {
-                foreach (var visibleColumn in LookupDefinition.VisibleColumns)
-                {
-                    var value = GetDatabaseRowValue(row, visibleColumn);
-                }
-            }
+            FireLookupDataChangedEvent();
         }
 
         public override string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column)
         {
-            throw new NotImplementedException();
+            var row = CurrentList[rowIndex];
+            return column.GetFormattedValue(row);
         }
 
         public override string GetDatabaseRowValue(int rowIndex, LookupColumnDefinitionBase column)

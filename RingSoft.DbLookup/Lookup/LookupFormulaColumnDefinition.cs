@@ -492,7 +492,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string GetFormattedValue<TEntity>(TEntity entity)
         {
-            throw new NotImplementedException();
+            var value = GetDatabaseValue(entity);
+            return FormatValue(value);
         }
     }
 }

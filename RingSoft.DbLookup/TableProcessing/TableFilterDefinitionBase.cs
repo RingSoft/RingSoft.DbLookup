@@ -677,7 +677,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
             foreach (var userFilter in UserFilters)
             {
-                result = userFilter.GetMauiFilter<TEntity>(param);
+                var userExpression = userFilter.GetMauiFilter<TEntity>(param);
+                if (userExpression != null)
+                {
+                    result = userExpression;
+                }
             }
             return result;
         }

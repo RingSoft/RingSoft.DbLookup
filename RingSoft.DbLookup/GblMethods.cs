@@ -16,6 +16,7 @@ using RingSoft.DbLookup.DataProcessor;
 using Enum = System.Enum;
 using Type = System.Type;
 using System.Reflection;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup
 {
@@ -538,5 +539,48 @@ namespace RingSoft.DbLookup
 
             return tableDefinition;
         }
+
+        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, string property, string methodName, System.Type propertyType)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            if (string.IsNullOrEmpty(property))
+                return source;
+
+            var lambda = GetLambda<TEntity>(property);
+
+            object result = typeof(Queryable).GetMethods().Single(
+                    method => method.Name == methodName
+                              && method.IsGenericMethodDefinition
+                              && method.GetGenericArguments().Length == 2
+                              && method.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(TEntity), propertyType)
+                .Invoke(null, new object[] { source, lambda });
+
+            var queryAble = (IQueryable<TEntity>)result;
+            return queryAble;
+        }
+
+        public static LambdaExpression GetLambda<TEntity>(string property)
+        {
+            System.Type type = typeof(TEntity);
+            ParameterExpression arg = Expression.Parameter(type, "x");
+            Expression expr = arg;
+
+            string[] props = property.Split('.');
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                expr = Expression.Property(expr, pi);
+                type = pi.PropertyType;
+            }
+            System.Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TEntity), type);
+            LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
+            return lambda;
+        }
+
+
     }
 }

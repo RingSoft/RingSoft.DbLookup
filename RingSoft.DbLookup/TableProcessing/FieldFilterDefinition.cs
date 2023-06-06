@@ -162,7 +162,12 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             get
             {
-                return JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+                var field = FieldDefinition;
+                if (FieldToSearch != null)
+                {
+                    field = FieldToSearch;
+                }
+                return JoinDefinition.GetPropertyJoinName(field.PropertyName);
             }
         }
 
@@ -484,7 +489,18 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
         {
-            var value = Value.GetPropertyFilterValue(FieldDefinition.FieldDataType);
+            if (!FormulaToSearch.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var stringValue = Value;
+            var field = FieldDefinition;
+            if (FieldToSearch != null)
+            {
+                field = FieldToSearch;
+            }
+            var value = stringValue.GetPropertyFilterValue(field.FieldDataType);
+
             return GetBinaryExpression<TEntity>(param, PropertyName, Condition, value);
         }
     }

@@ -518,65 +518,33 @@ namespace RingSoft.DbLookup.TableProcessing
             return null;
         }
 
-        public static LambdaExpression GetLambda<TEntity>(string property)
+        public static BinaryExpression GetStringExpression<TEntity>(ParameterExpression param, string property, Conditions condition, string value)
         {
-            System.Type type = typeof(TEntity);
-            ParameterExpression arg = Expression.Parameter(type, "x");
-            Expression expr = arg;
-
-            string[] props = property.Split('.');
-            foreach (string prop in props)
-            {
-                // use reflection (not ComponentModel) to mirror LINQ
-                PropertyInfo pi = type.GetProperty(prop);
-                expr = Expression.Property(expr, pi);
-                type = pi.PropertyType;
-            }
-            System.Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TEntity), type);
-            LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
-            return lambda;
-        }
-
-        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, string property, string methodName, System.Type baseType)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-
-            if (string.IsNullOrEmpty(property))
-                return source;
-
-            var lambda = GetLambda<TEntity>(property);
-
-            object result = typeof(Queryable).GetMethods().Single(
-                    method => method.Name == methodName
-                              && method.IsGenericMethodDefinition
-                              && method.GetGenericArguments().Length == 2
-                              && method.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(TEntity), GetType(property))
-                .Invoke(null, new object[] { source, lambda });
-
-            var queryAble = (IQueryable<TEntity>)result;
-            queryAble = queryAble.Take(5);
-            return queryAble;
-        }
-
-
-        public static BinaryExpression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
-        {
-            BinaryExpression result = null;
+            var newWhereMethod = GetWhereMethod<TEntity>();
             var returnExpression = GetPropertyExpression(property, param);
 
-            var expressionValue = Expression.Constant(value, value.GetType());
+            Expression<Func<string>> idLambda = () => value;
+            var CallMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
+            Expression callExpr = Expression.Call(returnExpression, CallMethod, idLambda.Body);
 
+            var result = GetBinaryExpression(callExpr, condition, Expression.Constant(0));
+
+            return result;
+        }
+
+        public static BinaryExpression GetBinaryExpression(Expression returnExpression, Conditions condition,
+            ConstantExpression constantExpression)
+        {
+            BinaryExpression result = null;
             switch (condition)
             {
                 case Conditions.Equals:
-                    result = Expression.Equal(returnExpression, expressionValue);
+                    result = Expression.Equal(returnExpression, constantExpression);
                     break;
                 case Conditions.NotEquals:
                     break;
                 case Conditions.GreaterThan:
-                    result = Expression.GreaterThan(returnExpression, expressionValue);
+                    result = Expression.GreaterThan(returnExpression, constantExpression);
                     break;
                 case Conditions.GreaterThanEquals:
                     break;
@@ -599,6 +567,25 @@ namespace RingSoft.DbLookup.TableProcessing
                 default:
                     throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
             }
+            return result;
+        }
+
+        public static BinaryExpression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
+        {
+            BinaryExpression result = null;
+            var returnExpression = GetPropertyExpression(property, param);
+
+            var expressionValue = Expression.Constant(value, value.GetType());
+
+            if (value.GetType() == typeof(string))
+            {
+                return GetStringExpression<TEntity>(param, property, condition, value.ToString());
+            }
+            else
+            {
+                result = GetBinaryExpression(returnExpression, condition, expressionValue);
+            }
+
             return result;
         }
 

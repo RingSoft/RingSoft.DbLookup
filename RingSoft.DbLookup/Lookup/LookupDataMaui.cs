@@ -195,7 +195,6 @@ namespace RingSoft.DbLookup.Lookup
                               && method.GetParameters().Length == 2)
                 .MakeGenericMethod(typeof(TEntity), GetType(property))
                 .Invoke(null, new object[] { source, lambda });
-
             var queryAble = (IQueryable<TEntity>)result;
             queryAble = queryAble.Take(5);
             return queryAble;

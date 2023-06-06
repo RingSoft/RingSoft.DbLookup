@@ -1287,7 +1287,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupDataMaui_LookupDataChanged(object sender, EventArgs e)
         {
-            ListView.Items.Clear();
+            _dataSource.Clear();
 
             if (sender is LookupDataMauiBase lookupDataMaui)
             {

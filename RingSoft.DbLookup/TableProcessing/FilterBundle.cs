@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -73,5 +74,38 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             _filters.Remove(filter);
         }
+
+        public BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        {
+            BinaryExpression result = null;
+            
+            BinaryExpression leftExpression = null;
+
+            foreach (var filter in Filters)
+            {
+                var rightExpression  = filter.GetMauiFilter<TEntity>(param);
+                if (rightExpression != null)
+                {
+                    if (leftExpression == null)
+                    {
+                        leftExpression = rightExpression;
+                        rightExpression = null;
+                    }
+                }
+
+                if (leftExpression != null && rightExpression != null)
+                {
+                    result = FilterItemDefinition.AppendExpression(leftExpression, rightExpression,
+                        filter.EndLogic);
+                }
+                else
+                {
+                    result = leftExpression;
+                }
+            }
+
+            return result;
+        }
+
     }
 }

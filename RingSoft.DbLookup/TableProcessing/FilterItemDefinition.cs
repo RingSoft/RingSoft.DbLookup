@@ -542,15 +542,19 @@ namespace RingSoft.DbLookup.TableProcessing
                     result = Expression.Equal(returnExpression, constantExpression);
                     break;
                 case Conditions.NotEquals:
+                    result = Expression.NotEqual(returnExpression, constantExpression);
                     break;
                 case Conditions.GreaterThan:
                     result = Expression.GreaterThan(returnExpression, constantExpression);
                     break;
                 case Conditions.GreaterThanEquals:
+                    result = Expression.GreaterThanOrEqual(returnExpression, constantExpression);
                     break;
                 case Conditions.LessThan:
+                    result = Expression.LessThan(returnExpression, constantExpression);
                     break;
                 case Conditions.LessThanEquals:
+                    result = Expression.LessThanOrEqual(returnExpression, constantExpression);
                     break;
                 case Conditions.Contains:
                     break;
@@ -653,6 +657,29 @@ namespace RingSoft.DbLookup.TableProcessing
             var whereQueryable = (IQueryable<TEntity>)whereResult;
 
             return whereQueryable;
+        }
+
+        public static BinaryExpression AppendExpression(BinaryExpression left, BinaryExpression right, EndLogics endLogic)
+        {
+            var result = left;
+
+            if (right == null)
+            {
+                return left;
+            }
+            switch (endLogic)
+            {
+                case EndLogics.And:
+                    result = Expression.AndAlso(left, right);
+                    break;
+                case EndLogics.Or:
+                    result = Expression.OrElse(left, right);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(endLogic), endLogic, null);
+            }
+
+            return result;
         }
     }
 }

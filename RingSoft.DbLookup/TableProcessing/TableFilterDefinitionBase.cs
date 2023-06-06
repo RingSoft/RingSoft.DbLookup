@@ -657,19 +657,20 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             BinaryExpression result = null;
 
+            var fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
+            var userFilter = UserBundle.GetMauiFilter<TEntity>(param);
 
-            foreach (var fixedFilter in FixedFilters)
+            if (fixedFilter != null && userFilter != null)
             {
-                result = fixedFilter.GetMauiFilter<TEntity>(param);
+                result = FilterItemDefinition.AppendExpression(fixedFilter, userFilter, EndLogics.And);
             }
-
-            foreach (var userFilter in UserFilters)
+            else if (fixedFilter != null)
             {
-                var userExpression = userFilter.GetMauiFilter<TEntity>(param);
-                if (userExpression != null)
-                {
-                    result = userExpression;
-                }
+                result = fixedFilter;
+            }
+            else
+            {
+                result = userFilter;
             }
             return result;
         }

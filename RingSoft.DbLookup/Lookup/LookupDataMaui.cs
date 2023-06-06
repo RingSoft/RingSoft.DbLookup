@@ -286,7 +286,30 @@ namespace RingSoft.DbLookup.Lookup
         public override void GetInitData(int pageSize)
         {
             PageSize = pageSize;
-            ProcessedQuery = BaseQuery.Take(PageSize);
+
+            var param = Expression.Parameter(typeof(TEntity), "p");
+            var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+
+            if (whereExpression == null)
+            {
+                ProcessedQuery = BaseQuery;
+            }
+            else
+            {
+                var whereLambda = Expression.Lambda<Func<TEntity, bool>>(whereExpression, param);
+
+                var whereMethod = FilterItemDefinition.GetWhereMethod<TEntity>();
+
+                object whereResult = whereMethod
+                    .Invoke(null, new object[] { BaseQuery, whereLambda });
+                var whereQueryable = (IQueryable<TEntity>)whereResult;
+
+
+                ProcessedQuery = whereQueryable;
+            }
+
+            ProcessedQuery = ProcessedQuery.Take(PageSize);
+
             CurrentList.Clear();
 
             CurrentList.AddRange(ProcessedQuery);

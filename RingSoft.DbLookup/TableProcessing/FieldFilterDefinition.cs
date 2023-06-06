@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
@@ -156,6 +157,14 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public override TreeViewType TreeViewType => TreeViewType.Field;
+
+        public override string PropertyName
+        {
+            get
+            {
+                return FieldDefinition.PropertyName;
+            }
+        }
 
         internal override void CopyFrom(FilterItemDefinition source)
         {
@@ -471,6 +480,12 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                 }
             }
+        }
+
+        public override BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        {
+            var value = Value.GetPropertyFilterValue(FieldDefinition.FieldDataType);
+            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, value);
         }
     }
 }

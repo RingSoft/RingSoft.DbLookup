@@ -170,6 +170,7 @@ namespace RingSoft.DbLookup.Lookup
             //returnEntity.ParentField = ParentField;
             returnEntity.ParentField = returnEntity.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
             returnEntity.ParentObject = this;
+            if (returnEntity.JoinDefinition != null) returnEntity.JoinDefinition.ParentObject = this;
 
             return returnEntity;
         }

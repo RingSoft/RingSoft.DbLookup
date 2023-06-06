@@ -351,48 +351,35 @@ namespace RingSoft.DbLookup
             return result;
         }
 
-        public static List<JoinInfo> GetAllNavigationProperties(this TableFieldJoinDefinition joinDefinition
-            ,LookupDefinitionBase lookupDefinition)
+        public static List<JoinInfo> GetAllNavigationProperties(this LookupDefinitionBase lookupDefinition)
         {
             var result = new List<JoinInfo>();
+            var joins = lookupDefinition.Joins;
 
-            var joins = lookupDefinition.Joins.Where(p =>
-                p.ForeignKeyDefinition.ForeignTable
-                == joinDefinition.ForeignKeyDefinition.PrimaryTable).ToList();
-
-            if (joins.Any())
+            var baseJoins = joins.Where(p => p.ParentObject == null);
+            foreach (var joinDefinition in baseJoins)
             {
-                foreach (var join in joins)
+                var joinInfo = new JoinInfo()
                 {
-                    if (join.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowRecursion)
-                    {
-                        var subJoins = GetAllNavigationProperties(join, lookupDefinition);
-                        if (subJoins.Any())
-                        {
-                            var joinInfo = new JoinInfo()
-                            {
-                                ParentJoin = joinDefinition,
-                                ChildJoin = join
-                            };
-                            result.Add(joinInfo);
-                            result.AddRange(subJoins);
-                        }
-                        else
-                        {
-                            var joinInfo = new JoinInfo()
-                            {
-                                ParentJoin = joinDefinition,
-                                ChildJoin = join
-                            };
-                            result.Add(joinInfo);
-                        }
-                    }
-                    else
+                    ChildJoin = joinDefinition,
+                };
+                result.Add(joinInfo);
+            }
+
+            var children = joins.Where(p => p.ParentObject != null).OfType<TableFieldJoinDefinition>();
+
+            foreach (var child in children)
+            {
+                var type = child.ParentObject.GetType();
+                if (child.ParentObject is LookupJoin lookupJoin)
+                {
+                    var parentLookupJoin = result.FirstOrDefault(p => p.ChildJoin == lookupJoin.JoinDefinition);
+                    if (parentLookupJoin != null)
                     {
                         var joinInfo = new JoinInfo()
                         {
-                            ParentJoin = joinDefinition,
-                            ChildJoin = join
+                            ParentJoin = parentLookupJoin.ChildJoin,
+                            ChildJoin = child
                         };
                         result.Add(joinInfo);
                     }
@@ -402,5 +389,53 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        public static List<string> GetAllIncludePropertiesFromNavProperties(this List<JoinInfo> joinsInfos)
+        {
+            var result = new List<string>();
+            foreach (var joinInfo in joinsInfos)
+            {
+                result.Add(joinInfo.GetIncludePropertyFromNavProperty(joinsInfos));
+            }
+            return result;
+        }
+
+        public static string GetIncludePropertyFromNavProperty(this JoinInfo joinInfo, List<JoinInfo> joinInfos)
+        {
+            var result = joinInfo.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
+            if (joinInfo.ParentJoin != null)
+            {
+                var parentJoin = joinInfos.FirstOrDefault(p => p.ChildJoin == joinInfo.ParentJoin);
+                if (parentJoin != null)
+                {
+                    result = $"{GetIncludePropertyFromNavProperty(parentJoin, joinInfos)}.{result}";
+                }
+            }
+            return result;
+        }
+
+        public static object GetPropertyFilterValue(this string value, FieldDataTypes dataType)
+        {
+            object result = null;
+            switch (dataType)
+            {
+                case FieldDataTypes.String:
+                    result = value;
+                    break;
+                case FieldDataTypes.Integer:
+                    result = int.Parse(value);
+                    break;
+                case FieldDataTypes.Decimal:
+                    break;
+                case FieldDataTypes.DateTime:
+                    break;
+                case FieldDataTypes.Bool:
+                    break;
+                case FieldDataTypes.Memo:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
+            }
+            return result;
+        }
     }
 }

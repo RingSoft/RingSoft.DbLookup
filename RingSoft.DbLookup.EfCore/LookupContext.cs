@@ -183,54 +183,21 @@ namespace RingSoft.DbLookup.EfCore
         }
 
         public override LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition) 
-            where TEntity : class, new()
+            where TEntity : class
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
             var query = context.GetTable<TEntity>();
-            var propertiesProcessed = new List<FieldDefinition>();
+            var navProperties = lookupDefinition.GetAllNavigationProperties();
 
-            foreach (var joinDefinition in lookupDefinition.Joins)
+            var includes = navProperties.GetAllIncludePropertiesFromNavProperties();
+
+            foreach (var include in includes)
             {
-                var name = joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName;
-
-                var properties = typeof(TEntity).GetProperties();
-                var property =
-                    properties.FirstOrDefault(f => f.Name == name);
-                if (property != null)
-                {
-                    var navProperties = joinDefinition.GetAllNavigationProperties(lookupDefinition);
-                    var navigationProperty = string.Empty;
-
-                    foreach (var navProperty in navProperties)
-                    {
-                        if (navProperty.ParentJoin == joinDefinition)
-                        {
-                            navigationProperty = navProperty.ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
-                            navigationProperty +=
-                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
-                            query = query.Include(navigationProperty);
-                        }
-                        else
-                        {
-                            navigationProperty +=
-                                $".{navProperty.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName}";
-                            query = query.Include(navigationProperty);
-                        }
-
-                    }
-                }
+                query = query.Include(include);
             }
 
-            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition, pageSize);
+            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition);
             return lookupMaui;
-        }
-
-
-        private string GetNavProperty(TableFieldJoinDefinition joinDefinition
-            , string parentName)
-        {
-            var result = $"{parentName}.{joinDefinition.ForeignKeyDefinition.ForeignObjectPropertyName}";
-            return result;
         }
     }
 }

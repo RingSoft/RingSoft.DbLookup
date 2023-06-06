@@ -8,6 +8,9 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using Google.Protobuf.WellKnownTypes;
 using MySqlX.XDevAPI.Common;
+using System.Linq.Expressions;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -92,6 +95,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public string Path { get; internal set; }
 
         public abstract TreeViewType TreeViewType { get; }
+
+        public abstract string PropertyName { get; }
 
         public bool IsFixed { get; internal set; }
 
@@ -506,6 +511,104 @@ namespace RingSoft.DbLookup.TableProcessing
 
                 //TableDescription = foundItem.Name;
             }
+        }
+
+        public virtual BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        {
+            return null;
+        }
+
+        public static BinaryExpression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
+        {
+            BinaryExpression result = null;
+            var returnExpression = GetPropertyExpression(property, param);
+
+            var expressionValue = Expression.Constant(value, value.GetType());
+
+            switch (condition)
+            {
+                case Conditions.Equals:
+                    result = Expression.Equal(returnExpression, expressionValue);
+                    break;
+                case Conditions.NotEquals:
+                    break;
+                case Conditions.GreaterThan:
+                    break;
+                case Conditions.GreaterThanEquals:
+                    break;
+                case Conditions.LessThan:
+                    break;
+                case Conditions.LessThanEquals:
+                    break;
+                case Conditions.Contains:
+                    break;
+                case Conditions.NotContains:
+                    break;
+                case Conditions.EqualsNull:
+                    break;
+                case Conditions.NotEqualsNull:
+                    break;
+                case Conditions.BeginsWith:
+                    break;
+                case Conditions.EndsWith:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
+            }
+            return result;
+        }
+
+        public static Expression<Func<TEntity, bool>> ReturnWhereInt<TEntity>(string property, int value)
+        {
+            var newWhereMethod = GetWhereMethod<TEntity>();
+            var param = Expression.Parameter(typeof(TEntity), "p");
+            var returnExpression = GetPropertyExpression(property, param);
+
+            var expressionValue = Expression.Constant(value);
+            var body = Expression.Equal(returnExpression, expressionValue);
+            var whereLambda = Expression.Lambda<Func<TEntity, bool>>(body, param);
+
+            return whereLambda;
+            //object whereResult = newWhereMethod
+            //    .Invoke(null, new object[] { source, whereLambda });
+
+            //var whereQueryable = (IQueryable<TEntity>)whereResult;
+            //return whereQueryable;
+        }
+
+        public static MethodInfo GetWhereMethod<TEntity>()
+        {
+            var methods = typeof(Queryable).GetMethods();
+            var whereMethod = methods
+                .Where(method => method.Name == "Where"
+                                 && method.IsGenericMethodDefinition
+                                 && method.GetGenericArguments().Length == 1
+                                 && method.GetParameters().Length == 2)
+                .FirstOrDefault();
+            var newWhereMethod = whereMethod.MakeGenericMethod(typeof(TEntity));
+            return newWhereMethod;
+        }
+
+
+        public static Expression GetPropertyExpression(string property, ParameterExpression param)
+        {
+            var first = true;
+            Expression returnExpression = null;
+            var properties = property.Split('.');
+            foreach (var newProperty in properties)
+            {
+                if (first)
+                {
+                    first = false;
+                    returnExpression = Expression.Property(param, newProperty);
+                }
+                else
+                {
+                    returnExpression = Expression.Property(returnExpression, newProperty);
+                }
+            }
+
+            return returnExpression;
         }
     }
 }

@@ -176,6 +176,7 @@ namespace RingSoft.DbLookup.Lookup
             lookupJoin.JoinDefinition = JoinDefinition;
             lookupJoin.SetJoinDefinition(foreignFieldDefinition);
             lookupJoin.ParentObject = this;
+            if (lookupJoin.JoinDefinition != null) lookupJoin.JoinDefinition.ParentObject = this;
             return lookupJoin;
         }
 

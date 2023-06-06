@@ -12,6 +12,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public override FilterItemTypes Type => FilterItemTypes.AdvancedFind;
 
         public override TreeViewType TreeViewType => TreeViewType.AdvancedFind;
+        public override string PropertyName { get; }
 
         public int AdvancedFindId { get; set; }
 

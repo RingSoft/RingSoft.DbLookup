@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using MySqlX.XDevAPI.Common;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
@@ -663,6 +664,17 @@ namespace RingSoft.DbLookup.TableProcessing
                 newFilter.CopyFrom(filterDefinitionFixedFilter);
                 _fixedFilterDefinitions.Add(newFilter);
             }
+        }
+
+        public BinaryExpression GetWhereExpresssion<TEntity>(ParameterExpression param)
+        {
+            BinaryExpression result = null;
+
+            foreach (var fixedFilter in FixedFilters)
+            {
+                result = fixedFilter.GetMauiFilter<TEntity>(param);
+            }
+            return result;
         }
     }
 }

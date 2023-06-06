@@ -158,6 +158,9 @@ namespace RingSoft.DbLookup.Lookup
             
             returnEntity.ParentField = returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
 
+            returnEntity.ParentObject = null;
+            if (returnEntity.JoinDefinition != null) returnEntity.JoinDefinition.ParentObject = null;
+
             //ChildField =
             //    returnEntity.JoinDefinition.ForeignKeyDefinition.ForeignKeyFieldJoins[0].ForeignField;
             return returnEntity;

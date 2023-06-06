@@ -132,7 +132,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(TControl));
+            
             ProcessFrameworkElementFactory(lookupControl, factory, dataColumnName, LookupColumnDefinition, designMode);
+            factory.AddHandler(FrameworkElement.LoadedEvent, new RoutedEventHandler(Loaded));
 
             template.VisualTree = factory;
 
@@ -142,9 +144,17 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected abstract void ProcessFrameworkElementFactory(LookupControl lookupControl,
             FrameworkElementFactory factory, string dataColumnName,
             LookupColumnDefinitionBase lookupColumnDefinition, bool designMode);
+
+        private void Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is TControl control)
+            {
+
+            }
+        }
     }
 
-    public class LookupColumn : LookupColumn<TextBlock>
+        public class LookupColumn : LookupColumn<TextBlock>
     {
         private LookupColumnAlignmentTypes _textAlignment = LookupColumnAlignmentTypes.Left;
 

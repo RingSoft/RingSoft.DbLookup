@@ -463,6 +463,7 @@ namespace RingSoft.DbLookup.Lookup
         public LookupJoin Include(FieldDefinition foreignFieldDefinition)
         {
             var lookupJoin = new LookupJoin(this, foreignFieldDefinition);
+            if (lookupJoin.JoinDefinition != null) lookupJoin.JoinDefinition.ParentObject = null;
             return lookupJoin;
         }
 

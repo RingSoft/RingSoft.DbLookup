@@ -322,5 +322,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             SkipPrint = value;
         }
-}
+
+        public string GetQueryPropertyName()
+        {
+            return PropertyName;
+        }
+    }
 }

@@ -403,7 +403,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _currentPageSize;
         //private DataTable _dataSource = new DataTable("DataSourceTable");
         private DataColumnMaps _columnMaps = new DataColumnMaps();
-        private List<DataItem> _dataSource = new List<DataItem>();
+        private ObservableCollection<DataItem> _dataSource = new ObservableCollection<DataItem>();
 
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
@@ -594,6 +594,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _columnMaps.ClearColumns();
             _dataSource.Clear();
 
+
             if (LookupColumns.Any())
                 MergeLookupDefinition();
             else
@@ -667,7 +668,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (lookupColumnDefinition == null)
                     throw new Exception($"No visible Lookup Column Definition was found for Property '{lookupColumnBase.PropertyName}'.");
 
-                lookupColumnBase.DataColumnName = lookupColumnDefinition.SelectSqlAlias;
+                _columnMaps.AddColumn(lookupColumnDefinition.SelectSqlAlias);
+                lookupColumnBase.DataColumnName = _columnMaps.GetVisibleColumnName(lookupColumnDefinition.SelectSqlAlias);
+
                 lookupColumnBase.LookupColumnDefinition = lookupColumnDefinition;
 
                 if (lookupColumnBase is LookupColumn lookupColumn)
@@ -706,7 +709,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     var lookupColumn = LookupControlsGlobals.LookupControlColumnFactory.CreateLookupColumn(column);
 
-                    lookupColumn.DataColumnName = column.SelectSqlAlias;
+                    _columnMaps.AddColumn(column.SelectSqlAlias);
+                    lookupColumn.DataColumnName = _columnMaps.GetVisibleColumnName(column.SelectSqlAlias);
+
                     lookupColumn.Header = column.Caption;
                     lookupColumn.LookupColumnDefinition = column;
                     lookupColumn.PropertyName = column.PropertyName;
@@ -733,14 +738,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 width = 20;
             }
-            _columnMaps.AddColumn(dataColumnName);
-            var columnName = _columnMaps.GetVisibleColumnName(dataColumnName);
+
             var gridColumn = new GridViewColumn
             {
                 Header = columnHeader,
                 Width = width,
-                CellTemplate = lookupColumn.GetCellDataTemplate(this, columnName, this.IsDesignMode()),
-                DisplayMemberBinding = new Binding(columnName),
+                CellTemplate = lookupColumn.GetCellDataTemplate(this, dataColumnName, false),
             };
             LookupGridView?.Columns.Add(gridColumn);
             
@@ -1289,16 +1292,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 for (int row = 0; row < lookupDataMaui.RowCount; row++)
                 {
-                    ListViewItem item = null;
                     var dataItem = new DataItem(_columnMaps);
                     foreach (var lookupColumn in LookupColumns)
                     {
                         var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);
-                        dataItem.SetColumnValue(lookupColumn.DataColumnName, value);
+                        dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, value);
                     }
-                    ListView.Items.Add(dataItem);
+                    _dataSource.Add(dataItem);
                 }
             }
+
+            if (ListView != null)
+                ListView.ItemsSource = _dataSource;
+
         }
 
 
@@ -1337,7 +1343,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         //                    cellValue = lookupColumn.LookupColumnDefinition.FormatValue(cellValue);
         //                }
         //            }
-                    
+
         //            newDataRow[lookupColumn.DataColumnName] = cellValue;
         //        }
 
@@ -1416,7 +1422,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         //        {
         //            SetupRecordCount(LookupData.RecordCount);
         //        }
-                
+
         //    }
 
         //}

@@ -359,6 +359,10 @@ namespace RingSoft.DbLookup.Lookup
 
                     columnDefinition.FieldDescription = foundTreeItem.Name;
                     var joinResult = lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
+                    if (joinResult != null)
+                    {
+                        ParentObject = joinResult.LookupJoin;
+                    }
                     if (joinResult != null && joinResult.LookupJoin != null)
                     {
                         columnDefinition.JoinQueryTableAlias = joinResult.LookupJoin.JoinDefinition.Alias;
@@ -424,6 +428,8 @@ namespace RingSoft.DbLookup.Lookup
             }
             return FormatValue(value);
         }
+
+        public abstract string GetPropertyJoinName();
 
         public abstract string GetDatabaseValue<TEntity>(TEntity entity) where TEntity : new();
 

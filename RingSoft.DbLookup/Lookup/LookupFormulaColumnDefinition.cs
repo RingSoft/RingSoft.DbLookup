@@ -485,6 +485,11 @@ namespace RingSoft.DbLookup.Lookup
             base.LoadFromEntity(entity, lookupDefinition);
         }
 
+        public override string GetPropertyJoinName()
+        {
+            return string.Empty;
+        }
+
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
             return "Formula";

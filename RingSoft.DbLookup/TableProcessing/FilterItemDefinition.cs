@@ -533,6 +533,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotEquals:
                     break;
                 case Conditions.GreaterThan:
+                    result = Expression.GreaterThan(returnExpression, expressionValue);
                     break;
                 case Conditions.GreaterThanEquals:
                     break;

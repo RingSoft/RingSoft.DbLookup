@@ -674,6 +674,11 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 result = fixedFilter.GetMauiFilter<TEntity>(param);
             }
+
+            foreach (var userFilter in UserFilters)
+            {
+                result = userFilter.GetMauiFilter<TEntity>(param);
+            }
             return result;
         }
     }

@@ -354,21 +354,27 @@ namespace RingSoft.DbLookup.AdvancedFind
                         result = result.Items.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
                     }
 
-                    if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
-                    {
-                        var lookupJoin = new LookupJoin(LookupDefinition);
-                        var tableFieldJoin = new TableFieldJoinDefinition();
-                        tableFieldJoin.ForeignKeyDefinition = fieldDefinition.ParentJoinForeignKeyDefinition;
-                        lookupJoin.JoinDefinition = tableFieldJoin;
+                    if (fieldDefinition.ParentJoinForeignKeyDefinition == null)
+                    //{
+                    //    var lookupJoin = new LookupJoin(LookupDefinition);
+                    //    var tableFieldJoin = new TableFieldJoinDefinition();
+                    //    tableFieldJoin.ForeignKeyDefinition = fieldDefinition.ParentJoinForeignKeyDefinition;
+                    //    lookupJoin.JoinDefinition = tableFieldJoin;
 
-                        if (result.Parent != null)
-                        {
-                            lookupJoin.ParentObject = result.Parent.Include;
-                        }
-                        result.Include = lookupJoin;
-                    }
-                    else
+                    //    if (result.Parent != null)
+                    //    {
+                    //        lookupJoin.ParentObject = result.Parent.Include;
+                    //        tableFieldJoin.ParentObject = result.Parent.Include;
+                    //    }
+                    //    result.Include = lookupJoin;
+                    //}
+                    //else
                     {
+                        if (fieldDefinition.PropertyName == "ProductName")
+                        {
+
+                        }
+
                         if (result.Parent != null)
                         {
                             var lookupJoin = new LookupJoin(LookupDefinition);
@@ -486,48 +492,6 @@ namespace RingSoft.DbLookup.AdvancedFind
                 childNodes.Add(selectedItem);
             }
 
-            if (childNodes.Any() == false)
-            {
-                //if (createColumn && selectedItem != null)
-                //{
-                //    switch (selectedItem.Type)
-                //    {
-                //        case TreeViewType.Field:
-                //            var processResult =
-                //                SelectColumnDescription(selectedItem, selectedItem, null, columnCaption, percentWidth);
-                //            includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                //            result.LookupJoin = includeJoin;
-                //            result.ColumnDefinition = processResult.ColumnDefinition;
-                //            break;
-                //        case TreeViewType.Formula:
-                //            var column = LookupDefinition.AddVisibleColumnDefinition(columnCaption,
-                //                selectedItem.FormulaData.Formula, percentWidth, selectedItem.FormulaData.DataType, "");
-                //            result.ColumnDefinition = column;
-
-                //            break;
-                //        default:
-                //            throw new ArgumentOutOfRangeException();
-                //    }
-
-
-                //    if (result.ColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
-                //    {
-                //        if (result.LookupJoin == null)
-                //        {
-                //            formulaColumn.PrimaryTable = LookupDefinition.TableDefinition;
-                //        }
-                //        else
-                //        {
-                //            formulaColumn.PrimaryTable =
-                //                result.LookupJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-
-                //            formulaColumn.PrimaryField =
-                //                result.LookupJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-                //        }
-                //    }
-                //}
-            }
-
             foreach (var child in childNodes)
             {
                 if (childNodes.IndexOf(child) == 0)
@@ -552,35 +516,6 @@ namespace RingSoft.DbLookup.AdvancedFind
                         result.LookupJoin = includeJoin;
                     }
 
-                    //if (createColumn)
-                    //{
-                    //    switch (selectedItem.Type)
-                    //    {
-                    //        case TreeViewType.Field:
-                    //            var processResult =
-                    //                SelectColumnDescription(selectedItem, child, includeJoin, columnCaption, percentWidth);
-                    //            includeJoin = ProcessInclude(includeJoin, processResult.LookupJoin);
-                    //            result.LookupJoin = includeJoin;
-                    //            result.ColumnDefinition = processResult.ColumnDefinition;
-                    //            break;
-                    //        case TreeViewType.Formula:
-                    //            var column = includeJoin.AddVisibleColumnDefinition(columnCaption,
-                    //               selectedItem.FormulaData.Formula, percentWidth, selectedItem.FormulaData.DataType);
-                    //            result.ColumnDefinition = column;
-                    //            break;
-                    //        default:
-                    //            throw new ArgumentOutOfRangeException();
-                    //    }
-
-                    //    if (result.ColumnDefinition is LookupFormulaColumnDefinition formulaColumn)
-                    //    {
-                    //        formulaColumn.PrimaryTable =
-                    //            includeJoin.JoinDefinition.ForeignKeyDefinition.ForeignTable;
-
-                    //        formulaColumn.PrimaryField =
-                    //            includeJoin.JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
-                    //    }
-                    //}
                 }
                 else if (childNodes.IndexOf(child) != 0)
                 {
@@ -590,10 +525,6 @@ namespace RingSoft.DbLookup.AdvancedFind
                 }
             }
 
-            //if (createColumn)
-            //{
-            //    SetTableField(selectedItem, result);
-            //}
             return result;
         }
 

@@ -162,7 +162,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             get
             {
-                return FieldDefinition.PropertyName;
+                return JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
             }
         }
 

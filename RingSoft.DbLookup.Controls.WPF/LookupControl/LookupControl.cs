@@ -20,6 +20,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
+using MySqlX.XDevAPI.Relational;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -711,7 +712,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                     _columnMaps.AddColumn(column.SelectSqlAlias);
                     lookupColumn.DataColumnName = _columnMaps.GetVisibleColumnName(column.SelectSqlAlias);
-
+                    
                     lookupColumn.Header = column.Caption;
                     lookupColumn.LookupColumnDefinition = column;
                     lookupColumn.PropertyName = column.PropertyName;
@@ -1295,6 +1296,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var dataItem = new DataItem(_columnMaps);
                     foreach (var lookupColumn in LookupColumns)
                     {
+                        var joinProperty = lookupColumn.LookupColumnDefinition.GetPropertyJoinName();
                         var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);
                         dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, value);
                     }

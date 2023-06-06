@@ -328,6 +328,28 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        public static string GetPropertyJoinName(this TableFieldJoinDefinition tableFieldJoinDefinition, string propertyName)
+        {
+            var result = string.Empty;
+
+            if (tableFieldJoinDefinition == null)
+            {
+                return propertyName;
+            }
+
+            var properties = tableFieldJoinDefinition.GetNavigationProperties();
+
+            foreach (var property in properties)
+            {
+                result += $"{property.ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName}.";
+            }
+
+            result += propertyName;
+
+            return result;
+
+        }
+
         public static List<JoinInfo> GetNavigationProperties(this IJoinParent parentJoin)
         {
             var result = new List<JoinInfo>();
@@ -346,6 +368,24 @@ namespace RingSoft.DbLookup
                     var newProps = parentJoin.ParentObject.GetNavigationProperties();
                     result.InsertRange(0, newProps);
                 }
+            }
+
+            return result;
+        }
+
+        public static List<JoinInfo> GetNavigationProperties(this TableFieldJoinDefinition parentJoin)
+        {
+            var result = new List<JoinInfo>();
+            var joinInfo = new JoinInfo
+            {
+                ParentJoin = parentJoin,
+            };
+            result.Add(joinInfo);
+
+            if (parentJoin.ParentObject != null)
+            {
+                var newProps = parentJoin.ParentObject.GetNavigationProperties();
+                result.InsertRange(0, newProps);
             }
 
             return result;
@@ -419,18 +459,20 @@ namespace RingSoft.DbLookup
             switch (dataType)
             {
                 case FieldDataTypes.String:
+                case FieldDataTypes.Memo:
                     result = value;
                     break;
                 case FieldDataTypes.Integer:
                     result = int.Parse(value);
                     break;
                 case FieldDataTypes.Decimal:
+                    result = decimal.Parse(value);
                     break;
                 case FieldDataTypes.DateTime:
+                    result = DateTime.Parse(value);
                     break;
                 case FieldDataTypes.Bool:
-                    break;
-                case FieldDataTypes.Memo:
+                    result = bool.Parse(value);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);

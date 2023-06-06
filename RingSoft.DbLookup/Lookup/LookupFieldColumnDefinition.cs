@@ -307,7 +307,6 @@ namespace RingSoft.DbLookup.Lookup
             if (foundItem != null)
             {
                 SetFieldDefinition(foundItem.FieldDefinition);
-                ParentObject = foundItem.Include;
             }
             //var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
@@ -316,6 +315,16 @@ namespace RingSoft.DbLookup.Lookup
         public override string FormatValueForColumnMap(string value)
         {
             return FieldDefinition.FormatValueForColumnMap(value);
+        }
+
+        public override string GetPropertyJoinName()
+        {
+            if (ParentObject is LookupJoin parentLookupJoin)
+            {
+                return parentLookupJoin.JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+            }
+
+            return FieldDefinition.PropertyName;
         }
 
         public override string GetDatabaseValue<TEntity>(TEntity entity)

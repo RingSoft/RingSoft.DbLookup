@@ -47,7 +47,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The fixed filters.
         /// </value>
-        public IReadOnlyList<FilterItemDefinition> FixedFilters => _fixedFilterDefinitions;
+        public IReadOnlyList<FilterItemDefinition> FixedFilters => FixedBundle.Filters;
 
         /// <summary>
         /// Gets the user filters.
@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The user filters.
         /// </value>
-        public IReadOnlyList<FilterItemDefinition> UserFilters => _userFilterDefinitions;
+        public IReadOnlyList<FilterItemDefinition> UserFilters => UserBundle.Filters;
 
         /// <summary>
         /// Gets the joins.
@@ -67,18 +67,24 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public TableDefinitionBase TableDefinition { get; set; }
 
+        public FilterBundle FixedBundle { get; }
+        public FilterBundle UserBundle { get; }
+
         /// <summary>
         /// Occurs when this filter is copied from a source table filter definition.  Used by subscribers (like AutoFill) to synchronize filters.
         /// </summary>
         public event EventHandler<TableFilterCopiedArgs> FilterCopied;
 
-        private readonly List<FilterItemDefinition> _fixedFilterDefinitions = new List<FilterItemDefinition>();
-        private readonly List<FilterItemDefinition> _userFilterDefinitions = new List<FilterItemDefinition>();
+        //private readonly List<FilterItemDefinition> _fixedFilterDefinitions = new List<FilterItemDefinition>();
+        //private readonly List<FilterItemDefinition> _userFilterDefinitions = new List<FilterItemDefinition>();
+
         private readonly List<TableFieldJoinDefinition> _joinDefinitions = new List<TableFieldJoinDefinition>();
 
         internal TableFilterDefinitionBase(TableDefinitionBase tableDefinition)
         {
             TableDefinition = tableDefinition;
+            FixedBundle = new FilterBundle(this);
+            UserBundle = new FilterBundle(this);
         }
 
         /// <summary>
@@ -86,22 +92,22 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </summary>
         public void ClearFixedFilters()
         {
-            _fixedFilterDefinitions.Clear();
+            FixedBundle.ClearFilters();
         }
 
         public void ClearUserFilters()
         {
-            _userFilterDefinitions.Clear();
+            UserBundle.ClearFilters();
         }
 
         internal void AddUserFilter(FilterItemDefinition filterItem)
         {
-            _userFilterDefinitions.Add(filterItem);
+            UserBundle.AddFilter(filterItem);
         }
 
         internal void AddFixedFilter(FilterItemDefinition filterItem)
         {
-            _fixedFilterDefinitions.Add(filterItem);
+            FixedBundle.AddFilter(filterItem);
         }
 
         /// <summary>
@@ -111,8 +117,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public void CopyFrom(TableFilterDefinitionBase source)
         {
             _joinDefinitions.Clear();
-            CopyFilters(source.FixedFilters, _fixedFilterDefinitions);
-            CopyFilters(source.UserFilters, _userFilterDefinitions);
+            FixedBundle.CopyFilters(source.FixedBundle);
+            UserBundle.CopyFilters(source.UserBundle);
             OnTableFilterCopied(new TableFilterCopiedArgs(source));
         }
 
@@ -188,7 +194,7 @@ namespace RingSoft.DbLookup.TableProcessing
             string value)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
-            _fixedFilterDefinitions.Add(fieldFilter);
+            FixedBundle.AddFilter(fieldFilter);
             fieldFilter.IsFixed = true;
             return fieldFilter;
         }
@@ -198,7 +204,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             var formulaFilter = CreateFormulaFilter(formula, dataType, condition, value);
             formulaFilter.Description = description;
-            _fixedFilterDefinitions.Add(formulaFilter);
+            FixedBundle.AddFilter(formulaFilter);
             formulaFilter.IsFixed = true;
             return formulaFilter;
         }
@@ -286,18 +292,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         private void InternalAddUserFilter(int index, FilterItemDefinition filter)
         {
-            if (_userFilterDefinitions.Count < index)
-            {
-                index = -1;
-            }
-            if (index == -1)
-            {
-                _userFilterDefinitions.Add(filter);
-            }
-            else
-            {
-                _userFilterDefinitions.Insert(index, filter);
-            }
+            UserBundle.InternalAddFilter(index, filter);
         }
 
         public FormulaFilterDefinition AddUserFilter(string formula, Conditions condition, string value = "",
@@ -328,20 +323,12 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public void RemoveUserFilter(FilterItemDefinition filterItem)
         {
-            _userFilterDefinitions.Remove(filterItem);
-        }
-
-        public void ReplaceUserFilter(FilterItemDefinition oldFilterItemDefinition,
-            FilterItemDefinition newFilterItemDefinition)
-        {
-            var index = _userFilterDefinitions.IndexOf(oldFilterItemDefinition);
-            _userFilterDefinitions.Remove(oldFilterItemDefinition);
-            _userFilterDefinitions.Insert(index, newFilterItemDefinition);
+            UserBundle.InternalRemoveFilter(filterItem);
         }
 
         public void RemoveFixedFilter(FilterItemDefinition filterItem)
         {
-            _fixedFilterDefinitions.Remove(filterItem);
+            FixedBundle.InternalRemoveFilter(filterItem);
         }
 
     internal void ProcessQuery(SelectQuery query)
@@ -662,7 +649,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         throw new ArgumentOutOfRangeException();
                 }
                 newFilter.CopyFrom(filterDefinitionFixedFilter);
-                _fixedFilterDefinitions.Add(newFilter);
+                FixedBundle.AddFilter(newFilter);
             }
         }
 

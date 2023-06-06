@@ -1302,11 +1302,23 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                     _dataSource.Add(dataItem);
                 }
+
+                var showRecordCountButton = _dataSource.Count == lookupDataMaui.PageSize;
+                if (showRecordCountButton)
+                {
+                    ShowRecordCount(0, false);
+                }
+                else
+                {
+                    var recordCount = lookupDataMaui.GetRecordCount();
+                    ShowRecordCount(recordCount, true);
+                }
             }
 
             if (ListView != null)
                 ListView.ItemsSource = _dataSource;
 
+            AdvancedFindButton.IsEnabled = _dataSource.Any();
         }
 
 
@@ -1450,58 +1462,60 @@ namespace RingSoft.DbLookup.Controls.WPF
             PrimaryKeyValue parentWindowPrimaryKeyValue = null, bool searchForSelectAll = false,
             PrimaryKeyValue initialSearchForPrimaryKeyValue = null)
         {
-            if (LookupData == null || ListView == null || !LookupData.LookupDefinition.VisibleColumns.Any())
-            {
-                _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
-                return;
-            }
-
-            LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
-
-            if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
-            {
-                if (SearchForHost != null)
-                    initialSearchFor = SearchForHost.SearchText;
-            }
-
             _currentPageSize = GetPageSize();
+            LookupDataMaui.GetInitData(_currentPageSize);
+            //if (LookupData == null || ListView == null || !LookupData.LookupDefinition.VisibleColumns.Any())
+            //{
+            //    _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
+            //    return;
+            //}
 
-            if (String.IsNullOrEmpty(initialSearchFor) &&
-                (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
-            {
-                //LookupData.GetInitData();
-                LookupDataMaui.GetInitData(_currentPageSize);
-            }
-            else
-            {
-                if (SearchForHost != null)
-                {
-                    if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
-                    {
-                        var forceRefresh = SearchForHost.SearchText == initialSearchFor;
+            //LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
-                        SearchForHost.SearchText =
-                            initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+            //if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
+            //{
+            //    if (SearchForHost != null)
+            //        initialSearchFor = SearchForHost.SearchText;
+            //}
 
-                        if (searchForSelectAll)
-                        {
-                            SearchForHost.SelectAll();
-                        }
+            //_currentPageSize = GetPageSize();
 
-                        if (forceRefresh)
-                            LookupData.OnSearchForChange(initialSearchFor);
-                    }
-                    else
-                    {
-                        SearchText = initialSearchFor;
-                        if (searchForSelectAll)
-                        {
-                            SearchForHost.SelectAll();
-                        }
-                        LookupData.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
-                    }
-                }
-            }
+            //if (String.IsNullOrEmpty(initialSearchFor) &&
+            //    (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
+            //{
+            //    //LookupData.GetInitData();
+            //    LookupDataMaui.GetInitData(_currentPageSize);
+            //}
+            //else
+            //{
+            //    if (SearchForHost != null)
+            //    {
+            //        if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
+            //        {
+            //            var forceRefresh = SearchForHost.SearchText == initialSearchFor;
+
+            //            SearchForHost.SearchText =
+            //                initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+
+            //            if (searchForSelectAll)
+            //            {
+            //                SearchForHost.SelectAll();
+            //            }
+
+            //            if (forceRefresh)
+            //                LookupData.OnSearchForChange(initialSearchFor);
+            //        }
+            //        else
+            //        {
+            //            SearchText = initialSearchFor;
+            //            if (searchForSelectAll)
+            //            {
+            //                SearchForHost.SelectAll();
+            //            }
+            //            LookupData.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+            //        }
+            //    }
+            //}
         }
 
         private int GetPageSize(bool setOriginalPageSize = true)
@@ -1822,16 +1836,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Spinner != null)
                 Spinner.Visibility = Visibility.Visible;
 
-            var processComplete = await LookupData.GetRecordCount();
+            var recordCount = LookupDataMaui.GetRecordCount();
 
             if (Spinner != null)
                 Spinner.Visibility = Visibility.Collapsed;
 
-            if (processComplete)
-            {
-                //if (!GetRecordCountButton.IsVisible)
-                ShowRecordCount(LookupData.RecordCount, true);
-            }
+            ShowRecordCount(recordCount, true);
         }
 
         private void ShowAdvancedFind()
@@ -2068,7 +2078,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ShowRecordCountWait = false;
                 ShowRecordCountProps = false;
-                LookupData.ClearLookupData();
+                LookupDataMaui.ClearData();
             }
             
             if (EqualsRadioButton != null)

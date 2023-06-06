@@ -17,6 +17,7 @@ using Enum = System.Enum;
 using Type = System.Type;
 using System.Reflection;
 using System.Linq.Expressions;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup
 {
@@ -540,7 +541,26 @@ namespace RingSoft.DbLookup
             return tableDefinition;
         }
 
-        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, string property, string methodName, System.Type propertyType)
+        private static Type GetType<TEntity>(string property)
+        {
+            Type type = typeof(TEntity);
+            ParameterExpression arg = Expression.Parameter(type, "x");
+            Expression expr = arg;
+
+            string[] props = property.Split('.');
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                expr = Expression.Property(expr, pi);
+                type = pi.PropertyType;
+            }
+            return type;
+
+        }
+
+
+        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, string methodName, string property)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -555,7 +575,7 @@ namespace RingSoft.DbLookup
                               && method.IsGenericMethodDefinition
                               && method.GetGenericArguments().Length == 2
                               && method.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(TEntity), propertyType)
+                .MakeGenericMethod(typeof(TEntity), GetType<TEntity>(property))
                 .Invoke(null, new object[] { source, lambda });
 
             var queryAble = (IQueryable<TEntity>)result;
@@ -581,6 +601,11 @@ namespace RingSoft.DbLookup
             return lambda;
         }
 
+        public static ParameterExpression GetParameterExpression<TEntity>()
+        {
+            var param = Expression.Parameter(typeof(TEntity), "p");
 
+            return param;
+        }
     }
 }

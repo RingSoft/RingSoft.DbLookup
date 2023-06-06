@@ -641,5 +641,18 @@ namespace RingSoft.DbLookup.TableProcessing
 
             return returnExpression;
         }
+
+        public static IQueryable<TEntity> FilterQuery<TEntity>(IQueryable<TEntity> source, ParameterExpression param, BinaryExpression expression)
+        {
+            var whereLambda = Expression.Lambda<Func<TEntity, bool>>(expression, param);
+
+            var whereMethod = GetWhereMethod<TEntity>();
+
+            object whereResult = whereMethod
+                .Invoke(null, new object[] { source, whereLambda });
+            var whereQueryable = (IQueryable<TEntity>)whereResult;
+
+            return whereQueryable;
+        }
     }
 }

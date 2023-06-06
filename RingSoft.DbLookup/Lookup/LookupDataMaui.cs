@@ -286,7 +286,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             PageSize = pageSize;
 
-            var param = Expression.Parameter(typeof(TEntity), "p");
+            var param = GblMethods.GetParameterExpression<TEntity>();
             var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
 
             if (whereExpression == null)
@@ -295,16 +295,7 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
-                var whereLambda = Expression.Lambda<Func<TEntity, bool>>(whereExpression, param);
-
-                var whereMethod = FilterItemDefinition.GetWhereMethod<TEntity>();
-
-                object whereResult = whereMethod
-                    .Invoke(null, new object[] { BaseQuery, whereLambda });
-                var whereQueryable = (IQueryable<TEntity>)whereResult;
-
-
-                ProcessedQuery = whereQueryable;
+                ProcessedQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
             }
 
             ProcessedQuery = ProcessedQuery.Take(PageSize);

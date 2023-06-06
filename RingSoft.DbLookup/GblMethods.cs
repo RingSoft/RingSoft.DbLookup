@@ -32,6 +32,12 @@ namespace RingSoft.DbLookup
         Memo = 6
     }
 
+    public enum OrderMethods
+    {
+        OrderBy = 0,
+        ThenBy = 1,
+    }
+
     public static class GblMethods
     {
         /// <summary>
@@ -560,8 +566,19 @@ namespace RingSoft.DbLookup
         }
 
 
-        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, string methodName, string property)
+        public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, OrderMethods methodType, string property)
         {
+            var methodName = "OrderBy";
+            switch (methodType)
+            {
+                case OrderMethods.OrderBy:
+                    break;
+                case OrderMethods.ThenBy:
+                    methodName = "ThenBy";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(methodType), methodType, null);
+            }
             if (source == null)
                 throw new ArgumentNullException("source");
 

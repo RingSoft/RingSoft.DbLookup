@@ -296,6 +296,13 @@ namespace RingSoft.DbLookup.Lookup
             else
             {
                 ProcessedQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
+
+                var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
+                if (!orderColumnName.IsNullOrEmpty())
+                {
+                    ProcessedQuery = GblMethods.ApplyOrder(ProcessedQuery, OrderMethods.OrderBy,
+                        orderColumnName);
+                }
             }
 
             ProcessedQuery = ProcessedQuery.Take(PageSize);

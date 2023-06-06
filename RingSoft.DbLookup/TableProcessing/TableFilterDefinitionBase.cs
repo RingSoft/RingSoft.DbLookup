@@ -657,6 +657,7 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             BinaryExpression result = null;
 
+
             foreach (var fixedFilter in FixedFilters)
             {
                 result = fixedFilter.GetMauiFilter<TEntity>(param);

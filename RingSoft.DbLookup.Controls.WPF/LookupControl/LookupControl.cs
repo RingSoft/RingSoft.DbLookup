@@ -549,8 +549,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupDefinition != null)
             {
                 LookupDataMaui =
-                    LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition,
-                        _currentPageSize);
+                    LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition, false);
 
                 LookupData = new LookupDataBase(LookupDefinition, this);
 

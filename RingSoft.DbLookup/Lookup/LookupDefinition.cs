@@ -299,9 +299,16 @@ namespace RingSoft.DbLookup.Lookup
             return addNewRecordProcessor.ShowAddOnTheFlyWindow();
         }
 
-        public override LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, int pageSize)
+        public override LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode)
         {
-            return TableDefinition.Context.GetQuery<TEntity>(lookupDefinition);
+            if (inputMode)
+            {
+                return new LookupDataMaui<TEntity>(lookupDefinition);
+            }
+            else
+            {
+                return TableDefinition.Context.GetQuery<TEntity>(lookupDefinition);
+            }
         }
     }
 }

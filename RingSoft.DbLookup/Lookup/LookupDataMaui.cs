@@ -43,6 +43,8 @@ namespace RingSoft.DbLookup.Lookup
         public abstract int GetRecordCount();
 
         public abstract void ClearData();
+
+        public bool InputMode { get; protected set; }
     }
     public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : new()
     {
@@ -62,7 +64,10 @@ namespace RingSoft.DbLookup.Lookup
             BaseQuery = query;
         }
 
-
+        public LookupDataMaui(LookupDefinitionBase lookupDefinition) : base(lookupDefinition)
+        {
+            
+        }
         public override void GetInitData(int pageSize)
         {
             PageSize = pageSize;

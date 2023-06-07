@@ -120,7 +120,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                         formatType = FormulaData.DataType;
 
                     }
-                    result = new LookupFormulaColumnDefinition(newFormula, formatType);
+                    result = new LookupFormulaColumnDefinition(null, formatType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -129,7 +129,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             var formula = result.LoadFromTreeViewItem(this);
             if (!formula.IsNullOrEmpty())
             {
-                result = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                result = new LookupFormulaColumnDefinition(null, FieldDataTypes.String);
                 result.ColumnIndexToAdd = index;
                 result.LoadFromTreeViewItem(this);
             }
@@ -606,7 +606,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     //lookupFormulaColumn.JoinQueryTableAlias = includeJoin.JoinDefinition.Alias;
                     var formula = lookupFormulaColumn.OriginalFormula;
                     column = includeJoin.AddVisibleColumnDefinition(caption,
-                        formula, percentWidth, lookupFormulaColumn.DataType);
+                        lookupFormulaColumn.FormulaObject, percentWidth, lookupFormulaColumn.DataType);
                 }
             }
             else

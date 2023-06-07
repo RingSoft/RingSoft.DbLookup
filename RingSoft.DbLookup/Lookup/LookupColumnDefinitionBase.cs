@@ -309,9 +309,9 @@ namespace RingSoft.DbLookup.Lookup
             return key;
         }
 
-        internal virtual string GetFormulaForColumn()
+        internal virtual ILookupFormula GetFormulaForColumn()
         {
-            return string.Empty;
+            return null;
         }
 
         public virtual FieldDefinition GetFieldForColumn()

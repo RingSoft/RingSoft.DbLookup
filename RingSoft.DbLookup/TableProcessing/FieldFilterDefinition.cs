@@ -136,7 +136,7 @@ namespace RingSoft.DbLookup.TableProcessing
             internal set => _fieldToSearch = value;
         }
 
-        public string FormulaToSearch { get; internal set; }
+        public ILookupFormula FormulaToSearch { get; internal set; }
 
         public LookupDefinitionBase BaseLookup { get; internal set; }
 
@@ -327,7 +327,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotEquals:
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
-                    FormulaToSearch = string.Empty;
+                    FormulaToSearch = null;
                     FieldToSearch = null;
                     if (treeViewItem.Parent == null)
                     {
@@ -351,7 +351,6 @@ namespace RingSoft.DbLookup.TableProcessing
                             SetJoinDefinition(treeViewItem, treeViewItem.FieldDefinition);
 
                             FormulaToSearch = textColumn.GetFormulaForColumn();
-                            FormulaToSearch = FormulaToSearch.Replace("{Alias}", JoinDefinition.Alias);
                         }
                         else
                         {
@@ -489,7 +488,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
         {
-            if (!FormulaToSearch.IsNullOrEmpty())
+            if (FormulaToSearch != null)
             {
                 return null;
             }

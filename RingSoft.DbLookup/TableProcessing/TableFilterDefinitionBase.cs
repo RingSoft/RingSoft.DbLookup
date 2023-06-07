@@ -500,21 +500,21 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 queryTable = GetQueryTableForFieldFilter(query, fieldFilterDefinition);
 
-                if (fieldFilterDefinition.FormulaToSearch.IsNullOrEmpty())
-                {
-                    if (fieldFilterDefinition.FieldToSearch != null)
-                    {
-                        lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldToSearch.FieldName,
-                            fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value),
-                            fieldFilterDefinition.FieldToSearch.ValueType,
-                            dateType);
-                    }
-                }
-                else
-                {
-                    lastWhere = query.AddWhereItemFormula(fieldFilterDefinition.FormulaToSearch,
-                        fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value), ValueTypes.String);
-                }
+                //if (fieldFilterDefinition.FormulaToSearch.IsNullOrEmpty())
+                //{
+                //    if (fieldFilterDefinition.FieldToSearch != null)
+                //    {
+                //        lastWhere = query.AddWhereItem(queryTable, fieldFilterDefinition.FieldToSearch.FieldName,
+                //            fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value),
+                //            fieldFilterDefinition.FieldToSearch.ValueType,
+                //            dateType);
+                //    }
+                //}
+                //else
+                //{
+                //    lastWhere = query.AddWhereItemFormula(fieldFilterDefinition.FormulaToSearch,
+                //        fieldFilterDefinition.Condition, fieldFilterDefinition.GetSearchValue(value), ValueTypes.String);
+                //}
 
                 if (lastWhere != null)
                 {

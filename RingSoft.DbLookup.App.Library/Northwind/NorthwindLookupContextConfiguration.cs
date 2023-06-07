@@ -10,6 +10,45 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.App.Library.Northwind
 {
+    public class OrderFormula : ILookupFormula
+    {
+        public string GetDatabaseValue(object entity)
+        {
+            if (entity is Order order)
+            {
+                return $"{GblMethods.FormatDateValue(order.OrderDate.Value, DbDateTypes.DateOnly)} {order.CustomerID}";
+            }
+            return string.Empty;
+        }
+    }
+
+    public class EmployeeFormula : ILookupFormula
+    {
+        public string GetDatabaseValue(object entity)
+        {
+            if (entity is Employee employee)
+            {
+                return $"{employee.FirstName} {employee.LastName}";
+            }
+
+            return string.Empty;
+        }
+    }
+
+    public class ExtendedPriceFormula : ILookupFormula
+    {
+        public string GetDatabaseValue(object entity)
+        {
+            if (entity is Order_Detail orderDetail)
+            {
+                var extendedPrice = orderDetail.Quantity * orderDetail.UnitPrice;
+                return Math.Round(extendedPrice, 2).ToString();
+            }
+
+            return string.Empty;
+        }
+    }
+
     public class NorthwindLookupContextConfiguration : AppLookupContextConfiguration, ILookupControl
     {
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
@@ -142,7 +181,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             OrdersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             //OrdersLookup.AddVisibleColumnDefinition(p => p.OrderId, "Order ID", p => p.OrderID, 15);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.Order, "Order", GetOrderFormula(), 20, "");
+            OrdersLookup.AddVisibleColumnDefinition(p => p.Order, "Order", new OrderFormula(), 20, "");
             var orderInclude = OrdersLookup.Include(p => p.Customer);
 
             orderInclude.AddVisibleColumnDefinition(p => p.Customer, "Customer", 
@@ -150,13 +189,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             var join = OrdersLookup.Include(p => p.Employee);
             join.AddVisibleColumnDefinition(p => p.Employee, "Employee", 
-                orderEmployeeNameFormula, 30, FieldDataTypes.String);
+                new EmployeeFormula(), 30, FieldDataTypes.String);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
 
             OrderDetailsLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(_lookupContext.OrderDetails);
             OrderDetailsLookup.Include(p => p.Order)
-                .AddVisibleColumnDefinition(p => p.Order, "Order", GetOrderFormula(), 20, FieldDataTypes.String);
+                .AddVisibleColumnDefinition(p => p.Order, "Order", new OrderFormula(), 20, FieldDataTypes.String);
             var productInclude =  OrderDetailsLookup.Include(p => p.Product);
 
             productInclude.AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
@@ -174,7 +213,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .AddVisibleColumnDefinition(p => p.Product, "Product", p => p.ProductName, 40);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
             OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.UnitPrice, "Price", p => p.UnitPrice, 15);
-            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice", extendedPriceFormula, 15, "")
+            OrderDetailsFormLookup.AddVisibleColumnDefinition(p => p.ExtendedPrice, "Extended\r\nPrice"
+                    , new ExtendedPriceFormula(), 15, "")
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right)
                 .DoShowNegativeValuesInRed().HasDescription("Extended Price");
@@ -206,10 +246,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             CustomerNameLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
             EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(_lookupContext.Employees);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", employeeNameFormula, 40, "");
+            EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", new EmployeeFormula(), 40, "");
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
             var employeeJoin = EmployeesLookup.Include(p => p.Employee1);
-            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", employeeSupervisorFormula, 40, FieldDataTypes.String);
+            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", new EmployeeFormula(), 40, FieldDataTypes.String);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
 
@@ -236,9 +276,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public override bool TestConnection()
         {
-            var ordersLookupData = new LookupDataBase(OrdersLookup, this);
-            var result = ordersLookupData.GetInitData();
-            return result.ResultCode == GetDataResultCodes.Success;
+            return true;
         }
 
         public override bool TestConnection(RegistrySettings registrySettings)

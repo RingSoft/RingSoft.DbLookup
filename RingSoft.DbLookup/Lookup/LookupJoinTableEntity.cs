@@ -110,11 +110,11 @@ namespace RingSoft.DbLookup.Lookup
         //}
 
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
-            string caption, string formula, double percentWidth, FieldDataTypes dataType)
+            string caption, ILookupFormula lookupFormula, double percentWidth, FieldDataTypes dataType)
         {
             var parentTable = JoinDefinition.ForeignKeyDefinition.PrimaryTable;
             
-            var columnDefinition = AddVisibleColumnDefinition(caption, formula, percentWidth, dataType);
+            var columnDefinition = AddVisibleColumnDefinition(caption, lookupFormula, percentWidth, dataType);
             //columnDefinition.ChildField = relatedField;
             columnDefinition.ChildField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].ForeignField;
             if (JoinDefinition.ForeignKeyDefinition != null)

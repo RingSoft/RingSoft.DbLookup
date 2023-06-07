@@ -260,12 +260,12 @@ namespace RingSoft.DbLookup.Lookup
                         {
                             if (hidden)
                             {
-                                var newColumn = AddHiddenColumn(formulaColumn.Formula, formulaColumn.DataType);
+                                var newColumn = AddHiddenColumn(formulaColumn.FormulaObject, formulaColumn.DataType);
                                 newColumn.CopyFrom(columnType);
                             }
                             else
                             {
-                                var newColumn = AddVisibleColumnDefinition(formulaColumn.Caption, formulaColumn.OriginalFormula,
+                                var newColumn = AddVisibleColumnDefinition(formulaColumn.Caption, formulaColumn.FormulaObject,
                                     formulaColumn.PercentWidth, formulaColumn.DataType, formulaColumn.JoinQueryTableAlias);
                                 newColumn.CopyFrom(columnType);
                             }
@@ -295,11 +295,11 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
-        internal LookupFormulaColumnDefinition AddHiddenColumn(string formula, FieldDataTypes dataType, string alias = "")
+        internal LookupFormulaColumnDefinition AddHiddenColumn(ILookupFormula lookupFormula, FieldDataTypes dataType, string alias = "")
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
-            var columnDefinition = new LookupFormulaColumnDefinition(formula, dataType)
+            var columnDefinition = new LookupFormulaColumnDefinition(lookupFormula, dataType)
             {
                 LookupDefinition = this,
                 JoinQueryTableAlias = alias
@@ -382,12 +382,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, ILookupFormula lookupFormula,
             double percentWidth, FieldDataTypes dataType, string alias)
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
-            var column = new LookupFormulaColumnDefinition(formula, dataType)
+            var column = new LookupFormulaColumnDefinition(lookupFormula, dataType)
             {
                 Caption = caption,
                 LookupDefinition = this,
@@ -1028,7 +1028,7 @@ namespace RingSoft.DbLookup.Lookup
                     }
                     else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {
-                        column = AddHiddenColumn(lookupFormulaColumn.OriginalFormula, lookupFormulaColumn.DataType,
+                        column = AddHiddenColumn(lookupFormulaColumn.FormulaObject, lookupFormulaColumn.DataType,
                             join.Alias);
                     }
 

@@ -339,7 +339,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             };
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            ordersLookup.AddVisibleColumnDefinition(p => p.Order, RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.GetOrderFormula(), "");
+            ordersLookup.AddVisibleColumnDefinition(p => p.Order, new OrderFormula(), "");
             ordersLookup.Include(p => p.Customer)
                 .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
 

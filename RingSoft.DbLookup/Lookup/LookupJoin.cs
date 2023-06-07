@@ -138,10 +138,10 @@ namespace RingSoft.DbLookup.Lookup
                     $"Field Definition table definition '{fieldDefinition.TableDefinition}' doesn't match {JoinDefinition.ForeignKeyDefinition.PrimaryTable}");
         }
 
-        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, string formula,
+        public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, ILookupFormula lookupFormula,
             double percentWidth, FieldDataTypes fieldDataType)
         {
-            var column = LookupDefinition.AddVisibleColumnDefinition(caption, formula, percentWidth, fieldDataType, JoinDefinition.Alias);
+            var column = LookupDefinition.AddVisibleColumnDefinition(caption, lookupFormula, percentWidth, fieldDataType, JoinDefinition.Alias);
             column.JoinQueryTableAlias = JoinDefinition.Alias;
             column.ParentObject = this;
             column.ParentField = JoinDefinition.ForeignKeyDefinition.FieldJoins[0].PrimaryField;

@@ -220,10 +220,10 @@ namespace RingSoft.DbLookup.Lookup
 
                 if (initColumn != null)
                 {
-                    var formula = initColumn.GetFormulaForColumn();
-                    if (!formula.IsNullOrEmpty())
+                    var lookupFormula = initColumn.GetFormulaForColumn();
+                    if (lookupFormula != null)
                     {
-                        newColumn = new LookupFormulaColumnDefinition(formula, FieldDataTypes.String);
+                        newColumn = new LookupFormulaColumnDefinition(lookupFormula, FieldDataTypes.String);
                     }
                 }
             }
@@ -242,27 +242,20 @@ namespace RingSoft.DbLookup.Lookup
         internal override string LoadFromTreeViewItem(TreeViewItem item)
         {
             LookupDefinition = item.BaseTree.LookupDefinition;
-            var formula = CheckForeignFormula(item);
-            if (!formula.IsNullOrEmpty())
-            {
-                return formula;
-            }
-
-            var test = this;
             return base.LoadFromTreeViewItem(item);
         }
 
-        private string CheckForeignFormula(TreeViewItem item)
+        private ILookupFormula CheckForeignFormula(TreeViewItem item)
         {
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
             {
                 var initialColumn = FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition
                     .InitialSortColumnDefinition;
 
-                var formula = initialColumn.GetFormulaForColumn();
-                if (!formula.IsNullOrEmpty())
+                var lookupFormula = initialColumn.GetFormulaForColumn();
+                if (lookupFormula != null)
                 {
-                    return formula;
+                    return lookupFormula;
                 }
 
                 if (initialColumn is LookupFieldColumnDefinition lookupFieldColumn)
@@ -283,7 +276,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            return string.Empty;
+            return null;
         }
 
         public override string ToString()

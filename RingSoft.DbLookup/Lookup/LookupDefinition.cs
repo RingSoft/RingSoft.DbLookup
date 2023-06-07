@@ -113,9 +113,9 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="formula">The formula.</param>
         /// <returns></returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
-            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula, string alias)
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, ILookupFormula lookupFormula, string alias)
         {
-            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, formula, 0, alias);
+            return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, lookupFormula, 0, alias);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
         /// <returns></returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
-            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption, string formula,
+            Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption, ILookupFormula lookupFormula,
             double percentWidth, string alias)
         {
             var columnName = caption;
@@ -135,7 +135,7 @@ namespace RingSoft.DbLookup.Lookup
                 columnName = lookupEntityProperty.GetFullPropertyName();
 
             ValidateProperty(lookupEntityProperty, false, columnName);
-            var column = base.AddVisibleColumnDefinition(caption, formula, percentWidth,
+            var column = base.AddVisibleColumnDefinition(caption, lookupFormula, percentWidth,
                 GetFieldDataTypeForProperty(lookupEntityProperty), alias);
             column.PropertyName = lookupEntityProperty.GetFullPropertyName();
             return column;
@@ -193,15 +193,6 @@ namespace RingSoft.DbLookup.Lookup
             column.PropertyName = lookupEntityProperty.GetFullPropertyName();
             return column;
         }
-
-        public LookupFormulaColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, string formula)
-        {
-            ValidateProperty(lookupEntityProperty, true, lookupEntityProperty.GetFullPropertyName());
-            var column = base.AddHiddenColumn(formula, GetFieldDataTypeForProperty(lookupEntityProperty));
-            column.PropertyName = lookupEntityProperty.GetFullPropertyName();
-            return column;
-        }
-
 
         /// <summary>
         /// Gets the column definition.

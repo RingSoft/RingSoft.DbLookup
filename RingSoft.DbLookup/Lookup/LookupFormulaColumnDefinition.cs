@@ -12,6 +12,10 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public interface ILookupFormula
+    {
+        string GetDatabaseValue(object entity);
+    }
     /// <summary>
     /// A lookup column based on a formula.
     /// </summary>
@@ -159,6 +163,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool ConvertToLocalTime { get; private set; }
 
+        public ILookupFormula FormulaObject { get; private set; }
+
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
 
@@ -167,9 +173,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="formula">The formula.</param>
         /// <param name="dataType">Type of the data.</param>
-        internal LookupFormulaColumnDefinition(string formula, FieldDataTypes dataType)
+        internal LookupFormulaColumnDefinition(ILookupFormula formulaObject, FieldDataTypes dataType)
         {
-            Formula = formula;
             _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
             _dataType = dataType;
 
@@ -178,6 +183,7 @@ namespace RingSoft.DbLookup.Lookup
             DecimalCount = LookupDefaults.DefaultDecimalCount;
 
             SetupColumn();
+            FormulaObject = formulaObject;
         }
 
         internal LookupFormulaColumnDefinition()
@@ -192,6 +198,7 @@ namespace RingSoft.DbLookup.Lookup
             if (source is LookupFormulaColumnDefinition formulaSource)
             {
                 Formula = formulaSource._formula;
+                FormulaObject = formulaSource.FormulaObject;
                 NumberFormatString = formulaSource.NumberFormatString;
                 DateFormatString = formulaSource.DateFormatString;
                 ColumnCulture = formulaSource.ColumnCulture;
@@ -394,14 +401,14 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
-        internal override string GetFormulaForColumn()
+        internal override ILookupFormula GetFormulaForColumn()
         {
-            return OriginalFormula;
+            return FormulaObject;
         }
 
         public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
-            var newColumn = new LookupFormulaColumnDefinition(OriginalFormula, DataType);
+            var newColumn = new LookupFormulaColumnDefinition(FormulaObject, DataType);
 
             newColumn.LookupDefinition = lookupDefinition;
             newColumn.JoinQueryTableAlias = JoinQueryTableAlias;
@@ -492,6 +499,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
+            if (FormulaObject != null) return FormulaObject.GetDatabaseValue(entity);
             return "Formula";
         }
 

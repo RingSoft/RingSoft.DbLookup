@@ -12,6 +12,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 {
     public class OrderFormula : ILookupFormula
     {
+        public int Id => 1;
+
         public string GetDatabaseValue(object entity)
         {
             if (entity is Order order)
@@ -24,6 +26,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
     public class EmployeeFormula : ILookupFormula
     {
+        public int Id => 2;
+
         public string GetDatabaseValue(object entity)
         {
             if (entity is Employee employee)
@@ -35,8 +39,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         }
     }
 
+
     public class ExtendedPriceFormula : ILookupFormula
     {
+        public int Id => 3;
+
         public string GetDatabaseValue(object entity)
         {
             if (entity is Order_Detail orderDetail)
@@ -249,7 +256,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", new EmployeeFormula(), 40, "");
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
             var employeeJoin = EmployeesLookup.Include(p => p.Employee1);
-            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", new EmployeeFormula(), 40, FieldDataTypes.String);
+            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", new EmployeeFormula(), 40, FieldDataTypes.String, true);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
 
@@ -287,14 +294,21 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         
         public void InitializeModel()
         {
+            _lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID)
+                .HasFormulaObject(new OrderFormula());
+
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();
+
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
             _lookupContext.Orders.GetFieldDefinition(p => p.Freight)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
+
+            _lookupContext.Orders.GetFieldDefinition(p => p.EmployeeID)
+                .HasFormulaObject(new EmployeeFormula());
 
             _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor");
                 //.DoesAllowRecursion(false);

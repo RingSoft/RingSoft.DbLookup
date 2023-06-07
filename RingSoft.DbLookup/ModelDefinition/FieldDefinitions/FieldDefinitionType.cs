@@ -1,4 +1,6 @@
-﻿namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
+﻿using RingSoft.DbLookup.Lookup;
+
+namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
     /// <summary>
     /// A generic field definition type class.
@@ -72,6 +74,12 @@
         public TFieldDefinition DoSkipPrint(bool value = true)
         {
             base.DoSkipPrint(value);
+            return (TFieldDefinition)this;
+        }
+
+        public TFieldDefinition HasFormulaObject(ILookupFormula lookupFormula)
+        {
+            base.HasFormulaObject(lookupFormula);
             return (TFieldDefinition)this;
         }
     }

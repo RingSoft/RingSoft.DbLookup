@@ -14,6 +14,8 @@ namespace RingSoft.DbLookup.Lookup
 {
     public interface ILookupFormula
     {
+        int Id { get; }
+
         string GetDatabaseValue(object entity);
     }
     /// <summary>
@@ -165,8 +167,11 @@ namespace RingSoft.DbLookup.Lookup
 
         public ILookupFormula FormulaObject { get; private set; }
 
+        public bool AllowNulls { get; internal set; }
+
         private readonly string _selectSqlAlias;
         private FieldDataTypes _dataType;
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupFormulaColumnDefinition"/> class.
@@ -184,6 +189,13 @@ namespace RingSoft.DbLookup.Lookup
 
             SetupColumn();
             FormulaObject = formulaObject;
+        }
+
+        protected internal override void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition, LookupDefinitionBase lookupDefinition,
+            bool copyFrom = true)
+        {
+            base.ProcessNewVisibleColumn(columnDefinition, lookupDefinition, copyFrom);
+            LookupDefinition.TableDefinition.Context.RegisterLookupFormula(FormulaObject);
         }
 
         internal LookupFormulaColumnDefinition()
@@ -210,6 +222,7 @@ namespace RingSoft.DbLookup.Lookup
                 PrimaryField = formulaSource.PrimaryField;
                 ParentObject =formulaSource.ParentObject;
                 ConvertToLocalTime = formulaSource.ConvertToLocalTime;
+                AllowNulls = formulaSource.AllowNulls;
                 if (formulaSource.Caption == "Difference")
                 {
                     
@@ -420,6 +433,11 @@ namespace RingSoft.DbLookup.Lookup
 
         internal override string LoadFromTreeViewItem(TreeViewItem item)
         {
+            if (item.FieldDefinition != null)
+            {
+                FormulaObject = item.FieldDefinition.FormulaObject;
+                AllowNulls = item.FieldDefinition.AllowNulls;
+            }
             var result = base.LoadFromTreeViewItem(item);
             if (item.FieldDefinition != null && !item.FieldDefinition.AllowRecursion)
             {
@@ -440,7 +458,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void SaveToEntity(AdvancedFindColumn entity)
         {
-            entity.Formula = OriginalFormula;
+            entity.Formula = FormulaObject.Id.ToString();
             entity.FieldDataType = (byte)DataType;
             entity.PrimaryFieldName = Description;
             var dateTypeInt = (int)DateType;
@@ -452,7 +470,13 @@ namespace RingSoft.DbLookup.Lookup
 
         internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
         {
-            Formula = entity.Formula;
+            var formulaId = entity.Formula.ToInt();
+            if (formulaId != 0)
+            {
+                FormulaObject = lookupDefinition.TableDefinition.Context.FormulaRegistry
+                    .FirstOrDefault(p => p.Id == formulaId);
+            }
+
             _dataType = (FieldDataTypes)entity.FieldDataType;
             Description = entity.PrimaryFieldName;
             DateType = (DbDateTypes)entity.PrimaryTableName.ToInt();
@@ -499,8 +523,25 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
-            if (FormulaObject != null) return FormulaObject.GetDatabaseValue(entity);
-            return "Formula";
+            var result = string.Empty;
+            var propertyObject = GetPropertyObject(entity);
+
+            if (FormulaObject != null)
+            {
+                if (propertyObject != null)
+                {
+                    result = FormulaObject.GetDatabaseValue(propertyObject);
+                }
+                else
+                {
+                    if (!AllowNulls)
+                    {
+                        result = FormulaObject.GetDatabaseValue(entity);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public override string GetFormattedValue<TEntity>(TEntity entity)

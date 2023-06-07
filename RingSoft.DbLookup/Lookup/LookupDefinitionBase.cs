@@ -322,7 +322,7 @@ namespace RingSoft.DbLookup.Lookup
                 Caption = caption,
                 LookupDefinition = this,
                 PercentWidth = percentWidth,
-                JoinQueryTableAlias = alias
+                JoinQueryTableAlias = alias,
             };
 
             //ProcessVisibleColumnDefinition(column);
@@ -383,7 +383,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, ILookupFormula lookupFormula,
-            double percentWidth, FieldDataTypes dataType, string alias)
+            double percentWidth, FieldDataTypes dataType, string alias, bool allowNulls = false)
         {
             ValidateNonPrimaryKeyDistinctColumns();
 
@@ -391,7 +391,8 @@ namespace RingSoft.DbLookup.Lookup
             {
                 Caption = caption,
                 LookupDefinition = this,
-                PercentWidth = percentWidth
+                PercentWidth = percentWidth,
+                AllowNulls = allowNulls,
             };
 
             //if (fieldDefinition != null)

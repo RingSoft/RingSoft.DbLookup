@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
@@ -122,6 +123,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public bool AllowUserNulls { get; private set; } = true;
 
         public bool SkipPrint { get; private set; }
+
+        public ILookupFormula FormulaObject { get; private set; }
+
 
         internal FieldDefinition()
         {
@@ -321,6 +325,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         internal void DoSkipPrint(bool value = true)
         {
             SkipPrint = value;
+        }
+
+        internal FieldDefinition HasFormulaObject(ILookupFormula lookupFormula)
+        {
+            FormulaObject = lookupFormula;
+            TableDefinition.Context.RegisterLookupFormula(lookupFormula);
+            return this;
         }
     }
 }

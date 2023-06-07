@@ -130,6 +130,20 @@ namespace RingSoft.DbLookup
             return args.AllowDelete;
         }
 
+        public IReadOnlyList<ILookupFormula> FormulaRegistry => _formulas.AsReadOnly();
+
+        internal void RegisterLookupFormula(ILookupFormula lookupFormula)
+        {
+            if (lookupFormula != null)
+            {
+                var existingFormula = _formulas.FirstOrDefault(p => p.Id == lookupFormula.Id);
+                if (existingFormula == null)
+                {
+                    _formulas.Add(lookupFormula);
+                }
+            }
+        }
+
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
@@ -142,6 +156,7 @@ namespace RingSoft.DbLookup
         public event EventHandler<CopyProcedureArgs> CopyProcedureEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
+        public readonly List<ILookupFormula> _formulas = new List<ILookupFormula>();
 
         public LookupContextBase()
         {

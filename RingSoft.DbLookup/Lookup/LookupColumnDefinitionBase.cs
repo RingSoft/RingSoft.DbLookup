@@ -324,7 +324,7 @@ namespace RingSoft.DbLookup.Lookup
 
         }
 
-        protected internal void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition
+        protected internal virtual void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition
             , LookupDefinitionBase lookupDefinition, bool copyFrom = true)
         {
             columnDefinition.LookupDefinition = lookupDefinition;
@@ -428,6 +428,32 @@ namespace RingSoft.DbLookup.Lookup
             }
             return FormatValue(value);
         }
+
+        public object GetPropertyObject<TEntity>(TEntity entity)
+        {
+            var properties = ParentObject.GetNavigationProperties();
+
+
+            object propertyObject = null;
+
+            foreach (var property in properties)
+            {
+                if (propertyObject == null)
+                {
+                    propertyObject = GblMethods.GetPropertyObject(entity, property
+                        .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
+                }
+                else
+                {
+                    propertyObject = GblMethods.GetPropertyObject(propertyObject, property
+                        .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
+                }
+            }
+
+            return propertyObject;
+        }
+
+
 
         public abstract string GetPropertyJoinName();
 

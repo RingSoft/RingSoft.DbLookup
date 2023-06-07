@@ -216,10 +216,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
             ordersLookup.AddVisibleColumnDefinition(p => p.Order
-                , new OrderFormula(), "");
+                , p => p.OrderName);
             var join = ordersLookup.Include(p => p.Employee);
             join.AddVisibleColumnDefinition(p => p.Employee, "Employee",
-                new EmployeeFormula(), 20, FieldDataTypes.String);
+                p => p.FullName, 20);
 
             OrdersLookupDefinition = ordersLookup;
 

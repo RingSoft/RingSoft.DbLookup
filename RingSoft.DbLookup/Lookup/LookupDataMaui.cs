@@ -77,14 +77,15 @@ namespace RingSoft.DbLookup.Lookup
             else
             {
                 FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
-
-                var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
-                if (!orderColumnName.IsNullOrEmpty())
-                {
-                    FilteredQuery = GblMethods.ApplyOrder(FilteredQuery, OrderMethods.OrderBy,
-                        orderColumnName);
-                }
             }
+
+            var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
+            if (!orderColumnName.IsNullOrEmpty())
+            {
+                FilteredQuery = GblMethods.ApplyOrder(FilteredQuery, OrderMethods.OrderBy,
+                    orderColumnName);
+            }
+
 
             ProcessedQuery = FilteredQuery.Take(PageSize);
 

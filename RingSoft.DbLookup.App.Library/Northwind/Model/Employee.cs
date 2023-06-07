@@ -19,6 +19,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         public int EmployeeID { get; set; }
 
+        public string FullName { get; set; }
+
         [Required]
         [StringLength(20)]
         public string LastName { get; set; }

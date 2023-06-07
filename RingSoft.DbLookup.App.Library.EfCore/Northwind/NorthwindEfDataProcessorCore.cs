@@ -6,16 +6,52 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.EfCore;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindEfDataProcessorCore : INorthwindEfDataProcessor
     {
-        public void SetSystemGlobals()
+        public NorthwindEfDataProcessorCore()
         {
             
         }
 
+        public void CheckDataExists()
+        {
+            SetAdvancedFindDbContext();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var ordersTable = context.GetTable<Order>();
+
+            if (ordersTable.Any(p => p.OrderName == null))
+            {
+                foreach (var order in ordersTable)
+                {
+                    order.OrderName =
+                        $"{GblMethods.FormatDateValue(order.OrderDate.GetValueOrDefault(), DbDateTypes.DateOnly)} {order.CustomerID}";
+
+                    if (!context.SaveEntity(order, "Updating Order Name"))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            var employeesTable = context.GetTable<Employee>();
+
+            if (employeesTable.Any(p => p.FullName == null))
+            {
+                foreach (var employee in employeesTable)
+                {
+                    employee.FullName = $"{employee.FirstName} {employee.LastName}";
+
+                    if (!context.SaveEntity(employee, "Updating Employee Full Name"))
+                    {
+                        return;
+                    }
+                }
+            }
+        }
         public Customer GetCustomer(string customerId)
         {
             var context = new NorthwindDbContextEfCore();

@@ -53,6 +53,9 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public FieldDefinition FieldDefinition { get; internal set; }
 
+        public FieldDefinition FieldToDisplay { get; internal set; }
+
+
         /// <summary>
         /// Gets a value indicating whether this column is distinct.
         /// </summary>
@@ -73,6 +76,8 @@ namespace RingSoft.DbLookup.Lookup
             }
             internal set => base.SearchForHostId = value;
         } 
+
+        public bool AllowNulls { get; internal set; }
 
         private string _selectSqlAlias = string.Empty;
 
@@ -137,6 +142,10 @@ namespace RingSoft.DbLookup.Lookup
         private void SetFieldDefinition(FieldDefinition fieldDefinition)
         {
             FieldDefinition = fieldDefinition;
+
+            AllowNulls = FieldDefinition.AllowNulls;
+
+            FieldToDisplay = fieldDefinition;
             _selectSqlAlias = $"{fieldDefinition.FieldName}_{Guid.NewGuid().ToString().Replace("-", "").ToUpper()}";
             if (LookupControlColumnId == 0 && fieldDefinition.LookupControlColumnId != 0)
                 LookupControlColumnId = fieldDefinition.LookupControlColumnId;
@@ -208,7 +217,6 @@ namespace RingSoft.DbLookup.Lookup
         public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
             LookupColumnDefinitionBase newColumn = new LookupFieldColumnDefinition(FieldDefinition);
-
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
                 LookupColumnDefinitionBase initColumn = null;
@@ -237,6 +245,34 @@ namespace RingSoft.DbLookup.Lookup
             ProcessNewVisibleColumn(newColumn, lookupDefinition);
 
             base.AddNewColumnDefinition(lookupDefinition);
+        }
+
+        protected internal override void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition, LookupDefinitionBase lookupDefinition,
+            bool copyFrom = true)
+        {
+            base.ProcessNewVisibleColumn(columnDefinition, lookupDefinition, copyFrom);
+
+            if (!Path.IsNullOrEmpty())
+            {
+                var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
+
+                if (foundTreeItem.Items.Any() || !foundTreeItem.FieldDefinition.AllowRecursion)
+                {
+                    var searchField = foundTreeItem.FieldDefinition;
+
+                    var columnToDisplay = searchField
+                        .ParentJoinForeignKeyDefinition
+                        .PrimaryTable
+                        .LookupDefinition.InitialSortColumnDefinition;
+
+                    if (columnToDisplay is LookupFieldColumnDefinition fieldColumn)
+                    {
+                        FieldToDisplay = fieldColumn.FieldDefinition;
+                    }
+
+                }
+
+            }
         }
 
         internal override string LoadFromTreeViewItem(TreeViewItem item)
@@ -314,7 +350,8 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (ParentObject is LookupJoin parentLookupJoin)
             {
-                return parentLookupJoin.JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+                var test = this;
+                return parentLookupJoin.JoinDefinition.GetPropertyJoinName(FieldToDisplay.PropertyName);
             }
 
             return FieldDefinition.PropertyName;
@@ -330,7 +367,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (propertyObject == null)
                 {
-                    if (!FieldDefinition.AllowNulls)
+                    if (!AllowNulls)
                     {
                         result = formulaObject.GetDatabaseValue(entity);
                     }
@@ -342,14 +379,16 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
-
                 if (propertyObject == null)
                 {
-                    result = GblMethods.GetPropertyValue(entity, FieldDefinition.PropertyName);
+                    if (!AllowNulls || !HasNavProperties)
+                    {
+                        result = GblMethods.GetPropertyValue(entity, FieldToDisplay.PropertyName);
+                    }
                 }
                 else
                 {
-                    result = GblMethods.GetPropertyValue(propertyObject, FieldDefinition.PropertyName);
+                    result = GblMethods.GetPropertyValue(propertyObject, FieldToDisplay.PropertyName);
                 }
             }
 

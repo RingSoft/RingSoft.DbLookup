@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.DataProcessor;
@@ -142,6 +143,8 @@ namespace RingSoft.DbLookup.Lookup
         public int ColumnIndexToAdd { get; internal set; } = -1;
 
         public bool AdjustColumnWidth { get; set; } = true;
+
+        public bool HasNavProperties { get; internal set; }
 
         protected internal void SetupColumn()
         {
@@ -358,6 +361,7 @@ namespace RingSoft.DbLookup.Lookup
                     }
 
                     columnDefinition.FieldDescription = foundTreeItem.Name;
+
                     var joinResult = lookupDefinition.AdvancedFindTree.MakeIncludes(foundTreeItem);
                     if (joinResult != null)
                     {
@@ -433,6 +437,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             var properties = ParentObject.GetNavigationProperties();
 
+            HasNavProperties = properties.Any();
 
             object propertyObject = null;
 

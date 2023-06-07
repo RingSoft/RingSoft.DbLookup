@@ -72,6 +72,13 @@ namespace RingSoft.DbLookup.Lookup
                     throw new ArgumentException(
                         $"Sort column {value.PropertyName}'s lookup definition does not match this.");
 
+                if (value is LookupFormulaColumnDefinition)
+                {
+                    var message = "Initial sort column cannot be a formula";
+                    throw new ArgumentException( message );
+                }
+
+
                 _initialSortLookupColumnDefinition = value;
                 InitialOrderByColumn =value;
             }
@@ -426,7 +433,9 @@ namespace RingSoft.DbLookup.Lookup
         internal void ProcessVisibleColumnDefinition(LookupColumnDefinitionBase columnDefinition)
         {
             if (InitialSortColumnDefinition == null || columnDefinition.ColumnIndexToAdd == 0)
+            {
                 InitialSortColumnDefinition = columnDefinition;
+            }
         }
 
         internal TableFieldJoinDefinition AddJoin(TableFieldJoinDefinition lookupFieldJoin)

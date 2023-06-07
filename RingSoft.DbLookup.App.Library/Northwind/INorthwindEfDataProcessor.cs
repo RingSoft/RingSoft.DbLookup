@@ -5,6 +5,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 {
     public interface INorthwindEfDataProcessor
     {
+        void CheckDataExists();
+
         Customer GetCustomer(string customerId);
 
         bool SaveCustomer(Customer customer);

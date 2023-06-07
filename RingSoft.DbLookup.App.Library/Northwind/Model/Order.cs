@@ -17,6 +17,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         public int OrderID { get; set; }
 
+        public string OrderName { get; set; }
+
         [StringLength(5)]
         public string CustomerID { get; set; }
 

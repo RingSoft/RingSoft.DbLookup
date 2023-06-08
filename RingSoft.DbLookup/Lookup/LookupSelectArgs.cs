@@ -11,13 +11,13 @@
         /// <value>
         /// The lookup data.
         /// </value>
-        public LookupDataBase LookupData { get; }
+        public LookupDataMauiBase LookupData { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupSelectArgs"/> class.
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>
-        public LookupSelectArgs(LookupDataBase lookupData)
+        public LookupSelectArgs(LookupDataMauiBase lookupData)
         {
             LookupData = lookupData;
         }

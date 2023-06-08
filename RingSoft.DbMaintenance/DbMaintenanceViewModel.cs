@@ -527,7 +527,7 @@ namespace RingSoft.DbMaintenance
                 _selectingRecord = true;
                 LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
                 Processor.CloseWindow();
-                LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
+                //LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
                 LookupAddViewArgs.CallBackToken.OnRefreshData();
             }
         }

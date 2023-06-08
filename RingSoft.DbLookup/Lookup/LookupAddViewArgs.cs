@@ -17,7 +17,7 @@
         /// <value>
         /// The lookup data.
         /// </value>
-        public LookupDataBase LookupData { get; private set; }
+        public LookupDataMauiBase LookupData { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="LookupAddViewArgs"/> is handled.
@@ -101,7 +101,7 @@
         /// <param name="lookupFormMode">The lookup form mode.</param>
         /// <param name="initialAddModeText">The initial add mode text.</param>
         /// <param name="ownerWindow">The owner window that launched this.</param>
-        public LookupAddViewArgs(LookupDataBase lookupData, bool fromLookupControl, LookupFormModes lookupFormMode,
+        public LookupAddViewArgs(LookupDataMauiBase lookupData, bool fromLookupControl, LookupFormModes lookupFormMode,
             string initialAddModeText, object ownerWindow)
         {
             LookupData = lookupData;

@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.Lookup
 {
     public class LookupWindowReturnArgs
     {
-        public LookupDataBase LookupData { get; internal set; }
+        public LookupDataMauiBase LookupData { get; internal set; }
     }
 
     /// <summary>
@@ -933,6 +933,8 @@ namespace RingSoft.DbLookup.Lookup
             return 0;
         }
 
+        
+
         public void ShowAddOnTheFlyWindow(PrimaryKeyValue selectedPrimaryKeyValue = null
             , object addViewParameter = null, object ownerWindow = null)
         {
@@ -1055,12 +1057,12 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        public void FireCloseEvent(LookupDataBase lookupData)
+        public void FireCloseEvent(LookupDataMauiBase lookupData)
         {
             WindowClosed?.Invoke(this, new LookupWindowReturnArgs(){LookupData = lookupData});
         }
 
-        public virtual LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode = false)
+        public virtual LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode)
         {
             return null;
         }

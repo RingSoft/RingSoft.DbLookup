@@ -390,6 +390,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowRecordCountWait { get; set; }
 
+        public ILookupWindow LookupWindow { get; private set; }
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -550,6 +552,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 LookupDataMaui =
                     LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition, false);
+                LookupDataMaui.SetParentControls(this, LookupWindow);
 
                 LookupData = new LookupDataBase(LookupDefinition, this);
 
@@ -1846,9 +1849,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void ShowAdvancedFind()
         {
             //advancedFindWindow.Owner = Window.GetWindow(this);
+            //var lookupData =
+            //    new LookupDataBase(new LookupDefinitionBase(SystemGlobals.AdvancedFindLookupContext.AdvancedFinds),
+            //        this);
+
             var lookupData =
-                new LookupDataBase(new LookupDefinitionBase(SystemGlobals.AdvancedFindLookupContext.AdvancedFinds),
-                    this);
+                SystemGlobals.AdvancedFindLookupContext.AdvancedFindLookup.GetLookupDataMaui(LookupDefinition, true);
 
             var addViewArgs = new LookupAddViewArgs(lookupData, true, LookupFormModes.View, 
                 "", Window.GetWindow(this));
@@ -1950,7 +1956,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var ownerWindow = Window.GetWindow(this);
                     //03/16/2023
                     //ownerWindow.Activated += OwnerWindow_Activated;
-                    LookupData.ViewSelectedRow(_selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
+                    LookupDataMaui.ViewSelectedRow(_selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
                     return true;
                 }
             }
@@ -2019,9 +2025,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                         var selectedIndex = ListView?.SelectedIndex ?? 0;
                         if (selectedIndex >= 0)
-                            LookupData.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
+                            LookupDataMaui.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
                         else
-                            LookupData.AddNewRow(Window.GetWindow(this), addViewParameter);
+                            LookupDataMaui.AddNewRow(Window.GetWindow(this), addViewParameter);
                         RefreshData(command.ResetSearchFor, String.Empty, LookupData.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.Reset:
@@ -2100,5 +2106,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             _readOnlyMode = readOnlyValue;
         }
+
+        public void SetLookupWindow(ILookupWindow lookupWindow)
+        {
+            LookupWindow = lookupWindow;
+            LookupDataMaui?.SetParentControls(this, lookupWindow);
+        }
+
+
     }
 }

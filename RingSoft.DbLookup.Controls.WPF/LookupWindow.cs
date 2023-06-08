@@ -43,7 +43,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "AddButton", Type = typeof(Button))]
     [TemplatePart(Name = "ViewButton", Type = typeof(Button))]
     [TemplatePart(Name = "CloseButton", Type = typeof(Button))]
-    public class LookupWindow : BaseWindow, INotifyPropertyChanged
+    public class LookupWindow : BaseWindow, ILookupWindow, INotifyPropertyChanged
     {
         private LookupDefinitionBase _lookupDefinition;
         public LookupDefinitionBase LookupDefinition
@@ -263,6 +263,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewButton.Visibility = AddButton.Visibility = Visibility.Collapsed;
             }
 
+            if (LookupControl != null)
+            {
+                LookupControl.SetLookupWindow(this);
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -275,7 +279,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl == null)
                 return;
 
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.View, string.Empty, this)
+            var args = new LookupAddViewArgs(LookupControl.LookupDataMaui, false, LookupFormModes.View, string.Empty, this)
             {
                 InputParameter = AddViewParameter,
                 AllowEdit = AddButton.IsEnabled,
@@ -309,7 +313,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     searchText = string.Empty;
                 }
             }
-            var args = new LookupAddViewArgs(LookupControl.LookupData, false, LookupFormModes.Add,
+            var args = new LookupAddViewArgs(LookupControl.LookupDataMaui, false, LookupFormModes.Add,
                 searchText, this)
             {
                 InputParameter = AddViewParameter,
@@ -337,7 +341,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
 
             Close();
-            var args = new LookupSelectArgs(LookupControl.LookupData);
+            var args = new LookupSelectArgs(LookupControl.LookupDataMaui);
             LookupSelect?.Invoke(this, args);
         }
 
@@ -440,6 +444,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             LookupDefinition = lookupDefinition;
             ApplyNewLookup?.Invoke(this, new EventArgs());
+        }
+
+        public void SelectPrimaryKey(PrimaryKeyValue primaryKey)
+        {
+            OnSelectButtonClick();
         }
     }
 }

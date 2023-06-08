@@ -1392,53 +1392,53 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="selectedIndex">Index of the selected row.</param>
         /// <param name="ownerWindow">The owner window.</param>
         /// <param name="inputParameter">The input parameter.</param>
-        public void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter = null, bool lookupReadOnlyMode = false)
-        {
-            if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
-            {
-                //03/17/2023
-                if (!lookupReadOnlyMode)
-                {
-                    _selectingRecord = true;
-                }
+        //public void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter = null, bool lookupReadOnlyMode = false)
+        //{
+        //    if (selectedIndex >= 0 && selectedIndex < LookupResultsDataTable.Rows.Count)
+        //    {
+        //        //03/17/2023
+        //        if (!lookupReadOnlyMode)
+        //        {
+        //            _selectingRecord = true;
+        //        }
 
-                var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
-                {
-                    ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
-                    InputParameter = inputParameter,
-                    LookupReadOnlyMode = lookupReadOnlyMode 
-                };
-                OnLookupView(args);
-                if (!args.Handled)
-                {
-                    _selectingRecord = false;
-                    args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
-                    LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
-                }
-            }
-        }
+        //        var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
+        //        {
+        //            ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+        //            InputParameter = inputParameter,
+        //            LookupReadOnlyMode = lookupReadOnlyMode 
+        //        };
+        //        OnLookupView(args);
+        //        if (!args.Handled)
+        //        {
+        //            _selectingRecord = false;
+        //            args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
+        //            LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Adds a new row.
         /// </summary>
         /// <param name="ownerWindow">The owner window.</param>
         /// <param name="inputParameter">The input parameter.</param>
-        public void AddNewRow(object ownerWindow, object inputParameter = null)
-        {
-            var args = new LookupAddViewArgs(this, true, LookupFormModes.Add, string.Empty, ownerWindow)
-            {
-                ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
-                InputParameter = inputParameter
-            };
-            args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
-            LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
-        }
+        //public void AddNewRow(object ownerWindow, object inputParameter = null)
+        //{
+        //    var args = new LookupAddViewArgs(this, true, LookupFormModes.Add, string.Empty, ownerWindow)
+        //    {
+        //        ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+        //        InputParameter = inputParameter
+        //    };
+        //    args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
+        //    LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+        //}
 
-        private void LookupCallBack_RefreshData(object sender, EventArgs e)
-        {
-            RefreshData();
-            DataSourceChanged?.Invoke(this, EventArgs.Empty);
-        }
+        //private void LookupCallBack_RefreshData(object sender, EventArgs e)
+        //{
+        //    RefreshData();
+        //    DataSourceChanged?.Invoke(this, EventArgs.Empty);
+        //}
 
         /// <summary>
         /// Refreshes the data.

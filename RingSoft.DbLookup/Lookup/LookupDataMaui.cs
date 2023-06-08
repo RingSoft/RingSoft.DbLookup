@@ -22,7 +22,25 @@ namespace RingSoft.DbLookup.Lookup
         
         public LookupDefinitionBase LookupDefinition { get; }
 
+        /// <summary>
+        /// Gets or sets the parent window's primary key value.
+        /// </summary>
+        /// <value>
+        /// The parent window's primary key value.
+        /// </value>
+        public PrimaryKeyValue ParentWindowPrimaryKeyValue { get; set; }
+
+        public ILookupControl LookupControl { get; private set; }
+
+        public ILookupWindow LookupWindow { get; private set; }
+
+        /// <summary>
+        /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
+        /// </summary>
+        public event EventHandler<LookupAddViewArgs> LookupView;
+
         public event EventHandler LookupDataChanged;
+        public event EventHandler DataSourceChanged;
 
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)
         {
@@ -45,9 +63,45 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void ClearData();
 
         public bool InputMode { get; protected set; }
+
+        public PrimaryKeyValue SelectedPrimaryKeyValue { get; protected set; }
+
+        public abstract PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText);
+
+        public abstract void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue);
+
+        public abstract void ViewSelectedRow(int _selectedIndex, object ownerWindow, object AddViewParameter, bool readOnlyMode = false);
+
+        public abstract void AddNewRow(object ownerWindow, object inputParameter = null);
+
+        public abstract void RefreshData();
+
+        public void SetParentControls(ILookupControl control, ILookupWindow lookupWindow = null)
+        {
+            LookupControl = control;
+            LookupWindow = lookupWindow;
+        }
+
+        public abstract string GetSelectedText();
+
+        /// <summary>
+        /// Occurs when a user wishes to view a selected lookup row.  Fires the LookupView event.
+        /// </summary>
+        /// <param name="e">The lookup primary key row arguments.</param>
+        protected virtual void OnLookupView(LookupAddViewArgs e)
+        {
+            LookupView?.Invoke(this, e);
+        }
+
+        protected virtual void OnDataSourceChanged()
+        {
+            DataSourceChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
     public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : new()
     {
+        public TableDefinition<TEntity> TableDefinition { get; }
+
         public IQueryable<TEntity> BaseQuery { get; }
 
         public IQueryable<TEntity> FilteredQuery { get; private set; }
@@ -58,15 +112,24 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int RowCount => CurrentList.Count;
 
+        private bool _selectingRecord;
+
         public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition)
         : base(lookupDefinition)
         {
+            if (lookupDefinition.TableDefinition is TableDefinition<TEntity> table)
+            {
+                TableDefinition = table;
+            }
             BaseQuery = query;
         }
 
         public LookupDataMaui(LookupDefinitionBase lookupDefinition) : base(lookupDefinition)
         {
-            
+            if (lookupDefinition.TableDefinition is TableDefinition<TEntity> table)
+            {
+                TableDefinition = table;
+            }
         }
         public override void GetInitData(int pageSize)
         {
@@ -127,6 +190,71 @@ namespace RingSoft.DbLookup.Lookup
         {
             CurrentList.Clear();
             FireLookupDataChangedEvent();
+        }
+
+        public override PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)
+        {
+            if (selectedIndex >= 0 && selectedIndex < RowCount)
+            {
+                var entity = CurrentList[selectedIndex];
+                if (entity != null)
+                {
+                    SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                }
+
+                if (LookupWindow == null)
+                {
+                    var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
+                    {
+                        ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+                        InputParameter = inputParameter,
+                        LookupReadOnlyMode = lookupReadOnlyMode
+                    };
+                    OnLookupView(args);
+                    if (!args.Handled)
+                    {
+                        args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
+                        LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+                    }
+                }
+                else
+                {
+                    LookupWindow.SelectPrimaryKey(SelectedPrimaryKeyValue);
+                }
+            }
+        }
+
+        public override void AddNewRow(object ownerWindow, object inputParameter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RefreshData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetSelectedText()
+        {
+            var entity = TableDefinition.GetEntityFromPrimaryKeyValue(SelectedPrimaryKeyValue);
+            var text = LookupDefinition.InitialSortColumnDefinition.GetDatabaseValue(entity);
+            return text;
+        }
+
+        private void LookupCallBack_RefreshData(object sender, EventArgs e)
+        {
+            RefreshData();
+            OnDataSourceChanged();
         }
     }
 }

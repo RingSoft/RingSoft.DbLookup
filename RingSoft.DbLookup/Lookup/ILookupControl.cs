@@ -6,6 +6,11 @@
         Contains = 1
     }
 
+    public interface ILookupWindow
+    {
+        void SelectPrimaryKey(PrimaryKeyValue primaryKey);
+    }
+
     /// <summary>
     /// The lookup's user interface.
     /// </summary>

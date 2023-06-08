@@ -35,7 +35,7 @@ namespace RingSoft.DbLookup
             LookupDefinition = lookupDefinition;
         }
 
-        public LookupAddViewArgs SetupProcessor(LookupDataBase lookupData)
+        public LookupAddViewArgs SetupProcessor(LookupDataMauiBase lookupData)
         {
             LookupAddViewArgs args = null;
             if (SelectedPrimaryKeyValue == null)
@@ -71,11 +71,12 @@ namespace RingSoft.DbLookup
 
         public void ShowAddOnTheFlyWindow()
         {
-            var lookupData = new LookupDataBase(LookupDefinition, this);
-            lookupData.LookupView += (sender, viewArgs) =>
-            {
-                viewArgs.Handled = true;
-            };
+            //var lookupData = new LookupDataBase(LookupDefinition, this);
+            var lookupData = LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition, true);
+            //lookupData.LookupView += (sender, viewArgs) =>
+            //{
+            //    viewArgs.Handled = true;
+            //};
             var args = SetupProcessor(lookupData);
             LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
@@ -98,16 +99,17 @@ namespace RingSoft.DbLookup
 
         public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
         {
-            var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
-            lookupData.LookupView += (sender, viewArgs) =>
-            {
-                viewArgs.Handled = true;
-            };
-            var args = SetupProcessor(lookupData);
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+            //var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
+            //lookupData.LookupView += (sender, viewArgs) =>
+            //{
+            //    viewArgs.Handled = true;
+            //};
+            //var args = SetupProcessor(lookupData);
+            //_lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 
-            var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);
-            return result;
+            //var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedItem, lookupData.SelectedPrimaryKeyValue);
+            //return result;
+            return null;
         }
     }
 }

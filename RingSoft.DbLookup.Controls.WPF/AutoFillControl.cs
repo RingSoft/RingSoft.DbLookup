@@ -947,8 +947,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupForm_LookupSelect(object sender, LookupSelectArgs e)
         {
-            var text = e.LookupData.GetSelectedRow()
-                .GetRowValue(Setup.LookupDefinition.InitialSortColumnDefinition.SelectSqlAlias);
+            var text = e.LookupData.GetSelectedText();
             SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
             RaiseDirtyFlag();
             LookupSelect?.Invoke(this, new EventArgs());

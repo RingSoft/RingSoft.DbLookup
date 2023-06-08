@@ -75,11 +75,11 @@ namespace RingSoft.DbLookup.TableProcessing
             _filters.Remove(filter);
         }
 
-        public BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        public Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
-            BinaryExpression result = null;
+            Expression result = null;
             
-            BinaryExpression leftExpression = null;
+            Expression leftExpression = null;
 
             foreach (var filter in Filters)
             {

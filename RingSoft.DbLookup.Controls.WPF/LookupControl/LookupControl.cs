@@ -21,6 +21,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
 using MySqlX.XDevAPI.Relational;
+using System.Collections.Specialized;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -30,6 +31,14 @@ namespace RingSoft.DbLookup.Controls.WPF
         Enabled = 1,
         Disabled = 2,
         Done = 3
+    }
+
+    public class DataSource : ObservableCollection<DataItem>
+    {
+        public void UpdateSource()
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
     }
 
     public class DataColumn
@@ -293,6 +302,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public int SelectedIndex
+        {
+            get
+            {
+                if (ListView.SelectedIndex >= 0)
+                {
+                    return ListView.SelectedIndex;
+                }
+                return -1;
+            }
+        }
+
         public static readonly DependencyProperty LookupDefinitionProperty =
             DependencyProperty.Register("LookupDefinition", typeof(LookupDefinitionBase), typeof(LookupControl),
                 new FrameworkPropertyMetadata(LookupDefinitionChangedCallback));
@@ -406,7 +427,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private int _currentPageSize;
         //private DataTable _dataSource = new DataTable("DataSourceTable");
         private DataColumnMaps _columnMaps = new DataColumnMaps();
-        private ObservableCollection<DataItem> _dataSource = new ObservableCollection<DataItem>();
+        private DataSource _dataSource = new DataSource();
 
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
@@ -1317,8 +1338,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
 
-            if (ListView != null)
+            if (ListView != null && ListView.ItemsSource == null)
                 ListView.ItemsSource = _dataSource;
+
+            _dataSource.UpdateSource();
 
             AdvancedFindButton.IsEnabled = _dataSource.Any();
         }
@@ -1859,14 +1882,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFindLookup.GetLookupDataMaui(LookupDefinition, true);
 
             var addViewArgs = new LookupAddViewArgs(lookupData, true, LookupFormModes.View, 
-                "", Window.GetWindow(this));
+                "", Window.GetWindow(this))
+            {
+            };
 
             addViewArgs.InputParameter = new AdvancedFindInput
             {
                 InputParameter = AddViewParameter,
                 LockTable = LookupDefinition.TableDefinition,
                 LookupDefinition = LookupDefinition,
-                LookupWidth = ActualWidth
+                LookupWidth = ActualWidth,
             };
 
             var advancedFindWindow = new AdvancedFindWindow(addViewArgs);
@@ -1958,7 +1983,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var ownerWindow = Window.GetWindow(this);
                     //03/16/2023
                     //ownerWindow.Activated += OwnerWindow_Activated;
-                    LookupDataMaui.ViewSelectedRow(_selectedIndex, ownerWindow, AddViewParameter, _readOnlyMode);
+                    LookupDataMaui.ViewSelectedRow(ownerWindow, AddViewParameter, _readOnlyMode);
                     return true;
                 }
             }
@@ -2027,7 +2052,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                         var selectedIndex = ListView?.SelectedIndex ?? 0;
                         if (selectedIndex >= 0)
-                            LookupDataMaui.ViewSelectedRow(selectedIndex, Window.GetWindow(this), addViewParameter);
+                            LookupDataMaui.ViewSelectedRow(Window.GetWindow(this), addViewParameter);
                         else
                             LookupDataMaui.AddNewRow(Window.GetWindow(this), addViewParameter);
                         RefreshData(command.ResetSearchFor, String.Empty, LookupData.ParentWindowPrimaryKeyValue);

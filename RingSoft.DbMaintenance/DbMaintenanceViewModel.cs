@@ -50,6 +50,7 @@ namespace RingSoft.DbMaintenance
         public int PageSize { get; } = 1;
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
+        public int SelectedIndex => 0;
 
         /// <summary>
         /// Gets the table definition.
@@ -249,7 +250,8 @@ namespace RingSoft.DbMaintenance
                     case LookupFormModes.Add:
                         RecordDirty = false;
                         OnNewButton();
-                        KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
+                        if (primaryKeyValue != null)
+                            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
                         break;
                     default:
                         DeleteButtonEnabled = LookupAddViewArgs.AllowEdit && MaintenanceMode == DbMaintenanceModes.EditMode;
@@ -258,7 +260,7 @@ namespace RingSoft.DbMaintenance
 
                 NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
 
-                if (primaryKeyValue.IsValid)
+                if (primaryKeyValue != null && primaryKeyValue.IsValid)
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
 
                 if (LookupAddViewArgs.LookupReadOnlyMode)
@@ -281,6 +283,10 @@ namespace RingSoft.DbMaintenance
         protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
             var selectedPrimaryKeyValue = LookupAddViewArgs.SelectedPrimaryKeyValue;
+            if (selectedPrimaryKeyValue == null)
+            {
+                return null;
+            }
             if (addViewPrimaryKeyValue.TableDefinition != TableDefinition && TableDefinition.PrimaryKeyFields.Count == 1)
             {
                 var pkField = TableDefinition.PrimaryKeyFields[0];

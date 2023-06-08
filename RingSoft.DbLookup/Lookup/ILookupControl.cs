@@ -39,5 +39,7 @@
         /// The search text.
         /// </value>
         string SearchText { get; }
+
+        int SelectedIndex { get; }
     }
 }

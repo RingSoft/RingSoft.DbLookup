@@ -70,7 +70,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue);
 
-        public abstract void ViewSelectedRow(int _selectedIndex, object ownerWindow, object AddViewParameter, bool readOnlyMode = false);
+        public abstract void ViewSelectedRow(object ownerWindow, object AddViewParameter, bool readOnlyMode = false);
 
         public abstract void AddNewRow(object ownerWindow, object inputParameter = null);
 
@@ -97,12 +97,14 @@ namespace RingSoft.DbLookup.Lookup
         {
             DataSourceChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public abstract PrimaryKeyValue GetSelectedPrimaryKeyValue();
     }
-    public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : new()
+    public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : class, new()
     {
         public TableDefinition<TEntity> TableDefinition { get; }
 
-        public IQueryable<TEntity> BaseQuery { get; }
+        public IQueryable<TEntity> BaseQuery { get; private set; }
 
         public IQueryable<TEntity> FilteredQuery { get; private set; }
 
@@ -135,32 +137,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             PageSize = pageSize;
 
-            var param = GblMethods.GetParameterExpression<TEntity>();
-            var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
-
-            if (whereExpression == null)
-            {
-                FilteredQuery = ProcessedQuery = BaseQuery;
-            }
-            else
-            {
-                FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
-            }
-
-            var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
-            if (!orderColumnName.IsNullOrEmpty())
-            {
-                FilteredQuery = GblMethods.ApplyOrder(FilteredQuery, OrderMethods.OrderBy,
-                    orderColumnName);
-            }
-
-
-            ProcessedQuery = FilteredQuery.Take(PageSize);
-
-            CurrentList.Clear();
-
-            CurrentList.AddRange(ProcessedQuery);
-
+            RefreshData();
             FireLookupDataChangedEvent();
         }
 
@@ -202,16 +179,12 @@ namespace RingSoft.DbLookup.Lookup
             throw new NotImplementedException();
         }
 
-        public override void ViewSelectedRow(int selectedIndex, object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)
+        public override void ViewSelectedRow(object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)
         {
+            var selectedIndex = LookupControl.SelectedIndex;
             if (selectedIndex >= 0 && selectedIndex < RowCount)
             {
-                var entity = CurrentList[selectedIndex];
-                if (entity != null)
-                {
-                    SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
-                }
-
+                SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
                 if (LookupWindow == null)
                 {
                     var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
@@ -239,9 +212,49 @@ namespace RingSoft.DbLookup.Lookup
             throw new NotImplementedException();
         }
 
+        private void RefreshBaseQuery()
+        {
+            BaseQuery = LookupDefinition.TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
+        }
+
         public override void RefreshData()
         {
-            throw new NotImplementedException();
+            RefreshBaseQuery();
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            //if (LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+            //{
+            //    var expression = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+            //    , fieldColumn.GetPropertyJoinName(), Conditions.Contains, "C");
+
+            //    var newQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, expression);
+            //}
+
+            var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+
+            if (whereExpression == null)
+            {
+                FilteredQuery = ProcessedQuery = BaseQuery;
+            }
+            else
+            {
+                FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
+            }
+
+            var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
+            if (!orderColumnName.IsNullOrEmpty())
+            {
+                FilteredQuery = GblMethods.ApplyOrder(FilteredQuery, OrderMethods.OrderBy,
+                    orderColumnName);
+            }
+
+            ProcessedQuery = FilteredQuery.Take(PageSize);
+
+            CurrentList.Clear();
+
+            CurrentList.AddRange(ProcessedQuery);
+
+            FireLookupDataChangedEvent();
         }
 
         public override string GetSelectedText()
@@ -249,6 +262,22 @@ namespace RingSoft.DbLookup.Lookup
             var entity = TableDefinition.GetEntityFromPrimaryKeyValue(SelectedPrimaryKeyValue);
             var text = LookupDefinition.InitialSortColumnDefinition.GetDatabaseValue(entity);
             return text;
+        }
+
+        public override PrimaryKeyValue GetSelectedPrimaryKeyValue()
+        {
+            if (LookupControl.SelectedIndex < 0)
+            {
+                return null;
+            }
+            var entity = CurrentList[LookupControl.SelectedIndex];
+            if (entity != null)
+            {
+                SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                return SelectedPrimaryKeyValue;
+            }
+
+            return null;
         }
 
         private void LookupCallBack_RefreshData(object sender, EventArgs e)

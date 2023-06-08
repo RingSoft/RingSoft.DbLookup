@@ -7,5 +7,6 @@ namespace RingSoft.DbLookup.App.Library
         public int PageSize { get; set; } = 15;
         public LookupSearchTypes SearchType { get; set; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
+        public int SelectedIndex => 0;  
     }
 }

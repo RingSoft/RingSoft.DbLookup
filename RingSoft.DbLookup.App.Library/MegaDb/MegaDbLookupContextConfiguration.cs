@@ -141,5 +141,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public int PageSize { get; } = 15;
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
+        public int SelectedIndex => 0;
     }
 }

@@ -20,6 +20,7 @@ namespace RingSoft.DbLookup
         public int PageSize => 1;
         public LookupSearchTypes SearchType => LookupSearchTypes.Equals;
         public string SearchText { get; set; }
+        public int SelectedIndex => 0;
         public object AddViewParameter { get; set; }
 
         public object OwnerWindow { get; set; }

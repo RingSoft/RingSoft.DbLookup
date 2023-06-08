@@ -406,6 +406,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 EmployeeID = EmployeeId,
                 FirstName = FirstName,
                 LastName = LastName,
+                FullName = $"{FirstName} {LastName}",
                 Title = Title,
                 TitleOfCourtesy = TitleOfCourtesy,
                 Address = Address,

@@ -284,7 +284,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 InputParameter = AddViewParameter,
                 AllowEdit = AddButton.IsEnabled,
                 LookupReadOnlyMode = _readOnlyMode,
-                ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue
+                ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue,
+                SelectedPrimaryKeyValue = LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue(),
             };
 
             if (_readOnlyMode)
@@ -380,7 +381,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl == null)
                 return;
 
-            LookupControl.LookupData.RefreshData();
+            LookupControl.LookupDataMaui.RefreshData();
             RefreshData?.Invoke(this, EventArgs.Empty);
         }
 

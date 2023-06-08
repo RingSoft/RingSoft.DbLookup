@@ -108,8 +108,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public Order GetOrder(int orderId, bool gridMode)
         {
             var context = new NorthwindDbContextEfCore();
-            var orders = context.Orders
-                .Where(p => (p.OrderDate > DateTime.Parse("01/01/1980") && p.OrderDate < DateTime.Parse("01/01/1998")));
+            var order = context.Orders.FirstOrDefault(p => p.CustomerID.Contains("C"));
 
             if (gridMode)
             {

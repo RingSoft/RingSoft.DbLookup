@@ -653,9 +653,9 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        public BinaryExpression GetWhereExpresssion<TEntity>(ParameterExpression param)
+        public Expression GetWhereExpresssion<TEntity>(ParameterExpression param)
         {
-            BinaryExpression result = null;
+            Expression result = null;
 
             var fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
             var userFilter = UserBundle.GetMauiFilter<TEntity>(param);

@@ -513,21 +513,82 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        public virtual BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        public virtual Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
             return null;
         }
 
-        public static BinaryExpression GetStringExpression<TEntity>(ParameterExpression param, string property, Conditions condition, string value)
+        public static Expression GetStringExpression<TEntity>(ParameterExpression param, string property, Conditions condition, string value)
         {
             var newWhereMethod = GetWhereMethod<TEntity>();
             var returnExpression = GetPropertyExpression(property, param);
 
             Expression<Func<string>> idLambda = () => value;
-            var CallMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
-            Expression callExpr = Expression.Call(returnExpression, CallMethod, idLambda.Body);
 
-            var result = GetBinaryExpression(callExpr, condition, Expression.Constant(0));
+            MethodInfo callMethod = null;
+            Expression callExpr = null;
+
+            Expression result = null;
+            Expression expr = param;
+
+            string[] props = property.Split('.');
+            System.Type type = typeof(TEntity);
+            PropertyInfo pi = null;
+
+            var lastType = type;
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                pi = type.GetProperty(prop);
+                if (props.LastOrDefault() != prop)
+                {
+                    expr = Expression.Property(expr, pi);
+                }
+                type = pi.PropertyType;
+            }
+
+            MemberExpression m = null;
+            ConstantExpression c = null;
+            MethodInfo mi = null;
+            Expression call = null;
+
+            switch (condition)
+            {
+                case Conditions.Equals:
+                case Conditions.NotEquals:
+                case Conditions.GreaterThan:
+                case Conditions.GreaterThanEquals:
+                case Conditions.LessThan:
+                case Conditions.LessThanEquals:
+                    callMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
+                    callExpr = Expression.Call(returnExpression, callMethod, idLambda.Body);
+                    result = GetBinaryExpression(callExpr, condition, Expression.Constant(0));
+                    break;
+                case Conditions.Contains:
+                    m = Expression.MakeMemberAccess(expr, pi);
+                    c = Expression.Constant(value, typeof(string));
+                    mi = typeof(string).GetMethod("Contains", new System.Type[] { typeof(string) });
+                    call = Expression.Call(m, mi, c);
+                    result = call;
+                    break;
+                case Conditions.NotContains:
+                    break;
+                case Conditions.EqualsNull:
+                    break;
+                case Conditions.NotEqualsNull:
+                    break;
+                case Conditions.BeginsWith:
+                    m = Expression.MakeMemberAccess(expr, pi);
+                    c = Expression.Constant(value, typeof(string));
+                    mi = typeof(string).GetMethod("StartsWith", new System.Type[] { typeof(string) });
+                    call = Expression.Call(m, mi, c);
+                    result = call;
+                    break;
+                case Conditions.EndsWith:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
+            }
 
             return result;
         }
@@ -574,7 +635,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public static BinaryExpression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
+        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
         {
             BinaryExpression result = null;
             var returnExpression = GetPropertyExpression(property, param);
@@ -646,7 +707,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return returnExpression;
         }
 
-        public static IQueryable<TEntity> FilterQuery<TEntity>(IQueryable<TEntity> source, ParameterExpression param, BinaryExpression expression)
+        public static IQueryable<TEntity> FilterQuery<TEntity>(IQueryable<TEntity> source, ParameterExpression param, Expression expression)
         {
             var whereLambda = Expression.Lambda<Func<TEntity, bool>>(expression, param);
 
@@ -659,7 +720,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return whereQueryable;
         }
 
-        public static BinaryExpression AppendExpression(BinaryExpression left, BinaryExpression right, EndLogics endLogic)
+        public static Expression AppendExpression(Expression left, Expression right, EndLogics endLogic)
         {
             var result = left;
 

@@ -486,7 +486,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
-        public override BinaryExpression GetMauiFilter<TEntity>(ParameterExpression param)
+        public override Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
             if (FormulaToSearch != null)
             {

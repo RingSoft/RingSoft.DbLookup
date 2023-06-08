@@ -336,5 +336,8 @@ namespace RingSoft.DbLookup
 
         public abstract LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition)
             where TEntity : class, new();
+
+        public abstract IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition)
+            where TEntity : class, new();
     }
 }

@@ -558,8 +558,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 LookupDataMaui.LookupDataChanged += LookupDataMaui_LookupDataChanged;
                 //LookupData.LookupDataChanged += LookupData_LookupDataChanged;
-                LookupData.DataSourceChanged += LookupData_DataSourceChanged;
-                LookupData.LookupView += (sender, args) => LookupView?.Invoke(this, args);
+                //LookupData.DataSourceChanged += LookupData_DataSourceChanged;
+                LookupDataMaui.LookupView += (sender, args) => LookupView?.Invoke(this, args);
             }
 
             if (!_setupRan && LookupData != null)
@@ -1465,12 +1465,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             PrimaryKeyValue initialSearchForPrimaryKeyValue = null)
         {
             _currentPageSize = GetPageSize();
+            
+            if (LookupDataMaui == null || ListView == null || !LookupDataMaui.LookupDefinition.VisibleColumns.Any())
+            {
+                _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
+                return;
+            }
+
             LookupDataMaui.GetInitData(_currentPageSize);
-            //if (LookupData == null || ListView == null || !LookupData.LookupDefinition.VisibleColumns.Any())
-            //{
-            //    _refreshPendingData = new RefreshPendingData(initialSearchFor, parentWindowPrimaryKeyValue);
-            //    return;
-            //}
 
             //LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
@@ -2079,7 +2081,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void ClearLookupControl()
         {
             _refreshPendingData = null;
-            if (LookupData != null)
+            if (LookupDataMaui != null)
             {
                 ShowRecordCountWait = false;
                 ShowRecordCountProps = false;

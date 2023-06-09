@@ -472,6 +472,16 @@ namespace RingSoft.DbLookup
                     {
                         result = Int16.Parse(value);
                     }
+
+                    if (valType == typeof(byte))
+                    {
+                        result = byte.Parse(value);
+                    }
+
+                    if (result == null)
+                    {
+                        result = intVal;
+                    }
                     break;
                 case FieldDataTypes.Decimal:
                     result = decimal.Parse(value);

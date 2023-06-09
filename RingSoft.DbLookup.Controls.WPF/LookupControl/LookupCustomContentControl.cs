@@ -167,7 +167,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             else
             {
                 var typeTranslation =
-                    EnumFieldTranslation.TypeTranslations.FirstOrDefault(f => f.TextValue == DataText);
+                    EnumFieldTranslation.TypeTranslations.FirstOrDefault(f => f.NumericValue == DataText.ToInt());
                 if (typeTranslation != null)
                     SelectItem(typeTranslation.NumericValue);
             }

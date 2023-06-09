@@ -694,9 +694,17 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     break;
                 case Conditions.EqualsNull:
+                    if (!allowNulls)
+                    {
+                        return null;
+                    }
                     result = Expression.Equal(propertyAccess, Expression.Constant(null, type));
                     break;
                 case Conditions.NotEqualsNull:
+                    if (!allowNulls)
+                    {
+                        return null;
+                    }
                     result = Expression.NotEqual(propertyAccess, Expression.Constant(null, type));
                     break;
                 default:

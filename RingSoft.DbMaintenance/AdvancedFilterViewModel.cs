@@ -787,6 +787,14 @@ namespace RingSoft.DbMaintenance
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+
+                    if (!FieldDefinition.AllowNulls)
+                    {
+                        var item = ConditionComboBoxSetup.GetItem((int)Conditions.EqualsNull);
+                        ConditionComboBoxSetup.Items.Remove(item);
+                        item = ConditionComboBoxSetup.GetItem((int)Conditions.NotEqualsNull);
+                        ConditionComboBoxSetup.Items.Remove(item);
+                    }
                     break;
                 case TreeViewType.Formula:
                     ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;

@@ -9,6 +9,7 @@ using System.Reflection;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.Lookup
@@ -1063,6 +1064,11 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         public virtual LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode)
+        {
+            return null;
+        }
+
+        public virtual AutoFillDataMauiBase GetAutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control)
         {
             return null;
         }

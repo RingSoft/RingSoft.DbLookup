@@ -644,7 +644,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, bool allowNulls = true, object value = null)
+        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, bool allowNulls = true, object value = null)
         {
             Expression result = null;
             var returnExpression = GetPropertyExpression(property, param);
@@ -683,7 +683,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotContains:
                 case Conditions.BeginsWith:
                 case Conditions.EndsWith:
-                    expressionValue = Expression.Constant(value, value.GetType());
+                    expressionValue = Expression.Constant(value, fieldType);
                     if (value.GetType() == typeof(string))
                     {
                         return GetStringExpression<TEntity>(param, property, condition, value.ToString());

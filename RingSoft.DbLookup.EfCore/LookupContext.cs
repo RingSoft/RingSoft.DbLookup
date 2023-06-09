@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -185,11 +186,11 @@ namespace RingSoft.DbLookup.EfCore
         public override LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition) 
             where TEntity : class
         {
-            var query = GetQueryable<TEntity>(lookupDefinition);
-
-            var lookupMaui = new LookupDataMaui<TEntity>(query, lookupDefinition);
+            var lookupMaui = new LookupDataMaui<TEntity>(lookupDefinition);
             return lookupMaui;
         }
+
+        
 
         public override IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition) where TEntity : class
         {
@@ -205,6 +206,12 @@ namespace RingSoft.DbLookup.EfCore
             }
 
             return query;
+        }
+
+        public override AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
+        {
+            var autoFillMaui = new AutoFillDataMaui<TEntity>(setup, control);
+            return autoFillMaui;
         }
     }
 }

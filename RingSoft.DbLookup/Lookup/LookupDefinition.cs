@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -309,6 +310,11 @@ namespace RingSoft.DbLookup.Lookup
             {
                 return TableDefinition.Context.GetQuery<TEntity>(lookupDefinition);
             }
+        }
+
+        public override AutoFillDataMauiBase GetAutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control)
+        {
+            return new AutoFillDataMaui<TEntity>(setup, control);
         }
     }
 }

@@ -407,6 +407,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public AutoFillDataMauiBase AutoFillDataMaui { get; private set; }
+
 
         public event EventHandler ControlDirty;
         public event EventHandler LookupSelect;
@@ -649,7 +651,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             CheckButton();
-            if (_autoFillData != null)
+            if (AutoFillDataMaui != null)
                 ClearValue();
 
             _autoFillData = new AutoFillData(this, Setup.LookupDefinition, Setup.Distinct)
@@ -657,6 +659,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ShowContainsBox = ShowContainsBox,
                 ContainsBoxMaxRows = ContainsBoxMaxRows
             };
+            AutoFillDataMaui = Setup.LookupDefinition.TableDefinition.LookupDefinition.GetAutoFillDataMaui(Setup, this);
 
             if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
             {
@@ -664,6 +667,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     TextBox.MaxLength = stringField.MaxLength;
             }
 
+            AutoFillDataMaui.OutputDataChanged += AutoFillDataMaui_OutputDataChanged;
 
             _autoFillData.AutoFillDataChanged += AutoFillData_AutoFillDataChanged;
 
@@ -697,6 +701,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             _setupRan = true;
+        }
+
+        private void AutoFillDataMaui_OutputDataChanged(object sender, AutoFillOutputData e)
+        {
+            if (e.ContainsData != null)
+            {
+                
+            }
+
+            if (e.AutoFillValue != null)
+            {
+                Value = e.AutoFillValue;
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -883,8 +900,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     break;
             }
 
-            if (_autoFillData.OnKeyCharPressed(newText[0]))
-                e.Handled = true;
+            AutoFillDataMaui.OnKeyCharPressed(newText[0]);
+            e.Handled = true;
             RaiseDirtyFlag();
         }
 
@@ -947,10 +964,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void LookupForm_LookupSelect(object sender, LookupSelectArgs e)
         {
-            var text = e.LookupData.GetSelectedText();
-            SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
-            RaiseDirtyFlag();
-            LookupSelect?.Invoke(this, new EventArgs());
+            //var text = e.LookupData.GetSelectedText();
+            //SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
+            //RaiseDirtyFlag();
+            //LookupSelect?.Invoke(this, new EventArgs());
+            
+            AutoFillDataMaui.OnLookupSelect(e.LookupData.GetSelectedPrimaryKeyValue());
+
             if (TabOutAfterLookupSelect)
             {
                 Send(Key.Tab);

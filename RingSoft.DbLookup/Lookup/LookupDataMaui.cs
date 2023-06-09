@@ -116,23 +116,15 @@ namespace RingSoft.DbLookup.Lookup
 
         private bool _selectingRecord;
 
-        public LookupDataMaui(IQueryable<TEntity> query, LookupDefinitionBase lookupDefinition)
+        public LookupDataMaui(LookupDefinitionBase lookupDefinition)
         : base(lookupDefinition)
         {
             if (lookupDefinition.TableDefinition is TableDefinition<TEntity> table)
             {
                 TableDefinition = table;
             }
-            BaseQuery = query;
         }
 
-        public LookupDataMaui(LookupDefinitionBase lookupDefinition) : base(lookupDefinition)
-        {
-            if (lookupDefinition.TableDefinition is TableDefinition<TEntity> table)
-            {
-                TableDefinition = table;
-            }
-        }
         public override void GetInitData(int pageSize)
         {
             PageSize = pageSize;
@@ -176,7 +168,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
         {
-            throw new NotImplementedException();
+            if (LookupWindow != null)
+            {
+                LookupWindow.SelectPrimaryKey(primaryKeyValue);
+            }
         }
 
         public override void ViewSelectedRow(object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)

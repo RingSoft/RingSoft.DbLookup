@@ -453,9 +453,13 @@ namespace RingSoft.DbLookup
             return result;
         }
 
-        public static object GetPropertyFilterValue(this string value, FieldDataTypes dataType)
+        public static object GetPropertyFilterValue(this string value, FieldDataTypes dataType, Type valType)
         {
             object result = null;
+            if (value == null)
+            {
+                return result;
+            }
             switch (dataType)
             {
                 case FieldDataTypes.String:
@@ -463,7 +467,11 @@ namespace RingSoft.DbLookup
                     result = value;
                     break;
                 case FieldDataTypes.Integer:
-                    result = int.Parse(value);
+                    var intVal = int.Parse(value);
+                    if (valType == typeof(Int16))
+                    {
+                        result = Int16.Parse(value);
+                    }
                     break;
                 case FieldDataTypes.Decimal:
                     result = decimal.Parse(value);

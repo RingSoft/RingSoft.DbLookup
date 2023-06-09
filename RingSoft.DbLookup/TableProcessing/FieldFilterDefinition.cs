@@ -328,7 +328,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.EqualsNull:
                 case Conditions.NotEqualsNull:
                     FormulaToSearch = null;
-                    FieldToSearch = null;
+                    //FieldToSearch = null;
                     if (treeViewItem.Parent == null)
                     {
                         JoinDefinition = null;
@@ -498,9 +498,9 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 field = FieldToSearch;
             }
-            var value = stringValue.GetPropertyFilterValue(field.FieldDataType);
+            var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
 
-            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, value);
+            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.AllowNulls, value);
         }
     }
 }

@@ -95,7 +95,10 @@ namespace RingSoft.DbLookup.ModelDefinition
                 }
 
                 if (field != null)
+                {
+                    field.SetType(propertyInfo.PropertyType);
                     field.PropertyName = propertyInfo.Name;
+                }
             }
         }
 

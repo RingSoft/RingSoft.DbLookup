@@ -333,6 +333,15 @@ namespace RingSoft.DbLookup.AdvancedFind
         public TreeViewItem ProcessFoundTreeViewItem(string path, TreeViewType type = TreeViewType.Field, TreeViewItem root = null)
         {
             TreeViewItem result = null;
+            if (path == "Employees@ReportsTo;Employees@FullName;")
+            {
+                
+            }
+
+            if (path == "Order Details@OrderID;Orders@OrderName;")
+            {
+                
+            }
             if (root != null)
             {
                 result = root;
@@ -355,33 +364,24 @@ namespace RingSoft.DbLookup.AdvancedFind
                     }
 
                     if (fieldDefinition.ParentJoinForeignKeyDefinition == null)
-                    //{
-                    //    var lookupJoin = new LookupJoin(LookupDefinition);
-                    //    var tableFieldJoin = new TableFieldJoinDefinition();
-                    //    tableFieldJoin.ForeignKeyDefinition = fieldDefinition.ParentJoinForeignKeyDefinition;
-                    //    lookupJoin.JoinDefinition = tableFieldJoin;
-
-                    //    if (result.Parent != null)
-                    //    {
-                    //        lookupJoin.ParentObject = result.Parent.Include;
-                    //        tableFieldJoin.ParentObject = result.Parent.Include;
-                    //    }
-                    //    result.Include = lookupJoin;
-                    //}
-                    //else
                     {
-                        if (fieldDefinition.PropertyName == "ProductName")
+                        if (fieldDefinition.PropertyName == "ReportsTo")
                         {
 
                         }
 
-                        if (result.Parent != null)
+                        if (result != null && result.Parent != null)
                         {
                             var lookupJoin = new LookupJoin(LookupDefinition);
                             lookupJoin.ParentObject = result.Parent.Include;
                             result.Include = lookupJoin;
                         }
+
                     }
+                }
+                if (fieldDefinition != null && !fieldDefinition.AllowRecursion)
+                {
+                    return result;
                 }
                 path = path.RightStr(path.Length - (sepPos + 1));
             }

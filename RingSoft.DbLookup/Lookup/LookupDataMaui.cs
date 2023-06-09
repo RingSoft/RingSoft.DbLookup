@@ -222,13 +222,6 @@ namespace RingSoft.DbLookup.Lookup
             RefreshBaseQuery();
 
             var param = GblMethods.GetParameterExpression<TEntity>();
-            //if (LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
-            //{
-            //    var expression = FilterItemDefinition.GetBinaryExpression<TEntity>(param
-            //    , fieldColumn.GetPropertyJoinName(), Conditions.Contains, "C");
-
-            //    var newQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, expression);
-            //}
 
             var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
 

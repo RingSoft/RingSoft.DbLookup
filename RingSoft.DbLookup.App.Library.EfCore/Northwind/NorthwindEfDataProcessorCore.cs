@@ -108,7 +108,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public Order GetOrder(int orderId, bool gridMode)
         {
             var context = new NorthwindDbContextEfCore();
-            var order = context.Orders.FirstOrDefault(p => p.CustomerID.Contains("C"));
 
             if (gridMode)
             {

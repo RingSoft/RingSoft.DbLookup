@@ -11,6 +11,7 @@ using MySqlX.XDevAPI.Common;
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using Type = Google.Protobuf.WellKnownTypes.Type;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -572,10 +573,12 @@ namespace RingSoft.DbLookup.TableProcessing
                     result = call;
                     break;
                 case Conditions.NotContains:
-                    break;
-                case Conditions.EqualsNull:
-                    break;
-                case Conditions.NotEqualsNull:
+                    m = Expression.MakeMemberAccess(expr, pi);
+                    c = Expression.Constant(value, typeof(string));
+                    mi = typeof(string).GetMethod("Contains", new System.Type[] { typeof(string) });
+                    call = Expression.Call(m, mi, c);
+                    var not = Expression.Not(call);
+                    result = not;
                     break;
                 case Conditions.BeginsWith:
                     m = Expression.MakeMemberAccess(expr, pi);
@@ -585,6 +588,12 @@ namespace RingSoft.DbLookup.TableProcessing
                     result = call;
                     break;
                 case Conditions.EndsWith:
+                    m = Expression.MakeMemberAccess(expr, pi);
+                    c = Expression.Constant(value, typeof(string));
+                    mi = typeof(string).GetMethod("EndsWith", new System.Type[] { typeof(string) });
+                    call = Expression.Call(m, mi, c);
+                    result = call;
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
@@ -635,41 +644,83 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, object value)
+        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, bool allowNulls = true, object value = null)
         {
-            BinaryExpression result = null;
+            Expression result = null;
             var returnExpression = GetPropertyExpression(property, param);
 
-            var expressionValue = Expression.Constant(value, value.GetType());
+            ConstantExpression expressionValue = null;
 
-            if (value.GetType() == typeof(string))
+            Expression expr = param;
+
+            string[] props = property.Split('.');
+            System.Type type = typeof(TEntity);
+            PropertyInfo pi = null;
+
+            var lastType = type;
+            foreach (string prop in props)
             {
-                return GetStringExpression<TEntity>(param, property, condition, value.ToString());
+                // use reflection (not ComponentModel) to mirror LINQ
+                pi = type.GetProperty(prop);
+                if (props.LastOrDefault() != prop)
+                {
+                    expr = Expression.Property(expr, pi);
+                }
+                type = pi.PropertyType;
             }
-            else
+            Expression propertyAccess = Expression.Property(expr, pi);
+            var propType = GblMethods.GetPropertyType<TEntity>(property);
+
+            switch (condition)
             {
-                result = GetBinaryExpression(returnExpression, condition, expressionValue);
+                case Conditions.Equals:
+                case Conditions.NotEquals:
+                case Conditions.GreaterThan:
+                case Conditions.GreaterThanEquals:
+                case Conditions.LessThan:
+                case Conditions.LessThanEquals:
+                case Conditions.Contains:
+                case Conditions.NotContains:
+                case Conditions.BeginsWith:
+                case Conditions.EndsWith:
+                    expressionValue = Expression.Constant(value, value.GetType());
+                    if (value.GetType() == typeof(string))
+                    {
+                        return GetStringExpression<TEntity>(param, property, condition, value.ToString());
+                    }
+                    else
+                    {
+                        result = GetBinaryExpression(returnExpression, condition, expressionValue);
+                    }
+                    break;
+                case Conditions.EqualsNull:
+                    result = Expression.Equal(propertyAccess, Expression.Constant(null, type));
+                    break;
+                case Conditions.NotEqualsNull:
+                    result = Expression.NotEqual(propertyAccess, Expression.Constant(null, type));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
             }
 
             return result;
         }
 
-        public static Expression<Func<TEntity, bool>> ReturnWhereInt<TEntity>(string property, int value)
+        public static Expression CreateNullPropagationExpression(Expression o, string property)
         {
-            var newWhereMethod = GetWhereMethod<TEntity>();
-            var param = Expression.Parameter(typeof(TEntity), "p");
-            var returnExpression = GetPropertyExpression(property, param);
+            Expression propertyAccess = Expression.Property(o, property);
 
-            var expressionValue = Expression.Constant(value);
-            var body = Expression.Equal(returnExpression, expressionValue);
-            var whereLambda = Expression.Lambda<Func<TEntity, bool>>(body, param);
+            var propertyType = propertyAccess.Type;
 
-            return whereLambda;
-            //object whereResult = newWhereMethod
-            //    .Invoke(null, new object[] { source, whereLambda });
+            if (propertyType.IsValueType && Nullable.GetUnderlyingType(propertyType) == null)
+                propertyAccess = Expression.Convert(
+                    propertyAccess, typeof(Nullable<>).MakeGenericType(propertyType));
 
-            //var whereQueryable = (IQueryable<TEntity>)whereResult;
-            //return whereQueryable;
+            var nullResult = Expression.Default(propertyAccess.Type);
+
+            var condition = Expression.Equal(o, Expression.Constant(null, o.Type));
+
+            return Expression.Condition(condition, nullResult, propertyAccess);
         }
 
         public static MethodInfo GetWhereMethod<TEntity>()

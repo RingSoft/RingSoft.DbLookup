@@ -339,6 +339,17 @@ namespace RingSoft.DbLookup.Lookup
             }
             //var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
+
+            if (foundItem != null)
+            {
+                if (ParentObject != null)
+                {
+                    var properties = ParentObject.GetNavigationProperties();
+
+                    HasNavProperties = properties.Any();
+                }
+            }
+
         }
 
         public override string FormatValueForColumnMap(string value)

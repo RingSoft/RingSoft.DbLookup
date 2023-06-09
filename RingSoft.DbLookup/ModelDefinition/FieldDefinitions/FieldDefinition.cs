@@ -126,6 +126,13 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public ILookupFormula FormulaObject { get; private set; }
 
+        public System.Type FieldType { get; private set; }
+
+        internal void SetType(Type type)
+        {
+            FieldType = type;
+        }
+
 
         internal FieldDefinition()
         {

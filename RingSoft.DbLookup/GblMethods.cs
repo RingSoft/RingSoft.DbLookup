@@ -599,6 +599,45 @@ namespace RingSoft.DbLookup
             return queryAble;
         }
 
+        public static Type GetPropertyType<TEntity>(string property)
+        {
+            var type = typeof(TEntity);
+            string[] props = property.Split('.');
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                type = pi.PropertyType;
+            }
+
+            return type;
+        }
+        
+        public static PropertyInfo GetPropertyInfo<TEntity>(string property)
+        {
+            PropertyInfo result  = null;
+            var type = typeof(TEntity);
+            string[] props = property.Split('.');
+            foreach (string prop in props)
+            {
+                // use reflection (not ComponentModel) to mirror LINQ
+                PropertyInfo pi = type.GetProperty(prop);
+                type = pi.PropertyType;
+                result = pi;
+            }
+            return result;
+        }
+
+        public static Type GetNullableType(Type type)
+        {
+            // Use Nullable.GetUnderlyingType() to remove the Nullable<T> wrapper if type is already nullable.
+            type = Nullable.GetUnderlyingType(type) ?? type; // avoid type becoming null
+            if (type.IsValueType)
+                return typeof(Nullable<>).MakeGenericType(type);
+            else
+                return type;
+        }
+
         public static LambdaExpression GetLambda<TEntity>(string property)
         {
             System.Type type = typeof(TEntity);

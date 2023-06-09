@@ -1326,7 +1326,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _dataSource.Add(dataItem);
                 }
 
-                var showRecordCountButton = _dataSource.Count == lookupDataMaui.PageSize;
+                var showRecordCountButton = _dataSource.Count == PageSize;
                 if (showRecordCountButton)
                 {
                     ShowRecordCount(0, false);
@@ -1495,7 +1495,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
-            LookupDataMaui.GetInitData(_currentPageSize);
+            LookupDataMaui.GetInitData();
 
             //LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
@@ -1745,7 +1745,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1)
             {
-                LookupData.GotoNextRecord();
+                //LookupData.GotoNextRecord();
+                LookupDataMaui.GotoNextRecord();
             }
             else
             {

@@ -30,6 +30,8 @@ namespace RingSoft.DbLookup.Lookup
         public Expression LookupExpression { get; set; }
 
         public ParameterExpression Param { get; set; }
+
+        public List<FieldFilterDefinition> FieldFilters { get; set; }
     }
     public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : class, new()
     {
@@ -261,7 +263,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize - 1, 0);
+                    MakeList(entity, LookupControl.PageSize, 0);
                 }
             }
         }
@@ -356,6 +358,8 @@ namespace RingSoft.DbLookup.Lookup
                 var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
                 filterDefinition.AddFixedFilter(primaryKeyField, Conditions.Equals, value);
             }
+
+            result.FieldFilters = filterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
 
             return result;
         }
@@ -459,18 +463,49 @@ namespace RingSoft.DbLookup.Lookup
                     GotoBottom();
                 }
             }
+            FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
+            LookupControl.SetLookupIndex(CurrentList.Count - 1);
         }
 
         private List<TEntity> GetPreviousPage(TEntity entity, int count)
         {
             var result = new List<TEntity>();
+            result.Add(entity);
 
             var input = GetProcessInput(entity);
+            var localCount = count - 1;
             while (input.FilterDefinition.FixedFilters.Any())
             {
-                
+                var lastFilter = input.FieldFilters.LastOrDefault();
+                lastFilter.Condition = Conditions.LessThan;
+
+                var filterExpr = input.FilterDefinition.GetWhereExpresssion<TEntity>(input.Param);
+                var fullExpr = FilterItemDefinition
+                    .AppendExpression(input.LookupExpression, filterExpr, EndLogics.And);
+
+                var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
+                query = ApplyOrderBys(query, false);
+                query = query.Take(localCount);
+
+                result.InsertRange(0, query);
+
+                localCount -= query.Count();
+                if (result.Count < localCount)
+                {
+                    input.FilterDefinition.RemoveFixedFilter(lastFilter);
+                    input.FieldFilters.Remove(lastFilter);
+                }
+                else
+                {
+                    break;
+                }
             }
 
+            if (result.Count < count)
+            {
+                count -= result.Count;
+                result.InsertRange(0, GetPreviousPage(result.FirstOrDefault(), count));
+            }
             return result;
         }
 

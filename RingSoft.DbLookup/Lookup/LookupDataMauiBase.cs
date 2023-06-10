@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public class LookupDataMauiOutput
+    {
+        public LookupScrollPositions ScrollPosition { get; }
+
+        public LookupDataMauiOutput(LookupScrollPositions scrollPosition)
+        {
+            ScrollPosition = scrollPosition;
+        }
+    }
     public abstract class LookupDataMauiBase
     {
         public abstract int RowCount { get; }
+
+        public List<LookupColumnDefinitionBase> OrderByList { get; }
 
         public LookupDefinitionBase LookupDefinition { get; }
 
@@ -25,17 +37,18 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupView;
 
-        public event EventHandler LookupDataChanged;
+        public event EventHandler<LookupDataMauiOutput> LookupDataChanged;
         public event EventHandler DataSourceChanged;
 
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
+            OrderByList = new List<LookupColumnDefinitionBase>();
         }
 
-        protected void FireLookupDataChangedEvent()
+        protected void FireLookupDataChangedEvent(LookupDataMauiOutput lookupOutput)
         {
-            LookupDataChanged?.Invoke(this, EventArgs.Empty);
+            LookupDataChanged?.Invoke(this, lookupOutput);
         }
 
         public abstract void GetInitData();
@@ -61,6 +74,8 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void AddNewRow(object ownerWindow, object inputParameter = null);
 
         public abstract void RefreshData();
+
+        public abstract void OnColumnClick(LookupColumnDefinitionBase column, bool resetSortOrder);
 
         public void SetParentControls(ILookupControl control, ILookupWindow lookupWindow = null)
         {
@@ -91,5 +106,9 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void GotoBottom();
 
         public abstract void GotoNextRecord();
+
+        public abstract void GotoPreviousRecord();
+
+        public abstract void GotoNextPage();
     }
 }

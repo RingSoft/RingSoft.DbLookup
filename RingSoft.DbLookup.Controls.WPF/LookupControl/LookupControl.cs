@@ -1197,7 +1197,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         sortColumnIndex = indexOfColumn;
                     }
                 }
-                LookupData.OnColumnClick(sortColumnIndex, resetSortOrder);
+                LookupDataMaui.OnColumnClick(sortColumn.LookupColumnDefinition, resetSortOrder);
 
                 for (int i = 0; i < LookupGridView.Columns.Count; i++)
                 {
@@ -1210,7 +1210,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
 
                 var columnNumber = 1;
-                foreach (var lookupColumnDefinition in LookupData.OrderByList)
+                foreach (var lookupColumnDefinition in LookupDataMaui.OrderByList)
                 {
                     var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
                     var orderGridColumnHeader =
@@ -1313,7 +1313,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        private void LookupDataMaui_LookupDataChanged(object sender, EventArgs e)
+        private void LookupDataMaui_LookupDataChanged(object sender, LookupDataMauiOutput e)
         {
             _dataSource.Clear();
 
@@ -1346,9 +1346,29 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (ListView != null && ListView.ItemsSource == null)
                 ListView.ItemsSource = _dataSource;
 
-            _dataSource.UpdateSource();
-
             AdvancedFindButton.IsEnabled = _dataSource.Any();
+
+            if (ScrollBar != null)
+            {
+                ScrollBar.IsEnabled = true;
+                switch (e.ScrollPosition)
+                {
+                    case LookupScrollPositions.Disabled:
+                        ScrollBar.IsEnabled = false;
+                        break;
+                    case LookupScrollPositions.Top:
+                        ScrollBar.Value = ScrollBar.Minimum;
+                        break;
+                    case LookupScrollPositions.Middle:
+                        SetScrollThumbToMiddle();
+                        break;
+                    case LookupScrollPositions.Bottom:
+                        ScrollBar.Value = ScrollBar.Maximum;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
 
 
@@ -1786,7 +1806,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             var selIndex = ListView.SelectedIndex;
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
-                LookupData.GotoNextPage();
+                LookupDataMaui.GotoNextPage();
             else
                 ListView.SelectedIndex = ListView.Items.Count - 1;
         }

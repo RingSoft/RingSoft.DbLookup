@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         public override TreeViewType TreeViewType => TreeViewType.Formula;
-        public override string PropertyName { get; }
+        public override string PropertyName { get; internal set; }
 
         internal override void CopyFrom(FilterItemDefinition source)
         {

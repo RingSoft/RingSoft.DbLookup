@@ -97,7 +97,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public abstract TreeViewType TreeViewType { get; }
 
-        public abstract string PropertyName { get; }
+        public abstract string PropertyName { get; internal set; }
 
         public bool IsFixed { get; internal set; }
 

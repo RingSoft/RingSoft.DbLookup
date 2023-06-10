@@ -158,16 +158,29 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override TreeViewType TreeViewType => TreeViewType.Field;
 
+        public string SetPropertyName { get; set; }
+
         public override string PropertyName
         {
             get
             {
-                var field = FieldDefinition;
-                if (FieldToSearch != null)
+                if (SetPropertyName.IsNullOrEmpty())
                 {
-                    field = FieldToSearch;
+                    var field = FieldDefinition;
+                    if (FieldToSearch != null)
+                    {
+                        field = FieldToSearch;
+                    }
+
+                    return JoinDefinition.GetPropertyJoinName(field.PropertyName);
                 }
-                return JoinDefinition.GetPropertyJoinName(field.PropertyName);
+
+                return SetPropertyName;
+            }
+
+            internal set
+            {
+                SetPropertyName = value;
             }
         }
 
@@ -181,6 +194,7 @@ namespace RingSoft.DbLookup.TableProcessing
             CaseSensitive = fieldFilterDefinition.CaseSensitive;
             ParentField = fieldFilterDefinition.ParentField;
             Path = fieldFilterDefinition.Path;
+            SetPropertyName = fieldFilterDefinition.SetPropertyName;
 
             if (fieldFilterDefinition.JoinDefinition != null)
             {

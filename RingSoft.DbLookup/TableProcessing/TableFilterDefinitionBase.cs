@@ -191,10 +191,10 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         private FieldFilterDefinition CreateAddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
-            string value)
+            string value, int index = -1)
         {
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
-            FixedBundle.AddFilter(fieldFilter);
+            FixedBundle.AddFilter(fieldFilter, index);
             fieldFilter.IsFixed = true;
             return fieldFilter;
         }
@@ -210,9 +210,9 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         internal FieldFilterDefinition AddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
-            string value)
+            string value, int index = -1)
         {
-            return CreateAddFixedFilter(fieldDefinition, condition, value);
+            return CreateAddFixedFilter(fieldDefinition, condition, value, index);
         }
 
         public FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,

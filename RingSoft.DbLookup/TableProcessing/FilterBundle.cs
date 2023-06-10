@@ -23,9 +23,16 @@ namespace RingSoft.DbLookup.TableProcessing
             _filters.Clear();
         }
 
-        public void AddFilter(FilterItemDefinition filterItem)
+        public void AddFilter(FilterItemDefinition filterItem, int index = -1)
         {
-            _filters.Add(filterItem);
+            if (index < 0)
+            {
+                _filters.Add(filterItem);
+            }
+            else
+            {
+                _filters.Insert(index, filterItem);
+            }
         }
 
         public void CopyFilters(FilterBundle sourceBundle)

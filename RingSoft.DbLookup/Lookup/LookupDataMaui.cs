@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Google.Protobuf.WellKnownTypes;
 using MySqlX.XDevAPI.Common;
+using MySqlX.XDevAPI.Relational;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.Lookup;
@@ -44,7 +45,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int RowCount => CurrentList.Count;
 
-        public List<LookupColumnDefinitionBase> OrderByList{ get; }
+        
 
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
             : base(lookupDefinition)
@@ -53,14 +54,13 @@ namespace RingSoft.DbLookup.Lookup
             {
                 TableDefinition = table;
             }
-            OrderByList = new List<LookupColumnDefinitionBase>();   
             OrderByList.Add(lookupDefinition.InitialOrderByColumn);
         }
 
         public override void GetInitData()
         {
             RefreshData();
-            FireLookupDataChangedEvent();
+            FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
         }
 
         public override string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column)
@@ -89,7 +89,7 @@ namespace RingSoft.DbLookup.Lookup
         public override void ClearData()
         {
             CurrentList.Clear();
-            FireLookupDataChangedEvent();
+            FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
         }
 
         public override PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText)
@@ -160,12 +160,7 @@ namespace RingSoft.DbLookup.Lookup
                 FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
             }
 
-            var orderColumnName = LookupDefinition.InitialOrderByColumn.GetPropertyJoinName();
-            if (!orderColumnName.IsNullOrEmpty())
-            {
-                FilteredQuery = GblMethods.ApplyOrder(FilteredQuery, OrderMethods.OrderBy,
-                    orderColumnName);
-            }
+            FilteredQuery = ApplyOrderBys(FilteredQuery);
 
             ProcessedQuery = FilteredQuery.Take(LookupControl.PageSize);
 
@@ -173,7 +168,46 @@ namespace RingSoft.DbLookup.Lookup
 
             CurrentList.AddRange(ProcessedQuery);
 
-            FireLookupDataChangedEvent();
+            FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
+        }
+
+        public override void OnColumnClick(LookupColumnDefinitionBase column, bool resetSortOrder)
+        {
+            if (resetSortOrder)
+            {
+                OrderByList.Clear();
+                if (column != LookupDefinition.InitialSortColumnDefinition)
+                    OrderByList.Add(column);
+                OrderByList.Add(LookupDefinition.InitialSortColumnDefinition);
+            }
+            else
+            {
+                if (OrderByList.Contains(column))
+                {
+                    OrderByList.Remove(column);
+                }
+                else
+                {
+                    OrderByList.Add(column);
+                }
+            }
+            GetInitData();
+        }
+
+        private LookupScrollPositions GetScrollPosition(LookupDataMauiProcessInput<TEntity> input, IEnumerable<TEntity> list)
+        {
+            var result = LookupScrollPositions.Top;
+
+            var entity = list.LastOrDefault();
+
+            var bottomList = GetFilteredPage(input, entity, Conditions.GreaterThan, 1);
+
+            if (bottomList.Any())
+            {
+                result = LookupScrollPositions.Middle;
+            }
+
+            return result;
         }
 
         public override string GetSelectedText()
@@ -217,7 +251,25 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var selectedEntity = CurrentList[0];
+            var selectedEntity = CurrentList.FirstOrDefault();
+            if (selectedEntity != null)
+            {
+                GetNextPage(selectedEntity, LookupControl.PageSize);
+            }
+        }
+
+        public override void GotoPreviousRecord()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GotoNextPage()
+        {
+            if (!CurrentList.Any() || CurrentList.Count < LookupControl.PageSize)
+            {
+                return;
+            }
+            var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
                 GetNextPage(selectedEntity, LookupControl.PageSize);
@@ -237,14 +289,14 @@ namespace RingSoft.DbLookup.Lookup
 
             if (size == LookupControl.PageSize)
             {
-                FireLookupDataChangedEvent();
+                FireLookupDataChangedEvent(new LookupDataMauiOutput(GetScrollPosition(input, CurrentList)));
                 LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
             }
         }
 
         private IQueryable<TEntity> GetPage(LookupDataMauiProcessInput<TEntity> input, TEntity entity, Conditions condition, int size)
         {
-            var filterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
+            var filterDefinition = input.FilterDefinition;
             
             var query = GetFilteredPage(input, entity, condition, size);
 
@@ -281,11 +333,11 @@ namespace RingSoft.DbLookup.Lookup
 
             foreach (var orderBy in orderBys)
             {
-                var fieldDefinition = orderBy.FieldDefinition;
+                var fieldDefinition = orderBy.FieldToDisplay;
                 var value = orderBy.GetDatabaseValue(entity);
 
                 hasMoreThan1Record =
-                    CreateFilterItem(condition, param, filterDefinition, fieldDefinition, value, lookupExpr);
+                    CreateFilterItem(condition, param, filterDefinition, fieldDefinition, value, lookupExpr, orderBy.GetPropertyJoinName());
 
                 if (!hasMoreThan1Record)
                 {
@@ -300,7 +352,7 @@ namespace RingSoft.DbLookup.Lookup
                     var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
 
                     hasMoreThan1Record = CreateFilterItem(condition, param, filterDefinition, primaryKeyField, value,
-                        lookupExpr);
+                        lookupExpr, primaryKeyField.PropertyName);
 
                     if (!hasMoreThan1Record)
                     {
@@ -352,13 +404,20 @@ namespace RingSoft.DbLookup.Lookup
             var filterDefinition = input.FilterDefinition;
             var result = initPage.ToList();
             var page = initPage;
+            var count = initPage.Count();
 
-            if (initPage.Count() < size)
+            if (count < size)
             {
-                filterDefinition.RemoveFixedFilter(filterDefinition.FixedBundle.Filters.LastOrDefault());
                 while (filterDefinition.FixedBundle.Filters.Any())
                 {
-
+                    var fieldFilters = filterDefinition.FixedBundle.Filters.OfType<FieldFilterDefinition>();
+                    foreach (var filterItem in fieldFilters)
+                    {
+                        if (condition == Conditions.GreaterThan)
+                        {
+                            filterItem.Value
+                        }
+                    }
                     var filter = filterDefinition.FixedBundle.Filters.LastOrDefault();
                     if (filter is FieldFilterDefinition fieldFilter)
                     {
@@ -393,11 +452,13 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         private bool CreateFilterItem(Conditions condition, ParameterExpression param, TableFilterDefinition<TEntity> filterDefinition,
-            FieldDefinition fieldDefinition, string value, Expression lookupExpr)
+            FieldDefinition fieldDefinition, string value, Expression lookupExpr, string propName)
         {
             bool hasMoreThan1Record;
             var filter = filterDefinition.AddFixedFilter(fieldDefinition, Conditions.Equals, value);
+
             if (filter != null)
+                filter.PropertyName = propName;
             {
                 var entityExpr = filterDefinition.GetWhereExpresssion<TEntity>(param);
 
@@ -413,11 +474,11 @@ namespace RingSoft.DbLookup.Lookup
                 if (!hasMoreThan1Record)
                 {
                     filter.Condition = condition;
-                    return true;
+                    return false;
                 }
             }
 
-            return false;
+            return true;
         }
 
         private void LookupCallBack_RefreshData(object sender, EventArgs e)

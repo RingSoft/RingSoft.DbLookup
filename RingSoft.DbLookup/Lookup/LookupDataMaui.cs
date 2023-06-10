@@ -464,6 +464,13 @@ namespace RingSoft.DbLookup.Lookup
         private List<TEntity> GetPreviousPage(TEntity entity, int count)
         {
             var result = new List<TEntity>();
+
+            var input = GetProcessInput(entity);
+            while (input.FilterDefinition.FixedFilters.Any())
+            {
+                
+            }
+
             return result;
         }
 

@@ -102,8 +102,15 @@ namespace RingSoft.DbLookup.TableProcessing
 
                 if (leftExpression != null && rightExpression != null)
                 {
-                    result = FilterItemDefinition.AppendExpression(leftExpression, rightExpression,
-                        filter.EndLogic);
+                    if (result == null)
+                    {
+                        result = FilterItemDefinition.AppendExpression(leftExpression, rightExpression,
+                            filter.EndLogic);
+                    }
+                    else
+                    {
+                        result = FilterItemDefinition.AppendExpression(result, rightExpression, filter.EndLogic);
+                    }
                 }
                 else
                 {

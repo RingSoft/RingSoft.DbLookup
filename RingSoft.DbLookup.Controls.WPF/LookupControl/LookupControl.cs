@@ -1209,14 +1209,22 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
+                var first = true;
                 var columnNumber = 1;
                 foreach (var lookupColumnDefinition in LookupDataMaui.OrderByList)
                 {
-                    var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
-                    var orderGridColumnHeader =
-                        LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
-                    GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
-                    columnNumber++;
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
+                        var orderGridColumnHeader =
+                            LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
+                        GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
+                        columnNumber++;
+                    }
                 }
 
                 if (resetSortOrder)

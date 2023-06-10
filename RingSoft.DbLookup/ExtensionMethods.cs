@@ -497,5 +497,10 @@ namespace RingSoft.DbLookup
             }
             return result;
         }
+
+        public static Expression AppendExpression(this BinaryExpression left, BinaryExpression right, EndLogics endLogic)
+        {
+            return FilterItemDefinition.AppendExpression(left, right, endLogic);
+        }
     }
 }

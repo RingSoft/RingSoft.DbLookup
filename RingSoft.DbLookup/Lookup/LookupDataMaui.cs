@@ -160,7 +160,7 @@ namespace RingSoft.DbLookup.Lookup
                 FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
             }
 
-            FilteredQuery = ApplyOrderBys(FilteredQuery);
+            FilteredQuery = ApplyOrderBys(FilteredQuery, true);
 
             ProcessedQuery = FilteredQuery.Take(LookupControl.PageSize);
 
@@ -200,7 +200,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var entity = list.LastOrDefault();
 
-            var bottomList = GetFilteredPage(input, entity, Conditions.GreaterThan, 1);
+            var bottomList = new List<TEntity>();
 
             if (bottomList.Any())
             {
@@ -251,10 +251,18 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var selectedEntity = CurrentList.FirstOrDefault();
+            var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
-                GetNextPage(selectedEntity, LookupControl.PageSize);
+                var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
+                if (entity == null)
+                {
+                    GotoBottom();
+                }
+                else
+                {
+                    MakeList(entity, LookupControl.PageSize - 1, 0);
+                }
             }
         }
 
@@ -272,39 +280,55 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
-                GetNextPage(selectedEntity, LookupControl.PageSize);
+                //GetNextPage(selectedEntity, LookupControl.PageSize);
             }
         }
 
-        private void GetNextPage(TEntity entity, int size)
+        private TEntity GetNearestEntity(TEntity entity, Conditions condition)
+        {
+            TEntity result = null;
+            var input = GetProcessInput(entity);
+
+            while (input.FilterDefinition.FixedFilters.Any())
+            {
+                var filterItem = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().LastOrDefault();
+                if (filterItem != null)
+                {
+                    filterItem.Condition = condition;
+                }
+
+                var filterExpr = input.FilterDefinition.GetWhereExpresssion<TEntity>(input.Param);
+
+                var fullExpr = FilterItemDefinition
+                    .AppendExpression(input.LookupExpression, filterExpr, EndLogics.And);
+
+                var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
+
+                query = ApplyOrderBys(query, true);
+
+                query = query.Take(1);
+
+                if (query.Count() == 1)
+                {
+                    return query.FirstOrDefault();
+                }
+                else
+                {
+                    var lastFilter = input.FilterDefinition.FixedFilters.LastOrDefault();
+                    if (lastFilter != null)
+                    {
+                        input.FilterDefinition.RemoveFixedFilter(lastFilter);
+                    }
+                }
+            }
+            
+            return result;
+        }
+
+
+        private LookupDataMauiProcessInput<TEntity> GetProcessInput(TEntity entity)
         {
             var filterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
-
-            var input = GetProcessInput(filterDefinition);
-
-            var query = GetPage(input,entity, Conditions.GreaterThan, size);
-
-            CurrentList.Clear();
-            CurrentList.AddRange( MakeList(query, size, input, Conditions.GreaterThan));
-
-            if (size == LookupControl.PageSize)
-            {
-                FireLookupDataChangedEvent(new LookupDataMauiOutput(GetScrollPosition(input, CurrentList)));
-                LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
-            }
-        }
-
-        private IQueryable<TEntity> GetPage(LookupDataMauiProcessInput<TEntity> input, TEntity entity, Conditions condition, int size)
-        {
-            var filterDefinition = input.FilterDefinition;
-            
-            var query = GetFilteredPage(input, entity, condition, size);
-
-            return query;
-        }
-
-        private LookupDataMauiProcessInput<TEntity> GetProcessInput(TableFilterDefinition<TEntity> filterDefinition)
-        {
             var query = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
             var param = GblMethods.GetParameterExpression<TEntity>();
             var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>().ToList();
@@ -318,76 +342,48 @@ namespace RingSoft.DbLookup.Lookup
                 Query = query,
                 Param = param,
             };
-            return result;
-        }
-
-        private IQueryable<TEntity> GetFilteredPage(LookupDataMauiProcessInput<TEntity> input, TEntity entity, Conditions condition,  int size)
-        {
-            var hasMoreThan1Record = false;
-
-            var filterDefinition = input.FilterDefinition;
-            var query = input.Query;
-            var orderBys = input.OrderByList;
-            var lookupExpr = input.LookupExpression;
-            var param = input.Param;
 
             foreach (var orderBy in orderBys)
             {
-                var fieldDefinition = orderBy.FieldToDisplay;
                 var value = orderBy.GetDatabaseValue(entity);
-
-                hasMoreThan1Record =
-                    CreateFilterItem(condition, param, filterDefinition, fieldDefinition, value, lookupExpr, orderBy.GetPropertyJoinName());
-
-                if (!hasMoreThan1Record)
-                {
-                    break;
-                }
+                var field = orderBy.FieldDefinition;
+                var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);
+                filterItem.PropertyName = orderBy.GetPropertyJoinName();
             }
 
-            if (hasMoreThan1Record)
+            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
             {
-                foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
-                {
-                    var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
-
-                    hasMoreThan1Record = CreateFilterItem(condition, param, filterDefinition, primaryKeyField, value,
-                        lookupExpr, primaryKeyField.PropertyName);
-
-                    if (!hasMoreThan1Record)
-                    {
-                        break;
-                    }
-                }
+                var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
+                filterDefinition.AddFixedFilter(primaryKeyField, Conditions.Equals, value);
             }
 
-            query = ApplyOrderBys(query);
-
-
-            var pageExpr = filterDefinition.GetWhereExpresssion<TEntity>(param);
-
-            var fullExpr = FilterItemDefinition.AppendExpression(lookupExpr, pageExpr, EndLogics.And);
-
-            var pagedQuery = FilterItemDefinition.FilterQuery(query, param, fullExpr);
-            pagedQuery = pagedQuery.Take(size);
-
-            return pagedQuery;
+            return result;
         }
 
-        private IQueryable<TEntity> ApplyOrderBys(IQueryable<TEntity> query)
+
+        private IQueryable<TEntity> ApplyOrderBys(IQueryable<TEntity> query, bool ascending)
         {
             var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>();
             var first = true;
+
+            var orderByType = OrderMethods.OrderBy;
+            var thenByType = OrderMethods.ThenBy;
+
+            if (!ascending)
+            {
+                orderByType = OrderMethods.OrderByDescending;
+                thenByType = OrderMethods.ThenByDescending;
+            }
             foreach (var orderBy in orderBys)
             {
                 if (first)
                 {
-                    query = GblMethods.ApplyOrder(query, OrderMethods.OrderBy, orderBy.GetPropertyJoinName());
+                    query = GblMethods.ApplyOrder(query, orderByType, orderBy.GetPropertyJoinName());
                     first = false;
                 }
                 else
                 {
-                    query = GblMethods.ApplyOrder(query, OrderMethods.ThenBy, orderBy.GetPropertyJoinName());
+                    query = GblMethods.ApplyOrder(query, thenByType, orderBy.GetPropertyJoinName());
                 }
             }
 
@@ -397,58 +393,6 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return query;
-        }
-
-        private List<TEntity> MakeList(IQueryable<TEntity> initPage, int size, LookupDataMauiProcessInput<TEntity> input, Conditions condition)
-        {
-            var filterDefinition = input.FilterDefinition;
-            var result = initPage.ToList();
-            var page = initPage;
-            var count = initPage.Count();
-
-            if (count < size)
-            {
-                while (filterDefinition.FixedBundle.Filters.Any())
-                {
-                    var fieldFilters = filterDefinition.FixedBundle.Filters.OfType<FieldFilterDefinition>();
-                    foreach (var filterItem in fieldFilters)
-                    {
-                        if (condition == Conditions.GreaterThan)
-                        {
-                            filterItem.Value
-                        }
-                    }
-                    var filter = filterDefinition.FixedBundle.Filters.LastOrDefault();
-                    if (filter is FieldFilterDefinition fieldFilter)
-                    {
-                        fieldFilter.Condition = condition;
-                        var filterExpr = filterDefinition.GetWhereExpresssion<TEntity>(input.Param);
-
-                        var fullExpr = FilterItemDefinition.AppendExpression(input.LookupExpression, filterExpr, EndLogics.And);
-
-                        var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
-                        ApplyOrderBys(query);
-
-                        size -= page.Count();
-
-                        query = query.Take(size);
-
-                        if (condition == Conditions.GreaterThan)
-                        {
-                            result.AddRange(query);
-                            page = query;
-                        }
-
-                        filterDefinition.RemoveFixedFilter(filterDefinition.FixedBundle.Filters.LastOrDefault());
-                        size -= page.Count();
-                        if (page.Count() >= size)
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-            return result;
         }
 
         private bool CreateFilterItem(Conditions condition, ParameterExpression param, TableFilterDefinition<TEntity> filterDefinition,
@@ -487,24 +431,45 @@ namespace RingSoft.DbLookup.Lookup
             OnDataSourceChanged();
         }
 
-        private TableFilterDefinition<TEntity> GetPageFilters(TEntity entity)
+        private void MakeList(TEntity entity, int topCount, int bottomCount)
         {
-            var result = new TableFilterDefinition<TEntity>(TableDefinition);
-
-            var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>();
-
-            foreach (var orderColumn in orderBys)
+            CurrentList.Clear();
+            if (topCount > 0)
             {
-                var value = orderColumn.GetDatabaseValue(entity);
-
-                result.AddFixedFilter(orderColumn.FieldDefinition, Conditions.Equals, value);
+                var previousPage = GetPreviousPage(entity, topCount);
+                if (previousPage != null && previousPage.Any())
+                {
+                    CurrentList.AddRange(previousPage);
+                }
+                else
+                {
+                    GotoTop();
+                }
             }
 
-            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
+            if (bottomCount > 0)
             {
-                var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
-                result.AddFixedFilter(primaryKeyField, Conditions.Equals, value);
+                var nextPage = GetNextPage(entity, bottomCount);
+                if (nextPage != null && nextPage.Any())
+                {
+                    CurrentList.AddRange(nextPage);
+                }
+                else
+                {
+                    GotoBottom();
+                }
             }
+        }
+
+        private List<TEntity> GetPreviousPage(TEntity entity, int count)
+        {
+            var result = new List<TEntity>();
+            return result;
+        }
+
+        private List<TEntity> GetNextPage(TEntity entity, int count)
+        {
+            var result = new List<TEntity>();
             return result;
         }
     }

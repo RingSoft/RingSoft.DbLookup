@@ -314,6 +314,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public void SetLookupIndex(int index)
+        {
+            ListView.SelectedIndex = index;
+        }
+
         public static readonly DependencyProperty LookupDefinitionProperty =
             DependencyProperty.Register("LookupDefinition", typeof(LookupDefinitionBase), typeof(LookupControl),
                 new FrameworkPropertyMetadata(LookupDefinitionChangedCallback));

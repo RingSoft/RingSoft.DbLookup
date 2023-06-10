@@ -9,5 +9,9 @@ namespace RingSoft.DbLookup.Lookup
         public LookupSearchTypes SearchType { get; set; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; }
         public int SelectedIndex => 0;
+        public void SetLookupIndex(int index)
+        {
+            
+        }
     }
 }

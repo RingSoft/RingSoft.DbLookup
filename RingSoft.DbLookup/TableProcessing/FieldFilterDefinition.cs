@@ -500,7 +500,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
 
-            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, field.AllowNulls, value);
+            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
         }
     }
 }

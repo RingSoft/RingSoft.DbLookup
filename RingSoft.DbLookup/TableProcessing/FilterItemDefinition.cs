@@ -644,7 +644,7 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, bool allowNulls = true, object value = null)
+        public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, object value = null)
         {
             Expression result = null;
             var returnExpression = GetPropertyExpression(property, param);
@@ -683,6 +683,10 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.NotContains:
                 case Conditions.BeginsWith:
                 case Conditions.EndsWith:
+                    if (value == null)
+                    {
+                        throw new ArgumentNullException("Value cannot be null.");
+                    }
                     expressionValue = Expression.Constant(value, fieldType);
                     if (value.GetType() == typeof(string))
                     {
@@ -694,14 +698,14 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     break;
                 case Conditions.EqualsNull:
-                    if (!allowNulls)
+                    if (!type.IsNullable())
                     {
                         return null;
                     }
                     result = Expression.Equal(propertyAccess, Expression.Constant(null, type));
                     break;
                 case Conditions.NotEqualsNull:
-                    if (!allowNulls)
+                    if (!type.IsNullable())
                     {
                         return null;
                     }
@@ -786,6 +790,11 @@ namespace RingSoft.DbLookup.TableProcessing
             if (right == null)
             {
                 return left;
+            }
+
+            if (left == null)
+            {
+                return right;
             }
             switch (endLogic)
             {

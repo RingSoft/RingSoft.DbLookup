@@ -41,5 +41,7 @@
         string SearchText { get; }
 
         int SelectedIndex { get; }
+
+        void SetLookupIndex(int index);
     }
 }

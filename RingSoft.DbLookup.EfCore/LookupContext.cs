@@ -183,7 +183,7 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        public override LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition) 
+        public override LookupDataMauiBase GetLookupDataMaui<TEntity>(LookupDefinitionBase lookupDefinition) 
             where TEntity : class
         {
             var lookupMaui = new LookupDataMaui<TEntity>(lookupDefinition);

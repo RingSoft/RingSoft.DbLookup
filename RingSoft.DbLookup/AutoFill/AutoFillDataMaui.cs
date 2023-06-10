@@ -193,7 +193,7 @@ namespace RingSoft.DbLookup.AutoFill
                             value.GetPropertyFilterValue(primaryKeyField.FieldDataType, primaryKeyField.FieldType);
 
                         var filter = FilterItemDefinition.GetBinaryExpression<TEntity>(param, property,
-                            Conditions.Equals, primaryKeyField.FieldType, false, filterValue);
+                            Conditions.Equals, primaryKeyField.FieldType, filterValue);
 
                         var filterQuery = FilterItemDefinition.FilterQuery(query, param, filter);
                         entity = filterQuery.FirstOrDefault();
@@ -226,8 +226,7 @@ namespace RingSoft.DbLookup.AutoFill
             var property = Setup.LookupDefinition.InitialSortColumnDefinition.GetPropertyJoinName();
 
             var autoFillExpr =
-                FilterItemDefinition.GetBinaryExpression<TEntity>(param, property, Conditions.BeginsWith, typeof(string), true,
-                    beginText);
+                FilterItemDefinition.GetBinaryExpression<TEntity>(param, property, Conditions.BeginsWith, typeof(string), beginText);
 
             Expression newFilter = null;
             if (baseExpr == null)

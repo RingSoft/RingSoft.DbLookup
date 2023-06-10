@@ -334,7 +334,7 @@ namespace RingSoft.DbLookup
             CopyProcedureEvent?.Invoke(this, args);
         }
 
-        public abstract LookupDataMauiBase GetQuery<TEntity>(LookupDefinitionBase lookupDefinition)
+        public abstract LookupDataMauiBase GetLookupDataMaui<TEntity>(LookupDefinitionBase lookupDefinition)
             where TEntity : class, new();
 
         public abstract IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition)

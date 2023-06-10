@@ -301,5 +301,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
         public int SelectedIndex => 0;
+        public void SetLookupIndex(int index)
+        {
+            
+        }
     }
 }

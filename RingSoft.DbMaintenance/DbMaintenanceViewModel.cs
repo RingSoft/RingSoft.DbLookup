@@ -51,6 +51,10 @@ namespace RingSoft.DbMaintenance
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
         public string SearchText { get; set; } = string.Empty;
         public int SelectedIndex => 0;
+        public void SetLookupIndex(int index)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Gets the table definition.

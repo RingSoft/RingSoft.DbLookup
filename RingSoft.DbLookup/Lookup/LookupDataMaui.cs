@@ -291,6 +291,8 @@ namespace RingSoft.DbLookup.Lookup
             TEntity result = null;
             var input = GetProcessInput(entity);
 
+            AddPrimaryKeyFieldsToFilter(entity, input);
+
             while (input.FilterDefinition.FixedFilters.Any())
             {
                 var filterItem = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().LastOrDefault();
@@ -299,14 +301,7 @@ namespace RingSoft.DbLookup.Lookup
                     filterItem.Condition = condition;
                 }
 
-                var filterExpr = input.FilterDefinition.GetWhereExpresssion<TEntity>(input.Param);
-
-                var fullExpr = FilterItemDefinition
-                    .AppendExpression(input.LookupExpression, filterExpr, EndLogics.And);
-
-                var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
-
-                query = ApplyOrderBys(query, true);
+                var query = GetQueryFromFilter(input.FilterDefinition, input, true);
 
                 query = query.Take(1);
 
@@ -325,6 +320,18 @@ namespace RingSoft.DbLookup.Lookup
             }
             
             return result;
+        }
+
+        private void AddPrimaryKeyFieldsToFilter(TEntity entity, LookupDataMauiProcessInput<TEntity> input)
+        {
+            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
+            {
+                var fieldFilter = input.FilterDefinition.AddFixedFilter(primaryKeyField, Conditions.Equals
+                    , GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName));
+                fieldFilter.SetPropertyName = primaryKeyField.PropertyName;
+            }
+
+            input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
         }
 
 
@@ -350,13 +357,8 @@ namespace RingSoft.DbLookup.Lookup
                 var value = orderBy.GetDatabaseValue(entity);
                 var field = orderBy.FieldDefinition;
                 var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);
-                filterItem.PropertyName = orderBy.GetPropertyJoinName();
-            }
-
-            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
-            {
-                var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
-                filterDefinition.AddFixedFilter(primaryKeyField, Conditions.Equals, value);
+                filterItem.SetPropertyName = orderBy.GetPropertyJoinName();
+                filterItem.LookupColumn = orderBy;
             }
 
             result.FieldFilters = filterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
@@ -399,36 +401,6 @@ namespace RingSoft.DbLookup.Lookup
             return query;
         }
 
-        private bool CreateFilterItem(Conditions condition, ParameterExpression param, TableFilterDefinition<TEntity> filterDefinition,
-            FieldDefinition fieldDefinition, string value, Expression lookupExpr, string propName)
-        {
-            bool hasMoreThan1Record;
-            var filter = filterDefinition.AddFixedFilter(fieldDefinition, Conditions.Equals, value);
-
-            if (filter != null)
-                filter.PropertyName = propName;
-            {
-                var entityExpr = filterDefinition.GetWhereExpresssion<TEntity>(param);
-
-                var fullExpr = FilterItemDefinition.AppendExpression(lookupExpr, entityExpr, EndLogics.And);
-
-                var query = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
-
-                query = FilterItemDefinition.FilterQuery(query, param, fullExpr);
-                query = query.Take(2);
-
-                hasMoreThan1Record = query.Count() > 1;
-
-                if (!hasMoreThan1Record)
-                {
-                    filter.Condition = condition;
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void LookupCallBack_RefreshData(object sender, EventArgs e)
         {
             RefreshData();
@@ -443,7 +415,7 @@ namespace RingSoft.DbLookup.Lookup
                 var previousPage = GetPreviousPage(entity, topCount);
                 if (previousPage != null && previousPage.Any())
                 {
-                    CurrentList.AddRange(previousPage);
+                    CurrentList.InsertRange(0, previousPage);
                 }
                 else
                 {
@@ -451,62 +423,43 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            if (bottomCount > 0)
-            {
-                var nextPage = GetNextPage(entity, bottomCount);
-                if (nextPage != null && nextPage.Any())
-                {
-                    CurrentList.AddRange(nextPage);
-                }
-                else
-                {
-                    GotoBottom();
-                }
-            }
+            //if (bottomCount > 0)
+            //{
+            //    var nextPage = GetNextPage(entity, bottomCount);
+            //    if (nextPage != null && nextPage.Any())
+            //    {
+            //        CurrentList.AddRange(nextPage);
+            //    }
+            //    else
+            //    {
+            //        GotoBottom();
+            //    }
+            //}
             FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
             LookupControl.SetLookupIndex(CurrentList.Count - 1);
         }
 
-        private List<TEntity> GetPreviousPage(TEntity entity, int count)
+        private List<TEntity> GetPreviousPage(TEntity entity, int count, bool recursion = false)
         {
             var result = new List<TEntity>();
-            result.Add(entity);
-
             var input = GetProcessInput(entity);
-            var localCount = count - 1;
-            while (input.FilterDefinition.FixedFilters.Any())
-            {
-                var lastFilter = input.FieldFilters.LastOrDefault();
-                lastFilter.Condition = Conditions.LessThan;
+            AddPrimaryKeyFieldsToFilter(entity, input);
 
-                var filterExpr = input.FilterDefinition.GetWhereExpresssion<TEntity>(input.Param);
-                var fullExpr = FilterItemDefinition
-                    .AppendExpression(input.LookupExpression, filterExpr, EndLogics.And);
-
-                var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
-                query = ApplyOrderBys(query, false);
-                query = query.Take(localCount);
-
-                result.InsertRange(0, query);
-
-                localCount -= query.Count();
-                if (result.Count < localCount)
-                {
-                    input.FilterDefinition.RemoveFixedFilter(lastFilter);
-                    input.FieldFilters.Remove(lastFilter);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            if (result.Count < count)
-            {
-                count -= result.Count;
-                result.InsertRange(0, GetPreviousPage(result.FirstOrDefault(), count));
-            }
             return result;
+        }
+
+        private IQueryable<TEntity> GetQueryFromFilter(TableFilterDefinition<TEntity> newFilter
+            , LookupDataMauiProcessInput<TEntity> input, bool ascending)
+        {
+            var filterExpr = newFilter.GetWhereExpresssion<TEntity>(input.Param);
+
+            var fullExpr =
+                FilterItemDefinition.AppendExpression(input.LookupExpression
+                    , filterExpr, EndLogics.And);
+
+            var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
+            query = ApplyOrderBys(query, ascending);
+            return query;
         }
 
         private List<TEntity> GetNextPage(TEntity entity, int count)
@@ -514,5 +467,6 @@ namespace RingSoft.DbLookup.Lookup
             var result = new List<TEntity>();
             return result;
         }
+
     }
 }

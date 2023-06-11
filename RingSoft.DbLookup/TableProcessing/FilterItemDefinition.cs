@@ -152,10 +152,26 @@ namespace RingSoft.DbLookup.TableProcessing
             internal set => _dateType = value;
         }
 
+        internal LookupColumnDefinitionBase LookupColumn { get; set; }
+
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
             TableDescription = tableFilterDefinition.TableDefinition.Description;
+        }
+
+        public string GetPropertyValue<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            if (LookupColumn != null)
+            {
+                return LookupColumn.GetDatabaseValue(entity);
+            }
+            if (PropertyName.IsNullOrEmpty())
+            {
+                return GblMethods.GetPropertyValue(entity, PropertyName);
+            }
+
+            return Value;
         }
 
         internal virtual void CopyFrom(FilterItemDefinition source)
@@ -171,6 +187,7 @@ namespace RingSoft.DbLookup.TableProcessing
             DateFilterType = source.DateFilterType;
             DateFilterValue = source.DateFilterValue;
             IsFixed = source.IsFixed;
+            LookupColumn = source.LookupColumn;
         }
 
         public virtual void SetTableDescription()
@@ -647,7 +664,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, object value = null)
         {
             Expression result = null;
-            var returnExpression = GetPropertyExpression(property, param);
+                var returnExpression = GetPropertyExpression(property, param);
 
             ConstantExpression expressionValue = null;
 

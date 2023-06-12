@@ -615,32 +615,6 @@ namespace RingSoft.DbLookup.Lookup
 
             return result;
         }
-        private TEntity GetNextEntity(TableFilterDefinition<TEntity> filterDefinition
-            , LookupDataMauiProcessInput<TEntity> input,
-            Conditions condition, bool ascending)
-        {
-            if (filterDefinition == null)
-            {
-                filterDefinition = input.FilterDefinition;
-            }
-            TEntity entity = null;
-            var lastFilter = filterDefinition.FixedFilters.LastOrDefault() as FieldFilterDefinition;
-            if (lastFilter != null)
-            {
-                lastFilter.Condition = condition;
-            }
-
-            var checkQuery = GetQueryFromFilter(filterDefinition, input, ascending);
-            if (checkQuery != null)
-            {
-                if (checkQuery.Any())
-                {
-                    entity = checkQuery.FirstOrDefault();
-                }
-            }
-
-            return entity;
-        }
 
         private void AddFilter(LookupDataMauiProcessInput<TEntity> input,
             LookupColumnDefinitionBase column, Conditions condition, string value)

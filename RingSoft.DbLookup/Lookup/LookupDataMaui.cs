@@ -261,7 +261,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(selectedEntity, entity, LookupControl.PageSize, 0);
+                    MakeList(entity, LookupControl.PageSize, 0);
                 }
             }
         }
@@ -273,14 +273,23 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void GotoNextPage()
         {
-            if (!CurrentList.Any() || CurrentList.Count < LookupControl.PageSize)
+            if (!CurrentList.Any())
             {
                 return;
             }
+
             var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
-                //GetNextPage(selectedEntity, LookupControl.PageSize);
+                var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
+                if (entity == null)
+                {
+                    GotoBottom();
+                }
+                else
+                {
+                    MakeList(entity, 0, LookupControl.PageSize);
+                }
             }
         }
 
@@ -422,7 +431,7 @@ namespace RingSoft.DbLookup.Lookup
             OnDataSourceChanged();
         }
 
-        private void MakeList(TEntity selectedEntity, TEntity entity, int topCount, int bottomCount)
+        private void MakeList(TEntity entity, int topCount, int bottomCount)
         {
             CurrentList.Clear();
             if (topCount > 0)
@@ -440,7 +449,7 @@ namespace RingSoft.DbLookup.Lookup
 
             if (bottomCount > 0)
             {
-                var nextPage = GetNextPage(entity, bottomCount);
+                var nextPage = GetPage(entity, bottomCount, false);
                 if (nextPage != null && nextPage.Any())
                 {
                     CurrentList.AddRange(nextPage);
@@ -461,7 +470,7 @@ namespace RingSoft.DbLookup.Lookup
             var input = GetProcessInput(nextEntity, true);
 
             var query = GetFilterPageQuery(nextEntity, count, input
-                , true, out var addedPrimaryKeyToFilter, false);
+                , true, out var addedPrimaryKeyToFilter, !previous);
 
             result.AddRange(query);
             
@@ -469,7 +478,15 @@ namespace RingSoft.DbLookup.Lookup
 
             if (count > 0)
             {
-                nextEntity = result.FirstOrDefault();
+                if (previous)
+                {
+                    nextEntity = result.FirstOrDefault();
+                }
+                else
+                {
+                    nextEntity = result.LastOrDefault();
+                }
+
                 var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter
                     , nextEntity, !previous);
 
@@ -561,7 +578,14 @@ namespace RingSoft.DbLookup.Lookup
             lastFilter = input.FieldFilters.LastOrDefault();
             if (lastFilter != null)
             {
-                lastFilter.Condition = Conditions.LessThan;
+                if (ascending)
+                {
+                    lastFilter.Condition = Conditions.GreaterThan;
+                }
+                else
+                {
+                    lastFilter.Condition = Conditions.LessThan;
+                }
             }
 
             var output = GetFilterPageQuery(topEntity, count, input
@@ -586,10 +610,27 @@ namespace RingSoft.DbLookup.Lookup
 
             if (count > 0)
             {
-                var entity = result.FirstOrDefault();
+                TEntity entity = null;
+                if (ascending)
+                {
+                    entity = result.LastOrDefault();
+                }
+                else
+                {
+                    entity = result.FirstOrDefault();
+                }
+
                 filterIndex++;
                 var newList = AddAditionalList(input, result, count, false, entity, ascending, filterIndex);
-                result.InsertRange(0, newList);
+
+                if (ascending)
+                {
+                    result.AddRange(newList);
+                }
+                else
+                {
+                    result.InsertRange(0, newList);
+                }
             }
             return result;
         }

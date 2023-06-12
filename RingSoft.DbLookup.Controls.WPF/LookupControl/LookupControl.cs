@@ -1795,7 +1795,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0)
             {
-                LookupData.GotoPreviousRecord();
+                LookupDataMaui.GotoPreviousRecord();
             }
             else
             {
@@ -1830,7 +1830,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             var selIndex = ListView.SelectedIndex;
             if (selIndex <= 0 || !checkSelectedIndex)
-                LookupData.GotoPreviousPage();
+                LookupDataMaui.GotoPreviousPage();
             else
                 ListView.SelectedIndex = 0;
         }

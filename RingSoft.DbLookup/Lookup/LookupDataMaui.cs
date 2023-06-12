@@ -262,14 +262,31 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize, 0);
+                    MakeList(entity, LookupControl.PageSize, 0, true);
                 }
             }
         }
 
         public override void GotoPreviousRecord()
         {
-            throw new NotImplementedException();
+            if (!CurrentList.Any())
+            {
+                return;
+            }
+
+            var selectedEntity = CurrentList.FirstOrDefault();
+            if (selectedEntity != null)
+            {
+                var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
+                if (entity == null)
+                {
+                    GotoTop();
+                }
+                else
+                {
+                    MakeList(entity, 0, LookupControl.PageSize, false);
+                }
+            }
         }
 
         public override void GotoNextPage()
@@ -289,7 +306,29 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, 0, LookupControl.PageSize);
+                    MakeList(entity, 0, LookupControl.PageSize, true);
+                }
+            }
+        }
+
+        public override void GotoPreviousPage()
+        {
+            if (!CurrentList.Any())
+            {
+                return;
+            }
+
+            var selectedEntity = CurrentList.FirstOrDefault();
+            if (selectedEntity != null)
+            {
+                var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
+                if (entity == null)
+                {
+                    GotoTop();
+                }
+                else
+                {
+                    MakeList(entity, LookupControl.PageSize, 0, false);
                 }
             }
         }
@@ -301,6 +340,8 @@ namespace RingSoft.DbLookup.Lookup
 
             AddPrimaryKeyFieldsToFilter(entity, input);
 
+            var ascending = condition == Conditions.GreaterThan;
+
             while (input.FilterDefinition.FixedFilters.Any())
             {
                 var filterItem = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().LastOrDefault();
@@ -309,7 +350,7 @@ namespace RingSoft.DbLookup.Lookup
                     filterItem.Condition = condition;
                 }
 
-                var query = GetQueryFromFilter(input.FilterDefinition, input, true);
+                var query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
 
                 query = query.Take(1);
 
@@ -439,7 +480,7 @@ namespace RingSoft.DbLookup.Lookup
             OnDataSourceChanged();
         }
 
-        private void MakeList(TEntity entity, int topCount, int bottomCount)
+        private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom)
         {
             CurrentList.Clear();
             if (topCount > 0)
@@ -450,6 +491,11 @@ namespace RingSoft.DbLookup.Lookup
                     CurrentList.InsertRange(0, previousPage);
                 }
                 else
+                {
+                    GotoTop();
+                }
+
+                if (previousPage.Count < topCount)
                 {
                     GotoTop();
                 }
@@ -468,7 +514,14 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
             FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
-            LookupControl.SetLookupIndex(CurrentList.Count - 1);
+            if (setIndexToBottom)
+            {
+                LookupControl.SetLookupIndex(CurrentList.Count - 1);
+            }
+            else
+            {
+                LookupControl.SetLookupIndex(0);
+            }
         }
 
         private List<TEntity> GetPage(TEntity nextEntity, int count

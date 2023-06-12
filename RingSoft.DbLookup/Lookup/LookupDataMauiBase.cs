@@ -113,5 +113,7 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void GotoPreviousRecord();
 
         public abstract void GotoNextPage();
+        
+        public abstract void GotoPreviousPage();
     }
 }

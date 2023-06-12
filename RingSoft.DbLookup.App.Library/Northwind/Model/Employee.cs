@@ -78,5 +78,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<EmployeeTerritory> Territories { get; set; }
+
+        public override string ToString()
+        {
+            return FullName;
+        }
     }
 }

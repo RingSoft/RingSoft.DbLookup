@@ -47,8 +47,6 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int RowCount => CurrentList.Count;
 
-        
-
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
             : base(lookupDefinition)
         {
@@ -198,7 +196,7 @@ namespace RingSoft.DbLookup.Lookup
 
         private LookupScrollPositions GetScrollPosition(LookupDataMauiProcessInput<TEntity> input, IEnumerable<TEntity> list)
         {
-            var result = LookupScrollPositions.Top;
+            var result = LookupScrollPositions.Middle;
 
             var entity = list.LastOrDefault();
 
@@ -263,7 +261,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize, 0);
+                    MakeList(selectedEntity, entity, LookupControl.PageSize, 0);
                 }
             }
         }
@@ -314,11 +312,11 @@ namespace RingSoft.DbLookup.Lookup
                     var lastFilter = input.FilterDefinition.FixedFilters.LastOrDefault();
                     if (lastFilter != null)
                     {
-                        input.FilterDefinition.RemoveFixedFilter(lastFilter);
+                        RemoveFilter(input, lastFilter);
                     }
                 }
             }
-            
+
             return result;
         }
 
@@ -335,9 +333,20 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
-        private LookupDataMauiProcessInput<TEntity> GetProcessInput(TEntity entity)
+        private LookupDataMauiProcessInput<TEntity> GetProcessInput(TEntity entity, bool getFilter = true
+        , TableFilterDefinition<TEntity> oldFilter = null)
         {
-            var filterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
+            TableFilterDefinition<TEntity> filterDefinition = null;
+            if (oldFilter == null)
+            {
+                filterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
+            }
+            else
+            {
+                //filterDefinition = oldFilter;
+                //getFilter = false;
+            }
+
             var query = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
             var param = GblMethods.GetParameterExpression<TEntity>();
             var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>().ToList();
@@ -352,16 +361,22 @@ namespace RingSoft.DbLookup.Lookup
                 Param = param,
             };
 
-            foreach (var orderBy in orderBys)
+            if (getFilter)
             {
-                var value = orderBy.GetDatabaseValue(entity);
-                var field = orderBy.FieldDefinition;
-                var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);
-                filterItem.SetPropertyName = orderBy.GetPropertyJoinName();
-                filterItem.LookupColumn = orderBy;
+                foreach (var orderBy in orderBys)
+                {
+                    var value = orderBy.GetDatabaseValue(entity);
+                    var field = orderBy.FieldDefinition;
+                    var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);
+                    filterItem.SetPropertyName = orderBy.GetPropertyJoinName();
+                    filterItem.LookupColumn = orderBy;
+                }
             }
 
-            result.FieldFilters = filterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
+            if (filterDefinition.FixedFilters.Count > 0)
+            {
+                result.FieldFilters = filterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
+            }
 
             return result;
         }
@@ -407,7 +422,7 @@ namespace RingSoft.DbLookup.Lookup
             OnDataSourceChanged();
         }
 
-        private void MakeList(TEntity entity, int topCount, int bottomCount)
+        private void MakeList(TEntity selectedEntity, TEntity entity, int topCount, int bottomCount)
         {
             CurrentList.Clear();
             if (topCount > 0)
@@ -439,12 +454,225 @@ namespace RingSoft.DbLookup.Lookup
             LookupControl.SetLookupIndex(CurrentList.Count - 1);
         }
 
-        private List<TEntity> GetPreviousPage(TEntity entity, int count, bool recursion = false)
+        private List<TEntity> GetPreviousPage(TEntity nextEntity, int count
+            , TableFilterDefinition<TEntity> filter = null)
         {
             var result = new List<TEntity>();
-            var input = GetProcessInput(entity);
-            AddPrimaryKeyFieldsToFilter(entity, input);
+            var input = GetProcessInput(nextEntity, true);
 
+            var query = GetFilterPageQuery(nextEntity, count, input
+                , true, out var addedPrimaryKeyToFilter, false);
+
+            result.AddRange(query);
+            
+            count -= result.Count;
+
+            if (count > 0)
+            {
+                nextEntity = result.FirstOrDefault();
+                var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter
+                    , nextEntity, false);
+                result.InsertRange(0, newList);
+            }
+
+            return result;
+        }
+
+        private IEnumerable<TEntity> GetFilterPageQuery(TEntity entity, int count, LookupDataMauiProcessInput<TEntity> input,
+            bool checkPrimaryKey, out bool addedPrimaryKeyToFilter, bool ascending)
+        {
+            addedPrimaryKeyToFilter = false;
+            var hasMoreThan1Record = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
+
+            if (hasMoreThan1Record && checkPrimaryKey)
+            {
+                addedPrimaryKeyToFilter = true;
+                AddPrimaryKeyFieldsToFilter(entity, input);
+            }
+
+            var query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
+            query = query.Take(count);
+            var result = GetOutputResult(query, ascending, count);
+            return result;
+        }
+
+        private bool DoesFilterHaveMoreThan1Record(TEntity entity, LookupDataMauiProcessInput<TEntity> input, bool addFilters)
+        {
+            var lastFilter = input.FieldFilters.LastOrDefault();
+            var hasMoreThan1Record = false;
+            foreach (var columnDefinition in input.OrderByList)
+            {
+                var value = columnDefinition.GetDatabaseValue(entity);
+                var orderByFieldFilter = input.FieldFilters
+                    .FirstOrDefault(p => p.FieldDefinition == columnDefinition.FieldDefinition);
+
+                if (orderByFieldFilter != null)
+                {
+                    if (orderByFieldFilter != lastFilter)
+                    {
+                        orderByFieldFilter.Condition = Conditions.Equals;
+                        orderByFieldFilter.Value = value;
+                    }
+                }
+                else if (addFilters)
+                {
+                    AddFilter(input, columnDefinition, Conditions.Equals, value);
+                }
+
+                hasMoreThan1Record = HasMoreThan1Record(input);
+                if (!hasMoreThan1Record)
+                {
+                    break;
+                }
+            }
+
+            return hasMoreThan1Record;
+        }
+
+        private List<TEntity> AddAditionalList(LookupDataMauiProcessInput<TEntity> input, List<TEntity> inputList
+        , int count, bool addedPrimaryKey, TEntity topEntity, bool ascending, int filterIndex = 0)
+        {
+            FieldFilterDefinition lastFilter = null;
+            input = GetProcessInput(topEntity);
+            if (addedPrimaryKey)
+            {
+                AddPrimaryKeyFieldsToFilter(topEntity, input);
+            }
+
+            var result = new List<TEntity>();
+
+            if (filterIndex > 1 && input.FieldFilters.Count > 1)
+            {
+                lastFilter= input.FieldFilters.LastOrDefault();
+                if (lastFilter != null && input.FieldFilters.Count > 1)
+                {
+                    RemoveFilter(input, lastFilter);
+                }
+            }
+
+            lastFilter = input.FieldFilters.LastOrDefault();
+            if (lastFilter != null)
+            {
+                lastFilter.Condition = Conditions.LessThan;
+            }
+
+            var output = GetFilterPageQuery(topEntity, count, input
+                , false, out addedPrimaryKey, ascending);
+
+            if (output.Count() == 0)
+            {
+                if (input.FieldFilters.Count > 1)
+                {
+                    var entity = topEntity;
+                    lastFilter = (input.FieldFilters.LastOrDefault());
+                    RemoveFilter(input, lastFilter);
+                    filterIndex++;
+                    var newList = AddAditionalList(input, result, count, false, entity, ascending, filterIndex);
+                    result.InsertRange(0, newList);
+                }
+                return result;
+            }
+
+            result.InsertRange(0, output);
+            count -= result.Count;
+
+            if (count > 0)
+            {
+                var entity = result.FirstOrDefault();
+                filterIndex++;
+                var newList = AddAditionalList(input, result, count, false, entity, ascending, filterIndex);
+                result.InsertRange(0, newList);
+            }
+            return result;
+        }
+
+        private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count)
+        {
+            if (query.Count() == 1)
+            {
+                return query;
+            }
+            var result = new List<TEntity>();
+
+            if (ascending)
+            {
+                result.AddRange(query);
+            }
+            else
+            {
+                foreach (var entity in query)
+                {
+                    if (result.Count == count)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        result.Insert(0, entity);
+                    }
+                }
+            }
+
+            return result;
+        }
+        private TEntity GetNextEntity(TableFilterDefinition<TEntity> filterDefinition
+            , LookupDataMauiProcessInput<TEntity> input,
+            Conditions condition, bool ascending)
+        {
+            if (filterDefinition == null)
+            {
+                filterDefinition = input.FilterDefinition;
+            }
+            TEntity entity = null;
+            var lastFilter = filterDefinition.FixedFilters.LastOrDefault() as FieldFilterDefinition;
+            if (lastFilter != null)
+            {
+                lastFilter.Condition = condition;
+            }
+
+            var checkQuery = GetQueryFromFilter(filterDefinition, input, ascending);
+            if (checkQuery != null)
+            {
+                if (checkQuery.Any())
+                {
+                    entity = checkQuery.FirstOrDefault();
+                }
+            }
+
+            return entity;
+        }
+
+        private void AddFilter(LookupDataMauiProcessInput<TEntity> input,
+            LookupColumnDefinitionBase column, Conditions condition, string value)
+        {
+            if (column is LookupFieldColumnDefinition fieldColumn)
+            {
+                var filterItem = input.FilterDefinition
+                    .AddFixedFilter(fieldColumn.FieldDefinition, Conditions.Equals, value);
+                input.FieldFilters.Add(filterItem);
+                filterItem.PropertyName = column.GetPropertyJoinName();
+                filterItem.LookupColumn = column;
+            }
+
+            input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
+        }
+
+        private void RemoveFilter(LookupDataMauiProcessInput<TEntity> input, FilterItemDefinition filterItem)
+        {
+            if (filterItem is FieldFilterDefinition fieldFilter)
+            {
+                input.FieldFilters.Remove(fieldFilter);
+            }
+            input.FilterDefinition.RemoveFixedFilter(filterItem);
+            input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
+        }
+
+        private bool HasMoreThan1Record(LookupDataMauiProcessInput<TEntity> input)
+        {
+            var result = false;
+            var query = GetQueryFromFilter(input.FilterDefinition, input, true);
+            var count = query.Count();
+            result = count > 1;
             return result;
         }
 

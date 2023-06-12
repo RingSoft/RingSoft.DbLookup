@@ -61,5 +61,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         public ICollection<Order_Detail> Order_Details { get; set; }
 
         public Shipper Shipper { get; set; }
+
+        public override string ToString()
+        {
+            return OrderName;
+        }
     }
 }

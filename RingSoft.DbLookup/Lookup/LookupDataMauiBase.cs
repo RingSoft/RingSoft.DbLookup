@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public ILookupWindow LookupWindow { get; private set; }
 
+        public LookupScrollPositions ScrollPosition { get; private set; }
+
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>
@@ -48,6 +50,7 @@ namespace RingSoft.DbLookup.Lookup
 
         protected void FireLookupDataChangedEvent(LookupDataMauiOutput lookupOutput)
         {
+            ScrollPosition = lookupOutput.ScrollPosition;
             LookupDataChanged?.Invoke(this, lookupOutput);
         }
 

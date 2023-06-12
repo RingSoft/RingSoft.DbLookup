@@ -427,7 +427,7 @@ namespace RingSoft.DbLookup.Lookup
             CurrentList.Clear();
             if (topCount > 0)
             {
-                var previousPage = GetPreviousPage(entity, topCount);
+                var previousPage = GetPage(entity, topCount, true);
                 if (previousPage != null && previousPage.Any())
                 {
                     CurrentList.InsertRange(0, previousPage);
@@ -438,24 +438,24 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            //if (bottomCount > 0)
-            //{
-            //    var nextPage = GetNextPage(entity, bottomCount);
-            //    if (nextPage != null && nextPage.Any())
-            //    {
-            //        CurrentList.AddRange(nextPage);
-            //    }
-            //    else
-            //    {
-            //        GotoBottom();
-            //    }
-            //}
+            if (bottomCount > 0)
+            {
+                var nextPage = GetNextPage(entity, bottomCount);
+                if (nextPage != null && nextPage.Any())
+                {
+                    CurrentList.AddRange(nextPage);
+                }
+                else
+                {
+                    GotoBottom();
+                }
+            }
             FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
             LookupControl.SetLookupIndex(CurrentList.Count - 1);
         }
 
-        private List<TEntity> GetPreviousPage(TEntity nextEntity, int count
-            , TableFilterDefinition<TEntity> filter = null)
+        private List<TEntity> GetPage(TEntity nextEntity, int count
+            , bool previous, TableFilterDefinition<TEntity> filter = null)
         {
             var result = new List<TEntity>();
             var input = GetProcessInput(nextEntity, true);
@@ -471,8 +471,16 @@ namespace RingSoft.DbLookup.Lookup
             {
                 nextEntity = result.FirstOrDefault();
                 var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter
-                    , nextEntity, false);
-                result.InsertRange(0, newList);
+                    , nextEntity, !previous);
+
+                if (previous)
+                {
+                    result.InsertRange(0, newList);
+                }
+                else
+                {
+                    result.AddRange(newList);
+                }
             }
 
             return result;

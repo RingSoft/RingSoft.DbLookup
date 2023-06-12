@@ -15,5 +15,10 @@
         public virtual Manufacturer Manufacturer { get; set; }
 
         public byte IconType { get; set; }
+
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
     }
 }

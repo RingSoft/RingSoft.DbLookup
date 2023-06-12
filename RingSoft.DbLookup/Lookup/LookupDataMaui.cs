@@ -145,6 +145,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void RefreshData()
         {
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             RefreshBaseQuery();
 
             var param = GblMethods.GetParameterExpression<TEntity>();
@@ -167,7 +168,7 @@ namespace RingSoft.DbLookup.Lookup
             CurrentList.Clear();
 
             CurrentList.AddRange(ProcessedQuery);
-
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
             FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
         }
 
@@ -419,7 +420,14 @@ namespace RingSoft.DbLookup.Lookup
 
             foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
             {
-                query = GblMethods.ApplyOrder(query, OrderMethods.ThenBy, primaryKeyField.PropertyName);
+                if (ascending)
+                {
+                    query = GblMethods.ApplyOrder(query, OrderMethods.ThenBy, primaryKeyField.PropertyName);
+                }
+                else
+                {
+                    query = GblMethods.ApplyOrder(query, OrderMethods.ThenByDescending, primaryKeyField.PropertyName);
+                }
             }
 
             return query;
@@ -470,7 +478,7 @@ namespace RingSoft.DbLookup.Lookup
             var input = GetProcessInput(nextEntity, true);
 
             var query = GetFilterPageQuery(nextEntity, count, input
-                , true, out var addedPrimaryKeyToFilter, !previous);
+                , true, out var addedPrimaryKeyToFilter, !previous, out var hasMultiRecs);
 
             result.AddRange(query);
             
@@ -504,12 +512,12 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         private IEnumerable<TEntity> GetFilterPageQuery(TEntity entity, int count, LookupDataMauiProcessInput<TEntity> input,
-            bool checkPrimaryKey, out bool addedPrimaryKeyToFilter, bool ascending)
+            bool checkPrimaryKey, out bool addedPrimaryKeyToFilter, bool ascending, out bool hasMultiRecs)
         {
             addedPrimaryKeyToFilter = false;
-            var hasMoreThan1Record = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
+            hasMultiRecs = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
 
-            if (hasMoreThan1Record && checkPrimaryKey)
+            if (hasMultiRecs && checkPrimaryKey)
             {
                 addedPrimaryKeyToFilter = true;
                 AddPrimaryKeyFieldsToFilter(entity, input);
@@ -517,7 +525,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
             query = query.Take(count);
-            var result = GetOutputResult(query, ascending, count);
+            var result = GetOutputResult(query, ascending, count, input);
             return result;
         }
 
@@ -589,7 +597,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             var output = GetFilterPageQuery(topEntity, count, input
-                , false, out addedPrimaryKey, ascending);
+                , false, out addedPrimaryKey, ascending, out var hasMultiRecs);
 
             if (output.Count() == 0)
             {
@@ -635,13 +643,15 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count)
+        private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count
+        , LookupDataMauiProcessInput<TEntity> input)
         {
             if (query.Count() == 1)
             {
                 return query;
             }
             var result = new List<TEntity>();
+            var tempList = new List<TEntity>(query);
 
             if (ascending)
             {

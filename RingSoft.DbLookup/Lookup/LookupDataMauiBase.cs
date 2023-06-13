@@ -16,7 +16,7 @@ namespace RingSoft.DbLookup.Lookup
     {
         public abstract int RowCount { get; }
 
-        public List<LookupColumnDefinitionBase> OrderByList { get; }
+        public List<LookupFieldColumnDefinition> OrderByList { get; }
 
         public LookupDefinitionBase LookupDefinition { get; }
 
@@ -45,7 +45,7 @@ namespace RingSoft.DbLookup.Lookup
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
-            OrderByList = new List<LookupColumnDefinitionBase>();
+            OrderByList = new List<LookupFieldColumnDefinition>();
         }
 
         protected void FireLookupDataChangedEvent(LookupDataMauiOutput lookupOutput)
@@ -78,7 +78,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract void RefreshData();
 
-        public abstract void OnColumnClick(LookupColumnDefinitionBase column, bool resetSortOrder);
+        public abstract void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder);
 
         public void SetParentControls(ILookupControl control, ILookupWindow lookupWindow = null)
         {
@@ -115,5 +115,7 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void GotoNextPage();
         
         public abstract void GotoPreviousPage();
+
+        public abstract void OnSearchForChange(string searchForText);
     }
 }

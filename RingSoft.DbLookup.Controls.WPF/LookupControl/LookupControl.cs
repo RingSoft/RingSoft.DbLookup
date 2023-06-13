@@ -671,7 +671,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
             if (!_resettingSearchFor)
-                LookupData.OnSearchForChange(SearchForHost.SearchText);
+                LookupDataMaui.OnSearchForChange(SearchForHost.SearchText);
         }
 
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1197,7 +1197,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                         sortColumnIndex = indexOfColumn;
                     }
                 }
-                LookupDataMaui.OnColumnClick(sortColumn.LookupColumnDefinition, resetSortOrder);
+
+                if (sortColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                {
+                    LookupDataMaui.OnColumnClick(fieldColumn, resetSortOrder);
+                }
 
                 for (int i = 0; i < LookupGridView.Columns.Count; i++)
                 {
@@ -1843,7 +1847,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
 
             if (selIndex >= ListView.Items.Count - 1 || !checkSelectedIndex)
-                LookupData.GotoBottom();
+                LookupDataMaui.GotoBottom();
             else
                 ListView.SelectedIndex = ListView.Items.Count - 1;
         }
@@ -1856,7 +1860,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var selIndex = ListView.SelectedIndex;
 
             if (selIndex <= 0 || !checkSelectedIndex)
-                LookupData.GotoTop();
+                LookupDataMaui.GotoTop();
             else
                 ListView.SelectedIndex = 0;
         }
@@ -2042,7 +2046,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             else
             {
-                if (SearchForHost != null) LookupData.OnSearchForChange(SearchForHost.SearchText);
+                if (SearchForHost != null) LookupDataMaui.OnSearchForChange(SearchForHost.SearchText);
             }
 
             if (SearchForHost != null) SearchForHost.Control.Focus();

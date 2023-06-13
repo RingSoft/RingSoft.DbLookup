@@ -108,6 +108,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public Order GetOrder(int orderId, bool gridMode)
         {
             var context = new NorthwindDbContextEfCore();
+            //var entitys = context.Orders
+            //    .Include(p => p.Customer)
+            //    .Where(p => p.Customer.CompanyName.Contains("w", StringComparison.CurrentCultureIgnoreCase));
 
             if (gridMode)
             {

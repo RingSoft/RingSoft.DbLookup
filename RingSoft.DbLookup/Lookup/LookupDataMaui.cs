@@ -54,7 +54,11 @@ namespace RingSoft.DbLookup.Lookup
             {
                 TableDefinition = table;
             }
-            OrderByList.Add(lookupDefinition.InitialOrderByColumn);
+
+            if (lookupDefinition.InitialOrderByColumn is LookupFieldColumnDefinition fieldColumn)
+            {
+                OrderByList.Add(fieldColumn);
+            }
         }
 
         public override void GetInitData()
@@ -77,6 +81,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int GetRecordCount()
         {
+            MakeFilteredQuery();
             var result = 0;
             if (FilteredQuery != null && FilteredQuery.Any())
             {
@@ -148,20 +153,7 @@ namespace RingSoft.DbLookup.Lookup
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             RefreshBaseQuery();
 
-            var param = GblMethods.GetParameterExpression<TEntity>();
-
-            var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
-
-            if (whereExpression == null)
-            {
-                FilteredQuery = ProcessedQuery = BaseQuery;
-            }
-            else
-            {
-                FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
-            }
-
-            FilteredQuery = ApplyOrderBys(FilteredQuery, true);
+            MakeFilteredQuery();
 
             ProcessedQuery = FilteredQuery.Take(LookupControl.PageSize);
 
@@ -172,14 +164,53 @@ namespace RingSoft.DbLookup.Lookup
             FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
         }
 
-        public override void OnColumnClick(LookupColumnDefinitionBase column, bool resetSortOrder)
+        private void MakeFilteredQuery(bool applyOrders = true)
+        {
+            var param = GblMethods.GetParameterExpression<TEntity>();
+
+            var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+
+            if (LookupControl.SearchType == LookupSearchTypes.Contains)
+            {
+                var contExpr = GetContainsExpr(param);
+                if (whereExpression == null)
+                {
+                    whereExpression = contExpr;
+                }
+                else
+                {
+                    whereExpression = FilterItemDefinition
+                        .AppendExpression(whereExpression, contExpr, EndLogics.And);
+                }
+            }
+
+            if (whereExpression == null)
+            {
+                FilteredQuery = ProcessedQuery = BaseQuery;
+            }
+            else
+            {
+                FilteredQuery = FilterItemDefinition.FilterQuery(BaseQuery, param, whereExpression);
+            }
+
+            if (applyOrders)
+            {
+                FilteredQuery = ApplyOrderBys(FilteredQuery, true);
+            }
+        }
+
+        public override void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder)
         {
             if (resetSortOrder)
             {
                 OrderByList.Clear();
                 if (column != LookupDefinition.InitialSortColumnDefinition)
                     OrderByList.Add(column);
-                OrderByList.Add(LookupDefinition.InitialSortColumnDefinition);
+
+                if (LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                {
+                    OrderByList.Add(fieldColumn);
+                }
             }
             else
             {
@@ -238,11 +269,14 @@ namespace RingSoft.DbLookup.Lookup
         public override void GotoTop()
         {
             GetInitData();
+            LookupControl.SetLookupIndex(0);
         }
 
         public override void GotoBottom()
         {
-            throw new NotImplementedException();
+            MakeFilteredQuery();
+            var entity = FilteredQuery.LastOrDefault();
+            MakeList(entity, LookupControl.PageSize, 0, true);
         }
 
         public override void GotoNextRecord()
@@ -331,6 +365,94 @@ namespace RingSoft.DbLookup.Lookup
                     MakeList(entity, LookupControl.PageSize, 0, false);
                 }
             }
+        }
+
+        public override void OnSearchForChange(string searchForText)
+        {
+            if (searchForText.IsNullOrEmpty())
+            {
+                GotoTop();
+                return;
+            }
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+            MakeFilteredQuery(false);
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+
+            var lookupExpr = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+
+            Expression filterExpr = null;
+            if (LookupControl.SearchType == LookupSearchTypes.Contains)
+            {
+                var containsExpr = GetContainsExpr(param);
+                filterExpr = containsExpr;
+            }
+            var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+            var type = searchColumn.FieldDefinition.FieldType;
+            var value = searchForText.GetPropertyFilterValue(searchColumn.FieldDefinition.FieldDataType,
+                searchColumn.FieldDefinition.FieldType);
+
+            if (filterExpr == null)
+            {
+
+                filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param, searchColumn.GetPropertyJoinName()
+                    , Conditions.GreaterThanEquals, type, value);
+                if (type == typeof(string))
+                {
+                    filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param,
+                        searchColumn.GetPropertyJoinName()
+                        , Conditions.BeginsWith, type, searchForText);
+
+                }
+            }
+
+            var fullExpr = FilterItemDefinition.AppendExpression(lookupExpr, filterExpr, EndLogics.And);
+
+            var query = FilterItemDefinition.FilterQuery<TEntity>(FilteredQuery, param, fullExpr);
+            query = ApplyOrderBys(query, true);
+
+            var entity = query.FirstOrDefault();
+
+            if (LookupControl.SearchType == LookupSearchTypes.Contains)
+            {
+                var contQuery = query.Take(LookupControl.PageSize);
+                CurrentList.Clear();
+                CurrentList.AddRange(contQuery);
+                FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Top));
+                if (CurrentList.Any())
+                {
+                    LookupControl.SetLookupIndex(0);
+                }
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                return;
+            }
+
+            if (entity == null || searchForText.IsNullOrEmpty())
+            {
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                return;
+            }
+
+            var splitPage = (int)Math.Ceiling((decimal)LookupControl.PageSize / 2);
+            var topCount = LookupControl.PageSize - splitPage;
+            var bottomCount = LookupControl.PageSize - topCount;
+
+            MakeList(entity, topCount, bottomCount, false);
+
+            var searchExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+                , searchColumn.GetPropertyJoinName()
+                , Conditions.Equals, searchColumn.FieldDefinition.FieldType
+                , searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn
+                    .FieldDefinition.FieldDataType, searchColumn.FieldDefinition.FieldType));
+            var queryable = CurrentList.AsQueryable();
+            query = FilterItemDefinition.FilterQuery(queryable, param, searchExpr);
+            entity = query.FirstOrDefault();
+            if (entity != null)
+            {
+                LookupControl.SetLookupIndex(CurrentList.IndexOf(entity));
+            }
+
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
         }
 
         private TEntity GetNearestEntity(TEntity entity, Conditions condition)
@@ -503,12 +625,26 @@ namespace RingSoft.DbLookup.Lookup
 
             if (bottomCount > 0)
             {
-                var nextPage = GetPage(entity, bottomCount, false);
+                var newBottomCount = bottomCount;
+                if (topCount > 0)
+                {
+                    newBottomCount++;
+                }
+                var nextPage = GetPage(entity, newBottomCount, false);
                 if (nextPage != null && nextPage.Any())
                 {
+                    if (topCount > 0 && nextPage.Any())
+                    {
+                        nextPage.Remove(nextPage.FirstOrDefault());
+                    }
                     CurrentList.AddRange(nextPage);
                 }
                 else
+                {
+                    GotoBottom();
+                }
+
+                if (nextPage.Count < bottomCount)
                 {
                     GotoBottom();
                 }
@@ -536,6 +672,11 @@ namespace RingSoft.DbLookup.Lookup
             result.AddRange(query);
             
             count -= result.Count;
+
+            if (result.Count == 0)
+            {
+                return result;
+            }
 
             if (count > 0)
             {
@@ -757,6 +898,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             var result = false;
             var query = GetQueryFromFilter(input.FilterDefinition, input, true);
+            query = query.Take(2);
             var count = query.Count();
             result = count > 1;
             return result;
@@ -767,13 +909,36 @@ namespace RingSoft.DbLookup.Lookup
         {
             var filterExpr = newFilter.GetWhereExpresssion<TEntity>(input.Param);
 
+            var containsExpr = GetContainsExpr(input.Param);
+
             var fullExpr =
                 FilterItemDefinition.AppendExpression(input.LookupExpression
                     , filterExpr, EndLogics.And);
 
+            if (containsExpr != null)
+            {
+                fullExpr = FilterItemDefinition.AppendExpression(fullExpr, containsExpr, EndLogics.And);
+            }
+
             var query = FilterItemDefinition.FilterQuery(input.Query, input.Param, fullExpr);
             query = ApplyOrderBys(query, ascending);
             return query;
+        }
+
+        private Expression GetContainsExpr(ParameterExpression param)
+        {
+            Expression containsExpr = null;
+            if (LookupControl.SearchType == LookupSearchTypes.Contains)
+            {
+                var containsColumn = OrderByList.FirstOrDefault();
+                containsExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+                    , containsColumn.GetPropertyJoinName()
+                    , Conditions.Contains
+                    , containsColumn.FieldDefinition.FieldType
+                    , LookupControl.SearchText);
+            }
+
+            return containsExpr;
         }
 
         private List<TEntity> GetNextPage(TEntity entity, int count)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -18,11 +19,13 @@ namespace RingSoft.DbLookup.AutoFill
 
         public AutoFillValue AutoFillValue { get; }
 
+        public string BeginText { get; }
 
-        public AutoFillOutputData(List<string> containsData, AutoFillValue autoFillValue)
+        public AutoFillOutputData(List<string> containsData, AutoFillValue autoFillValue, string beginText = "")
         {
             ContainsData = containsData;
             AutoFillValue = autoFillValue;
+            BeginText = beginText;
         }
     }
     public abstract class AutoFillDataMauiBase
@@ -53,6 +56,8 @@ namespace RingSoft.DbLookup.AutoFill
         public abstract void OnLookupSelect(PrimaryKeyValue primaryKey);
 
         public abstract void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList);
+
+        public abstract AutoFillContainsItem GetAutoFillContainsItem(string text, string beginText);
     }
 
     public class AutoFillDataMaui<TEntity> : AutoFillDataMauiBase where TEntity : class, new()
@@ -100,7 +105,7 @@ namespace RingSoft.DbLookup.AutoFill
                 Control.SelectionLength = newText.Length - Control.SelectionStart;
             }
 
-            OnOutput(beginText);
+            OnOutput(newText, null, beginText);
 
         }
 
@@ -228,7 +233,8 @@ namespace RingSoft.DbLookup.AutoFill
             var property = Setup.LookupDefinition.InitialSortColumnDefinition.GetPropertyJoinName();
 
             var autoFillExpr =
-                FilterItemDefinition.GetBinaryExpression<TEntity>(param, property, Conditions.BeginsWith, typeof(string), beginText);
+                FilterItemDefinition.GetBinaryExpression<TEntity>
+                    (param, property, Conditions.BeginsWith, typeof(string), beginText);
 
             Expression newFilter = null;
             if (baseExpr == null)
@@ -244,39 +250,111 @@ namespace RingSoft.DbLookup.AutoFill
 
             resultQuery = GblMethods.ApplyOrder(resultQuery, OrderMethods.OrderBy, property);
 
+            AutoFillValue newValue = null;
             var first = resultQuery.FirstOrDefault();
             if (first == null)
             {
-                result = beginText;
+                //result = beginText;
             }
             else
             {
                 result = Setup.LookupDefinition.InitialSortColumnDefinition.GetDatabaseValue(first);
 
-                var outputData = new AutoFillOutputData(null, first.GetAutoFillValue()); ;
-                OnOutputAutoFillData(outputData);
+                newValue = first.GetAutoFillValue();
+            }
+            if (newValue == null)
+            {
+                newValue = GetAutoFillValue(beginText);
+            }
+
+            //var outputData = new AutoFillOutputData(null, newValue); ;
+            //OnOutputAutoFillData(outputData);
+            OnOutput(result, newValue, beginText);
+
+            return result;
+        }
+
+        private List<string> GetContainsList(string beginText)
+        {
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var result = new List<string>();
+            if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+            {
+                var containsProperty = Setup.LookupDefinition.InitialSortColumnDefinition.GetPropertyJoinName();
+
+                var lookupExpr = Setup.LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+                var containsExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(
+                    param
+                    , containsProperty
+                    , Conditions.Contains
+                    , fieldColumn.FieldDefinition.FieldType
+                    , beginText);
+                containsExpr = FilterItemDefinition.AppendExpression(
+                    lookupExpr
+                    , containsExpr
+                    , EndLogics.And);
+                var containsQuery = Setup.LookupDefinition.TableDefinition.Context
+                    .GetQueryable<TEntity>(Setup.LookupDefinition);
+                containsQuery = FilterItemDefinition.FilterQuery(containsQuery, param, containsExpr);
+                
+                containsQuery = GblMethods.ApplyOrder(containsQuery, OrderMethods.OrderBy, containsProperty);
+                containsQuery = containsQuery.Take(5);
+
+                foreach (var entity in containsQuery)
+                {
+                    result.Add(fieldColumn.GetDatabaseValue(entity));
+                }
             }
             return result;
         }
-        private void OnOutput(string newText)
+
+        private void OnOutput(string newText, AutoFillValue autoFillValue = null, string beginText = "")
         {
+            List<string> containsList = null;
+            var containsText = beginText;
+            if (containsText.IsNullOrEmpty())
+            {
+                containsText = newText;
+            }
+            if (!containsText.IsNullOrEmpty())
+            {
+                containsList = GetContainsList(containsText);
+            }
+
+            if (autoFillValue == null)
+            {
+                autoFillValue = GetAutoFillValue();
+            }
+
+            var outputData = new AutoFillOutputData(containsList
+                , autoFillValue, containsText);
+
+            OnOutputAutoFillData(outputData);
+        }
+
+        private AutoFillValue GetAutoFillValue(string editText = "")
+        {
+            if (editText.IsNullOrEmpty())
+            {
+                editText = Control.EditText;
+            }
             var autoFillValue = GetAutoFillData();
             if (autoFillValue == null)
             {
-                var primaryKey = new PrimaryKeyValue(Setup.LookupDefinition.TableDefinition);
-                autoFillValue = new AutoFillValue(primaryKey, Control.EditText);
+                if (!Control.EditText.IsNullOrEmpty())
+                {
+                    var primaryKey = new PrimaryKeyValue(Setup.LookupDefinition.TableDefinition);
+                    autoFillValue = new AutoFillValue(primaryKey, editText);
+                }
             }
 
-            var outputData = new AutoFillOutputData(null
-                , autoFillValue);
-            OnOutputAutoFillData(outputData);
+            return autoFillValue;
         }
 
         private AutoFillValue GetAutoFillData()
         {
             if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
             {
-
                 var param = GblMethods.GetParameterExpression<TEntity>();
                 var query = TableDefinition.Context.GetQueryable<TEntity>(Setup.LookupDefinition);
                 var property = Setup.LookupDefinition.InitialSortColumnDefinition.GetPropertyJoinName();
@@ -304,6 +382,19 @@ namespace RingSoft.DbLookup.AutoFill
             Control.EditText = text.IsNullOrEmpty() ? string.Empty : text;
             Control.SelectionStart = 0;
             Control.SelectionLength = Control.EditText.Length;
+        }
+        public override AutoFillContainsItem GetAutoFillContainsItem(string text, string beginText)
+        {
+            var firstIndex = text.IndexOf(beginText, StringComparison.OrdinalIgnoreCase);
+            var prefix = text.LeftStr(firstIndex);
+            var containsText = text.MidStr(firstIndex, beginText.Length);
+            var suffix = text.RightStr(text.Length - (firstIndex + beginText.Length));
+            return new AutoFillContainsItem
+            {
+                PrefixText = prefix,
+                ContainsText = containsText,
+                SuffixText = suffix
+            };
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -17,6 +18,14 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    public class ContainsSource : ObservableCollection<AutoFillContainsItem>
+    {
+        public void UpdateSource()
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+    }
     public class LookupShownArgs
     {
         public LookupWindow LookupWindow { get; set; }
@@ -64,8 +73,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public ListBox ListBox { get; set; }
 
-        public ObservableCollection<AutoFillContainsItem> ContainsItems { get; set; } =
-            new ObservableCollection<AutoFillContainsItem>();
+        public ContainsSource ContainsItems { get; }
 
         public static readonly DependencyProperty SetupProperty =
             DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillControl),
@@ -454,6 +462,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public AutoFillControl()
         {
+            ContainsItems = new ContainsSource();
             Loaded += (sender, args) => OnLoad();
             
             SizeChanged += (sender, args) =>
@@ -706,14 +715,32 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void AutoFillDataMaui_OutputDataChanged(object sender, AutoFillOutputData e)
         {
+            var openPopup = false;
+            ContainsItems.Clear();
+
             if (e.ContainsData != null)
             {
-                
+                foreach (var contItem in e.ContainsData)
+                {
+                    ContainsItems.Add(AutoFillDataMaui.GetAutoFillContainsItem(contItem, e.BeginText));
+                    openPopup = true;
+                }
             }
 
-            if (e.AutoFillValue != null)
+            if (Popup != null)
+                Popup.IsOpen = openPopup;
+
+            if (openPopup)
             {
+                ListBox.ItemsSource = ContainsItems;
+                ContainsItems.UpdateSource();
+            }
+
+            //if (e.AutoFillValue != null)
+            {
+                _onAutoFillDataChanged = true;
                 Value = e.AutoFillValue;
+                _onAutoFillDataChanged = false;
             }
         }
 
@@ -815,10 +842,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ClearValue()
         {
-            //if (_autoFillData == null)
-            //    return;
-
-            //_autoFillData.ClearValue();
+            TextBox.Text = string.Empty;
+            Popup.IsOpen = false;
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)

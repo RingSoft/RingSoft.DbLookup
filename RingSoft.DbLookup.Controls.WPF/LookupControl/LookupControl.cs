@@ -1343,15 +1343,23 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _dataSource.Add(dataItem);
                 }
 
-                var showRecordCountButton = _dataSource.Count == PageSize;
-                if (showRecordCountButton)
+                if (_dataSource.Any())
                 {
-                    ShowRecordCount(0, false);
+
+                    var showRecordCountButton = _dataSource.Count == PageSize;
+                    if (showRecordCountButton)
+                    {
+                        ShowRecordCount(0, false);
+                    }
+                    else
+                    {
+                        var recordCount = lookupDataMaui.GetRecordCount();
+                        ShowRecordCount(recordCount, true);
+                    }
                 }
                 else
                 {
-                    var recordCount = lookupDataMaui.GetRecordCount();
-                    ShowRecordCount(recordCount, true);
+                    ShowRecordCount(0, false);
                 }
             }
 

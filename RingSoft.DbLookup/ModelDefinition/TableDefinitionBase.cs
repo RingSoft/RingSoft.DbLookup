@@ -281,6 +281,11 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <returns></returns>
         public TableDefinitionBase HasLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
+            if (LookupDefinition != null)
+            {
+                LookupDefinition.CopyLookupData(lookupDefinition);
+                return this;
+            }
             if (lookupDefinition.TableDefinition != this)
                 throw new ArgumentException(
                     $"Lookup's table definition '{lookupDefinition.TableDefinition}' does not match this table definition. ({this})");

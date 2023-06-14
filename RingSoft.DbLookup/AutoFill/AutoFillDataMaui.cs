@@ -51,6 +51,8 @@ namespace RingSoft.DbLookup.AutoFill
         public abstract void OnDeleteKeyDown();
 
         public abstract void OnLookupSelect(PrimaryKeyValue primaryKey);
+
+        public abstract void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList);
     }
 
     public class AutoFillDataMaui<TEntity> : AutoFillDataMauiBase where TEntity : class, new()
@@ -258,7 +260,50 @@ namespace RingSoft.DbLookup.AutoFill
         }
         private void OnOutput(string newText)
         {
+            var autoFillValue = GetAutoFillData();
+            if (autoFillValue == null)
+            {
+                var primaryKey = new PrimaryKeyValue(Setup.LookupDefinition.TableDefinition);
+                autoFillValue = new AutoFillValue(primaryKey, Control.EditText);
+            }
 
+            var outputData = new AutoFillOutputData(null
+                , autoFillValue);
+            OnOutputAutoFillData(outputData);
+        }
+
+        private AutoFillValue GetAutoFillData()
+        {
+            if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+            {
+
+                var param = GblMethods.GetParameterExpression<TEntity>();
+                var query = TableDefinition.Context.GetQueryable<TEntity>(Setup.LookupDefinition);
+                var property = Setup.LookupDefinition.InitialSortColumnDefinition.GetPropertyJoinName();
+                var autoFillExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+                    , property
+                    , Conditions.Equals
+                    , lookupFieldColumn.FieldDefinition.FieldType
+                    , Control.EditText);
+                query = FilterItemDefinition.FilterQuery(query
+                    , param
+                    , autoFillExpr);
+                var autoFillValue = query.FirstOrDefault().GetAutoFillValue();
+                return autoFillValue;
+            }
+            return null;
+        }
+
+        public override void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList)
+        {
+            if (refreshContainsList)
+            {
+                //GetContainsBoxDataTable(text);
+            }
+
+            Control.EditText = text.IsNullOrEmpty() ? string.Empty : text;
+            Control.SelectionStart = 0;
+            Control.SelectionLength = Control.EditText.Length;
         }
 
     }

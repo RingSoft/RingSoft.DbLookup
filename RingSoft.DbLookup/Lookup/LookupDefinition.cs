@@ -308,6 +308,7 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
+                
                 return TableDefinition.Context.GetLookupDataMaui<TEntity>(lookupDefinition);
             }
         }

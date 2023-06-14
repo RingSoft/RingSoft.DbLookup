@@ -122,7 +122,8 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
                         InputParameter = inputParameter,
-                        LookupReadOnlyMode = lookupReadOnlyMode
+                        LookupReadOnlyMode = lookupReadOnlyMode,
+                        SelectedPrimaryKeyValue = SelectedPrimaryKeyValue,
                     };
                     OnLookupView(args);
                     if (!args.Handled)
@@ -166,6 +167,10 @@ namespace RingSoft.DbLookup.Lookup
 
         private void MakeFilteredQuery(bool applyOrders = true)
         {
+            if (BaseQuery == null)
+            {
+                RefreshBaseQuery();
+            }
             var param = GblMethods.GetParameterExpression<TEntity>();
 
             var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);

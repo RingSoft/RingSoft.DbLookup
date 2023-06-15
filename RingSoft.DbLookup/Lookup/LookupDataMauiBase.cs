@@ -72,11 +72,13 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue);
 
+        public abstract void SetNewPrimaryKeyValue(PrimaryKeyValue primaryKeyValue);
+
         public abstract void ViewSelectedRow(object ownerWindow, object AddViewParameter, bool readOnlyMode = false);
 
         public abstract void AddNewRow(object ownerWindow, object inputParameter = null);
 
-        public abstract void RefreshData();
+        public abstract void RefreshData(string newText = "");
 
         public abstract void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder);
 
@@ -116,6 +118,6 @@ namespace RingSoft.DbLookup.Lookup
         
         public abstract void GotoPreviousPage();
 
-        public abstract void OnSearchForChange(string searchForText);
+        public abstract void OnSearchForChange(string searchForText, bool initialValue = false);
     }
 }

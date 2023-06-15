@@ -110,6 +110,16 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        public override void SetNewPrimaryKeyValue(PrimaryKeyValue primaryKeyValue)
+        {
+            var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKeyValue);
+            if (entity != null)
+            {
+                var autoFillValue = entity.GetAutoFillValue();
+                OnSearchForChange(autoFillValue.Text);
+            }
+        }
+
         public override void ViewSelectedRow(object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)
         {
             var selectedIndex = LookupControl.SelectedIndex;
@@ -149,7 +159,7 @@ namespace RingSoft.DbLookup.Lookup
             BaseQuery = LookupDefinition.TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
         }
 
-        public override void RefreshData()
+        public override void RefreshData(string newText = "")
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             RefreshBaseQuery();
@@ -372,13 +382,14 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        public override void OnSearchForChange(string searchForText)
+        public override void OnSearchForChange(string searchForText, bool initialValue = false)
         {
             if (searchForText.IsNullOrEmpty())
             {
                 GotoTop();
                 return;
             }
+
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             MakeFilteredQuery(false);
 
@@ -434,6 +445,10 @@ namespace RingSoft.DbLookup.Lookup
 
             if (entity == null || searchForText.IsNullOrEmpty())
             {
+                if (initialValue)
+                {
+                    GetInitData();
+                }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 return;
             }

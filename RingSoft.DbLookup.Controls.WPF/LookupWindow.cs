@@ -449,7 +449,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SelectPrimaryKey(PrimaryKeyValue primaryKey)
         {
+            if (LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue() == null)
+            {
+                LookupControl.LookupDataMaui.SetNewPrimaryKeyValue(primaryKey);
+                return;
+            }
             OnSelectButtonClick();
+            //SelectPrimaryKey(primaryKey);
         }
     }
 }

@@ -254,7 +254,7 @@ namespace RingSoft.DbMaintenance
                     case LookupFormModes.Add:
                         RecordDirty = false;
                         OnNewButton();
-                        if (primaryKeyValue != null)
+                        //if (primaryKeyValue != null)
                             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, LookupAddViewArgs.InitialAddModeText);
                         break;
                     default:

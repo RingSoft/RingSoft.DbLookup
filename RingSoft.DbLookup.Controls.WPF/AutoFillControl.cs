@@ -955,13 +955,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Setup.AllowLookupAdd, Setup.AllowLookupView, initialText, Value?.PrimaryKeyValue, readOnlyPrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
+            if (Popup != null)
+                Popup.IsOpen = false;
+
             lookupWindow.Owner = Window.GetWindow(this);
             lookupWindow.RefreshData += (o, args) =>
             {
-                var popupIsOpen = false;
-                if (Popup != null)
-                    popupIsOpen = Popup.IsOpen;
-
                 if (Value != null)
                 {
                     var value = Value.PrimaryKeyValue.KeyValueFields[0].Value;
@@ -991,12 +990,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void LookupForm_LookupSelect(object sender, LookupSelectArgs e)
         {
             //var text = e.LookupData.GetSelectedText();
-            //SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
-            //RaiseDirtyFlag();
-            //LookupSelect?.Invoke(this, new EventArgs());
-            
-            AutoFillDataMaui.OnLookupSelect(e.LookupData.GetSelectedPrimaryKeyValue());
+            SetValue(e.LookupData.SelectedPrimaryKeyValue, TextBox.Text);
+            RaiseDirtyFlag();
+            LookupSelect?.Invoke(this, new EventArgs());
 
+            AutoFillDataMaui.OnLookupSelect(e.LookupData.GetSelectedPrimaryKeyValue());
             if (TabOutAfterLookupSelect)
             {
                 Send(Key.Tab);

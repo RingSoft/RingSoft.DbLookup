@@ -1542,52 +1542,52 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             LookupDataMaui.GetInitData();
 
-            //LookupData.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
+            LookupDataMaui.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
-            //if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
-            //{
-            //    if (SearchForHost != null)
-            //        initialSearchFor = SearchForHost.SearchText;
-            //}
+            if (!resetSearchFor && initialSearchFor.IsNullOrEmpty())
+            {
+                if (SearchForHost != null)
+                    initialSearchFor = SearchForHost.SearchText;
+            }
 
-            //_currentPageSize = GetPageSize();
+            _currentPageSize = GetPageSize();
 
-            //if (String.IsNullOrEmpty(initialSearchFor) &&
-            //    (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
-            //{
-            //    //LookupData.GetInitData();
-            //    LookupDataMaui.GetInitData(_currentPageSize);
-            //}
-            //else
-            //{
-            //    if (SearchForHost != null)
-            //    {
-            //        if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
-            //        {
-            //            var forceRefresh = SearchForHost.SearchText == initialSearchFor;
+            if (String.IsNullOrEmpty(initialSearchFor) &&
+                (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
+            {
+                //LookupData.GetInitData();
+                LookupDataMaui.GetInitData();
+            }
+            else
+            {
+                if (SearchForHost != null)
+                {
+                    if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
+                    {
+                        var forceRefresh = SearchForHost.SearchText == initialSearchFor;
 
-            //            SearchForHost.SearchText =
-            //                initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
+                        SearchForHost.SearchText =
+                            initialSearchFor; //This automatically triggers LookupData.OnSearchForChange.  Only if the text value has changed.
 
-            //            if (searchForSelectAll)
-            //            {
-            //                SearchForHost.SelectAll();
-            //            }
+                        if (searchForSelectAll)
+                        {
+                            SearchForHost.SelectAll();
+                        }
 
-            //            if (forceRefresh)
-            //                LookupData.OnSearchForChange(initialSearchFor);
-            //        }
-            //        else
-            //        {
-            //            SearchText = initialSearchFor;
-            //            if (searchForSelectAll)
-            //            {
-            //                SearchForHost.SelectAll();
-            //            }
-            //            LookupData.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
-            //        }
-            //    }
-            //}
+                        //if (forceRefresh)
+                            LookupDataMaui.OnSearchForChange(initialSearchFor, true);
+                    }
+                    else
+                    {
+                        SearchText = initialSearchFor;
+                        if (searchForSelectAll)
+                        {
+                            SearchForHost.SelectAll();
+                        }
+                        LookupDataMaui.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+                    }
+                }
+            }
         }
 
         private int GetPageSize(bool setOriginalPageSize = true)

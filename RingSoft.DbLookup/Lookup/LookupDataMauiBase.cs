@@ -78,7 +78,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract void AddNewRow(object ownerWindow, object inputParameter = null);
 
-        public abstract void RefreshData(string newText = "");
+        public abstract void RefreshData();
 
         public abstract void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder);
 

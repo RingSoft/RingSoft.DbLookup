@@ -159,7 +159,7 @@ namespace RingSoft.DbLookup.Lookup
             BaseQuery = LookupDefinition.TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
         }
 
-        public override void RefreshData(string newText = "")
+        public override void RefreshData()
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             RefreshBaseQuery();
@@ -625,9 +625,11 @@ namespace RingSoft.DbLookup.Lookup
         private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom)
         {
             CurrentList.Clear();
+            var previousPageCount = 0;
             if (topCount > 0)
             {
                 var previousPage = GetPage(entity, topCount, true);
+                previousPageCount = previousPage.Count;
                 if (previousPage != null && previousPage.Any())
                 {
                     CurrentList.InsertRange(0, previousPage);

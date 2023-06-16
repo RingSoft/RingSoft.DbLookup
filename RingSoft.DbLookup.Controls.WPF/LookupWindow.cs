@@ -376,11 +376,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             e.Handled = true;
         }
 
-        private void LookupCallBackRefreshData(LookupDataBase lookupData)
+        private void LookupCallBackRefreshData(LookupDataMauiBase lookupData)
         {
-            if (LookupControl == null)
-                return;
-
             LookupControl.LookupDataMaui.RefreshData();
             RefreshData?.Invoke(this, EventArgs.Empty);
         }

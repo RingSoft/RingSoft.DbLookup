@@ -7,7 +7,7 @@ namespace RingSoft.DbLookup.Lookup
     /// </summary>
     public class LookupCallBackToken
     {
-        public LookupDataBase LookupData { get; set; }
+        public LookupDataMauiBase LookupData { get; set; }
 
 
         /// <summary>

@@ -761,7 +761,15 @@ namespace RingSoft.DbLookup.Controls.WPF
         private GridViewColumn AddGridViewColumn(string caption, double width, string dataColumnName, LookupColumnBase lookupColumn)
         {
             var columnHeader = new GridViewColumnHeader { Content = caption }; // + "\r\nLine2\r\nLine3"};
-            columnHeader.Click += GridViewColumnHeaderClickedHandler;
+            if (lookupColumn.LookupColumnDefinition is LookupFormulaColumnDefinition)
+            {
+                columnHeader.Foreground = new SolidColorBrush(Colors.Black);
+                columnHeader.IsEnabled = false;
+            }
+            else
+            {
+                columnHeader.Click += GridViewColumnHeaderClickedHandler;
+            }
 
             if (width < 0)
             {

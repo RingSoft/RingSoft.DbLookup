@@ -766,8 +766,14 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
-        private IEnumerable<TEntity> GetFilterPageQuery(TEntity entity, int count, LookupDataMauiProcessInput<TEntity> input,
-            bool checkPrimaryKey, out bool addedPrimaryKeyToFilter, bool ascending, out bool hasMultiRecs)
+        private IEnumerable<TEntity> GetFilterPageQuery(
+            TEntity entity
+            , int count
+            , LookupDataMauiProcessInput<TEntity> input
+            , bool checkPrimaryKey
+            , out bool addedPrimaryKeyToFilter
+            , bool ascending
+            , out bool hasMultiRecs)
         {
             addedPrimaryKeyToFilter = false;
             hasMultiRecs = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
@@ -778,7 +784,18 @@ namespace RingSoft.DbLookup.Lookup
                 AddPrimaryKeyFieldsToFilter(entity, input);
             }
 
-            var query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
+            var qAsc = ascending;
+            switch (_orderByType)
+            {
+                case OrderByTypes.Ascending:
+                    break;
+                case OrderByTypes.Descending:
+                    qAsc = !ascending;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            var query = GetQueryFromFilter(input.FilterDefinition, input, qAsc);
             query = query.Take(count);
             var result = GetOutputResult(query, ascending, count, input);
             return result;
@@ -841,18 +858,40 @@ namespace RingSoft.DbLookup.Lookup
             lastFilter = input.FieldFilters.LastOrDefault();
             if (lastFilter != null)
             {
-                if (ascending)
+                switch (_orderByType)
                 {
-                    lastFilter.Condition = Conditions.GreaterThan;
-                }
-                else
-                {
-                    lastFilter.Condition = Conditions.LessThan;
+                    case OrderByTypes.Ascending:
+                        if (ascending)
+                        {
+                            lastFilter.Condition = Conditions.GreaterThan;
+                        }
+                        else
+                        {
+                            lastFilter.Condition = Conditions.LessThan;
+                        }
+                        break;
+                    case OrderByTypes.Descending:
+                        if (ascending)
+                        {
+                            lastFilter.Condition = Conditions.LessThan;
+                        }
+                        else
+                        {
+                            lastFilter.Condition = Conditions.GreaterThan;
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-
-            var output = GetFilterPageQuery(topEntity, count, input
-                , false, out addedPrimaryKey, ascending, out var hasMultiRecs);
+            var output = GetFilterPageQuery(
+                topEntity
+                , count
+                , input
+                , false
+                , out addedPrimaryKey
+                , ascending
+                , out var hasMultiRecs);
 
             if (output.Count() == 0)
             {

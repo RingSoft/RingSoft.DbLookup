@@ -392,8 +392,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void RefreshValue(AutoFillValue autoFillValue)
         {
-            AutoFillDataMaui.SetValue(autoFillValue.PrimaryKeyValue, autoFillValue.Text, false);
-            Value = autoFillValue;
+            if (Value.PrimaryKeyValue.IsEqualTo(autoFillValue.PrimaryKeyValue))
+            {
+                AutoFillDataMaui.SetValue(autoFillValue.PrimaryKeyValue, autoFillValue.Text, false);
+                Value = autoFillValue;
+            }
         }
 
         public void OnSelect()

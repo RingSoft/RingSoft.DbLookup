@@ -400,7 +400,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </value>
         public ObservableCollection<LookupColumnBase> LookupColumns { get; }
 
-        public LookupDataBase LookupData { get; private set; }
+        //public LookupDataBase LookupData { get; private set; }
 
         public LookupDataMauiBase LookupDataMaui { get; private set; }
 
@@ -568,7 +568,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             //    throw new ArgumentException(
             //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
-            if (LookupData != null && LookupDataMaui != null)
+            if (LookupDataMaui != null)
             {
                 ClearLookupControl();
                 LookupColumns.Clear();
@@ -580,7 +580,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(LookupDefinition, false);
                 LookupDataMaui.SetParentControls(this, LookupWindow);
 
-                LookupData = new LookupDataBase(LookupDefinition, this);
+                //LookupData = new LookupDataBase(LookupDefinition, this);
 
                 LookupDataMaui.LookupDataChanged += LookupDataMaui_LookupDataChanged;
                 //LookupData.LookupDataChanged += LookupData_LookupDataChanged;
@@ -588,9 +588,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupDataMaui.LookupView += (sender, args) => LookupView?.Invoke(this, args);
             }
 
-            if (!_setupRan && LookupData != null)
+            if (!_setupRan && LookupDataMaui != null)
             {
-                SetupRecordCount(LookupData.RecordCount);
+                //SetupRecordCount(LookupDataMaui.GetRecordCount());
                 if (ListView != null)
                 {
                     ListView.PreviewKeyDown += ListView_PreviewKeyDown;
@@ -1077,11 +1077,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            e.Handled = true;
-            if (e.Delta > 0)
-                LookupData.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
-            else
-                LookupData.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
+            //e.Handled = true;
+            //if (e.Delta > 0)
+            //    LookupData.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
+            //else
+            //    LookupData.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
         }
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -1231,8 +1231,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
-                if (resetSortOrder)
-                    SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
+                //if (resetSortOrder)
+                //    SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
 
                 SearchForHost?.Control.Focus();
             }
@@ -1320,7 +1320,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
                 else
                 {
-                    LookupData?.OnChangePageSize();
+                    //LookupData?.OnChangePageSize();
                 }
             }
         }
@@ -1681,7 +1681,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.AddedItems.Count > 0)
             {
                 var index = ListView.Items.IndexOf(e.AddedItems[0] ?? throw new InvalidOperationException());
-                LookupData.SelectedRowIndex = index;
+                //LookupData.SelectedRowIndex = index;
             }
         }
 
@@ -1876,8 +1876,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void OnSearchTypeChanged()
         {
-            if (!SearchText.IsNullOrEmpty())
-                LookupData.ResetRecordCount();
+            //if (!SearchText.IsNullOrEmpty())
+            //    LookupData.ResetRecordCount();
 
             if (SearchForHost != null)
             {
@@ -1888,9 +1888,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public int GetRecordCountWait()
         {
-            if (LookupData != null)
+            if (LookupDataMaui != null)
             {
-                var result = LookupData.GetRecordCountWait();
+                var result = LookupDataMaui.GetRecordCount();
 
                 ShowRecordCountLabel();
                 var recordsText = result == 1 ? "" : "s";
@@ -1968,7 +1968,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
 
             var showRecordCount = ShowRecordCountProps;
-            if (LookupData?.ScrollPosition == LookupScrollPositions.Disabled)
+            if (LookupDataMaui?.ScrollPosition == LookupScrollPositions.Disabled)
             {
                 showRecordCount = true;
             }
@@ -2048,7 +2048,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
             //Peter Ringering - 09/25/2022 - E-273;
-            RefreshData(false, "", LookupData.ParentWindowPrimaryKeyValue);
+            //RefreshData(false, "", LookupData.ParentWindowPrimaryKeyValue);
             if (SearchForHost != null && SearchForHost.SearchText.IsNullOrEmpty())
             {
                 ListView.SelectedIndex = _selectedIndex;
@@ -2102,7 +2102,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupDataMaui.ViewSelectedRow(Window.GetWindow(this), addViewParameter);
                         else
                             LookupDataMaui.AddNewRow(Window.GetWindow(this), addViewParameter);
-                        RefreshData(command.ResetSearchFor, String.Empty, LookupData.ParentWindowPrimaryKeyValue);
+                        RefreshData(command.ResetSearchFor, String.Empty, LookupDataMaui.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.Reset:
                         ClearLookupControl();

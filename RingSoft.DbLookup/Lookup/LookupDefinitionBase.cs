@@ -149,7 +149,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {
-            tableDefinition.Context.Initialize();
+            //tableDefinition.Context.Initialize();
             TableDefinition = tableDefinition;
             FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
         }
@@ -320,6 +320,10 @@ namespace RingSoft.DbLookup.Lookup
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition
             , double percentWidth, string alias)
         {
+            if (VisibleColumns.Count > 1 && TableDefinition.TableName == "AdvancedFinds")
+            {
+                
+            }
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
             {

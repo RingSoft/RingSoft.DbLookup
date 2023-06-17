@@ -245,7 +245,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void LookupControl_Loaded(object sender, RoutedEventArgs e)
         {
             Reload();
-            LookupControl.RefreshData(false, _initialSearchFor, null, 
+            LookupControl.RefreshData(false, _initialSearchFor, null,
                 true, InitialSearchForPrimaryKeyValue);
             LookupControl.AddViewParameter = AddViewParameter;
 
@@ -253,8 +253,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void Reload()
         {
-            LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
-            LookupControl.LookupData.LookupView += LookupData_LookupView;
+            //LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
+            LookupControl.LookupDataMaui.LookupView += LookupData_LookupView;
         }
 
         public override void OnApplyTemplate()
@@ -320,10 +320,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             var searchText = LookupControl.SearchText;
             if (!searchText.IsNullOrEmpty())
             {
-                if (LookupControl.LookupData.SortColumnDefinition != LookupDefinition.InitialSortColumnDefinition)
-                {
-                    searchText = string.Empty;
-                }
+                //if (LookupControl.LookupData.SortColumnDefinition != LookupDefinition.InitialSortColumnDefinition)
+                //{
+                //    searchText = string.Empty;
+                //}
             }
             var args = new LookupAddViewArgs(LookupControl.LookupDataMaui, false, LookupFormModes.Add,
                 searchText, this)

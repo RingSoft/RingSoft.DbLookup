@@ -133,26 +133,26 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         public void ShowSqlStatement()
         {
-            var sql = LookupControl.LookupData.GetSqlStatement();
-            var window = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = sql});
-            window.SnugWidth = 700;
-            window.SnugHeight = 500;
-            window.Loaded += (sender, args) =>
-            {
-                window.MemoEditor.TextBox.IsReadOnly = true;
-                window.MemoEditor.TextBox.TextChanged += (o, eventArgs) =>
-                {
-                    window.MemoEditor.TextBox.SelectionLength = 0;
-                    window.MemoEditor.TextBox.SelectionStart = 0;
-                };
-                window.MemoEditor.TextBox.TextWrapping = TextWrapping.NoWrap;
-                window.MemoEditor.TextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                window.MemoEditor.TextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                window.UpdateLayout();
-            };
-            window.Owner = this;
-            window.ShowInTaskbar = false;
-            window.ShowDialog();
+            //var sql = LookupControl.LookupData.GetSqlStatement();
+            //var window = new AdvancedFindGridMemoEditor(new DataEntryGridMemoValue(0) {Text = sql});
+            //window.SnugWidth = 700;
+            //window.SnugHeight = 500;
+            //window.Loaded += (sender, args) =>
+            //{
+            //    window.MemoEditor.TextBox.IsReadOnly = true;
+            //    window.MemoEditor.TextBox.TextChanged += (o, eventArgs) =>
+            //    {
+            //        window.MemoEditor.TextBox.SelectionLength = 0;
+            //        window.MemoEditor.TextBox.SelectionStart = 0;
+            //    };
+            //    window.MemoEditor.TextBox.TextWrapping = TextWrapping.NoWrap;
+            //    window.MemoEditor.TextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    window.MemoEditor.TextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    window.UpdateLayout();
+            //};
+            //window.Owner = this;
+            //window.ShowInTaskbar = false;
+            //window.ShowDialog();
         }
 
         public bool ShowRefreshSettings(DbLookup.AdvancedFind.AdvancedFind advancedFind)
@@ -190,12 +190,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 if (ViewModel.LookupDefinition != null && showRecordCount)
                 {
-                    if (LookupControl.LookupData == null)
+                    if (LookupControl.LookupDataMaui == null)
                     {
                         _refreshAfterLoad = true;
                         return recordCount;
                     }
-                    recordCount = LookupControl.LookupData.GetRecordCountWait();
+
+                    recordCount = LookupControl.LookupDataMaui.GetRecordCount();
                     //var countQuerySet = new QuerySet();
                     //ViewModel.LookupDefinition.GetCountQuery(countQuerySet, "Count");
                     //var countResult =

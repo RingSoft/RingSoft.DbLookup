@@ -66,7 +66,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool InputMode { get; protected set; }
 
-        public PrimaryKeyValue SelectedPrimaryKeyValue { get; protected set; }
+        public PrimaryKeyValue SelectedPrimaryKeyValue { get; internal set; }
 
         public abstract PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText);
 

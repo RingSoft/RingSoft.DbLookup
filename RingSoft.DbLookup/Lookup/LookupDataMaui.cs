@@ -128,7 +128,9 @@ namespace RingSoft.DbLookup.Lookup
                 SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
                 if (LookupWindow == null || LookupWindow.ReadOnlyMode)
                 {
-                    var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
+                    var args = new LookupAddViewArgs(this
+                        , true
+                        , LookupFormModes.View, string.Empty, ownerWindow)
                     {
                         ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
                         InputParameter = inputParameter,

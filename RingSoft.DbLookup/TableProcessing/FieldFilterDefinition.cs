@@ -299,6 +299,10 @@ namespace RingSoft.DbLookup.TableProcessing
             if (result)
             {
                 SetTableDescription();
+                if (DateFilterType != DateFilterTypes.SpecificDate)
+                {
+                    Value = ConvertDate(Value);
+                }
             }
             return result;
         }

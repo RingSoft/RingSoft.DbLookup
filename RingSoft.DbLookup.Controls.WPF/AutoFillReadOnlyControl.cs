@@ -145,7 +145,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         public int SelectionLength { get; set; }
         public void RefreshValue(AutoFillValue autoFillValue)
         {
-            TextBlock.Text = autoFillValue.Text;
+            if (autoFillValue.PrimaryKeyValue.IsEqualTo(Value.PrimaryKeyValue))
+            {
+                Value = autoFillValue;
+            }
         }
 
         public void OnSelect()

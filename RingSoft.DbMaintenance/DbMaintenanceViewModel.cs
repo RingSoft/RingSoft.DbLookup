@@ -535,12 +535,12 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _selectingRecord = true;
-                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
-                {
-                    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
-                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
-                    LookupAddViewArgs.CallBackToken.DbSelect = true;
-                }
+                //if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                //{
+                //    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+                //        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+                //    LookupAddViewArgs.CallBackToken.DbSelect = true;
+                //}
 
                 Processor.CloseWindow();
                 //LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
@@ -770,6 +770,17 @@ namespace RingSoft.DbMaintenance
             else
             {
                 _lookupData.SelectPrimaryKey(primaryKey);
+
+                if (LookupAddViewArgs != null)
+                {
+                    if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                    {
+                        LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+                            TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+                    }
+                    LookupAddViewArgs.CallBackToken.OnRefreshData();
+                }
+
             }
 
             _savingRecord = false;
@@ -1336,15 +1347,15 @@ namespace RingSoft.DbMaintenance
                 return;
             }
 
-            if (LookupAddViewArgs != null && !_selectingRecord && RecordsChanged)
-            {
-                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
-                {
-                    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
-                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
-                }
-                LookupAddViewArgs.CallBackToken.OnRefreshData();
-            }
+            //if (LookupAddViewArgs != null && !_selectingRecord && RecordsChanged)
+            //{
+            //    if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+            //    {
+            //        LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+            //            TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+            //    }
+            //    LookupAddViewArgs.CallBackToken.OnRefreshData();
+            //}
         }
 
         /// <summary>

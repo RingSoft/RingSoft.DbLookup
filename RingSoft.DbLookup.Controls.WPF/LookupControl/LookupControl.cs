@@ -425,6 +425,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public event EventHandler<LookupColumnWidthChangedArgs> ColumnWidthChanged;
 
+        public event EventHandler SelectedIndexChanged;
+
         private bool _controlLoaded;
         private bool _onLoadRan;
         private bool _setupRan;
@@ -516,6 +518,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             _advancedFindMode = AdvancedFindModes.Done;
             base.OnApplyTemplate();
+        }
+
+        private void ListView_SelectionChanged1(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnLoad()
@@ -1085,11 +1092,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //e.Handled = true;
-            //if (e.Delta > 0)
-            //    LookupData.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
-            //else
-            //    LookupData.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
+            e.Handled = true;
+            if (e.Delta > 0)
+                LookupDataMaui.OnMouseWheelForward(); //See OnPageDown() for quadriplegic debugging.
+            else
+                LookupDataMaui.OnMouseWheelBack(); //See OnPageUp() for quadriplegic debugging.
         }
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -1336,7 +1343,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void LookupDataMaui_LookupDataChanged(object sender, LookupDataMauiOutput e)
         {
             _dataSource.Clear();
-
+            
             if (sender is LookupDataMauiBase lookupDataMaui)
             {
                 for (int row = 0; row < lookupDataMaui.RowCount; row++)
@@ -1369,6 +1376,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     ShowRecordCount(0, false);
                 }
+                SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
             }
 
             if (ListView != null && ListView.ItemsSource == null)
@@ -1689,6 +1697,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (e.AddedItems.Count > 0)
             {
                 var index = ListView.Items.IndexOf(e.AddedItems[0] ?? throw new InvalidOperationException());
+                SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                 //LookupData.SelectedRowIndex = index;
             }
         }
@@ -1829,7 +1838,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (ListView == null)
                 return;
 
-            //LookupData.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+            //LookupDataMaui.OnMouseWheelForward(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
 
             //Comment out below code block when debugging mouse wheel.
 
@@ -1845,7 +1854,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (ListView == null)
                 return;
 
-            //LookupData.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
+            //LookupDataMaui.OnMouseWheelBack(); //For debugging purposes only. I'm a quadriplegic and it's very difficult for me to use a mouse wheel.
 
             //Comment out below code block when debugging mouse wheel.
 

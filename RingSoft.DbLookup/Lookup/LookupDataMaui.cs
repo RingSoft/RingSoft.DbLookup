@@ -155,7 +155,16 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void AddNewRow(object ownerWindow, object inputParameter = null)
         {
-            throw new NotImplementedException();
+            SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
+            var args = new LookupAddViewArgs(this
+                , true
+                , LookupFormModes.Add, string.Empty, ownerWindow)
+            {
+                ParentWindowPrimaryKeyValue = ParentWindowPrimaryKeyValue,
+                InputParameter = inputParameter,
+            };
+            args.CallBackToken.RefreshData += LookupCallBack_RefreshData;
+            LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void RefreshBaseQuery()
@@ -262,6 +271,51 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
             GetInitData();
+        }
+
+        public override void OnMouseWheelForward()
+        {
+            if (!CurrentList.Any() || CurrentList.Count < 3)
+            {
+                return;
+            }
+
+            var selectedEntity = CurrentList[CurrentList.Count - 3];
+            if (selectedEntity != null)
+            {
+                var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
+                if (entity == null)
+                {
+                    GotoBottom();
+                }
+                else
+                {
+                    MakeList(entity, LookupControl.PageSize - 4, 4, true);
+                }
+            }
+
+        }
+
+        public override void OnMouseWheelBack()
+        {
+            if (!CurrentList.Any() || CurrentList.Count < 3)
+            {
+                return;
+            }
+
+            var selectedEntity = CurrentList.FirstOrDefault();
+            if (selectedEntity != null)
+            {
+                var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
+                if (entity == null)
+                {
+                    GotoTop();
+                }
+                else
+                {
+                    MakeList(entity, 3, LookupControl.PageSize - 3, false);
+                }
+            }
         }
 
         private LookupScrollPositions GetScrollPosition()

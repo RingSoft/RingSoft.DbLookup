@@ -82,6 +82,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public abstract void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder);
 
+        public abstract void OnMouseWheelForward();
+
+        public abstract void OnMouseWheelBack();
+
         public void SetParentControls(ILookupControl control, ILookupWindow lookupWindow = null)
         {
             LookupControl = control;

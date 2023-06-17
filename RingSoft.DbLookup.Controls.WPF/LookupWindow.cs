@@ -253,7 +253,22 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void Reload()
         {
-            //LookupControl.LookupData.SelectedIndexChanged += LookupData_SelectedIndexChanged;
+            LookupControl.SelectedIndexChanged += (sender, args) => 
+            {
+                if (LookupControl.SelectedIndex >= 0)
+                {
+                    SelectButton.IsEnabled = true;
+                    if (_allowView)
+                    {
+                        ViewButton.IsEnabled = true;
+                    }
+                }
+                else
+                {
+                    SelectButton.IsEnabled = false;
+                    ViewButton.IsEnabled = false;
+                }
+            };
             LookupControl.LookupDataMaui.LookupView += LookupData_LookupView;
         }
 
@@ -266,7 +281,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             CloseButton = GetTemplateChild("CloseButton") as Button;
 
             SetReadOnlyMode(_readOnlyMode);
-
+            SelectButton.IsEnabled = false;
+            ViewButton.IsEnabled = false;
             base.OnApplyTemplate();
 
             if (!_allowView)
@@ -337,9 +353,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupCallBackRefreshData(args.CallBackToken);
             };
 
-            //LookupView?.Invoke(this, args);
-            //if (!args.Handled)
-            //    _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void SelectButton_Click(object sender, RoutedEventArgs e)

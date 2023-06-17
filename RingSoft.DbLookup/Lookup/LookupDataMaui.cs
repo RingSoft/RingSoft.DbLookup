@@ -126,7 +126,7 @@ namespace RingSoft.DbLookup.Lookup
             if (selectedIndex >= 0 && selectedIndex < RowCount)
             {
                 SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
-                if (LookupWindow == null)
+                if (LookupWindow == null || LookupWindow.ReadOnlyMode)
                 {
                     var args = new LookupAddViewArgs(this, true, LookupFormModes.View, string.Empty, ownerWindow)
                     {
@@ -159,12 +159,18 @@ namespace RingSoft.DbLookup.Lookup
             BaseQuery = LookupDefinition.TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
         }
 
-        public override void RefreshData()
+        public override void RefreshData(string newText = "")
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             RefreshBaseQuery();
 
             MakeFilteredQuery();
+
+            if (!newText.IsNullOrEmpty())
+            {
+                OnSearchForChange(newText, true);
+                return;
+            }
 
             ProcessedQuery = FilteredQuery.Take(LookupControl.PageSize);
 
@@ -259,8 +265,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string GetSelectedText()
         {
-            var entity = TableDefinition.GetEntityFromPrimaryKeyValue(SelectedPrimaryKeyValue);
-            var text = LookupDefinition.InitialSortColumnDefinition.GetDatabaseValue(entity);
+            var autoFillValue = LookupDefinition.GetAutoFillValue(SelectedPrimaryKeyValue);
+            var text = autoFillValue?.Text;
+            //var entity = TableDefinition.GetEntityFromPrimaryKeyValue(SelectedPrimaryKeyValue);
+            //var text = LookupDefinition.InitialSortColumnDefinition.GetDatabaseValue(entity);
             return text;
         }
 
@@ -618,7 +626,7 @@ namespace RingSoft.DbLookup.Lookup
 
         private void LookupCallBack_RefreshData(object sender, EventArgs e)
         {
-            RefreshData();
+            RefreshData(LookupControl.SearchText);
             OnDataSourceChanged();
         }
 
@@ -642,6 +650,7 @@ namespace RingSoft.DbLookup.Lookup
                 if (previousPage.Count < topCount)
                 {
                     GotoTop();
+                    return;
                 }
             }
 

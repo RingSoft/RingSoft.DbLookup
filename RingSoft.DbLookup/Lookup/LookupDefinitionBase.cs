@@ -1072,5 +1072,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             return null;
         }
+
+        public virtual AutoFillValue GetAutoFillValue(PrimaryKeyValue primaryKey)
+        {
+            return null;
+        }
     }
 }

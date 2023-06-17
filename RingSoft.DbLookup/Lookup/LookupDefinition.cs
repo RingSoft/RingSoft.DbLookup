@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -316,6 +317,39 @@ namespace RingSoft.DbLookup.Lookup
         public override AutoFillDataMauiBase GetAutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control)
         {
             return new AutoFillDataMaui<TEntity>(setup, control);
+        }
+
+        public override AutoFillValue GetAutoFillValue(PrimaryKeyValue primaryKey)
+        {
+            var query = TableDefinition.Context
+                .GetQueryable<TEntity>(this);
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            Expression fullExpr = null;
+            foreach (var keyValueField in primaryKey.KeyValueFields)
+            {
+                var pkExpr = FilterItemDefinition.GetBinaryExpression<TEntity>
+                (param
+                    , keyValueField.FieldDefinition.PropertyName
+                    , Conditions.Equals
+                    , keyValueField.FieldDefinition.FieldType
+                    , keyValueField.Value
+                        .GetPropertyFilterValue(keyValueField.FieldDefinition.FieldDataType
+                        , keyValueField.FieldDefinition.FieldType));
+                if (fullExpr == null)
+                {
+                    fullExpr = pkExpr;
+                }
+                else
+                {
+                    fullExpr = FilterItemDefinition.AppendExpression(fullExpr, pkExpr, EndLogics.And);
+                }
+            }
+
+            query = FilterItemDefinition.FilterQuery(query, param, fullExpr);
+            var entity = query.Take(1).FirstOrDefault();
+            var autoFillValue = entity.GetAutoFillValue();
+            return autoFillValue;
         }
     }
 }

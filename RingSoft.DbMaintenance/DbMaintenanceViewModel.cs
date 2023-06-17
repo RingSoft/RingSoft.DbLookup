@@ -535,10 +535,17 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _selectingRecord = true;
-                LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
+                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                {
+                    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+                    LookupAddViewArgs.CallBackToken.DbSelect = true;
+                }
+
                 Processor.CloseWindow();
                 //LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
                 LookupAddViewArgs.CallBackToken.OnRefreshData();
+
             }
         }
 
@@ -1331,6 +1338,11 @@ namespace RingSoft.DbMaintenance
 
             if (LookupAddViewArgs != null && !_selectingRecord && RecordsChanged)
             {
+                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                {
+                    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+                }
                 LookupAddViewArgs.CallBackToken.OnRefreshData();
             }
         }

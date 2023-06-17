@@ -1585,6 +1585,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             SearchForHost.SelectAll();
                         }
                         LookupDataMaui.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+                        LookupDataMaui.OnSearchForChange(initialSearchFor);
                     }
                 }
             }

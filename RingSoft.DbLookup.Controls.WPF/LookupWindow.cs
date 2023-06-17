@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -142,6 +143,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public PrimaryKeyValue InitialSearchForPrimaryKeyValue { get; set; }
 
+        public IAutoFillControl AutoFillControl { get; }
+
+        public bool ReadOnlyMode => _readOnlyMode;
+
         /// <summary>
         /// Occurs when a lookup row is selected by the user.
         /// </summary>
@@ -169,8 +174,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowInTaskbarProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(false));
         }
 
-        public LookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor, PrimaryKeyValue readOnlyValue = null)
+        public LookupWindow(LookupDefinitionBase lookupDefinition
+            , bool allowAdd
+            , bool allowView
+            , string initialSearchFor
+            , IAutoFillControl autoFillControl = null
+            , PrimaryKeyValue readOnlyValue = null)
         {
+            AutoFillControl = autoFillControl;
             var loaded = false;
             _readOnlyPrimaryKeyValue = readOnlyValue;
             DataContext = this;
@@ -293,7 +304,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             args.CallBackToken.RefreshData += (o, eventArgs) =>
             {
-                LookupCallBackRefreshData(args.CallBackToken.LookupData);
+                LookupCallBackRefreshData(args.CallBackToken);
             };
 
             LookupView?.Invoke(this, args);
@@ -323,12 +334,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
             args.CallBackToken.RefreshData += (o, eventArgs) =>
             {
-                LookupCallBackRefreshData(args.CallBackToken.LookupData);
+                LookupCallBackRefreshData(args.CallBackToken);
             };
 
-            LookupView?.Invoke(this, args);
-            if (!args.Handled)
-                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+            //LookupView?.Invoke(this, args);
+            //if (!args.Handled)
+            //    _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         private void SelectButton_Click(object sender, RoutedEventArgs e)
@@ -376,10 +387,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             e.Handled = true;
         }
 
-        private void LookupCallBackRefreshData(LookupDataMauiBase lookupData)
+        private void LookupCallBackRefreshData(LookupCallBackToken token)
         {
-            LookupControl.LookupDataMaui.RefreshData();
-            RefreshData?.Invoke(this, EventArgs.Empty);
+            LookupControl.LookupDataMaui.RefreshData(LookupControl.SearchText);
+            if (AutoFillControl != null)
+            {
+                AutoFillControl.RefreshValue(token.NewAutoFillValue);
+            }
+            //RefreshData?.Invoke(this, EventArgs.Empty);
+            if (token.DbSelect)
+            {
+                Close();
+                //LookupControl.LookupDataMaui.SetNewPrimaryKeyValue(token.NewAutoFillValue.PrimaryKeyValue);
+                if (AutoFillControl != null)
+                {
+                    AutoFillControl.OnSelect();
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

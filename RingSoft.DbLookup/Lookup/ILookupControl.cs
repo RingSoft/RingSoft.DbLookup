@@ -9,6 +9,8 @@
     public interface ILookupWindow
     {
         void SelectPrimaryKey(PrimaryKeyValue primaryKey);
+
+        bool ReadOnlyMode { get; }
     }
 
     /// <summary>

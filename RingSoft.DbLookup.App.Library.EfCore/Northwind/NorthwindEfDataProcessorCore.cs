@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
@@ -110,7 +111,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var context = new NorthwindDbContextEfCore();
             //var entitys = context.Orders
             //    .Include(p => p.Customer)
-            //    .Where(p => p.Customer.CompanyName.Contains("w", StringComparison.CurrentCultureIgnoreCase));
+            //    .Where(p => p.Customer.CompanyName.Contains("w", StringComparison.CurrentCultureIgnoreCase))
+            //    .OrderBy(p => p.OrderName);
 
             if (gridMode)
             {

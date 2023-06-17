@@ -224,6 +224,7 @@ namespace RingSoft.DbLookup.AutoFill
 
         public string GetNewText(string beginText)
         {
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             var result = string.Empty;
 
             var query = TableDefinition.Context.GetQueryable<TEntity>(Setup.LookupDefinition);
@@ -270,7 +271,7 @@ namespace RingSoft.DbLookup.AutoFill
             //var outputData = new AutoFillOutputData(null, newValue); ;
             //OnOutputAutoFillData(outputData);
             OnOutput(result, newValue, beginText);
-
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
             return result;
         }
 

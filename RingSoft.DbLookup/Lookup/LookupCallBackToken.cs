@@ -1,4 +1,5 @@
 ﻿using System;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -9,6 +10,9 @@ namespace RingSoft.DbLookup.Lookup
     {
         public LookupDataMauiBase LookupData { get; set; }
 
+        public AutoFillValue NewAutoFillValue { get; set; }
+
+        public bool DbSelect { get; set; }
 
         /// <summary>
         /// Occurs when the child window changes the underlying data source.

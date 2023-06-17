@@ -536,11 +536,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return null;
         }
 
-        public static Expression GetStringExpression<TEntity>(ParameterExpression param, string property, Conditions condition, string value)
+        public static Expression GetStringExpression<TEntity>(
+            ParameterExpression param, string property, Conditions condition, string value)
         {
             var newWhereMethod = GetWhereMethod<TEntity>();
             var returnExpression = GetPropertyExpression(property, param);
-
             Expression<Func<string>> idLambda = () => value;
 
             MethodInfo callMethod = null;
@@ -578,14 +578,16 @@ namespace RingSoft.DbLookup.TableProcessing
                 case Conditions.GreaterThanEquals:
                 case Conditions.LessThan:
                 case Conditions.LessThanEquals:
-                    callMethod = typeof(string).GetMethod("CompareTo", new[] { typeof(string) });
+                    callMethod = typeof(string).GetMethod("CompareTo"
+                        , new[] { typeof(string) });
                     callExpr = Expression.Call(returnExpression, callMethod, idLambda.Body);
                     result = GetBinaryExpression(callExpr, condition, Expression.Constant(0));
                     break;
                 case Conditions.Contains:
                     m = Expression.MakeMemberAccess(expr, pi);
                     c = Expression.Constant(value, typeof(string));
-                    mi = typeof(string).GetMethod("Contains", new System.Type[] { typeof(string) });
+                    mi = typeof(string).GetMethod("Contains"
+                        , new System.Type[] { typeof(string) });
                     call = Expression.Call(m, mi, c);
                     result = call;
                     break;

@@ -7,5 +7,14 @@ namespace RingSoft.DbLookup.Tests
         public string EditText { get; set; }
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
+        public void RefreshValue(AutoFillValue autoFillValue)
+        {
+            
+        }
+
+        public void OnSelect()
+        {
+            
+        }
     }
 }

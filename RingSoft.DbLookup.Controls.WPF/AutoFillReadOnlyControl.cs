@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     ///     <MyNamespace:AutoFillReadOnlyControl/>
     ///
     /// </summary>
-    public class AutoFillReadOnlyControl : Control, IReadOnlyControl
+    public class AutoFillReadOnlyControl : Control, IReadOnlyControl, IAutoFillControl
     {
         public TextBlock TextBlock { get; set; }
 
@@ -130,6 +130,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public string EditText
+        {
+            get
+            {
+                return TextBlock.Text;
+            }
+            set
+            {
+                TextBlock.Text = value;
+            }
+        }
+        public int SelectionStart { get; set; }
+        public int SelectionLength { get; set; }
+        public void RefreshValue(AutoFillValue autoFillValue)
+        {
+            TextBlock.Text = autoFillValue.Text;
+        }
+
+        public void OnSelect()
+        {
+            
+        }
 
         private AutoFillValue _pendingAutoFillValue;
 
@@ -164,8 +186,14 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var initialText = TextBlock.Text;
 
-            var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(Setup.LookupDefinition,
-                Setup.AllowLookupAdd, Setup.AllowLookupView, initialText, Value?.PrimaryKeyValue, Value?.PrimaryKeyValue);
+            var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(
+                Setup.LookupDefinition
+                , Setup.AllowLookupAdd
+                , Setup.AllowLookupView
+                , initialText
+                , Value?.PrimaryKeyValue
+                , this
+                , Value?.PrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
             lookupWindow.Owner = Window.GetWindow(this);

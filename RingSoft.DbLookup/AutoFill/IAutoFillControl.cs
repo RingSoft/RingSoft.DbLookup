@@ -7,5 +7,9 @@
         int SelectionStart { get; set; }
 
         int SelectionLength { get; set; }
+
+        void RefreshValue(AutoFillValue autoFillValue);
+
+        void OnSelect();
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -15,10 +16,21 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             _taskbarIcon = new TaskbarIcon();
         }
-        public virtual LookupWindow CreateLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd,
-            bool allowView, string initialSearchFor, PrimaryKeyValue initialPrimaryKeyValue = null, PrimaryKeyValue readOnlyPrimaryKeyValue = null)
+        public virtual LookupWindow CreateLookupWindow(
+            LookupDefinitionBase lookupDefinition
+            , bool allowAdd
+            , bool allowView
+            , string initialSearchFor
+            , PrimaryKeyValue initialPrimaryKeyValue = null
+            , IAutoFillControl autoFillControl = null
+            , PrimaryKeyValue readOnlyPrimaryKeyValue = null)
         {
-            return new LookupWindow(lookupDefinition, allowAdd, allowView, initialSearchFor, readOnlyPrimaryKeyValue)
+            return new LookupWindow(lookupDefinition
+                    , allowAdd
+                    , allowView
+                    , initialSearchFor
+                    , autoFillControl
+                    , readOnlyPrimaryKeyValue)
                 {InitialSearchForPrimaryKeyValue = initialPrimaryKeyValue};
         }
 

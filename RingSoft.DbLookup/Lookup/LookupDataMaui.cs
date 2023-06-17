@@ -237,6 +237,10 @@ namespace RingSoft.DbLookup.Lookup
                         _orderByType = OrderByTypes.Ascending;
                     }
                 }
+                else
+                {
+                    _orderByType = OrderByTypes.Ascending;
+                }
                 OrderByList.Clear();
                 if (column != LookupDefinition.InitialSortColumnDefinition)
                     OrderByList.Add(column);
@@ -446,7 +450,12 @@ namespace RingSoft.DbLookup.Lookup
             var fullExpr = FilterItemDefinition.AppendExpression(lookupExpr, filterExpr, EndLogics.And);
 
             var query = FilterItemDefinition.FilterQuery<TEntity>(FilteredQuery, param, fullExpr);
-            query = ApplyOrderBys(query, true);
+            var ascending = true;
+            if (_orderByType == OrderByTypes.Descending)
+            {
+                ascending = false;
+            }
+            query = ApplyOrderBys(query, ascending);
 
             var entity = query.FirstOrDefault();
 

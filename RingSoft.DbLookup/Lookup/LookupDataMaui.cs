@@ -47,6 +47,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int RowCount => CurrentList.Count;
 
+        private OrderByTypes _orderByType = OrderByTypes.Ascending;
+
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
             : base(lookupDefinition)
         {
@@ -218,7 +220,7 @@ namespace RingSoft.DbLookup.Lookup
 
             if (applyOrders)
             {
-                FilteredQuery = ApplyOrderBys(FilteredQuery, true);
+                FilteredQuery = ApplyOrderBys(FilteredQuery, _orderByType == OrderByTypes.Ascending);
             }
         }
 
@@ -226,6 +228,15 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (resetSortOrder)
             {
+                if (column == OrderByList[0])
+                {
+                    if (_orderByType == OrderByTypes.Ascending)
+                        _orderByType = OrderByTypes.Descending;
+                    else
+                    {
+                        _orderByType = OrderByTypes.Ascending;
+                    }
+                }
                 OrderByList.Clear();
                 if (column != LookupDefinition.InitialSortColumnDefinition)
                     OrderByList.Add(column);
@@ -488,6 +499,18 @@ namespace RingSoft.DbLookup.Lookup
         private TEntity GetNearestEntity(TEntity entity, Conditions condition)
         {
             TEntity result = null;
+
+            if (_orderByType == OrderByTypes.Descending)
+            {
+                if (condition == Conditions.GreaterThan)
+                {
+                    condition = Conditions.LessThan;
+                }
+                else
+                {
+                    condition = Conditions.GreaterThan;
+                }
+            }
             var input = GetProcessInput(entity);
 
             AddPrimaryKeyFieldsToFilter(entity, input);
@@ -697,6 +720,11 @@ namespace RingSoft.DbLookup.Lookup
             , bool previous, TableFilterDefinition<TEntity> filter = null)
         {
             var result = new List<TEntity>();
+            var ascending = !previous;
+            if (_orderByType == OrderByTypes.Descending)
+            {
+                ascending = !ascending;
+            }
             var input = GetProcessInput(nextEntity, true);
 
             var query = GetFilterPageQuery(nextEntity, count, input

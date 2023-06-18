@@ -266,12 +266,12 @@ namespace RingSoft.DbLookup
             {
                 item.Processed = true;
             }
-            var getDataResult = deleteTable.ChildField.TableDefinition.Context.DataProcessor.GetData(deleteTable.Query);
-            if (getDataResult.ResultCode != GetDataResultCodes.Success)
+            var getDataResult = deleteTable.Query.GetData();
+            if (!getDataResult)
             {
                 return false;
             }
-            var hasData = getDataResult.DataSet.Tables[0].Rows.Count > 0;
+            var hasData = deleteTable.Query.RecordCount() > 0;
             var caption = "Validation Failure";
             var tableDescription = deleteTable.Description.Replace("\r\n", " ");
             if (deleteTable.ChildField.AllowNulls && deleteTable.ChildField.AllowUserNulls)

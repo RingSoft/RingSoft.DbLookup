@@ -1056,12 +1056,18 @@ namespace RingSoft.DbMaintenance
 
                 if (deleteTables.Tables.Any())
                 {
+                    deleteTables.Context = SystemGlobals.DataRepository.GetDataContext();
                     if (!Processor.CheckDeleteTables(deleteTables))
                     {
                         return DbMaintenanceResults.ValidationError;
                     }
 
                     if (!DeleteChildren(deleteTables))
+                    {
+                        return DbMaintenanceResults.DatabaseError;
+                    }
+
+                    if (!deleteTables.Context.Commit($"Deleting Children"))
                     {
                         return DbMaintenanceResults.DatabaseError;
                     }
@@ -1100,7 +1106,9 @@ namespace RingSoft.DbMaintenance
                 if (!TablesToDelete.Contains(childField.TableDefinition))
                 {
                     tables.Add(childField.TableDefinition);
-                    var query = new SelectQuery(childField.TableDefinition.TableName).SetMaxRecords(1);
+                    var query = childField.TableDefinition.LookupDefinition.GetSelectQueryMaui();
+                    query.SetMaxRecords(1);
+                    //var query = new SelectQuery(childField.TableDefinition.TableName).SetMaxRecords(1);
                     if (parentField == null)
                     {
                         if (childField.ParentJoinForeignKeyDefinition != null)
@@ -1110,9 +1118,10 @@ namespace RingSoft.DbMaintenance
                                 var keyValueField =
                                     _lookupData.SelectedPrimaryKeyValue.KeyValueFields.FirstOrDefault(p =>
                                         p.FieldDefinition == fieldJoin.PrimaryField);
-
-                                query.AddWhereItem(fieldJoin.ForeignField.FieldName, Conditions.Equals,
-                                    keyValueField.Value, false, fieldJoin.ForeignField.ValueType);
+                                deleteTable.Column = query.AddColumn(fieldJoin.ForeignField);
+                                query.AddFilter(deleteTable.Column, Conditions.Equals, keyValueField.Value);
+                                //query.AddWhereItem(fieldJoin.ForeignField.FieldName, Conditions.Equals,
+                                //    keyValueField.Value, false, fieldJoin.ForeignField.ValueType);
                             }
                         }
                     }
@@ -1123,7 +1132,7 @@ namespace RingSoft.DbMaintenance
                         FieldDefinition whereField = null;
                         if (parentTable == null || parentTable.ParentDeleteTable == null)
                         {
-                            joinTable = MakeJoinTable(childField, parentField, query);
+                            //joinTable = MakeJoinTable(childField, parentField, query);
                         }
                         else
                         {
@@ -1131,7 +1140,7 @@ namespace RingSoft.DbMaintenance
                             var firstField = childField;
                             while (parentTable?.ParentDeleteTable != null)
                             {
-                                joinTable = MakeJoinTable(firstField, parentField, query, joinTable);
+                                //joinTable = MakeJoinTable(firstField, parentField, query, joinTable);
                                 firstField = parentTable.ChildField;
                                 parentField = parentTable.ParentField;
                                 parentTable = parentDeleteTable.ParentDeleteTable;
@@ -1141,7 +1150,7 @@ namespace RingSoft.DbMaintenance
                                     break;
                                 }
                             }
-                            joinTable = MakeJoinTable(topField, parentField, query, joinTable);
+                            //joinTable = MakeJoinTable(topField, parentField, query, joinTable);
                         }
 
                         if (rootChild?.ParentJoinForeignKeyDefinition != null)
@@ -1154,19 +1163,29 @@ namespace RingSoft.DbMaintenance
 
                                 if (whereField == null)
                                 {
-                                    whereField = fieldJoin.ForeignField;
+                                    whereField = fieldJoin.PrimaryField;
                                 }
-                                query.AddWhereItem(joinTable, whereField.FieldName, Conditions.Equals,
-                                    keyValueField.Value, false, fieldJoin.ForeignField.ValueType);
 
+                                if (keyValueField != null)
+                                {
+                                    deleteTable.Column = query.AddColumn(keyValueField.FieldDefinition);
+                                    query.AddFilter(deleteTable.Column, Conditions.Equals, keyValueField.Value);
+                                }
+                                else
+                                {
+                                    
+                                }
+                                //query.AddWhereItem(joinTable, whereField.FieldName, Conditions.Equals,
+                                //    keyValueField.Value, false, fieldJoin.ForeignField.ValueType);
                             }
                         }
                     }
 
-                    var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
-                    if (dataResult.ResultCode == GetDataResultCodes.Success)
+                    //var dataResult = TableDefinition.Context.DataProcessor.GetData(query);
+                    var dataResult = query.GetData();
+                    if (dataResult)
                     {
-                        if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                        if (query.RecordCount() > 0)
                         {
                             if (!childField.TableDefinition.CanViewTable)
                             {
@@ -1219,20 +1238,20 @@ namespace RingSoft.DbMaintenance
 
             }
 
-            //if (!childField.AllowNulls || !childField.AllowUserNulls)
-            //{
-            //    foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
-            //    {
-            //        if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
-            //        {
-            //            if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
-            //                    rootChild, deleteTable))
-            //            {
-            //                return false;
-            //            }
-            //        }
-            //    }
-            //}
+            if (!childField.AllowNulls || !childField.AllowUserNulls)
+            {
+                foreach (var tableDefinitionChildField in childField.TableDefinition.ChildFields)
+                {
+                    if (tableDefinitionChildField.AllowRecursion && childField.AllowRecursion)
+                    {
+                        if (!ProcessDeleteChildField(tables, tableDefinitionChildField, deleteTables, childField,
+                                rootChild, deleteTable))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
 
             return true;
         }
@@ -1269,11 +1288,11 @@ namespace RingSoft.DbMaintenance
                 ProcessDeleteChildren(deleteTable, sqls, childFieldsProcessed);
             }
 
-            var result = deleteTables.PrimaryKeyValue.TableDefinition.Context.DataProcessor.ExecuteSqls(sqls);
-            if (result.ResultCode != GetDataResultCodes.Success)
-            {
-                return false;
-            }
+            //var result = deleteTables.PrimaryKeyValue.TableDefinition.Context.DataProcessor.ExecuteSqls(sqls);
+            //if (result.ResultCode != GetDataResultCodes.Success)
+            //{
+            //    return false;
+            //}
             OnTablesDeleted(deleteTables);
             return true;
         }
@@ -1286,36 +1305,34 @@ namespace RingSoft.DbMaintenance
         private void ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls
             , List<FieldDefinition> childFieldsProcessed)
         {
-            if (deleteTable.ChildField.TableDefinition.ChildFields.Any())
-            {
-                foreach (var childField in deleteTable.ChildField.TableDefinition.ChildFields)
-                {
-                    var childTable = deleteTable.Parent.Tables.FirstOrDefault(p => p.ChildField.TableDefinition == childField.TableDefinition);
-                    if (childTable != null && childTable.ChildField.AllowRecursion)
-                    {
-                        var processedChildField = childFieldsProcessed.FirstOrDefault(childField);
-                        if (processedChildField == null)
-                        {
-                            ProcessDeleteChildren(childTable, sqls, childFieldsProcessed);
-                            childTable.Processed = true;
-                            childFieldsProcessed.Add(childField);
-                        }
-                    }
-                }
-            }
+            //if (deleteTable.ChildField.TableDefinition.ChildFields.Any())
+            //{
+            //    foreach (var childField in deleteTable.ChildField.TableDefinition.ChildFields)
+            //    {
+            //        var childTable = deleteTable.Parent.Tables.FirstOrDefault(p => p.ChildField.TableDefinition == childField.TableDefinition);
+            //        if (childTable != null && childTable.ChildField.AllowRecursion)
+            //        {
+            //            var processedChildField = childFieldsProcessed.FirstOrDefault(childField);
+            //            if (processedChildField == null)
+            //            {
+            //                ProcessDeleteChildren(childTable, sqls, childFieldsProcessed);
+            //                childTable.Processed = true;
+            //                childFieldsProcessed.Add(childField);
+            //            }
+            //        }
+            //    }
+            //}
 
             if (!deleteTable.Processed)
             {
                 var sql = string.Empty;
                 if (deleteTable.ChildField.AllowNulls && deleteTable.ChildField.AllowUserNulls)
                 {
-                    sql = deleteTable.ChildField.TableDefinition.Context.DataProcessor.SqlGenerator
-                        .GenerateSetNullStatement(deleteTable.Query, deleteTable.ChildField.FieldName);
+                    deleteTable.Query.SetNull(deleteTable.Column, deleteTable.Parent.Context);
                 }
                 else
                 {
-                    sql = deleteTable.ChildField.TableDefinition.Context.DataProcessor.SqlGenerator
-                        .GenerateDeleteStatement(deleteTable.Query);
+                    deleteTable.Query.DeleteAllData(deleteTable.Parent.Context);
                 }
 
                 sqls.Add(sql);

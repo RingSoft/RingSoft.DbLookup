@@ -357,15 +357,26 @@ namespace RingSoft.DbLookup.Lookup
             return FieldDefinition.FormatValueForColumnMap(value);
         }
 
-        public override string GetPropertyJoinName()
+        public override string GetPropertyJoinName(bool useDbField = false)
         {
+            var result = FieldDefinition.PropertyName;
             if (ParentObject is LookupJoin parentLookupJoin)
             {
                 var test = this;
+                if (FieldDefinition.TableDefinition == LookupDefinition.TableDefinition)
+                {
+                    return FieldDefinition.PropertyName;
+                }
+
+                if (useDbField)
+                {
+                    result = parentLookupJoin.JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName, useDbField);
+                    return result;
+                }
                 return parentLookupJoin.JoinDefinition.GetPropertyJoinName(FieldToDisplay.PropertyName);
             }
 
-            return FieldDefinition.PropertyName;
+            return result;
         }
 
         public override string GetDatabaseValue<TEntity>(TEntity entity)

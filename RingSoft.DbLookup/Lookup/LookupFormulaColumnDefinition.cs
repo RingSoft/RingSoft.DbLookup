@@ -516,7 +516,7 @@ namespace RingSoft.DbLookup.Lookup
             base.LoadFromEntity(entity, lookupDefinition);
         }
 
-        public override string GetPropertyJoinName()
+        public override string GetPropertyJoinName(bool useDbField = false)
         {
             return string.Empty;
         }

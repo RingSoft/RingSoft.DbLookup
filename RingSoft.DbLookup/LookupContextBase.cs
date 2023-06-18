@@ -337,7 +337,8 @@ namespace RingSoft.DbLookup
         public abstract LookupDataMauiBase GetLookupDataMaui<TEntity>(LookupDefinitionBase lookupDefinition)
             where TEntity : class, new();
 
-        public abstract IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition)
+        public abstract IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition
+        , IDbContext context = null)
             where TEntity : class, new();
 
         public abstract AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)

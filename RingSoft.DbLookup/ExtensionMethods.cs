@@ -328,7 +328,7 @@ namespace RingSoft.DbLookup
             return result;
         }
 
-        public static string GetPropertyJoinName(this TableFieldJoinDefinition tableFieldJoinDefinition, string propertyName)
+        public static string GetPropertyJoinName(this TableFieldJoinDefinition tableFieldJoinDefinition, string propertyName, bool useParent = false)
         {
             var result = string.Empty;
 
@@ -337,7 +337,7 @@ namespace RingSoft.DbLookup
                 return propertyName;
             }
 
-            var properties = tableFieldJoinDefinition.GetNavigationProperties();
+            var properties = tableFieldJoinDefinition.GetNavigationProperties(useParent);
 
             foreach (var property in properties)
             {
@@ -373,7 +373,7 @@ namespace RingSoft.DbLookup
             return result;
         }
 
-        public static List<JoinInfo> GetNavigationProperties(this TableFieldJoinDefinition parentJoin)
+        public static List<JoinInfo> GetNavigationProperties(this TableFieldJoinDefinition parentJoin, bool returnParent = false)
         {
             var result = new List<JoinInfo>();
             var joinInfo = new JoinInfo
@@ -388,6 +388,10 @@ namespace RingSoft.DbLookup
                 result.InsertRange(0, newProps);
             }
 
+            if (returnParent)
+            {
+                result.Remove(result.LastOrDefault());
+            }
             return result;
         }
 
@@ -455,6 +459,11 @@ namespace RingSoft.DbLookup
 
         public static object GetPropertyFilterValue(this string value, FieldDataTypes dataType, Type valType)
         {
+            var nullable = false;
+            if (Nullable.GetUnderlyingType(valType) != null)
+            {
+                nullable = true;
+            }
             object result = null;
             if (value == null)
             {
@@ -467,21 +476,42 @@ namespace RingSoft.DbLookup
                     result = value;
                     break;
                 case FieldDataTypes.Integer:
-                    var intVal = int.Parse(value);
-                    if (valType == typeof(Int16))
+                    if (nullable)
                     {
-                        result = Int16.Parse(value);
+                        int? intVal = int.Parse(value);
+                        if (valType == typeof(Int16?))
+                        {
+                            result = (Int16?)Int16.Parse(value); }
+
+                        if (valType == typeof(byte?))
+                        {
+                            result = (byte?)byte.Parse(value);
+                        }
+
+                        if (result == null)
+                        {
+                            result = intVal;
+                        }
+                    }
+                    else
+                    {
+                        var intVal = int.Parse(value);
+                        if (valType == typeof(Int16))
+                        {
+                            result = Int16.Parse(value);
+                        }
+
+                        if (valType == typeof(byte))
+                        {
+                            result = byte.Parse(value);
+                        }
+
+                        if (result == null)
+                        {
+                            result = intVal;
+                        }
                     }
 
-                    if (valType == typeof(byte))
-                    {
-                        result = byte.Parse(value);
-                    }
-
-                    if (result == null)
-                    {
-                        result = intVal;
-                    }
                     break;
                 case FieldDataTypes.Decimal:
                     result = decimal.Parse(value);

@@ -319,6 +319,11 @@ namespace RingSoft.DbLookup.Lookup
             return new AutoFillDataMaui<TEntity>(setup, control);
         }
 
+        public override SelectQueryMauiBase GetSelectQueryMaui()
+        {
+            return new SelectQueryMaui<TEntity>(this);
+        }
+
         public override AutoFillValue GetAutoFillValue(PrimaryKeyValue primaryKey)
         {
             var query = TableDefinition.Context

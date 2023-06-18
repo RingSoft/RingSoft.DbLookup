@@ -1,5 +1,6 @@
 ﻿using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System.Collections.Generic;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
 
@@ -12,6 +13,8 @@ namespace RingSoft.DbLookup
         public PrimaryKeyValue PrimaryKeyValue { get; set; }
 
         public bool DeleteAllData { get; set; }
+
+        public IDbContext Context { get; set; }
     }
 
     public class DeleteTable
@@ -26,7 +29,7 @@ namespace RingSoft.DbLookup
 
         public FieldDefinition RootField { get; set; }
         
-        public SelectQuery Query { get; set; }
+        public SelectQueryMauiBase Query { get; set; }
 
         public bool DeleteAllData { get; set; }
         
@@ -35,6 +38,8 @@ namespace RingSoft.DbLookup
         public bool Processed { get; set; }
 
         public string Description { get; set; }
+
+        public LookupFieldColumnDefinition Column { get; set; }
 
         public override string ToString()
         {

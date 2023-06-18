@@ -18,6 +18,7 @@ using Type = System.Type;
 using System.Reflection;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.TableProcessing;
+using Microsoft.VisualBasic;
 
 namespace RingSoft.DbLookup
 {
@@ -239,6 +240,17 @@ namespace RingSoft.DbLookup
             var property = model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
             if (property != null)
             {
+                var nullable = false;
+                if (Nullable.GetUnderlyingType(property.PropertyType) != null)
+                {
+                    nullable = true;
+                }
+
+                if (nullable &&  value == null)
+                {
+                    property.SetValue(model, value);
+                }
+
                 if (property.PropertyType == typeof(string))
                 {
                     property.SetValue(model, value);
@@ -306,6 +318,11 @@ namespace RingSoft.DbLookup
                     bool checkValue;
                     if (Boolean.TryParse(value, out checkValue))
                         property.SetValue(model, checkValue);
+                }
+
+                else
+                {
+                    property.SetValue(model,null);
                 }
             }
         }

@@ -192,9 +192,14 @@ namespace RingSoft.DbLookup.EfCore
 
         
 
-        public override IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition) where TEntity : class
+        public override IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition
+            , IDbContext context = null) where TEntity : class
         {
-            var context = SystemGlobals.DataRepository.GetDataContext();
+            if (context == null)
+            {
+                context = SystemGlobals.DataRepository.GetDataContext();
+            }
+            
             var query = context.GetTable<TEntity>();
             var navProperties = lookupDefinition.GetAllNavigationProperties();
 

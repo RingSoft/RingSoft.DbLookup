@@ -460,7 +460,7 @@ namespace RingSoft.DbLookup.Lookup
 
 
 
-        public abstract string GetPropertyJoinName();
+        public abstract string GetPropertyJoinName(bool useDbField = false);
 
         public abstract string GetDatabaseValue<TEntity>(TEntity entity) where TEntity : new();
 

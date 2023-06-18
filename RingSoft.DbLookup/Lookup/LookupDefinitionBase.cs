@@ -1081,5 +1081,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             return null;
         }
+
+        public virtual SelectQueryMauiBase GetSelectQueryMaui()
+        {
+            return null;
+        }
     }
 }

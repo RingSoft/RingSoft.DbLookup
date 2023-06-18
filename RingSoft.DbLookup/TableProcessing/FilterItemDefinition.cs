@@ -666,7 +666,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, object value = null)
         {
             Expression result = null;
-                var returnExpression = GetPropertyExpression(property, param);
+            var returnExpression = GetPropertyExpression(property, param);
 
             ConstantExpression expressionValue = null;
 

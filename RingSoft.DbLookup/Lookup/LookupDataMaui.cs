@@ -204,7 +204,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
 
-            if (LookupControl.SearchType == LookupSearchTypes.Contains)
+            if (LookupControl != null && LookupControl.SearchType == LookupSearchTypes.Contains)
             {
                 var contExpr = GetContainsExpr(param);
                 if (whereExpression == null)

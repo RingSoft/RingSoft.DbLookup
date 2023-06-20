@@ -19,7 +19,27 @@ namespace RingSoft.DbLookup
 
     public class DeleteTable
     {
-        public FieldDefinition ChildField { get; set; }
+        private FieldDefinition _childField;
+
+        public FieldDefinition ChildField
+        {
+            get
+            {
+                if (_childField == null)
+                {
+                    
+                }
+                return _childField;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    
+                }
+                _childField = value;
+        }
+    }
 
         public DeleteTables Parent { get; set; }
 

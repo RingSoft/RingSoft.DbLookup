@@ -202,7 +202,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     treeRoot.BaseTree = this;
                     treeItems.Add(treeRoot);
                     if (field.ParentJoinForeignKeyDefinition != null &&
-                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null && field.AllowRecursion
+                        field.ParentJoinForeignKeyDefinition.PrimaryTable != null
                         && field.ParentJoinForeignKeyDefinition.PrimaryTable.CanViewTable)
                     {
                         if (field.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
@@ -213,7 +213,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     }
                 }
 
-                AddFormulaToTree(treeItems, null);
+                //AddFormulaToTree(treeItems, null);
                 AddAdvancedFindToTree(treeItems, null);
 
                 
@@ -258,7 +258,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                 }
             }
 
-            AddFormulaToTree(treeItems, parent);
+            //AddFormulaToTree(treeItems, parent);
             AddAdvancedFindToTree(treeItems, parent);
         }
 
@@ -289,7 +289,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             treeViewItems.Add(result);
         }
         public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
-            bool searchForRootFormula = false, TreeViewItem parentItem = null)
+            bool searchForRootFormula = false, TreeViewItem parentItem = null, bool searchSubs = true)
         {
             TreeViewItem foundTreeViewItem = null;
             if (!items.Any())
@@ -305,7 +305,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                     {
                         return treeViewItem;
                     }
-                    else
+                    else if (searchSubs)
                     {
                         foundTreeViewItem = FindFieldInTree(treeViewItem.Items, fieldDefinition);
                         if (foundTreeViewItem != null)
@@ -324,6 +324,101 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             return foundTreeViewItem;
         }
+
+        public TreeViewItem FindTableInTree(TableDefinitionBase tableDefinition
+            , TreeViewItem parentItem, bool checkKeys = true, FieldDefinition parentField = null)
+        {
+            TreeViewItem result = null;
+            foreach (var parentItemItem in parentItem.Items)
+            {
+                if (parentItemItem.Type == TreeViewType.Field)
+                {
+                    if (parentItemItem.FieldDefinition.TableDefinition == tableDefinition)
+                    {
+                        if (parentField != null)
+                        {
+                            if (parentItemItem.FieldDefinition != parentField)
+                            {
+                                continue;
+                            }
+                        }
+                        return parentItemItem;
+                    }
+
+                    else if (parentItemItem.FieldDefinition.ParentJoinForeignKeyDefinition != null && checkKeys)
+                    {
+                        if (parentItemItem
+                            .FieldDefinition
+                            .ParentJoinForeignKeyDefinition
+                            .PrimaryTable == tableDefinition)
+                        {
+                            if (parentField != null)
+                            {
+                                if (parentItemItem.FieldDefinition != parentField)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            return parentItemItem;
+                        }
+                    }
+                }
+            }
+
+            if (result == null)
+            {
+                foreach (var parentItemItem in parentItem.Items)
+                {
+                    result = FindTableInTree(tableDefinition, parentItemItem, checkKeys, parentField);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public TreeViewItem FindTableInTree(TableDefinitionBase tableDefinition)
+        {
+            TreeViewItem result = null;
+            foreach (var parentItemItem in TreeRoot)
+            {
+                if (parentItemItem.Type == TreeViewType.Field)
+                {
+                    if (parentItemItem.FieldDefinition.TableDefinition == tableDefinition)
+                    {
+                        return parentItemItem;
+                    }
+
+                    else if (parentItemItem.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+                    {
+                        if (parentItemItem
+                                .FieldDefinition
+                                .ParentJoinForeignKeyDefinition
+                                .PrimaryTable == tableDefinition)
+                        {
+                            return parentItemItem;
+                        }
+                    }
+                }
+            }
+
+            if (result == null)
+            {
+                foreach (var parentItemItem in TreeRoot)
+                {
+                    result = FindTableInTree(tableDefinition, parentItemItem);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            return null;
+        }
+
 
         public TreeViewItem FindAfInTree(FieldDefinition parentFieldDefinition)
         {

@@ -599,7 +599,8 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
-        public void ProcessFilterWheres(List<WhereItem> wheres, ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, FilterItemDefinition filterDefinition)
+        public void ProcessFilterWheres(List<WhereItem> wheres
+            , ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, FilterItemDefinition filterDefinition)
         {
             if (wheres.Count > 0)
             {

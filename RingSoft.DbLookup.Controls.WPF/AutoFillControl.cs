@@ -861,8 +861,15 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ClearValue()
         {
-            TextBox.Text = string.Empty;
-            Popup.IsOpen = false;
+            if (TextBox != null)
+            {
+                TextBox.Text = string.Empty;
+            }
+
+            if (Popup != null)
+            {
+                Popup.IsOpen = false;
+            }
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)

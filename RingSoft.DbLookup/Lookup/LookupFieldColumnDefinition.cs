@@ -365,7 +365,10 @@ namespace RingSoft.DbLookup.Lookup
                 var test = this;
                 if (FieldDefinition.TableDefinition == LookupDefinition.TableDefinition)
                 {
-                    return FieldDefinition.PropertyName;
+                    if (!FieldDefinition.AllowRecursion)
+                    {
+                        return FieldDefinition.PropertyName;
+                    }
                 }
 
                 if (useDbField)

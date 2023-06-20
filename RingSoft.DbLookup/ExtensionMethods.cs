@@ -390,7 +390,10 @@ namespace RingSoft.DbLookup
 
             if (returnParent)
             {
-                result.Remove(result.LastOrDefault());
+                if (parentJoin.ForeignKeyDefinition.FieldJoins[0].ForeignField.AllowRecursion)
+                {
+                    result.Remove(result.LastOrDefault());
+                }
             }
             return result;
         }

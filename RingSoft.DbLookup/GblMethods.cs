@@ -678,6 +678,11 @@ namespace RingSoft.DbLookup
                 expr = Expression.Property(expr, pi);
                 type = pi.PropertyType;
             }
+
+            if (type == typeof(decimal))
+            {
+                
+            }
             System.Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TEntity), type);
             LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
             return lambda;

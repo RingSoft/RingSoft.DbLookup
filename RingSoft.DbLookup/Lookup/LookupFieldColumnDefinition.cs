@@ -99,6 +99,7 @@ namespace RingSoft.DbLookup.Lookup
                 JoinQueryTableAlias = sourceFieldColumn.JoinQueryTableAlias;
                 Distinct = sourceFieldColumn.Distinct;
                 ParentField = sourceFieldColumn.ParentField;
+                SearchForHostId = sourceFieldColumn.SearchForHostId;
                 var test = this;
             }
             base.CopyFrom(source);
@@ -113,6 +114,21 @@ namespace RingSoft.DbLookup.Lookup
         /// </returns>
         public override string FormatValue(string value)
         {
+            if (SearchForHostId != null)
+            {
+                var formattedVaue =
+                    FieldDefinition.TableDefinition.Context.FormatValueForSearchHost(
+                        SearchForHostId.GetValueOrDefault(), value);
+
+                if (formattedVaue.IsNullOrEmpty())
+                {
+                    return FieldDefinition.FormatValue(value);
+                }
+                else
+                {
+                    return formattedVaue;
+                }
+            }
             return FieldDefinition.FormatValue(value);
         }
 
@@ -142,7 +158,7 @@ namespace RingSoft.DbLookup.Lookup
         private void SetFieldDefinition(FieldDefinition fieldDefinition)
         {
             FieldDefinition = fieldDefinition;
-
+            SearchForHostId = fieldDefinition.SearchForHostId;
             AllowNulls = FieldDefinition.AllowNulls;
 
             FieldToDisplay = fieldDefinition;

@@ -45,6 +45,15 @@ namespace RingSoft.DbLookup
         }
     }
 
+    public class SearchHostFormatArgs
+    {
+        public string Value { get; set; }
+
+        public string RawValue { get; set; }
+
+        public int SearchForHostId { get; set; }
+    }
+
     public class UserAutoFill
     {
         public AutoFillSetup AutoFillSetup { get; set; }
@@ -154,6 +163,8 @@ namespace RingSoft.DbLookup
         public event EventHandler<CanProcessTableArgs> CanProcessTableEvent;
 
         public event EventHandler<CopyProcedureArgs> CopyProcedureEvent;
+
+        public event EventHandler<SearchHostFormatArgs> FormatSearchForEvent;
 
         private readonly List<TableDefinitionBase> _tables = new List<TableDefinitionBase>();
         public readonly List<ILookupFormula> _formulas = new List<ILookupFormula>();
@@ -343,5 +354,17 @@ namespace RingSoft.DbLookup
 
         public abstract AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
             where TEntity : class, new();
+
+        public virtual string FormatValueForSearchHost(int searchForHostId, string value)
+        {
+            var args = new SearchHostFormatArgs()
+            {
+                SearchForHostId = searchForHostId,
+                RawValue = value,
+            };
+
+            FormatSearchForEvent?.Invoke(this, args);
+            return args.Value;
+        }
     }
 }

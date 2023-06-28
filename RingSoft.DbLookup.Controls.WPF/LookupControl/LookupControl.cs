@@ -767,15 +767,29 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private GridViewColumn AddGridViewColumn(string caption, double width, string dataColumnName, LookupColumnBase lookupColumn)
         {
+            var enable = true;
             var columnHeader = new GridViewColumnHeader { Content = caption }; // + "\r\nLine2\r\nLine3"};
             if (lookupColumn.LookupColumnDefinition is LookupFormulaColumnDefinition)
             {
-                columnHeader.Foreground = new SolidColorBrush(Colors.Black);
-                columnHeader.IsEnabled = false;
+                enable = false;
+            }
+
+            if (lookupColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+            {
+                if (fieldColumn.DataType == FieldDataTypes.Decimal)
+                {
+                    enable = false;
+                }
+            }
+
+            if (enable)
+            {
+                columnHeader.Click += GridViewColumnHeaderClickedHandler;
             }
             else
             {
-                columnHeader.Click += GridViewColumnHeaderClickedHandler;
+                columnHeader.Foreground = new SolidColorBrush(Colors.Black);
+                columnHeader.IsEnabled = false;
             }
 
             if (width < 0)

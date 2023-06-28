@@ -551,7 +551,7 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var splitPage = (int)Math.Ceiling((decimal)LookupControl.PageSize / 2);
+            var splitPage = (int)Math.Ceiling((double)LookupControl.PageSize / 2);
             var topCount = LookupControl.PageSize - splitPage;
             var bottomCount = LookupControl.PageSize - topCount;
 

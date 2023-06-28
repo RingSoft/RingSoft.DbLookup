@@ -146,33 +146,6 @@ namespace RingSoft.DbLookup.TableProcessing
             return AddFixedFilter(fieldDefinition, condition, value);
         }
 
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double>> entityProperty,
-            Conditions condition, double value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
-            return AddFixedFilter(fieldDefinition, condition, value);
-        }
-
-        /// <summary>
-        /// Adds a fixed filter.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double?>> entityProperty,
-            Conditions condition, double value)
-        {
-            var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
-            return AddFixedFilter(fieldDefinition, condition, value);
-        }
 
         /// <summary>
         /// Adds a fixed filter.
@@ -209,8 +182,8 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal>> entityProperty,
-            Conditions condition, decimal value)
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double>> entityProperty,
+            Conditions condition, double value)
         {
             var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);
@@ -223,8 +196,8 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>The added filter.</returns>
-        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, decimal?>> entityProperty,
-            Conditions condition, decimal value)
+        public FieldFilterDefinition AddFixedFilter(Expression<Func<TEntity, double?>> entityProperty,
+            Conditions condition, double value)
         {
             var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
             return AddFixedFilter(fieldDefinition, condition, value);

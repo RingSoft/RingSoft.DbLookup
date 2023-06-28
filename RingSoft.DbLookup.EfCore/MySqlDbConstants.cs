@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup.EfCore
                 case DbFieldTypes.String:
                     return "varchar";
                 case DbFieldTypes.Decimal:
-                    return "decimal";
+                    return "double";
                 case DbFieldTypes.DateTime:
                     return "datetime";
                 case DbFieldTypes.Byte:

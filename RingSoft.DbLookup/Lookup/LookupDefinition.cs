@@ -238,7 +238,7 @@ namespace RingSoft.DbLookup.Lookup
             var propertyType = GetTypeFromExpression(lookupEntityProperty);
             if (propertyType == typeof(string)
                 || propertyType == typeof(DateTime)
-                || propertyType == typeof(decimal)
+                || propertyType == typeof(double)
                 || propertyType == typeof(double)
                 || propertyType == typeof(float)
                 || propertyType == typeof(int)

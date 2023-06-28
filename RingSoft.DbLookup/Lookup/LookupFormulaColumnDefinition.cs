@@ -134,18 +134,18 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Gets the number of digits to the right of the decimal point.
+        /// Gets the number of digits to the right of the double point.
         /// </summary>
         /// <value>
-        /// The decimal count.
+        /// The double count.
         /// </value>
         public int DecimalCount { get; internal set; }
 
         /// <summary>
-        /// Gets the type of the decimal field.
+        /// Gets the type of the double field.
         /// </summary>
         /// <value>
-        /// The type of the decimal field.
+        /// The type of the double field.
         /// </value>
         public DecimalFieldTypes DecimalFieldType { get; set; }
 
@@ -364,7 +364,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Sets the number of digits to the right of the decimal point.
+        /// Sets the number of digits to the right of the double point.
         /// </summary>
         /// <param name="value">The new digits value.</param>
         /// <returns>This object.</returns>
@@ -375,7 +375,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Sets the type of this decimal field.
+        /// Sets the type of this double field.
         /// </summary>
         /// <param name="value">The new DecimalFieldTypes value.</param>
         /// <returns>This object.</returns>

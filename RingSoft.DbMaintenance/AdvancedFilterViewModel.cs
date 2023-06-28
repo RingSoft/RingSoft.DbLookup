@@ -231,9 +231,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
-        private decimal _decimalSearchValueDecimal;
+        private double _decimalSearchValueDecimal;
 
-        public decimal DecimalSearchValueDecimal
+        public double DecimalSearchValueDecimal
         {
             get => _decimalSearchValueDecimal;
             set
@@ -526,7 +526,7 @@ namespace RingSoft.DbMaintenance
                     }
                     break;
                 case FieldDataTypes.Decimal:
-                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
+                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal().ToDouble();
                     break;
                 case FieldDataTypes.DateTime:
                     ProcessDateReturn();

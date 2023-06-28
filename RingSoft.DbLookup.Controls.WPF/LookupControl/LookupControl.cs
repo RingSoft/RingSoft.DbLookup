@@ -774,14 +774,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 enable = false;
             }
 
-            if (lookupColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
-            {
-                if (fieldColumn.DataType == FieldDataTypes.Decimal)
-                {
-                    enable = false;
-                }
-            }
-
             if (enable)
             {
                 columnHeader.Click += GridViewColumnHeaderClickedHandler;

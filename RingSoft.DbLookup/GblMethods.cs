@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup
         /// <summary>
         /// Gets the number format string to use in formatting numeric values.
         /// </summary>
-        /// <param name="decimals">The number of digits to the right of the decimal point.</param>
+        /// <param name="decimals">The number of digits to the right of the double point.</param>
         /// <param name="isCurrency">if set to <c>true</c> [is currency].</param>
         /// <returns>A numeric format string.</returns>
         public static string GetNumFormat(int decimals, bool isCurrency)
@@ -262,11 +262,11 @@ namespace RingSoft.DbLookup
                     if (DateTime.TryParse(value, out checkValue))
                         property.SetValue(model, checkValue);
                 }
-                else if (property.PropertyType == typeof(decimal)
-                         || property.PropertyType == typeof(decimal?))
+                else if (property.PropertyType == typeof(double)
+                         || property.PropertyType == typeof(double?))
                 {
-                    decimal checkValue;
-                    if (Decimal.TryParse(value, out checkValue))
+                    double checkValue;
+                    if (double.TryParse(value, out checkValue))
                         property.SetValue(model, checkValue);
                 }
                 else if (property.PropertyType == typeof(double)
@@ -380,8 +380,8 @@ namespace RingSoft.DbLookup
             {
                 return FieldDataTypes.DateTime;
             }
-            else if (type == typeof(decimal)
-                     || type == typeof(decimal?)
+            else if (type == typeof(double)
+                     || type == typeof(double?)
                      || type == typeof(double)
                      || type == typeof(double?)
                      || type == typeof(float)
@@ -679,7 +679,7 @@ namespace RingSoft.DbLookup
                 type = pi.PropertyType;
             }
 
-            if (type == typeof(decimal))
+            if (type == typeof(double))
             {
                 
             }

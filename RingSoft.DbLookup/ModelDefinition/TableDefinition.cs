@@ -64,8 +64,8 @@ namespace RingSoft.DbLookup.ModelDefinition
                 {
                     field = AddStringField(fieldName);
                 }
-                else if (propertyInfo.PropertyType == typeof(decimal)
-                         || propertyInfo.PropertyType == typeof(decimal?)
+                else if (propertyInfo.PropertyType == typeof(double)
+                         || propertyInfo.PropertyType == typeof(double?)
                          || propertyInfo.PropertyType == typeof(double)
                          || propertyInfo.PropertyType == typeof(double?)
                          || propertyInfo.PropertyType == typeof(float)
@@ -245,7 +245,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Gets the decimal number field definition for the property.
+        /// Gets the double number field definition for the property.
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>
@@ -255,27 +255,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Gets the decimal number field definition for the property.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <returns>The Decimal field definition of the property.</returns>
-        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, decimal?>> entityProperty)
-        {
-            return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
-        }
-
-        /// <summary>
-        /// Gets the decimal number field definition for the property.
-        /// </summary>
-        /// <param name="entityProperty">The entity property.</param>
-        /// <returns>The Decimal field definition of the property.</returns>
-        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, double>> entityProperty)
-        {
-            return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
-        }
-
-        /// <summary>
-        /// Gets the decimal number field definition for the property.
+        /// Gets the double number field definition for the property.
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>
@@ -285,7 +265,27 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Gets the decimal number field definition for the property.
+        /// Gets the double number field definition for the property.
+        /// </summary>
+        /// <param name="entityProperty">The entity property.</param>
+        /// <returns>The Decimal field definition of the property.</returns>
+        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, double>> entityProperty)
+        {
+            return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
+        }
+
+        /// <summary>
+        /// Gets the double number field definition for the property.
+        /// </summary>
+        /// <param name="entityProperty">The entity property.</param>
+        /// <returns>The Decimal field definition of the property.</returns>
+        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, decimal?>> entityProperty)
+        {
+            return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
+        }
+
+        /// <summary>
+        /// Gets the double number field definition for the property.
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>
@@ -295,7 +295,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Gets the decimal number field definition for the property.
+        /// Gets the double number field definition for the property.
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>

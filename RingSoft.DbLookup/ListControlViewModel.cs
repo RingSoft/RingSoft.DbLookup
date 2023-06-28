@@ -62,7 +62,7 @@ namespace RingSoft.DbLookup
     {
         public string TextValue { get; set; }
 
-        public decimal NumericValue { get; set; }
+        public double NumericValue { get; set; }
 
         public ListControlColumn Column { get; internal set; }
 
@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    cell.NumericValue = value.ToDecimal();
+                    cell.NumericValue = value.ToDecimal().ToDouble();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

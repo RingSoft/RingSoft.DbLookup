@@ -517,7 +517,7 @@ namespace RingSoft.DbLookup
 
                     break;
                 case FieldDataTypes.Decimal:
-                    result = decimal.Parse(value);
+                    result = double.Parse(value);
                     break;
                 case FieldDataTypes.DateTime:
                     result = DateTime.Parse(value);

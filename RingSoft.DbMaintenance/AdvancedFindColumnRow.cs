@@ -115,8 +115,8 @@ namespace RingSoft.DbMaintenance
                     }
                     else
                     {
-                        var percentWidth = (decimal) decimalProps.Value;
-                        PercentWidth = Decimal.ToDouble(percentWidth);
+                        var percentWidth = (double) decimalProps.Value;
+                        PercentWidth = percentWidth;
                     }
                     LookupColumnDefinition.UpdatePercentWidth(PercentWidth * 100);
                     Manager.ViewModel.ResetLookup();

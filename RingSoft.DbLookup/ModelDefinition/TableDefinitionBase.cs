@@ -209,10 +209,10 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Adds a decimal field.
+        /// Adds a double field.
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
-        /// <returns>The added decimal field definition.</returns>
+        /// <returns>The added double field definition.</returns>
         public DecimalFieldDefinition AddDecimalField(string fieldName)
         {
             var field = new DecimalFieldDefinition();

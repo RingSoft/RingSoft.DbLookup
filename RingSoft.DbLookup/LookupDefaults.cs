@@ -22,10 +22,10 @@ namespace RingSoft.DbLookup
         public static CultureInfo DefaultDateCulture { get; private set; }
 
         /// <summary>
-        /// Gets the default decimal count.
+        /// Gets the default double count.
         /// </summary>
         /// <value>
-        /// The default decimal count.
+        /// The default double count.
         /// </value>
         public static int DefaultDecimalCount { get; private set; } = 2;
 
@@ -54,9 +54,9 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// Sets the default decimal count.
+        /// Sets the default double count.
         /// </summary>
-        /// <param name="decimalCount">The decimal count.</param>
+        /// <param name="decimalCount">The double count.</param>
         public static void SetDefaultDecimalCount(int decimalCount)
         {
             DefaultDecimalCount = decimalCount;

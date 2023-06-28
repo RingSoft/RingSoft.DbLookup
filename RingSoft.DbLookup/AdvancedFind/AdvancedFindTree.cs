@@ -326,10 +326,12 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
         public TreeViewItem FindTableInTree(TableDefinitionBase tableDefinition
-            , TreeViewItem parentItem, bool checkKeys = true, FieldDefinition parentField = null)
+            , TreeViewItem parentItem, bool checkKeys = true, FieldDefinition parentField = null
+            , FieldDefinition fiterField = null)
         {
             TreeViewItem result = null;
-            foreach (var parentItemItem in parentItem.Items)
+            var items = parentItem.Items.ToList();
+            foreach (var parentItemItem in items)
             {
                 if (parentItemItem.Type == TreeViewType.Field)
                 {
@@ -358,6 +360,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                                 {
                                     continue;
                                 }
+
                             }
 
                             return parentItemItem;
@@ -368,9 +371,29 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             if (result == null)
             {
-                foreach (var parentItemItem in parentItem.Items)
+                var subItems = parentItem.Items.ToList();
+                foreach (var parentItemItem in subItems)
                 {
-                    result = FindTableInTree(tableDefinition, parentItemItem, checkKeys, parentField);
+                    if (fiterField != null)
+                    {
+                        if (parentItemItem.Type == TreeViewType.Field)
+                        {
+                            if (parentItemItem.FieldDefinition.ParentJoinForeignKeyDefinition != null
+                                && fiterField.ParentJoinForeignKeyDefinition != null)
+                            {
+                                if (parentItemItem.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                                    == fiterField.ParentJoinForeignKeyDefinition.PrimaryTable)
+                                {
+                                    if (fiterField != parentItemItem.FieldDefinition)
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    result = FindTableInTree(tableDefinition, parentItemItem, checkKeys, parentField, fiterField);
                     if (result != null)
                     {
                         return result;

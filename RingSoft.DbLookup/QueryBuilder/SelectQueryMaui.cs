@@ -168,19 +168,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             if (map != null)
             {
                 TreeViewItem subItem = null;
-                var useDbField = true;
-                if (parentField != null && filterField != null && filterField.TableDefinition != parentField.TableDefinition)
-                {
-                    subItem = LookupDefinition.AdvancedFindTree.FindFieldInTree(
-                        LookupDefinition.AdvancedFindTree.TreeRoot
-                        , filterField);
-                }
-                else
-                {
-                    subItem = LookupDefinition.AdvancedFindTree.FindTableInTree(
-                        value.FieldDefinition.TableDefinition
-                        , map.TreeViewItem, true, parentField);
-                }
+                var useDbField = true; 
+
+                subItem = LookupDefinition.AdvancedFindTree.FindTableInTree(
+                    value.FieldDefinition.TableDefinition
+                    , map.TreeViewItem, true, parentField, filterField);
 
                 if (subItem != null)
                 {

@@ -1113,6 +1113,7 @@ namespace RingSoft.DbMaintenance
             , DeleteTable parentDeleteTable = null
             , FieldDefinition prevField = null)
         {
+            var origParentField = parentField;
             FieldDefinition topField = null;
             var deleteTable = new DeleteTable();
             if (!fields.Contains(childField))
@@ -1213,10 +1214,10 @@ namespace RingSoft.DbMaintenance
                                         checkParent = childField;
                                     }
 
-                                    if (deleteTable.Column.FieldDefinition.TableDefinition
-                                        .Description == "Product Version Departments")
                                     //if (deleteTable.Column.FieldDefinition.TableDefinition
-                                    //        .Description == "Error Developers")
+                                    //    .Description == "Product Version Departments")
+                                    if (deleteTable.Column.FieldDefinition.TableDefinition
+                                            .Description == "Error Developers")
                                     {
 
                                     }
@@ -1227,7 +1228,7 @@ namespace RingSoft.DbMaintenance
                                     {
                                         fieldFilter = parentDeleteTable.Column.FieldDefinition;
                                     }
-                                    query.AddFilter(deleteTable.Column, Conditions.Equals, keyValueField, checkParent);
+                                    var filter = query.AddFilter(deleteTable.Column, Conditions.Equals, keyValueField, checkParent, fieldFilter);
                                 }
                                 else
                                 {

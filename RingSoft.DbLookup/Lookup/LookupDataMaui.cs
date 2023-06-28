@@ -720,14 +720,24 @@ namespace RingSoft.DbLookup.Lookup
 
             foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
             {
-                if (ascending)
+                if (first)
                 {
-                    query = GblMethods.ApplyOrder(query, OrderMethods.ThenBy, primaryKeyField.PropertyName);
+                    query = GblMethods.ApplyOrder(query, orderByType, primaryKeyField.PropertyName);
+                    first = false;
                 }
                 else
                 {
-                    query = GblMethods.ApplyOrder(query, OrderMethods.ThenByDescending, primaryKeyField.PropertyName);
+                    query = GblMethods.ApplyOrder(query, thenByType, primaryKeyField.PropertyName);
                 }
+
+                //if (ascending)
+                //{
+                //    query = GblMethods.ApplyOrder(query, OrderMethods.ThenBy, primaryKeyField.PropertyName);
+                //}
+                //else
+                //{
+                //    query = GblMethods.ApplyOrder(query, OrderMethods.ThenByDescending, primaryKeyField.PropertyName);
+                //}
             }
 
             return query;

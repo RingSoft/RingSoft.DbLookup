@@ -173,12 +173,18 @@ namespace RingSoft.DbLookup.Lookup
             FromFormula = Entity.FromFormula;
             foreach (var advancedFindColumn in Entity.Columns)
             {
-                LoadFromAdvFindColumnEntity(advancedFindColumn);
+                if (advancedFindColumn.Formula.IsNullOrEmpty())
+                {
+                    LoadFromAdvFindColumnEntity(advancedFindColumn);
+                }
             }
 
             foreach (var advancedFindFilter in Entity.Filters)
             {
-                LoadFromAdvFindFilter(advancedFindFilter);
+                if (advancedFindFilter.Formula.IsNullOrEmpty())
+                {
+                    LoadFromAdvFindFilter(advancedFindFilter);
+                }
             }
 
             lookupRefresher.LoadFromAdvFind(Entity);

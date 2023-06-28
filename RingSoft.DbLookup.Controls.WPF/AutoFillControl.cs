@@ -712,6 +712,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     ListBox.SelectionChanged += (sender, args) =>
                     {
+                        if (ListBox.SelectedItem is AutoFillContainsItem autoFillContainsItem)
+                        {
+                            Value = AutoFillDataMaui.OnListBoxChange(autoFillContainsItem);
+                        }
                         //_autoFillData.OnChangeContainsIndex(ListBox.SelectedIndex);
                     };
                 }

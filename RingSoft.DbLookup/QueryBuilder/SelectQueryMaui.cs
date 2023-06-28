@@ -44,7 +44,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             MaxRecords = value;
         }
 
-        public abstract LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition);
+        public abstract LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition
+        , FieldDefinition parentField = null);
 
         public abstract LookupFieldColumnDefinition AddColumn(TableDefinitionBase tableDefinition
             , FieldDefinition fieldDefinition);
@@ -58,7 +59,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             LookupFieldColumnDefinition column
             , Conditions condition
             , PrimaryKeyValueField value
-            , FieldDefinition parentField = null);
+            , FieldDefinition parentField = null
+            , FieldDefinition filterField = null);
 
         public abstract bool GetData(IDbContext context = null);
 
@@ -83,11 +85,24 @@ namespace RingSoft.DbLookup.QueryBuilder
             base.Filter = Filter;
         }
 
-        public override LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition)
+        public override LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition,
+            FieldDefinition parentField = null)
         {
-            var treeItem = LookupDefinition.AdvancedFindTree.FindFieldInTree(
-                LookupDefinition.AdvancedFindTree.TreeRoot
-                , fieldDefinition, false, null, false);
+            TreeViewItem treeItem = null;
+
+            if (parentField != null)
+            {
+                treeItem = LookupDefinition.AdvancedFindTree.FindFieldInTree(
+                    LookupDefinition.AdvancedFindTree.TreeRoot
+                    , parentField, false, null, true);
+            }
+
+            if (treeItem == null)
+            {
+                treeItem = LookupDefinition.AdvancedFindTree.FindFieldInTree(
+                    LookupDefinition.AdvancedFindTree.TreeRoot
+                    , fieldDefinition, false, null, false);
+            }
             
             var newColumn = treeItem.CreateColumn(LookupDefinition.VisibleColumns.Count - 1);
             var joinRes = LookupDefinition.AdvancedFindTree.MakeIncludes(treeItem);
@@ -145,15 +160,27 @@ namespace RingSoft.DbLookup.QueryBuilder
             LookupFieldColumnDefinition column
             , Conditions condition
             , PrimaryKeyValueField value
-            , FieldDefinition parentField = null)
+            , FieldDefinition parentField = null
+            , FieldDefinition filterField = null)
         {
             FieldFilterDefinition result = null;
             var map = ColumnMaps.FirstOrDefault(p => p.Column == column);
             if (map != null)
             {
-                var subItem = LookupDefinition.AdvancedFindTree.FindTableInTree(
-                    value.FieldDefinition.TableDefinition
-                    , map.TreeViewItem, true, parentField);
+                TreeViewItem subItem = null;
+                var useDbField = true;
+                if (parentField != null && filterField != null && filterField.TableDefinition != parentField.TableDefinition)
+                {
+                    subItem = LookupDefinition.AdvancedFindTree.FindFieldInTree(
+                        LookupDefinition.AdvancedFindTree.TreeRoot
+                        , filterField);
+                }
+                else
+                {
+                    subItem = LookupDefinition.AdvancedFindTree.FindTableInTree(
+                        value.FieldDefinition.TableDefinition
+                        , map.TreeViewItem, true, parentField);
+                }
 
                 if (subItem != null)
                 {
@@ -219,7 +246,8 @@ namespace RingSoft.DbLookup.QueryBuilder
             var result = GetData(context);
             if (result)
             {
-                foreach (var entity in Result)
+                var records = Result.ToList();
+                foreach (var entity in records)
                 {
                     //DeleteProperties(entity);
 
@@ -245,11 +273,13 @@ namespace RingSoft.DbLookup.QueryBuilder
             var result = GetData(context);
             if (result)
             {
-                foreach (var entity in Result)
+                var records = Result.ToList();
+                foreach (var entity in records)
                 {
                     DeleteProperties(entity);
 
                     result = context.DeleteEntity(entity, "Deleting Record");
+                    var test = Filter;
                     if (!result)
                     {
                         var query = LookupDefinition

@@ -211,6 +211,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(lookupDefinition,
                 allowAdd, allowView, initialSearchFor, initialSearchForPrimaryKey);
 
+            //lookupWindow.InitialSearchForPrimaryKeyValue = initialSearchForPrimaryKey;
+
             lookupWindow.LookupSelect += (sender, args) =>
             {
                 ViewModel.OnRecordSelected(args);

@@ -110,6 +110,12 @@ namespace RingSoft.DbLookup.Lookup
             {
                 LookupWindow.SelectPrimaryKey(primaryKeyValue);
             }
+
+            if (LookupControl != null && LookupControl.PageSize == 1)
+            {
+                SelectedPrimaryKeyValue = primaryKeyValue;
+                FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
+            }
         }
 
         public override void SetNewPrimaryKeyValue(PrimaryKeyValue primaryKeyValue)
@@ -118,7 +124,33 @@ namespace RingSoft.DbLookup.Lookup
             if (entity != null)
             {
                 var autoFillValue = entity.GetAutoFillValue();
-                OnSearchForChange(autoFillValue.Text);
+                if (autoFillValue.Text.IsNullOrEmpty())
+                {
+                    var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+                    var context = SystemGlobals.DataRepository.GetDataContext();
+                    var table = context.GetTable<TEntity>();
+                    foreach (var field in primaryKeyValue.KeyValueFields)
+                    {
+                        var fieldFilter = filter.AddFixedFilter(field.FieldDefinition, Conditions.Equals
+                            , GblMethods.GetPropertyValue(entity, field.FieldDefinition.PropertyName));
+                        fieldFilter.SetPropertyName = field.FieldDefinition.PropertyName;
+                    }
+
+                    var param = GblMethods.GetParameterExpression<TEntity>();
+                    var expr = filter.GetWhereExpresssion<TEntity>(param);
+                    var query = FilterItemDefinition.FilterQuery(table, param, expr);
+                    entity = query.Take(1).FirstOrDefault();
+                    var splitPage = (int)Math.Ceiling((double)LookupControl.PageSize / 2);
+                    var topCount = LookupControl.PageSize - splitPage;
+                    var bottomCount = LookupControl.PageSize - topCount;
+
+                    MakeList(entity, topCount, bottomCount, false);
+                    SetLookupIndexFromEntity(param, entity);
+                }
+                else
+                {
+                    OnSearchForChange(autoFillValue.Text);
+                }
             }
         }
 
@@ -187,10 +219,17 @@ namespace RingSoft.DbLookup.Lookup
 
             ProcessedQuery = FilteredQuery.Take(LookupControl.PageSize);
 
+            if (LookupControl.PageSize == 1 && FilteredQuery.Any())
+            {
+                SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(ProcessedQuery.FirstOrDefault());
+            }
+
             CurrentList.Clear();
 
             CurrentList.AddRange(ProcessedQuery);
+              
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+
             FireLookupDataChangedEvent(GetOutputArgs());
         }
 
@@ -557,6 +596,15 @@ namespace RingSoft.DbLookup.Lookup
 
             MakeList(entity, topCount, bottomCount, false);
 
+            SetLookupIndexFromEntity(param, entity);
+
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+        }
+
+        private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)
+        {
+            var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+            IQueryable<TEntity> query;
             var searchExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
                 , searchColumn.GetPropertyJoinName()
                 , Conditions.Equals, searchColumn.FieldDefinition.FieldType
@@ -569,8 +617,6 @@ namespace RingSoft.DbLookup.Lookup
             {
                 LookupControl.SetLookupIndex(CurrentList.IndexOf(entity));
             }
-
-            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
         }
 
         public LookupDataMauiOutput GetOutputArgs()
@@ -752,6 +798,17 @@ namespace RingSoft.DbLookup.Lookup
         private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom)
         {
             CurrentList.Clear();
+
+            if (LookupControl != null && LookupControl.PageSize == 1)
+            {
+                CurrentList.Add(entity);
+                SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                
+                FireLookupDataChangedEvent(GetOutputArgs());
+                return;
+
+            }
+
             var previousPageCount = 0;
             if (topCount > 0)
             {

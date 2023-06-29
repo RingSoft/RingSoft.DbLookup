@@ -54,7 +54,6 @@ namespace RingSoft.DbMaintenance
         public int SelectedIndex => 0;
         public void SetLookupIndex(int index)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace RingSoft.DbMaintenance
 
         public bool ValidateAllAtOnce { get; set; }
 
-        private LookupDataBase _lookupData;
+        private LookupDataMauiBase _lookupData;
         private bool _fromLookupFormAddView;
         private AutoFillValue _savedKeyAutoFillValue;
         private bool _selectingRecord;
@@ -198,9 +197,11 @@ namespace RingSoft.DbMaintenance
             var tableLookupDefinition = TableDefinition.LookupDefinition.Clone();
             Setup(tableLookupDefinition);
             SetupViewLookupDefinition(ViewLookupDefinition);
-            _lookupData = new LookupDataBase(ViewLookupDefinition, this);
+            _lookupData = TableDefinition.LookupDefinition.GetLookupDataMaui(ViewLookupDefinition, true);
+            _lookupData.SetParentControls(this);
 
-            _lookupData.LookupDataChanged += _lookupData_LookupDataChanged;
+            //_lookupData.LookupDataChanged += _lookupData_LookupDataChanged;
+            _lookupData.LookupDataChanged += _lookupData_LookupDataChanged1;
             FindButtonLookupDefinition = ViewLookupDefinition;
 
             base.InternalInitialize();
@@ -228,6 +229,39 @@ namespace RingSoft.DbMaintenance
             }
 
             Initialize();
+        }
+
+        private void _lookupData_LookupDataChanged1(object sender, LookupDataMauiOutput e)
+        {
+            //if (e. >= 0)
+            {
+                MaintenanceMode = DbMaintenanceModes.EditMode;
+                TEntity newEntity =
+                    TableDefinition.GetEntityFromPrimaryKeyValue(_lookupData.SelectedPrimaryKeyValue);
+
+                ChangingEntity = true;
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+                LockDate = DateTime.Now;
+                GetLastSavedDate(_lookupData.SelectedPrimaryKeyValue);
+
+                Entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                if (Entity == null)
+                {
+                    DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
+                    ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                    ChangingEntity = false;
+                    return;
+                }
+                if (!_savingRecord)
+                {
+                    LoadFromEntity(Entity);
+                    Processor?.OnRecordSelected();
+                }
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                ChangingEntity = false;
+
+                OnLookupDataChanged();
+            }
         }
 
         protected virtual TableFilterDefinitionBase GetAddViewFilter()
@@ -360,7 +394,8 @@ namespace RingSoft.DbMaintenance
             if (columnIndex < 0)
                 throw new ArgumentException($"Column {column.Caption} is not found in this view model's table lookup definition.");
 
-            _lookupData.OnColumnClick(columnIndex, true);
+            //_lookupData.OnColumnClick(columnIndex, true);
+            _lookupData.OnColumnClick((LookupFieldColumnDefinition)column, true);
         }
 
         private void _lookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)

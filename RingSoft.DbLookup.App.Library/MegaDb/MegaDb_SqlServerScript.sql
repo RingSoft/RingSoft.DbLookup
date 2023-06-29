@@ -137,8 +137,8 @@ CREATE TABLE [dbo].[StockCostQuantity](
 	[StockNumber] [nvarchar](50) NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
 	[PurchasedDateTime] [datetime] NOT NULL,
-	[Quantity] [decimal](18, 4) NOT NULL,
-	[Cost] [decimal](18, 4) NOT NULL,
+	[Quantity] [double](18, 4) NOT NULL,
+	[Cost] [double](18, 4) NOT NULL,
  CONSTRAINT [PK_StockCostQuantity] PRIMARY KEY CLUSTERED 
 (
 	[StockNumber] ASC,
@@ -155,7 +155,7 @@ GO
 CREATE TABLE [dbo].[StockMaster](
 	[StockNumber] [nvarchar](50) NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
-	[Price] [decimal](18, 4) NOT NULL,
+	[Price] [double](18, 4) NOT NULL,
  CONSTRAINT [PK_StockMaster] PRIMARY KEY CLUSTERED 
 (
 	[StockNumber] ASC,
@@ -190,7 +190,7 @@ CREATE TABLE [dbo].[AdvancedFindColumns](
   [PrimaryFieldName] [nvarchar](50) NULL,
   [Path] [nvarchar](1000) NOT NULL,
   [Caption] [nvarchar](50) NOT NULL,
-  [PercentWidth] [decimal](18, 4) NOT NULL,
+  [PercentWidth] [double](18, 4) NOT NULL,
   [Formula] [ntext] NULL,
   [FieldDataType] [tinyint] NULL,
   [DecimalFormatType] [tinyint] NULL

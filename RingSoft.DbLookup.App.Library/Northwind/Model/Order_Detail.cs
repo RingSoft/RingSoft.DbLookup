@@ -19,7 +19,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         public int ProductID { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
 
         public short Quantity { get; set; }
 

@@ -92,8 +92,8 @@ CREATE TABLE [dbo].[StockCostQuantity](
 	[StockNumber] [nvarchar](50) NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
 	[PurchasedDateTime] [datetime] NOT NULL,
-	[Quantity] [decimal](18, 0) NOT NULL,
-	[Cost] [decimal](18, 0) NOT NULL,
+	[Quantity] [double](18, 0) NOT NULL,
+	[Cost] [double](18, 0) NOT NULL,
  CONSTRAINT [PK_StockCostQuantity] PRIMARY KEY CLUSTERED 
 (
 	[StockNumber] ASC,
@@ -110,7 +110,7 @@ GO
 CREATE TABLE [dbo].[StockMaster](
 	[StockNumber] [nvarchar](50) NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
-	[Price] [decimal](18, 0) NOT NULL,
+	[Price] [double](18, 0) NOT NULL,
  CONSTRAINT [PK_StockMaster] PRIMARY KEY CLUSTERED 
 (
 	[StockNumber] ASC,
@@ -284,7 +284,7 @@ CREATE TABLE [dbo].[TB_GoalDetails](
 	[intGoalID] [int] NOT NULL,
 	[intGoalDetailID] [int] NOT NULL,
 	[intTaskID] [int] NULL,
-	[decHrsToSpend] [decimal](18, 2) NULL,
+	[decHrsToSpend] [double](18, 2) NULL,
 	[intErrorID] [int] NULL,
 	[intOutlineID] [int] NULL,
 	[bytLineType] [tinyint] NOT NULL
@@ -299,7 +299,7 @@ CREATE TABLE [dbo].[TB_Goals](
 	[intGoalID] [int] NOT NULL,
 	[intUserID] [int] NULL,
 	[dteGoalDate] [datetime] NULL,
-	[decWorkingHrs] [decimal](18, 4) NULL,
+	[decWorkingHrs] [double](18, 4) NULL,
 	[txtBeginNotes] [nvarchar](max) NULL,
 	[txtEndNotes] [nvarchar](max) NULL,
 	[dteModifiedDate] [datetime] NULL,
@@ -479,10 +479,10 @@ CREATE TABLE [dbo].[TB_Tasks](
 	[strTaskDesc] [nvarchar](100) NOT NULL,
 	[dteDueDate] [datetime] NULL,
 	[dteCompletedDate] [datetime] NULL,
-	[decEstHrs] [decimal](18, 2) NOT NULL,
-	[decHrsSpent] [decimal](18, 2) NULL,
+	[decEstHrs] [double](18, 2) NOT NULL,
+	[decHrsSpent] [double](18, 2) NULL,
 	[txtNotes] [nvarchar](max) NULL,
-	[decOrigEst] [decimal](18, 2) NULL,
+	[decOrigEst] [double](18, 2) NULL,
 	[intProjectID] [int] NULL,
 	[strCMSTaskID] [nvarchar](50) NULL,
 	[intStatusID] [int] NULL,

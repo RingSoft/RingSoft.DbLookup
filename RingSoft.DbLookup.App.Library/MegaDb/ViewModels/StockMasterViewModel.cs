@@ -73,9 +73,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private decimal _price;
+        private double _price;
 
-        public decimal Price
+        public double Price
         {
             get => _price;
             set

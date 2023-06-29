@@ -4,7 +4,7 @@
     {
         public string ProductName { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
 
         public short UnitsInStock { get; set; }
 

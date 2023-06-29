@@ -16,11 +16,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
-        public decimal ExtendedPrice => Math.Round(Quantity * Price, 2);
+        public double ExtendedPrice => Math.Round(Quantity * Price, 2);
 
-        public decimal Discount { get; set; }
+        public double Discount { get; set; }
 
         private INorthwindLookupContext _lookupContext;
         private OrderDetailsGridManager _manager;
@@ -65,11 +65,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case OrderDetailsGridColumns.Quantity:
                     return new DataEntryGridIntegerCellProps(this, columnId, _quantitySetup, Quantity);
                 case OrderDetailsGridColumns.Price:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, Price);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)Price);
                 case OrderDetailsGridColumns.ExtendedPrice:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, ExtendedPrice);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)ExtendedPrice);
                 case OrderDetailsGridColumns.Discount:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, Discount);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)Discount);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -147,7 +147,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     if (value is DataEntryGridDecimalCellProps decimalCellProps)
                     {
                         if (decimalCellProps.Value != null)
-                            Price = (decimal) decimalCellProps.Value;
+                            Price = (double) decimalCellProps.Value;
                         _manager.OrderViewModel.RefreshTotalControls();
                     }
                     break;
@@ -155,7 +155,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     if (value is DataEntryGridDecimalCellProps discountCellProps)
                     {
                         if (discountCellProps.Value != null)
-                            Discount = (decimal)discountCellProps.Value;
+                            Discount = (double)discountCellProps.Value;
                         _manager.OrderViewModel.RefreshTotalControls();
                     }
                     break;
@@ -194,7 +194,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
             Quantity = 1;
             if (product.UnitPrice != null)
-                Price = (decimal) product.UnitPrice;
+                Price = (double) product.UnitPrice;
             _manager.OrderViewModel.RefreshTotalControls();
         }
 
@@ -205,7 +205,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ProductAutoFillValue = new AutoFillValue(productPrimaryKey, entity.Product.ProductName);
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
-            Discount = (decimal) entity.Discount;
+            Discount = (double) entity.Discount;
         }
 
         public override void SaveToEntity(Order_Detail entity, int rowIndex)

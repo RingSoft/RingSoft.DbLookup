@@ -33,7 +33,7 @@ CREATE TABLE `advancedfindcolumns` (
   `PrimaryFieldName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `Path` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `Caption` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `PercentWidth` decimal(18,4) NOT NULL,
+  `PercentWidth` double(18,4) NOT NULL,
   `Formula` longtext,
   `FieldDataType` tinyint unsigned DEFAULT NULL,
   `DecimalFormatType` tinyint unsigned DEFAULT NULL,
@@ -232,8 +232,8 @@ CREATE TABLE `stockcostquantity` (
   `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `PurchasedDateTime` datetime(6) NOT NULL,
-  `Quantity` decimal(18,4) NOT NULL,
-  `Cost` decimal(18,4) NOT NULL,
+  `Quantity` double(18,4) NOT NULL,
+  `Cost` double(18,4) NOT NULL,
   PRIMARY KEY (`StockNumber`,`Location`,`PurchasedDateTime`),
   CONSTRAINT `FK_StockCostQuantity_StockMaster` FOREIGN KEY (`StockNumber`, `Location`) REFERENCES `stockmaster` (`StockNumber`, `Location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -259,7 +259,7 @@ DROP TABLE IF EXISTS `stockmaster`;
 CREATE TABLE `stockmaster` (
   `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Price` decimal(18,4) NOT NULL,
+  `Price` double(18,4) NOT NULL,
   PRIMARY KEY (`StockNumber`,`Location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

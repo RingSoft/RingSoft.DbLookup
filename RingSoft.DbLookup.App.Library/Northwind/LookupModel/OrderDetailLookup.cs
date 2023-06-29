@@ -8,13 +8,13 @@
 
         public string Product { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
 
         public short Quantity { get; set; }
 
-        public decimal ExtendedPrice { get; set; }
+        public double ExtendedPrice { get; set; }
 
-        public decimal Discount { get; set; }
+        public double Discount { get; set; }
 
         public string CategoryName { get; set; }
     }

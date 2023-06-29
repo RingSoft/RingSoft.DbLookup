@@ -269,7 +269,7 @@ CREATE TABLE [dbo].[AdvancedFindColumns](
   [PrimaryFieldName] [nvarchar](50) NULL,
   [Path] [nvarchar](1000) NULL,
   [Caption] [nvarchar](50) NOT NULL,
-  [PercentWidth] [decimal](18, 4) NOT NULL,
+  [PercentWidth] [double](18, 4) NOT NULL,
   [Formula] [ntext] NULL,
   [FieldDataType] [tinyint] NULL,
   [DecimalFormatType] [tinyint] NULL

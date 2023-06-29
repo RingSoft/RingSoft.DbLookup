@@ -106,9 +106,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _price;
+        private double _price;
 
-        public decimal Price
+        public double Price
         {
             get => _price;
             set
@@ -122,9 +122,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _extPrice;
+        private double _extPrice;
 
-        public decimal ExtPrice
+        public double ExtPrice
         {
             get => _extPrice;
             set
@@ -137,8 +137,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _discount;
-        public decimal Discount
+        private double _discount;
+        public double Discount
         {
             get => _discount;
             set
@@ -239,7 +239,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
                 if (product != null && product.UnitPrice != null)
                 {
-                    Price = (decimal)product.UnitPrice;
+                    Price = (double)product.UnitPrice;
                     Quantity = 1;
                 }
 
@@ -280,7 +280,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             LoadFromOrder(entity.Order);
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
-            Discount = (decimal)entity.Discount;
+            Discount = (double)entity.Discount;
             _productDirty = false;
 
             if (ReadOnlyMode)

@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         public int? ShipVia { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal? Freight { get; set; }
+        public double? Freight { get; set; }
 
         [StringLength(40)]
         public string ShipName { get; set; }

@@ -203,8 +203,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal? _freight;
-        public decimal? Freight
+        private double? _freight;
+        public double? Freight
         {
             get => _freight;
             set
@@ -359,9 +359,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _subTotal;
+        private double _subTotal;
 
-        public decimal SubTotal
+        public double SubTotal
         {
             get => _subTotal;
             set
@@ -374,8 +374,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _totalDiscount;
-        public decimal TotalDiscount
+        private double _totalDiscount;
+        public double TotalDiscount
         {
             get => _totalDiscount;
             set
@@ -388,9 +388,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal _total;
+        private double _total;
 
-        public decimal Total
+        public double Total
         {
             get => _total;
             set
@@ -590,11 +590,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public void RefreshTotalControls()
         {
-            decimal subTotal = 0;
-            decimal totalDiscount = 0;
-            decimal freight = 0;
+            double subTotal = 0;
+            double totalDiscount = 0;
+            double freight = 0;
             if (Freight != null)
-                freight = (decimal) Freight;
+                freight = (double) Freight;
 
             if (GridMode)
             {
@@ -613,7 +613,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 {
                     var extendedPrice = orderDetail.Quantity * orderDetail.UnitPrice;
                     subTotal += extendedPrice;
-                    var decimalDiscount = (decimal) orderDetail.Discount;
+                    var decimalDiscount = (double) orderDetail.Discount;
                     totalDiscount += decimalDiscount;
                 }
             }

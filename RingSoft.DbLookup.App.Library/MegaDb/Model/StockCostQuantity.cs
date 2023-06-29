@@ -9,8 +9,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.Model
         public string StockNumber { get; set; }
         public string Location { get; set; }
         public DateTime PurchasedDateTime { get; set; }
-        public decimal Quantity { get; set; }
-        public decimal Cost { get; set; }
+        public double Quantity { get; set; }
+        public double Cost { get; set; }
 
         public virtual StockMaster StockMaster { get; set; }
     }

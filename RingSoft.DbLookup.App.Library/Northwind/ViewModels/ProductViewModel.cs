@@ -106,9 +106,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private decimal? _unitPrice;
+        private double? _unitPrice;
 
-        public decimal? UnitPrice
+        public double? UnitPrice
         {
             get => _unitPrice;
             set

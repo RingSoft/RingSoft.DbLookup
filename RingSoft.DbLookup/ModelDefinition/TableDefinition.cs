@@ -259,7 +259,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>
-        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, double?>> entityProperty)
+        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, decimal?>> entityProperty)
         {
             return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
         }
@@ -279,7 +279,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
         /// <returns>The Decimal field definition of the property.</returns>
-        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, decimal?>> entityProperty)
+        public DecimalFieldDefinition GetFieldDefinition(Expression<Func<TEntity, double?>> entityProperty)
         {
             return GetPropertyField(entityProperty.GetFullPropertyName()) as DecimalFieldDefinition;
         }

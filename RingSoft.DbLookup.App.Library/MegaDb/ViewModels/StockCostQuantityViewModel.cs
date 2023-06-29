@@ -54,9 +54,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private decimal _quantity;
+        private double _quantity;
 
-        public decimal Quantity
+        public double Quantity
         {
             get => _quantity;
             set
@@ -69,9 +69,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private decimal _cost;
+        private double _cost;
 
-        public decimal Cost
+        public double Cost
         {
             get => _cost;
             set

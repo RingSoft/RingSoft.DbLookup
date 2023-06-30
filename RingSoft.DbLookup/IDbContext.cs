@@ -31,11 +31,11 @@ namespace RingSoft.DbLookup
 
         void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true);
 
-        void OpenConnection();
+        bool OpenConnection();
 
-        void CloseConnection();
+        bool CloseConnection();
 
-        void ExecuteSql(string sql);
+        bool ExecuteSql(string sql);
 
         List<string> GetListOfDatabases(DbDataProcessor dataProcessor);
     }

@@ -145,19 +145,19 @@ namespace RingSoft.DbLookup
             
         }
 
-        public void OpenConnection()
+        public bool OpenConnection()
         {
-            
+            return true;
         }
 
-        public void CloseConnection()
+        public bool CloseConnection()
         {
-            
+            return true;
         }
 
-        public void ExecuteSql(string sql)
+        public bool ExecuteSql(string sql)
         {
-            
+            return true;
         }
 
         public List<string> GetListOfDatabases(DbDataProcessor dataProcessor)

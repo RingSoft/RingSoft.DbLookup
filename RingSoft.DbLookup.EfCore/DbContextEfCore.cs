@@ -124,9 +124,16 @@ namespace RingSoft.DbLookup.EfCore
                 return;
             }
 
-            OpenConnection();
+            if (!OpenConnection())
+            {
+                return;
+            }
 
-            ExecuteSql(sql);
+            if (!ExecuteSql(sql))
+            {
+                CloseConnection();
+                return;
+            }
 
             if (!value)
             {
@@ -134,19 +141,52 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        public void OpenConnection()
+        public bool OpenConnection()
         {
-            Database.OpenConnection();
+            try
+            {
+                Database.OpenConnection();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                return false;
+            }
+
+            return true;
         }
 
-        public void CloseConnection()
+        public bool CloseConnection()
         {
-            Database.CloseConnection();
+            try
+            {
+                Database.CloseConnection();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                return false;
+            }
+
+            return true;
         }
 
-        public void ExecuteSql(string sql)
+        public bool ExecuteSql(string sql)
         {
-            Database.ExecuteSqlRaw(sql);
+            try
+            {
+                Database.ExecuteSqlRaw(sql);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                return false;
+            }
+
+            return true;
         }
 
         public List<string> GetListOfDatabases(DbDataProcessor dataProcessor)

@@ -124,10 +124,36 @@ namespace RingSoft.DbLookup.DataProcessor
         {
             var originalDatabase = Database;
             Database = "master";
-            var result = ExecuteSql(GetDropDatabaseSql(originalDatabase), 
-                false, true, false);
+
+            var context = SystemGlobals.DataRepository.GetDataContext(this);
+            var sql = GetDropDatabaseSql(originalDatabase);
+
+            var successResult = new DataProcessResult("Success")
+            {
+                ConnectionString = ConnectionString,
+                ProcessedSqlStatement = sql,
+                ResultCode = GetDataResultCodes.Success,
+            };
+            var result = context.OpenConnection();
+            if (result)
+            {
+                result = context.ExecuteSql(sql);
+            }
+
+            context.CloseConnection();
             Database = originalDatabase;
-            return result;
+
+            if (result)
+            {
+                return successResult;
+            }
+            //var result = ExecuteSql(GetDropDatabaseSql(originalDatabase), 
+            //    false, true, false);
+            return new DataProcessResult("Fail")
+            {
+                ConnectionString = ConnectionString,
+                ResultCode = GetDataResultCodes.DbConnectError,
+            };
         }
 
         private string GenerateConnectionString()

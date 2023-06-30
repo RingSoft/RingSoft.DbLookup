@@ -510,6 +510,12 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 return null;
             }
+
+            DbDateTypes? dateType = null;
+            if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
+            {
+                dateType = dateFieldDefinition.DateType;
+            }
             var stringValue = Value;
             var field = FieldDefinition;
             if (FieldToSearch != null)

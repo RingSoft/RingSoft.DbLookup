@@ -118,6 +118,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                         formatString = culture.DateTimeFormat.ShortDatePattern;
                         break;
                     case DbDateTypes.DateTime:
+                    case DbDateTypes.Millisecond:
                         formatString = culture.DateTimeFormat.ShortDatePattern + ' ' + culture.DateTimeFormat.LongTimePattern;
                         break;
                     default:

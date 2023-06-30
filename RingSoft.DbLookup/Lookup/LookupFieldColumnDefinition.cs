@@ -420,16 +420,21 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
+                DbDateTypes? dateType = null;
+                if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
+                {
+                    dateType = dateFieldDefinition.DateType;
+                }
                 if (propertyObject == null)
                 {
                     if (!AllowNulls || !HasNavProperties)
                     {
-                        result = GblMethods.GetPropertyValue(entity, FieldToDisplay.PropertyName);
+                        result = GblMethods.GetPropertyValue(entity, FieldToDisplay.PropertyName, dateType);
                     }
                 }
                 else
                 {
-                    result = GblMethods.GetPropertyValue(propertyObject, FieldToDisplay.PropertyName);
+                    result = GblMethods.GetPropertyValue(propertyObject, FieldToDisplay.PropertyName, dateType);
                 }
             }
 

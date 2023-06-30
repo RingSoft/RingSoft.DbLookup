@@ -449,11 +449,29 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        private bool DataExists()
+        {
+            if (_lookupData.IsThereData())
+            {
+                return true;
+            }
+
+            var message = "There is no data in this table";
+            var caption = "No Data";
+            ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Information);
+
+            return false;
+        }
+
         /// <summary>
         /// Called when Previous button is clicked.
         /// </summary>
         public override void OnGotoPreviousButton()
         {
+            if (!DataExists())
+            {
+                return;
+            }
             FirePreviousEvent();
             if (!PreviousCommand.IsEnabled)
                 return;
@@ -467,7 +485,8 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
-                if (_lookupData.ScrollPosition == LookupScrollPositions.Top)
+                if (_lookupData.ScrollPosition == LookupScrollPositions.Top
+                                        )
                     _lookupData.GotoBottom();
                 else
                 {
@@ -487,6 +506,11 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public override void OnGotoNextButton()
         {
+            if (!DataExists())
+            {
+                return;
+            }
+
             FireNextEvent();
             if (!NextCommand.IsEnabled)
                 return;
@@ -501,7 +525,7 @@ namespace RingSoft.DbMaintenance
             else
             {
                 if (_lookupData.ScrollPosition == LookupScrollPositions.Bottom)
-                    _lookupData.GotoTop();
+                _lookupData.GotoTop();
                 else
                 {
                     _lookupData.GotoNextRecord();

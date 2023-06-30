@@ -32,7 +32,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public ILookupWindow LookupWindow { get; private set; }
 
-        public LookupScrollPositions ScrollPosition { get; private set; }
+        public LookupScrollPositions ScrollPosition { get; protected internal set; }
 
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
@@ -85,6 +85,8 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void OnMouseWheelForward();
 
         public abstract void OnMouseWheelBack();
+
+        public abstract bool IsThereData();
 
         public void SetParentControls(ILookupControl control, ILookupWindow lookupWindow = null)
         {

@@ -486,5 +486,34 @@ namespace RingSoft.DbLookup.ModelDefinition
 
             return true;
         }
+
+        public bool IsEqualTo(TEntity first, TEntity second)
+        {
+            var result = true;
+            if (first != null && second == null)
+            {
+                return false;
+            }
+
+            if (first == null && second != null)
+            {
+                return false;
+            }
+
+            if (first == null && second == null)
+            {
+                return true;
+            }
+            foreach (var primaryKeyField in PrimaryKeyFields)
+            {
+                var firstValue = GblMethods.GetPropertyValue(first, primaryKeyField.PropertyName);
+                var secondValue = GblMethods.GetPropertyValue(second, primaryKeyField.PropertyName);
+                if (firstValue != secondValue)
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
     }
 }

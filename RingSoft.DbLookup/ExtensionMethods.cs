@@ -102,6 +102,7 @@ namespace RingSoft.DbLookup
                 case DbDateTypes.DateOnly:
                     return DateFormatTypes.DateOnly;
                 case DbDateTypes.DateTime:
+                case DbDateTypes.Millisecond:
                     return DateFormatTypes.DateTime;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dbDateType), dbDateType, null);

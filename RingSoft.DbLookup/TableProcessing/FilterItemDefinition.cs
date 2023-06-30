@@ -396,7 +396,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     if (date != null)
                     {
                         date = ConvertToUniversalTime(date.Value);
-                        searchValue = date.Value.FormatDateValue(DbDateTypes.DateTime);
+                        searchValue = date.Value.FormatDateValue(DbDateTypes.Millisecond);
                     }
 
                 }

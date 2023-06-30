@@ -61,6 +61,8 @@ namespace RingSoft.DbLookup.Lookup
             {
                 OrderByList.Add(fieldColumn);
             }
+
+            _orderByType = lookupDefinition.InitialOrderByType;
         }
 
         public override void GetInitData()
@@ -114,7 +116,8 @@ namespace RingSoft.DbLookup.Lookup
             if (LookupControl != null && LookupControl.PageSize == 1)
             {
                 SelectedPrimaryKeyValue = primaryKeyValue;
-                FireLookupDataChangedEvent(new LookupDataMauiOutput(LookupScrollPositions.Middle));
+                SetNewPrimaryKeyValue(primaryKeyValue);
+                SetScrollPosition(GetOutputArgs().ScrollPosition);
             }
         }
 
@@ -357,6 +360,17 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        public override bool IsThereData()
+        {
+            MakeFilteredQuery(true);
+            return FilteredQuery.Any();
+        }
+
+        private void SetScrollPosition(LookupScrollPositions scrollPosition)
+        {
+            ScrollPosition = scrollPosition;
+        }
+
         private LookupScrollPositions GetScrollPosition()
         {
             var result = LookupScrollPositions.Disabled;
@@ -372,6 +386,22 @@ namespace RingSoft.DbLookup.Lookup
             var prevEntity = GetNearestEntity(CurrentList[0], Conditions.LessThan);
             var nextEntity = GetNearestEntity(CurrentList[CurrentList.Count - 1], Conditions.GreaterThan);
 
+            if (LookupControl != null)
+            {
+                if (LookupControl.PageSize == 1)
+                {
+                    if (TableDefinition.IsEqualTo(CurrentList[0], nextEntity))
+                    {
+                        nextEntity = null;
+                    }
+
+                    if (TableDefinition.IsEqualTo(CurrentList[0], prevEntity))
+                    {
+                        prevEntity = null;
+                    }
+
+                }
+            }
             if (prevEntity != null && nextEntity != null)
             {
                 result = LookupScrollPositions.Middle;
@@ -629,6 +659,10 @@ namespace RingSoft.DbLookup.Lookup
         private TEntity GetNearestEntity(TEntity entity, Conditions condition)
         {
             TEntity result = null;
+            if (entity == null)
+            {
+                return result;
+            }
 
             if (_orderByType == OrderByTypes.Descending)
             {

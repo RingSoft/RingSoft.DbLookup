@@ -164,8 +164,13 @@ namespace RingSoft.DbLookup.TableProcessing
                 FieldDefinition = fieldDefinition,
                 Condition = condition,
                 Value = value,
-                ReportDescription = fieldDefinition.Description
+                ReportDescription = fieldDefinition.Description,
             };
+
+            if (fieldDefinition is DateFieldDefinition dateFieldDefinition)
+            {
+                fieldFilter.DateType = dateFieldDefinition.DateType;
+            }
 
             return fieldFilter;
         }

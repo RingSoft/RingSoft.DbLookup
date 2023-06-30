@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.TableProcessing;
 using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup
 {
@@ -121,13 +122,11 @@ namespace RingSoft.DbLookup
                 switch (dateType)
                 {
                     case DbDateTypes.DateOnly:
+                    case DbDateTypes.Millisecond:
                         formatString = "MM/dd/yyyy";
                         break;
                     case DbDateTypes.DateTime:
                         formatString = "MM/dd/yyyy hh:mm:ss tt";
-                        break;
-                    case DbDateTypes.Millisecond:
-                        formatString = "MM/dd/yyyy hh:mm:ss tt.fff";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(value), value, null);
@@ -138,13 +137,11 @@ namespace RingSoft.DbLookup
                 switch (dateType)
                 {
                     case DbDateTypes.DateOnly:
+                    case DbDateTypes.Millisecond:
                         formatString = "M/d/yyyy";
                         break;
                     case DbDateTypes.DateTime:
                         formatString = "M/d/yyyy hh:mm:ss tt";
-                        break;
-                    case DbDateTypes.Millisecond:
-                        formatString = "M/d/yyyy hh:mm:ss tt.fff";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(value), value, null);
@@ -152,7 +149,12 @@ namespace RingSoft.DbLookup
                 }
             }
 
-            return value.ToString(formatString);
+            var result = value.ToString(formatString);
+            if (dateType == DbDateTypes.Millisecond)
+            {
+                result = $"{result} {value.TimeOfDay}";
+            }
+            return result;
         }
 
         /// <summary>
@@ -316,7 +318,7 @@ namespace RingSoft.DbLookup
                 else if (property.PropertyType == typeof(bool))
                 {
                     bool checkValue;
-                    if (Boolean.TryParse(value, out checkValue))
+                    if (bool.TryParse(value, out checkValue))
                         property.SetValue(model, checkValue);
                 }
 
@@ -327,19 +329,29 @@ namespace RingSoft.DbLookup
             }
         }
 
-        public static string GetPropertyValue<T>(T model, string propertyName) where T : new()
+        public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
         {
             var properties = model.GetType().GetProperties();
             var property =
                 properties.FirstOrDefault(f => f.Name == propertyName);
+
             if (property != null)
             {
                 var value = property.GetValue(model);
+                if (dateType != null && dateType.Value == DbDateTypes.Millisecond)
+                {
+                    if (value is DateTime date)
+                    {
+                        var dateValue = date.FormatDateValue(dateType.Value);
+                        return dateValue;
+                    }
+                }
+
                 if (value != null)
-                    return property.GetValue(model).ToString();
+                    return value.ToString();
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         public static object GetPropertyObject<T>(T model, string propertyName)

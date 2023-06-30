@@ -344,3 +344,4 @@ healthchecksdb
 /RingSoft.DbLookup.Controls.WPF/Themes/ListControlTemplate.xaml
 /RingSoft.DbMaintenance/DbMaintenanceViewModelBase.cs
 /RingSoft.DbLookup.App.Library/Northwind/ViewModels/OrderViewModel.cs
+/RingSoft.DbLookup/DataProcessor/DbDataProcessor.cs

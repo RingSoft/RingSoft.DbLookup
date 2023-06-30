@@ -315,7 +315,8 @@ namespace RingSoft.DbLookup
                         property.SetValue(model, checkValue);
                 }
 
-                else if (property.PropertyType == typeof(bool))
+                else if (property.PropertyType == typeof(bool)
+                         || property.PropertyType == typeof(bool?))
                 {
                     bool checkValue;
                     if (bool.TryParse(value, out checkValue))

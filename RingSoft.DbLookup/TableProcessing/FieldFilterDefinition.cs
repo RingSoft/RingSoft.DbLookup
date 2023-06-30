@@ -310,7 +310,8 @@ namespace RingSoft.DbLookup.TableProcessing
         public override void SaveToEntity(AdvancedFindFilter entity)
         {
             entity.Operand = (byte)Condition;
-
+            entity.TableName = FieldDefinition.TableDefinition.Description;
+            entity.FieldName = FieldDefinition.Description;
             base.SaveToEntity(entity);
         }
 

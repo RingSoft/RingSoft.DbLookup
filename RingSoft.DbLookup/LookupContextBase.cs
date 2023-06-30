@@ -325,7 +325,9 @@ namespace RingSoft.DbLookup
         public string CopyData(DbDataProcessor destinationProcessor)
         {
             var tableIndex = 0;
-            var tablesToProcess = TableDefinitions.OrderBy(p => p.PriorityLevel);
+            var tablesToProcess
+                = TableDefinitions.OrderBy(p => p.PriorityLevel)
+                    .ToList();
             foreach (var tableDefinition in tablesToProcess)
             {
                 tableIndex++;

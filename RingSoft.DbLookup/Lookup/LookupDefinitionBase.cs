@@ -1092,5 +1092,10 @@ namespace RingSoft.DbLookup.Lookup
         {
             return null;
         }
+
+        public virtual string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
+        {
+            return string.Empty;
+        }
     }
 }

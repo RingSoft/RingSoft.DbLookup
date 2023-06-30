@@ -129,7 +129,7 @@ namespace RingSoft.DbLookup.DataProcessor
             }
         }
 
-        public override string GetIdentityInsertSql(string tableName)
+        public override string GetIdentityInsertSql(string tableName, bool setOn)
         {
             return string.Empty;
         }

@@ -2,11 +2,14 @@
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.QueryBuilder;
+using System.Text.RegularExpressions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -355,6 +358,110 @@ namespace RingSoft.DbLookup.Lookup
             var entity = query.Take(1).FirstOrDefault();
             var autoFillValue = entity.GetAutoFillValue();
             return autoFillValue;
+        }
+
+        public override string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
+        {
+
+            var context = SystemGlobals.DataRepository.GetDataContext();
+
+            var table = context.GetTable<TEntity>();
+
+            var destinationContext = SystemGlobals.DataRepository.GetDataContext(destinationProcessor);
+
+            var totalRecords = table.Count();
+
+            var tableDef = TableDefinition as TableDefinition<TEntity>;
+
+            var identity = !(TableDefinition.PrimaryKeyFields.Count > 1 
+                              || TableDefinition.PrimaryKeyFields[0].FieldDataType != FieldDataTypes.Integer);
+            var recordIndex = 0;
+            var batch = new List<TEntity>();
+            foreach (var entity in table)
+            {
+                TEntity newEntity = tableDef.GetEntity() as TEntity;
+                foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
+                {
+                    var value = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
+                    if (!value.IsNullOrEmpty())
+                    {
+                        GblMethods.SetPropertyValue(newEntity, fieldDefinition.PropertyName, value);
+                    }
+                }
+
+                batch.Add(newEntity);
+
+                //destinationContext.SaveEntity(newEntity, "Copying Data");
+                recordIndex++;
+                if (recordIndex % 10 == 0)
+                {
+                    destinationContext.AddRange(batch);
+                    if (identity)
+                    {
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true);
+                    }
+
+                    if (!destinationContext.Commit("Copying Data"))
+                    {
+                        if (identity)
+                        {
+                            destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                        }
+
+                        return "Error";
+                    }
+                    batch.Clear();
+                    if (identity)
+                    {
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                    }
+                    var args = new CopyProcedureArgs
+                    {
+                        TableDefinitionBeingProcessed = TableDefinition,
+                        TableIdBeingProcessed = tableIndex,
+                        TotalRecords = totalRecords,
+                        RecordBeingProcessed = recordIndex,
+                    };
+                    TableDefinition.Context.FireCopyProcedureEvent(args);
+                }
+            }
+
+            if (batch.Any())
+            {
+                if (identity)
+                {
+                    destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true);
+                }
+                destinationContext.AddRange(batch);
+                if (!destinationContext.Commit("Copying Data"))
+                {
+                    if (identity)
+                    {
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                    }
+                    return "Error";
+                }
+            }
+            if (identity)
+            {
+                destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+            }
+
+            if (identity)
+            {
+                destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+            }
+            var args1 = new CopyProcedureArgs
+            {
+                TableDefinitionBeingProcessed = TableDefinition,
+                TableIdBeingProcessed = tableIndex,
+                TotalRecords = totalRecords,
+                RecordBeingProcessed = recordIndex,
+            };
+            TableDefinition.Context.FireCopyProcedureEvent(args1);
+
+
+            return base.CopyDataTo(destinationProcessor, tableIndex);
         }
     }
 }

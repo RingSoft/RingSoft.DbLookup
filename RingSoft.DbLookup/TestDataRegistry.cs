@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup
 {
@@ -138,6 +140,11 @@ namespace RingSoft.DbLookup
             return GetList<TEntity>().AsQueryable();
         }
 
+        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true)
+        {
+            
+        }
+
         public IQueryable GetTable(string tableName)
         {
             return null;
@@ -153,6 +160,11 @@ namespace RingSoft.DbLookup
         }
 
         IDbContext DbLookup.IDataRepository.GetDataContext()
+        {
+            return DataContext;
+        }
+
+        public IDbContext GetDataContext(DbDataProcessor dataProcessor)
         {
             return DataContext;
         }

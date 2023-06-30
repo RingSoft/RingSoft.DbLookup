@@ -18,6 +18,10 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         LookupDefinition<AdvancedFindLookup, AdvancedFind> AdvancedFindLookup { get; set; }
 
+        LookupDefinition<AdvancedFindLookup, AdvancedFindColumn> AdvancedFindColumnLookup { get; set; }
+
+        LookupDefinition<AdvFindFilterLookup, AdvancedFindFilter> AdvancedFindFilterLookup { get; set; }
+
         LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
     }
 }

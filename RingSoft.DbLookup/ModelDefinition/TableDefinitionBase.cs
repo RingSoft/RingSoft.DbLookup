@@ -480,117 +480,122 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
         {
-            var result = string.Empty;
-            bool identity = !(PrimaryKeyFields.Count > 1 || PrimaryKeyFields[0].FieldDataType != FieldDataTypes.Integer);
-
-            var lookupDefinition = new LookupDefinitionBase(this);
-            lookupDefinition.AddAllFieldsAsHiddenColumns(true);
-            var fieldColumns = lookupDefinition.HiddenColumns.OfType<LookupFieldColumnDefinition>();
-
-            var lookupUi = new LookupUserInterface()
+            if (LookupDefinition == null)
             {
-                PageSize = 100,
-            };
-            var lookupData = new LookupDataBase(lookupDefinition, lookupUi);
-            var totalRecords = lookupData.GetRecordCountWait();
-            var recordIndex = 0;
-
-            if (totalRecords > 0)
-            {
-                var updateSqls = new List<string>();
-                lookupData.PrintDataChanged += (sender, changedArgs) =>
-                {
-                    if (!result.IsNullOrEmpty())
-                    {
-                        changedArgs.Abort = true;
-                        return;
-                    }
-
-                    var sqlList = new List<string>();
-                    if (identity)
-                    {
-                        sqlList.Add(destinationProcessor.GetIdentityInsertSql(TableName));
-                    }
-
-                    recordIndex += changedArgs.OutputTable.Rows.Count;
-
-                    foreach (DataRow outputTableRow in changedArgs.OutputTable.Rows)
-                    {
-                        var primaryKey = new PrimaryKeyValue(this);
-                        primaryKey.PopulateFromDataRow(outputTableRow);
-
-                        var insertStatement = new InsertDataStatement(this);
-                        var updateStatement = new UpdateDataStatement(primaryKey);
-
-                        foreach (var column in fieldColumns)
-                        {
-                            var sqlValue = outputTableRow.GetRowValue(column.SelectSqlAlias);
-                            var addField = true;
-                            if (column.FieldDefinition.ParentJoinForeignKeyDefinition != null)
-                            {
-                                if (column.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable == this)
-                                {
-                                    var updateSqlData = new SqlData(column.FieldDefinition.FieldName, sqlValue,
-                                        column.FieldDefinition.ValueType);
-                                    updateStatement.AddSqlData(updateSqlData);
-                                    addField = false;
-                                }
-                            }
-
-                            if (addField && !sqlValue.IsNullOrEmpty())
-                            {
-                                var fieldName = column.FieldDefinition.FieldName;
-                                var valueType = column.FieldDefinition.ValueType;
-                                var dateType = DbDateTypes.DateOnly;
-
-                                if (column.FieldDefinition is DateFieldDefinition dateField)
-                                {
-                                    dateType = dateField.DateType;
-                                }
-
-                                var sqlData = new SqlData(fieldName, sqlValue, valueType, dateType);
-                                insertStatement.AddSqlData(sqlData);
-                            }
-                        }
-
-                        sqlList.Add(destinationProcessor.SqlGenerator.GenerateInsertSqlStatement(insertStatement));
-                        if (updateStatement.SqlDatas.Any())
-                        {
-                            updateSqls.Add(destinationProcessor.SqlGenerator.GenerateUpdateSql(updateStatement));
-                        }
-                    }
-
-                    var getDataResult = destinationProcessor.ExecuteSqls(sqlList, true, true, false);
-                    if (getDataResult.ResultCode != GetDataResultCodes.Success)
-                    {
-                        result = getDataResult.Message;
-                    }
-
-                    var args = new CopyProcedureArgs
-                    {
-                        TableDefinitionBeingProcessed = this,
-                        TableIdBeingProcessed = tableIndex,
-                        TotalRecords = totalRecords,
-                        RecordBeingProcessed = recordIndex,
-                    };
-                    Context.FireCopyProcedureEvent(args);
-                };
-
-                lookupData.GetPrintData();
-
-                if (updateSqls.Any())
-                {
-                    var updateResult = destinationProcessor.ExecuteSqls(updateSqls, true
-                        , true, false);
-
-                    if (updateResult.ResultCode != GetDataResultCodes.Success)
-                    {
-                        return updateResult.Message;
-                    }
-                }
+                throw new ArgumentNullException($"{EntityName} has no lookup definition");
             }
+            return LookupDefinition.CopyDataTo(destinationProcessor, tableIndex);
+            //var result = string.Empty;
+            //bool identity = !(PrimaryKeyFields.Count > 1 || PrimaryKeyFields[0].FieldDataType != FieldDataTypes.Integer);
 
-            return result;
+            //var lookupDefinition = new LookupDefinitionBase(this);
+            //lookupDefinition.AddAllFieldsAsHiddenColumns(true);
+            //var fieldColumns = lookupDefinition.HiddenColumns.OfType<LookupFieldColumnDefinition>();
+
+            //var lookupUi = new LookupUserInterface()
+            //{
+            //    PageSize = 100,
+            //};
+            //var lookupData = new LookupDataBase(lookupDefinition, lookupUi);
+            //var totalRecords = lookupData.GetRecordCountWait();
+            //var recordIndex = 0;
+
+            //if (totalRecords > 0)
+            //{
+            //    var updateSqls = new List<string>();
+            //    lookupData.PrintDataChanged += (sender, changedArgs) =>
+            //    {
+            //        if (!result.IsNullOrEmpty())
+            //        {
+            //            changedArgs.Abort = true;
+            //            return;
+            //        }
+
+            //        var sqlList = new List<string>();
+            //        if (identity)
+            //        {
+            //            sqlList.Add(destinationProcessor.GetIdentityInsertSql(TableName));
+            //        }
+
+            //        recordIndex += changedArgs.OutputTable.Rows.Count;
+
+            //        foreach (DataRow outputTableRow in changedArgs.OutputTable.Rows)
+            //        {
+            //            var primaryKey = new PrimaryKeyValue(this);
+            //            primaryKey.PopulateFromDataRow(outputTableRow);
+
+            //            var insertStatement = new InsertDataStatement(this);
+            //            var updateStatement = new UpdateDataStatement(primaryKey);
+
+            //            foreach (var column in fieldColumns)
+            //            {
+            //                var sqlValue = outputTableRow.GetRowValue(column.SelectSqlAlias);
+            //                var addField = true;
+            //                if (column.FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            //                {
+            //                    if (column.FieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable == this)
+            //                    {
+            //                        var updateSqlData = new SqlData(column.FieldDefinition.FieldName, sqlValue,
+            //                            column.FieldDefinition.ValueType);
+            //                        updateStatement.AddSqlData(updateSqlData);
+            //                        addField = false;
+            //                    }
+            //                }
+
+            //                if (addField && !sqlValue.IsNullOrEmpty())
+            //                {
+            //                    var fieldName = column.FieldDefinition.FieldName;
+            //                    var valueType = column.FieldDefinition.ValueType;
+            //                    var dateType = DbDateTypes.DateOnly;
+
+            //                    if (column.FieldDefinition is DateFieldDefinition dateField)
+            //                    {
+            //                        dateType = dateField.DateType;
+            //                    }
+
+            //                    var sqlData = new SqlData(fieldName, sqlValue, valueType, dateType);
+            //                    insertStatement.AddSqlData(sqlData);
+            //                }
+            //            }
+
+            //            sqlList.Add(destinationProcessor.SqlGenerator.GenerateInsertSqlStatement(insertStatement));
+            //            if (updateStatement.SqlDatas.Any())
+            //            {
+            //                updateSqls.Add(destinationProcessor.SqlGenerator.GenerateUpdateSql(updateStatement));
+            //            }
+            //        }
+
+            //        var getDataResult = destinationProcessor.ExecuteSqls(sqlList, true, true, false);
+            //        if (getDataResult.ResultCode != GetDataResultCodes.Success)
+            //        {
+            //            result = getDataResult.Message;
+            //        }
+
+            //        var args = new CopyProcedureArgs
+            //        {
+            //            TableDefinitionBeingProcessed = this,
+            //            TableIdBeingProcessed = tableIndex,
+            //            TotalRecords = totalRecords,
+            //            RecordBeingProcessed = recordIndex,
+            //        };
+            //        Context.FireCopyProcedureEvent(args);
+            //    };
+
+            //    lookupData.GetPrintData();
+
+            //    if (updateSqls.Any())
+            //    {
+            //        var updateResult = destinationProcessor.ExecuteSqls(updateSqls, true
+            //            , true, false);
+
+            //        if (updateResult.ResultCode != GetDataResultCodes.Success)
+            //        {
+            //            return updateResult.Message;
+            //        }
+            //    }
+            //}
+
+            //return result;
         }
 
         public abstract object GetEntity();

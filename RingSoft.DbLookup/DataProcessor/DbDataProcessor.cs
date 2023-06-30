@@ -399,9 +399,13 @@ namespace RingSoft.DbLookup.DataProcessor
             ControlsGlobals.UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
         }
 
-        public virtual string GetIdentityInsertSql(string tableName)
+        public virtual string GetIdentityInsertSql(string tableName, bool setOn)
         {
-            return $"SET IDENTITY_INSERT {SqlGenerator.FormatSqlObject(tableName)} ON";
+            var strOn = "ON";
+            if (!setOn)
+                strOn = "OFF";
+
+            return $"SET IDENTITY_INSERT {SqlGenerator.FormatSqlObject(tableName)} {strOn}";
         }
     }
 }

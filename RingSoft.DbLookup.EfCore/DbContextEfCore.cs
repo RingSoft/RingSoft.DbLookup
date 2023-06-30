@@ -6,6 +6,9 @@ using RingSoft.DbLookup.RecordLocking;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace Microsoft.EntityFrameworkCore
 {
@@ -110,6 +113,25 @@ namespace RingSoft.DbLookup.EfCore
         {
             var dbSet = Set<TEntity>();
             return dbSet;
+        }
+
+        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true)
+        {
+
+            var sql = processor.GetIdentityInsertSql(tableDefinition.TableName, value);
+            if (sql.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            Database.OpenConnection();
+
+            Database.ExecuteSqlRaw(sql);
+
+            if (!value)
+            {
+                Database.CloseConnection();
+            }
         }
 
         public IQueryable GetTable(string tableName)

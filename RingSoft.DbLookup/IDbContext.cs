@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup
 {
@@ -26,5 +28,7 @@ namespace RingSoft.DbLookup
         void AddRange<TEntity>(List<TEntity> listToAdd) where TEntity : class, new();
 
         IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new();
+
+        void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true);
     }
 }

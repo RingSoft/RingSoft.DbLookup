@@ -23,6 +23,27 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.AdvancedFindLookup = advancedFindLookup;
 
+            _lookupContext.AdvancedFindColumnLookup = new LookupDefinition<AdvancedFindLookup, AdvancedFindColumn>(
+                _lookupContext.AdvancedFindColumns);
+
+            _lookupContext.AdvancedFindColumnLookup.AddVisibleColumnDefinition(
+                p => p.Name
+                , "Caption"
+                , p => p.Caption, 99);
+            _lookupContext.AdvancedFindColumns.HasLookupDefinition(_lookupContext.AdvancedFindColumnLookup);
+
+            _lookupContext.AdvancedFindFilterLookup = new LookupDefinition<AdvFindFilterLookup, AdvancedFindFilter>(
+                _lookupContext.AdvancedFindFilters);
+            _lookupContext.AdvancedFindFilterLookup.AddVisibleColumnDefinition(
+                p => p.TableName
+                , "Table"
+                , p => p.TableName, 50);
+            _lookupContext.AdvancedFindFilterLookup.AddVisibleColumnDefinition(
+                p => p.FieldName
+                , "Field"
+                , p => p.FieldName, 50);
+            _lookupContext.AdvancedFindFilters.HasLookupDefinition(_lookupContext.AdvancedFindFilterLookup);
+
             _lookupContext.AdvancedFinds.HasLookupDefinition(advancedFindLookup);
 
             var recordLockingLookup = new LookupDefinition<RecordLockingLookup, RecordLock>(_lookupContext.RecordLocks);

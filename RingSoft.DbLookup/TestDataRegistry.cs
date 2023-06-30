@@ -145,6 +145,26 @@ namespace RingSoft.DbLookup
             
         }
 
+        public void OpenConnection()
+        {
+            
+        }
+
+        public void CloseConnection()
+        {
+            
+        }
+
+        public void ExecuteSql(string sql)
+        {
+            
+        }
+
+        public List<string> GetListOfDatabases(DbDataProcessor dataProcessor)
+        {
+            return new List<string>();
+        }
+
         public IQueryable GetTable(string tableName)
         {
             return null;

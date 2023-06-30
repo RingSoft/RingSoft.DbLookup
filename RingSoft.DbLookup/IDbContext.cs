@@ -30,5 +30,13 @@ namespace RingSoft.DbLookup
         IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new();
 
         void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true);
+
+        void OpenConnection();
+
+        void CloseConnection();
+
+        void ExecuteSql(string sql);
+
+        List<string> GetListOfDatabases(DbDataProcessor dataProcessor);
     }
 }

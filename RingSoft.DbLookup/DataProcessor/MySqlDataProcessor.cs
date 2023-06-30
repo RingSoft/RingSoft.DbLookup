@@ -104,11 +104,21 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
+        public override string GetDatabaseListSql()
+        {
+            return "SHOW DATABASES;";
+        }
+
+        public override string GetDropDatabaseSql(string databaseName)
+        {
+            return $"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(databaseName)}";
+        }
+
         public override DataProcessResult DropDatabase()
         {
             var originalDatabase = Database;
             Database = "sys";
-            var result = ExecuteSql($"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(originalDatabase)}", false,
+            var result = ExecuteSql(GetDropDatabaseSql(originalDatabase), false,
                 true, false);
             Database = originalDatabase;
             return result;

@@ -80,6 +80,16 @@ namespace RingSoft.DbLookup.DataProcessor
             throw new NotImplementedException("Not relevant for Sqlite.");
         }
 
+        public override string GetDatabaseListSql()
+        {
+            return string.Empty;
+        }
+
+        public override string GetDropDatabaseSql(string databaseName)
+        {
+            return string.Empty;
+        }
+
         public override DataProcessResult DropDatabase()
         {
             var path = FilePath;

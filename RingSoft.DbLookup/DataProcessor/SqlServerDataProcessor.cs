@@ -102,7 +102,7 @@ namespace RingSoft.DbLookup.DataProcessor
             Database = "master";
             var query = new SelectQuery("")
             {
-                RawSql = "SELECT name FROM master.dbo.sysdatabases"
+                RawSql = GetDatabaseListSql()
             };
 
             var result = GetData(query);
@@ -110,11 +110,21 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
+        public override string GetDatabaseListSql()
+        {
+            return "SELECT name FROM master.dbo.sysdatabases";
+        }
+
+        public override string GetDropDatabaseSql(string databaseName)
+        {
+            return $"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(databaseName)}";
+        }
+
         public override DataProcessResult DropDatabase()
         {
             var originalDatabase = Database;
             Database = "master";
-            var result = ExecuteSql($"DROP DATABASE IF EXISTS {SqlGenerator.FormatSqlObject(originalDatabase)}", 
+            var result = ExecuteSql(GetDropDatabaseSql(originalDatabase), 
                 false, true, false);
             Database = originalDatabase;
             return result;

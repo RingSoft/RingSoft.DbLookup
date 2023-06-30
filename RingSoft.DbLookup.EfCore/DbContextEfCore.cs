@@ -124,14 +124,55 @@ namespace RingSoft.DbLookup.EfCore
                 return;
             }
 
-            Database.OpenConnection();
+            OpenConnection();
 
-            Database.ExecuteSqlRaw(sql);
+            ExecuteSql(sql);
 
             if (!value)
             {
-                Database.CloseConnection();
+                CloseConnection();
             }
+        }
+
+        public void OpenConnection()
+        {
+            Database.OpenConnection();
+        }
+
+        public void CloseConnection()
+        {
+            Database.CloseConnection();
+        }
+
+        public void ExecuteSql(string sql)
+        {
+            Database.ExecuteSqlRaw(sql);
+        }
+
+        public List<string> GetListOfDatabases(DbDataProcessor dataProcessor)
+        {
+            var result = new List<string>();
+
+            var listSql = dataProcessor.GetDatabaseListSql();
+
+            if (listSql.IsNullOrEmpty())
+                return result;
+
+            OpenConnection();
+
+            try
+            {
+                result = Database.SqlQueryRaw<string>(listSql).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+            }
+
+            CloseConnection();
+
+            return result;
         }
 
         public IQueryable GetTable(string tableName)

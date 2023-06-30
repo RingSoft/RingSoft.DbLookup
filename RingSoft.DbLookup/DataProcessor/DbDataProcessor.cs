@@ -129,6 +129,10 @@ namespace RingSoft.DbLookup.DataProcessor
             return  new DataProcessResult("");
         }
 
+        public abstract string GetDatabaseListSql();
+
+        public abstract string GetDropDatabaseSql(string databaseName);
+
         public abstract DataProcessResult DropDatabase();
 
         /// <summary>

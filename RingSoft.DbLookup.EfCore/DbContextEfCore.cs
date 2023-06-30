@@ -200,13 +200,9 @@ namespace RingSoft.DbLookup.EfCore
 
             SetConnectionString(dataProcessor.ConnectionString);
 
-            try
+            if (!OpenConnection())
             {
-                OpenConnection();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                SetConnectionString(null);
                 return result;
             }
 
@@ -226,11 +222,12 @@ namespace RingSoft.DbLookup.EfCore
             return result;
         }
 
+        public abstract void SetProcessor(DbDataProcessor processor);
+        public abstract void SetConnectionString(string? connectionString);
+
         public IQueryable GetTable(string tableName)
         {
             return this.Query(tableName);
         }
-
-        protected abstract void SetConnectionString(string? connectionString);
     }
 }

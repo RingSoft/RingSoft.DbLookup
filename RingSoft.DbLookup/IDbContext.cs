@@ -38,5 +38,9 @@ namespace RingSoft.DbLookup
         bool ExecuteSql(string sql);
 
         List<string> GetListOfDatabases(DbDataProcessor dataProcessor);
+
+        void SetProcessor(DbDataProcessor processor);
+
+        void SetConnectionString(string? connectionString);
     }
 }

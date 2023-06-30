@@ -10,6 +10,7 @@ using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.RecordLocking;
 using System.Linq;
+using RingSoft.DbLookup.DataProcessor;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -39,21 +40,44 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             
         }
 
+        private string? _connectionString;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             switch (LookupContext.DataProcessorType)
             {
                 case DataProcessorTypes.Sqlite:
                     DbConstants.ConstantGenerator = new SqliteDbConstants();
-                    optionsBuilder.UseSqlite(LookupContext.MegaDbContextConfiguration.SqliteDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseSqlite(LookupContext.MegaDbContextConfiguration.SqliteDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlite(_connectionString);
+                    }
                     break;
                 case DataProcessorTypes.SqlServer:
                     DbConstants.ConstantGenerator = new SqlServerDbConstants();
-                    optionsBuilder.UseSqlServer(LookupContext.MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseSqlServer(LookupContext.MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlServer(_connectionString);
+                    }
                     break;
                 case DataProcessorTypes.MySql:
                     DbConstants.ConstantGenerator = new MySqlDbConstants();
-                    optionsBuilder.UseMySQL(LookupContext.MegaDbContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseMySQL(LookupContext.MegaDbContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseMySQL(_connectionString);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -107,6 +131,27 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public override DbContextEfCore GetNewDbContextEfCore()
         {
             return new MegaDbDbContextEfCore();
+        }
+
+        public override void SetProcessor(DbDataProcessor processor)
+        {
+            if (processor is SqliteDataProcessor sqliteDataProcessor)
+            {
+                LookupContext.DataProcessorType = DataProcessorTypes.Sqlite;
+            }
+            else if (processor is SqlServerDataProcessor  sqlServerDataProcessor)
+            {
+                LookupContext.DataProcessorType = DataProcessorTypes.SqlServer;
+            }
+            else
+            {
+                LookupContext.DataProcessorType = DataProcessorTypes.MySql;
+            }
+        }
+
+        public override void SetConnectionString(string? connectionString)
+        {
+            _connectionString = connectionString;
         }
     }
 }

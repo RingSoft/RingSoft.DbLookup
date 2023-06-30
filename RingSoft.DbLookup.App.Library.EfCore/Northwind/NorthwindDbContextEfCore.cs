@@ -6,6 +6,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.EfCore.Northwind.Configurations;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.RecordLocking;
 
@@ -27,6 +28,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         private static NorthwindLookupContextEfCore _lookupContext;
 
+        private string? _connectionString;
+
         public NorthwindDbContextEfCore(NorthwindLookupContextEfCore lookupContext)
         {
             _lookupContext = lookupContext;
@@ -42,15 +45,36 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             {
                 case DataProcessorTypes.Sqlite:
                     DbConstants.ConstantGenerator = new SqliteDbConstants();
-                    optionsBuilder.UseSqlite(_lookupContext.NorthwindContextConfiguration.SqliteDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseSqlite(_lookupContext.NorthwindContextConfiguration.SqliteDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlite(_connectionString);
+                    }
                     break;
                 case DataProcessorTypes.SqlServer:
                     DbConstants.ConstantGenerator = new SqlServerDbConstants();
-                    optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlServer(_connectionString);
+                    }
                     break;
                 case DataProcessorTypes.MySql:
                     DbConstants.ConstantGenerator = new MySqlDbConstants();
-                    optionsBuilder.UseMySQL(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    if (_connectionString == null)
+                    {
+                        optionsBuilder.UseMySQL(_lookupContext.NorthwindContextConfiguration.MySqlDataProcessor.ConnectionString);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseMySQL(_connectionString);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -83,6 +107,28 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public override DbContextEfCore GetNewDbContextEfCore()
         {
             return new NorthwindDbContextEfCore();
+        }
+
+        public override void SetProcessor(DbDataProcessor processor)
+        {
+            if (processor is SqliteDataProcessor sqliteDataProcessor)
+            {
+                _lookupContext.DataProcessorType = DataProcessorTypes.Sqlite;
+            }
+            else if (processor is SqlServerDataProcessor sqlServerDataProcessor)
+            {
+                _lookupContext.DataProcessorType = DataProcessorTypes.SqlServer;
+            }
+            else
+            {
+                _lookupContext.DataProcessorType = DataProcessorTypes.MySql;
+            }
+
+        }
+
+        public override void SetConnectionString(string? connectionString)
+        {
+            _connectionString = connectionString;
         }
     }
 }

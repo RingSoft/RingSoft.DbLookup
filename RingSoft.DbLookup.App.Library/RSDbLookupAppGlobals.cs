@@ -205,7 +205,14 @@ namespace RingSoft.DbLookup.App.Library
         public static void ConnectToNorthwind(INorthwindEfDataProcessor processor,
             INorthwindLookupContext lookupContext)
         {
-            processor.GetProduct(1);
+            try
+            {
+                processor.GetProduct(1);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
             processor.SetAdvancedFindDbContext();
             processor.SetAdvancedFindLookupContext();
         }

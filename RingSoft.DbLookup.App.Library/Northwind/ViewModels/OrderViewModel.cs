@@ -663,7 +663,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             order.OrderName = $"{GblMethods.FormatDateValue(OrderDate, DbDateTypes.DateOnly)} {order.CustomerID}";
             order.RequiredDate = RequiredDate;
             order.ShippedDate = ShippedDate;
-            order.Freight = Freight;
+            order.Freight = (float)Freight;
             order.ShipName = ShipName;
             order.ShipAddress = Address;
             order.ShipCity = City;

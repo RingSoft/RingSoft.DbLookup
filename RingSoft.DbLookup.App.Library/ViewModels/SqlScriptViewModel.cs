@@ -94,7 +94,12 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
                 result = _dataProcessor.ExecuteSql(SqlText, true);
             }
 
-            DbDataProcessor.ShowSqlStatementWindow(false);
+            if (result.ResultCode == GetDataResultCodes.Success)
+            {
+                var message = "Success!";
+                ControlsGlobals.UserInterface.ShowMessageBox(message, message, RsMessageBoxIcons.Information);
+            }
+            //DbDataProcessor.ShowSqlStatementWindow(false);
             _view.CloseWindow(result.ResultCode == GetDataResultCodes.Success);
         }
 

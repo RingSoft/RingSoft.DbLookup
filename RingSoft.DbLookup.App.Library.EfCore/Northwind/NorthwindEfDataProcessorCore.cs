@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.Northwind;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
@@ -23,10 +24,22 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             SetAdvancedFindDbContext();
             var context = SystemGlobals.DataRepository.GetDataContext();
             var ordersTable = context.GetTable<Order>();
-
-            if (ordersTable.Any(p => p.OrderName == null))
+            var any = false;
+            try
             {
-                foreach (var order in ordersTable)
+                any = ordersTable.Any(p => p.OrderName == null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                return;
+            }
+
+            if (any)
+            {
+                var orderList = ordersTable.Where(p => p.OrderName == null).ToList();
+                foreach (var order in orderList)
                 {
                     order.OrderName =
                         $"{GblMethods.FormatDateValue(order.OrderDate.GetValueOrDefault(), DbDateTypes.DateOnly)} {order.CustomerID}";
@@ -42,7 +55,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
             if (employeesTable.Any(p => p.FullName == null))
             {
-                foreach (var employee in employeesTable)
+                var employeesList = employeesTable.Where(p => p.FullName == null).ToList();
+                foreach (var employee in employeesList)
                 {
                     employee.FullName = $"{employee.FirstName} {employee.LastName}";
 

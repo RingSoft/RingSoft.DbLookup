@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.DataProcessor;
@@ -49,7 +51,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public LookupDefinition<CategoryLookup, Category> CategoriesLookup { get; private set; }
 
+
+
         private INorthwindLookupContext _lookupContext;
+        
         public NorthwindLookupContextConfiguration(INorthwindLookupContext lookupContext)
         {
             _lookupContext = lookupContext;
@@ -87,8 +92,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
             base.Reinitialize(registrySettings);
 
-            if (_lookupContext.Initialized)
-                ConfigureLookups();
+            //if (_lookupContext.Initialized)
+            //    ConfigureLookups();
         }
 
         public string GetOrdersEmployeeNameFormula()
@@ -255,6 +260,18 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public override bool TestConnection()
         {
+            try
+            {
+                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(1);
+                DataProcessor.IsValid = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                DataProcessor.IsValid = false;
+                return false;
+            }
             return true;
         }
 

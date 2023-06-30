@@ -79,6 +79,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Employees](
 	[EmployeeID] [int] IDENTITY(1,1) NOT NULL,
+	[FullName] [nvarchar](50) NULL,
 	[LastName] [nvarchar](20) NOT NULL,
 	[FirstName] [nvarchar](10) NOT NULL,
 	[Title] [nvarchar](30) NULL,
@@ -136,6 +137,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Orders](
 	[OrderID] [int] IDENTITY(1,1) NOT NULL,
+	[OrderName] [nvarchar](50) NULL,
 	[CustomerID] [nchar](5) NULL,
 	[EmployeeID] [int] NULL,
 	[OrderDate] [datetime] NULL,
@@ -269,7 +271,7 @@ CREATE TABLE [dbo].[AdvancedFindColumns](
   [PrimaryFieldName] [nvarchar](50) NULL,
   [Path] [nvarchar](1000) NULL,
   [Caption] [nvarchar](50) NOT NULL,
-  [PercentWidth] [double](18, 4) NOT NULL,
+  [PercentWidth] [real] NOT NULL,
   [Formula] [ntext] NULL,
   [FieldDataType] [tinyint] NULL,
   [DecimalFormatType] [tinyint] NULL

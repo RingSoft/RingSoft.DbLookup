@@ -254,7 +254,19 @@ namespace RingSoft.DbLookup.AutoFill
             resultQuery = GblMethods.ApplyOrder(resultQuery, OrderMethods.OrderBy, property);
 
             AutoFillValue newValue = null;
-            var first = resultQuery.FirstOrDefault();
+            TEntity first = null;
+            try
+            {
+                first = resultQuery.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                return string.Empty;
+            }
+            
             if (first == null)
             {
                 //result = beginText;
@@ -303,9 +315,17 @@ namespace RingSoft.DbLookup.AutoFill
                 containsQuery = GblMethods.ApplyOrder(containsQuery, OrderMethods.OrderBy, containsProperty);
                 containsQuery = containsQuery.Take(5);
 
-                foreach (var entity in containsQuery)
+                try
                 {
-                    result.Add(fieldColumn.GetDatabaseValue(entity));
+                    foreach (var entity in containsQuery)
+                    {
+                        result.Add(fieldColumn.GetDatabaseValue(entity));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return result;
                 }
             }
             return result;
@@ -369,7 +389,16 @@ namespace RingSoft.DbLookup.AutoFill
                 query = FilterItemDefinition.FilterQuery(query
                     , param
                     , autoFillExpr);
-                var autoFillValue = query.FirstOrDefault().GetAutoFillValue();
+                AutoFillValue autoFillValue = null;
+                try
+                {
+                    autoFillValue = query.FirstOrDefault().GetAutoFillValue();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                }
                 return autoFillValue;
             }
             return null;

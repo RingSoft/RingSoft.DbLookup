@@ -127,7 +127,7 @@ namespace RingSoft.DbLookup.Lookup
             if (entity != null)
             {
                 var autoFillValue = entity.GetAutoFillValue();
-                if (autoFillValue.Text.IsNullOrEmpty())
+                if (autoFillValue == null || autoFillValue.Text.IsNullOrEmpty())
                 {
                     var filter = new TableFilterDefinition<TEntity>(TableDefinition);
                     var context = SystemGlobals.DataRepository.GetDataContext();
@@ -229,8 +229,18 @@ namespace RingSoft.DbLookup.Lookup
 
             CurrentList.Clear();
 
-            CurrentList.AddRange(ProcessedQuery);
-              
+            try
+            {
+                CurrentList.AddRange(ProcessedQuery);
+            }
+            catch (Exception e)
+            {
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                return;
+            }
+
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
             FireLookupDataChangedEvent(GetOutputArgs());
@@ -363,7 +373,16 @@ namespace RingSoft.DbLookup.Lookup
         public override bool IsThereData()
         {
             MakeFilteredQuery(true);
-            return FilteredQuery.Any();
+            try
+            {
+                return FilteredQuery.Any();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+            }
+            return false;
         }
 
         private void SetScrollPosition(LookupScrollPositions scrollPosition)

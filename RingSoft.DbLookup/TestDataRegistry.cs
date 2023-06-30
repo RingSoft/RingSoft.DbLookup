@@ -165,6 +165,15 @@ namespace RingSoft.DbLookup
             return new List<string>();
         }
 
+        public void SetProcessor(DbDataProcessor processor)
+        {
+            
+        }
+
+        public void SetConnectionString(string connectionString)
+        {
+        }
+
         public IQueryable GetTable(string tableName)
         {
             return null;

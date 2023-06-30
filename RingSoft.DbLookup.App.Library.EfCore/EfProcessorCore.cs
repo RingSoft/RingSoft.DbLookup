@@ -21,6 +21,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
             NorthwindLookupContext.SetAdvancedFind();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
             NorthwindEfDataProcessor.CheckDataExists();
+            RsDbLookupAppGlobals.EfProcessor = this;
 
             if (!RsDbLookupAppGlobals.UnitTest)
             {

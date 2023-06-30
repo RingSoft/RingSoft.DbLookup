@@ -396,7 +396,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             entity.Path = Path;
             entity.Caption = Caption;
-            entity.PercentWidth = PercentWidth;
+            entity.PercentWidth = (float)PercentWidth;
         }
 
         internal virtual void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)

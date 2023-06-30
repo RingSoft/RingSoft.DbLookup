@@ -5,6 +5,8 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
+using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb
 {
@@ -108,9 +110,19 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         public override bool TestConnection()
         {
-            var itemsLookupData = new LookupDataBase(ItemsLookup, this);
-            var result = itemsLookupData.GetInitData();
-            return result.ResultCode == GetDataResultCodes.Success;
+            try
+            {
+                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(1);
+                DataProcessor.IsValid = true;
+            }
+            catch (Exception e)
+            {
+                DataProcessor.IsValid = false;
+                Console.WriteLine(e);
+                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                return false;
+            }
+            return true;
         }
 
         public override bool TestConnection(RegistrySettings registrySettings)

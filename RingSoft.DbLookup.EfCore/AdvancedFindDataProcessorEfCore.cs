@@ -106,9 +106,9 @@ namespace RingSoft.DbLookup.EfCore
             return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
         }
 
-        public IDbContext GetDataContext(DbDataProcessor dataProcessor)
+        public virtual IDbContext GetDataContext(DbDataProcessor dataProcessor)
         {
-            return GetDataContext();
+            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
         }
 
         public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()

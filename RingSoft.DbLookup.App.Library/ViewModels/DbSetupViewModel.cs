@@ -392,20 +392,23 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         private void FillListWithDatabaseNames(ref List<string> list, DbDataProcessor dataProcessor)
         {
-            list.Clear();
             var dbList = new List<string>();
-            var result = dataProcessor.GetListOfDatabases();
-            if (result.ResultCode == GetDataResultCodes.Success)
-            {
-                var dataTable = result.DataSet.Tables[0];
-                foreach (DataRow dataRow in dataTable.Rows)
-                {
-                    var text = dataRow.GetRowValue(dataTable.Columns[0].ColumnName);
-                    dbList.Add(text);
-                }
+            list.Clear();
+            var context = SystemGlobals.DataRepository.GetDataContext(dataProcessor);
+            context.SetProcessor(dataProcessor);
+            dbList = context.GetListOfDatabases(dataProcessor);
+            //var result = dataProcessor.GetListOfDatabases();
+            //if (result.ResultCode == GetDataResultCodes.Success)
+            //{
+            //    var dataTable = result.DataSet.Tables[0];
+            //    foreach (DataRow dataRow in dataTable.Rows)
+            //    {
+            //        var text = dataRow.GetRowValue(dataTable.Columns[0].ColumnName);
+            //        dbList.Add(text);
+            //    }
 
-                list = dbList.OrderBy(o => o).ToList();
-            }
+            //}
+            list = dbList.OrderBy(o => o).ToList();
         }
 
         private RegistrySettings GetRegistrySettings()

@@ -213,7 +213,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
             entity.ProductID = product.ProductID;
             entity.Quantity = (short)Quantity;
-            entity.UnitPrice = Price;
+            entity.UnitPrice = (float)Price;
             entity.Discount = (float)Discount;
         }
     }

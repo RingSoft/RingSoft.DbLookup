@@ -301,7 +301,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             orderDetail.Quantity = Quantity;
-            orderDetail.UnitPrice = Price;
+            orderDetail.UnitPrice = (float)Price;
             orderDetail.Discount = (float)Discount;
             return orderDetail;
         }

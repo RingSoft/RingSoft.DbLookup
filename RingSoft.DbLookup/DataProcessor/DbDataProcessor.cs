@@ -65,8 +65,15 @@ namespace RingSoft.DbLookup.DataProcessor
 
         internal static bool ShowSqlWindow => _showSqlWindow;
 
+        private bool _valid;
 
-        private static bool _showSqlWindow;
+        public bool IsValid
+        {
+            get => _valid;
+            set => _valid= value;
+        }
+
+            private static bool _showSqlWindow;
         public DbDataProcessor()
         {
             if (UserInterface == null)
@@ -307,6 +314,41 @@ namespace RingSoft.DbLookup.DataProcessor
                 result.ResultCode = GetDataResultCodes.NothingToDo;
                 return result;
             }
+
+            var failResult = new DataProcessResult("Exec SQL Fail")
+            {
+                ResultCode = GetDataResultCodes.DbConnectError,
+            };
+            var context = SystemGlobals.DataRepository.GetDataContext(this);
+            context.SetProcessor(this);
+            if (!context.OpenConnection())
+            {
+                if (setWaitCursor)
+                    ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+
+                return failResult;
+            }
+
+            foreach (var sql in sqlsList)
+            { 
+                if (!context.ExecuteSql(sql))
+                {
+                    if (setWaitCursor)
+                        ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+
+                    context.CloseConnection();
+                    return failResult;
+                }
+            }
+
+            context.CloseConnection();
+            if (setWaitCursor)
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+
+            return new DataProcessResult("Success")
+            {
+                ResultCode = GetDataResultCodes.Success,
+            };
 
             var connection = TryOpenConnection(result, clearConnectionPools, setWaitCursor);
             if (result.ResultCode == GetDataResultCodes.DbConnectError)

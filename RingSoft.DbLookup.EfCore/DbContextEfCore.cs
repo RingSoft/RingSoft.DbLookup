@@ -158,7 +158,17 @@ namespace RingSoft.DbLookup.EfCore
             if (listSql.IsNullOrEmpty())
                 return result;
 
-            OpenConnection();
+            SetConnectionString(dataProcessor.ConnectionString);
+
+            try
+            {
+                OpenConnection();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+            }
 
             try
             {
@@ -172,6 +182,7 @@ namespace RingSoft.DbLookup.EfCore
 
             CloseConnection();
 
+            SetConnectionString(null);
             return result;
         }
 
@@ -179,5 +190,7 @@ namespace RingSoft.DbLookup.EfCore
         {
             return this.Query(tableName);
         }
+
+        protected abstract void SetConnectionString(string? connectionString);
     }
 }

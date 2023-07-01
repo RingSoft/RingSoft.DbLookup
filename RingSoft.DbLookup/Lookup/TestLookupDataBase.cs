@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -8,24 +9,31 @@ namespace RingSoft.DbLookup.Lookup
     {
         public IQueryable<TEntity> TableToProcess { get; }
 
-        public event EventHandler<LookupDataChangedArgs> PrintDataChanged;
+        public TableDefinition<TEntity> TableDefinition { get; }
 
-        public TestLookupDataBase(IQueryable<TEntity> listToQuery)
+        public event EventHandler<LookupDataMauiPrintOutput> PrintOutput;
+
+        public TestLookupDataBase(IQueryable<TEntity> listToQuery, TableDefinition<TEntity> tableDefinition)
         {
+            TableDefinition = tableDefinition;
             TableToProcess = listToQuery;
         }
 
-        public int GetRecordCountWait()
+        public int GetRecordCount()
         {
             return TableToProcess.Count();
         }
 
-        public void GetPrintData()
+        public void DoPrintOutput(int pageSize)
         {
-            var dataTable = TableToProcess.ConvertEnumerableToDataTable();
+            var args = new LookupDataMauiPrintOutput();
+            foreach (var entity in TableToProcess)
+            {
+                var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                args.Result.Add(primaryKey);
+            }
 
-            var args = new LookupDataChangedArgs(dataTable, 0, LookupScrollPositions.Top);
-            PrintDataChanged?.Invoke(this, args);
+            PrintOutput?.Invoke(this, args);
         }
     }
 }

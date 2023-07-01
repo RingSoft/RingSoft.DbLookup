@@ -21,11 +21,11 @@ namespace RingSoft.DbLookup.Lookup
 
     public interface ILookupDataBase
     {
-        event EventHandler<LookupDataChangedArgs> PrintDataChanged;
+        event EventHandler<LookupDataMauiPrintOutput> PrintOutput;
 
-        int GetRecordCountWait();
+        int GetRecordCount();
 
-        void GetPrintData();
+        void DoPrintOutput(int pageSize);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <summary>
     /// The base class containing a lookup's data.
     /// </summary>
-    public class LookupDataBase : ILookupDataBase
+    public class LookupDataBase1// : ILookupDataBase
     {
         /// <summary>
         /// Gets the lookup results data table.
@@ -226,7 +226,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="userInterface">The user interface.</param>
-        public LookupDataBase(LookupDefinitionBase lookupDefinition, ILookupControl userInterface)
+        public LookupDataBase1(LookupDefinitionBase lookupDefinition, ILookupControl userInterface)
         {
             //if (lookupDefinition.InitialSortColumnDefinition == null)
             //    throw new ArgumentException(

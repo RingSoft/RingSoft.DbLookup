@@ -71,10 +71,11 @@ namespace RingSoft.DbLookup
             return null;
         }
 
-        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
+        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition
+            , TableDefinition<TEntity> tableDefinition) where TEntity : class, new()
         {
             var table = GetTable<TEntity>();
-            return new TestLookupDataBase<TEntity>(table);
+            return new TestLookupDataBase<TEntity>(table, tableDefinition);
         }
 
         public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()

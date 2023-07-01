@@ -25,7 +25,7 @@ namespace RingSoft.DbLookup.Lookup
             Result = new List<PrimaryKeyValue>();
         }
     }
-    public abstract class LookupDataMauiBase
+    public abstract class LookupDataMauiBase : ILookupDataBase
     {
         public abstract int RowCount { get; }
 
@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets or sets the parent window's primary key value.
         /// </summary>
-        /// <value>
+                /// <value>
         /// The parent window's primary key value.
         /// </value>
         public PrimaryKeyValue ParentWindowPrimaryKeyValue { get; set; }

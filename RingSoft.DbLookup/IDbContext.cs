@@ -8,7 +8,8 @@ namespace RingSoft.DbLookup
 {
     public interface IDbContext
     {
-        ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi)
+        ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition
+            , TableDefinition<TEntity> tableDefinition)
             where TEntity : class, new();
 
         bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();

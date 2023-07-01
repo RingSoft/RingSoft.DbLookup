@@ -53,15 +53,15 @@ namespace RingSoft.DbLookup.EfCore
 
         public abstract DbContextEfCore GetNewDbContextEfCore();
 
-        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi) where TEntity : class, new()
-        {
-            return new LookupDataBase(lookupDefinition, lookupUi);
-        }
-
         public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
         {
             var result = GetDbContextEf().SaveEntity(Set<TEntity>(), entity, message);
             return result;
+        }
+
+        public ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, TableDefinition<TEntity> tableDefinition) where TEntity : class, new()
+        {
+            return tableDefinition.LookupDefinition.GetLookupDataMaui(lookupDefinition, false);
         }
 
         public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()

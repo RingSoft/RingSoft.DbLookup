@@ -22,13 +22,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The lookup data.
         /// </value>
-        public LookupData<TLookupEntity, TEntity> LookupData { get; }
+        public LookupData1<TLookupEntity, TEntity> LookupData { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupDataChangedArgs{TLookupEntity, TEntity}"/> class.
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>
-        public LookupDataChangedArgs(LookupData<TLookupEntity, TEntity> lookupData)
+        public LookupDataChangedArgs(LookupData1<TLookupEntity, TEntity> lookupData)
         {
             LookupData = lookupData;
         }
@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.Lookup
     /// <typeparam name="TLookupEntity">The type of the lookup entity.</typeparam>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <seealso cref="LookupDataBase" />
-    public class LookupData<TLookupEntity, TEntity> : LookupDataBase 
+    public class LookupData1<TLookupEntity, TEntity> : LookupDataBase1
         where TLookupEntity : new() where TEntity : class, new()
     {
         /// <summary>
@@ -80,7 +80,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="userInterface">The user interface.</param>
-        public LookupData(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, ILookupControl userInterface)
+        public LookupData1(LookupDefinition<TLookupEntity, TEntity> lookupDefinition, ILookupControl userInterface)
             : base(lookupDefinition, userInterface)
         {
         }
@@ -100,7 +100,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupData">The lookup data.</param>
         /// <returns></returns>
-        public List<TLookupEntity> GetLookupResultsListFromLookupData(LookupDataBase lookupData)
+        public List<TLookupEntity> GetLookupResultsListFromLookupData(LookupDataBase1 lookupData)
         {
             var lookupResults = new List<TLookupEntity>();
 

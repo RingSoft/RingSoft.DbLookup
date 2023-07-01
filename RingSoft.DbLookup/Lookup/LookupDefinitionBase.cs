@@ -920,17 +920,17 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        public void GetCountQuery(QuerySet querySet, string name)
-        {
-            var lookupInterface = new LookupUserInterface
-            {
-                PageSize = 0
-            };
-            var lookupData = new LookupDataBase(this, lookupInterface);
-            var query = lookupData.GetQuery();
-            var countQuery = new CountQuery(query, name);
-            querySet.AddQuery(countQuery, name);
-        }
+        //public void GetCountQuery(QuerySet querySet, string name)
+        //{
+        //    var lookupInterface = new LookupUserInterface
+        //    {
+        //        PageSize = 0
+        //    };
+        //    var lookupData = new LookupDataBase(this, lookupInterface);
+        //    var query = lookupData.GetQuery();
+        //    var countQuery = new CountQuery(query, name);
+        //    querySet.AddQuery(countQuery, name);
+        //}
 
         public int GetCount(DataProcessResult countResult, string name)
         {

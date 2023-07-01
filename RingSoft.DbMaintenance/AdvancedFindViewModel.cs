@@ -1295,9 +1295,10 @@ namespace RingSoft.DbMaintenance
             {
                 PageSize = 1,
             };
-            var lookupData = new LookupDataBase(LookupDefinition, lookupUi);
+            var lookupData = LookupDefinition.TableDefinition.LookupDefinition.GetLookupDataMaui(
+                LookupDefinition, false);
 
-            _recordCount = lookupData.GetRecordCountWait();
+            _recordCount = lookupData.GetRecordCount();
             if (_recordCount == 0 && LookupRefresher.RefreshRate == RefreshRate.None)
             {
                 return;

@@ -312,6 +312,16 @@ namespace RingSoft.DbLookup.Lookup
             return key;
         }
 
+        public virtual string FormatColumnForHeaderRowKey<TEntity>(PrimaryKeyValue primaryKeyValue, TEntity entity) where TEntity : new()
+        {
+            var key = GblMethods.GetPropertyValue(entity, GetPropertyJoinName());
+            key = GblMethods.FormatValueForPrinterRowKey(DataType, key);
+
+            key += primaryKeyValue.KeyString;
+            return key;
+        }
+
+
         internal virtual ILookupFormula GetFormulaForColumn()
         {
             return null;

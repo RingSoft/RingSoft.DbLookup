@@ -654,79 +654,33 @@ namespace RingSoft.DbMaintenance
         }
 
         public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs, IPrintProcessor printProcessor)
-        {
-            var lookupUi = new LookupUserInterface
-            {
-                PageSize = 10,
-            };
-            var lookupData = new LookupDataBase(printerSetupArgs.LookupDefinition, lookupUi);
+        { 
+            var lookupData = printerSetupArgs.LookupDefinition.TableDefinition.LookupDefinition
+                .GetLookupDataMaui(printerSetupArgs.LookupDefinition, false);
 
             printerSetupArgs.PrintingProcessingViewModel.UpdateStatus(0, 0, ProcessTypes.CountingHeaderRecords);
-            printerSetupArgs.TotalRecords = lookupData.GetRecordCountWait();
-
+            printerSetupArgs.TotalRecords = lookupData.GetRecordCount();
             var page = 0;
-            lookupData.PrintDataChanged += (sender, args) =>
+            lookupData.PrintOutput += (sender, output) =>
             {
-                if (printerSetupArgs.PrintingProcessingViewModel.Abort)
-                {
-                    args.Abort = true;
-                }
-
                 var headerRows = new List<PrintingInputHeaderRow>();
-                foreach (DataRow outputTableRow in args.OutputTable.Rows)
+                foreach (var primaryKeyValue in output.Result)
                 {
-                    var headerRow = new PrintingInputHeaderRow();
-                    headerRow.RowKey = lookupData.LookupDefinition.InitialSortColumnDefinition
-                        .FormatColumnForHeaderRowKey(outputTableRow);
-                    var columnMapId = 0;
-                    foreach (var columnMap in printerSetupArgs.ColumnMaps)
-                    {
-                        var value = outputTableRow.GetRowValue(columnMap.FieldName);
-                        var originalValue = value;
-                        if (columnMap.ColumnDefinition.SearchForHostId.HasValue)
-                        {
-                            value = DbDataProcessor.UserInterface.FormatValue(value,
-                                columnMap.ColumnDefinition.SearchForHostId.Value);
-                        }
-
-                        if (value == originalValue)
-                        {
-                            value = columnMap.ColumnDefinition.FormatValueForColumnMap(value);
-                        }
-
-                        switch (columnMap.ColumnType)
-                        {
-                            case PrintColumnTypes.String:
-                                PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow
-                                    , columnMap.StringFieldIndex, value);
-                                break;
-                            case PrintColumnTypes.Number:
-                                PrintingInteropGlobals.HeaderProcessor.SetNumberValue(headerRow
-                                    , columnMap.NumericFieldIndex, value);
-                                break;
-                            case PrintColumnTypes.Memo:
-                                PrintingInteropGlobals.HeaderProcessor.SetMemoValue(headerRow
-                                    , columnMap.MemoFieldIndex, value);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
-                        columnMapId++;
-                    }
-
+                    var headerRow = lookupData.GetPrinterHeaderRow(primaryKeyValue, printerSetupArgs);
                     headerRows.Add(headerRow);
 
                     var dataProcessedArgs = new PrinterDataProcessedEventArgs
                     {
                         HeaderRow = headerRow,
-                        LookupDataChangedArgs = args,
                         PrinterSetup = printerSetupArgs,
                         LookupData = lookupData,
-                        OutputRow = outputTableRow,
                     };
+                }
 
-                    printProcessor.NotifyProcessingHeader(dataProcessedArgs);
+                if (printerSetupArgs.PrintingProcessingViewModel.Abort)
+                {
+                    output.Abort = true;
+                    return;
                 }
 
                 var result = PrintingInteropGlobals.HeaderProcessor.AddChunk(headerRows, printerSetupArgs.PrintingProperties);
@@ -734,15 +688,21 @@ namespace RingSoft.DbMaintenance
                 {
                     printerSetupArgs.PrintingProcessingViewModel.Abort = true;
                     ControlsGlobals.UserInterface.ShowMessageBox(result, "Print Error!", RsMessageBoxIcons.Error);
-                    args.Abort = true;
+                    output.Abort = true;
                 }
 
                 page += headerRows.Count;
                 printerSetupArgs.PrintingProcessingViewModel
                     .UpdateStatus(page, printerSetupArgs.TotalRecords, ProcessTypes.ImportHeader);
+
             };
-            
-            lookupData.GetPrintData();
+            lookupData.DoPrintOutput(10);
+            if (printerSetupArgs.PrintingProcessingViewModel.Abort)
+            {
+                return;
+            }
+
+
             MakeAdditionalFilter(printerSetupArgs);
         }
 

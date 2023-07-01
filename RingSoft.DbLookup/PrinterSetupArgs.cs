@@ -31,7 +31,7 @@ namespace RingSoft.DbLookup
 
         public PrintingInputHeaderRow HeaderRow { get; set; }
 
-        public LookupDataBase LookupData { get; set; }
+        public LookupDataMauiBase LookupData { get; set; }
 
         public DataRow OutputRow { get; set; }
     }

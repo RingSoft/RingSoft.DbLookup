@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -10,6 +11,18 @@ namespace RingSoft.DbLookup.Lookup
         public LookupDataMauiOutput(LookupScrollPositions scrollPosition)
         {
             ScrollPosition = scrollPosition;
+        }
+    }
+
+    public class LookupDataMauiPrintOutput
+    {
+        public List<PrimaryKeyValue> Result { get; }
+
+        public bool Abort { get; set; }
+
+        public LookupDataMauiPrintOutput()
+        {
+            Result = new List<PrimaryKeyValue>();
         }
     }
     public abstract class LookupDataMauiBase
@@ -39,6 +52,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupView;
 
+        public event EventHandler<LookupDataMauiPrintOutput> PrintOutput;
         public event EventHandler<LookupDataMauiOutput> LookupDataChanged;
         public event EventHandler DataSourceChanged;
 
@@ -52,6 +66,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             ScrollPosition = lookupOutput.ScrollPosition;
             LookupDataChanged?.Invoke(this, lookupOutput);
+        }
+
+        protected void FirePrintOutputEvent(LookupDataMauiPrintOutput output)
+        {
+            PrintOutput?.Invoke(this, output);
         }
 
         public abstract void GetInitData();
@@ -125,5 +144,12 @@ namespace RingSoft.DbLookup.Lookup
         public abstract void GotoPreviousPage();
 
         public abstract void OnSearchForChange(string searchForText, bool initialValue = false);
+
+        public abstract void DoPrintOutput(int pageSize);
+
+        public abstract PrintingInputHeaderRow GetPrinterHeaderRow(PrimaryKeyValue primaryKeyValue
+            , PrinterSetupArgs printerSetupArgs);
+
+        public abstract object GetEntityForPrimaryKey(PrimaryKeyValue primaryKeyValue);
     }
 }

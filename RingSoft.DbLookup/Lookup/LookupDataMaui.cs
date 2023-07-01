@@ -11,11 +11,13 @@ using MySqlX.XDevAPI.Common;
 using MySqlX.XDevAPI.Relational;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
+using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -648,6 +650,107 @@ namespace RingSoft.DbLookup.Lookup
             SetLookupIndexFromEntity(param, entity);
 
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+        }
+
+        public override void DoPrintOutput(int pageSize)
+        {
+            var printOutput = new LookupDataMauiPrintOutput();
+
+            MakeFilteredQuery();
+
+            var counter = 0;
+            foreach (var entity in FilteredQuery)
+            {
+                counter++;
+                var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                printOutput.Result.Add(primaryKey);
+
+                if (counter % pageSize == 0)
+                {
+                    counter = 0;
+                    FirePrintOutputEvent(printOutput);
+                    printOutput.Result.Clear();
+                }
+
+                if (printOutput.Abort)
+                {
+                    return;
+                }
+            }
+
+            if (printOutput.Result.Any())
+            {
+                FirePrintOutputEvent(printOutput);
+                printOutput.Result.Clear();
+            }
+        }
+
+        public override PrintingInputHeaderRow GetPrinterHeaderRow(PrimaryKeyValue primaryKeyValue, PrinterSetupArgs printerSetupArgs)
+        {
+            var headerRow = new PrintingInputHeaderRow();
+            var entity = GetEntityForPrimaryKey(primaryKeyValue) as TEntity;
+            headerRow.RowKey = LookupDefinition.InitialSortColumnDefinition
+                .FormatColumnForHeaderRowKey(primaryKeyValue, entity);
+            var columnMapId = 0;
+            foreach (var columnMap in printerSetupArgs.ColumnMaps)
+            {
+                var value = columnMap.ColumnDefinition.GetDatabaseValue(entity);
+                
+                var originalValue = value;
+                if (columnMap.ColumnDefinition.SearchForHostId.HasValue)
+                {
+                    value = DbDataProcessor.UserInterface.FormatValue(value,
+                        columnMap.ColumnDefinition.SearchForHostId.Value);
+                }
+
+                if (value == originalValue)
+                {
+                    value = columnMap.ColumnDefinition.FormatValueForColumnMap(value);
+                }
+
+                switch (columnMap.ColumnType)
+                {
+                    case PrintColumnTypes.String:
+                        PrintingInteropGlobals.HeaderProcessor.SetStringValue(headerRow
+                            , columnMap.StringFieldIndex, value);
+                        break;
+                    case PrintColumnTypes.Number:
+                        PrintingInteropGlobals.HeaderProcessor.SetNumberValue(headerRow
+                            , columnMap.NumericFieldIndex, value);
+                        break;
+                    case PrintColumnTypes.Memo:
+                        PrintingInteropGlobals.HeaderProcessor.SetMemoValue(headerRow
+                            , columnMap.MemoFieldIndex, value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                columnMapId++;
+            }
+
+            return headerRow;
+        }
+
+        public override object GetEntityForPrimaryKey(PrimaryKeyValue primaryKeyValue)
+        {
+            if (BaseQuery == null)
+            {
+                RefreshBaseQuery();
+            }
+            var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKeyValue);
+            var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
+            {
+                var fieldFilter = filter.AddFixedFilter(primaryKeyField, Conditions.Equals
+                    , GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName));
+                fieldFilter.SetPropertyName = primaryKeyField.PropertyName;
+            }
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = filter.GetWhereExpresssion<TEntity>(param);
+            var query = FilterItemDefinition.FilterQuery(BaseQuery, param, expr);
+            return query.FirstOrDefault();
         }
 
         private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)

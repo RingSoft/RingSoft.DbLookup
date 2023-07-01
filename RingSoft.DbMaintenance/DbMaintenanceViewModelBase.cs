@@ -674,7 +674,10 @@ namespace RingSoft.DbMaintenance
                         HeaderRow = headerRow,
                         PrinterSetup = printerSetupArgs,
                         LookupData = lookupData,
+                        PrimaryKey = primaryKeyValue,
                     };
+
+                    printProcessor.NotifyProcessingHeader(dataProcessedArgs);
                 }
 
                 if (printerSetupArgs.PrintingProcessingViewModel.Abort)

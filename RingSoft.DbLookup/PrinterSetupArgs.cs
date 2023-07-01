@@ -27,13 +27,11 @@ namespace RingSoft.DbLookup
     {
         public PrinterSetupArgs PrinterSetup { get; set; }
 
-        public LookupDataChangedArgs LookupDataChangedArgs { get; set; }
-
         public PrintingInputHeaderRow HeaderRow { get; set; }
 
         public LookupDataMauiBase LookupData { get; set; }
 
-        public DataRow OutputRow { get; set; }
+        public PrimaryKeyValue PrimaryKey { get; set; }
     }
 
     public class PrintingColumnMap

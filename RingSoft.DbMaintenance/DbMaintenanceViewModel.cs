@@ -696,55 +696,60 @@ namespace RingSoft.DbMaintenance
             if (previewArgs.Handled)
                 return DbMaintenanceResults.NotAllowed;
 
-            var lockSql = string.Empty;
             if (!unitTestMode)
             {
                 var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
                 var keyString = recordLockPrimaryKey.KeyString;
-                var tableField =
-                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
-                var pkField =
-                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
-                var dateField =
-                    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
-                var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
+                //var tableField =
+                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
+                //var pkField =
+                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
+                //var dateField =
+                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
+                //var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
 
                 switch (MaintenanceMode)
                 {
                     case DbMaintenanceModes.AddMode:
                         break;
                     case DbMaintenanceModes.EditMode:
-                        var selectQuery =
-                            new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
-                        selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
-                        selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
-                        var lockDateWhere = selectQuery.AddWhereItem(dateField.FieldName, Conditions.GreaterThanEquals,
-                            LockDate.ToUniversalTime(),
-                            DbDateTypes.Millisecond);
+                        var context = SystemGlobals.DataRepository.GetDataContext();
+                        var query = context.GetTable<RecordLock>();
+                        var recordLock = query.FirstOrDefault(
+                            p => p.Table == TableDefinition.TableName
+                                 && p.PrimaryKey == keyString
+                                 && p.LockDateTime >= LockDate.ToUniversalTime());
+                        //var selectQuery =
+                        //    new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
+                        //selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
+                        //selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
+                        //var lockDateWhere = selectQuery.AddWhereItem(dateField.FieldName, Conditions.GreaterThanEquals,
+                        //    LockDate.ToUniversalTime(),
+                        //    DbDateTypes.Millisecond);
 
-                        var dataResult =
-                            SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
-                                selectQuery);
+                        //var dataResult =
+                        //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
+                        //        selectQuery);
 
-                        if (dataResult.ResultCode == GetDataResultCodes.Success)
+                        //if (dataResult.ResultCode == GetDataResultCodes.Success)
                         {
-                            var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                                .SqlGenerator;
-                            var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
-                            table = sqlGenerator.FormatSqlObject(table);
+                            //var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
+                            //    .SqlGenerator;
+                            //var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
+                            //table = sqlGenerator.FormatSqlObject(table);
 
-                            if (dataResult.DataSet.Tables[0].Rows.Count > 0)
+                            if (recordLock != null)
                             {
-                                var row = dataResult.DataSet.Tables[0].Rows[0];
+                                //var row = dataResult.DataSet.Tables[0].Rows[0];
                                 var message =
                                         $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
                                 message +=
                                     "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
 
-                                var lockKey =
-                                    new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
-                                lockKey.PopulateFromDataRow(row);
-                                if (!Processor.ShowRecordLockWindow(lockKey, message, InputParameter))
+                                //var lockKey =
+                                //    new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+                                //lockKey.PopulateFromDataRow(row);
+                                if (!Processor.ShowRecordLockWindow(SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetPrimaryKeyValueFromEntity(recordLock), message, InputParameter))
                                 {
                                     return DbMaintenanceResults.ValidationError;
                                 }

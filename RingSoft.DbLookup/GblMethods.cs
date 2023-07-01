@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.TableProcessing;
 using Microsoft.VisualBasic;
+using RingSoft.DbLookup.RecordLocking;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup
@@ -495,65 +496,89 @@ namespace RingSoft.DbLookup
         public static bool DoRecordLock(PrimaryKeyValue primaryKey)
         {
             var result = true;
-
-            var recordLockTableField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
-            var recordLockPkField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
-            var recordLockDateField =
-                SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
-            var recordLockUserField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
-
-            var sqlDatas = new List<SqlData>();
-            var sqlData = new SqlData(recordLockTableField.FieldName,
-                primaryKey.TableDefinition.TableName, ValueTypes.String);
-            sqlDatas.Add(sqlData);
-            sqlData = new SqlData(recordLockPkField.FieldName, primaryKey.KeyString, ValueTypes.String);
-            sqlDatas.Add(sqlData);
-            sqlData = new SqlData(recordLockDateField.FieldName, GetNowDateText(), ValueTypes.DateTime,
-                DbDateTypes.Millisecond);
-            sqlDatas.Add(sqlData);
-            sqlData = new SqlData(recordLockUserField.FieldName, SystemGlobals.UserName, ValueTypes.String);
-            sqlDatas.Add(sqlData);
-
-            var selectQuery = new SelectQuery(recordLockTableField.TableDefinition.TableName);
-            selectQuery.AddWhereItem(recordLockTableField.FieldName, Conditions.Equals,
-                primaryKey.TableDefinition.TableName);
-
-            selectQuery.AddWhereItem(recordLockPkField.FieldName, Conditions.Equals, primaryKey.KeyString);
-
-            var getDataResult = primaryKey.TableDefinition.Context.DataProcessor.GetData(selectQuery);
-            if (getDataResult.ResultCode == GetDataResultCodes.Success)
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var query = context.GetTable<RecordLock>();
+            var recordLock = query.FirstOrDefault(p => p.Table == primaryKey.TableDefinition.TableName
+                                                             
+                                                       && p.PrimaryKey == primaryKey.KeyString);
+            if (recordLock == null)
             {
-                var sql = string.Empty;
-                if (getDataResult.DataSet.Tables[0].Rows.Count >= 1)
+                recordLock = new RecordLock()
                 {
-                    var dataRow = getDataResult.DataSet.Tables[0].Rows[0];
-                    var recordLockPrimaryKey = new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
-                    recordLockPrimaryKey.PopulateFromDataRow(dataRow);
-                    var updateStatement = new UpdateDataStatement(recordLockPrimaryKey);
-                    foreach (var data in sqlDatas)
-                    {
-                        updateStatement.AddSqlData(data);
-                    }
-
-                    sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateUpdateSql(
-                        updateStatement);
-                }
-                else
-                {
-                    var insertStatement = new InsertDataStatement(recordLockPkField.TableDefinition);
-                    foreach (var data in sqlDatas)
-                    {
-                        insertStatement.AddSqlData(data);
-                    }
-
-                    sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateInsertSqlStatement(
-                        insertStatement);
-                }
-                result = primaryKey.TableDefinition.Context.DataProcessor.ExecuteSql(sql).ResultCode == GetDataResultCodes.Success;
+                    Table = primaryKey.TableDefinition.TableName,
+                    LockDateTime = DateTime.Now.ToUniversalTime(),
+                    PrimaryKey = primaryKey.KeyString,
+                    User = SystemGlobals.UserName,
+                };
+                var list = new List<RecordLock>();
+                list.Add(recordLock);
+                context.AddRange(list);
+                context.Commit("Saving Record Lock");
             }
-            
+            else
+            {
+                recordLock.LockDateTime = DateTime.Now.ToUniversalTime();
+                context.SaveEntity(recordLock, "Saving Record Lock");
+            }
+
+            //var recordLockTableField =
+            //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
+            //var recordLockPkField =
+            //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
+            //var recordLockDateField =
+            //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
+            //var recordLockUserField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
+
+            //var sqlDatas = new List<SqlData>();
+            //var sqlData = new SqlData(recordLockTableField.FieldName,
+            //    primaryKey.TableDefinition.TableName, ValueTypes.String);
+            //sqlDatas.Add(sqlData);
+            //sqlData = new SqlData(recordLockPkField.FieldName, primaryKey.KeyString, ValueTypes.String);
+            //sqlDatas.Add(sqlData);
+            //sqlData = new SqlData(recordLockDateField.FieldName, GetNowDateText(), ValueTypes.DateTime,
+            //    DbDateTypes.Millisecond);
+            //sqlDatas.Add(sqlData);
+            //sqlData = new SqlData(recordLockUserField.FieldName, SystemGlobals.UserName, ValueTypes.String);
+            //sqlDatas.Add(sqlData);
+
+            //var selectQuery = new SelectQuery(recordLockTableField.TableDefinition.TableName);
+            //selectQuery.AddWhereItem(recordLockTableField.FieldName, Conditions.Equals,
+            //    primaryKey.TableDefinition.TableName);
+
+            //selectQuery.AddWhereItem(recordLockPkField.FieldName, Conditions.Equals, primaryKey.KeyString);
+
+            //var getDataResult = primaryKey.TableDefinition.Context.DataProcessor.GetData(selectQuery);
+            //if (getDataResult.ResultCode == GetDataResultCodes.Success)
+            //{
+            //    var sql = string.Empty;
+            //    if (getDataResult.DataSet.Tables[0].Rows.Count >= 1)
+            //    {
+            //        var dataRow = getDataResult.DataSet.Tables[0].Rows[0];
+            //        var recordLockPrimaryKey = new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
+            //        recordLockPrimaryKey.PopulateFromDataRow(dataRow);
+            //        var updateStatement = new UpdateDataStatement(recordLockPrimaryKey);
+            //        foreach (var data in sqlDatas)
+            //        {
+            //            updateStatement.AddSqlData(data);
+            //        }
+
+            //        sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateUpdateSql(
+            //            updateStatement);
+            //    }
+            //    else
+            //    {
+            //        var insertStatement = new InsertDataStatement(recordLockPkField.TableDefinition);
+            //        foreach (var data in sqlDatas)
+            //        {
+            //            insertStatement.AddSqlData(data);
+            //        }
+
+            //        sql = primaryKey.TableDefinition.Context.DataProcessor.SqlGenerator.GenerateInsertSqlStatement(
+            //            insertStatement);
+            //    }
+            //    result = primaryKey.TableDefinition.Context.DataProcessor.ExecuteSql(sql).ResultCode == GetDataResultCodes.Success;
+            //}
+
             return result;
         }
 

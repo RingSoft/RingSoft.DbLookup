@@ -105,7 +105,9 @@ namespace RingSoft.DbLookup.Lookup
                 LookupWindow.SelectPrimaryKey(primaryKeyValue);
             }
 
-            if (LookupControl != null && LookupControl.PageSize == 1)
+            if (LookupControl != null 
+                && LookupControl.PageSize == 1
+                && primaryKeyValue != null)
             {
                 SelectedPrimaryKeyValue = primaryKeyValue;
                 SetNewPrimaryKeyValue(primaryKeyValue);

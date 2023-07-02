@@ -1,10 +1,8 @@
 ﻿using RingSoft.DataEntryControls.Engine;
-using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
@@ -13,13 +11,6 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using RingSoft.DbLookup;
-using RingSoft.DbLookup.AdvancedFind;
-using RingSoft.DbLookup.App.Library;
-using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
-using Google.Protobuf.WellKnownTypes;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {

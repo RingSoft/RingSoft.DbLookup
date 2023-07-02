@@ -52,9 +52,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             LookupControlsGlobals.LookupControlContentTemplateFactory =
                 new AppLookupContentTemplateFactory(_application);
 
-            //Necessary so .NET Core 3.x is compatible with Entity Framework 6.
-            DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
-
             _mainWindow = new MainWindow();
             base.StartApp(appSection, args);
         }

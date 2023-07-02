@@ -237,5 +237,7 @@ namespace RingSoft.DbLookup.DataProcessor
 
             return $"SET IDENTITY_INSERT {SqlGenerator.FormatSqlObject(tableName)} {strOn}";
         }
+
+        public abstract bool TestConnection();
     }
 }

@@ -76,5 +76,10 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
 
         }
+
+        public override bool TestConnection()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

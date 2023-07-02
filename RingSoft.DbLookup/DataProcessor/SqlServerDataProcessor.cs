@@ -119,6 +119,11 @@ namespace RingSoft.DbLookup.DataProcessor
             };
         }
 
+        public override bool TestConnection()
+        {
+            throw new NotImplementedException();
+        }
+
         private string GenerateConnectionString()
         {
             var connectionString = $"data source={Server};initial catalog={Database};Pooling=false;";

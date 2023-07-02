@@ -11,6 +11,7 @@ using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
+using System.Data.Common;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -291,7 +292,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition, string alias = "")
+        internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition, TableFieldJoinDefinition join = null)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
             if (!isPrimaryKey)
@@ -302,9 +303,11 @@ namespace RingSoft.DbLookup.Lookup
             var columnDefinition = new LookupFieldColumnDefinition(fieldDefinition)
             {
                 LookupDefinition = this,
-                JoinQueryTableAlias = alias
             };
-
+            if (join != null)
+            {
+                columnDefinition.NavigationProperties = join.GetNavigationProperties();
+            }
             _hiddenColumns.Add(columnDefinition);
             return columnDefinition;
         }
@@ -1047,7 +1050,7 @@ namespace RingSoft.DbLookup.Lookup
 
                     if (lookupColumn is LookupFieldColumnDefinition lookupFieldColumn)
                     {
-                        column = AddHiddenColumn(lookupFieldColumn.FieldDefinition, join.Alias);
+                        column = AddHiddenColumn(lookupFieldColumn.FieldDefinition, join);
                     }
                     else if (lookupColumn is LookupFormulaColumnDefinition lookupFormulaColumn)
                     {

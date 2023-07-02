@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data;
-using MySql.Data.MySqlClient;
-using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
-using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 
 namespace RingSoft.DbLookup.DataProcessor
 {
@@ -51,32 +47,6 @@ namespace RingSoft.DbLookup.DataProcessor
 
         private readonly MySqlSelectSqlGenerator _generator = new MySqlSelectSqlGenerator();
 
-        /// <summary>
-        /// Implement this to create and open the database connection.
-        /// </summary>
-        protected override IDbConnection CreateConnection()
-        {
-            var connectionString = GenerateConnectionString();
-            return new MySqlConnection(connectionString);
-        }
-
-        protected override IDataAdapter GetDataAdapter(IDbConnection connection, string sqlStatement)
-        {
-            IDataAdapter adapter = null;
-            if (connection is MySqlConnection mySqlConnection)
-                adapter = new MySqlDataAdapter(sqlStatement, mySqlConnection);
-
-            return adapter;
-        }
-
-        protected override IDbCommand GetDbCommand(IDbConnection connection, string sqlStatement)
-        {
-            MySqlCommand command = null;
-            if (connection is MySqlConnection mySqlConnection)
-                command = new MySqlCommand(sqlStatement, mySqlConnection);
-
-            return command;
-        }
 
         private string GenerateConnectionString()
         {
@@ -84,24 +54,6 @@ namespace RingSoft.DbLookup.DataProcessor
             //Provider=MySQLProv;Data Source=mydb;User Id=myUsername;Password=myPassword;SslMode=none
             var connectionString = $"server={Server};database={Database};uid={UserName};password={Password};";
             return connectionString;
-        }
-
-        /// <summary>
-        /// Gets the list of databases.
-        /// </summary>
-        /// <returns>A GetDataResult object containing a list of databases or an error.</returns>
-        public override DataProcessResult GetListOfDatabases()
-        {
-            var originalDatabase = Database;
-            Database = "mysql";
-            var query = new SelectQuery("")
-            {
-                RawSql = "SHOW DATABASES;"
-            };
-
-            var result = GetData(query);
-            Database = originalDatabase;
-            return result;
         }
 
         public override string GetDatabaseListSql()

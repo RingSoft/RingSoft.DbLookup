@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Org.BouncyCastle.Asn1.Pkcs;
 using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.EfCore

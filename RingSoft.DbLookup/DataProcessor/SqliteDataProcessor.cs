@@ -1,8 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Data.SQLite;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
-using RingSoft.DataEntryControls.Engine;
+using System;
+using System.Data;
 
 namespace RingSoft.DbLookup.DataProcessor
 {
@@ -46,39 +45,6 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <summary>
         /// Implement this to create and open the database connection.
         /// </summary>
-        protected override IDbConnection CreateConnection()
-        {
-            return new SQLiteConnection(GenerateConnectionString());
-        }
-
-        /// <summary>
-        /// Implement this to create and return the data adapter used to fill a DataSet with the results of the SQL statement.
-        /// </summary>
-        /// <param name="connection">The connection object.</param>
-        /// <param name="sqlStatement">The SQL statement.</param>
-        /// <returns></returns>
-        protected override IDataAdapter GetDataAdapter(IDbConnection connection, string sqlStatement)
-        {
-            SQLiteDataAdapter adapter = null;
-            if (connection is SQLiteConnection sqliteConnection)
-                adapter = new SQLiteDataAdapter(sqlStatement, sqliteConnection);
-
-            return adapter;
-        }
-
-        protected override IDbCommand GetDbCommand(IDbConnection connection, string sqlStatement)
-        {
-            SQLiteCommand command = null;
-            if (connection is SQLiteConnection sqliteConnection)
-                    command = new SQLiteCommand(sqlStatement, sqliteConnection);
-
-            return command;
-        }
-
-        public override DataProcessResult GetListOfDatabases()
-        {
-            throw new NotImplementedException("Not relevant for Sqlite.");
-        }
 
         public override string GetDatabaseListSql()
         {
@@ -130,13 +96,6 @@ namespace RingSoft.DbLookup.DataProcessor
 
         public override void CloseConnection(IDbConnection connection)
         {
-            if (connection is SQLiteConnection sqLiteConnection && !IsClosed)
-            {
-                IsClosed = true;
-                sqLiteConnection.Close();
-                sqLiteConnection.Dispose();
-                GC.Collect();
-            }
         }
 
         public override string GetIdentityInsertSql(string tableName, bool setOn)

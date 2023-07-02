@@ -286,31 +286,32 @@ namespace RingSoft.DbLookup
                     if (!primaryKeyString.IsNullOrEmpty())
                     {
                         primaryKey.LoadFromPrimaryString(primaryKeyString);
-                        var query = new SelectQuery(tableDefinition.TableName);
-                        query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName);
-                        foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
-                        {
-                            query.AddSelectColumn(primaryKeyField.FieldName);
-                        }
+                        return primaryKey.TableDefinition.LookupDefinition.GetAutoFillValue(primaryKey);
+                        //var query = new SelectQuery(tableDefinition.TableName);
+                        //query.AddSelectColumn(lookupFieldColumn.FieldDefinition.FieldName);
+                        //foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
+                        //{
+                        //    query.AddSelectColumn(primaryKeyField.FieldName);
+                        //}
 
-                        foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
-                        {
-                            query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
-                                primaryKeyKeyValueField.Value);
-                        }
+                        //foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
+                        //{
+                        //    query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, Conditions.Equals,
+                        //        primaryKeyKeyValueField.Value);
+                        //}
 
-                        var result = tableDefinition.Context.DataProcessor.GetData(query);
-                        if (result.ResultCode == GetDataResultCodes.Success)
-                        {
-                            var primaryKeyValue = new PrimaryKeyValue(tableDefinition);
-                            if (result.DataSet.Tables[0].Rows.Count > 0)
-                            {
-                                var text = result.DataSet.Tables[0].Rows[0]
-                                    .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
-                                primaryKeyValue.PopulateFromDataRow(result.DataSet.Tables[0].Rows[0]);
-                                return new AutoFillValue(primaryKeyValue, text);
-                            }
-                        }
+                        //var result = tableDefinition.Context.DataProcessor.GetData(query);
+                        //if (result.ResultCode == GetDataResultCodes.Success)
+                        //{
+                        //    var primaryKeyValue = new PrimaryKeyValue(tableDefinition);
+                        //    if (result.DataSet.Tables[0].Rows.Count > 0)
+                        //    {
+                        //        var text = result.DataSet.Tables[0].Rows[0]
+                        //            .GetRowValue(lookupFieldColumn.FieldDefinition.FieldName);
+                        //        primaryKeyValue.PopulateFromDataRow(result.DataSet.Tables[0].Rows[0]);
+                        //        return new AutoFillValue(primaryKeyValue, text);
+                        //    }
+                        //}
                     }
                 }
             }

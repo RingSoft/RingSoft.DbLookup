@@ -73,43 +73,6 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <summary>
         /// Implement this to create and open the database connection.
         /// </summary>
-        protected override IDbConnection CreateConnection()
-        {
-            return new SqlConnection(GenerateConnectionString());
-        }
-
-        protected override IDataAdapter GetDataAdapter(IDbConnection connection, string sqlStatement)
-        {
-            SqlDataAdapter adapter = null;
-            if (connection is SqlConnection sqlConnection)
-                adapter = new SqlDataAdapter(sqlStatement, sqlConnection);
-
-            return adapter;
-        }
-
-        protected override IDbCommand GetDbCommand(IDbConnection connection, string sqlStatement)
-        {
-            IDbCommand command = null;
-            if (connection is SqlConnection sqlConnection)
-                command = new SqlCommand(sqlStatement, sqlConnection);
-
-            return command;
-        }
-
-        public override DataProcessResult GetListOfDatabases()
-        {
-            var originalDatabase = Database;
-            Database = "master";
-            var query = new SelectQuery("")
-            {
-                RawSql = GetDatabaseListSql()
-            };
-
-            var result = GetData(query);
-            Database = originalDatabase;
-            return result;
-        }
-
         public override string GetDatabaseListSql()
         {
             return "SELECT name FROM master.dbo.sysdatabases";
@@ -174,12 +137,6 @@ namespace RingSoft.DbLookup.DataProcessor
 
             connectionString += "TrustServerCertificate=True;";
             return connectionString;
-        }
-
-        protected override void ClearConnectionPools()
-        {
-            SqlConnection.ClearAllPools();
-            base.ClearConnectionPools();
         }
 
     }

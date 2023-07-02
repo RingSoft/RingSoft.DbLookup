@@ -401,7 +401,17 @@ namespace RingSoft.DbLookup.Lookup
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
             var result = string.Empty;
-            var propertyObject = GetPropertyObject(entity);
+
+            object propertyObject = null;
+            if (NavigationProperties == null)
+            {
+                propertyObject = GetPropertyObject(entity);
+            }
+            else
+            {
+                propertyObject = GetPropertyObject(entity, NavigationProperties);
+            }
+
             var formulaObject = FieldDefinition.FormulaObject;
 
             if (formulaObject != null)
@@ -420,6 +430,10 @@ namespace RingSoft.DbLookup.Lookup
             }
             else
             {
+                if (HasNavProperties && propertyObject == null)
+                {
+                    return null;
+                }
                 DbDateTypes? dateType = null;
                 if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
                 {

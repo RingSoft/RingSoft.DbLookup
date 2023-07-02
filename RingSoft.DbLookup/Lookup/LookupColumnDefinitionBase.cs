@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
@@ -117,7 +118,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool KeepNullEmpty { get; internal set; }
 
-
+        public List<JoinInfo>? NavigationProperties { get; internal set; }
         /// <summary>
         /// Gets the horizontal alignment type.
         /// </summary>
@@ -447,14 +448,24 @@ namespace RingSoft.DbLookup.Lookup
         {
             var properties = ParentObject.GetNavigationProperties();
 
+            return GetPropertyObject(entity, properties);
+        }
+
+        public object GetPropertyObject<TEntity>(TEntity entity, List<JoinInfo> properties)
+        {
             HasNavProperties = properties.Any();
 
             object propertyObject = null;
 
+            var index = 0;
             foreach (var property in properties)
             {
                 if (propertyObject == null)
                 {
+                    if (index > 0)
+                    {
+                        return null;
+                    }
                     propertyObject = GblMethods.GetPropertyObject(entity, property
                         .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
                 }
@@ -463,11 +474,11 @@ namespace RingSoft.DbLookup.Lookup
                     propertyObject = GblMethods.GetPropertyObject(propertyObject, property
                         .ParentJoin.ForeignKeyDefinition.ForeignObjectPropertyName);
                 }
+                index++;
             }
 
             return propertyObject;
         }
-
 
 
         public abstract string GetPropertyJoinName(bool useDbField = false);

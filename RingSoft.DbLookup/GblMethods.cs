@@ -1,26 +1,20 @@
-﻿using System;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.RecordLocking;
+using RingSoft.Printing.Interop;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
-using Newtonsoft.Json;
-using RingSoft.DbLookup.QueryBuilder;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.Printing.Interop;
-using Google.Protobuf.WellKnownTypes;
-using RingSoft.DbLookup.DataProcessor;
 using Enum = System.Enum;
 using Type = System.Type;
-using System.Reflection;
-using System.Linq.Expressions;
-using RingSoft.DbLookup.TableProcessing;
-using Microsoft.VisualBasic;
-using RingSoft.DbLookup.RecordLocking;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup
 {

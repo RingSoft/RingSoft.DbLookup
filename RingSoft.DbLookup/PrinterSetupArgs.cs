@@ -72,6 +72,10 @@ namespace RingSoft.DbLookup
             ColumnType = PrintColumnTypes.Memo;
         }
 
+        public override string ToString()
+        {
+            return ColumnDefinition.Caption;
+        }
     }
     public class PrinterSetupArgs
     {

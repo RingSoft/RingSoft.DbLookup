@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using Google.Protobuf.WellKnownTypes;
-using MySqlX.XDevAPI.Common;
-using MySqlX.XDevAPI.Relational;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using RingSoft.Printing.Interop;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.Lookup
 {

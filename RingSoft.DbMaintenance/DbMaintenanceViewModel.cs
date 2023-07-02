@@ -1,24 +1,19 @@
-﻿using RingSoft.DbLookup;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.RecordLocking;
+using RingSoft.DbLookup.TableProcessing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Google.Protobuf.WellKnownTypes;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
-using RingSoft.DbLookup.QueryBuilder;
-using RingSoft.DbLookup.TableProcessing;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Timers;
-using Renci.SshNet.Messages;
-using RingSoft.DbLookup.RecordLocking;
-using Ubiety.Dns.Core.Records;
 
 namespace RingSoft.DbMaintenance
 {

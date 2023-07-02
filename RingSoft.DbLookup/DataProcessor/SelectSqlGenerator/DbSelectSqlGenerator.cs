@@ -1,12 +1,10 @@
 ﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookup.QueryBuilder;
-using Google.Protobuf.WellKnownTypes;
-using Newtonsoft.Json.Linq;
 
 namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {

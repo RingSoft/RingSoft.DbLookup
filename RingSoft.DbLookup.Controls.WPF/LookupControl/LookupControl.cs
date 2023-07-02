@@ -1,10 +1,15 @@
 ﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbMaintenance;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Media;
 using System.Reflection;
@@ -14,14 +19,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookup.QueryBuilder;
-using RingSoft.DbMaintenance;
-using MySqlX.XDevAPI.Relational;
-using System.Collections.Specialized;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF

@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup
 
     public class DataRepositoryRegistry : IDbContext
     {
+        private string _lastError;
+
         public List<DataRepositoryRegistryItemBase> Entities { get; private set; } =
             new List<DataRepositoryRegistryItemBase>();
 
@@ -78,7 +80,7 @@ namespace RingSoft.DbLookup
             return new TestLookupDataBase<TEntity>(table, tableDefinition);
         }
 
-        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             if (!table.Contains(entity))
@@ -88,12 +90,12 @@ namespace RingSoft.DbLookup
             return true;
         }
 
-        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool SaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             return SaveNoCommitEntity(entity, message);
         }
 
-        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool DeleteEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
             if (table.Contains(entity))
@@ -103,17 +105,17 @@ namespace RingSoft.DbLookup
             return true;
         }
 
-        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             return DeleteEntity(entity, message);
         }
 
-        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             return SaveNoCommitEntity(entity, message);
         }
 
-        public bool Commit(string message)
+        public bool Commit(string message, bool silent = false)
         {
             return true;
         }
@@ -141,22 +143,23 @@ namespace RingSoft.DbLookup
             return GetList<TEntity>().AsQueryable();
         }
 
-        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true)
+
+        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool silent = false, bool value = true)
         {
             
         }
 
-        public bool OpenConnection()
+        public bool OpenConnection(bool silent = false)
         {
             return true;
         }
 
-        public bool CloseConnection()
+        public bool CloseConnection(bool silent = false)
         {
             return true;
         }
 
-        public bool ExecuteSql(string sql)
+        public bool ExecuteSql(string sql, bool silent = false)
         {
             return true;
         }

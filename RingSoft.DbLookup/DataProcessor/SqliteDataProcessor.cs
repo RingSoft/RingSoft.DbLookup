@@ -105,7 +105,17 @@ namespace RingSoft.DbLookup.DataProcessor
 
         public override bool TestConnection()
         {
-            throw new NotImplementedException();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+            var context = SystemGlobals.DataRepository.GetDataContext(this);
+            context.SetConnectionString(GenerateConnectionString());
+            var result = context.OpenConnection();
+            if (result)
+            {
+                context.CloseConnection();
+            }
+            context.SetConnectionString(null);
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+            return result;
         }
     }
 }

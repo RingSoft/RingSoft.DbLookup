@@ -53,9 +53,9 @@ namespace RingSoft.DbLookup.EfCore
 
         public abstract DbContextEfCore GetNewDbContextEfCore();
 
-        public bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool SaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            var result = GetDbContextEf().SaveEntity(Set<TEntity>(), entity, message);
+            var result = GetDbContextEf().SaveEntity(Set<TEntity>(), entity, message, silent);
             return result;
         }
 
@@ -64,33 +64,33 @@ namespace RingSoft.DbLookup.EfCore
             return tableDefinition.LookupDefinition.GetLookupDataMaui(lookupDefinition, false);
         }
 
-        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
             var context = GetDbContextEf();
-            if (!context.SaveNoCommitEntity(Set<TEntity>(), entity, message))
+            if (!context.SaveNoCommitEntity(Set<TEntity>(), entity, message, silent))
                 return false;
 
             return true;
         }
 
-        public bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool DeleteEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            return GetDbContextEf().DeleteEntity(Set<TEntity>(), entity, message);
+            return GetDbContextEf().DeleteEntity(Set<TEntity>(), entity, message, silent);
         }
 
-        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            return GetDbContextEf().DeleteNoCommitEntity(Set<TEntity>(), entity, message);
+            return GetDbContextEf().DeleteNoCommitEntity(Set<TEntity>(), entity, message, silent);
         }
 
-        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new()
+        public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            return GetDbContextEf().AddNewNoCommitEntity(Set<TEntity>(), entity, message);
+            return GetDbContextEf().AddNewNoCommitEntity(Set<TEntity>(), entity, message, silent);
         }
 
-        public bool Commit(string message)
+        public bool Commit(string message, bool silent = false)
         {
-            var result = GetDbContextEf().SaveEfChanges(message);
+            var result = GetDbContextEf().SaveEfChanges(message, silent);
 
             return result;
         }
@@ -115,7 +115,8 @@ namespace RingSoft.DbLookup.EfCore
             return dbSet;
         }
 
-        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true)
+        public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition
+            , bool silent = false, bool value = true)
         {
 
             var sql = processor.GetIdentityInsertSql(tableDefinition.TableName, value);
@@ -124,7 +125,7 @@ namespace RingSoft.DbLookup.EfCore
                 return;
             }
 
-            if (!OpenConnection())
+            if (!OpenConnection(silent))
             {
                 return;
             }
@@ -141,7 +142,7 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
-        public bool OpenConnection()
+        public bool OpenConnection(bool silent = false)
         {
             try
             {
@@ -150,14 +151,26 @@ namespace RingSoft.DbLookup.EfCore
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                if (silent)
+                {
+                    GblMethods.LastError = e.Message;
+                }
+                else
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                }
+
                 return false;
             }
 
+            if (silent)
+            {
+                GblMethods.LastError = string.Empty;
+            }
             return true;
         }
 
-        public bool CloseConnection()
+        public bool CloseConnection(bool silent = false)
         {
             try
             {
@@ -166,14 +179,26 @@ namespace RingSoft.DbLookup.EfCore
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                if (silent)
+                {
+                    GblMethods.LastError = e.Message;
+                }
+                else
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                }
+
                 return false;
             }
 
+            if (silent)
+            {
+                GblMethods.LastError = string.Empty;
+            }
             return true;
         }
 
-        public bool ExecuteSql(string sql)
+        public bool ExecuteSql(string sql, bool silent = false)
         {
             try
             {
@@ -182,10 +207,18 @@ namespace RingSoft.DbLookup.EfCore
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                if (silent)
+                {
+                    GblMethods.LastError += e.Message;
+                }
+                else
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                }
+
                 return false;
             }
-
+            GblMethods.LastError = string.Empty;
             return true;
         }
 
@@ -219,6 +252,7 @@ namespace RingSoft.DbLookup.EfCore
             CloseConnection();
 
             SetConnectionString(null);
+            GblMethods.LastError = string.Empty;
             return result;
         }
 

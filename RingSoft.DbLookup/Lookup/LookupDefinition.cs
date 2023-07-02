@@ -398,22 +398,22 @@ namespace RingSoft.DbLookup.Lookup
                     destinationContext.AddRange(batch);
                     if (identity)
                     {
-                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true);
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true, true);
                     }
 
-                    if (!destinationContext.Commit("Copying Data"))
+                    if (!destinationContext.Commit("Copying Data", true))
                     {
                         if (identity)
                         {
-                            destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                            destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false, false);
                         }
 
-                        return "Error";
+                        return GblMethods.LastError;
                     }
                     batch.Clear();
                     if (identity)
                     {
-                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true, false);
                     }
                     var args = new CopyProcedureArgs
                     {
@@ -430,27 +430,24 @@ namespace RingSoft.DbLookup.Lookup
             {
                 if (identity)
                 {
-                    destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true);
+                    destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true, true);
                 }
                 destinationContext.AddRange(batch);
-                if (!destinationContext.Commit("Copying Data"))
+                if (!destinationContext.Commit("Copying Data", true))
                 {
                     if (identity)
                     {
-                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                        destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false, false);
                     }
-                    return "Error";
+
+                    return GblMethods.LastError;
                 }
             }
             if (identity)
             {
-                destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
+                destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, true, false);
             }
 
-            if (identity)
-            {
-                destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false);
-            }
             var args1 = new CopyProcedureArgs
             {
                 TableDefinitionBeingProcessed = TableDefinition,

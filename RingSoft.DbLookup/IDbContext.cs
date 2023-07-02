@@ -12,17 +12,17 @@ namespace RingSoft.DbLookup
             , TableDefinition<TEntity> tableDefinition)
             where TEntity : class, new();
 
-        bool SaveNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();
+        bool SaveNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
-        bool SaveEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();
+        bool SaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
-        bool DeleteEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();
+        bool DeleteEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
-        bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();
+        bool DeleteNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
-        bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message) where TEntity : class, new();
+        bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
-        bool Commit(string message);
+        bool Commit(string message, bool silent = false);
 
         void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class, new();
 
@@ -30,13 +30,14 @@ namespace RingSoft.DbLookup
 
         IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new();
 
-        void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool value = true);
+        void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool silent = false
+            , bool value = true);
 
-        bool OpenConnection();
+        bool OpenConnection(bool silent = false);
 
-        bool CloseConnection();
+        bool CloseConnection(bool silent = false);
 
-        bool ExecuteSql(string sql);
+        bool ExecuteSql(string sql, bool silent = false);
 
         List<string> GetListOfDatabases(DbDataProcessor dataProcessor);
 

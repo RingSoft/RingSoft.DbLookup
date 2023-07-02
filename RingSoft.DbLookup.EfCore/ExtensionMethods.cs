@@ -18,12 +18,12 @@ namespace RingSoft.DbLookup.EfCore
         /// True if no errors occurred while saving.
         /// </returns>
         public static bool SaveEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
-            string debugMessage) where TEntity : class
+            string debugMessage, bool silent = false) where TEntity : class
         {
-            if (!SaveNoCommitEntity(context, dbSet, entity, debugMessage))
+            if (!SaveNoCommitEntity(context, dbSet, entity, debugMessage, silent))
                 return false;
 
-            return context.SaveEfChanges(debugMessage);
+            return context.SaveEfChanges(debugMessage, silent);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace RingSoft.DbLookup.EfCore
         /// True if no errors occurred while saving.
         /// </returns>
         public static bool SaveNoCommitEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
-            string debugMessage) where TEntity : class
+            string debugMessage, bool silent = false) where TEntity : class
         {
             try
             {
@@ -70,6 +70,7 @@ namespace RingSoft.DbLookup.EfCore
             if (!AddNewNoCommitEntity(context, dbSet, entity, debugMessage))
                 return false;
 
+            GblMethods.LastError = string.Empty;
             return context.SaveEfChanges(debugMessage);
         }
 
@@ -85,7 +86,7 @@ namespace RingSoft.DbLookup.EfCore
         /// True if no errors occured while saving.
         /// </returns>
         public static bool AddNewNoCommitEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
-            string debugMessage) where TEntity : class
+            string debugMessage, bool silent = false) where TEntity : class
         {
             try
             {
@@ -93,10 +94,10 @@ namespace RingSoft.DbLookup.EfCore
             }
             catch (Exception e)
             {
-                ProcessException(e, debugMessage);
+                ProcessException(e, debugMessage, silent);
                 return false;
             }
-
+            GblMethods.LastError = string.Empty;
             return true;
         }
 
@@ -110,12 +111,17 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="debugMessage">The debug message.</param>
         /// <returns></returns>
         public static bool DeleteEntity<TEntity>(this DbContext dbContext, DbSet<TEntity> dbSet, TEntity entity,
-            string debugMessage) where TEntity : class
+            string debugMessage, bool silent = false) where TEntity : class
         {
             if (!DeleteNoCommitEntity(dbContext, dbSet, entity, debugMessage))
                 return false;
 
-            return dbContext.SaveEfChanges(debugMessage);
+            var result = dbContext.SaveEfChanges(debugMessage);
+            if (result)
+            {
+                GblMethods.LastError = string.Empty;
+            }
+            return result;
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="debugMessage">The debug message.</param>
         /// <returns></returns>
         public static bool DeleteNoCommitEntity<TEntity>(this DbContext dbContext, DbSet<TEntity> dbSet, TEntity entity,
-            string debugMessage) where TEntity : class
+            string debugMessage, bool silent = false) where TEntity : class
         {
             try
             {
@@ -139,7 +145,7 @@ namespace RingSoft.DbLookup.EfCore
                 ProcessException(e, debugMessage);
                 return false;
             }
-
+            GblMethods.LastError = string.Empty;
             return true;
         }
 
@@ -149,7 +155,7 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbContext">The database context.</param>
         /// <param name="debugMessage">The debug message.</param>
         /// <returns>True, if data was saved without exceptions.</returns>
-        public static bool SaveEfChanges(this DbContext dbContext, string debugMessage)
+        public static bool SaveEfChanges(this DbContext dbContext, string debugMessage, bool silent = false)
         {
             try
             {
@@ -157,20 +163,25 @@ namespace RingSoft.DbLookup.EfCore
             }
             catch (Exception e)
             {
-                ProcessException(e, debugMessage);
+                ProcessException(e, debugMessage, silent);
                 return false;
             }
-
+            GblMethods.LastError = string.Empty;
             return true;
         }
 
-        public static void ProcessException(this Exception e, string debugMessage)
+        public static void ProcessException(this Exception e, string debugMessage, bool silent = false)
         {
             var exception = e;
             if (exception.InnerException != null)
                 exception = exception.InnerException;
 
-            DbDataProcessor.DisplayDataException(exception, debugMessage);
+            if (!silent)
+            {
+                DbDataProcessor.DisplayDataException(exception, debugMessage);
+            }
+
+            GblMethods.LastError = exception.Message;
         }
     }
 }

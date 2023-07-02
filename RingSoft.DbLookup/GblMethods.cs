@@ -39,6 +39,8 @@ namespace RingSoft.DbLookup
 
     public static class GblMethods
     {
+        public static string LastError { get; set; }
+
         /// <summary>
         /// Duplicates the passed-in string.
         /// </summary>

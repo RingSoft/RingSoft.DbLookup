@@ -669,11 +669,14 @@ namespace RingSoft.DbMaintenance
                     if (KeyAutoFillSetup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition
                         lookupFieldColumn)
                     {
-                        var message = $"{lookupFieldColumn.FieldDefinition.Description} cannot be empty.";
-                        var caption = "Invalid Key Value";
-                        //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                        View.OnValidationFail(lookupFieldColumn.FieldDefinition, message, caption);
-                        return DbMaintenanceResults.ValidationError;
+                        if (!lookupFieldColumn.FieldDefinition.GeneratedKey || MaintenanceMode == DbMaintenanceModes.EditMode)
+                        {
+                            var message = $"{lookupFieldColumn.FieldDefinition.Description} cannot be empty.";
+                            var caption = "Invalid Key Value";
+                            //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                            View.OnValidationFail(lookupFieldColumn.FieldDefinition, message, caption);
+                            return DbMaintenanceResults.ValidationError;
+                        }
                     }
                 }
             }
@@ -829,7 +832,10 @@ namespace RingSoft.DbMaintenance
             }
             else
             {
-                _lookupData.SelectPrimaryKey(primaryKey);
+                if (MaintenanceMode == DbMaintenanceModes.AddMode)
+                {
+                    _lookupData.SelectPrimaryKey(primaryKey);
+                }
 
                 if (LookupAddViewArgs != null)
                 {
@@ -984,8 +990,19 @@ namespace RingSoft.DbMaintenance
                     {
                         if (dbAutoFillMap.AutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())
                         {
-                            ProcessAutoFillValidationResponse(dbAutoFillMap);
-                            return false;
+                            var validate = true;
+                            if (KeyAutoFillSetup
+                                    .LookupDefinition
+                                    .InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                            {
+                                validate = !lookupFieldColumn.FieldDefinition.GeneratedKey;
+                            }
+
+                            if (validate)
+                            {
+                                ProcessAutoFillValidationResponse(dbAutoFillMap);
+                                return false;
+                            }
                         }
                     }
                     else

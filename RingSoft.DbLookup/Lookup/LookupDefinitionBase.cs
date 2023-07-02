@@ -96,6 +96,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupColumnDefinitionBase InitialOrderByColumn { get; set; }
 
+        public FieldDefinition InitialOrderByField { get; set; }
+
         /// <summary>
         /// Gets the name of the lookup entity.
         /// </summary>

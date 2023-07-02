@@ -1235,6 +1235,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var columnNumber = 1;
                 foreach (var lookupColumnDefinition in LookupDataMaui.OrderByList)
                 {
+                    if (LookupDefinition.InitialOrderByField != null)
+                    {
+                        if (LookupDefinition.InitialOrderByField == lookupColumnDefinition.FieldDefinition)
+                        {
+                            continue;
+                        }
+                    }
                     if (first)
                     {
                         first = false;

@@ -40,6 +40,7 @@ namespace RingSoft.DbLookup.Lookup
         public override int RowCount => CurrentList.Count;
 
         private OrderByTypes _orderByType = OrderByTypes.Ascending;
+        private bool _addInitialField = true;
 
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
             : base(lookupDefinition)
@@ -281,9 +282,18 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder)
         {
+            _addInitialField = false;
             if (resetSortOrder)
             {
-                if (column == OrderByList[0])
+                var index = 0;
+                if (LookupDefinition.InitialOrderByField != null)
+                {
+                    if (OrderByList[0].FieldDefinition == LookupDefinition.InitialOrderByField)
+                    {
+                        index = 1;
+                    }
+                }
+                if (column == OrderByList[index])
                 {
                     if (_orderByType == OrderByTypes.Ascending)
                         _orderByType = OrderByTypes.Descending;
@@ -579,6 +589,15 @@ namespace RingSoft.DbLookup.Lookup
                 filterExpr = containsExpr;
             }
             var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+
+            if (searchColumn != null)
+            {
+                if (LookupDefinition.InitialOrderByField != null 
+                    && LookupDefinition.InitialOrderByField == searchColumn.FieldDefinition)
+                {
+                    searchColumn = OrderByList[1];
+                }
+            }
             var type = searchColumn.FieldDefinition.FieldType;
             var value = searchForText.GetPropertyFilterValue(searchColumn.FieldDefinition.FieldDataType,
                 searchColumn.FieldDefinition.FieldType);
@@ -890,6 +909,26 @@ namespace RingSoft.DbLookup.Lookup
         {
             var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>();
             var first = true;
+
+            if (LookupDefinition.InitialOrderByField != null && _addInitialField)
+            {
+                var insertColumn = true;
+                if (orderBys.FirstOrDefault() is LookupFieldColumnDefinition fieldColumn)
+                {
+                    if (fieldColumn.FieldDefinition == LookupDefinition.InitialOrderByField)
+                    {
+                        insertColumn = false;
+                    }
+                }
+
+                if (insertColumn)
+                {
+                    var column = LookupDefinition.AddHiddenColumn(
+                        LookupDefinition.InitialOrderByField);
+                    OrderByList.Insert(0, column);
+                }
+            }
+
 
             var orderByType = OrderMethods.OrderBy;
             var thenByType = OrderMethods.ThenBy;
@@ -1330,6 +1369,16 @@ namespace RingSoft.DbLookup.Lookup
             if (LookupControl.SearchType == LookupSearchTypes.Contains)
             {
                 var containsColumn = OrderByList.FirstOrDefault();
+                if (containsColumn != null)
+                {
+                    if (LookupDefinition.InitialOrderByField != null)
+                    {
+                        if (containsColumn.FieldDefinition == LookupDefinition.InitialOrderByField)
+                        {
+                            containsColumn = OrderByList[1];
+                        }
+                    }
+                }
                 containsExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
                     , containsColumn.GetPropertyJoinName()
                     , Conditions.Contains

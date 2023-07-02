@@ -133,6 +133,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             FieldType = type;
         }
 
+        public bool GeneratedKey { get; private set; }
 
         internal FieldDefinition()
         {
@@ -231,6 +232,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <returns>True if the value is safe to save to the database.</returns>
         public virtual bool ValidateValueForSavingToDb(string value)
         {
+            if (GeneratedKey && value.IsNullOrEmpty())
+            {
+                return true;
+            }
             if (!AllowNulls && value.IsNullOrEmpty())
                 return false;
 
@@ -338,6 +343,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             FormulaObject = lookupFormula;
             TableDefinition.Context.RegisterLookupFormula(lookupFormula);
+            return this;
+        }
+
+        internal FieldDefinition IsGeneratedKey(bool value = true)
+        {
+            GeneratedKey = value;
             return this;
         }
     }

@@ -82,5 +82,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             base.HasFormulaObject(lookupFormula);
             return (TFieldDefinition)this;
         }
+
+        public new TFieldDefinition IsGeneratedKey(bool value = true)
+        {
+            base.IsGeneratedKey(value);
+            return (TFieldDefinition)this;
+        }
     }
 }

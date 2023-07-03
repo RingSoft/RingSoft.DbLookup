@@ -220,6 +220,11 @@ namespace RingSoft.DbLookup.Lookup
                         integerFieldDefinition.EnumTranslation != null)
                         return LookupColumnAlignmentTypes.Left;
                 }
+
+                if (SearchForHostId > 0)
+                {
+                    return LookupColumnAlignmentTypes.Left;
+                }
             }
 
             return base.SetupDefaultHorizontalAlignment();

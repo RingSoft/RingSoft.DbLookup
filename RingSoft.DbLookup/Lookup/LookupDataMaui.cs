@@ -850,10 +850,10 @@ namespace RingSoft.DbLookup.Lookup
 
             var ascending = condition == Conditions.GreaterThan;
             var removeFilter = true;
-            while (input.FilterDefinition.FixedFilters.Any() && removeFilter)
+            while (input.FilterDefinition.FixedFilters.Any())
             {
                 var filterItem = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().LastOrDefault();
-                if (filterItem != null)
+                if (filterItem != null && !filterItem.IsNullFilter())
                 {
                     filterItem.Condition = condition;
                 }
@@ -868,30 +868,61 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    var lastFilter = input.FilterDefinition.FixedFilters.LastOrDefault();
+                    var lastFilter = input.FieldFilters.LastOrDefault();
                     if (lastFilter != null)
                     {
                         if (input.FilterDefinition.FixedFilters.Count > 1)
                         {
                             var filterIndex = input.FilterDefinition
                                 .FixedBundle.IndexOf(lastFilter);
-                            if (input
-                                .FilterDefinition
-                                .FixedBundle
-                                .Filters[filterIndex - 1]
+                            var nullFilter = input
+                                .FieldFilters[filterIndex - 1];
+                            if (nullFilter
                                 .Value.IsNullOrEmpty())
                             {
+                                if (_orderByType == OrderByTypes.Ascending)
+                                {
+                                    if (ascending)
+                                    {
+                                        nullFilter.Condition = Conditions.NotEqualsNull;
+                                    }
+                                    else
+                                    {
+                                        nullFilter.Condition = Conditions.EqualsNull;
+                                    }
+                                }
+                                else
+                                {
+                                    if (ascending)
+                                    {
+                                        nullFilter.Condition = Conditions.EqualsNull;
+                                    }
+                                    else
+                                    {
+                                        nullFilter.Condition = Conditions.NotEqualsNull;
+                                    }
+                                }
+
                                 removeFilter = false;
+                                if (lastFilter.IsPrimaryKey)
+                                {
+                                    removeFilter = true;
+                                }
+
                                 if (lastFilter is FieldFilterDefinition fieldFilter)
                                 {
                                     fieldFilter.Condition = condition;
                                 }
                             }
                         }
-
+                        else
+                        {
+                            removeFilter = true;
+                        }
                         if (removeFilter)
                         {
                             RemoveFilter(input, lastFilter);
+                            removeFilter = false;
                         }
                     }
                 }
@@ -1261,16 +1292,8 @@ namespace RingSoft.DbLookup.Lookup
             
             var setFirstNull = setNullValue;
             input = GetProcessInput(topEntity);
-            var lastFilter2 = input.FieldFilters.LastOrDefault();
-            if (lastFilter2 != null)
-            {
-                if (lastFilter2.FieldDefinition.AllowNulls 
-                    && lastFilter2.Value.IsNullOrEmpty())
-                {
-                    setNullValue = true;
-                }
-            }
-            if (setNullValue)
+            lastFilter = input.FieldFilters.LastOrDefault();
+            if (lastFilter != null && lastFilter.IsNullFilter() || setNullValue)
             {
                 var lastFilter1 = input.FieldFilters.LastOrDefault();
 

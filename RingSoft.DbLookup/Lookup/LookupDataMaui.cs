@@ -880,28 +880,8 @@ namespace RingSoft.DbLookup.Lookup
                             if (nullFilter
                                 .Value.IsNullOrEmpty())
                             {
-                                if (_orderByType == OrderByTypes.Ascending)
-                                {
-                                    if (ascending)
-                                    {
-                                        nullFilter.Condition = Conditions.NotEqualsNull;
-                                    }
-                                    else
-                                    {
-                                        nullFilter.Condition = Conditions.EqualsNull;
-                                    }
-                                }
-                                else
-                                {
-                                    if (ascending)
-                                    {
-                                        nullFilter.Condition = Conditions.EqualsNull;
-                                    }
-                                    else
-                                    {
-                                        nullFilter.Condition = Conditions.NotEqualsNull;
-                                    }
-                                }
+                                var nullCondition = GetNullCondition(ascending);
+                                nullFilter.Condition = nullCondition;
 
                                 removeFilter = false;
                                 if (lastFilter.IsPrimaryKey)
@@ -929,6 +909,35 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return result;
+        }
+
+        private Conditions GetNullCondition(bool ascending)
+        {
+            var nullCondition = Conditions.EqualsNull;
+            if (_orderByType == OrderByTypes.Ascending)
+            {
+                if (ascending)
+                {
+                    nullCondition = Conditions.NotEqualsNull;
+                }
+                else
+                {
+                    nullCondition = Conditions.EqualsNull;
+                }
+            }
+            else
+            {
+                if (ascending)
+                {
+                    nullCondition = Conditions.EqualsNull;
+                }
+                else
+                {
+                    nullCondition = Conditions.NotEqualsNull;
+                }
+            }
+
+            return nullCondition;
         }
 
         private void AddPrimaryKeyFieldsToFilter(TEntity entity, LookupDataMauiProcessInput<TEntity> input)

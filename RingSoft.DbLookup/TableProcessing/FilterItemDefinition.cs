@@ -150,6 +150,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         internal LookupColumnDefinitionBase LookupColumn { get; set; }
 
+        public bool Processed { get; private set; }
+
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
@@ -529,6 +531,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public virtual Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
+            Processed = true;
             return null;
         }
 

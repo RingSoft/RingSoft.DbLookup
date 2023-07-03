@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (columnDefinition is LookupFieldColumnDefinition lookupFieldColumn
                     && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition
                     && integerFieldDefinition.EnumTranslation != null)
-                    hostId = SearchForStringHostId;
+                    hostId = GblMethods.SearchForEnumHostId;
             }
 
             var searchForHost = CreateSearchForHost(hostId);
@@ -67,7 +67,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return new LookupSearchForDateHost();
             if (hostId == SearchForIntegerHostId)
                 return new LookupSearchForIntegerHost();
-
+            if (hostId == GblMethods.SearchForEnumHostId)
+            {
+                return new LookupSearchForEnumHost();
+            }
             return new LookupSearchForStringHost();
         }
 

@@ -1256,8 +1256,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
-                //if (resetSortOrder)
-                //    SetActiveColumn(columnIndex, LookupData.SortColumnDefinition.DataType);
+                if (resetSortOrder)
+                {
+                    var activeColumn = LookupDataMaui.OrderByList.FirstOrDefault();
+                    if (LookupDefinition.InitialOrderByField != null)
+                    {
+                        if (LookupDefinition.InitialOrderByField == activeColumn.FieldDefinition)
+                        {
+                            activeColumn = LookupDataMaui.OrderByList[1];
+                        }
+                    }
+                    SetActiveColumn(columnIndex, activeColumn.DataType);
+                }
 
                 SearchForHost?.Control.Focus();
             }

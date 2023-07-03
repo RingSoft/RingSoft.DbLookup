@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 var formattedVaue =
                     FieldDefinition.TableDefinition.Context.FormatValueForSearchHost(
-                        SearchForHostId.GetValueOrDefault(), value);
+                        SearchForHostId.GetValueOrDefault(), value, FieldDefinition);
 
                 if (formattedVaue.IsNullOrEmpty())
                 {

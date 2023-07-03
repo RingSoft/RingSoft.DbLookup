@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -90,6 +91,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             if (TableDefinition.PrimaryKeyFields.Contains(this))
                 return value;
+            if (EnumTranslation != null)
+            {
+                var numValue = value.ToInt();
+                var trans = EnumTranslation
+                    .TypeTranslations
+                    .FirstOrDefault(p => p.NumericValue == numValue);
+                if (trans != null)
+                {
+                    return trans.TextValue;
+                }
+            }
 
             var formatString = NumberFormatString;
             if (formatString.IsNullOrEmpty())

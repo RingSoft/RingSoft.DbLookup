@@ -52,6 +52,8 @@ namespace RingSoft.DbLookup
         public string RawValue { get; set; }
 
         public int SearchForHostId { get; set; }
+
+        public FieldDefinition FieldDefinition { get; internal set; }
     }
 
     public class UserAutoFill
@@ -358,12 +360,26 @@ namespace RingSoft.DbLookup
         public abstract AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
             where TEntity : class, new();
 
-        public virtual string FormatValueForSearchHost(int searchForHostId, string value)
+        public virtual string FormatValueForSearchHost(int searchForHostId, string value, FieldDefinition fieldDefinition)
         {
+            if (searchForHostId == GblMethods.SearchForEnumHostId 
+                && fieldDefinition is IntegerFieldDefinition integerField
+                && integerField.EnumTranslation != null)
+            {
+                var numValue = value.ToInt();
+                var translation = integerField
+                    .EnumTranslation
+                    .TypeTranslations.FirstOrDefault(p => p.NumericValue == numValue);
+                if (translation != null)
+                {
+                    return translation.TextValue;
+                }
+            }
             var args = new SearchHostFormatArgs()
             {
                 SearchForHostId = searchForHostId,
                 RawValue = value,
+                FieldDefinition = fieldDefinition,
             };
 
             FormatSearchForEvent?.Invoke(this, args);

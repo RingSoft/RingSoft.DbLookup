@@ -251,9 +251,14 @@ namespace RingSoft.DbLookup.Lookup
 
             var whereExpression = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
 
-            if (LookupControl != null && LookupControl.SearchType == LookupSearchTypes.Contains)
+            var condition = Conditions.Contains;
+
+            if (LookupControl != null 
+                && (LookupControl.SearchType == LookupSearchTypes.Contains
+                    || condition != null))
             {
-                var contExpr = GetContainsExpr(param);
+                var contExpr = GetContainsExpr(param, condition);
+
                 if (whereExpression == null)
                 {
                     whereExpression = contExpr;
@@ -604,9 +609,13 @@ namespace RingSoft.DbLookup.Lookup
 
             if (filterExpr == null)
             {
-
+                var condition = Conditions.GreaterThanEquals;
+                if (_orderByType == OrderByTypes.Descending)
+                {
+                    condition = Conditions.LessThanEquals;
+                }
                 filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param, searchColumn.GetPropertyJoinName()
-                    , Conditions.GreaterThanEquals, type, value);
+                    , condition, type, value);
                 if (type == typeof(string))
                 {
                     filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param,
@@ -1363,9 +1372,10 @@ namespace RingSoft.DbLookup.Lookup
             return query;
         }
 
-        private Expression GetContainsExpr(ParameterExpression param)
+        private Expression GetContainsExpr(ParameterExpression param, Conditions? condition = null)
         {
             Expression containsExpr = null;
+            var search = true;
             if (LookupControl.SearchType == LookupSearchTypes.Contains)
             {
                 var containsColumn = OrderByList.FirstOrDefault();
@@ -1379,11 +1389,22 @@ namespace RingSoft.DbLookup.Lookup
                         }
                     }
                 }
-                containsExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
-                    , containsColumn.GetPropertyJoinName()
-                    , Conditions.Contains
-                    , containsColumn.FieldDefinition.FieldType
-                    , LookupControl.SearchText);
+
+                var searchCond = Conditions.Contains;
+                if (containsColumn.FieldDefinition.SearchForCondition != null)
+                {
+                    searchCond = containsColumn.FieldDefinition.SearchForCondition.GetValueOrDefault();
+                }
+
+                if (!LookupControl.SearchText.IsNullOrEmpty())
+                {
+                    containsExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+                        , containsColumn.GetPropertyJoinName()
+                        , searchCond
+                        , containsColumn.FieldDefinition.FieldType
+                        , LookupControl.SearchText.GetPropertyFilterValue(
+                            containsColumn.FieldDefinition.FieldDataType, containsColumn.FieldDefinition.FieldType));
+                }
             }
 
             return containsExpr;

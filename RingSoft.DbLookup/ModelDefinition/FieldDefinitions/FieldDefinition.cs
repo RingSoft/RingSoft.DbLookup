@@ -135,6 +135,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public bool GeneratedKey { get; private set; }
 
+        public Conditions? SearchForCondition { get; private set; }
+
         internal FieldDefinition()
         {
             AllowNulls = true;

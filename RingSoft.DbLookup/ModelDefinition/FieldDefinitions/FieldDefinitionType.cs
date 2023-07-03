@@ -1,4 +1,5 @@
 ﻿using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {

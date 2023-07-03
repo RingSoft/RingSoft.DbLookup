@@ -39,6 +39,7 @@ namespace RingSoft.DbLookup
 
     public static class GblMethods
     {
+        public const int SearchForEnumHostId = 4;
         public static string LastError { get; set; }
 
         /// <summary>

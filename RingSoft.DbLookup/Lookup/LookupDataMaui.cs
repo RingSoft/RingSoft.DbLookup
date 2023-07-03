@@ -1273,8 +1273,31 @@ namespace RingSoft.DbLookup.Lookup
             if (setNullValue)
             {
                 var lastFilter1 = input.FieldFilters.LastOrDefault();
-            
-                lastFilter1.Condition = Conditions.EqualsNull;
+
+                if (ascending && filterIndex > 0)
+                {
+                    if (_orderByType == OrderByTypes.Ascending)
+                    {
+                        lastFilter1.Condition = Conditions.NotEqualsNull;
+                        setFirstNull = true;
+                    }
+                    else
+                    {
+                        lastFilter1.Condition = Conditions.EqualsNull;
+                    }
+                }
+                else
+                {
+                    if (_orderByType == OrderByTypes.Ascending)
+                    {
+                        lastFilter1.Condition = Conditions.EqualsNull;
+                    }
+                    else
+                    {
+                        lastFilter1.Condition = Conditions.NotEqualsNull;
+                        setFirstNull = true;
+                    }
+                }
             }
 
             if (addedPrimaryKey)

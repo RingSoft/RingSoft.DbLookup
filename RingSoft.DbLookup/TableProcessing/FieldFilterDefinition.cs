@@ -518,7 +518,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 dateType = dateFieldDefinition.DateType;
             }
 
-            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty())
+            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty() && Condition != Conditions.NotEqualsNull)
             {
                 if (LookupColumn != null)
                 {
@@ -539,6 +539,16 @@ namespace RingSoft.DbLookup.TableProcessing
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
 
             var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
+            return result;
+        }
+
+        public bool IsNullFilter()
+        {
+            var result = false;
+            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty())
+            {
+                result = true;
+            }
             return result;
         }
     }

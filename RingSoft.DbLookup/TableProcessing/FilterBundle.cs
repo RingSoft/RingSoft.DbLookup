@@ -20,6 +20,10 @@ namespace RingSoft.DbLookup.TableProcessing
             TableFilter = tableFilter;
         }
 
+        public int IndexOf(FilterItemDefinition filterItem)
+        {
+            return _filters.IndexOf(filterItem);
+        }
         public void ClearFilters()
         {
             _filters.Clear();
@@ -92,13 +96,6 @@ namespace RingSoft.DbLookup.TableProcessing
 
             foreach (var filter in Filters)
             {
-                if (filter.Value.IsNullOrEmpty())
-                {
-                    if (filter is FieldFilterDefinition fieldFilter)
-                    {
-                        fieldFilter.Condition = Conditions.EqualsNull;
-                    }
-                }
                 var rightExpression  = filter.GetMauiFilter<TEntity>(param);
                 if (rightExpression != null)
                 {

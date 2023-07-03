@@ -834,12 +834,23 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
             var input = GetProcessInput(entity);
+            var lastFilter1 = input.FieldFilters.LastOrDefault();
+            var checkNull = false;
+            if (lastFilter1 != null)
+            {
+                if (lastFilter1.FieldDefinition.AllowNulls
+                    && lastFilter1.Value.IsNullOrEmpty())
+                {
+                    lastFilter1.Condition = Conditions.EqualsNull;
+                    checkNull = true;
+                }
+            }
 
             AddPrimaryKeyFieldsToFilter(entity, input);
 
             var ascending = condition == Conditions.GreaterThan;
-
-            while (input.FilterDefinition.FixedFilters.Any())
+            var removeFilter = true;
+            while (input.FilterDefinition.FixedFilters.Any() && removeFilter)
             {
                 var filterItem = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().LastOrDefault();
                 if (filterItem != null)
@@ -860,7 +871,28 @@ namespace RingSoft.DbLookup.Lookup
                     var lastFilter = input.FilterDefinition.FixedFilters.LastOrDefault();
                     if (lastFilter != null)
                     {
-                        RemoveFilter(input, lastFilter);
+                        if (input.FilterDefinition.FixedFilters.Count > 1)
+                        {
+                            var filterIndex = input.FilterDefinition
+                                .FixedBundle.IndexOf(lastFilter);
+                            if (input
+                                .FilterDefinition
+                                .FixedBundle
+                                .Filters[filterIndex - 1]
+                                .Value.IsNullOrEmpty())
+                            {
+                                removeFilter = false;
+                                if (lastFilter is FieldFilterDefinition fieldFilter)
+                                {
+                                    fieldFilter.Condition = condition;
+                                }
+                            }
+                        }
+
+                        if (removeFilter)
+                        {
+                            RemoveFilter(input, lastFilter);
+                        }
                     }
                 }
             }
@@ -875,6 +907,7 @@ namespace RingSoft.DbLookup.Lookup
                 var fieldFilter = input.FilterDefinition.AddFixedFilter(primaryKeyField, Conditions.Equals
                     , GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName));
                 fieldFilter.SetPropertyName = primaryKeyField.PropertyName;
+                fieldFilter.IsPrimaryKey = true;
             }
 
             input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
@@ -1090,8 +1123,14 @@ namespace RingSoft.DbLookup.Lookup
             }
             var input = GetProcessInput(nextEntity, true);
 
-            var query = GetFilterPageQuery(nextEntity, count, input
-                , true, out var addedPrimaryKeyToFilter, !previous, out var hasMultiRecs);
+            var query = GetFilterPageQuery(
+                nextEntity
+                , count, input
+                , true
+                , out var addedPrimaryKeyToFilter
+                , !previous
+                , out var hasMultiRecs
+                , false);
 
             result.AddRange(query);
             
@@ -1136,15 +1175,26 @@ namespace RingSoft.DbLookup.Lookup
             , bool checkPrimaryKey
             , out bool addedPrimaryKeyToFilter
             , bool ascending
-            , out bool hasMultiRecs)
+            , out bool hasMultiRecs
+            , bool checkNull)
         {
             addedPrimaryKeyToFilter = false;
-            hasMultiRecs = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
+            if (checkNull)
+            {
+                hasMultiRecs = false;
+            }
+            else
+            {
+                hasMultiRecs = DoesFilterHaveMoreThan1Record(entity, input, checkPrimaryKey);
+            }
 
+            var condition = Conditions.Equals;
             if (hasMultiRecs && checkPrimaryKey)
             {
+
                 addedPrimaryKeyToFilter = true;
                 AddPrimaryKeyFieldsToFilter(entity, input);
+                
             }
 
             var qAsc = ascending;
@@ -1197,21 +1247,47 @@ namespace RingSoft.DbLookup.Lookup
             return hasMoreThan1Record;
         }
 
-        private List<TEntity> AddAditionalList(LookupDataMauiProcessInput<TEntity> input, List<TEntity> inputList
-        , int count, bool addedPrimaryKey, TEntity topEntity, bool ascending, int filterIndex = 0)
+        private List<TEntity> AddAditionalList(
+            LookupDataMauiProcessInput<TEntity> input
+            , List<TEntity> inputList
+            , int count
+            , bool addedPrimaryKey
+            , TEntity topEntity
+            , bool ascending
+            , bool setNullValue = false
+            , int filterIndex = 0)
         {
             FieldFilterDefinition lastFilter = null;
+            
+            var setFirstNull = setNullValue;
             input = GetProcessInput(topEntity);
+            var lastFilter2 = input.FieldFilters.LastOrDefault();
+            if (lastFilter2 != null)
+            {
+                if (lastFilter2.FieldDefinition.AllowNulls 
+                    && lastFilter2.Value.IsNullOrEmpty())
+                {
+                    setNullValue = true;
+                }
+            }
+            if (setNullValue)
+            {
+                var lastFilter1 = input.FieldFilters.LastOrDefault();
+            
+                lastFilter1.Condition = Conditions.EqualsNull;
+            }
+
             if (addedPrimaryKey)
             {
                 AddPrimaryKeyFieldsToFilter(topEntity, input);
             }
 
             var result = new List<TEntity>();
-
+            
             if (filterIndex > 1 && input.FieldFilters.Count > 1)
             {
                 lastFilter= input.FieldFilters.LastOrDefault();
+
                 if (lastFilter != null && input.FieldFilters.Count > 1)
                 {
                     RemoveFilter(input, lastFilter);
@@ -1219,7 +1295,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             lastFilter = input.FieldFilters.LastOrDefault();
-            if (lastFilter != null)
+            if (lastFilter != null && !setFirstNull)
             {
                 switch (_orderByType)
                 {
@@ -1254,18 +1330,39 @@ namespace RingSoft.DbLookup.Lookup
                 , false
                 , out addedPrimaryKey
                 , ascending
-                , out var hasMultiRecs);
+                , out var hasMultiRecs
+                , setNullValue);
 
+            lastFilter = input.FieldFilters.LastOrDefault();
             if (output.Count() == 0)
             {
                 if (input.FieldFilters.Count > 1)
                 {
                     var entity = topEntity;
-                    lastFilter = (input.FieldFilters.LastOrDefault());
                     RemoveFilter(input, lastFilter);
                     filterIndex++;
-                    var newList = AddAditionalList(input, result, count, false, entity, ascending, filterIndex);
+                    var newList = AddAditionalList(input, result, count, false, entity, ascending, false, filterIndex);
                     result.InsertRange(0, newList);
+                }
+                else
+                {
+                    if (!setFirstNull)
+                    {
+                        if (lastFilter.FieldDefinition.AllowNulls)
+                        {
+                            lastFilter.Condition = Conditions.EqualsNull;
+                            var newList = AddAditionalList(
+                                input
+                                , result
+                                , count
+                                , false
+                                , topEntity
+                                , ascending
+                                , true
+                                , filterIndex);
+                            result.InsertRange(0, newList);
+                        }
+                    }
                 }
                 return result;
             }
@@ -1286,7 +1383,8 @@ namespace RingSoft.DbLookup.Lookup
                 }
 
                 filterIndex++;
-                var newList = AddAditionalList(input, result, count, false, entity, ascending, filterIndex);
+                var newList = AddAditionalList(input, result, count, false, entity, ascending
+                    , false, filterIndex);
 
                 if (ascending)
                 {

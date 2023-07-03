@@ -407,7 +407,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             entity.Path = Path;
             entity.Caption = Caption;
-            entity.PercentWidth = (float)PercentWidth;
+            entity.PercentWidth = PercentWidth;
         }
 
         internal virtual void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
@@ -425,6 +425,7 @@ namespace RingSoft.DbLookup.Lookup
             PercentWidth = entity.PercentWidth;
             var test = this;
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
+            AdjustColumnWidth = false;
         }
 
         public virtual string FormatValueForColumnMap(string value)

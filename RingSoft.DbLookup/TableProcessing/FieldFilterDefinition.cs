@@ -137,6 +137,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public LookupDefinitionBase BaseLookup { get; internal set; }
 
+        public bool IsPrimaryKey { get; internal set; }
+
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
@@ -509,12 +511,24 @@ namespace RingSoft.DbLookup.TableProcessing
                 return null;
             }
 
+            Expression nullExpr = null;
             DbDateTypes? dateType = null;
             if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
             {
                 dateType = dateFieldDefinition.DateType;
             }
 
+            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty())
+            {
+                if (LookupColumn != null)
+                {
+                    var propertyName = LookupColumn.GetPropertyJoinName(true);
+                    nullExpr = FilterItemDefinition
+                        .GetBinaryExpression<TEntity>(param, propertyName, Conditions.EqualsNull
+                            , FieldDefinition.FieldType);
+                    return nullExpr;
+                }
+            }
             var stringValue = Value;
             var field = FieldDefinition;
             if (FieldToSearch != null)
@@ -524,7 +538,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
 
-            return GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
+            var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
+            return result;
         }
     }
 }

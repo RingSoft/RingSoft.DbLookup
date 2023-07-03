@@ -254,8 +254,7 @@ namespace RingSoft.DbLookup.Lookup
             var condition = Conditions.Contains;
 
             if (LookupControl != null 
-                && (LookupControl.SearchType == LookupSearchTypes.Contains
-                    || condition != null))
+                && LookupControl.SearchType == LookupSearchTypes.Contains)
             {
                 var contExpr = GetContainsExpr(param, condition);
 
@@ -603,8 +602,8 @@ namespace RingSoft.DbLookup.Lookup
                     searchColumn = OrderByList[1];
                 }
             }
-            var type = searchColumn.FieldDefinition.FieldType;
-            var value = searchForText.GetPropertyFilterValue(searchColumn.FieldDefinition.FieldDataType,
+            var type = searchColumn.FieldToDisplay.FieldType;
+            var value = searchForText.GetPropertyFilterValue(searchColumn.FieldToDisplay.FieldDataType,
                 searchColumn.FieldDefinition.FieldType);
 
             if (filterExpr == null)
@@ -614,13 +613,16 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     condition = Conditions.LessThanEquals;
                 }
-                filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param, searchColumn.GetPropertyJoinName()
-                    , condition, type, value);
                 if (type == typeof(string))
                 {
                     filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param,
                         searchColumn.GetPropertyJoinName()
                         , Conditions.BeginsWith, type, searchForText);
+                }
+                else
+                {
+                    filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param, searchColumn.GetPropertyJoinName()
+                        , condition, type, value);
 
                 }
             }
@@ -776,12 +778,26 @@ namespace RingSoft.DbLookup.Lookup
         private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)
         {
             var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+            var propertyName = searchColumn.GetPropertyJoinName();
+            var dbValue = searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn
+                .FieldToDisplay.FieldDataType, searchColumn.FieldToDisplay.FieldType);
+            Expression nullExpr = null;
+            if (dbValue != null && searchColumn.AllowNulls)
+            {
+                nullExpr = FilterItemDefinition.GetBinaryExpression<TEntity>
+                (param, searchColumn.GetPropertyJoinName(true)
+                    , Conditions.NotEqualsNull
+                    , searchColumn.FieldDefinition.FieldType);
+            }
             IQueryable<TEntity> query;
             var searchExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
-                , searchColumn.GetPropertyJoinName()
-                , Conditions.Equals, searchColumn.FieldDefinition.FieldType
-                , searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn
-                    .FieldDefinition.FieldDataType, searchColumn.FieldDefinition.FieldType));
+                , propertyName
+                , Conditions.Equals, searchColumn.FieldToDisplay.FieldType
+                , dbValue);
+            if (nullExpr != null)
+            {
+                searchExpr = FilterItemDefinition.AppendExpression(nullExpr, searchExpr, EndLogics.And);
+            }
             var queryable = CurrentList.AsQueryable();
             query = FilterItemDefinition.FilterQuery(queryable, param, searchExpr);
             entity = query.FirstOrDefault();

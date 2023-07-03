@@ -514,12 +514,14 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 dateType = dateFieldDefinition.DateType;
             }
+
             var stringValue = Value;
             var field = FieldDefinition;
             if (FieldToSearch != null)
             {
                 field = FieldToSearch;
             }
+
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
 
             return GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);

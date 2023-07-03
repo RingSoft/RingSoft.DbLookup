@@ -171,6 +171,23 @@ namespace RingSoft.DbLookup.TableProcessing
                 fieldFilter.DateType = dateFieldDefinition.DateType;
             }
 
+            if (fieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                var primaryLookup = fieldDefinition
+                    .ParentJoinForeignKeyDefinition
+                    .PrimaryTable
+                    .LookupDefinition;
+                if (primaryLookup != null)
+                {
+                    var sortColumn = primaryLookup.InitialSortColumnDefinition;
+                    if (sortColumn is LookupFieldColumnDefinition fieldColumn)
+                    {
+                        fieldFilter.FieldToSearch = fieldColumn.FieldToDisplay;
+                    }
+                }
+
+            }
+
             return fieldFilter;
         }
 

@@ -196,6 +196,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "RecordCountControl", Type = typeof(StringReadOnlyBox))]
     [TemplatePart(Name = "Spinner", Type = typeof(Control))]
     [TemplatePart(Name = "AdvancedFindButton", Type = typeof(Button))]
+    [TemplatePart(Name = "ListTextBox", Type = typeof(StringReadOnlyBox))]
     public class LookupControl : Control, ILookupControl, IReadOnlyControl
     {
         private class RefreshPendingData
@@ -212,6 +213,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public Label SearchForLabel { get; set; }
+
+        public StringReadOnlyBox ListTextBox { get; set; }
 
         public RadioButton EqualsRadioButton { get; set; }
 
@@ -488,6 +491,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             RecordCountControl = GetTemplateChild(nameof(RecordCountControl)) as StringReadOnlyBox;
             Spinner = GetTemplateChild(nameof(Spinner)) as Control;
             AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
+            ListTextBox = GetTemplateChild(nameof(ListTextBox)) as StringReadOnlyBox;
+
+            if (LookupWindow != null)
+            {
+                ListTextBox.Visibility = Visibility.Collapsed;
+            }
 
             if (LookupDefinition != null && !LookupDefinition.TableDefinition.CanViewTable)
             {

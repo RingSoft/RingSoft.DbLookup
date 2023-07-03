@@ -186,5 +186,31 @@ namespace RingSoft.DbMaintenance
 
             base.RemoveRow(rowToDelete);
         }
+
+        public bool IsSortColumnInitialSortColumn()
+        {
+            var result = false;
+            var row = Rows.FirstOrDefault();
+            if (row != null && row is AdvancedFindColumnRow columnRow)
+            {
+                if (columnRow.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                {
+                    var oldLookupColumn = ViewModel
+                        .LookupDefinition
+                        .TableDefinition
+                        .LookupDefinition
+                        .InitialSortColumnDefinition;
+
+                    if (oldLookupColumn is LookupFieldColumnDefinition oldFieldColumn)
+                    {
+                        if (oldFieldColumn.FieldDefinition == fieldColumn.FieldDefinition)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

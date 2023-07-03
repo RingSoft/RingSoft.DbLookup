@@ -634,18 +634,29 @@ namespace RingSoft.DbMaintenance
         private static void MapMemoField(int memoFieldIndex, PrintingColumnMap columnMap,
             LookupColumnDefinitionBase hiddenColumn)
         {
+            var caption = hiddenColumn.Caption;
+            if (!caption.IsNullOrEmpty())
+            {
+                caption = caption.Replace("\r\n", " ");
+            }
+
             columnMap.MapMemo(hiddenColumn, memoFieldIndex,
                 hiddenColumn.SelectSqlAlias);
             PrintingInteropGlobals.PropertiesProcessor.SetMemoCaption(memoFieldIndex,
-                hiddenColumn.Caption.Replace("\r\n", " "));
+                caption);
         }
 
         private static void MapStringField(PrintingColumnMap columnMap, LookupColumnDefinitionBase lookupColumn,
             int stringFieldIndex)
         {
+            var caption = lookupColumn.Caption;
+            if (!caption.IsNullOrEmpty())
+            {
+                caption = caption.Replace("\r\n", " ");
+            }
             columnMap.MapString(lookupColumn, stringFieldIndex, lookupColumn.SelectSqlAlias);
             PrintingInteropGlobals.PropertiesProcessor.SetStringCaption(stringFieldIndex,
-                lookupColumn.Caption.Replace("\r\n", " "));
+                caption);
         }
 
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)

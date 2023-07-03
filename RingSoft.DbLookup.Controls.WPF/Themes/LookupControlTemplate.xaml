@@ -13,6 +13,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -28,7 +29,8 @@
                                 </StackPanel>
                                 <StackPanel x:Name="SearchForStackPanel" Grid.Column="1" Margin="5,0,0,0" Height="20" VerticalAlignment="Center"/>
                             </Grid>
-                            <Grid Grid.Row="1" Margin="0,5,0,5">
+                            <dec:StringReadOnlyBox Grid.Row="1" x:Name="ListTextBox" Text="Double Click on a row to see details." FontWeight="Bold" FontSize="10"/>
+                            <Grid Grid.Row="2" Margin="0,5,0,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -62,12 +64,12 @@
                                 </ListView>
                                 <ScrollBar x:Name="ScrollBar" Grid.Column="1" Maximum="100" Minimum="0" ViewportSize="10"/>
                             </Grid>
-                            <Button x:Name="GetRecordCountButton" Grid.Row="2" Content="_Get Record Count" Width="100" HorizontalAlignment="Right" IsTabStop="False"/>
-                            <StackPanel x:Name="RecordCountStackPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Hidden" >
+                            <Button x:Name="GetRecordCountButton" Grid.Row="3" Content="_Get Record Count" Width="100" HorizontalAlignment="Right" IsTabStop="False"/>
+                            <StackPanel x:Name="RecordCountStackPanel" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Hidden" >
                                 <dec:StringReadOnlyBox x:Name="RecordCountControl" HorizontalAlignment="Right"/>
                                 <dec:WaitSpinner x:Name="Spinner" Height="16" Width="16" Visibility="Collapsed" Margin="5" EllipseSize="4" />
                             </StackPanel>
-                            <Button x:Name="AdvancedFindButton" Grid.Row="2" Content="Advanced F_ind" Width="100" HorizontalAlignment="Left" IsTabStop="False"/>
+                            <Button x:Name="AdvancedFindButton" Grid.Row="3" Content="Advanced F_ind" Width="100" HorizontalAlignment="Left" IsTabStop="False"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

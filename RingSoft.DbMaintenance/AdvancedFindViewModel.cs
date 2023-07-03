@@ -552,6 +552,16 @@ namespace RingSoft.DbMaintenance
             
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
+
+            if (tableDefinition.LookupDefinition != null)
+            {
+                if (tableDefinition.LookupDefinition.InitialOrderByField != null
+                    && ColumnsManager.IsSortColumnInitialSortColumn())
+                {
+                    LookupDefinition.InitialOrderByField = tableDefinition.LookupDefinition.InitialOrderByField;
+                }
+            }
+
             ProcessRefresh();
 
             ResetLookup();
@@ -871,6 +881,8 @@ namespace RingSoft.DbMaintenance
             {
                 View.NotifyFromFormulaExists = false;
             }
+
+            LookupDefinition.InitialOrderByField = lookupDefinition.InitialOrderByField;
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
             {
                 visibleColumn.AddNewColumnDefinition(LookupDefinition);

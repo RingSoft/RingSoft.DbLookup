@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -90,6 +92,13 @@ namespace RingSoft.DbLookup.TableProcessing
 
             foreach (var filter in Filters)
             {
+                if (filter.Value.IsNullOrEmpty())
+                {
+                    if (filter is FieldFilterDefinition fieldFilter)
+                    {
+                        fieldFilter.Condition = Conditions.EqualsNull;
+                    }
+                }
                 var rightExpression  = filter.GetMauiFilter<TEntity>(param);
                 if (rightExpression != null)
                 {

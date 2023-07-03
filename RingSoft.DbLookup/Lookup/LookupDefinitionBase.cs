@@ -168,6 +168,14 @@ namespace RingSoft.DbLookup.Lookup
                 var message = "Invalid table";
                 throw new Exception(message);
             }
+            if (TableDefinition.LookupDefinition != null)
+            {
+                if (TableDefinition.LookupDefinition.InitialOrderByField != null)
+                {
+                    InitialOrderByField = TableDefinition.LookupDefinition.InitialOrderByField;
+                }
+            }
+
 
             FilterDefinition = new TableFilterDefinitionBase(TableDefinition);
             AdvancedFindTree = new AdvancedFindTree(this);
@@ -245,6 +253,7 @@ namespace RingSoft.DbLookup.Lookup
             ChildField = source.ChildField;
             AllowAddOnTheFly = source.AllowAddOnTheFly;
             AdvancedFindTree = source.AdvancedFindTree;
+            InitialOrderByField = source.InitialOrderByField;
         }
 
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)

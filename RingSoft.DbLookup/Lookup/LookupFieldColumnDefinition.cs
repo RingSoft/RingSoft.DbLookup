@@ -34,7 +34,12 @@ namespace RingSoft.DbLookup.Lookup
         {
             get
             {
-                return FieldDefinition.FieldDataType;
+                if (FieldToDisplay == null)
+                {
+                    return FieldDefinition.FieldDataType;
+                }
+
+                return FieldToDisplay.FieldDataType;
             }
         }
         /// <summary>
@@ -53,7 +58,20 @@ namespace RingSoft.DbLookup.Lookup
         /// </value>
         public FieldDefinition FieldDefinition { get; internal set; }
 
-        public FieldDefinition FieldToDisplay { get; internal set; }
+        private FieldDefinition _fieldToDisplay;
+
+        public FieldDefinition FieldToDisplay
+        {
+            get
+            {
+                if (_fieldToDisplay == null)
+                {
+                    return FieldDefinition;
+                }
+                return _fieldToDisplay;
+            }
+            internal set => _fieldToDisplay = value;
+        }
 
 
         /// <summary>
@@ -273,6 +291,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             base.ProcessNewVisibleColumn(columnDefinition, lookupDefinition, copyFrom);
 
+
             if (!Path.IsNullOrEmpty())
             {
                 var foundTreeItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
@@ -328,6 +347,9 @@ namespace RingSoft.DbLookup.Lookup
                         if (newFieldResult != null)
                         {
                             JoinQueryTableAlias = newFieldResult.LookupJoin.JoinDefinition.Alias;
+                            NavigationProperties = newFieldResult
+                                .LookupJoin.JoinDefinition
+                                .GetNavigationProperties();
                         }
                     }
                 }

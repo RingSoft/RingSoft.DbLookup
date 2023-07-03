@@ -880,7 +880,16 @@ namespace RingSoft.DbLookup.Lookup
                             if (nullFilter
                                 .Value.IsNullOrEmpty())
                             {
+                                var oldNullCondition = nullFilter.Condition;
                                 var nullCondition = GetNullCondition(ascending);
+
+                                if (oldNullCondition == nullCondition 
+                                    && lastFilter.IsPrimaryKey
+                                    && lastFilter.Condition == condition)
+                                {
+                                    return result;
+                                }
+
                                 nullFilter.Condition = nullCondition;
 
                                 removeFilter = false;

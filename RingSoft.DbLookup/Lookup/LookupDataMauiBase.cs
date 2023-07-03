@@ -4,6 +4,46 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public enum LookupScrollPositions
+    {
+        Disabled = 0,
+        Top = 1,
+        Middle = 2,
+        Bottom = 3
+    }
+
+    public interface ILookupDataBase
+    {
+        event EventHandler<LookupDataMauiPrintOutput> PrintOutput;
+
+        int GetRecordCount();
+
+        void DoPrintOutput(int pageSize);
+    }
+
+    /// <summary>
+    /// Arguments sent when the lookup's selected row index changes.
+    /// </summary>
+    public class SelectedIndexChangedEventArgs
+    {
+        /// <summary>
+        /// Creates new index.
+        /// </summary>
+        /// <value>
+        /// The new index.
+        /// </value>
+        public int NewIndex { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SelectedIndexChangedEventArgs"/> class.
+        /// </summary>
+        /// <param name="newIndex">The new index.</param>
+        public SelectedIndexChangedEventArgs(int newIndex)
+        {
+            NewIndex = newIndex;
+        }
+    }
+
     public class LookupDataMauiOutput
     {
         public LookupScrollPositions ScrollPosition { get; }

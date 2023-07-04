@@ -1358,28 +1358,31 @@ namespace RingSoft.DbLookup.Lookup
             {
                 var lastFilter1 = input.FieldFilters.LastOrDefault();
 
-                if (ascending && filterIndex > 0)
+                if (filterIndex > 0)
                 {
-                    if (_orderByType == OrderByTypes.Ascending)
+                    if (ascending)
                     {
-                        lastFilter1.Condition = Conditions.NotEqualsNull;
-                        setFirstNull = true;
+                        if (_orderByType == OrderByTypes.Ascending)
+                        {
+                            lastFilter1.Condition = Conditions.NotEqualsNull;
+                            setFirstNull = true;
+                        }
+                        else
+                        {
+                            lastFilter1.Condition = Conditions.EqualsNull;
+                        }
                     }
                     else
                     {
-                        lastFilter1.Condition = Conditions.EqualsNull;
-                    }
-                }
-                else
-                {
-                    if (_orderByType == OrderByTypes.Ascending)
-                    {
-                        lastFilter1.Condition = Conditions.EqualsNull;
-                    }
-                    else
-                    {
-                        lastFilter1.Condition = Conditions.NotEqualsNull;
-                        setFirstNull = true;
+                        if (_orderByType == OrderByTypes.Ascending)
+                        {
+                            lastFilter1.Condition = Conditions.EqualsNull;
+                        }
+                        else
+                        {
+                            lastFilter1.Condition = Conditions.NotEqualsNull;
+                            setFirstNull = true;
+                        }
                     }
                 }
                 var isEnd = IsEnd(topEntity, ascending, lastFilter1);

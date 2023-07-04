@@ -1312,7 +1312,8 @@ namespace RingSoft.DbLookup.Lookup
             , int filterIndex = 0)
         {
             FieldFilterDefinition lastFilter = null;
-            
+            var result = new List<TEntity>();
+
             var setFirstNull = setNullValue;
             input = GetProcessInput(topEntity);
             lastFilter = input.FieldFilters.LastOrDefault();
@@ -1344,15 +1345,21 @@ namespace RingSoft.DbLookup.Lookup
                         setFirstNull = true;
                     }
                 }
+                var isEnd = IsEnd(topEntity, ascending, lastFilter1);
+
+                if (isEnd)
+                {
+                    return result;
+                }
+
             }
+
 
             if (addedPrimaryKey)
             {
                 AddPrimaryKeyFieldsToFilter(topEntity, input);
             }
 
-            var result = new List<TEntity>();
-            
             if (filterIndex > 1 && input.FieldFilters.Count > 1)
             {
                 lastFilter= input.FieldFilters.LastOrDefault();
@@ -1409,6 +1416,13 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     var entity = topEntity;
                     RemoveFilter(input, lastFilter);
+                    lastFilter = input.FieldFilters.LastOrDefault();
+                    var isEnd = IsEnd(topEntity, ascending, lastFilter);
+
+                    if (isEnd)
+                    {
+                        return result;
+                    }
                     filterIndex++;
                     var newList = AddAditionalList(input, result, count, false, entity, ascending, false, filterIndex);
                     result.InsertRange(0, newList);
@@ -1419,7 +1433,7 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         if (lastFilter.FieldDefinition.AllowNulls)
                         {
-                            lastFilter.Condition = Conditions.EqualsNull;
+                          lastFilter.Condition = Conditions.EqualsNull;
                             var newList = AddAditionalList(
                                 input
                                 , result
@@ -1465,6 +1479,27 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
             return result;
+        }
+
+        private bool IsEnd(TEntity topEntity, bool ascending, FieldFilterDefinition lastFilter)
+        {
+            var isEnd = false;
+            //if (lastFilter.IsNullFilter())
+            {
+                var nextCond = Conditions.GreaterThan;
+                if (!ascending)
+                {
+                    nextCond = Conditions.LessThan;
+                }
+
+                var nextEntity = GetNearestEntity(topEntity, nextCond);
+                if (nextEntity == null)
+                {
+                    isEnd = true;
+                }
+            }
+
+            return isEnd;
         }
 
         private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count

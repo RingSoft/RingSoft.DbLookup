@@ -873,28 +873,39 @@ namespace RingSoft.DbLookup.Lookup
                     {
                         if (lastFilter.FieldDefinition.AllowNulls)
                         {
-                            switch (lastFilter.Condition)
+                            var queryData = false;
+                            if (lastFilter.Value.IsNullOrEmpty())
                             {
-                                case Conditions.EqualsNull:
-                                case Conditions.NotEqualsNull:
-                                    break;
-                                default:
-                                    if (lastFilter.Value.IsNullOrEmpty())
+                                if (_orderByType == OrderByTypes.Descending)
+                                {
+                                    if (ascending)
                                     {
                                         lastFilter.Condition = Conditions.NotEqualsNull;
+                                        queryData = true;
                                     }
-                                    else
+                                }
+                            }
+                            else
+                            {
+                                if (_orderByType == OrderByTypes.Ascending)
+                                {
+                                    if (!ascending)
                                     {
                                         lastFilter.Condition = Conditions.EqualsNull;
+                                        queryData = true;
                                     }
-                                    query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
-                                    query = query.Take(1);
+                                }
+                            }
 
-                                    if (query.Count() == 1)
-                                    {
-                                        return query.FirstOrDefault();
-                                    }
-                                    break;
+                            if (queryData)
+                            {
+                                query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
+                                query = query.Take(1);
+
+                                if (query.Count() == 1)
+                                {
+                                    return query.FirstOrDefault();
+                                }
                             }
                         }
                         if (input.FilterDefinition.FixedFilters.Count > 1)

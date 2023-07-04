@@ -836,15 +836,15 @@ namespace RingSoft.DbLookup.Lookup
             var input = GetProcessInput(entity);
             var lastFilter1 = input.FieldFilters.LastOrDefault();
             var checkNull = false;
-            if (lastFilter1 != null)
-            {
-                if (lastFilter1.FieldDefinition.AllowNulls
-                    && lastFilter1.Value.IsNullOrEmpty())
-                {
-                    lastFilter1.Condition = Conditions.EqualsNull;
-                    checkNull = true;
-                }
-            }
+            //if (lastFilter1 != null)
+            //{
+            //    if (lastFilter1.FieldDefinition.AllowNulls
+            //        && lastFilter1.Value.IsNullOrEmpty())
+            //    {
+            //        lastFilter1.Condition = Conditions.EqualsNull;
+            //        checkNull = true;
+            //    }
+            //}
 
             AddPrimaryKeyFieldsToFilter(entity, input);
 
@@ -920,17 +920,23 @@ namespace RingSoft.DbLookup.Lookup
                                 var oldNullCondition = nullFilter.Condition;
                                 var nullCondition = GetNullCondition(ascending);
 
-                                if (oldNullCondition == nullCondition 
-                                    && lastFilter.IsPrimaryKey
-                                    && lastFilter.Condition == condition)
+                                //if (oldNullCondition == nullCondition
+                                //    && lastFilter.IsPrimaryKey
+                                //    && lastFilter.Condition == condition)
+                                //{
+                                //    return result;
+                                //}
+                                if (lastFilter.IsPrimaryKey
+                                    && input.FieldFilters.Count > 1)
                                 {
                                     return result;
                                 }
 
+
                                 nullFilter.Condition = nullCondition;
 
                                 removeFilter = false;
-                                if (lastFilter.IsPrimaryKey)
+                                //if (lastFilter.IsPrimaryKey)
                                 {
                                     removeFilter = true;
                                 }
@@ -948,7 +954,6 @@ namespace RingSoft.DbLookup.Lookup
                         if (removeFilter)
                         {
                             RemoveFilter(input, lastFilter);
-                            removeFilter = false;
                         }
                     }
                 }
@@ -1212,7 +1217,6 @@ namespace RingSoft.DbLookup.Lookup
             var nextCond = Conditions.GreaterThan;
             if (!ascending)
                 nextCond = Conditions.LessThan;
-            var nearestEntity = GetNearestEntity(nextEntity, nextCond);
 
             var query = GetFilterPageQuery(
                 nextEntity

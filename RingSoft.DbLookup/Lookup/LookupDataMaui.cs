@@ -871,6 +871,32 @@ namespace RingSoft.DbLookup.Lookup
                     var lastFilter = input.FieldFilters.LastOrDefault();
                     if (lastFilter != null)
                     {
+                        if (lastFilter.FieldDefinition.AllowNulls)
+                        {
+                            switch (lastFilter.Condition)
+                            {
+                                case Conditions.EqualsNull:
+                                case Conditions.NotEqualsNull:
+                                    break;
+                                default:
+                                    if (lastFilter.Value.IsNullOrEmpty())
+                                    {
+                                        lastFilter.Condition = Conditions.NotEqualsNull;
+                                    }
+                                    else
+                                    {
+                                        lastFilter.Condition = Conditions.EqualsNull;
+                                    }
+                                    query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
+                                    query = query.Take(1);
+
+                                    if (query.Count() == 1)
+                                    {
+                                        return query.FirstOrDefault();
+                                    }
+                                    break;
+                            }
+                        }
                         if (input.FilterDefinition.FixedFilters.Count > 1)
                         {
                             var filterIndex = input.FilterDefinition

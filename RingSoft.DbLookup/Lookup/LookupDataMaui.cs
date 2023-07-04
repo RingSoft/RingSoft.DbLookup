@@ -1172,6 +1172,11 @@ namespace RingSoft.DbLookup.Lookup
             }
             var input = GetProcessInput(nextEntity, true);
 
+            var nextCond = Conditions.GreaterThan;
+            if (!ascending)
+                nextCond = Conditions.LessThan;
+            var nearestEntity = GetNearestEntity(nextEntity, nextCond);
+
             var query = GetFilterPageQuery(
                 nextEntity
                 , count, input

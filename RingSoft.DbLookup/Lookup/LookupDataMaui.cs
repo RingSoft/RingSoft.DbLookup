@@ -1052,6 +1052,7 @@ namespace RingSoft.DbLookup.Lookup
                     var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);
                     filterItem.SetPropertyName = orderBy.GetPropertyJoinName();
                     filterItem.LookupColumn = orderBy;
+                    filterItem.FieldToSearch = orderBy.FieldToDisplay;
                 }
             }
 

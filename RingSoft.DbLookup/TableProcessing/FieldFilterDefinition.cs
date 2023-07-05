@@ -123,10 +123,10 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             get
             {
-                //if (_fieldToSearch == null)
-                //{
-                //    return FieldDefinition;
-                //}
+                if (_fieldToSearch == null)
+                {
+                    return FieldDefinition;
+                }
                 return _fieldToSearch;
             }
             internal set => _fieldToSearch = value;
@@ -542,7 +542,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
-
+            
             var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
             return result;
         }

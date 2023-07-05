@@ -1585,7 +1585,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
-            LookupDataMaui.GetInitData();
+            if (initialSearchForPrimaryKeyValue == null)
+            {
+                LookupDataMaui.GetInitData();
+            }
 
             LookupDataMaui.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 
@@ -1630,7 +1633,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                             SearchForHost.SelectAll();
                         }
                         LookupDataMaui.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
-                        if (!initialSearchFor.IsNullOrEmpty())
+                        if (!initialSearchFor.IsNullOrEmpty() && initialSearchForPrimaryKeyValue == null)
                         {
                             LookupDataMaui.OnSearchForChange(initialSearchFor);
                         }

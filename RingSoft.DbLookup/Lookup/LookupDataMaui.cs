@@ -11,6 +11,19 @@ using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public enum LookupOperations
+    {
+        GetInitData = 0,
+        PageUp = 1,
+        PageDown = 2,
+        RecordUp = 3,
+        RecordDown = 4,
+        GotoBottom = 5,
+        GotoTop = 6,
+        WheelForward = 7,
+        WheelBackward = 8,
+        SearchForChange = 9,
+    }
     public class LookupDataMauiProcessInput<TEntity> where TEntity : class, new()
     {
         public IQueryable<TEntity> Query { get; set; }
@@ -121,8 +134,8 @@ namespace RingSoft.DbLookup.Lookup
             var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKeyValue);
             if (entity != null)
             {
-                var autoFillValue = entity.GetAutoFillValue();
-                if (autoFillValue == null || autoFillValue.Text.IsNullOrEmpty())
+                //var autoFillValue = entity.GetAutoFillValue();
+                //if (autoFillValue == null || autoFillValue.Text.IsNullOrEmpty())
                 {
                     var filter = new TableFilterDefinition<TEntity>(TableDefinition);
                     var context = SystemGlobals.DataRepository.GetDataContext();
@@ -142,13 +155,13 @@ namespace RingSoft.DbLookup.Lookup
                     var topCount = LookupControl.PageSize - splitPage;
                     var bottomCount = LookupControl.PageSize - topCount;
 
-                    MakeList(entity, topCount, bottomCount, false);
+                    MakeList(entity, topCount, bottomCount, false, LookupOperations.SearchForChange);
                     SetLookupIndexFromEntity(param, entity);
                 }
-                else
-                {
-                    OnSearchForChange(autoFillValue.Text);
-                }
+                //else
+                //{
+                //    OnSearchForChange(autoFillValue.Text);
+                //}
             }
         }
 
@@ -350,7 +363,8 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize - 4, 4, true);
+                    MakeList(entity, LookupControl.PageSize - 4, 4, true
+                    , LookupOperations.WheelForward);
                 }
             }
 
@@ -373,7 +387,8 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, 3, LookupControl.PageSize - 3, false);
+                    MakeList(entity, 3, LookupControl.PageSize - 3, false
+                    , LookupOperations.WheelBackward);
                 }
             }
         }
@@ -480,7 +495,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             MakeFilteredQuery();
             var entity = FilteredQuery.LastOrDefault();
-            MakeList(entity, LookupControl.PageSize, 0, true);
+            MakeList(entity, LookupControl.PageSize, 0, true, LookupOperations.GotoBottom);
         }
 
         public override void GotoNextRecord()
@@ -500,7 +515,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize, 0, true);
+                    MakeList(entity, LookupControl.PageSize, 0, true, LookupOperations.GotoBottom);
                 }
             }
         }
@@ -522,7 +537,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, 0, LookupControl.PageSize, false);
+                    MakeList(entity, 0, LookupControl.PageSize, false, LookupOperations.RecordUp);
                 }
             }
         }
@@ -544,7 +559,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, 0, LookupControl.PageSize, true);
+                    MakeList(entity, 0, LookupControl.PageSize, true, LookupOperations.PageDown);
                 }
             }
         }
@@ -566,7 +581,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    MakeList(entity, LookupControl.PageSize, 0, false);
+                    MakeList(entity, LookupControl.PageSize, 0, false, LookupOperations.PageUp);
                 }
             }
         }
@@ -667,7 +682,7 @@ namespace RingSoft.DbLookup.Lookup
             var topCount = LookupControl.PageSize - splitPage;
             var bottomCount = LookupControl.PageSize - topCount;
 
-            MakeList(entity, topCount, bottomCount, false);
+            MakeList(entity, topCount, bottomCount, false, LookupOperations.SearchForChange);
 
             SetLookupIndexFromEntity(param, entity);
 
@@ -1131,8 +1146,10 @@ namespace RingSoft.DbLookup.Lookup
             OnDataSourceChanged();
         }
 
-        private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom)
+        private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom
+        , LookupOperations operation)
         {
+            var fireChangedEvent = true;
             CurrentList.Clear();
 
             if (LookupControl != null && LookupControl.PageSize == 1)
@@ -1148,7 +1165,7 @@ namespace RingSoft.DbLookup.Lookup
             var previousPageCount = 0;
             if (topCount > 0)
             {
-                var previousPage = GetPage(entity, topCount, true);
+                var previousPage = GetPage(entity, operation, topCount, true);
                 previousPageCount = previousPage.Count;
                 if (previousPage != null && previousPage.Any())
                 {
@@ -1156,12 +1173,18 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
+                    fireChangedEvent = false;
                     GotoTop();
                 }
 
                 if (previousPage.Count < topCount)
                 {
-                    GotoTop();
+                    fireChangedEvent = false;
+                    if (operation != LookupOperations.GetInitData)
+                    {
+                        GotoTop();
+                    }
+
                     return;
                 }
             }
@@ -1173,7 +1196,7 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     newBottomCount++;
                 }
-                var nextPage = GetPage(entity, newBottomCount, false);
+                var nextPage = GetPage(entity, operation, newBottomCount, false);
                 if (nextPage != null && nextPage.Any())
                 {
                     if (topCount > 0 && nextPage.Any())
@@ -1184,15 +1207,30 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
+                    fireChangedEvent = false;
                     GotoBottom();
                 }
-
+                var gotoBottom = false;
                 if (nextPage.Count < bottomCount)
                 {
+                    gotoBottom = true;
+                    if (operation == LookupOperations.GetInitData)
+                    {
+                        gotoBottom = false;
+                    }
+                }
+                if (gotoBottom)
+                {
+                    fireChangedEvent = false;
                     GotoBottom();
                 }
             }
-            FireLookupDataChangedEvent(GetOutputArgs());
+
+            if (fireChangedEvent)
+            {
+                FireLookupDataChangedEvent(GetOutputArgs());
+            }
+
             if (setIndexToBottom)
             {
                 LookupControl.SetLookupIndex(CurrentList.Count - 1);
@@ -1203,7 +1241,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
-        private List<TEntity> GetPage(TEntity nextEntity, int count
+        private List<TEntity> GetPage(TEntity nextEntity, LookupOperations operation, int count
             , bool previous, TableFilterDefinition<TEntity> filter = null)
         {
             var result = new List<TEntity>();
@@ -1248,7 +1286,7 @@ namespace RingSoft.DbLookup.Lookup
                 }
 
                 var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter
-                    , nextEntity, !previous);
+                    , nextEntity, !previous, operation);
 
                 if (previous)
                 {
@@ -1349,6 +1387,7 @@ namespace RingSoft.DbLookup.Lookup
             , bool addedPrimaryKey
             , TEntity topEntity
             , bool ascending
+            , LookupOperations operation
             , bool setNullValue = false
             , int filterIndex = 0)
         {
@@ -1389,7 +1428,12 @@ namespace RingSoft.DbLookup.Lookup
                         }
                     }
                 }
-                var isEnd = IsEnd(topEntity, ascending, lastFilter1);
+
+                var isEnd = false;
+                if (operation != LookupOperations.GetInitData)
+                {
+                    isEnd = IsEnd(topEntity, ascending, lastFilter1);
+                }
 
                 if (isEnd)
                 {
@@ -1461,14 +1505,22 @@ namespace RingSoft.DbLookup.Lookup
                     var entity = topEntity;
                     RemoveFilter(input, lastFilter);
                     lastFilter = input.FieldFilters.LastOrDefault();
-                    var isEnd = IsEnd(topEntity, ascending, lastFilter);
+                    var isEnd = false;
+                    switch (operation)
+                    {
+                        case LookupOperations.SearchForChange:
+                            break;
+                        default:
+                            isEnd = IsEnd(topEntity, ascending, lastFilter);
+                            break;
+                    }
 
                     if (isEnd)
                     {
                         return result;
                     }
                     filterIndex++;
-                    var newList = AddAditionalList(input, result, count, false, entity, ascending, false, filterIndex);
+                    var newList = AddAditionalList(input, result, count, false, entity, ascending, operation, false, filterIndex);
                     result.InsertRange(0, newList);
                 }
                 else
@@ -1485,6 +1537,7 @@ namespace RingSoft.DbLookup.Lookup
                                 , false
                                 , topEntity
                                 , ascending
+                                , operation
                                 , true
                                 , filterIndex);
                             result.InsertRange(0, newList);
@@ -1511,7 +1564,7 @@ namespace RingSoft.DbLookup.Lookup
 
                 filterIndex++;
                 var newList = AddAditionalList(input, result, count, false, entity, ascending
-                    , false, filterIndex);
+                    , operation, false, filterIndex);
 
                 if (ascending)
                 {

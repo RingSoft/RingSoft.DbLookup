@@ -2041,6 +2041,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (!showRecordCount)
                 {
                     showRecordCount = ShowRecordCountProps;
+                    if (showRecordCount && recordCount == 0)
+                    {
+                        recordCount = LookupDataMaui.GetRecordCount();
+                    }
                 }
 
                 if (showRecordCount)

@@ -91,7 +91,11 @@ namespace RingSoft.DbLookup.Lookup
 
         public override int GetRecordCount()
         {
-            MakeFilteredQuery();
+            if (FilteredQuery == null)
+            {
+                MakeFilteredQuery();
+            }
+
             var result = 0;
             if (FilteredQuery != null && FilteredQuery.Any())
             {

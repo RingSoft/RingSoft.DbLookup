@@ -935,14 +935,9 @@ namespace RingSoft.DbLookup.Lookup
                                 var oldNullCondition = nullFilter.Condition;
                                 var nullCondition = GetNullCondition(ascending);
 
-                                //if (oldNullCondition == nullCondition
-                                //    && lastFilter.IsPrimaryKey
-                                //    && lastFilter.Condition == condition)
-                                //{
-                                //    return result;
-                                //}
-                                if (lastFilter.IsPrimaryKey
-                                    && input.FieldFilters.Count > 1)
+                                if (oldNullCondition == nullCondition
+                                    && lastFilter.IsPrimaryKey
+                                    && lastFilter.Condition == condition)
                                 {
                                     return result;
                                 }
@@ -951,7 +946,7 @@ namespace RingSoft.DbLookup.Lookup
                                 nullFilter.Condition = nullCondition;
 
                                 removeFilter = false;
-                                //if (lastFilter.IsPrimaryKey)
+                                if (lastFilter.IsPrimaryKey)
                                 {
                                     removeFilter = true;
                                 }
@@ -1266,7 +1261,7 @@ namespace RingSoft.DbLookup.Lookup
                 , false);
 
             result.AddRange(query);
-            
+
             count -= result.Count;
 
             if (result.Count == 0)
@@ -1285,8 +1280,12 @@ namespace RingSoft.DbLookup.Lookup
                     nextEntity = result.LastOrDefault();
                 }
 
-                var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter
-                    , nextEntity, !previous, operation);
+                if (operation == LookupOperations.SearchForChange && previous)
+                {
+                    count++;
+                }
+
+                var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter, nextEntity, !previous, operation);
 
                 if (previous)
                 {
@@ -1296,6 +1295,13 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     result.AddRange(newList);
                 }
+
+                if (operation == LookupOperations.SearchForChange && previous)
+                {
+                    var lastEntity = result.LastOrDefault();
+                    result.Remove(lastEntity);
+                }
+
             }
 
             return result;

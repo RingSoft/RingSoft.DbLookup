@@ -11,6 +11,8 @@
         void SelectPrimaryKey(PrimaryKeyValue primaryKey);
 
         bool ReadOnlyMode { get; }
+
+        void OnSelectButtonClick();
     }
 
     /// <summary>

@@ -361,7 +361,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             OnSelectButtonClick();
         }
 
-        private void OnSelectButtonClick()
+        public void OnSelectButtonClick()
         {
             if (LookupControl == null)
                 return;
@@ -489,7 +489,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupControl.LookupDataMaui.SetNewPrimaryKeyValue(primaryKey);
                 return;
             }
-            OnSelectButtonClick();
+            LookupControl.LookupDataMaui.SetNewPrimaryKeyValue(primaryKey);
+            //OnSelectButtonClick();
             //SelectPrimaryKey(primaryKey);
         }
     }

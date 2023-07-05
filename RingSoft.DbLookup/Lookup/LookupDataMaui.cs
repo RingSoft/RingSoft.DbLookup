@@ -196,6 +196,7 @@ namespace RingSoft.DbLookup.Lookup
                 else
                 {
                     LookupWindow.SelectPrimaryKey(SelectedPrimaryKeyValue);
+                    LookupWindow.OnSelectButtonClick();
                 }
             }
         }
@@ -476,7 +477,8 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (LookupControl.SelectedIndex < 0)
             {
-                return null;
+                var newPrimaryKey = new PrimaryKeyValue(TableDefinition);
+                return newPrimaryKey;
             }
 
             var entity = CurrentList[LookupControl.SelectedIndex];

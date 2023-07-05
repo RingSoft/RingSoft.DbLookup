@@ -4,6 +4,7 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -107,6 +108,52 @@ namespace RingSoft.DbLookup.TableProcessing
             throw new System.NotImplementedException();
         }
 
+        public override Expression GetMauiFilter<TEntity>(ParameterExpression param)
+        {
+            var advancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(AdvancedFindId);
+
+            return GetAdvFindExpression<TEntity>(advancedFind, param);
+        }
+
+        private Expression GetAdvFindExpression<TEntity>(
+            AdvancedFind.AdvancedFind advancedFind
+            , ParameterExpression param)
+        {
+            var filters = advancedFind.Filters.ToList();
+
+            Expression result = null;
+            if (filters != null)
+            {
+                foreach (var advancedFindFilter in filters)
+                {
+                    Expression advFindExpr = null;
+                    if (advancedFindFilter.SearchForAdvancedFindId.HasValue)
+                    {
+                        var subAdvancedFind = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(
+                            advancedFindFilter.SearchForAdvancedFindId.Value);
+                        var subFilter = GetAdvFindExpression<TEntity>(subAdvancedFind, param);
+                        if (subFilter != null)
+                        {
+                            if (result == null)
+                            {
+                                result = subFilter;
+                            }
+                            else
+                            {
+                                result = FilterItemDefinition.AppendExpression(result, subFilter, EndLogic);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var lookupDef = new LookupDefinitionBase(advancedFind.Id);
+                        result = lookupDef.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+                    }
+                }
+            }
+            return result;
+        }
+
         public List<WhereItem> ProcessAdvancedFind(SelectQuery query, ref WhereItem firstWhereItem
             , ref WhereItem lastWhereItem, bool fromAdvancedFind, AdvancedFindTree tree = null)
         {
@@ -139,7 +186,8 @@ namespace RingSoft.DbLookup.TableProcessing
                     {
                         //var foundTreeItem = LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
                         
-                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter, false
+                        advFindFilterReturn = LookupDefinition.LoadFromAdvFindFilter(advancedFindFilter
+                        , false
                         , null, Path);
                         
                         TableFilterDefinitionBase.ProcessFieldJoins(query, LookupDefinition.Joins);

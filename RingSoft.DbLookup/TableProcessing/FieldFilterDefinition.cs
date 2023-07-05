@@ -123,11 +123,10 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             get
             {
-                if (_fieldToSearch == null)
-                {
-                    return FieldDefinition;
-                }
-
+                //if (_fieldToSearch == null)
+                //{
+                //    return FieldDefinition;
+                //}
                 return _fieldToSearch;
             }
             internal set => _fieldToSearch = value;
@@ -276,7 +275,13 @@ namespace RingSoft.DbLookup.TableProcessing
                     if (treeViewItem != null)
                     {
                         FieldDefinition = treeViewItem.FieldDefinition;
+                        //SetFieldToDisplay();
                         ProcessFoundTreeItem(treeViewItem);
+                        SetPropertyName = FieldDefinition.PropertyName;
+                        if (JoinDefinition != null)
+                        {
+                            PropertyName = JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+                        }
                     }
                 }
 
@@ -551,5 +556,25 @@ namespace RingSoft.DbLookup.TableProcessing
             }
             return result;
         }
+
+        public void SetFieldToDisplay()
+        {
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                var primaryLookup = FieldDefinition
+                    .ParentJoinForeignKeyDefinition
+                    .PrimaryTable
+                    .LookupDefinition;
+                if (primaryLookup != null)
+                {
+                    var sortColumn = primaryLookup.InitialSortColumnDefinition;
+                    if (sortColumn is LookupFieldColumnDefinition fieldColumn)
+                    {
+                        FieldToSearch = fieldColumn.FieldToDisplay;
+                    }
+                }
+            }
+        }
+
     }
 }

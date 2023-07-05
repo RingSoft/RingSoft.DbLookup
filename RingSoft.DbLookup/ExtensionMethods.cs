@@ -524,7 +524,7 @@ namespace RingSoft.DbLookup
                     result = DateTime.Parse(value);
                     break;
                 case FieldDataTypes.Bool:
-                    result = bool.Parse(value);
+                    result = value.ToBool();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);

@@ -706,7 +706,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         throw new ArgumentNullException("Value cannot be null.");
                     }
                     expressionValue = Expression.Constant(value, fieldType);
-                    if (value.GetType() == typeof(string))
+                    if (fieldType == typeof(string))
                     {
                         return GetStringExpression<TEntity>(param, property, condition, value.ToString());
                     }

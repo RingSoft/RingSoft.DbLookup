@@ -1172,7 +1172,7 @@ namespace RingSoft.DbLookup.Lookup
                     GotoTop();
                 }
 
-                if (previousPage.Count < topCount)
+                if (previousPage.Count < topCount  && !setIndexToBottom)
                 {
                     fireChangedEvent = false;
                     if (operation != LookupOperations.GetInitData)
@@ -1280,11 +1280,6 @@ namespace RingSoft.DbLookup.Lookup
                     nextEntity = result.LastOrDefault();
                 }
 
-                if (operation == LookupOperations.SearchForChange && previous)
-                {
-                    count++;
-                }
-
                 var newList = AddAditionalList(input, result, count, addedPrimaryKeyToFilter, nextEntity, !previous, operation);
 
                 if (previous)
@@ -1295,13 +1290,6 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     result.AddRange(newList);
                 }
-
-                if (operation == LookupOperations.SearchForChange && previous)
-                {
-                    var lastEntity = result.LastOrDefault();
-                    result.Remove(lastEntity);
-                }
-
             }
 
             return result;

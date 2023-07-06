@@ -10,7 +10,7 @@
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Orders (Lookup Control)" Height="575" Width="800">
+        Title="Orders (Lookup Control)" Height="650" Width="800">
     <Window.DataContext>
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
     </Window.DataContext>

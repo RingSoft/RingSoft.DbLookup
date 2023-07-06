@@ -16,17 +16,7 @@ namespace RingSoft.DbMaintenance
 {
     public interface IAdvancedFindView : IDbMaintenanceView
     {
-        bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem);
-
-        bool ShowFromFormulaEditor(ref string fromFormula);
-
         AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition);
-
-        bool NotifyFromFormulaExists { get; set; }
-
-        void ApplyToLookup();
-
-        void ShowSqlStatement();
 
         bool ShowRefreshSettings(AdvancedFind advancedFind);
 
@@ -345,13 +335,7 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand AddFilterCommand { get; set; }
 
-        public RelayCommand FromFormulaCommand { get; set; }
-
         public RelayCommand ImportDefaultLookupCommand { get; set; }
-
-        public RelayCommand ApplyToLookupCommand { get; set; }
-
-        public RelayCommand ShowSqlCommand { get; set; }
 
         public RelayCommand RefreshSettingsCommand { get; set; }
 
@@ -478,13 +462,7 @@ namespace RingSoft.DbMaintenance
 
             AddColumnCommand.IsEnabled = AddFilterCommand.IsEnabled = SelectedTreeViewItem != null;
 
-            FromFormulaCommand = new RelayCommand(ShowFromFormulaEditor);
-
             ImportDefaultLookupCommand = new RelayCommand(ImportDefaultLookup);
-
-            ApplyToLookupCommand = new RelayCommand(ApplyToLookup);
-
-            ShowSqlCommand = new RelayCommand(ShowSql);
 
             RefreshSettingsCommand = new RelayCommand(ShowRefreshSettings);
 
@@ -524,6 +502,7 @@ namespace RingSoft.DbMaintenance
 
             ReadOnlyMode = false;
             View.LockTable(true);
+            RefreshSettingsCommand.IsEnabled = RefreshNowCommand.IsEnabled = true;
             return advancedFind;
         }
 
@@ -538,15 +517,7 @@ namespace RingSoft.DbMaintenance
             //TableIndex = TableComboBoxSetup.Items.IndexOf(comboItem);
             CreateLookupDefinition();
 
-            if (!entity.FromFormula.IsNullOrEmpty())
-            {
-                LookupDefinition.HasFromFormula(entity.FromFormula);
-                View.NotifyFromFormulaExists = true;
-            }
-            else
-            {
-                View.NotifyFromFormulaExists = false;
-            }
+            
             ClearRefresh();
             LoadRefreshSettings(entity);
             
@@ -566,8 +537,8 @@ namespace RingSoft.DbMaintenance
 
             ResetLookup();
 
-            PrintLookupOutputCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
-                ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
+            PrintLookupOutputCommand.IsEnabled =  RefreshNowCommand.IsEnabled = true;
+            RefreshSettingsCommand.IsEnabled = true;
 
             Clearing = false;
         }
@@ -583,7 +554,7 @@ namespace RingSoft.DbMaintenance
         {
             CreateLookupDefinition();
 
-            ImportDefaultLookupCommand.IsEnabled = FromFormulaCommand.IsEnabled = true;
+            ImportDefaultLookupCommand.IsEnabled = true;
 
             AdvancedFindTree.LoadTree(tableName);
             this.LookupDefinition.AdvancedFindTree = AdvancedFindTree;
@@ -731,7 +702,6 @@ namespace RingSoft.DbMaintenance
             ReadOnlyMode = false;
 
             CreateLookupDefinition();
-            View.NotifyFromFormulaExists = false;
 
             //if (LookupDefinition != null)
             //{
@@ -744,10 +714,9 @@ namespace RingSoft.DbMaintenance
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
             PrintLookupOutputCommand.IsEnabled = AddColumnCommand.IsEnabled = 
-                AddFilterCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
-                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
+                AddFilterCommand.IsEnabled =  RefreshNowCommand.IsEnabled = false;
 
-            FromFormulaCommand.IsEnabled = ImportDefaultLookupCommand.IsEnabled = TableRow != null;
+            ImportDefaultLookupCommand.IsEnabled = TableRow != null;
 
             ClearRefresh();
             LockTable();
@@ -797,8 +766,7 @@ namespace RingSoft.DbMaintenance
             AdvancedFindTree.LookupDefinition = LookupDefinition;
             ColumnsManager?.SetupForNewRecord();
             FiltersManager?.SetupForNewRecord();
-            PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled =
-                ApplyToLookupCommand.IsEnabled = ShowSqlCommand.IsEnabled = false;
+            PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
         }
 
         protected override bool SaveEntity(AdvancedFind entity)
@@ -823,14 +791,6 @@ namespace RingSoft.DbMaintenance
 
         private void AddColumn()
         {
-            if (SelectedTreeViewItem.Type == TreeViewType.Formula)
-            {
-                if (!View.ShowFormulaEditor(SelectedTreeViewItem))
-                {
-                    return;
-                }
-            }
-
             var startIndex = ColumnsManager.GetNewColumnIndex();
             var column = SelectedTreeViewItem.CreateColumn(startIndex);
             column.AdjustColumnWidth = false;
@@ -872,15 +832,6 @@ namespace RingSoft.DbMaintenance
 
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
-            if (!lookupDefinition.FromFormula.IsNullOrEmpty())
-            {
-                LookupDefinition.HasFromFormula(lookupDefinition.FromFormula);
-                View.NotifyFromFormulaExists = true;
-            }
-            else
-            {
-                View.NotifyFromFormulaExists = false;
-            }
 
             LookupDefinition.InitialOrderByField = lookupDefinition.InitialOrderByField;
             foreach (var visibleColumn in lookupDefinition.VisibleColumns)
@@ -1107,8 +1058,7 @@ namespace RingSoft.DbMaintenance
                 var test = LookupDefinition;
                 LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
                 ProcessRefresh();
-                PrintLookupOutputCommand.IsEnabled = ApplyToLookupCommand.IsEnabled = RefreshNowCommand.IsEnabled =
-                    ShowSqlCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = true;
+                PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = true;
             }
         }
 
@@ -1159,17 +1109,6 @@ namespace RingSoft.DbMaintenance
             else
             {
                 LookupCommand = GetLookupCommand(LookupCommands.Clear);
-            }
-        }
-
-        private void ShowFromFormulaEditor()
-        {
-            var fromFormula = LookupDefinition.FromFormula;
-            if (View.ShowFromFormulaEditor(ref fromFormula))
-            {
-                View.NotifyFromFormulaExists = !fromFormula.IsNullOrEmpty();
-                LookupDefinition.HasFromFormula(fromFormula);
-                ResetLookup();
             }
         }
 
@@ -1237,33 +1176,33 @@ namespace RingSoft.DbMaintenance
 
         private void ApplyToLookup()
         {
-            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
-            if (ValidateLookup())
-            {
-                LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
-                View.ApplyToLookup();
-            }
+        //    var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
+        //    if (ValidateLookup())
+        //    {
+        //        LookupDefinition.TableDefinition.HasLookupDefinition(LookupDefinition);
+        //        View.ApplyToLookup();
+        //    }
 
-            if (!keyDown)
-            {
-                View.ResetViewForNewRecord();
-            }
+        //    if (!keyDown)
+        //    {
+        //        View.ResetViewForNewRecord();
+        //    }
         }
 
         private void ShowSql()
         {
-            var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
-            if (ValidateLookup())
-            {
-                View.ShowSqlStatement();
+        //    var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
+        //    if (ValidateLookup())
+        //    {
+        //        View.ShowSqlStatement();
 
-            }
+        //    }
 
-            if (!keyDown)
-            {
-                View.ResetViewForNewRecord();
-                View.ResetViewForNewRecord();
-            }
+        //    if (!keyDown)
+        //    {
+        //        View.ResetViewForNewRecord();
+        //        View.ResetViewForNewRecord();
+        //    }
         }
 
         private void ShowRefreshSettings()

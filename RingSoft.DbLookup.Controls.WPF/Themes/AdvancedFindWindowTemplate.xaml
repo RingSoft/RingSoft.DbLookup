@@ -86,8 +86,6 @@
 
                                         <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add F_ilter" Command="{Binding AddFilterCommand}"/>
 
-                                        <dec:NotificationButton x:Name="NotificationButton" HorizontalAlignment="Left" Width="100" Height="50"  Margin="0, 50, 0, 0" Content="From Formula" Command="{Binding FromFormulaCommand}"/>
-
                                     </StackPanel>
 
                                     <Label Grid.Row="2" Grid.Column="4" Content="Columns" HorizontalAlignment="Left"/>

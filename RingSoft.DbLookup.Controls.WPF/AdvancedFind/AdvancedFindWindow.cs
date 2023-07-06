@@ -66,7 +66,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public ListControl TableListControl { get; set; }
 
         public LookupControl LookupControl { get; set; }
-        public NotificationButton NotificationButton { get; set; }
         public bool ApplyToLookupDefinition { get; set; }
 
         public AdvancedFindViewModel ViewModel { get; set; }
@@ -113,16 +112,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
 
             return null;
-        }
-
-        public bool NotifyFromFormulaExists
-        {
-            get => _notifyFromFormulaExists;
-            set
-            {
-                _notifyFromFormulaExists = value;
-                NotificationButton.MemoHasText = value;
-            }
         }
 
         public void ApplyToLookup()
@@ -295,7 +284,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             TreeView = GetTemplateChild(nameof(TreeView)) as TreeView;
             TableListControl = GetTemplateChild(nameof(TableListControl)) as ListControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
-            NotificationButton = GetTemplateChild(nameof(NotificationButton)) as NotificationButton;
 
             if (LookupControl != null)
             {

@@ -11,7 +11,7 @@
     xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
     mc:Ignorable="d"
     Style="{StaticResource WindowStyle}"
-    Title="Orders (Grid Control)" Height="575" Width="800">
+    Title="Orders (Grid Control)" Height="650" Width="800">
     <Window.DataContext>
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
     </Window.DataContext>

@@ -134,12 +134,6 @@ namespace RingSoft.DbLookup.Lookup
 
         public event EventHandler<LookupWindowReturnArgs> WindowClosed;
 
-        public LookupDefinitionBase HasFromFormula(string value)
-        {
-            FromFormula = value;
-            return this;
-        }
-
         public void ClearVisibleColumns()
         {
             _visibleColumns.Clear();

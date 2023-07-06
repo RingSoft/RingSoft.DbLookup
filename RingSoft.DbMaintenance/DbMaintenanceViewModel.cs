@@ -812,6 +812,8 @@ namespace RingSoft.DbMaintenance
                         }
                         break;
                 }
+
+                LockDate = DateTime.Now;
                 GetLastSavedDate(primaryKey);
 
                 //var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor

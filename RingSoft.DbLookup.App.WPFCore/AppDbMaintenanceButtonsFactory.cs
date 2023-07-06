@@ -17,8 +17,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             var additionalButtons = new AdvancedFindAdditionalButtonsControl();
             result.AdditionalButtonsPanel.Children.Add(additionalButtons);
             additionalButtons.ImportDefaultLookupButton.Command = viewModel.ImportDefaultLookupCommand;
-            additionalButtons.ApplyToLookupButton.Command = viewModel.ApplyToLookupCommand;
-            additionalButtons.SqlViewerButton.Command = viewModel.ShowSqlCommand;
             additionalButtons.RefreshSettingsButton.Command = viewModel.RefreshSettingsCommand;
             additionalButtons.PrintLookupOutputButton.Command = viewModel.PrintLookupOutputCommand;
             result.UpdateLayout();

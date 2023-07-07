@@ -72,7 +72,15 @@ namespace RingSoft.DbLookup.AdvancedFind
         public RefreshRate RefreshRate
         {
             get => (RefreshRate) RefreshRateItem.NumericValue;
-            set => RefreshRateItem = RefreshRateSetup.GetItem((int) value);
+            set
+            {
+                var item = RefreshRateSetup.Items
+                    .FirstOrDefault(p => p.NumericValue == (int)value);
+                if (item != null)
+                {
+                    RefreshRateItem = item;
+                }
+            }
         }
 
         private TextComboBoxControlSetup _refreshConditionSetup;

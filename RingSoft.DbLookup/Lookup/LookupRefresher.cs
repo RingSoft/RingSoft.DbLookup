@@ -70,13 +70,13 @@ namespace RingSoft.DbLookup.Lookup
                         ResetCount();
                     }
                     break;
-                case RefreshRate.Seconds:
-                    if (_interval == RefreshValue)
-                    {
-                        _interval = 0;
-                        ResetCount();
-                    }
-                    break;
+                //case RefreshRate.Seconds:
+                //    if (_interval == RefreshValue)
+                //    {
+                //        _interval = 0;
+                //        ResetCount();
+                //    }
+                //    break;
                 default:
                     break;
             }

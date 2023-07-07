@@ -95,13 +95,20 @@ namespace RingSoft.DbLookup.Lookup
             {
                 MakeFilteredQuery();
             }
-
             var result = 0;
-            if (FilteredQuery != null && FilteredQuery.Any())
+            try
             {
-                result = FilteredQuery.Count();
-            }
+                if (FilteredQuery != null && FilteredQuery.Any())
+                {
+                    result = FilteredQuery.Count();
+                }
 
+            }
+            catch (Exception e)
+            {
+                DbDataProcessor.DisplayDataException(e, "Counting Records");
+            }
+            
             return result;
         }
 

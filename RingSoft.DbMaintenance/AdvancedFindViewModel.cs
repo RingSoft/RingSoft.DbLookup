@@ -533,7 +533,7 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-            ProcessRefresh();
+            //ProcessRefresh();
 
             ResetLookup();
 

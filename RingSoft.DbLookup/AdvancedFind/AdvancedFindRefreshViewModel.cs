@@ -14,7 +14,6 @@ namespace RingSoft.DbLookup.AdvancedFind
         None = 3,
         Hours = 0,
         Minutes = 1,
-        Seconds = 2,
     }
 
     public class AdvancedFindRefreshViewModel : INotifyPropertyChanged

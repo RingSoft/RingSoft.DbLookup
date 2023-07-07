@@ -58,7 +58,14 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>
         /// The parent join foreign key definition.
         /// </value>
-        public ForeignKeyDefinition ParentJoinForeignKeyDefinition { get; internal set; }
+        public ForeignKeyDefinition ParentJoinForeignKeyDefinition
+        {
+            get => _parentJoinForeignKeyDefinition;
+            internal set
+            {
+                _parentJoinForeignKeyDefinition = value;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this field allows null values.
@@ -75,6 +82,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// The description.
         /// </value>
         private string _description;
+
+        private ForeignKeyDefinition _parentJoinForeignKeyDefinition;
 
         public string Description
         {

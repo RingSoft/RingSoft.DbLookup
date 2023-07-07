@@ -469,6 +469,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (_joinsList.All(p => p.Alias != lookupFieldJoin.Alias))
             {
+                if (lookupFieldJoin.ForeignKeyDefinition.ForeignTable.TableName == "DevLogixChartsBars")
+                {
+
+                }
+
                 if (!_joinsList.Any(p => p.ForeignKeyDefinition.IsEqualTo(lookupFieldJoin.ForeignKeyDefinition)))
                 {
                     _joinsList.Add(lookupFieldJoin);

@@ -238,6 +238,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+            KeyDown += (sender, args) =>
+            {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    if (args.Key == Key.L)
+                    {
+                        LookupControl.Focus();
+                    }
+                }
+            };
+            ;
         }
 
         public void Initialize()

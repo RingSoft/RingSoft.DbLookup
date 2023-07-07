@@ -125,7 +125,12 @@
                                         </deg:DataEntryGrid.Columns>
                                     </deg:DataEntryGrid>
 
-                                    <lc:LookupControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5" x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800" ShowAdvancedFindButton="False"/>
+                                    <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5" Orientation="Vertical">
+                                        <Label HorizontalAlignment="Left" Content="(Ctrl + L to set focus)"/>
+
+                                        <lc:LookupControl  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800" ShowAdvancedFindButton="False"/>
+                                    </StackPanel>
+
                                     </Grid>
                                 </DockPanel>
                             </AdornerDecorator>

@@ -493,10 +493,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             AdvancedFindButton = GetTemplateChild(nameof(AdvancedFindButton)) as Button;
             ListTextBox = GetTemplateChild(nameof(ListTextBox)) as StringReadOnlyBox;
 
-            if (LookupWindow != null)
-            {
-                ListTextBox.Visibility = Visibility.Collapsed;
-            }
+            ListTextBox.Visibility = Visibility.Collapsed;
 
             if (LookupDefinition != null && !LookupDefinition.TableDefinition.CanViewTable)
             {
@@ -2222,7 +2219,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (SearchForHost != null)
                 SearchForHost.SearchText = String.Empty;
 
-            ListTextBox.Visibility = Visibility.Collapsed;
+            if (ListTextBox != null)
+            {
+                ListTextBox.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SetDesignText()

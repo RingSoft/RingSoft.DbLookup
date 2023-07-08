@@ -18,6 +18,8 @@ namespace RingSoft.DbMaintenance
     {
         AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition);
 
+        void ShowFiltersEllipse(bool showFiltersEllipse = true);
+
         bool ShowRefreshSettings(AdvancedFind advancedFind);
 
         void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount);
@@ -524,6 +526,11 @@ namespace RingSoft.DbMaintenance
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
 
+            if (entity.Filters.Any())
+            {
+                View.ShowFiltersEllipse(true);
+            }
+
             if (tableDefinition.LookupDefinition != null)
             {
                 if (tableDefinition.LookupDefinition.InitialOrderByField != null
@@ -720,6 +727,7 @@ namespace RingSoft.DbMaintenance
 
             ClearRefresh();
             LockTable();
+            View.ShowFiltersEllipse(false);
             Clearing = false;
 
             //LoadTree();

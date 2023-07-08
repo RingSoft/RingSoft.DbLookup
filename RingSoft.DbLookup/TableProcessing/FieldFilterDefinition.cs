@@ -327,7 +327,16 @@ namespace RingSoft.DbLookup.TableProcessing
             ProcessFoundTreeItem(treeViewItem);
 
             var result = base.LoadFromFilterReturn(filterReturn, treeViewItem);
-            Value = result;
+
+            if (DateFilterType != DateFilterTypes.SpecificDate)
+            {
+                Value = ConvertDate(Value);
+            }
+            else
+            {
+                Value = result;
+            }
+
 
             return result;
         }

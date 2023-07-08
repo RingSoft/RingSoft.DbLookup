@@ -9,6 +9,7 @@ using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using Hardcodet.Wpf.TaskbarNotification;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
@@ -66,6 +67,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public ListControl TableListControl { get; set; }
 
         public LookupControl LookupControl { get; set; }
+        public TabControl TabControl { get; set; }
+        public TabItem ColumnsTabItem { get; set; }
+        public DataEntryGrid ColumnsGrid { get; set; }
+        public Ellipse FilterEllipse { get; set; }
+        public TabItem FiltersTabItem { get; set; }
+        public DataEntryGrid FiltersGrid { get; set; }
         public bool ApplyToLookupDefinition { get; set; }
 
         public AdvancedFindViewModel ViewModel { get; set; }
@@ -112,6 +119,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
 
             return null;
+        }
+
+        public void ShowFiltersEllipse(bool showFiltersEllipse = true)
+        {
+            if (showFiltersEllipse)
+            {
+                FilterEllipse.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                FilterEllipse.Visibility = Visibility.Collapsed;
+            }
         }
 
         public void ApplyToLookup()
@@ -238,17 +257,45 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
-            KeyDown += (sender, args) =>
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                switch (e.Key)
                 {
-                    if (args.Key == Key.L)
-                    {
+                    case Key.O:
+                        if (!ColumnsGrid.IsKeyboardFocusWithin)
+                        {
+                            TabControl.SelectedItem = ColumnsTabItem;
+                            ColumnsTabItem.UpdateLayout();
+                            ColumnsGrid.Focus();
+                        }
+                        break;
+                    case Key.I:
+                        if (!FiltersGrid.IsKeyboardFocusWithin)
+                        {
+                            TabControl.SelectedItem = FiltersTabItem;
+                            FiltersTabItem.UpdateLayout();
+                            //FiltersGrid.Focus();
+                            FiltersGrid.RefreshDataSource();
+                            if (ViewModel.FiltersManager.Rows.Any())
+                            {
+                                FiltersGrid.GotoCell(ViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
+                            }
+                        }
+                        break;
+                    case Key.L:
                         LookupControl.Focus();
-                    }
+                        break;
+                    case Key.F:
+                        TreeView.Focus();
+                        break;
                 }
-            };
-            ;
+            }
+
+            base.OnPreviewKeyDown(e);
         }
 
         public void Initialize()
@@ -295,7 +342,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             TreeView = GetTemplateChild(nameof(TreeView)) as TreeView;
             TableListControl = GetTemplateChild(nameof(TableListControl)) as ListControl;
             LookupControl = GetTemplateChild(nameof(LookupControl)) as LookupControl;
-
+            TabControl = GetTemplateChild(nameof(TabControl)) as TabControl;
+            ColumnsTabItem = GetTemplateChild(nameof(ColumnsTabItem)) as TabItem;
+            ColumnsGrid = GetTemplateChild(nameof(ColumnsGrid)) as DataEntryGrid;
+            FiltersTabItem = GetTemplateChild(nameof(FiltersTabItem)) as TabItem;
+            FilterEllipse = GetTemplateChild(nameof(FilterEllipse)) as Ellipse;
+            FiltersGrid = GetTemplateChild(nameof(FiltersGrid)) as DataEntryGrid;
+            ShowFiltersEllipse(false);
             if (LookupControl != null)
             {
                 LookupControl.Loaded += (sender, args) =>

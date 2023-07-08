@@ -20,7 +20,8 @@
                         <Border.Resources>
                             <dbm:AdvancedFindViewModel x:Key="AdvancedFindViewModel"/>
                             <Style TargetType="{x:Type local:AdvancedFindWindow}">
-                                <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                                <Setter Property="Width" Value="600"/>
+                                <Setter Property="Height" Value="500"/>
                             </Style>
                         </Border.Resources>
 
@@ -32,11 +33,8 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -62,25 +60,29 @@
 
                                     <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="Refresh Now" IsTabStop="False"/>
 
-                                    <TreeView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" x:Name="TreeView" ItemsSource="{Binding TreeRoot}">
-                                        <TreeView.ItemTemplate>
+                                    <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
+                                        <Label Content="(Ctrl + F to set focus)" DockPanel.Dock="Top"/>
+                                        <TreeView x:Name="TreeView" ItemsSource="{Binding TreeRoot}" >
+                                            <TreeView.ItemTemplate>
 
-                                            <HierarchicalDataTemplate DataType="advancedFind:TreeViewItems" ItemsSource="{Binding Items}">
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Name}"/>
-                                                </StackPanel>
-                                            </HierarchicalDataTemplate>
+                                                <HierarchicalDataTemplate DataType="advancedFind:TreeViewItems" ItemsSource="{Binding Items}">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </HierarchicalDataTemplate>
 
-                                        </TreeView.ItemTemplate>
+                                            </TreeView.ItemTemplate>
 
-                                        <TreeView.ItemContainerStyle>
-                                            <Style TargetType="{x:Type TreeViewItem}">
-                                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                            </Style>
-                                        </TreeView.ItemContainerStyle>
-                                    </TreeView>
+                                            <TreeView.ItemContainerStyle>
+                                                <Style TargetType="{x:Type TreeViewItem}">
+                                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                                </Style>
+                                            </TreeView.ItemContainerStyle>
+                                        </TreeView>
 
-                                    <StackPanel Grid.Row="2" Grid.Column="3" Grid.RowSpan="4" VerticalAlignment="Center" Orientation="Vertical">
+                                    </DockPanel>
+
+                                    <StackPanel Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Orientation="Vertical">
 
                                         <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add _Column" Command="{Binding AddColumnCommand}"/>
 
@@ -88,48 +90,64 @@
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="2" Grid.Column="4" Content="Columns" HorizontalAlignment="Left"/>
+                                    <DockPanel Grid.Row="2" Grid.Column="4">
+                                        <TabControl x:Name="TabControl">
+                                            <TabItem x:Name="ColumnsTabItem" Header="Columns (Ctrl + O)">
+                                                <deg:DataEntryGrid Grid.Row="1" x:Name="ColumnsGrid"  Manager="{Binding ColumnsManager}">
+                                                    <deg:DataEntryGrid.Columns>
 
-                                    <deg:DataEntryGrid Grid.Row="3" Grid.Column="4" Manager="{Binding ColumnsManager}">
-                                        <deg:DataEntryGrid.Columns>
+                                                        <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>
+                                                        <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindColumnRow.FieldColumnId}" Width="150"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindColumnRow.FieldColumnId}" Width="150"/>
+                                                        <deg:DataEntryGridTextColumn Header="Caption" ColumnId="{x:Static dbm:AdvancedFindColumnRow.NameColumnId}" Width="400"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Caption" ColumnId="{x:Static dbm:AdvancedFindColumnRow.NameColumnId}" Width="400"/>
-
-                                            <deg:DataEntryGridTextColumn Header="Percent Width" ColumnId="{x:Static 
+                                                        <deg:DataEntryGridTextColumn Header="Percent Width" ColumnId="{x:Static 
                                                 dbm:AdvancedFindColumnRow.PercentColumnId}" Width="100"/>
 
-                                        </deg:DataEntryGrid.Columns>
-                                    </deg:DataEntryGrid>
+                                                    </deg:DataEntryGrid.Columns>
+                                                </deg:DataEntryGrid>
+                                            </TabItem>
+                                            <TabItem x:Name="FiltersTabItem">
+                                                <TabItem.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="Filters (Ctrl + I)"/>
+                                                        <Ellipse x:Name="FilterEllipse" Width="8" Height="8" Fill="Red"/>
+                                                    </StackPanel>
+                                                </TabItem.Header>
+                                                <deg:DataEntryGrid Grid.Row="3" x:Name="FiltersGrid" Manager="{Binding FiltersManager}" >
+                                                    <deg:DataEntryGrid.Columns>
 
-                                    <Label Grid.Row="4" Grid.Column="4" Content="Filters" HorizontalAlignment="Left"/>
+                                                        <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50" Alignment="Center"/>
 
-                                    <deg:DataEntryGrid Grid.Row="5" Grid.Column="4" Manager="{Binding FiltersManager}" >
-                                        <deg:DataEntryGrid.Columns>
+                                                        <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.TableColumnId}" Width="150"/>
 
-                                            <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50" Alignment="Center"/>
+                                                        <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.FieldColumnId}" Width="250"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.TableColumnId}" Width="150"/>
+                                                        <deg:DataEntryGridTextColumn Header="Search For" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.SearchColumnId}" Width="250"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Field" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.FieldColumnId}" Width="250"/>
+                                                        <deg:DataEntryGridTextColumn Header=")" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.RightParenthesesColumnId}" Width="50" Alignment="Center"/>
 
-                                            <deg:DataEntryGridTextColumn Header="Search For" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.SearchColumnId}" Width="250"/>
+                                                        <deg:DataEntryGridTextColumn Header="End Logic" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.EndLogicColumnId}" Width="100"/>
 
-                                            <deg:DataEntryGridTextColumn Header=")" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.RightParenthesesColumnId}" Width="50" Alignment="Center"/>
+                                                    </deg:DataEntryGrid.Columns>
+                                                </deg:DataEntryGrid>
 
-                                            <deg:DataEntryGridTextColumn Header="End Logic" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.EndLogicColumnId}" Width="100"/>
+                                            </TabItem>
+                                        </TabControl>
 
-                                        </deg:DataEntryGrid.Columns>
-                                    </deg:DataEntryGrid>
+                                    </DockPanel>
 
-                                    <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5" Orientation="Vertical">
-                                        <Label HorizontalAlignment="Left" Content="(Ctrl + L to set focus)"/>
+                                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5">
 
-                                        <lc:LookupControl  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="300" MinWidth="800" ShowAdvancedFindButton="False"/>
-                                    </StackPanel>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Grid.Row="0" HorizontalAlignment="Left" Content="(Ctrl + L to set focus)"/>
+
+                                        <lc:LookupControl Grid.Row="1"  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="800" ShowAdvancedFindButton="False"/>
+                                    </Grid>
 
                                     </Grid>
                                 </DockPanel>

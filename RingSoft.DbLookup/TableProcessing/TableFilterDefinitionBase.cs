@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
@@ -658,20 +659,28 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             Expression result = null;
 
-            var fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
-            var userFilter = UserBundle.GetMauiFilter<TEntity>(param);
+            try
+            {
+                var fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
+                var userFilter = UserBundle.GetMauiFilter<TEntity>(param);
 
-            if (fixedFilter != null && userFilter != null)
-            {
-                result = FilterItemDefinition.AppendExpression(fixedFilter, userFilter, EndLogics.And);
+                if (fixedFilter != null && userFilter != null)
+                {
+                    result = FilterItemDefinition.AppendExpression(fixedFilter, userFilter, EndLogics.And);
+                }
+                else if (fixedFilter != null)
+                {
+                    result = fixedFilter;
+                }
+                else
+                {
+                    result = userFilter;
+                }
             }
-            else if (fixedFilter != null)
+            catch (Exception e)
             {
-                result = fixedFilter;
-            }
-            else
-            {
-                result = userFilter;
+                DbDataProcessor.DisplayDataException(e, "Filter Operation");
+
             }
             return result;
         }

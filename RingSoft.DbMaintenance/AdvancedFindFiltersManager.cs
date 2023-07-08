@@ -6,6 +6,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
@@ -272,18 +273,34 @@ namespace RingSoft.DbMaintenance
 
         protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
+            switch (e.Action)
             {
-                if (Rows.Any())
-                {
-                    FinishOffFilter();
-                    //if (_resetLookup )
-                    //{
-                    //    ViewModel.ResetLookup();
-                    //}
+                case NotifyCollectionChangedAction.Add:
+                    ViewModel.View.ShowFiltersEllipse(true);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    if (Rows.Any())
+                    {
+                        FinishOffFilter();
+                        //if (_resetLookup )
+                        //{
+                        //    ViewModel.ResetLookup();
+                        //}
 
-                }
-                
+                    }
+                    if (Rows.Count <= 1)
+                    {
+                        ViewModel.View.ShowFiltersEllipse(false);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             base.OnRowsChanged(e);
         }
@@ -383,6 +400,7 @@ namespace RingSoft.DbMaintenance
             {
                 var advancedRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
                 FinishOffFilter();
+                ViewModel.View.ShowFiltersEllipse(true);
             }
             //Grid?.RefreshGridView();
             Grid?.GotoCell(row, (int)FilterColumns.Search);
@@ -466,6 +484,11 @@ namespace RingSoft.DbMaintenance
                 }
             }
             base.RemoveRow(rowToDelete);
+        }
+
+        public void SetFocusToGrid()
+        {
+            Grid?.GotoCell(Rows[0], (SearchColumnId));
         }
     }
 }

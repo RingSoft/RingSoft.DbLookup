@@ -805,6 +805,10 @@ namespace RingSoft.DbLookup.Lookup
 
         private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)
         {
+            if (TableDefinition.PrimaryKeyFields.Count > 1)
+            {
+                return;
+            }
             var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
             var propertyName = searchColumn.GetPropertyJoinName();
             var dbValue = searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn

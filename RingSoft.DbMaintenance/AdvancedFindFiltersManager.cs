@@ -276,7 +276,11 @@ namespace RingSoft.DbMaintenance
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    ViewModel.View.ShowFiltersEllipse(true);
+                    if (HasData())
+                    {
+                        ViewModel.View.ShowFiltersEllipse(true);
+                    }
+
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     if (Rows.Any())

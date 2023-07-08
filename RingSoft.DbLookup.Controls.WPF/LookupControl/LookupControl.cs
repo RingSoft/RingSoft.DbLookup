@@ -1386,7 +1386,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (_dataSource.Any())
                 {
-                    ListTextBox.Visibility = Visibility.Visible;
+                    if (LookupWindow == null)
+                    {
+                        ListTextBox.Visibility = Visibility.Visible;
+                    }
                     var showRecordCountButton = _dataSource.Count == PageSize;
                     if (showRecordCountButton)
                     {

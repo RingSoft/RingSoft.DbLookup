@@ -102,5 +102,12 @@ namespace RingSoft.DbMaintenance
 
             return result;
         }
+
+        public bool HasData()
+        {
+            var result = false;
+            result = Rows.Any(row => !row.IsNew);
+            return result;
+        }
     }
 }

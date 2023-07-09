@@ -418,6 +418,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public ILookupWindow LookupWindow { get; private set; }
 
+        public bool HideUserDoubleClickRowMessage { get; set; }
+
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
         /// </summary>
@@ -697,7 +699,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void MergeLookupDefinition()
         {
-            if (LookupColumns.FirstOrDefault(f => f.PropertyName == LookupDefinition.InitialSortColumnDefinition.PropertyName) == null)
+            if (LookupColumns.FirstOrDefault(
+                    f => f.PropertyName 
+                         == LookupDefinition
+                             .InitialSortColumnDefinition
+                             .PropertyName) == null
+                 && !HideUserDoubleClickRowMessage)
                 throw new Exception($"No Lookup Column was added to Columns collection for initial sort column Property '{LookupDefinition.InitialSortColumnDefinition.PropertyName}'.");
 
             foreach (var lookupColumnBase in LookupColumns)
@@ -1255,10 +1262,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                     else
                     {
                         var orderColumnIndex = GetIndexOfVisibleColumnDefinition(lookupColumnDefinition);
-                        var orderGridColumnHeader =
-                            LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
-                        GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
-                        columnNumber++;
+                        if (orderColumnIndex != -1)
+                        {
+                            var orderGridColumnHeader =
+                                LookupGridView.Columns[orderColumnIndex].Header as GridViewColumnHeader;
+                            GridViewSort.AddNonPrimarySortGlyph(orderGridColumnHeader, columnNumber);
+                            columnNumber++;
+                        }
                     }
                 }
 
@@ -1386,7 +1396,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (_dataSource.Any())
                 {
-                    if (LookupWindow == null)
+                    if (LookupWindow == null && !HideUserDoubleClickRowMessage)
                     {
                         ListTextBox.Visibility = Visibility.Visible;
                     }

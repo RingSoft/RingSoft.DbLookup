@@ -285,7 +285,7 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
-            fieldFilter.SetFieldToDisplay();
+            fieldFilter.SetFieldToDisplay(condition);
             InternalAddUserFilter(index, fieldFilter);
 
             return fieldFilter;

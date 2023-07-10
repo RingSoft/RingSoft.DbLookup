@@ -566,21 +566,31 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
-        public void SetFieldToDisplay()
+        public void SetFieldToDisplay(Conditions condition)
         {
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
             {
-                var primaryLookup = FieldDefinition
-                    .ParentJoinForeignKeyDefinition
-                    .PrimaryTable
-                    .LookupDefinition;
-                if (primaryLookup != null)
+                switch (condition)
                 {
-                    var sortColumn = primaryLookup.InitialSortColumnDefinition;
-                    if (sortColumn is LookupFieldColumnDefinition fieldColumn)
-                    {
-                        FieldToSearch = fieldColumn.FieldToDisplay;
-                    }
+                    case Conditions.Equals:
+                    case Conditions.EqualsNull:
+                    case Conditions.NotEquals:
+                    case Conditions.NotEqualsNull:
+                        break;
+                    default:
+                        var primaryLookup = FieldDefinition
+                            .ParentJoinForeignKeyDefinition
+                            .PrimaryTable
+                            .LookupDefinition;
+                        if (primaryLookup != null)
+                        {
+                            var sortColumn = primaryLookup.InitialSortColumnDefinition;
+                            if (sortColumn is LookupFieldColumnDefinition fieldColumn)
+                            {
+                                FieldToSearch = fieldColumn.FieldToDisplay;
+                            }
+                        }
+                        break;
                 }
             }
         }

@@ -401,6 +401,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void OnSelect()
         {
+            RaiseDirtyFlag();
             if (TabOutAfterLookupSelect)
             {
                 Send(Key.Tab);
@@ -1031,7 +1032,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         { 
             var text = e.LookupData.GetSelectedText();
             SetValue(e.LookupData.SelectedPrimaryKeyValue, text);
-            RaiseDirtyFlag();
             LookupSelect?.Invoke(this, new EventArgs());
 
             AutoFillDataMaui.OnLookupSelect(e.LookupData.GetSelectedPrimaryKeyValue());

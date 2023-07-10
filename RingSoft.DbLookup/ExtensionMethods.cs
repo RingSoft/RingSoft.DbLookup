@@ -521,7 +521,15 @@ namespace RingSoft.DbLookup
                     result = double.Parse(value);
                     break;
                 case FieldDataTypes.DateTime:
-                    result = DateTime.Parse(value);
+                    if (value.IsNullOrEmpty())
+                    {
+                        result = (DateTime?)null;
+                    }
+                    else
+                    {
+                        result = DateTime.Parse(value);
+                    }
+
                     break;
                 case FieldDataTypes.Bool:
                     result = value.ToBool();

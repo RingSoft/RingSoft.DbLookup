@@ -555,7 +555,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (_pendingAutoFillValue != null)
                 {
-                    Value = _pendingAutoFillValue;
+                    //Value = _pendingAutoFillValue;
                     if (TextBox != null && Value != null)
                     {
                         TextBox.Text = Value.Text;

@@ -326,28 +326,42 @@ namespace RingSoft.DbMaintenance
                 var pkField = TableDefinition.PrimaryKeyFields[0];
                 var value = addViewPrimaryKeyValue.KeyValueFields[0].Value;
                 var primaryField = addViewPrimaryKeyValue.TableDefinition.FieldDefinitions
-                    .FirstOrDefault(p => p.ParentJoinForeignKeyDefinition != null 
+                    .FirstOrDefault(p => p.ParentJoinForeignKeyDefinition != null
                                          && p.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField == pkField);
 
-                var selectQuery = new SelectQuery(addViewPrimaryKeyValue.TableDefinition.TableName);
+                var selectQuery = addViewPrimaryKeyValue.TableDefinition.LookupDefinition.GetSelectQueryMaui();
                 selectQuery.SetMaxRecords(1);
-                var joinTable = selectQuery.AddPrimaryJoinTable(JoinTypes.InnerJoin, TableDefinition.TableName);
-                joinTable.AddJoinField(pkField.FieldName, primaryField.FieldName);
-                selectQuery.AddSelectColumn(primaryField.FieldName);
-                selectQuery.AddWhereItem(addViewPrimaryKeyValue.KeyValueFields[0].FieldDefinition.FieldName
-                    , Conditions.Equals, value);
-                
-                var getTableResult = TableDefinition.Context.DataProcessor.GetData(selectQuery);
-                if (getTableResult.ResultCode == GetDataResultCodes.Success)
+                var column = selectQuery.AddColumn(primaryField);
+                var pkColumn = selectQuery.AddColumn(addViewPrimaryKeyValue.KeyValueFields[0].FieldDefinition);
+                selectQuery.AddFilter(pkColumn, Conditions.Equals, value);
+                if (selectQuery.GetData())
                 {
-                    var table = getTableResult.DataSet.Tables[0];
-                    if (table.Rows.Count > 0)
+                    var listPks = selectQuery.GetDataResult();
+                    if (listPks.Any())
                     {
                         var newPrimaryKey = new PrimaryKeyValue(TableDefinition);
-                        newPrimaryKey.LoadFromIdValue(table.Rows[0].GetRowValue(primaryField.FieldName));
+                        newPrimaryKey.LoadFromIdValue(listPks[0].KeyValueFields[0].Value);
                         selectedPrimaryKeyValue = newPrimaryKey;
                     }
                 }
+
+                //var joinTable = selectQuery.AddPrimaryJoinTable(JoinTypes.InnerJoin, TableDefinition.TableName);
+                //joinTable.AddJoinField(pkField.FieldName, primaryField.FieldName);
+                //selectQuery.AddSelectColumn(primaryField.FieldName);
+                //selectQuery.AddWhereItem(addViewPrimaryKeyValue.KeyValueFields[0].FieldDefinition.FieldName
+                //    , Conditions.Equals, value);
+
+                //var getTableResult = TableDefinition.Context.DataProcessor.GetData(selectQuery);
+                //if (getTableResult.ResultCode == GetDataResultCodes.Success)
+                //{
+                //    var table = getTableResult.DataSet.Tables[0];
+                //    if (table.Rows.Count > 0)
+                //    {
+                //        var newPrimaryKey = new PrimaryKeyValue(TableDefinition);
+                //        newPrimaryKey.LoadFromIdValue(table.Rows[0].GetRowValue(primaryField.FieldName));
+                //        selectedPrimaryKeyValue = newPrimaryKey;
+                //    }
+                //}
             }
             var result = addViewPrimaryKeyValue;
             switch (LookupAddViewArgs.LookupFormMode)

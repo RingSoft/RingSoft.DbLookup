@@ -66,6 +66,8 @@ namespace RingSoft.DbLookup.QueryBuilder
         public abstract bool SetNull(LookupFieldColumnDefinition column, IDbContext context);
 
         public abstract bool DeleteAllData(IDbContext context);
+
+        public abstract List<PrimaryKeyValue> GetDataResult();
     }
     public class SelectQueryMaui<TEntity> : SelectQueryMauiBase where TEntity : class, new()
     {
@@ -281,6 +283,17 @@ namespace RingSoft.DbLookup.QueryBuilder
             }
 
             SetMaxRecords(maxRecords);
+            return result;
+        }
+
+        public override List<PrimaryKeyValue> GetDataResult()
+        {
+            var result = new List<PrimaryKeyValue>();
+            foreach (var entity in Result)
+            {
+                var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                result.Add(primaryKeyValue);
+            }
             return result;
         }
 

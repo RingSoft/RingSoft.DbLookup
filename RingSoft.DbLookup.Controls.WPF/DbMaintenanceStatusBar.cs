@@ -60,11 +60,25 @@ namespace RingSoft.DbLookup.Controls.WPF
             statusBarControl.ViewModel.LastSavedDate = statusBarControl.LastSavedDate;
         }
 
+        private bool _isActive = true;
+
         static DbMaintenanceStatusBar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(typeof(DbMaintenanceStatusBar)));
 
             IsTabStopProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(false));
+        }
+
+        public DbMaintenanceStatusBar()
+        {
+            Loaded += (sender, args) =>
+            {
+                var window = Window.GetWindow(this);
+                window.Closing += (sender, args) =>
+                {
+                    _isActive = false;
+                };
+            };
         }
 
         public override void OnApplyTemplate()
@@ -89,6 +103,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SetSaveStatus(string message, AlertLevels alertLevel)
         {
+            if (!_isActive)
+            {
+                return;
+            }
             Dispatcher.Invoke(() =>
             {
                 StatusTextBox.Visibility = Visibility.Collapsed;

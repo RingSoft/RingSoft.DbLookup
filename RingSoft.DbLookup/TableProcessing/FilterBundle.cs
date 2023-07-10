@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
@@ -73,7 +74,7 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 index = -1;
             }
-            if (index == -1)
+            if (index == -1 || !_filters.Any())
             {
                 _filters.Add(filter);
             }

@@ -115,6 +115,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             var result = filterWindow.ShowDialog();
             if (result != null && result == true)
             {
+                //FocusFiltersTab();
                 return filterWindow.FilterReturn;
             }
 
@@ -276,14 +277,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     case Key.I:
                         if (!FiltersGrid.IsKeyboardFocusWithin)
                         {
-                            TabControl.SelectedItem = FiltersTabItem;
-                            FiltersTabItem.UpdateLayout();
-                            //FiltersGrid.Focus();
-                            FiltersGrid.RefreshDataSource();
-                            if (ViewModel.FiltersManager.Rows.Any())
-                            {
-                                FiltersGrid.GotoCell(ViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
-                            }
+                            FocusFiltersTab();
                         }
                         break;
                     case Key.L:
@@ -296,6 +290,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
 
             base.OnPreviewKeyDown(e);
+        }
+
+        private void FocusFiltersTab()
+        {
+            TabControl.SelectedItem = FiltersTabItem;
+            FiltersTabItem.UpdateLayout();
+            //FiltersGrid.Focus();
+            FiltersGrid.RefreshDataSource();
+            if (ViewModel.FiltersManager.Rows.Any())
+            {
+                FiltersGrid.GotoCell(ViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
+            }
         }
 
         public void Initialize()

@@ -889,7 +889,7 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     filterItem.Condition = condition;
                 }
-
+                
                 var query = GetQueryFromFilter(input.FilterDefinition, input, ascending);
 
                 query = query.Take(1);

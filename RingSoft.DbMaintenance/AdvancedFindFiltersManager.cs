@@ -176,7 +176,7 @@ namespace RingSoft.DbMaintenance
         {
             var newIndex = GetNewRowIndex();
 
-            if (newIndex < Rows.Count - 1)
+            if (newIndex < Rows.Count - 1 && newIndex >= 0)
             {
                 var firstNewRow = Rows[newIndex];
                 if (firstNewRow.IsNew)

@@ -347,3 +347,4 @@ healthchecksdb
 /RingSoft.DbLookup/DataProcessor/DbDataProcessor.cs
 /RingSoft.DbLookup.App.Library/Northwind/Model/Order_Detail.cs
 /RingSoft.DbLookup.App.Library/Northwind/Model/Product.cs
+/RingSoft.DbLookup/ExtensionMethods.cs

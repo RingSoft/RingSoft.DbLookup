@@ -550,6 +550,10 @@ namespace RingSoft.DbLookup.TableProcessing
                 field = FieldToSearch;
             }
 
+            if (stringValue.IsNullOrEmpty())
+            {
+                
+            }
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
             
             var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);

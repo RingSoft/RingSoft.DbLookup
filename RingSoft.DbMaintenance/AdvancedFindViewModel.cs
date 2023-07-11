@@ -384,13 +384,11 @@ namespace RingSoft.DbMaintenance
 
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
             {
-                if (contextTableDefinition.LookupDefinition != null)
+                if (contextTableDefinition.LookupDefinition != null
+                    && contextTableDefinition.CanViewTable)
                 {
                     var tableRow = new ListControlDataSourceRow();
-                    if (!contextTableDefinition.Description.IsNullOrEmpty() && contextTableDefinition.CanViewTable)
-                    {
-                        tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
-                    }
+                    tableRow.AddColumn(dataColumn, contextTableDefinition.Description);
 
                     TableDataSource.AddRow(tableRow);
                     index++;
@@ -494,7 +492,9 @@ namespace RingSoft.DbMaintenance
                 {
                     return null;
                 }
-                TableRow = TableDataSource.Items.FirstOrDefault(p => p.GetCellItem(0)
+
+                var items = TableDataSource.Items;
+                TableRow = items.FirstOrDefault(p => p.GetCellItem(0)
                                                                      == tableDefinition.Description);
 
             }

@@ -198,6 +198,11 @@ namespace RingSoft.DbLookup.TableProcessing
         private FieldFilterDefinition CreateAddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value, int index = -1)
         {
+            if (value.IsNullOrEmpty())
+            {
+
+            }
+
             var fieldFilter = CreateFieldFilter(fieldDefinition, condition, value);
             FixedBundle.AddFilter(fieldFilter, index);
             fieldFilter.IsFixed = true;

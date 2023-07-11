@@ -149,8 +149,9 @@ namespace RingSoft.DbLookup.Lookup
                 //if (autoFillValue == null || autoFillValue.Text.IsNullOrEmpty())
                 {
                     var filter = new TableFilterDefinition<TEntity>(TableDefinition);
-                    var context = SystemGlobals.DataRepository.GetDataContext();
-                    var table = context.GetTable<TEntity>();
+                    //var context = SystemGlobals.DataRepository.GetDataContext();
+                    //var table = context.GetTable<TEntity>();
+                    var table = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
                     foreach (var field in primaryKeyValue.KeyValueFields)
                     {
                         var fieldFilter = filter.AddFixedFilter(field.FieldDefinition, Conditions.Equals
@@ -830,6 +831,19 @@ namespace RingSoft.DbLookup.Lookup
             {
                 searchExpr = FilterItemDefinition.AppendExpression(nullExpr, searchExpr, EndLogics.And);
             }
+
+            var searchPrimaryKeyFilter = new TableFilterDefinition<TEntity>(TableDefinition);
+            foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
+            {
+                searchPrimaryKeyFilter.AddFixedFilter(primaryKeyField
+                    , Conditions.Equals
+                    , GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName));
+            }
+
+            searchExpr = FilterItemDefinition.AppendExpression(searchExpr
+                , searchPrimaryKeyFilter.GetWhereExpresssion<TEntity>(param)
+                , EndLogics.And);
+
             var queryable = CurrentList.AsQueryable();
             query = FilterItemDefinition.FilterQuery(queryable, param, searchExpr);
             entity = query.FirstOrDefault();
@@ -1064,6 +1078,10 @@ namespace RingSoft.DbLookup.Lookup
             {
                 foreach (var orderBy in orderBys)
                 {
+                    if (orderBy.FieldDefinition.Description == "Description")
+                    {
+                        
+                    }
                     var value = orderBy.GetDatabaseValue(entity);
                     var field = orderBy.FieldDefinition;
                     var filterItem = filterDefinition.AddFixedFilter(field, Conditions.Equals, value);

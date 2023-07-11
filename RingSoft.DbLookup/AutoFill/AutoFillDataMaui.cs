@@ -386,6 +386,11 @@ namespace RingSoft.DbLookup.AutoFill
                     , Conditions.Equals
                     , lookupFieldColumn.FieldDefinition.FieldType
                     , Control.EditText);
+
+                var filterExpr = Setup.LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+
+                autoFillExpr = FilterItemDefinition.AppendExpression(autoFillExpr, filterExpr, EndLogics.And);
+
                 query = FilterItemDefinition.FilterQuery(query
                     , param
                     , autoFillExpr);

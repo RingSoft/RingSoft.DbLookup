@@ -156,19 +156,48 @@ namespace RingSoft.DbLookup.Lookup
             {
                 throw new Exception("Invalid column primaryKey");
             }
-            var query = new SelectQuery(primaryKeyValue.TableDefinition.TableName);
-            query.AddSelectColumn(FieldDefinition.FieldName);
-            foreach (var primaryKeyField in primaryKeyValue.KeyValueFields)
+
+            var selectQuery = FieldDefinition
+                .TableDefinition
+                .LookupDefinition
+                .GetSelectQueryMaui();
+
+            selectQuery.SetMaxRecords(1);
+            selectQuery.AddColumn(FieldDefinition);
+            foreach (var primaryKeyValueField in primaryKeyValue.KeyValueFields)
             {
-                query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.Equals, primaryKeyField.Value);
+                selectQuery.Filter.AddFixedFilter(primaryKeyValueField.FieldDefinition, Conditions.Equals,
+                    primaryKeyValueField.Value);
+            }
+            if (selectQuery.GetData())
+            {
+                var result= selectQuery.GetPropertyValue(0, FieldDefinition.PropertyName);
+                if (FieldDefinition is DateFieldDefinition dateField)
+                {
+                    var date = result.ToDate();
+                    if (dateField.ConvertToLocalTime)
+                    {
+                        date = date.GetValueOrDefault().ToLocalTime();
+                        result = date.GetValueOrDefault().FormatDateValue(dateField.DateType);
+                    }
+                }
+
+                return result;
             }
 
-            var dataProcessResult = primaryKeyValue.TableDefinition.Context.DataProcessor.GetData(query);
-            if (dataProcessResult.ResultCode == GetDataResultCodes.Success)
-            {
-                return dataProcessResult.DataSet.Tables[0].Rows[0]
-                    .GetRowValue(FieldDefinition.FieldName);
-            }
+            //var query = new SelectQuery(primaryKeyValue.TableDefinition.TableName);
+            //query.AddSelectColumn(FieldDefinition.FieldName);
+            //foreach (var primaryKeyField in primaryKeyValue.KeyValueFields)
+            //{
+            //    query.AddWhereItem(primaryKeyField.FieldDefinition.FieldName, Conditions.Equals, primaryKeyField.Value);
+            //}
+
+            //var dataProcessResult = primaryKeyValue.TableDefinition.Context.DataProcessor.GetData(query);
+            //if (dataProcessResult.ResultCode == GetDataResultCodes.Success)
+            //{
+            //    return dataProcessResult.DataSet.Tables[0].Rows[0]
+            //        .GetRowValue(FieldDefinition.FieldName);
+            //}
 
             return "";
         }

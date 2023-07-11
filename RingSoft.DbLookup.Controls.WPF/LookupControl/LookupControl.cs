@@ -700,11 +700,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         private void MergeLookupDefinition()
         {
             if (LookupColumns.FirstOrDefault(
-                    f => f.PropertyName 
+                    f => f.PropertyName
                          == LookupDefinition
                              .InitialSortColumnDefinition
                              .PropertyName) == null
-                 && !HideUserDoubleClickRowMessage)
+                 && LookupWindow != null)
                 throw new Exception($"No Lookup Column was added to Columns collection for initial sort column Property '{LookupDefinition.InitialSortColumnDefinition.PropertyName}'.");
 
             foreach (var lookupColumnBase in LookupColumns)

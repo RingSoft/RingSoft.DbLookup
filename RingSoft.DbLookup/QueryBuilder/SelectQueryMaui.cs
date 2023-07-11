@@ -5,6 +5,7 @@ using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.TableProcessing;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using FieldDefinition = RingSoft.DbLookup.ModelDefinition.FieldDefinitions.FieldDefinition;
 
@@ -68,6 +69,8 @@ namespace RingSoft.DbLookup.QueryBuilder
         public abstract bool DeleteAllData(IDbContext context);
 
         public abstract List<PrimaryKeyValue> GetDataResult();
+
+        public abstract string GetPropertyValue(int rowIndex, string property);
     }
     public class SelectQueryMaui<TEntity> : SelectQueryMauiBase where TEntity : class, new()
     {
@@ -75,6 +78,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public new TableFilterDefinition<TEntity> Filter { get; }
 
         public IQueryable<TEntity> Result { get; private set; }
+        public List<TEntity> ListResult { get; private set; } = new List<TEntity>();
 
         public SelectQueryMaui(LookupDefinitionBase lookupDefinition)
         : base(lookupDefinition)
@@ -211,6 +215,8 @@ namespace RingSoft.DbLookup.QueryBuilder
                 {
                     Result = Result.Take(MaxRecords);
                 }
+
+                ListResult = Result.ToList();
             }
             catch (Exception e)
             {
@@ -297,6 +303,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        public override string GetPropertyValue(int rowIndex, string property)
+        {
+            if (rowIndex > ListResult.Count - 1)
+            {
+                throw new Exception("Invalid Row Index");
+            }
+            
+            return GblMethods.GetPropertyValue(ListResult[rowIndex], property);
+        }
         private void DeleteProperties(TEntity entity)
         {
             foreach (var fieldDefinition in TableDefinition.FieldDefinitions

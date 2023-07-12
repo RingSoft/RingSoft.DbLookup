@@ -62,5 +62,16 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         {
             return GblMethods.FormatValue(FieldDataType, value);
         }
+
+        public override string GetUserValue(string dbIdValue)
+        {
+            var boolValue = dbIdValue.ToBool();
+            if (boolValue)
+            {
+                return "True";
+            }
+
+            return "False";
+        }
     }
 }

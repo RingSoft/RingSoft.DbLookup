@@ -280,7 +280,14 @@ namespace RingSoft.DbLookup.TableProcessing
                         SetPropertyName = FieldDefinition.PropertyName;
                         if (JoinDefinition != null)
                         {
-                            PropertyName = JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+                            if (FieldToSearch != null)
+                            {
+                                PropertyName = JoinDefinition.GetPropertyJoinName(FieldToSearch.PropertyName);
+                            }
+                            else
+                            {
+                                PropertyName = JoinDefinition.GetPropertyJoinName(FieldDefinition.PropertyName);
+                            }
                         }
                     }
                 }

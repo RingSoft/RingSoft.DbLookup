@@ -256,7 +256,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
 
             //AddFormulaToTree(treeItems, parent);
-            AddAdvancedFindToTree(treeItems, parent);
+            //AddAdvancedFindToTree(treeItems, parent);
         }
 
 

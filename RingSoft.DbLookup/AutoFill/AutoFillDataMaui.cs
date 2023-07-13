@@ -60,6 +60,8 @@ namespace RingSoft.DbLookup.AutoFill
         public abstract AutoFillContainsItem GetAutoFillContainsItem(string text, string beginText);
 
         public abstract AutoFillValue OnListBoxChange(AutoFillContainsItem item);
+
+        public abstract AutoFillValue OnPaste(string text);
     }
 
     public class AutoFillDataMaui<TEntity> : AutoFillDataMauiBase where TEntity : class, new()
@@ -338,8 +340,7 @@ namespace RingSoft.DbLookup.AutoFill
             if (containsText.IsNullOrEmpty())
             {
                 containsText = newText;
-            }
-            if (!containsText.IsNullOrEmpty())
+            }if (!containsText.IsNullOrEmpty())
             {
                 containsList = GetContainsList(containsText);
             }
@@ -440,6 +441,11 @@ namespace RingSoft.DbLookup.AutoFill
             Control.SelectionStart = Control.EditText.Length;
             Control.SelectionLength = 0;
             return GetAutoFillData();
+        }
+
+        public override AutoFillValue OnPaste(string text)
+        {
+            return GetAutoFillValue(text);
         }
     }
 }

@@ -776,7 +776,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (!_settingText)
             {
-                //_autoFillData.OnTextChanged();
+                Value = AutoFillDataMaui.OnPaste(TextBox.Text);
             }
         }
 

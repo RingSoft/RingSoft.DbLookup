@@ -445,7 +445,11 @@ namespace RingSoft.DbLookup.AutoFill
 
         public override AutoFillValue OnPaste(string text)
         {
-            return GetAutoFillValue(text);
+            Control.EditText = text;
+            var result = GetAutoFillValue();
+            Control.SelectionStart = Control.EditText.Length;
+            Control.SelectionLength = 0;
+            return result;
         }
     }
 }

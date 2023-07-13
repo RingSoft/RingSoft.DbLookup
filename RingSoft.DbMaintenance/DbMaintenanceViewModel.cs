@@ -1184,6 +1184,13 @@ namespace RingSoft.DbMaintenance
                     return DbMaintenanceResults.DatabaseError;
                 }
 
+                if (LookupAddViewArgs != null && LookupAddViewArgs.CallBackToken != null)
+                {
+                    LookupAddViewArgs.CallBackToken.NewAutoFillValue = null;
+                    LookupAddViewArgs.SelectedPrimaryKeyValue = null;
+                    LookupAddViewArgs.CallBackToken.OnRefreshData(RefreshOperations.Delete);
+                }
+
                 RecordsChanged = true;
                 RecordDirty = false;
                 OnNewButton();

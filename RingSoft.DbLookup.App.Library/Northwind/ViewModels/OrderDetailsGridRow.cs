@@ -105,21 +105,26 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     if (value is DataEntryGridAutoFillCellProps autoFillCellProps)
                     {
                         bool validProduct;
-                        if (autoFillCellProps.AutoFillValue.PrimaryKeyValue.IsValid)
+                        if (autoFillCellProps.AutoFillValue.IsValid())
                         {
                             validProduct = SetProduct(autoFillCellProps.AutoFillValue);
                         }
                         else
                         {
                             validProduct = false;
+                            var item = string.Empty;
+                            if (autoFillCellProps.AutoFillValue != null)
+                            {
+                                item = autoFillCellProps.AutoFillValue.Text;
+                            }
                             var message =
-                                $"'{autoFillCellProps.AutoFillValue.Text}' is not a valid Product.  Do you wish to create a new Product?";
+                                $"'{item}' is not a valid Product.  Do you wish to create a new Product?";
                             if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Invalid Product") ==
                                 MessageBoxButtonsResult.Yes)
                             {
                                 var newProductResult =
                                     _lookupContext.NorthwindContextConfiguration.ProductsLookup.ShowAddOnTheFlyWindow(
-                                        autoFillCellProps.AutoFillValue.Text, _manager.OrderViewModel.OrderView.OwnerWindow);
+                                        item, _manager.OrderViewModel.OrderView.OwnerWindow);
                                 if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
                                 {
                                     var newAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,

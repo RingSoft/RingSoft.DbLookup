@@ -392,11 +392,18 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void RefreshValue(AutoFillValue autoFillValue)
         {
-            if (Value == null || Value.PrimaryKeyValue.IsEqualTo(autoFillValue.PrimaryKeyValue))
+            var process = autoFillValue != null;
+            if (process)
+            {
+                process = Value == null || Value.PrimaryKeyValue.IsEqualTo(autoFillValue.PrimaryKeyValue);
+            }
+            if (process)
             {
                 AutoFillDataMaui.SetValue(autoFillValue.PrimaryKeyValue, autoFillValue.Text, false);
-                Value = autoFillValue;
             }
+
+            Value = autoFillValue;
+            RaiseDirtyFlag();
         }
 
         public void OnSelect()
@@ -777,6 +784,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_settingText)
             {
                 Value = AutoFillDataMaui.OnPaste(TextBox.Text);
+                TextBox.SelectionStart = TextBox.Text.Length;
+                TextBox.SelectionLength = 0;
+                RaiseDirtyFlag();
+                {
+                    
+                }
             }
         }
 
@@ -920,6 +933,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     break;
                 case Key.F5:
                     ShowLookupWindow();
+                    break;case Key.Space:
+                    AutoFillDataMaui.OnKeyCharPressed(' ');
+                    e.Handled = true;
                     break;
             }
 

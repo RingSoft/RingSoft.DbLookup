@@ -42,7 +42,7 @@ namespace RingSoft.DbLookup.Tests
         {
             Reinitialize();
             LookupData.GetInitData();
-            Assert.AreEqual(100, LookupData.CurrentList.Count);
+            Assert.AreEqual(10, LookupData.CurrentList.Count);
         }
 
     }

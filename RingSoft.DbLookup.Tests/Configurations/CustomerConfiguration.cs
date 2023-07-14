@@ -11,7 +11,6 @@ namespace RingSoft.DbLookup.Tests.Configurations
         {
             builder.Property(p => p.Id).HasColumnType(DbConstants.IntegerColumnType);
             builder.Property(p => p.Name).HasColumnType(DbConstants.StringColumnType);
-            builder.Property(p => p.ContactName).HasColumnType(DbConstants.StringColumnType);
         }
     }
 }

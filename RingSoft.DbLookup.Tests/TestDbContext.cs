@@ -11,6 +11,8 @@ namespace RingSoft.DbLookup.Tests
     {
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<TimeClock> TimeClocks { get; set; }
+
         public TestDbContext()
         {
             DbConstants.ConstantGenerator = new SqlServerDbConstants();
@@ -19,6 +21,7 @@ namespace RingSoft.DbLookup.Tests
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeClockConfiguration());
 
             AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
 

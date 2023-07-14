@@ -10,11 +10,11 @@ namespace RingSoft.DbLookup.Tests
     {
         public static TestUserInterface UserInterface { get; private set; }
 
-        public static TestDatabase Database { get; private set; }
+        public static TestLookupContext Database { get; private set; }
 
         public static TestLookupControl LookupControl { get; private set; }
 
-        public static LookupDataMaui<Customer> LookupData { get; private set; }
+        public static LookupDataMaui<TimeClock> LookupData { get; private set; }
 
         [ClassInitialize]
         public static void Setup(TestContext testContext)
@@ -22,18 +22,18 @@ namespace RingSoft.DbLookup.Tests
             UserInterface = new TestUserInterface();
             ControlsGlobals.UserInterface = UserInterface;
 
-            Database = new TestDatabase(new TestDbContext());
+            Database = new TestLookupContext(new TestDbContext());
             LookupControl = new TestLookupControl();
         }
 
         private void Reinitialize()
         {
-            var lookupDefinition = Database.CustomerLookup.Clone();
-            var lookupDataBase = Database.CustomerLookup.GetLookupDataMaui(lookupDefinition, true);
+            var lookupDefinition = Database.TimeClockLookup.Clone();
+            var lookupDataBase = Database.TimeClockLookup.GetLookupDataMaui(lookupDefinition, true);
             lookupDataBase.SetParentControls(LookupControl);
-            if (lookupDataBase is LookupDataMaui<Customer> lookupDataCustomer)
+            if (lookupDataBase is LookupDataMaui<TimeClock> lookupDataTimeClock)
             {
-                LookupData = lookupDataCustomer;
+                LookupData = lookupDataTimeClock;
             }
         }
 
@@ -42,7 +42,7 @@ namespace RingSoft.DbLookup.Tests
         {
             Reinitialize();
             LookupData.GetInitData();
-            Assert.AreEqual(1, LookupData.CurrentList.Count);
+            Assert.AreEqual(100, LookupData.CurrentList.Count);
         }
 
     }

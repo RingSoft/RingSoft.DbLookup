@@ -6,13 +6,11 @@ namespace RingSoft.DbLookup.AdvancedFind
     public class AdvancedFindFilter
     {
         [Required]
-        [Key]
         public int AdvancedFindId { get; set; }
 
         public virtual AdvancedFind AdvancedFind { get; set; }
 
         [Required]
-        [Key]
         public int FilterId { get; set; }
 
         public byte LeftParentheses { get; set; }

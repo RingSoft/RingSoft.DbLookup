@@ -5,7 +5,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 
-namespace RingSoft.DbLookup
+namespace RingSoft.DbLookup.Testing
 {
     public abstract class DataRepositoryRegistryItemBase
     {
@@ -146,7 +146,7 @@ namespace RingSoft.DbLookup
 
         public void SetIdentityInsert(DbDataProcessor processor, TableDefinitionBase tableDefinition, bool silent = false, bool value = true)
         {
-            
+
         }
 
         public bool OpenConnection(bool silent = false)
@@ -171,7 +171,7 @@ namespace RingSoft.DbLookup
 
         public void SetProcessor(DbDataProcessor processor)
         {
-            
+
         }
 
         public void SetConnectionString(string connectionString)
@@ -192,7 +192,7 @@ namespace RingSoft.DbLookup
             DataContext = context;
         }
 
-        IDbContext DbLookup.IDataRepository.GetDataContext()
+        IDbContext IDataRepository.GetDataContext()
         {
             return DataContext;
         }

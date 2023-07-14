@@ -11,5 +11,5 @@ rem pause
 vstest.console.exe C:\Users\petem\source\repos\RingSoft.DbLookup\RingSoft.DbLookup.Tests\bin\Debug\netcoreapp3.1\RingSoft.DbLookup.Tests.dll
 rundll32 user32.dll,MessageBeep
 echo .
-echo .NET Core 3.1  Finished!
+echo .NET 7.0  Finished!
 pause

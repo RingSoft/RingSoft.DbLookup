@@ -5,12 +5,10 @@ namespace RingSoft.DbLookup.RecordLocking
 {
     public class RecordLock
     {
-        [Key]
         [Required]
         [MaxLength(50)]
         public string Table { get; set; }
 
-        [Key]
         [Required]
         [MaxLength(50)]
         public string PrimaryKey { get; set; }

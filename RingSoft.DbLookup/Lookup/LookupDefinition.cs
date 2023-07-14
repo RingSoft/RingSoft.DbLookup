@@ -213,6 +213,12 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        public LookupFieldColumnDefinition GetFieldColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
+        {
+            var column = GetColumnDefinition(lookupEntityProperty);
+            return column as LookupFieldColumnDefinition;
+        }
+
         private LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
             FieldDefinition fieldDefinition,

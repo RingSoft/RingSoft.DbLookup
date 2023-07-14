@@ -17,10 +17,14 @@ namespace RingSoft.DbLookup.Tests
     {
         public TableDefinition<Customer> Customers { get; set; }
 
+        public TableDefinition<Error> Errors { get; set; }
+
         public TableDefinition<TimeClock> TimeClocks { get; set; }
 
         public LookupDefinition<CustomerLookup, Customer> CustomerLookup { get; set; }
-        
+
+        public LookupDefinition<ErrorLookup, Error> ErrorLookup { get; set; }
+
         public LookupDefinition<TimeClockLookup, TimeClock> TimeClockLookup { get; set; }
 
         public TestLookupContext(DbContext context) : base(context)
@@ -40,6 +44,16 @@ namespace RingSoft.DbLookup.Tests
                     , p => p.Name, 50);
 
             Customers.HasLookupDefinition(CustomerLookup);
+
+            ErrorLookup = new LookupDefinition<ErrorLookup, Error>(Errors);
+
+            ErrorLookup
+                .AddVisibleColumnDefinition(p => p.ErrorId
+                    , "ErrorId"
+                    , p => p.ErrorId, 50);
+
+            Errors.HasLookupDefinition(ErrorLookup);
+
 
             TimeClockLookup = new LookupDefinition<TimeClockLookup, TimeClock>(TimeClocks);
             TimeClockLookup.AddVisibleColumnDefinition(
@@ -61,6 +75,13 @@ namespace RingSoft.DbLookup.Tests
                 p => p.CustomerName
                 , "Customer"
                 , p => p.Name, 25);
+
+            TimeClockLookup.Include(p => p.Error)
+                .AddVisibleColumnDefinition(
+                    p => p.ErrorId
+                    , "Error"
+                    , p => p.ErrorId, 25);
+
             TimeClocks.HasLookupDefinition(TimeClockLookup);
         }
 
@@ -78,6 +99,7 @@ namespace RingSoft.DbLookup.Tests
         private void PopulateDatabase()
         {
             DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Customer>(new Customer()));
+            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Error>(new Error()));
             DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<TimeClock>(new TimeClock()));
 
             var customers = new List<Customer>();
@@ -129,39 +151,95 @@ namespace RingSoft.DbLookup.Tests
                 Name = "Laura Curtis",
             });
 
+            customers.Add(new Customer()
+            {
+                Id = 9,
+                Name = "Peter Blankard (President)",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 10,
+                Name = "Smiley Whitesock (Sales Manager)",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 11,
+                Name = "Sparky McCllean",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 12,
+                Name = "Susan Jones (PD Group Lead)",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 13,
+                Name = "Charley Damsen",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 14,
+                Name = "Smitty James",
+            });
+
+            customers.Add(new Customer()
+            {
+                Id = 15,
+                Name = "Larry Talbert",
+            });
+
             DataRepository.DataContext.AddRange(customers);
+
+            var errors = new List<Error>();
+            for (int i = 0; i < 4; i++)
+            {
+                var error = new Error()
+                {
+                    Id = i + 1,
+                    ErrorId = $"E-{i + 1}",
+                };
+                errors.Add(error);
+            }
+
+            DataRepository.DataContext.AddRange(errors);
 
             var timeClocks = new List<TimeClock>();
             var customerIndex = 1;
             var piDateIndex = 1;
+            var errorIndex = 1;
 
             for (int i = 1; i < 101; i++)
             {
                 var punchInDate = DateTime.Now.AddDays(piDateIndex);
                 DateTime? punchOutDate = null;
-                Customer customer = null;
+                Error error = null;
                 if (i < 50)
                 {
                     punchOutDate = punchInDate.AddHours(1);
-                    customer = customers.FirstOrDefault(p => p.Id == customerIndex);
+                    error = errors.FirstOrDefault(p => p.Id == errorIndex);
                 }
-                else
-                {
-                    
-                }
+                var customer = customers.FirstOrDefault(p => p.Id == customerIndex);
                 var timeClock = new TimeClock()
                 {
                     Id = i,
                     TimeClockId =$"T-{i}",
                     PunchInDate = punchInDate,
                     PunchOutDate = punchOutDate,
-                    CustomerId = customer?.Id,
+                    CustomerId = customer.Id,
                     Customer = customer,
+                    Error = error,
+                    ErrorId = error?.Id,
                 };
                 timeClocks.Add(timeClock);
                 customerIndex++;
                 piDateIndex++;
-                if (customerIndex == 9)
+                errorIndex++;
+                if (customerIndex == 16)
                 {
                     customerIndex = 1;
                 }
@@ -169,6 +247,11 @@ namespace RingSoft.DbLookup.Tests
                 if (piDateIndex == 5)
                 {
                     piDateIndex = 1;
+                }
+
+                if (errorIndex == 5)
+                {
+                    errorIndex = 1;
                 }
             }
             DataRepository.DataContext.AddRange(timeClocks);

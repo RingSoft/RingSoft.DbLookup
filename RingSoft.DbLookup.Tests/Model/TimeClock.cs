@@ -22,6 +22,10 @@ namespace RingSoft.DbLookup.Tests.Model
 
         public virtual Customer Customer { get; set; }
 
+        public int? ErrorId { get; set; }
+
+        public virtual Error Error { get; set; }
+
         public override string ToString()
         {
             return TimeClockId;
@@ -37,5 +41,7 @@ namespace RingSoft.DbLookup.Tests.Model
         public DateTime PunchOutDate { get; set; }
 
         public string CustomerName { get; set; }
+
+        public string ErrorId { get; set; }
     }
 }

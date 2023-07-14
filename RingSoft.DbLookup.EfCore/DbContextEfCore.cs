@@ -51,6 +51,12 @@ namespace RingSoft.DbLookup.EfCore
             return this;
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+
         public abstract DbContextEfCore GetNewDbContextEfCore();
 
         public bool SaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()

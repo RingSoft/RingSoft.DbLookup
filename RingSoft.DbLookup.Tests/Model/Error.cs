@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RingSoft.DbLookup.Tests.Model
 {
-    public class Customer
+    public class Error
     {
         [Required]
         [Key]
@@ -12,23 +12,24 @@ namespace RingSoft.DbLookup.Tests.Model
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
-        
+        public string ErrorId { get; set; }
+
         public virtual ICollection<TimeClock> TimeClocks { get; set; }
 
-        public Customer()
+        public Error()
         {
             TimeClocks = new HashSet<TimeClock>();
         }
 
         public override string ToString()
         {
-            return Name;
+            return ErrorId;
         }
     }
 
-    public class CustomerLookup
+    public class ErrorLookup
     {
-        public string Name { get; set; }
+        public string ErrorId { get; set; }
     }
+
 }

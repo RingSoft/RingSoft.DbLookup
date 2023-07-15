@@ -13,6 +13,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using Enum = System.Enum;
 using Type = System.Type;
 
@@ -337,12 +338,18 @@ namespace RingSoft.DbLookup
             if (property != null)
             {
                 var value = property.GetValue(model);
-                if (dateType != null && dateType.Value == DbDateTypes.Millisecond)
+                if (dateType != null)
                 {
-                    if (value is DateTime date)
+                    switch (dateType.Value)
                     {
-                        var dateValue = date.FormatDateValue(dateType.Value);
-                        return dateValue;
+                        case DbDateTypes.DateTime:
+                        case DbDateTypes.Millisecond:
+                            if (value is DateTime date)
+                            {
+                                var dateValue = date.FormatDateValue(DbDateTypes.Millisecond);
+                                return dateValue;
+                            }
+                            break;
                     }
                 }
 

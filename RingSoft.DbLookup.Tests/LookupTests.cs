@@ -387,8 +387,8 @@ namespace RingSoft.DbLookup.Tests
             Assert.AreEqual(10, LookupData.CurrentList.Count);
             Assert.AreEqual(LookupScrollPositions.Middle, LookupData.ScrollPosition);
 
-            //Assert.AreEqual(1, LookupData.CurrentList.FirstOrDefault().Id);
-            //Assert.AreEqual(71, LookupData.CurrentList.LastOrDefault().Id);
+            Assert.AreEqual(49, LookupData.CurrentList.FirstOrDefault().Id);
+            Assert.AreEqual(81, LookupData.CurrentList.LastOrDefault().Id);
         }
     }
 }

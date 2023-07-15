@@ -347,7 +347,9 @@ namespace RingSoft.DbLookup
                 }
 
                 if (value != null)
+                {
                     return value.ToString();
+                }
             }
 
             return string.Empty;

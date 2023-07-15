@@ -379,9 +379,16 @@ namespace RingSoft.DbLookup.Tests
             LookupData.OnColumnClick(column, true);
             Assert.AreEqual(10, LookupData.CurrentList.Count);
             Assert.AreEqual(LookupScrollPositions.Top, LookupData.ScrollPosition);
-            //
+            
+            Assert.AreEqual(1, LookupData.CurrentList.FirstOrDefault().Id);
+            Assert.AreEqual(45, LookupData.CurrentList.LastOrDefault().Id);
+
+            LookupData.GotoNextPage();
+            Assert.AreEqual(10, LookupData.CurrentList.Count);
+            Assert.AreEqual(LookupScrollPositions.Middle, LookupData.ScrollPosition);
+
             //Assert.AreEqual(1, LookupData.CurrentList.FirstOrDefault().Id);
-            //Assert.AreEqual(32, LookupData.CurrentList.LastOrDefault().Id);
+            //Assert.AreEqual(71, LookupData.CurrentList.LastOrDefault().Id);
         }
     }
 }

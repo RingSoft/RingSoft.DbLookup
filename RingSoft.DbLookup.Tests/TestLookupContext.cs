@@ -246,7 +246,7 @@ namespace RingSoft.DbLookup.Tests
                     customerIndex = 1;
                 }
 
-                if (piDateIndex == 15)
+                if (piDateIndex == 5)
                 {
                     piDateIndex = 1;
                 }

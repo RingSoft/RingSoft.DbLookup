@@ -212,10 +212,11 @@ namespace RingSoft.DbLookup.Tests
             var customerIndex = 1;
             var piDateIndex = 1;
             var errorIndex = 1;
+            var startDate = DateTime.Parse("01/01/1980 12:00:00 AM");
 
             for (int i = 1; i < 101; i++)
             {
-                var punchInDate = DateTime.Now.AddDays(piDateIndex);
+                var punchInDate = startDate.AddDays(piDateIndex);
                 DateTime? punchOutDate = null;
                 Error error = null;
                 if (i < 50)

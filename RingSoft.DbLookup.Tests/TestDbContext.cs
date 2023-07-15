@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.Tests.Configurations;

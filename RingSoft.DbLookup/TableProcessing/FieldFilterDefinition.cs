@@ -430,7 +430,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public override string ToString()
         {
-            return FieldDefinition.ToString();
+            var result = GetReportBeginTextPrintMode(null);
+
+            result += $"{GetConditionText(Condition)} {Value}";
+
+            return result;
         }
 
         protected internal override string ConvertDate(string value)

@@ -1418,60 +1418,12 @@ namespace RingSoft.DbLookup.Lookup
             , TEntity topEntity
             , bool ascending
             , LookupOperations operation
-            , bool setNullValue = false
             , int filterIndex = 0)
         {
             FieldFilterDefinition lastFilter = null;
             var result = new List<TEntity>();
 
-            var setFirstNull = setNullValue;
             input = GetProcessInput(topEntity);
-            lastFilter = input.FieldFilters.LastOrDefault();
-            if (lastFilter != null && lastFilter.IsNullFilter() || setNullValue)
-            {
-                var lastFilter1 = input.FieldFilters.LastOrDefault();
-
-                if (filterIndex > 0)
-                {
-                    if (ascending)
-                    {
-                        if (_orderByType == OrderByTypes.Ascending)
-                        {
-                            lastFilter1.Condition = Conditions.NotEqualsNull;
-                            setFirstNull = true;
-                        }
-                        else
-                        {
-                            lastFilter1.Condition = Conditions.EqualsNull;
-                        }
-                    }
-                    else
-                    {
-                        if (_orderByType == OrderByTypes.Ascending)
-                        {
-                            lastFilter1.Condition = Conditions.EqualsNull;
-                        }
-                        else
-                        {
-                            lastFilter1.Condition = Conditions.NotEqualsNull;
-                            setFirstNull = true;
-                        }
-                    }
-                }
-
-                var isEnd = false;
-                if (operation != LookupOperations.GetInitData)
-                {
-                    isEnd = IsEnd(topEntity, ascending, lastFilter1);
-                }
-
-                if (isEnd)
-                {
-                    return result;
-                }
-
-            }
-
 
             if (addedPrimaryKey)
             {
@@ -1489,33 +1441,30 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             lastFilter = input.FieldFilters.LastOrDefault();
-            if (lastFilter != null && !setFirstNull)
+            switch (_orderByType)
             {
-                switch (_orderByType)
-                {
-                    case OrderByTypes.Ascending:
-                        if (ascending)
-                        {
-                            lastFilter.Condition = Conditions.GreaterThan;
-                        }
-                        else
-                        {
-                            lastFilter.Condition = Conditions.LessThan;
-                        }
-                        break;
-                    case OrderByTypes.Descending:
-                        if (ascending)
-                        {
-                            lastFilter.Condition = Conditions.LessThan;
-                        }
-                        else
-                        {
-                            lastFilter.Condition = Conditions.GreaterThan;
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case OrderByTypes.Ascending:
+                    if (ascending)
+                    {
+                        lastFilter.Condition = Conditions.GreaterThan;
+                    }
+                    else
+                    {
+                        lastFilter.Condition = Conditions.LessThan;
+                    }
+                    break;
+                case OrderByTypes.Descending:
+                    if (ascending)
+                    {
+                        lastFilter.Condition = Conditions.LessThan;
+                    }
+                    else
+                    {
+                        lastFilter.Condition = Conditions.GreaterThan;
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             var output = GetFilterPageQuery(
                 topEntity
@@ -1525,7 +1474,7 @@ namespace RingSoft.DbLookup.Lookup
                 , out addedPrimaryKey
                 , ascending
                 , out var hasMultiRecs
-                , setNullValue);
+                , false);
 
             lastFilter = input.FieldFilters.LastOrDefault();
             if (output.Count() == 0)
@@ -1550,29 +1499,8 @@ namespace RingSoft.DbLookup.Lookup
                         return result;
                     }
                     filterIndex++;
-                    var newList = AddAditionalList(input, result, count, false, entity, ascending, operation, false, filterIndex);
+                    var newList = AddAditionalList(input, result, count, false, entity, ascending, operation, filterIndex);
                     result.InsertRange(0, newList);
-                }
-                else
-                {
-                    if (!setFirstNull)
-                    {
-                        if (lastFilter.FieldDefinition.AllowNulls)
-                        {
-                          lastFilter.Condition = Conditions.EqualsNull;
-                            var newList = AddAditionalList(
-                                input
-                                , result
-                                , count
-                                , false
-                                , topEntity
-                                , ascending
-                                , operation
-                                , true
-                                , filterIndex);
-                            result.InsertRange(0, newList);
-                        }
-                    }
                 }
                 return result;
             }
@@ -1594,7 +1522,7 @@ namespace RingSoft.DbLookup.Lookup
 
                 filterIndex++;
                 var newList = AddAditionalList(input, result, count, false, entity, ascending
-                    , operation, false, filterIndex);
+                    , operation, filterIndex);
 
                 if (ascending)
                 {

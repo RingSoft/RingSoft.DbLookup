@@ -96,7 +96,14 @@ namespace RingSoft.DbLookup.Lookup
 
         public LookupColumnDefinitionBase InitialOrderByColumn { get; set; }
 
-        public FieldDefinition InitialOrderByField { get; set; }
+        public FieldDefinition InitialOrderByField
+        {
+            get => _initialOrderByField;
+            set
+            {
+                _initialOrderByField = value;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the lookup entity.
@@ -143,6 +150,7 @@ namespace RingSoft.DbLookup.Lookup
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
+        private FieldDefinition _initialOrderByField;
 
         public LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {

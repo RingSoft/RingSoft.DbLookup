@@ -7,6 +7,8 @@ namespace RingSoft.DbLookup.AdvancedFind
     public class AdvancedFindLookup
     {
         public string Name { get; set; }
+
+        public string TableName { get; set; }
     }
 
     public class AdvFindFilterLookup

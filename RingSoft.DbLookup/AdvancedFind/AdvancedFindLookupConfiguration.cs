@@ -19,7 +19,10 @@ namespace RingSoft.DbLookup.AdvancedFind
         {
             var advancedFindLookup = new LookupDefinition<AdvancedFindLookup, AdvancedFind>(_lookupContext.AdvancedFinds);
             advancedFindLookup.AddVisibleColumnDefinition(p => p.Name, "Name"
-                , p => p.Name, 95);
+                , p => p.Name, 50);
+
+            advancedFindLookup.AddVisibleColumnDefinition(p => p.TableName, "Table"
+                , p => p.Table, 50);
 
             _lookupContext.AdvancedFindLookup = advancedFindLookup;
 

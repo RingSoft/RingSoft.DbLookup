@@ -1423,14 +1423,14 @@ namespace RingSoft.DbLookup.Lookup
             FieldFilterDefinition lastFilter = null;
             var result = new List<TEntity>();
 
-            input = GetProcessInput(topEntity);
-
-            ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
-
+            //input = GetProcessInput(topEntity);
             lastFilter = input.FieldFilters.LastOrDefault();
+
+            //ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
+
             if (lastFilter.FieldDefinition.AllowNulls)
             {
-                return AddAditionalListNull(
+                return AddAdditionalListNull(
                     input
                     , inputList
                     , count
@@ -1440,6 +1440,9 @@ namespace RingSoft.DbLookup.Lookup
                     , operation
                     , filterIndex);
             }
+
+            lastFilter = input.FieldFilters.LastOrDefault();
+
             switch (_orderByType)
             {
                 case OrderByTypes.Ascending:
@@ -1476,12 +1479,13 @@ namespace RingSoft.DbLookup.Lookup
                 , false);
 
             lastFilter = input.FieldFilters.LastOrDefault();
+            RemoveFilter(input, lastFilter);
             if (output.Count() == 0)
             {
-                if (input.FieldFilters.Count > 1)
+                if (input.FieldFilters.Count > 0)
                 {
                     var entity = topEntity;
-                    RemoveFilter(input, lastFilter);
+                    //RemoveFilter(input, lastFilter);
                     lastFilter = input.FieldFilters.LastOrDefault();
                     var isEnd = false;
                     switch (operation)
@@ -1523,16 +1527,21 @@ namespace RingSoft.DbLookup.Lookup
                 var newList = AddAditionalList(input, result, count, false, entity, ascending
                     , operation, filterIndex);
 
-                if (ascending)
-                {
-                    result.AddRange(newList);
-                }
-                else
-                {
-                    result.InsertRange(0, newList);
-                }
+                ProcessPageOutput(ascending, result, newList);
             }
             return result;
+        }
+
+        private static void ProcessPageOutput(bool ascending, List<TEntity> result, List<TEntity> newList)
+        {
+            if (ascending)
+            {
+                result.AddRange(newList);
+            }
+            else
+            {
+                result.InsertRange(0, newList);
+            }
         }
 
         private void ProcesAddFilters(LookupDataMauiProcessInput<TEntity> input
@@ -1579,7 +1588,7 @@ namespace RingSoft.DbLookup.Lookup
             return isEnd;
         }
 
-        private List<TEntity> AddAditionalListNull(
+        private List<TEntity> AddAdditionalListNull(
             LookupDataMauiProcessInput<TEntity> input
             , List<TEntity> inputList
             , int count
@@ -1591,17 +1600,19 @@ namespace RingSoft.DbLookup.Lookup
         {
             var result = new List<TEntity>();
 
-            input = GetProcessInput(topEntity);
+            var lastFilter = input.FieldFilters.LastOrDefault();
 
-            ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
+            if (addedPrimaryKey)
+            {
+                RemoveFilter(input, lastFilter);
+                lastFilter = input.FieldFilters.LastOrDefault();
+            }
 
             var nearestCondition = Conditions.LessThan;
             if (ascending)
             {
                 nearestCondition = Conditions.GreaterThan;
             }
-
-            var lastFilter = input.FieldFilters.LastOrDefault();
 
             var nextEntity = GetNearestEntity(topEntity, nearestCondition);
 
@@ -1612,16 +1623,39 @@ namespace RingSoft.DbLookup.Lookup
 
             var nextInput = GetProcessInput(nextEntity);
 
+            FieldFilterDefinition nextLastFilter = nextInput.FieldFilters.LastOrDefault();
+            var hasMoreThan1Record = HasMoreThan1Record(nextInput);
+            if (hasMoreThan1Record)
+            {
+                AddPrimaryKeyFieldsToFilter(nextEntity, nextInput);
+            }
+
             if (lastFilter.IsNullFilter())
             {
                 
             }
             else
             {
-                var nextLastFilter = nextInput.FieldFilters.LastOrDefault();
                 if (nextLastFilter.IsNullFilter())
                 {
-                    
+                    nextLastFilter.Condition = Conditions.EqualsNull;
+                }
+            }
+            var query = GetQueryFromFilter(nextInput.FilterDefinition, nextInput, ascending);
+            var newList = GetOutputResult(query, ascending, count, nextInput);
+
+            count -= newList.Count();
+            ProcessPageOutput(ascending, result, newList.ToList());
+
+            if (count > 0)
+            {
+                if (ascending)
+                {
+                    nextEntity = newList.LastOrDefault();
+                }
+                else
+                {
+                    nextEntity = newList.FirstOrDefault();
                 }
             }
             return result;

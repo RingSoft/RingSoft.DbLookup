@@ -692,7 +692,7 @@ namespace RingSoft.DbLookup.Lookup
                 return;
             }
 
-            var splitPage = (int)Math.Ceiling((double)LookupControl.PageSize / 2);
+            var splitPage = (int)Math.Floor((double)LookupControl.PageSize / 2);
             var topCount = LookupControl.PageSize - splitPage;
             var bottomCount = LookupControl.PageSize - topCount;
 
@@ -1425,22 +1425,21 @@ namespace RingSoft.DbLookup.Lookup
 
             input = GetProcessInput(topEntity);
 
-            if (addedPrimaryKey)
-            {
-                AddPrimaryKeyFieldsToFilter(topEntity, input);
-            }
-
-            if (filterIndex > 1 && input.FieldFilters.Count > 1)
-            {
-                lastFilter= input.FieldFilters.LastOrDefault();
-
-                if (lastFilter != null && input.FieldFilters.Count > 1)
-                {
-                    RemoveFilter(input, lastFilter);
-                }
-            }
+            ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
 
             lastFilter = input.FieldFilters.LastOrDefault();
+            if (lastFilter.FieldDefinition.AllowNulls)
+            {
+                return AddAditionalListNull(
+                    input
+                    , inputList
+                    , count
+                    , addedPrimaryKey
+                    , topEntity
+                    , ascending
+                    , operation
+                    , filterIndex);
+            }
             switch (_orderByType)
             {
                 case OrderByTypes.Ascending:
@@ -1536,6 +1535,29 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        private void ProcesAddFilters(LookupDataMauiProcessInput<TEntity> input
+            , int filterIndex
+            , bool addedPrimaryKey
+            , TEntity topEntity)
+        {
+            if (addedPrimaryKey)
+            {
+                AddPrimaryKeyFieldsToFilter(topEntity, input);
+            }
+
+
+            FieldFilterDefinition lastFilter;
+            if (filterIndex > 1 && input.FieldFilters.Count > 1)
+            {
+                lastFilter = input.FieldFilters.LastOrDefault();
+
+                if (lastFilter != null && input.FieldFilters.Count > 1)
+                {
+                    RemoveFilter(input, lastFilter);
+                }
+            }
+        }
+
         private bool IsEnd(TEntity topEntity, bool ascending, FieldFilterDefinition lastFilter)
         {
             var isEnd = false;
@@ -1555,6 +1577,54 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             return isEnd;
+        }
+
+        private List<TEntity> AddAditionalListNull(
+            LookupDataMauiProcessInput<TEntity> input
+            , List<TEntity> inputList
+            , int count
+            , bool addedPrimaryKey
+            , TEntity topEntity
+            , bool ascending
+            , LookupOperations operation
+            , int filterIndex = 0)
+        {
+            var result = new List<TEntity>();
+
+            input = GetProcessInput(topEntity);
+
+            ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
+
+            var nearestCondition = Conditions.LessThan;
+            if (ascending)
+            {
+                nearestCondition = Conditions.GreaterThan;
+            }
+
+            var lastFilter = input.FieldFilters.LastOrDefault();
+
+            var nextEntity = GetNearestEntity(topEntity, nearestCondition);
+
+            if (nextEntity == null)
+            {
+                return result;
+            }
+
+            var nextInput = GetProcessInput(nextEntity);
+
+            if (lastFilter.IsNullFilter())
+            {
+                
+            }
+            else
+            {
+                var nextLastFilter = nextInput.FieldFilters.LastOrDefault();
+                if (nextLastFilter.IsNullFilter())
+                {
+                    
+                }
+            }
+            return result;
         }
 
         private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count

@@ -454,6 +454,16 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        public List<JoinInfo> GetNavigationProperties()
+        {
+            if (ParentObject != null)
+            {
+                return ParentObject.GetNavigationProperties();
+            }
+
+            return NavigationProperties;
+        }
+
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
             var result = string.Empty;

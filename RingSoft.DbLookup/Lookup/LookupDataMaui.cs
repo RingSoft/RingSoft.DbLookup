@@ -1088,6 +1088,7 @@ namespace RingSoft.DbLookup.Lookup
                     filterItem.SetPropertyName = orderBy.GetPropertyJoinName();
                     filterItem.LookupColumn = orderBy;
                     filterItem.FieldToSearch = orderBy.FieldToDisplay;
+                    filterItem.NavigationProperties = orderBy.GetNavigationProperties();
                 }
             }
 

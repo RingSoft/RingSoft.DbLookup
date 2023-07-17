@@ -5,6 +5,7 @@ using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
@@ -52,6 +53,10 @@ namespace RingSoft.DbLookup.TableProcessing
             internal set
             {
                 _fieldDefinition = value;
+                if (value.Description == "Name")
+                {
+                    
+                }
                 ValueType = _fieldDefinition.ValueType;
                 if (FieldDefinition is DateFieldDefinition dateFieldDefinition)
                 {
@@ -138,6 +143,8 @@ namespace RingSoft.DbLookup.TableProcessing
 
         public bool IsPrimaryKey { get; internal set; }
 
+        public List<JoinInfo> NavigationProperties { get; internal set; }
+
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
@@ -201,6 +208,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 SetTableDescription();
                 TableFilterDefinition.AddJoin(JoinDefinition);
             }
+            NavigationProperties = fieldFilterDefinition.NavigationProperties;
 
             base.CopyFrom(source);
         }
@@ -280,6 +288,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         SetPropertyName = FieldDefinition.PropertyName;
                         if (JoinDefinition != null)
                         {
+                            NavigationProperties = JoinDefinition.GetNavigationProperties(true);
                             if (FieldToSearch != null)
                             {
                                 PropertyName = JoinDefinition.GetPropertyJoinName(FieldToSearch.PropertyName);
@@ -543,11 +552,16 @@ namespace RingSoft.DbLookup.TableProcessing
                 dateType = dateFieldDefinition.DateType;
             }
 
-            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty() && Condition != Conditions.NotEqualsNull)
+            if (IsNullableFilter() && Value.IsNullOrEmpty() && Condition != Conditions.NotEqualsNull)
             {
                 if (LookupColumn != null)
                 {
-                    var propertyName = LookupColumn.GetPropertyJoinName(true);
+                    var useDbField = false;
+                    if (FieldDefinition.AllowNulls)
+                    {
+                        useDbField = true;
+                    }
+                    var propertyName = LookupColumn.GetPropertyJoinName(useDbField);
                     nullExpr = FilterItemDefinition
                         .GetBinaryExpression<TEntity>(param, propertyName, Conditions.EqualsNull
                             , FieldDefinition.FieldType);
@@ -561,20 +575,42 @@ namespace RingSoft.DbLookup.TableProcessing
                 field = FieldToSearch;
             }
 
-            if (stringValue.IsNullOrEmpty())
-            {
-                
-            }
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
             
             var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);
             return result;
         }
 
+        public bool IsNullableFilter()
+        {
+            var result = FieldDefinition.AllowNulls;
+            if (!result)
+            {
+                if (NavigationProperties != null)
+                {
+                    foreach (var property in NavigationProperties)
+                    {
+                        if (property.ParentJoin != null)
+                        {
+                            if (property
+                                .ParentJoin
+                                .ForeignKeyDefinition
+                                .FieldJoins[0]
+                                .ForeignField.AllowNulls)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         public bool IsNullFilter()
         {
             var result = false;
-            if (FieldDefinition.AllowNulls && Value.IsNullOrEmpty())
+            if (IsNullableFilter() && Value.IsNullOrEmpty())
             {
                 result = true;
             }

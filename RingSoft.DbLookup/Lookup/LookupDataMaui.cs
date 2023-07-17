@@ -1429,7 +1429,7 @@ namespace RingSoft.DbLookup.Lookup
 
             //ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
 
-            if (lastFilter.FieldDefinition.AllowNulls)
+            if (lastFilter.IsNullableFilter())
             {
                 return AddAdditionalListNull(
                     input
@@ -1444,31 +1444,7 @@ namespace RingSoft.DbLookup.Lookup
 
             lastFilter = input.FieldFilters.LastOrDefault();
 
-            switch (_orderByType)
-            {
-                case OrderByTypes.Ascending:
-                    if (ascending)
-                    {
-                        lastFilter.Condition = Conditions.GreaterThan;
-                    }
-                    else
-                    {
-                        lastFilter.Condition = Conditions.LessThan;
-                    }
-                    break;
-                case OrderByTypes.Descending:
-                    if (ascending)
-                    {
-                        lastFilter.Condition = Conditions.LessThan;
-                    }
-                    else
-                    {
-                        lastFilter.Condition = Conditions.GreaterThan;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            SetLastFilterCondition(ascending, lastFilter);
             var output = GetFilterPageQuery(
                 topEntity
                 , count
@@ -1531,6 +1507,37 @@ namespace RingSoft.DbLookup.Lookup
                 ProcessPageOutput(ascending, result, newList);
             }
             return result;
+        }
+
+        private void SetLastFilterCondition(bool ascending, FieldFilterDefinition lastFilter)
+        {
+            switch (_orderByType)
+            {
+                case OrderByTypes.Ascending:
+                    if (ascending)
+                    {
+                        lastFilter.Condition = Conditions.GreaterThan;
+                    }
+                    else
+                    {
+                        lastFilter.Condition = Conditions.LessThan;
+                    }
+
+                    break;
+                case OrderByTypes.Descending:
+                    if (ascending)
+                    {
+                        lastFilter.Condition = Conditions.LessThan;
+                    }
+                    else
+                    {
+                        lastFilter.Condition = Conditions.GreaterThan;
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private static void ProcessPageOutput(bool ascending, List<TEntity> result, List<TEntity> newList)
@@ -1603,62 +1610,99 @@ namespace RingSoft.DbLookup.Lookup
 
             var lastFilter = input.FieldFilters.LastOrDefault();
 
-            if (addedPrimaryKey)
+            SetLastFilterCondition(ascending, lastFilter);
+            var output = GetFilterPageQuery(
+                topEntity
+                , count
+                , input
+                , false
+                , out addedPrimaryKey
+                , ascending
+                , out var hasMultiRecs
+                , false);
+
+            var nextEntity = topEntity;
+            count -= output.Count();
+            if (output.Count() == 0)
             {
-                RemoveFilter(input, lastFilter);
-                lastFilter = input.FieldFilters.LastOrDefault();
-            }
-
-            var nearestCondition = Conditions.LessThan;
-            if (ascending)
-            {
-                nearestCondition = Conditions.GreaterThan;
-            }
-
-            var nextEntity = GetNearestEntity(topEntity, nearestCondition);
-
-            if (nextEntity == null)
-            {
-                return result;
-            }
-
-            var nextInput = GetProcessInput(nextEntity);
-
-            FieldFilterDefinition nextLastFilter = nextInput.FieldFilters.LastOrDefault();
-            var hasMoreThan1Record = HasMoreThan1Record(nextInput);
-            if (hasMoreThan1Record)
-            {
-                AddPrimaryKeyFieldsToFilter(nextEntity, nextInput);
-            }
-
-            if (lastFilter.IsNullFilter())
-            {
-                
-            }
-            else
-            {
-                if (nextLastFilter.IsNullFilter())
-                {
-                    nextLastFilter.Condition = Conditions.EqualsNull;
-                }
-            }
-            var query = GetQueryFromFilter(nextInput.FilterDefinition, nextInput, ascending);
-            var newList = GetOutputResult(query, ascending, count, nextInput);
-
-            count -= newList.Count();
-            ProcessPageOutput(ascending, result, newList.ToList());
-
-            if (count > 0)
-            {
+                var nearestCondition = Conditions.LessThan;
                 if (ascending)
                 {
-                    nextEntity = newList.LastOrDefault();
+                    nearestCondition = Conditions.GreaterThan;
+                }
+
+                nextEntity = GetNearestEntity(topEntity, nearestCondition);
+
+                if (nextEntity == null)
+                {
+                    return result;
+                }
+
+                var nextInput = GetProcessInput(nextEntity);
+
+                FieldFilterDefinition nextLastFilter = nextInput.FieldFilters.LastOrDefault();
+                var hasMoreThan1Record = HasMoreThan1Record(nextInput);
+                if (hasMoreThan1Record)
+                {
+                    AddPrimaryKeyFieldsToFilter(nextEntity, nextInput);
+                }
+
+                if (lastFilter.IsNullFilter())
+                {
+
                 }
                 else
                 {
-                    nextEntity = newList.FirstOrDefault();
+                    if (nextLastFilter.IsNullFilter())
+                    {
+                        nextLastFilter.Condition = Conditions.EqualsNull;
+                    }
+                }
+                var query = GetQueryFromFilter(nextInput.FilterDefinition, nextInput, ascending);
+                var newList = GetOutputResult(query, ascending, count, nextInput);
+
+                count -= newList.Count();
+                ProcessPageOutput(ascending, result, newList.ToList());
+
+                if (count > 0)
+                {
+                    if (ascending)
+                    {
+                        nextEntity = newList.LastOrDefault();
+                    }
+                    else
+                    {
+                        nextEntity = newList.FirstOrDefault();
+                    }
                 }
             }
+            else
+            {
+                var newList = output.ToList();
+                ProcessPageOutput(ascending, result, output.ToList());
+
+                if (count > 0)
+                {
+                    if (ascending)
+                    {
+                        nextEntity = newList.LastOrDefault();
+                    }
+                    else
+                    {
+                        nextEntity = newList.FirstOrDefault();
+                    }
+                }
+            }
+            lastFilter = input.FieldFilters.LastOrDefault();
+            RemoveFilter(input, lastFilter);
+
+            if (input.FieldFilters.Any())
+            {
+                var newList = AddAditionalList(input, result, count, false, nextEntity, ascending
+                    , operation, filterIndex);
+                ProcessPageOutput(ascending, result, output.ToList());
+            }
+
             return result;
         }
 

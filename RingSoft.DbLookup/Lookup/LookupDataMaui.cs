@@ -917,7 +917,7 @@ namespace RingSoft.DbLookup.Lookup
                     var lastFilter = input.FieldFilters.LastOrDefault();
                     if (lastFilter != null)
                     {
-                        if (lastFilter.FieldDefinition.AllowNulls)
+                        if (lastFilter.IsNullableFilter())
                         {
                             var queryData = false;
                             if (lastFilter.Value.IsNullOrEmpty())
@@ -925,6 +925,14 @@ namespace RingSoft.DbLookup.Lookup
                                 if (_orderByType == OrderByTypes.Descending)
                                 {
                                     if (ascending)
+                                    {
+                                        lastFilter.Condition = Conditions.NotEqualsNull;
+                                        queryData = true;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!ascending)
                                     {
                                         lastFilter.Condition = Conditions.NotEqualsNull;
                                         queryData = true;
@@ -940,6 +948,11 @@ namespace RingSoft.DbLookup.Lookup
                                         lastFilter.Condition = Conditions.EqualsNull;
                                         queryData = true;
                                     }
+                                }
+                                else
+                                {
+                                    lastFilter.Condition = Conditions.EqualsNull;
+                                    queryData = true;
                                 }
                             }
 
@@ -1427,6 +1440,10 @@ namespace RingSoft.DbLookup.Lookup
             //input = GetProcessInput(topEntity);
             lastFilter = input.FieldFilters.LastOrDefault();
 
+            if (lastFilter == null)
+            {
+                return result;
+            }
             //ProcesAddFilters(input, filterIndex, addedPrimaryKey, topEntity);
 
             if (lastFilter.IsNullableFilter())
@@ -1670,6 +1687,10 @@ namespace RingSoft.DbLookup.Lookup
                     if (nextLastFilter.IsNullFilter())
                     {
                         nextLastFilter.Condition = Conditions.EqualsNull;
+                        if (_orderByType == OrderByTypes.Descending)
+                        {
+                            nextLastFilter.Condition = Conditions.NotEqualsNull;
+                        }
                     }
                 }
                 var query = GetQueryFromFilter(nextInput.FilterDefinition, nextInput, ascending);

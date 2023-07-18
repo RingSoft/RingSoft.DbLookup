@@ -1610,7 +1610,32 @@ namespace RingSoft.DbLookup.Lookup
 
             var lastFilter = input.FieldFilters.LastOrDefault();
 
+            if (lastFilter == null)
+            {
+                return result;
+            }
+
             SetLastFilterCondition(ascending, lastFilter);
+
+            if (ascending && lastFilter.IsNullFilter())
+            {
+                var nearestEntity = GetNearestEntity(topEntity, Conditions.GreaterThan);
+                if (nearestEntity == null)
+                {
+                    return result;
+                }
+
+                result.Add(nearestEntity);
+                count--;
+
+                if (count == 0)
+                {
+                    return result;
+                }
+                lastFilter.Value = lastFilter.LookupColumn.GetDatabaseValue(nearestEntity);
+                topEntity = nearestEntity;
+            }
+
             var output = GetFilterPageQuery(
                 topEntity
                 , count
@@ -1626,27 +1651,16 @@ namespace RingSoft.DbLookup.Lookup
             if (output.Count() == 0)
             {
                 var nearestCondition = Conditions.LessThan;
-                if (ascending)
-                {
-                    nearestCondition = Conditions.GreaterThan;
-                }
+                var nearestEntity = GetNearestEntity(topEntity, nearestCondition);
 
-                nextEntity = GetNearestEntity(topEntity, nearestCondition);
-
-                if (nextEntity == null)
+                if (nearestEntity == null)
                 {
                     return result;
                 }
 
-                var nextInput = GetProcessInput(nextEntity);
+                var nextInput = GetProcessInput(nearestEntity);
 
-                FieldFilterDefinition nextLastFilter = nextInput.FieldFilters.LastOrDefault();
-                var hasMoreThan1Record = HasMoreThan1Record(nextInput);
-                if (hasMoreThan1Record)
-                {
-                    AddPrimaryKeyFieldsToFilter(nextEntity, nextInput);
-                }
-
+                var nextLastFilter = nextInput.FieldFilters.LastOrDefault();
                 if (lastFilter.IsNullFilter())
                 {
 
@@ -1675,6 +1689,8 @@ namespace RingSoft.DbLookup.Lookup
                         nextEntity = newList.FirstOrDefault();
                     }
                 }
+                lastFilter = input.FieldFilters.LastOrDefault();
+                RemoveFilter(input, lastFilter);
             }
             else
             {
@@ -1693,14 +1709,12 @@ namespace RingSoft.DbLookup.Lookup
                     }
                 }
             }
-            lastFilter = input.FieldFilters.LastOrDefault();
-            RemoveFilter(input, lastFilter);
-
-            if (input.FieldFilters.Any())
+            if (count > 0)
             {
+                lastFilter.Value = lastFilter.LookupColumn.GetDatabaseValue(nextEntity);
                 var newList = AddAditionalList(input, result, count, false, nextEntity, ascending
                     , operation, filterIndex);
-                ProcessPageOutput(ascending, result, output.ToList());
+                ProcessPageOutput(ascending, result, newList);
             }
 
             return result;

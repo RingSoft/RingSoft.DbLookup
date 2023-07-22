@@ -94,6 +94,7 @@ namespace RingSoft.DbLookup.TableProcessing
             Expression result = null;
             
             Expression leftExpression = null;
+            EndLogics endLogic = EndLogics.And;
 
             foreach (var filter in Filters)
             {
@@ -112,17 +113,18 @@ namespace RingSoft.DbLookup.TableProcessing
                     if (result == null)
                     {
                         result = FilterItemDefinition.AppendExpression(leftExpression, rightExpression,
-                            filter.EndLogic);
+                            endLogic);
                     }
                     else
                     {
-                        result = FilterItemDefinition.AppendExpression(result, rightExpression, filter.EndLogic);
+                        result = FilterItemDefinition.AppendExpression(result, rightExpression, endLogic);
                     }
                 }
                 else
                 {
                     result = leftExpression;
                 }
+                endLogic = filter.EndLogic;
             }
 
             return result;

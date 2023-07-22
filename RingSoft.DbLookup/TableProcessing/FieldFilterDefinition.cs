@@ -449,19 +449,19 @@ namespace RingSoft.DbLookup.TableProcessing
         protected internal override string ConvertDate(string value)
         {
             value = base.ConvertDate(value);
-            //if (FieldDefinition is DateFieldDefinition dateField)
-            //{
-            //    if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
-            //    {
-            //        var date = value.ToDate();
-            //        if (date != null)
-            //        {
-            //            date = date.Value.ToUniversalTime();
-            //            return date.Value.FormatDateValue(dateField.DateType);
-            //        }
-            //    }
+            if (FieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+                {
+                    var date = value.ToDate();
+                    if (date != null)
+                    {
+                        date = date.Value.ToUniversalTime();
+                        return date.Value.FormatDateValue(dateField.DateType);
+                    }
+                }
 
-            //}
+            }
 
             return value;
         }
@@ -554,6 +554,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
             if (IsNullableFilter() && Value.IsNullOrEmpty() && Condition != Conditions.NotEqualsNull)
             {
+                var propertyName = PropertyName;
                 if (LookupColumn != null)
                 {
                     var useDbField = false;
@@ -561,12 +562,12 @@ namespace RingSoft.DbLookup.TableProcessing
                     {
                         useDbField = true;
                     }
-                    var propertyName = LookupColumn.GetPropertyJoinName(useDbField);
-                    nullExpr = FilterItemDefinition
-                        .GetBinaryExpression<TEntity>(param, propertyName, Conditions.EqualsNull
-                            , FieldDefinition.FieldType);
-                    return nullExpr;
+                    propertyName = LookupColumn.GetPropertyJoinName(useDbField);
                 }
+                nullExpr = FilterItemDefinition
+                    .GetBinaryExpression<TEntity>(param, propertyName, Conditions.EqualsNull
+                        , FieldDefinition.FieldType);
+                return nullExpr;
             }
             var stringValue = Value;
             var field = FieldDefinition;

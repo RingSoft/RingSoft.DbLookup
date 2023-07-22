@@ -361,7 +361,26 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void OnMouseWheelForward()
         {
-            if (!CurrentList.Any() || CurrentList.Count < 3)
+            if (!CurrentList.Any() || CurrentList.Count < 3 || AtBottom())
+            {
+                return;
+            }
+
+            var selectedEntity = CurrentList[2];
+            if (selectedEntity != null)
+            {
+                CurrentList.Clear();
+                CurrentList.AddRange(GetNextRecordSet(selectedEntity, LookupControl.PageSize));
+                FireLookupDataChangedEvent(GetOutputArgs());
+                LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
+
+            }
+
+        }
+
+        public override void OnMouseWheelBack()
+        {
+            if (!CurrentList.Any() || CurrentList.Count < 3 || AtTop())
             {
                 return;
             }
@@ -369,40 +388,10 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList[CurrentList.Count - 3];
             if (selectedEntity != null)
             {
-                var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
-                if (entity == null)
-                {
-                    GotoBottom();
-                }
-                else
-                {
-                    MakeList(entity, LookupControl.PageSize - 4, 4, true
-                    , LookupOperations.WheelForward);
-                }
-            }
-
-        }
-
-        public override void OnMouseWheelBack()
-        {
-            if (!CurrentList.Any() || CurrentList.Count < 3)
-            {
-                return;
-            }
-
-            var selectedEntity = CurrentList.FirstOrDefault();
-            if (selectedEntity != null)
-            {
-                var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
-                if (entity == null)
-                {
-                    GotoTop();
-                }
-                else
-                {
-                    MakeList(entity, 3, LookupControl.PageSize - 3, false
-                    , LookupOperations.WheelBackward);
-                }
+                CurrentList.Clear();
+                CurrentList.AddRange(GetPreviousRecordSet(selectedEntity, LookupControl.PageSize));
+                FireLookupDataChangedEvent(GetOutputArgs());
+                LookupControl.SetLookupIndex(0);
             }
         }
 
@@ -424,6 +413,26 @@ namespace RingSoft.DbLookup.Lookup
         private void SetScrollPosition(LookupScrollPositions scrollPosition)
         {
             ScrollPosition = scrollPosition;
+        }
+
+        private LookupScrollPositions GetScrollPosition(TEntity entity)
+        {
+            var result = LookupScrollPositions.Middle;
+
+            var previousRecordSet = GetPreviousRecordSet(entity, 1);
+            var nextRecordSet = GetNextRecordSet(entity, 1);
+
+            if (!previousRecordSet.Any())
+            {
+                result = LookupScrollPositions.Top;
+            }
+
+            if (!nextRecordSet.Any())
+            {
+                result = LookupScrollPositions.Bottom;
+            }
+
+            return result;
         }
 
         private LookupScrollPositions GetScrollPosition()
@@ -547,10 +556,33 @@ namespace RingSoft.DbLookup.Lookup
                         var newList = GetOutputResult(query, !rsAscending, queryCount, input);
                         if (rsAscending)
                         {
+                            if (recordCount > 1)
+                            {
+                                var topEntity = newList.FirstOrDefault();
+                                if (GetScrollPosition(topEntity) == LookupScrollPositions.Top)
+                                {
+                                    result.Clear();
+                                    IntGotoTop();
+                                    return result;
+                                }
+                            }
+
                             result.InsertRange(0, newList);
                         }
                         else
                         {
+                            if (recordCount > 1)
+                            {
+                                var bottomEntity = newList.LastOrDefault();
+                                var scrollPosition = GetScrollPosition(bottomEntity);
+                                if (scrollPosition == LookupScrollPositions.Bottom)
+                                {
+                                    result.Clear();
+                                    IntGotoBottom();
+                                    return result;
+                                }
+                            }
+
                             result.AddRange(newList);
                         }
                     }
@@ -656,10 +688,32 @@ namespace RingSoft.DbLookup.Lookup
                         var newList = GetOutputResult(query, rsAscending, queryCount, input);
                         if (rsAscending)
                         {
+                            if (recordCount > 1)
+                            {
+                                var bottomEntity = newList.LastOrDefault();
+                                var scrollPosition = GetScrollPosition(bottomEntity);
+                                if (scrollPosition == LookupScrollPositions.Bottom)
+                                {
+                                    result.Clear();
+                                    IntGotoBottom();
+                                    return result;
+                                }
+                            }
                             result.AddRange(newList);
                         }
                         else
                         {
+                            if (recordCount > 1)
+                            {
+                                var topEntity = newList.FirstOrDefault();
+                                if (GetScrollPosition(topEntity) == LookupScrollPositions.Top)
+                                {
+                                    result.Clear();
+                                    IntGotoTop();
+                                    return result;
+                                }
+                            }
+
                             result.InsertRange(0, newList);
                         }
                     }
@@ -701,24 +755,79 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void GotoTop()
         {
-            GetInitData();
+            if (AtTop())
+            {
+                return;
+            }
+            IntGotoTop();
             LookupControl.SetLookupIndex(0);
         }
 
+        private void IntGotoTop()
+        {
+            GetInitData();
+        }
+
         public override void GotoBottom()
+        {
+            if (AtBottom())
+            {
+                return;
+            }
+            IntGotoBottom();
+            FireLookupDataChangedEvent(GetOutputArgs());
+            LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
+        }
+
+        private void IntGotoBottom()
         {
             MakeFilteredQuery();
             var entity = FilteredQuery.LastOrDefault();
             CurrentList.Clear();
             CurrentList.AddRange(GetPreviousRecordSet(entity, LookupControl.PageSize - 1));
             CurrentList.Add(entity);
-            FireLookupDataChangedEvent(GetOutputArgs());
-            LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
+            SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
         }
+
+        private bool AtBottom()
+        {
+            var result = false;
+            if (LookupControl.PageSize == 1)
+            {
+                return result;
+            }
+
+            switch (ScrollPosition)
+            {
+                case LookupScrollPositions.Bottom:
+                case LookupScrollPositions.Disabled:
+                    result = true; 
+                    break;
+            }
+            return result;
+        }
+
+        private bool AtTop()
+        {
+            var result = false;
+            if (LookupControl.PageSize == 1)
+            {
+                return result;
+            }
+            switch (ScrollPosition)
+            {
+                case LookupScrollPositions.Top:
+                case LookupScrollPositions.Disabled:
+                    result = true;
+                    break;
+            }
+            return result;
+        }
+
 
         public override void GotoNextRecord()
         {
-            if (!CurrentList.Any())
+            if (!CurrentList.Any() || AtBottom())
             {
                 return;
             }
@@ -726,26 +835,20 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList.FirstOrDefault();
             if (selectedEntity != null)
             {
-                //var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
-                //if (entity == null)
-                //{
-                //    GotoBottom();
-                //}
-                //else
-                //{
-                //    MakeList(selectedEntity, LookupControl.PageSize, 0, true, LookupOperations.GotoBottom);
-                //}
                 CurrentList.Clear();
                 CurrentList.AddRange(GetNextRecordSet(selectedEntity, LookupControl.PageSize));
+                if (LookupControl.PageSize == 1 && CurrentList.Any())
+                {
+                    SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(CurrentList.LastOrDefault());
+                }
                 FireLookupDataChangedEvent(GetOutputArgs());
                 LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
-
             }
         }
 
         public override void GotoPreviousRecord()
         {
-            if (!CurrentList.Any())
+            if (!CurrentList.Any() || AtTop())
             {
                 return;
             }
@@ -753,17 +856,13 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
-                //var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
-                //if (entity == null)
-                //{
-                //    GotoTop();
-                //}
-                //else
-                //{
-                //    MakeList(selectedEntity, 0, LookupControl.PageSize, false, LookupOperations.RecordUp);
-                //}
                 CurrentList.Clear();
                 CurrentList.AddRange(GetPreviousRecordSet(selectedEntity, LookupControl.PageSize));
+                if (LookupControl.PageSize == 1 && CurrentList.Any())
+                {
+                    SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(CurrentList.FirstOrDefault());
+                }
+
                 FireLookupDataChangedEvent(GetOutputArgs());
                 LookupControl.SetLookupIndex(0);
             }
@@ -771,7 +870,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void GotoNextPage()
         {
-            if (!CurrentList.Any())
+            if (!CurrentList.Any() || AtBottom())
             {
                 return;
             }
@@ -779,12 +878,6 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList.LastOrDefault();
             if (selectedEntity != null)
             {
-                //var entity = GetNearestEntity(selectedEntity, Conditions.GreaterThan);
-                //if (entity == null)
-                //{
-                //    GotoBottom();
-                //}
-                //else
                 {
                     CurrentList.Clear();
                     CurrentList.AddRange(GetNextRecordSet(selectedEntity, LookupControl.PageSize));
@@ -796,7 +889,7 @@ namespace RingSoft.DbLookup.Lookup
 
         public override void GotoPreviousPage()
         {
-            if (!CurrentList.Any())
+            if (!CurrentList.Any() || AtTop())
             {
                 return;
             }
@@ -804,15 +897,6 @@ namespace RingSoft.DbLookup.Lookup
             var selectedEntity = CurrentList.FirstOrDefault();
             if (selectedEntity != null)
             {
-                //var entity = GetNearestEntity(selectedEntity, Conditions.LessThan);
-                //if (entity == null)
-                //{
-                //    GotoTop();
-                //}
-                //else
-                //{
-                //    MakeList(entity, LookupControl.PageSize, 0, false, LookupOperations.PageUp);
-                //}
                 CurrentList.Clear();
                 CurrentList.AddRange(GetPreviousRecordSet(selectedEntity, LookupControl.PageSize));
                 FireLookupDataChangedEvent(GetOutputArgs());
@@ -1031,27 +1115,27 @@ namespace RingSoft.DbLookup.Lookup
             {
                 return;
             }
-            var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
-            var propertyName = searchColumn.GetPropertyJoinName();
-            var dbValue = searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn
-                .FieldToDisplay.FieldDataType, searchColumn.FieldToDisplay.FieldType);
-            Expression nullExpr = null;
-            if (dbValue != null && searchColumn.AllowNulls)
-            {
-                nullExpr = FilterItemDefinition.GetBinaryExpression<TEntity>
-                (param, searchColumn.GetPropertyJoinName(true)
-                    , Conditions.NotEqualsNull
-                    , searchColumn.FieldDefinition.FieldType);
-            }
-            IQueryable<TEntity> query;
-            var searchExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
-                , propertyName
-                , Conditions.Equals, searchColumn.FieldToDisplay.FieldType
-                , dbValue);
-            if (nullExpr != null)
-            {
-                searchExpr = FilterItemDefinition.AppendExpression(nullExpr, searchExpr, EndLogics.And);
-            }
+            //var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+            //var propertyName = searchColumn.GetPropertyJoinName();
+            //var dbValue = searchColumn.GetDatabaseValue(entity).GetPropertyFilterValue(searchColumn
+            //    .FieldToDisplay.FieldDataType, searchColumn.FieldToDisplay.FieldType);
+            //Expression nullExpr = null;
+            //if (dbValue != null && searchColumn.AllowNulls)
+            //{
+            //    nullExpr = FilterItemDefinition.GetBinaryExpression<TEntity>
+            //    (param, searchColumn.GetPropertyJoinName(true)
+            //        , Conditions.NotEqualsNull
+            //        , searchColumn.FieldDefinition.FieldType);
+            //}
+            //IQueryable<TEntity> query;
+            //var searchExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param
+            //    , propertyName
+            //    , Conditions.Equals, searchColumn.FieldToDisplay.FieldType
+            //    , dbValue);
+            //if (nullExpr != null)
+            //{
+            //    searchExpr = FilterItemDefinition.AppendExpression(nullExpr, searchExpr, EndLogics.And);
+            //}
 
             var searchPrimaryKeyFilter = new TableFilterDefinition<TEntity>(TableDefinition);
             foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
@@ -1062,13 +1146,12 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             var primaryKeyExpr = searchPrimaryKeyFilter.GetWhereExpresssion<TEntity>(param);
-            searchExpr = primaryKeyExpr;
             //searchExpr = FilterItemDefinition.AppendExpression(searchExpr
             //    , primaryKeyExpr
             //    , EndLogics.And);
 
             var queryable = CurrentList.AsQueryable();
-            query = FilterItemDefinition.FilterQuery(queryable, param, searchExpr);
+            var query = FilterItemDefinition.FilterQuery(queryable, param, primaryKeyExpr);
             entity = query.FirstOrDefault();
             if (entity != null)
             {
@@ -1414,7 +1497,7 @@ namespace RingSoft.DbLookup.Lookup
         private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom
         , LookupOperations operation)
         {
-            var fireChangedEvent = true;
+            //var fireChangedEvent = true;
             CurrentList.Clear();
 
             if (LookupControl != null && LookupControl.PageSize == 1)
@@ -1439,16 +1522,16 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    fireChangedEvent = false;
-                    GotoTop();
+                    //fireChangedEvent = false;
+                    IntGotoTop();
                 }
 
                 if (previousPage.Count < topCount  && !setIndexToBottom)
                 {
-                    fireChangedEvent = false;
+                    //fireChangedEvent = false;
                     if (operation != LookupOperations.GetInitData)
                     {
-                        GotoTop();
+                        IntGotoTop();
                     }
 
                     return;
@@ -1480,8 +1563,8 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 else
                 {
-                    fireChangedEvent = false;
-                    GotoBottom();
+                    //fireChangedEvent = false;
+                    IntGotoBottom();
                 }
                 var gotoBottom = false;
                 if (nextPage.Count < bottomCount)
@@ -1494,12 +1577,12 @@ namespace RingSoft.DbLookup.Lookup
                 }
                 if (gotoBottom)
                 {
-                    fireChangedEvent = false;
-                    GotoBottom();
+                    //fireChangedEvent = false;
+                    IntGotoBottom();
                 }
             }
 
-            if (fireChangedEvent)
+            //if (fireChangedEvent)
             {
                 FireLookupDataChangedEvent(GetOutputArgs());
             }

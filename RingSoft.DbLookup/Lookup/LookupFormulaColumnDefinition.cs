@@ -528,17 +528,18 @@ namespace RingSoft.DbLookup.Lookup
 
             if (FormulaObject != null)
             {
-                if (propertyObject != null)
-                {
-                    result = FormulaObject.GetDatabaseValue(propertyObject);
-                }
-                else
-                {
-                    if (!AllowNulls)
-                    {
-                        result = FormulaObject.GetDatabaseValue(entity);
-                    }
-                }
+                //if (propertyObject != null)
+                //{
+                //    result = FormulaObject.GetDatabaseValue(propertyObject);
+                //}
+                //else
+                //{
+                //    if (!AllowNulls)
+                //    {
+                //        result = FormulaObject.GetDatabaseValue(entity);
+                //    }
+                //}
+                result = FormulaObject.GetDatabaseValue(entity);
             }
 
             return result;

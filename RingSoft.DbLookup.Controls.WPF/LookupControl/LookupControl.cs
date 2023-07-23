@@ -1387,13 +1387,26 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var dataItem = new DataItem(_columnMaps);
                     foreach (var lookupColumn in LookupColumns)
                     {
-                        var dbValue = lookupDataMaui.GetDatabaseRowValue(row, lookupColumn.LookupColumnDefinition);
-                        if (dbValue != null)
+                        //var dbValue = lookupDataMaui.GetDatabaseRowValue(row, lookupColumn.LookupColumnDefinition);
+                        //if (dbValue != null)
+                        //{
+                        //    if (lookupColumn.SetValue(dbValue))
+                        //    {
+                        //        dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, dbValue);
+                        //        continue;
+                        //    }
+                        //}
+                        if (lookupColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
                         {
-                            if (lookupColumn.SetValue(dbValue))
+                            if (fieldColumn.FieldDefinition is IntegerFieldDefinition integerField)
                             {
-                                dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, dbValue);
-                                continue;
+                                if (integerField.ContentTemplateId > 0)
+                                {
+                                    var dbValue = lookupDataMaui
+                                        .GetDatabaseRowValue(row, lookupColumn.LookupColumnDefinition);
+                                    dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, dbValue);
+                                    continue;
+                                }
                             }
                         }
                         var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);

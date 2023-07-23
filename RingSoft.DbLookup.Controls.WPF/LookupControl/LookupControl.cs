@@ -1175,6 +1175,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
+            var sortColumn1 = LookupColumns[columnIndex];
+            if (sortColumn1.LookupColumnDefinition is LookupFormulaColumnDefinition)
+            {
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+
             var headerClicked = LookupGridView.Columns[columnIndex].Header as GridViewColumnHeader;
             if (headerClicked == null)
                 return;
@@ -1218,6 +1226,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                     SearchForHost.SearchText = String.Empty;
 
                 var sortColumn = LookupColumns[columnIndex];
+                if (sortColumn.LookupColumnDefinition is LookupFormulaColumnDefinition)
+                {
+                    SystemSounds.Exclamation.Play();
+                    return;
+                }
                 var sortColumnIndex = columnIndex;
                 if (sortColumn != null && sortColumn.LookupColumnDefinition != null)
                 {

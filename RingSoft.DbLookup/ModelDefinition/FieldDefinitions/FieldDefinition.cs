@@ -146,6 +146,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 
         public Conditions? SearchForCondition { get; private set; }
 
+        public bool CanFormatValue { get; private set; } = true;
+
         internal FieldDefinition()
         {
             AllowNulls = true;

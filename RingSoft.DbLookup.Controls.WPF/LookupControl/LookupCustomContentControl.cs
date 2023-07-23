@@ -70,6 +70,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             factory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
             factory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
         }
+
+        public override bool SetValue(string dbValue)
+        {
+            return true;
+        }
     }
 
     /// <summary>

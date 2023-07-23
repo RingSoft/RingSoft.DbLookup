@@ -1387,7 +1387,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var dataItem = new DataItem(_columnMaps);
                     foreach (var lookupColumn in LookupColumns)
                     {
-                        var joinProperty = lookupColumn.LookupColumnDefinition.GetPropertyJoinName();
+                        var dbValue = lookupDataMaui.GetDatabaseRowValue(row, lookupColumn.LookupColumnDefinition);
+                        if (dbValue != null)
+                        {
+                            if (lookupColumn.SetValue(dbValue))
+                            {
+                                dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, dbValue);
+                                continue;
+                            }
+                        }
                         var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);
                         dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, value);
                     }

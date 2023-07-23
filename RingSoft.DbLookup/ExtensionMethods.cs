@@ -480,6 +480,11 @@ namespace RingSoft.DbLookup
                     result = value;
                     break;
                 case FieldDataTypes.Integer:
+                    if (valType.IsEnum)
+                    {
+                        result = value.ToInt();
+                        return result;
+                    }
                     if (nullable)
                     {
                         int? intVal = int.Parse(value);

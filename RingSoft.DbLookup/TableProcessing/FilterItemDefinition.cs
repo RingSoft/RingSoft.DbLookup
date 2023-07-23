@@ -705,6 +705,11 @@ namespace RingSoft.DbLookup.TableProcessing
                     {
                         throw new ArgumentNullException("Value cannot be null.");
                     }
+
+                    if (fieldType.IsEnum)
+                    {
+                        fieldType = typeof(int);
+                    }
                     expressionValue = Expression.Constant(value, fieldType);
                     if (fieldType == typeof(string))
                     {

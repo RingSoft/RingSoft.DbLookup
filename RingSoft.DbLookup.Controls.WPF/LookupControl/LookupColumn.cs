@@ -114,7 +114,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         internal abstract DataTemplate GetCellDataTemplate(LookupControl lookupControl, string dataColumnName,
             bool designMode);
 
-
+        public virtual bool SetValue(string dbValue)
+        {
+            return false;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [Properties.NotifyPropertyChangedInvocator]

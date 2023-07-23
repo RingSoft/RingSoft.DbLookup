@@ -338,6 +338,10 @@ namespace RingSoft.DbLookup
             if (property != null)
             {
                 var value = property.GetValue(model);
+                if (property.PropertyType.IsEnum)
+                {
+                    value = (int)value;
+                }
                 if (dateType != null)
                 {
                     switch (dateType.Value)

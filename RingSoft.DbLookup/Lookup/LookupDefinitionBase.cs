@@ -448,6 +448,7 @@ namespace RingSoft.DbLookup.Lookup
 
             //if (join != null)
             //    column.JoinQueryTableAlias = join.Alias;
+            TableDefinition.Context.RegisterLookupFormula(lookupFormula);
             AddVisibleColumnDefinition(column);
             return column;
         }

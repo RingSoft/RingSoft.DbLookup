@@ -471,7 +471,11 @@ namespace RingSoft.DbLookup.Lookup
         internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
         {
             var formulaId = entity.Formula.ToInt();
-            if (formulaId != 0)
+            if (formulaId == 0)
+            {
+
+            }
+            else
             {
                 FormulaObject = lookupDefinition.TableDefinition.Context.FormulaRegistry
                     .FirstOrDefault(p => p.Id == formulaId);
@@ -514,6 +518,13 @@ namespace RingSoft.DbLookup.Lookup
 
             var test = this;
             base.LoadFromEntity(entity, lookupDefinition);
+            ProcessNewVisibleColumn(this, lookupDefinition, false);
+            switch (_dataType)
+            {
+                case FieldDataTypes.Decimal:
+                    HasHorizontalAlignmentType(LookupColumnAlignmentTypes.Right);
+                    break;
+            }
         }
 
         public override string GetPropertyJoinName(bool useDbField = false)

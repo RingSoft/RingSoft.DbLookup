@@ -368,6 +368,10 @@ namespace RingSoft.DbLookup.Lookup
 
         public override string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
         {
+            if (TableDefinition.TempTable)
+            {
+                return string.Empty;
+            }
 
             var context = SystemGlobals.DataRepository.GetDataContext();
 

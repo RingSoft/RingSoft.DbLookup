@@ -122,7 +122,7 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public int PriorityLevel { get; set; } = 1000;
 
-        public bool IsAdvancedFind { get; internal set; }
+        public bool IsAdvancedFind { get; internal set; } = true;
 
         public bool CanViewTable
         {
@@ -153,6 +153,8 @@ namespace RingSoft.DbLookup.ModelDefinition
         {
             return Context.CanDeleteTable(this, lookupDefinition);
         }
+
+        public bool TempTable { get; private set; }
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
@@ -599,5 +601,11 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         public abstract object GetEntity();
+
+        internal TableDefinitionBase IsTempTable(bool value = true)
+        {
+            TempTable = value;
+            return this;
+        }
     }
 }

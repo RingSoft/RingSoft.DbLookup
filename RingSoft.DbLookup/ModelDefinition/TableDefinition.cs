@@ -515,5 +515,16 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
             return result;
         }
+
+        public new TableDefinition<TEntity> IsTempTable(bool value = true)
+        {
+            return (TableDefinition<TEntity>)base.IsTempTable(value);
+        }
+
+        public TableDefinition<TEntity> ShowInAdvFind(bool value = true)
+        {
+            IsAdvancedFind = value;
+            return this;
+        }
     }
 }

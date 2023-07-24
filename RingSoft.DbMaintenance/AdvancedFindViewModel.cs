@@ -385,7 +385,8 @@ namespace RingSoft.DbMaintenance
             foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
             {
                 if (contextTableDefinition.LookupDefinition != null
-                    && contextTableDefinition.CanViewTable)
+                    && contextTableDefinition.CanViewTable
+                    && contextTableDefinition.IsAdvancedFind)
                 {
                     var tableRow = new ListControlDataSourceRow();
                     tableRow.AddColumn(dataColumn, contextTableDefinition.Description);

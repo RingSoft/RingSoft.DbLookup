@@ -57,24 +57,5 @@ namespace RingSoft.DbMaintenance
             }
             base.LoadFromColumnDefinition(column);
         }
-
-        public override DataEntryGridCellStyle GetCellStyle(int columnId)
-        {
-            var column = (AdvancedFindColumnColumns)columnId;
-            switch (column)
-            {
-                case AdvancedFindColumnColumns.Table:
-                    break;
-                case AdvancedFindColumnColumns.Field:
-                    return new DataEntryGridCellStyle() { State = DataEntryGridCellStates.Enabled };
-                case AdvancedFindColumnColumns.Name:
-                    break;
-                case AdvancedFindColumnColumns.PercentWidth:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            return base.GetCellStyle(columnId);
-        }
     }
 }

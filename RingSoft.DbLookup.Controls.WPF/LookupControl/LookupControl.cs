@@ -721,7 +721,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 if (lookupColumnBase is LookupColumn lookupColumn)
                     if (!lookupColumn.TextAlignmentChanged)
+                    {
                         lookupColumn.TextAlignment = lookupColumnDefinition.HorizontalAlignment;
+                    }
 
                 lookupColumnDefinition.UpdateCaption(lookupColumnBase.Header);
 

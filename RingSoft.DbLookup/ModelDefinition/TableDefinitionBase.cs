@@ -427,7 +427,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                     break;
                 case FieldDataTypes.Decimal:
                     query.AddWhereItem(primaryKeyKeyValueField.FieldDefinition.FieldName, condition,
-                        primaryKeyKeyValueField.Value.ToDecimal().ToDouble());
+                        primaryKeyKeyValueField.Value.ToDecimal());
                     break;
                 case FieldDataTypes.DateTime:
                     DbDateTypes dateType = new DbDateTypes();

@@ -118,7 +118,7 @@ namespace RingSoft.DbLookup
                     break;
                 case FieldDataTypes.Integer:
                 case FieldDataTypes.Decimal:
-                    cell.NumericValue = value.ToDecimal().ToDouble();
+                    cell.NumericValue = value.ToDecimal();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

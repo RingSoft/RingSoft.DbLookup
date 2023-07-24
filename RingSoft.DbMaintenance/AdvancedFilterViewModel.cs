@@ -525,7 +525,7 @@ namespace RingSoft.DbMaintenance
                     }
                     break;
                 case FieldDataTypes.Decimal:
-                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal().ToDouble();
+                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
                     break;
                 case FieldDataTypes.DateTime:
                     ProcessDateReturn();

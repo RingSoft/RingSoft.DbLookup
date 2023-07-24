@@ -472,6 +472,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 InitialSortColumnDefinition = columnDefinition;
             }
+            columnDefinition.SetupColumn();
         }
 
         internal TableFieldJoinDefinition AddJoin(TableFieldJoinDefinition lookupFieldJoin)

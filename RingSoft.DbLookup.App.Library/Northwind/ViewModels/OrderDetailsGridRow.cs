@@ -65,11 +65,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 case OrderDetailsGridColumns.Quantity:
                     return new DataEntryGridIntegerCellProps(this, columnId, _quantitySetup, Quantity);
                 case OrderDetailsGridColumns.Price:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)Price);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, Price);
                 case OrderDetailsGridColumns.ExtendedPrice:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)ExtendedPrice);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, ExtendedPrice);
                 case OrderDetailsGridColumns.Discount:
-                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, (decimal)Discount);
+                    return new DataEntryGridDecimalCellProps(this, columnId, _decimalSetup, Discount);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

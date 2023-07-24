@@ -284,11 +284,11 @@ namespace RingSoft.DbLookup
                     {
                         case OrderByTypes.Ascending:
                             selectedRow = _orderedList.FirstOrDefault(p => p.DataCells[sortColumnIndex].NumericValue >=
-                                                                           searchForText.ToDecimal().ToDouble());
+                                                                           searchForText.ToDecimal());
                             break;
                         case OrderByTypes.Descending:
                             selectedRow = _ascList.FirstOrDefault(p => p.DataCells[sortColumnIndex].NumericValue >=
-                                                                           searchForText.ToDecimal().ToDouble());
+                                                                           searchForText.ToDecimal());
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();

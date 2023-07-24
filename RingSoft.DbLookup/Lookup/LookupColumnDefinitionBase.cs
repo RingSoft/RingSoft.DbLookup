@@ -125,7 +125,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>
         /// The horizontal alignment type.
         /// </value>
-        public LookupColumnAlignmentTypes HorizontalAlignment { get; private set; } = LookupColumnAlignmentTypes.Left;
+        public LookupColumnAlignmentTypes HorizontalAlignment { get; private set; }
 
         public virtual int? SearchForHostId { get; internal set; }
 
@@ -147,7 +147,9 @@ namespace RingSoft.DbLookup.Lookup
 
         public bool HasNavProperties { get; internal set; }
 
-        protected internal void SetupColumn()
+        public bool SetHorizontalAlignment { get; private set; }
+
+        internal void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
         }
@@ -186,6 +188,7 @@ namespace RingSoft.DbLookup.Lookup
             TableDescription = source.TableDescription;
             FieldDescription = source.FieldDescription;
             Path = source.Path;
+            SetHorizontalAlignment = source.SetHorizontalAlignment;
         }
 
         /// <summary>
@@ -204,6 +207,7 @@ namespace RingSoft.DbLookup.Lookup
         public void HasHorizontalAlignmentType(LookupColumnAlignmentTypes alignmentType)
         {
             HorizontalAlignment = alignmentType;
+            SetHorizontalAlignment = true;
         }
 
         public void HasSearchForHostId(int hostId)

@@ -168,6 +168,7 @@ namespace RingSoft.DbLookup.Lookup
                     var bottomCount = LookupControl.PageSize - topCount;
 
                     MakeList(entity, topCount, bottomCount, false, LookupOperations.SearchForChange);
+                    SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
                     SetLookupIndexFromEntity(param, entity);
                 }
                 //else
@@ -1002,6 +1003,7 @@ namespace RingSoft.DbLookup.Lookup
 
             topCount--;
             MakeList(entity, topCount, bottomCount, false, LookupOperations.SearchForChange);
+            SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
             SetLookupIndexFromEntity(param, entity);
 
@@ -1504,6 +1506,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 CurrentList.Add(entity);
                 SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+                
                 
                 FireLookupDataChangedEvent(GetOutputArgs());
                 return;

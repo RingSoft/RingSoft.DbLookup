@@ -12,6 +12,7 @@ using System;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Media;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace RingSoft.DbLookup.App.WPFCore
@@ -232,17 +233,17 @@ namespace RingSoft.DbLookup.App.WPFCore
             
         }
 
-        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
             _splashWindow.ShowErrorMessageBox(text, caption);
         }
 
-        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }
 
-        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Cancel;
         }

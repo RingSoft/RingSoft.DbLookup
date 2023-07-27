@@ -13,6 +13,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using Enum = System.Enum;
 using Type = System.Type;
@@ -481,14 +482,14 @@ namespace RingSoft.DbLookup
             return jsonFile;
         }
 
-        public static bool ValidatePrintingFile()
+        public static async Task<bool> ValidatePrintingFile()
         {
             if (GetPrintingInputExeFileName().IsNullOrEmpty())
             {
                 var message =
                     "The RingSoft printing app has not been installed. Would you like to download and install it?";
                 var caption = "Printing";
-                if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) ==
+                if (await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption, true) ==
                     MessageBoxButtonsResult.Yes)
                 {
                     Process.Start(new ProcessStartInfo

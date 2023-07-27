@@ -1,4 +1,5 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿using System.Threading.Tasks;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.Tests
 {
@@ -19,17 +20,17 @@ namespace RingSoft.DbLookup.Tests
             Cursor = cursor;
         }
 
-        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
             throw new System.NotImplementedException();
         }
 
-        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxResult;
         }
 
-        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
                 return MessageBoxResult;
         }

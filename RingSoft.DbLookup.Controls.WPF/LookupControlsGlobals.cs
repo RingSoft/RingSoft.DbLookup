@@ -147,10 +147,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
 
-        public static void PrintDocument(PrinterSetupArgs printerSetupArgs)
+        public static async void PrintDocument(PrinterSetupArgs printerSetupArgs)
         {
 
-            if (!GblMethods.ValidatePrintingFile())
+            if (!await GblMethods.ValidatePrintingFile())
             {
                 return;
             }

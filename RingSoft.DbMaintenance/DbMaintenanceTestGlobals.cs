@@ -2,6 +2,7 @@
 using RingSoft.DbLookup;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.Testing;
@@ -54,17 +55,17 @@ namespace RingSoft.DbMaintenance
 
         }
 
-        public void ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
 
         }
 
-        public MessageBoxButtonsResult ShowYesNoMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }
 
-        public MessageBoxButtonsResult ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
+        public async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }

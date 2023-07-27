@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
@@ -96,7 +97,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return base.GetCellStyle(columnId);
         }
 
-        public override void SetCellValue(DataEntryGridEditingCellProps value)
+        public async override void SetCellValue(DataEntryGridEditingCellProps value)
         {
             var column = (OrderDetailsGridColumns) value.ColumnId;
             switch (column)
@@ -107,7 +108,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                         bool validProduct;
                         if (autoFillCellProps.AutoFillValue.IsValid())
                         {
-                            validProduct = SetProduct(autoFillCellProps.AutoFillValue);
+                            validProduct = await SetProduct(autoFillCellProps.AutoFillValue);
                         }
                         else
                         {
@@ -119,7 +120,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             }
                             var message =
                                 $"'{item}' is not a valid Product.  Do you wish to create a new Product?";
-                            if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Invalid Product") ==
+                            if (await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Invalid Product") ==
                                 MessageBoxButtonsResult.Yes)
                             {
                                 var newProductResult =
@@ -129,7 +130,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                 {
                                     var newAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,
                                         newProductResult.NewLookupEntity.ProductName);
-                                    validProduct = SetProduct(newAutoFillValue);
+                                    validProduct = await SetProduct(newAutoFillValue);
                                 }
                             }
                         }
@@ -170,7 +171,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.SetCellValue(value);
         }
 
-        private bool SetProduct(AutoFillValue productValue)
+        private async Task<bool> SetProduct(AutoFillValue productValue)
         {
             var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(productValue.PrimaryKeyValue);
             var orderDetails = Manager.Rows.OfType<OrderDetailsGridRow>();
@@ -179,7 +180,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (existingRow != null && existingRow != this)
             {
                 var message = $"'{productValue.Text}' already exists in this order.  Do you wish to modify it instead?";
-                if (ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Duplicate Product detected.") ==
+                if (await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Duplicate Product detected.") ==
                     MessageBoxButtonsResult.Yes)
                 {
                     _manager.Grid.GotoCell(existingRow, (int)OrderDetailsGridColumns.Product);

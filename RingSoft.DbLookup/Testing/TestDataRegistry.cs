@@ -115,6 +115,11 @@ namespace RingSoft.DbLookup.Testing
             return SaveNoCommitEntity(entity, message);
         }
 
+        public bool AddSaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
+        {
+            return SaveNoCommitEntity(entity, message);
+        }
+
         public bool Commit(string message, bool silent = false)
         {
             return true;

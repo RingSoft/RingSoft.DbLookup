@@ -530,16 +530,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Order entity)
         {
-            //Customer = CustomersAutoFillSetup.GetAutoFillValueForIdValue(entity.CustomerID);
-            Customer =
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers.GetAutoFillValue(entity.CustomerID);
+            Customer = entity.Customer.GetAutoFillValue();
 
             if (entity.Customer != null)
                 CompanyName = entity.Customer.CompanyName;
 
-            Employee =
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees.GetAutoFillValue(
-                    entity.EmployeeID.ToString());
+            Employee = entity.Employee.GetAutoFillValue();
 
             RequiredDate = entity.RequiredDate;
             if (entity.OrderDate == null)
@@ -550,13 +546,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ShippedDate = entity.ShippedDate;
-
-            if (entity.ShipVia != null)
-                ShipVia =
-                    RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Shippers.GetAutoFillValue(entity.ShipVia
-                        .Value
-                        .ToString());
-
+            ShipVia = entity.Shipper.GetAutoFillValue();
             Freight = entity.Freight;
             ShipName = entity.ShipName;
             Address = entity.ShipAddress;

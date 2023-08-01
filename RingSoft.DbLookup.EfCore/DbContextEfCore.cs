@@ -94,6 +94,14 @@ namespace RingSoft.DbLookup.EfCore
             return GetDbContextEf().AddNewNoCommitEntity(Set<TEntity>(), entity, message, silent);
         }
 
+        public bool AddSaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
+        {
+            var list = new List<TEntity>();
+            list.Add(entity);
+            AddRange(list);
+            return Commit(message, silent);
+        }
+
         public bool Commit(string message, bool silent = false)
         {
             var result = GetDbContextEf().SaveEfChanges(message, silent);

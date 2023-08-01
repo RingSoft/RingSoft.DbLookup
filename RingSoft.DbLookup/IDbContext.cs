@@ -22,6 +22,8 @@ namespace RingSoft.DbLookup
 
         bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
 
+        bool AddSaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new();
+
         bool Commit(string message, bool silent = false);
 
         void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class, new();

@@ -13,6 +13,24 @@ namespace RingSoft.DbMaintenance
         No = 1,
         Cancel = 2
     }
+
+    public class TestDbMaintenanceView : IDbMaintenanceView
+    {
+        public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
+        {
+            
+        }
+
+        public void ResetViewForNewRecord()
+        {
+            
+        }
+
+        public void SetReadOnlyMode(bool readOnlyValue)
+        {
+        }
+    }
+
     /// <summary>
     /// The view for DbMaintenanceViewModel classes.  This should be implemented by the base class of DbMaintenance windows to avoid duplicate code.
     /// </summary>

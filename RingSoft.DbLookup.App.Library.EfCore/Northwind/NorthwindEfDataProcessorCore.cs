@@ -69,29 +69,27 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         }
         public Customer GetCustomer(string customerId)
         {
-            var context = new NorthwindDbContextEfCore();
-            return context.Customers.FirstOrDefault(f => f.CustomerID == customerId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.GetTable<Customer>().FirstOrDefault(f => f.CustomerID == customerId);
         }
 
         public bool SaveCustomer(Customer customer)
         {
-            using (var context = new NorthwindDbContextEfCore())
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Customer>();
+            if (table.FirstOrDefault(f => f.CustomerID == customer.CustomerID) == null)
             {
-                if (context.Customers.FirstOrDefault(f => f.CustomerID == customer.CustomerID) == null)
-                    return context.AddNewEntity(context.Customers, customer, "Saving Customer");
+                return context.AddSaveEntity(customer, "Saving Customer");
             }
 
-            using (var context = new NorthwindDbContextEfCore())
-            {
-                return context.SaveEntity(context.Customers, customer, "Saving Customer");
-            }
+            return context.SaveEntity(customer, "Saving Customer");
         }
 
         public bool DeleteCustomer(string customerId)
         {
-            var context = new NorthwindDbContextEfCore();
-            var customer = context.Customers.FirstOrDefault(p => p.CustomerID == customerId);
-            return context.DeleteEntity(context.Customers, customer, "Deleting Customer");
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var customer = context.GetTable<Customer>().FirstOrDefault(p => p.CustomerID == customerId);
+            return context.DeleteEntity(customer, "Deleting Customer");
         }
 
 
@@ -122,7 +120,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public Order GetOrder(int orderId, bool gridMode)
         {
-            var context = new NorthwindDbContextEfCore();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Order>();
             //var entitys = context.Orders
             //    .Include(p => p.Customer)
             //    .Where(p => p.Customer.CompanyName.Contains("w", StringComparison.CurrentCultureIgnoreCase))
@@ -130,7 +129,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
             if (gridMode)
             {
-                return context.Orders.Include(i => i.Customer)
+                return table.Include(i => i.Customer)
                     .Include(i => i.Employee)
                     .Include(i => i.Shipper)
                     .Include(i => i.Order_Details)
@@ -139,7 +138,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             }
             else
             {
-                return context.Orders.Include(i => i.Customer)
+                return table.Include(i => i.Customer)
                     .Include(i => i.Employee)
                     .Include(i => i.Shipper)
                     .FirstOrDefault(f => f.OrderID == orderId);

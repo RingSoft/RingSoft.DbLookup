@@ -11,7 +11,6 @@ namespace RingSoft.DbLookup.Tests
     {
         public TestGlobals() : base(new DbLookupAppTestDataRepository(new DataRepositoryRegistry()))
         {
-            RsDbLookupAppGlobals.UnitTest = true;
             RsDbLookupAppGlobals.EfProcessor = new EfProcessorCore();
             SystemGlobals.DataRepository = DataRepository;
         }

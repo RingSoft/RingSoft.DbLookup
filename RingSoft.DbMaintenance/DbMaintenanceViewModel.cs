@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Timers;
+using Microsoft.VisualBasic;
 
 namespace RingSoft.DbMaintenance
 {
@@ -850,6 +851,7 @@ namespace RingSoft.DbMaintenance
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode)
                 {
+                    var context = SystemGlobals.DataRepository.GetDataContext();
                     _lookupData.SelectPrimaryKey(primaryKey);
                 }
 

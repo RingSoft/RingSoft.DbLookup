@@ -50,115 +50,115 @@ namespace RingSoft.DbMaintenance
             DataRepository.ClearData();
         }
 
-        public void SetWindowCursor(WindowCursorTypes cursor)
+        public virtual void SetWindowCursor(WindowCursorTypes cursor)
         {
 
         }
 
-        public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
+        public virtual async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
 
         }
 
-        public async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
+        public virtual async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }
 
-        public async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
+        public virtual async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
             return MessageBoxButtonsResult.Yes;
         }
 
         public bool KeyControlRegistered { get; set; }
         public event EventHandler<LookupAddViewArgs> LookupAddView;
-        public void InitializeFromLookupData(LookupAddViewArgs e)
+        public virtual void InitializeFromLookupData(LookupAddViewArgs e)
         {
             
         }
 
-        public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
+        public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             
         }
 
-        public void OnRecordSelected()
+        public virtual void OnRecordSelected()
         {
             
         }
 
-        public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor,
+        public virtual void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor,
             PrimaryKeyValue initialSearchForPrimaryKey)
         {
             
         }
 
-        public void CloseWindow()
+        public virtual void CloseWindow()
         {
             
         }
 
-        public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
+        public virtual MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
             return MessageButtons.Yes;
         }
 
-        public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
+        public virtual bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
             return true;
         }
 
-        public void ShowRecordSavedMessage()
+        public virtual void ShowRecordSavedMessage()
         {
             
         }
 
-        public void OnReadOnlyModeSet(bool readOnlyValue)
+        public virtual void OnReadOnlyModeSet(bool readOnlyValue)
         {
             
         }
 
-        public bool IsMaintenanceKeyDown(MaintenanceKey key)
+        public virtual bool IsMaintenanceKeyDown(MaintenanceKey key)
         {
             return false;
         }
 
-        public void Activate()
+        public virtual void Activate()
         {
             
         }
 
-        public void SetWindowReadOnlyMode()
+        public virtual void SetWindowReadOnlyMode()
         {
             
         }
 
-        public bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
+        public virtual bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
         {
             return true;
         }
 
-        public bool CheckDeleteTables(DeleteTables deleteTables)
+        public virtual bool CheckDeleteTables(DeleteTables deleteTables)
         {
             return true;
         }
 
-        public void PrintOutput(PrinterSetupArgs printerSetupArgs)
+        public virtual void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
             
         }
 
-        public void SetSaveStatus(string message, AlertLevels alertLevel)
+        public virtual void SetSaveStatus(string message, AlertLevels alertLevel)
         {
             
         }
 
-        public List<DbAutoFillMap> GetAutoFills()
+        public virtual List<DbAutoFillMap> GetAutoFills()
         {
             return null;
         }
 
-        public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
+        public virtual void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             
         }

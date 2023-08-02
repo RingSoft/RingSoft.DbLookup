@@ -4,6 +4,7 @@ using System.Linq;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup.Testing
 {
@@ -18,7 +19,7 @@ namespace RingSoft.DbLookup.Testing
     {
         public List<TEntity> Table { get; private set; }
 
-        public DataRepositoryRegistryItem(TEntity entity)
+        public DataRepositoryRegistryItem()
         {
             Table = new List<TEntity>();
             Entity = typeof(TEntity);
@@ -41,6 +42,7 @@ namespace RingSoft.DbLookup.Testing
 
         public DataRepositoryRegistry()
         {
+            AddEntity(new DataRepositoryRegistryItem<RecordLock>());
         }
 
         public void AddEntity(DataRepositoryRegistryItemBase entity)
@@ -82,8 +84,25 @@ namespace RingSoft.DbLookup.Testing
 
         public bool SaveNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
+            var tableDef = GblMethods.GetTableDefinition<TEntity>();
             var table = GetList<TEntity>();
-            if (!table.Contains(entity))
+            var indexEntity = -1;
+            var foundEntity = false;
+            foreach (var entity1 in table)
+            {
+                indexEntity++;
+                if (tableDef.IsEqualTo(entity1, entity))
+                {
+                    foundEntity = true;
+                    break;
+                }
+            }
+
+            if (foundEntity)
+            {
+                table[indexEntity] = entity;
+            }
+            else
             {
                 table.Add(entity);
             }
@@ -112,12 +131,14 @@ namespace RingSoft.DbLookup.Testing
 
         public bool AddNewNoCommitEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            return SaveNoCommitEntity(entity, message);
+            var table = GetList<TEntity>();
+            table.Add(entity);
+            return true;
         }
 
         public bool AddSaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
         {
-            return SaveNoCommitEntity(entity, message);
+            return AddNewNoCommitEntity(entity, message, silent);
         }
 
         public bool Commit(string message, bool silent = false)

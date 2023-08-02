@@ -98,9 +98,9 @@ namespace RingSoft.DbLookup.Tests
 
         private void PopulateDatabase()
         {
-            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Customer>(new Customer()));
-            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Error>(new Error()));
-            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<TimeClock>(new TimeClock()));
+            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Customer>());
+            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<Error>());
+            DataRepository.DataContext.AddEntity(new DataRepositoryRegistryItem<TimeClock>());
 
             var customers = new List<Customer>();
             customers.Add(new Customer()

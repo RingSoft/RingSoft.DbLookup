@@ -163,9 +163,11 @@ namespace RingSoft.DbLookup.Lookup
                     var expr = filter.GetWhereExpresssion<TEntity>(param);
                     var query = FilterItemDefinition.FilterQuery(table, param, expr);
                     entity = query.Take(1).FirstOrDefault();
-                    var splitPage = (int)Math.Ceiling((double)LookupControl.PageSize / 2);
+
+                    var splitPage = (int)Math.Floor((double)LookupControl.PageSize / 2);
                     var topCount = LookupControl.PageSize - splitPage;
                     var bottomCount = LookupControl.PageSize - topCount;
+                    topCount--;
 
                     MakeList(entity, topCount, bottomCount, false, LookupOperations.SearchForChange);
                     SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
@@ -1548,6 +1550,10 @@ namespace RingSoft.DbLookup.Lookup
 
             if (bottomCount > 0)
             {
+                //if (topCount + bottomCount > LookupControl.PageSize - 1)
+                //{
+                //    bottomCount--;
+                //}
                 //var newBottomCount = bottomCount;
                 //if (topCount > 0)
                 //{

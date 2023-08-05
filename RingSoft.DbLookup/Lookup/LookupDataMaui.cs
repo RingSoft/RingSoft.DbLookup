@@ -120,7 +120,34 @@ namespace RingSoft.DbLookup.Lookup
 
         public override PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText)
         {
-            throw new NotImplementedException();
+            MakeFilteredQuery(false);
+            var param = GblMethods.GetParameterExpression<TEntity>();
+
+            var lookupExpr = LookupDefinition.FilterDefinition.GetWhereExpresssion<TEntity>(param);
+            var searchColumn = OrderByList.FirstOrDefault() as LookupFieldColumnDefinition;
+
+            var type = searchColumn.FieldToDisplay.FieldType;
+            var value = searchText.GetPropertyFilterValue(searchColumn.FieldToDisplay.FieldDataType,
+                searchColumn.FieldDefinition.FieldType);
+
+
+            var filterExpr = FilterItemDefinition.GetBinaryExpression<TEntity>(param,
+                searchColumn.GetPropertyJoinName()
+                , Conditions.Equals, type, searchText);
+
+            var fullExpr = filterExpr;
+            if (lookupExpr != null)
+            {
+                fullExpr = FilterItemDefinition.AppendExpression(lookupExpr, filterExpr, EndLogics.And);
+            }
+
+            var query = FilterItemDefinition.FilterQuery<TEntity>(FilteredQuery, param, fullExpr);
+            query = ApplyOrderBys(query, true);
+
+            var entity = query.FirstOrDefault();
+
+            var result = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+            return result;
         }
 
         public override void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
@@ -145,12 +172,8 @@ namespace RingSoft.DbLookup.Lookup
             var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKeyValue);
             if (entity != null)
             {
-                //var autoFillValue = entity.GetAutoFillValue();
-                //if (autoFillValue == null || autoFillValue.Text.IsNullOrEmpty())
                 {
                     var filter = new TableFilterDefinition<TEntity>(TableDefinition);
-                    //var context = SystemGlobals.DataRepository.GetDataContext();
-                    //var table = context.GetTable<TEntity>();
                     var table = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
                     foreach (var field in primaryKeyValue.KeyValueFields)
                     {
@@ -173,10 +196,6 @@ namespace RingSoft.DbLookup.Lookup
                     SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
                     SetLookupIndexFromEntity(param, entity);
                 }
-                //else
-                //{
-                //    OnSearchForChange(autoFillValue.Text);
-                //}
             }
         }
 

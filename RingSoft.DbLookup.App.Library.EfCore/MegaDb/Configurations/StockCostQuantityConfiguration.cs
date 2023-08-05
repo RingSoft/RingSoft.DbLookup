@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.EfCore;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations
 {
@@ -9,8 +10,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations
         public void Configure(EntityTypeBuilder<StockCostQuantity> builder)
         {
             builder.HasKey(p => new {p.StockNumber, p.Location, p.PurchasedDateTime});
-            builder.Property(p => p.Quantity).IsRequired();
-            builder.Property(p => p.Cost).IsRequired();
+            builder.Property(p => p.PurchasedDateTime).HasColumnType(DbConstants.DateColumnType);
+            builder.Property(p => p.Quantity).IsRequired().HasColumnType(DbConstants.DecimalColumnType);
+            builder.Property(p => p.Cost).IsRequired().HasColumnType(DbConstants.DecimalColumnType);
 
             builder.HasOne(p => p.StockMaster)
                 .WithMany(p => p.CostQuantities)

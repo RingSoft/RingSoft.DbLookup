@@ -317,7 +317,7 @@ namespace RingSoft.DbMaintenance
 
         protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
-            var selectedPrimaryKeyValue = LookupAddViewArgs.SelectedPrimaryKeyValue;
+            var selectedPrimaryKeyValue = addViewPrimaryKeyValue;
             if (selectedPrimaryKeyValue == null)
             {
                 return null;
@@ -829,6 +829,7 @@ namespace RingSoft.DbMaintenance
                 }
 
                 LockDate = DateTime.Now;
+                _savedKeyAutoFillValue = KeyAutoFillValue;
                 GetLastSavedDate(primaryKey);
 
                 //var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
@@ -971,7 +972,6 @@ namespace RingSoft.DbMaintenance
                     return false;
                 }
             }
-
             return true;
         }
 

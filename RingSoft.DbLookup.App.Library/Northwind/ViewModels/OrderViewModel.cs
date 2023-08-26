@@ -479,7 +479,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             DetailsGridManager = new OrderDetailsGridManager(this);
 
-            RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
+            //RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
 
             //var querySet = new QuerySet();
             //var lookupDefinition =

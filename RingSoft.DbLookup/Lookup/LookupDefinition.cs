@@ -383,8 +383,7 @@ namespace RingSoft.DbLookup.Lookup
 
             var tableDef = TableDefinition as TableDefinition<TEntity>;
 
-            var identity = !(TableDefinition.PrimaryKeyFields.Count > 1 
-                              || TableDefinition.PrimaryKeyFields[0].FieldDataType != FieldDataTypes.Integer);
+            var identity = TableDefinition.IsIdentity();
             var recordIndex = 0;
             var batch = new List<TEntity>();
             foreach (var entity in table)

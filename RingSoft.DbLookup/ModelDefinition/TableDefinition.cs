@@ -526,5 +526,22 @@ namespace RingSoft.DbLookup.ModelDefinition
             IsAdvancedFind = value;
             return this;
         }
+
+        public bool IsIdentity()
+        {
+            var identity = PrimaryKeyFields.Count == 1
+                              && PrimaryKeyFields[0].FieldDataType == FieldDataTypes.Integer;
+            return identity;
+
+        }
+
+        public IntegerFieldDefinition GetIdentityField()
+        {
+            if (IsIdentity())
+            {
+                return PrimaryKeyFields[0] as IntegerFieldDefinition;
+            }
+            return null;
+        }
     }
 }

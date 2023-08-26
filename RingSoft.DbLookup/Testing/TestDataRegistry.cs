@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -105,8 +106,34 @@ namespace RingSoft.DbLookup.Testing
             else
             {
                 table.Add(entity);
+                SetNewIdentity(tableDef, entity);
             }
             return true;
+        }
+
+        private  void SetNewIdentity<TEntity>(TableDefinition<TEntity> tableDef, TEntity entity) where TEntity : class, new()
+        {
+            if (tableDef.IsIdentity())
+            {
+                var identField = tableDef.GetIdentityField();
+                var value = GblMethods.GetPropertyValue(entity, identField.PropertyName).ToInt();
+                if (value == 0)
+                {
+                    var table = GetList<TEntity>();
+                    var maxId = 0;
+                    foreach (var entity1 in table)
+                    {
+                        var value1 = GblMethods.GetPropertyValue(entity1, identField.PropertyName).ToInt();
+                        if (value1 > maxId)
+                        {
+                            maxId = value1;
+                        }
+                    }
+
+                    maxId++;
+                    GblMethods.SetPropertyValue(entity, identField.PropertyName, maxId.ToString());
+                }
+            }
         }
 
         public bool SaveEntity<TEntity>(TEntity entity, string message, bool silent = false) where TEntity : class, new()
@@ -133,6 +160,7 @@ namespace RingSoft.DbLookup.Testing
         {
             var table = GetList<TEntity>();
             table.Add(entity);
+            SetNewIdentity(GblMethods.GetTableDefinition<TEntity>(), entity);
             return true;
         }
 

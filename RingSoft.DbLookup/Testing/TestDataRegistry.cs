@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.Testing
     {
         private string _lastError;
 
-        public List<DataRepositoryRegistryItemBase> Entities { get; private set; } =
+        public List<DataRepositoryRegistryItemBase> Entities { get; } =
             new List<DataRepositoryRegistryItemBase>();
 
         public DataRepositoryRegistry DbContext { get; private set; }

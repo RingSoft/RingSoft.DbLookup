@@ -330,7 +330,16 @@ namespace RingSoft.DbLookup
             }
         }
 
-        public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
+        public static void SetPropertyObject<T>(T model, string propertyName, object value) where T : new()
+        {
+            var property = model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
+            if (property != null)
+            {
+                property.SetValue(model, value);
+            }
+        }
+
+            public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
         {
             var properties = model.GetType().GetProperties();
             var property =
@@ -600,7 +609,7 @@ namespace RingSoft.DbLookup
             return dateText;
         }
 
-        public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : new()
+        public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : class, new()
         {
             TableDefinition<TEntity> tableDefinition = null;
             var entityName = typeof(TEntity).Name;

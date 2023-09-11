@@ -82,5 +82,7 @@ namespace RingSoft.DbLookup
             }
             set => _lookupContext = value;
         }
+
+        public static bool UnitTestMode { get; set; }
     }
 }

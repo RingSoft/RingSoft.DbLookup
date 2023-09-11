@@ -30,6 +30,7 @@ namespace RingSoft.DbMaintenance
         public virtual void Initialize()
         {
             ControlsGlobals.UserInterface = this;
+            SystemGlobals.UnitTestMode = true;
 
             var viewModel = (TViewModel)Activator.CreateInstance(typeof(TViewModel));
             ViewModel = viewModel;

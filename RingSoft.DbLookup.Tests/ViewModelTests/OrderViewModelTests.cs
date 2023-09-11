@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbMaintenance;
@@ -45,9 +47,83 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
                 CompanyName = "FedEx",
             };
             Globals.ViewModel.ShipVia = shipVia.GetAutoFillValue();
+            Globals.ViewModel.GridMode = true;
+            
+
 
             Globals.ViewModel.SaveCommand.Execute(null);
             Globals.ViewModel.SaveCommand.Execute(null);
+        }
+
+        [TestMethod]
+        public void TestOrderLoad()
+        {
+            Globals.ClearData();
+
+            var category = new Category
+            {
+                CategoryName = "First Category",
+            };
+
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            context.SaveEntity(category, "Test Category");
+
+            var product = new Product
+            {
+                ProductName = "First Product",
+                CategoryID = category.CategoryId,
+            };
+            context.SaveEntity(product, "Saving Product");
+
+            var customer = new Customer
+            {
+                CustomerID = "ALFKI",
+                CompanyName = "First Customer",
+            };
+
+            context.SaveEntity(customer, "Saving Customer");
+
+            var employee = new Employee
+            {
+                FirstName = "First",
+                LastName = "Employee",
+                FullName = "First Employee",
+            };
+
+            context.SaveEntity(employee, "Saving Employee");
+
+            var shipper = new Shipper
+            {
+                CompanyName = "First Shipper",
+            };
+
+            context.SaveEntity(shipper, "Saving Shipper");
+
+            var order = new Order
+            {
+                CustomerID = customer.CustomerID,
+                EmployeeID = employee.EmployeeID,
+                ShipVia = shipper.ShipperID,
+                OrderDate = new DateTime(1980, 1, 1),
+            };
+
+            context.SaveEntity(order, "Saving Order");
+
+            var detail = new Order_Detail
+            {
+                OrderID = order.OrderID,
+                ProductID = product.ProductID,
+                Quantity = 1,
+                UnitPrice = 10.00,
+            };
+
+            context.SaveEntity(detail, "Saving Order Details");
+
+            var table = context.GetTable<Order>();
+            var loadOrder = table.FirstOrDefault(p => p.OrderID == order.OrderID);
+
+            Globals.ViewModel.GridMode = true;
+            Globals.ViewModel.OnRecordSelected(loadOrder.GetAutoFillValue().PrimaryKeyValue);
         }
     }
 }

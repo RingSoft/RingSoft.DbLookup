@@ -460,6 +460,8 @@ namespace RingSoft.DbMaintenance
 
         public abstract void OnRecordSelected(LookupSelectArgs e);
 
+        public abstract void OnRecordSelected(PrimaryKeyValue primaryKey);
+
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
         }

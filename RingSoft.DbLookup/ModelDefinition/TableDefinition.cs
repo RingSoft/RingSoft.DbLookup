@@ -12,6 +12,7 @@ using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup.ModelDefinition
@@ -29,7 +30,7 @@ namespace RingSoft.DbLookup.ModelDefinition
     /// <typeparam name="TEntity">A database table class used in the Entity Framework.</typeparam>
     /// <seealso cref="TableDefinitionBase" />
     public sealed class TableDefinition<TEntity> : TableDefinitionBase
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public TableDefinition(LookupContextBase context, string tablePropertyName)
         {
@@ -369,6 +370,7 @@ namespace RingSoft.DbLookup.ModelDefinition
             return entity;
         }
 
+
         /// <summary>
         /// Gets the primary key value from entity.
         /// </summary>
@@ -542,6 +544,63 @@ namespace RingSoft.DbLookup.ModelDefinition
                 return PrimaryKeyFields[0] as IntegerFieldDefinition;
             }
             return null;
+        }
+
+        public void FillOutEntity(TEntity entity, bool processChildKeys = true)
+        {
+            var parentJoins = FieldDefinitions
+                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+
+            foreach (var fieldDefinition in parentJoins)
+            {
+                GblMethods.SetPropertyObject(
+                    entity
+                    ,fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
+                    , GetParentObject(entity, fieldDefinition));
+            }
+        }
+
+        private object GetParentObject(TEntity entity, FieldDefinition parentField)
+        {
+            return parentField
+                .ParentJoinForeignKeyDefinition
+                .PrimaryTable
+                .GetJoinParentObject(entity, parentField.ParentJoinForeignKeyDefinition);
+        }
+
+        public override void FillOutObject(object obj)
+        {
+            if (obj is TEntity entity)
+            {
+                FillOutEntity(entity, false);
+            }
+        }
+
+        public override object GetJoinParentObject<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
+        {
+            var tableFilter = new TableFilterDefinition<TEntity>(this);
+            foreach (var fieldJoin in foreignKey.FieldJoins)
+            {
+                tableFilter.AddFixedFilter(
+                    fieldJoin.PrimaryField
+                    , Conditions.Equals
+                    , GblMethods.GetPropertyValue(
+                        childEntity
+                        , fieldJoin.ForeignField.PropertyName));
+            }
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = tableFilter.GetWhereExpresssion<TEntity>(param);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<TEntity>();
+            var query = FilterItemDefinition.FilterQuery(table, param, expr);
+            var result = query.FirstOrDefault();
+            return result;
+        }
+
+        public override object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -40,7 +40,7 @@ namespace RingSoft.DbMaintenance
     /// <seealso cref="DbMaintenanceViewModelBase" />
     /// <seealso cref="ILookupControl" />
     public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
-        where TEntity : new()
+        where TEntity : class, new()
     {
         public TEntity Entity { get; private set; }
 
@@ -250,6 +250,11 @@ namespace RingSoft.DbMaintenance
                 }
                 if (!_savingRecord)
                 {
+                    if (SystemGlobals.UnitTestMode)
+                    {
+                        TableDefinition.FillOutEntity(Entity);
+                    }
+
                     LoadFromEntity(Entity);
                     Processor?.OnRecordSelected();
                 }
@@ -583,10 +588,15 @@ namespace RingSoft.DbMaintenance
 
         public override void OnRecordSelected(LookupSelectArgs e)
         {
+            OnRecordSelected(e.LookupData.SelectedPrimaryKeyValue);
+        }
+
+        public override void OnRecordSelected(PrimaryKeyValue primaryKey)
+        {
             if (!CheckDirty())
                 return;
 
-            _lookupData.SelectPrimaryKey(e.LookupData.SelectedPrimaryKeyValue);
+            _lookupData.SelectPrimaryKey(primaryKey);
         }
 
         /// <summary>

@@ -120,6 +120,8 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public List<FieldDefinition> ChildFields { get; set; } = new List<FieldDefinition>();
 
+        public List<ForeignKeyDefinition> ChildKeys { get; set; } = new List<ForeignKeyDefinition>();
+
         public int PriorityLevel { get; set; } = 1000;
 
         public bool IsAdvancedFind { get; internal set; } = true;
@@ -607,5 +609,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             TempTable = value;
             return this;
         }
+
+        public abstract void FillOutObject(object obj);
+
+        public abstract object GetJoinParentObject<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new();
+
+        public abstract object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new();
     }
 }

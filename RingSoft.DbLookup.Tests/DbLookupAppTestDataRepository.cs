@@ -11,6 +11,7 @@ namespace RingSoft.DbLookup.Tests
             DataContext.AddEntity(new DataRepositoryRegistryItem<Employee>());
             DataContext.AddEntity(new DataRepositoryRegistryItem<Shipper>());
             DataContext.AddEntity(new DataRepositoryRegistryItem<Order>());
+            DataContext.AddEntity(new DataRepositoryRegistryItem<Category>());
             DataContext.AddEntity(new DataRepositoryRegistryItem<Product>());
             DataContext.AddEntity(new DataRepositoryRegistryItem<Order_Detail>());
         }

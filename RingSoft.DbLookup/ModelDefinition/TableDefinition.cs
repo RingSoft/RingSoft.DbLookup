@@ -553,19 +553,40 @@ namespace RingSoft.DbLookup.ModelDefinition
 
             foreach (var fieldDefinition in parentJoins)
             {
+                var childObject = GetParentObject(entity, fieldDefinition);
                 GblMethods.SetPropertyObject(
                     entity
                     ,fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
-                    , GetParentObject(entity, fieldDefinition));
+                    , childObject);
+            }
+
+            if (processChildKeys)
+            {
+                foreach (var childKey in ChildKeys)
+                {
+                    var result = childKey.ForeignTable.GetJoinCollection(entity, childKey);
+                    if (result != null)
+                    {
+                        GblMethods.SetPropertyObject(entity, childKey.CollectionName, result);
+                    }
+                }
             }
         }
 
         private object GetParentObject(TEntity entity, FieldDefinition parentField)
         {
-            return parentField
+            var result = parentField
                 .ParentJoinForeignKeyDefinition
                 .PrimaryTable
                 .GetJoinParentObject(entity, parentField.ParentJoinForeignKeyDefinition);
+            if (result != null)
+            {
+                parentField
+                    .ParentJoinForeignKeyDefinition
+                    .PrimaryTable
+                    .FillOutObject(result);
+            }
+            return result;
         }
 
         public override void FillOutObject(object obj)
@@ -578,17 +599,12 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public override object GetJoinParentObject<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
         {
-            var tableFilter = new TableFilterDefinition<TEntity>(this);
-            foreach (var fieldJoin in foreignKey.FieldJoins)
-            {
-                tableFilter.AddFixedFilter(
-                    fieldJoin.PrimaryField
-                    , Conditions.Equals
-                    , GblMethods.GetPropertyValue(
-                        childEntity
-                        , fieldJoin.ForeignField.PropertyName));
-            }
+            var tableFilter = GetTableFilter(childEntity, foreignKey);
 
+            if (!tableFilter.FixedFilters.Any())
+            {
+                return null;
+            }
             var param = GblMethods.GetParameterExpression<TEntity>();
             var expr = tableFilter.GetWhereExpresssion<TEntity>(param);
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -598,9 +614,45 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        private TableFilterDefinition<TEntity> GetTableFilter<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new()
+        {
+            var tableFilter = new TableFilterDefinition<TEntity>(this);
+            foreach (var fieldJoin in foreignKey.FieldJoins)
+            {
+                var value = GblMethods.GetPropertyValue(childEntity
+                    , fieldJoin.ForeignField.PropertyName);
+                if (!value.IsNullOrEmpty())
+                {
+                    tableFilter.AddFixedFilter(
+                        fieldJoin.PrimaryField
+                        , Conditions.Equals
+                        , value);
+                }
+            }
+
+            return tableFilter;
+        }
+
         public override object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
         {
-            throw new NotImplementedException();
+            var tableFilter = GetTableFilter(childEntity, foreignKey);
+
+            if (!tableFilter.FixedFilters.Any())
+            {
+                return null;
+            }
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = tableFilter.GetWhereExpresssion<TEntity>(param);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<TEntity>();
+            var query = FilterItemDefinition.FilterQuery(table, param, expr);
+            var result = new HashSet<TEntity>(query);
+
+            foreach (var entity in result)
+            {
+                FillOutObject(entity);
+            }
+            return result;
         }
     }
 }

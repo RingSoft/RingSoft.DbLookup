@@ -157,6 +157,10 @@ namespace RingSoft.DbLookup.EfCore
                         }
                     }
 
+                    if (foreignKey.PrincipalToDependent != null)
+                    {
+                        foreignKeyDefinition.CollectionName = foreignKey.PrincipalToDependent.Name;
+                    }
                     parentTable.ChildKeys.Add(foreignKeyDefinition);
                 }
                 //var primaryProperty = foreignKey.PrincipalKey.Properties[0];

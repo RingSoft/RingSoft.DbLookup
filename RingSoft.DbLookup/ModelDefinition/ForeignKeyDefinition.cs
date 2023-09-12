@@ -68,7 +68,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </value>
         public string ForeignObjectPropertyName { get; internal set; }
 
-        public string ParentObjectPropertyName { get; internal set; }
+        public string CollectionName { get; set; }
 
         public List<ForeignKeyFieldJoin> ForeignKeyFieldJoins { get; internal set; } = new List<ForeignKeyFieldJoin>();
 

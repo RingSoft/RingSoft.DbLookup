@@ -92,6 +92,16 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
 
             context.SaveEntity(employee, "Saving Employee");
 
+            var secondEmployee = new Employee
+            {
+                FirstName = "Second",
+                LastName = "Employee",
+                FullName = "Second Employee",
+                ReportsTo = employee.EmployeeID,
+            };
+
+            context.SaveEntity(secondEmployee, "Saving Employee");
+
             var shipper = new Shipper
             {
                 CompanyName = "First Shipper",
@@ -102,7 +112,7 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
             var order = new Order
             {
                 CustomerID = customer.CustomerID,
-                EmployeeID = employee.EmployeeID,
+                EmployeeID = secondEmployee.EmployeeID,
                 ShipVia = shipper.ShipperID,
                 OrderDate = new DateTime(1980, 1, 1),
             };

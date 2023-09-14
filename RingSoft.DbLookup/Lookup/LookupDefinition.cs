@@ -392,6 +392,10 @@ namespace RingSoft.DbLookup.Lookup
                 foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
                 {
                     var value = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName);
+                    if (value.IsNullOrEmpty() && !fieldDefinition.AllowNulls)
+                    {
+
+                    }
                     if (!value.IsNullOrEmpty())
                     {
                         GblMethods.SetPropertyValue(newEntity, fieldDefinition.PropertyName, value);
@@ -412,12 +416,13 @@ namespace RingSoft.DbLookup.Lookup
 
                     if (!destinationContext.Commit("Copying Data", true))
                     {
+                        var lastError = GblMethods.LastError;
                         if (identity)
                         {
                             destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false, false);
                         }
 
-                        return GblMethods.LastError;
+                        return lastError;
                     }
                     batch.Clear();
                     if (identity)
@@ -444,12 +449,13 @@ namespace RingSoft.DbLookup.Lookup
                 destinationContext.AddRange(batch);
                 if (!destinationContext.Commit("Copying Data", true))
                 {
+                    var lastError = GblMethods.LastError;
                     if (identity)
                     {
                         destinationContext.SetIdentityInsert(destinationProcessor, TableDefinition, false, false);
                     }
 
-                    return GblMethods.LastError;
+                    return lastError;
                 }
             }
             if (identity)

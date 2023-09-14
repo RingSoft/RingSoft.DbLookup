@@ -609,6 +609,12 @@ namespace RingSoft.DbLookup.ModelDefinition
             var expr = tableFilter.GetWhereExpresssion<TEntity>(param);
             var context = SystemGlobals.DataRepository.GetDataContext();
             var table = context.GetTable<TEntity>();
+
+            if (table == null || !table.Any())
+            {
+                return null;
+            }
+
             var query = FilterItemDefinition.FilterQuery(table, param, expr);
             var result = query.FirstOrDefault();
             return result;
@@ -645,6 +651,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             var expr = tableFilter.GetWhereExpresssion<TEntity>(param);
             var context = SystemGlobals.DataRepository.GetDataContext();
             var table = context.GetTable<TEntity>();
+
+            if (table == null || !table.Any())
+            {
+                return null;
+            }
             var query = FilterItemDefinition.FilterQuery(table, param, expr);
             var result = new HashSet<TEntity>(query);
 

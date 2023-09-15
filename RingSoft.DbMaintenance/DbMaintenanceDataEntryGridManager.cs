@@ -77,7 +77,7 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        public List<TEntity> GetEntityList()
+        public virtual List<TEntity> GetEntityList()
         {
             if (Grid != null)
             {

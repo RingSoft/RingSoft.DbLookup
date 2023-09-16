@@ -213,6 +213,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (!LookupDefinition.TableDefinition.CanViewTable)
                 {
                     ViewButton.Visibility = Visibility.Collapsed;
+                    LookupControl.ShowAdvancedFindButton = false;
                 }
 
                 if (!LookupDefinition.TableDefinition.CanAddToTable)
@@ -288,6 +289,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_allowView)
             {
                 ViewButton.Visibility = AddButton.Visibility = Visibility.Collapsed;
+                if (LookupControl != null)
+                {
+                    LookupControl.ShowAdvancedFindButton = false;
+                }
             }
 
             if (LookupControl != null)

@@ -158,6 +158,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                     .TextValue;
                 return enumText;
             }
+
+            if (ParentJoinForeignKeyDefinition == null && TableDefinition.PrimaryKeyFields.Contains(this))
+            {
+                return dbIdValue;
+            }
             return base.GetUserValue(dbIdValue);
         }
 

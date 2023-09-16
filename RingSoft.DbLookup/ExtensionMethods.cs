@@ -259,6 +259,16 @@ namespace RingSoft.DbLookup
 
             return result;
         }
+
+        public static void FillOutEntity<TEntity>(this TEntity entity) where TEntity : class, new()
+        {
+            var table = SystemGlobals.LookupContext.TableDefinitions
+                .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
+            if (table is TableDefinition<TEntity> fullTable)
+            {
+                fullTable.FillOutEntity(entity);
+            }
+        }
         public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity) where TEntity : class, new()
         {
             if (entity == null)

@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="7.17.0" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="7.18.0" />
   </ItemGroup>
 
   <ItemGroup>

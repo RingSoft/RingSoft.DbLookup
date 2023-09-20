@@ -17,6 +17,18 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
+    public class UiControlMap
+    {
+        public UiCommand UiCommand { get; }
+
+        public FieldDefinition FieldDefinition { get; }
+
+        public UiControlMap(UiCommand uiCommand, FieldDefinition fieldDefinition)
+        {
+            UiCommand = uiCommand;
+            FieldDefinition = fieldDefinition;
+        }
+    }
     public class SelectArgs
     {
         public bool Cancel { get; set; }
@@ -157,6 +169,8 @@ namespace RingSoft.DbMaintenance
                 OnPropertyChanged();
             }
         }
+
+        public UiCommand KeyAutoFillUiCommand { get; }
 
         private bool _primaryKeyControlsEnabled;
 
@@ -327,6 +341,7 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public List<UiControlMap> UiControls { get; } = new List<UiControlMap>();
         public object InputParameter { get; set; }
 
         public DateTime LockDate { get; set; }
@@ -334,13 +349,22 @@ namespace RingSoft.DbMaintenance
         public IDbMaintenanceDataProcessor Processor { get; set; }
 
         public RelayCommand PreviousCommand { get; private set; }
-        public RelayCommand NextCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand NewCommand { get; private set; }
-        public RelayCommand FindCommand { get; private set; }
-        public RelayCommand SelectCommand { get; private set; }
-        public RelayCommand PrintCommand { get; private set; }
+
+        public UiCommand PreviousUiCommand { get; }
+        public RelayCommand NextCommand { get; }
+        public UiCommand NextUiCommand { get; }
+        public RelayCommand SaveCommand { get; }
+        public UiCommand SaveUiCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public UiCommand DeleteUiCommand { get; }
+        public RelayCommand NewCommand { get; }
+        public UiCommand NewUiCommand { get; }
+        public RelayCommand FindCommand { get; }
+        public UiCommand FindUiCommand { get; }
+        public RelayCommand SelectCommand { get; }
+        public UiCommand SelectUiCommand { get; }
+        public RelayCommand PrintCommand { get; }
+        public UiCommand PrintUiCommand { get; }
         public bool CheckDirtyFlag { get; set; } = true;
 
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
@@ -358,15 +382,28 @@ namespace RingSoft.DbMaintenance
         public DbMaintenanceViewModelBase()
         {
             PreviousCommand = new RelayCommand(OnGotoPreviousButton);
+            PreviousUiCommand = new UiCommand();
             NextCommand = new RelayCommand(OnGotoNextButton);
+            NextUiCommand = new UiCommand();
             SaveCommand = new RelayCommand(OnSaveButton){IsEnabled = SaveButtonEnabled};
+            SaveUiCommand = new UiCommand();
             DeleteCommand = new RelayCommand(OnDeleteButton){IsEnabled = DeleteButtonEnabled};
+            DeleteUiCommand = new UiCommand();
             NewCommand = new RelayCommand(OnNewButton){IsEnabled = NewButtonEnabled};
+            NewUiCommand = new UiCommand();
             FindCommand = new RelayCommand(OnFindButton);
+            FindUiCommand = new UiCommand();
             SelectCommand = new RelayCommand(OnSelectButton){IsEnabled = SelectButtonEnabled};
+            SelectUiCommand = new UiCommand();
             PrintCommand = new RelayCommand(PrintOutput);
-
+            PrintUiCommand = new UiCommand();
             NewButtonEnabled = SaveButtonEnabled = true;
+            KeyAutoFillUiCommand = new UiCommand();
+        }
+
+        public void MapFieldToUiCommand(UiCommand uiCommand, FieldDefinition fieldDefinition)
+        {
+            UiControls.Add(new UiControlMap(uiCommand, fieldDefinition));
         }
 
         protected internal void Setup(LookupDefinitionBase lookupDefinition)

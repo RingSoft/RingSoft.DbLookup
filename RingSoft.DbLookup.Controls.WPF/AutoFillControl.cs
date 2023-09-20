@@ -337,6 +337,48 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public static readonly DependencyProperty UiCommandProperty =
+            DependencyProperty.Register(nameof(UiCommand), typeof(UiCommand), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(UiCommandChangedCallback));
+
+        public UiCommand UiCommand
+        {
+            get { return (UiCommand)GetValue(UiCommandProperty); }
+            set { SetValue(UiCommandProperty, value); }
+        }
+
+        private static void UiCommandChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl._vmUiControl == null)
+            {
+                autoFillControl._vmUiControl = WPFControlsGlobals.VmUiFactory.CreateUiControl(
+                    autoFillControl, autoFillControl.UiCommand);
+                if (autoFillControl.UiLabel != null)
+                {
+                    autoFillControl._vmUiControl.SetLabel(autoFillControl.UiLabel);
+                }
+            }
+        }
+
+        public static readonly DependencyProperty UiLabelProperty =
+            DependencyProperty.Register(nameof(UiLabel), typeof(Label), typeof(AutoFillControl),
+                new FrameworkPropertyMetadata(UiLabelChangedCallback));
+
+        public Label UiLabel
+        {
+            get { return (Label)GetValue(UiLabelProperty); }
+            set { SetValue(UiLabelProperty, value); }
+        }
+
+        private static void UiLabelChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var autoFillControl = (AutoFillControl)obj;
+            if (autoFillControl._vmUiControl != null)
+                autoFillControl._vmUiControl.SetLabel(autoFillControl.UiLabel);
+        }
 
         public string EditText
         {
@@ -457,6 +499,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _settingText;
         private AutoFillValue _pendingAutoFillValue;
         private bool _pendingSendTab = false;
+        private VmUiControl _vmUiControl;
 
         static AutoFillControl()
         {

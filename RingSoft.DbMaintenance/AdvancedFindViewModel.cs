@@ -367,6 +367,7 @@ namespace RingSoft.DbMaintenance
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindFilters);
 
             TableUiCommand = new UiCommand();
+            MapFieldToUiCommand(TableUiCommand, TableDefinition.GetFieldDefinition(p => p.Table));
         }
 
         protected override void Initialize()

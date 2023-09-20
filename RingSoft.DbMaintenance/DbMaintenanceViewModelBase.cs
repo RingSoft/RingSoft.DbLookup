@@ -189,7 +189,6 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _primaryKeyControlsEnabled = value;
-                KeyAutoFillUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(PrimaryKeyControlsEnabled), false);
             }
         }

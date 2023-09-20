@@ -24,9 +24,8 @@ namespace RingSoft.DbMaintenance
             {
                 var message = "You must specify a Name to print report.";
                 var caption = "Validation Error";
-                AdvancedFindViewModel.View.OnValidationFail(
-                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Name), message,
-                    caption);
+                AdvancedFindViewModel.KeyAutoFillUiCommand.SetFocus();
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
                 return;
             }
             PrinterSetup.PrintingProperties.ReportTitle =

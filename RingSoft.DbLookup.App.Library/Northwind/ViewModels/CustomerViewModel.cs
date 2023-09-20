@@ -301,7 +301,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers.GetFieldDefinition(p =>
                         p.CustomerID);
 
-                View.OnValidationFail(fieldDefinition, message, "Delete Validation Fail");
+                KeyAutoFillUiCommand.SetFocus();
+                ControlsGlobals.UserInterface.ShowMessageBox(message, "Delete Validation Fail",
+                    RsMessageBoxIcons.Exclamation);
+                //View.OnValidationFail(fieldDefinition, message, "Delete Validation Fail");
                 return false;
             }
             return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteCustomer(KeyAutoFillValue.Text);

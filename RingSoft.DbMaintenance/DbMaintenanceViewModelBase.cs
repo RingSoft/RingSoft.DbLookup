@@ -189,6 +189,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _primaryKeyControlsEnabled = value;
+                KeyAutoFillUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(PrimaryKeyControlsEnabled), false);
             }
         }
@@ -228,6 +229,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 DeleteCommand.IsEnabled = _deleteButtonEnabled = value;
+                DeleteUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(DeleteButtonEnabled), false);
             }
         }
@@ -249,6 +251,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 NewCommand.IsEnabled = _newButtonEnabled = value;
+                NewUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(NewButtonEnabled));
             }
         }
@@ -270,6 +273,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 SaveCommand.IsEnabled = _saveButtonEnabled = value;
+                SaveUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(SaveButtonEnabled), false);
             }
         }

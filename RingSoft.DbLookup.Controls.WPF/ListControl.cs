@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -104,6 +105,50 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public static readonly DependencyProperty UiCommandProperty =
+            DependencyProperty.Register(nameof(UiCommand), typeof(UiCommand), typeof(ListControl),
+                new FrameworkPropertyMetadata(UiCommandChangedCallback));
+
+        public UiCommand UiCommand
+        {
+            get { return (UiCommand)GetValue(UiCommandProperty); }
+            set { SetValue(UiCommandProperty, value); }
+        }
+
+        private static void UiCommandChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var listControl = (ListControl)obj;
+            if (listControl._vmUiControl == null)
+            {
+                listControl._vmUiControl = WPFControlsGlobals.VmUiFactory.CreateUiControl(
+                    listControl, listControl.UiCommand);
+                if (listControl.UiLabel != null)
+                {
+                    listControl._vmUiControl.SetLabel(listControl.UiLabel);
+                }
+            }
+        }
+
+        public static readonly DependencyProperty UiLabelProperty =
+            DependencyProperty.Register(nameof(UiLabel), typeof(Label), typeof(ListControl),
+                new FrameworkPropertyMetadata(UiLabelChangedCallback));
+
+        public Label UiLabel
+        {
+            get { return (Label)GetValue(UiLabelProperty); }
+            set { SetValue(UiLabelProperty, value); }
+        }
+
+        private static void UiLabelChangedCallback(DependencyObject obj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var listControl = (ListControl)obj;
+            if (listControl._vmUiControl != null)
+                listControl._vmUiControl.SetLabel(listControl.UiLabel);
+        }
+
+
         public Border Border { get; private set; }
 
         public ListControlViewModel ViewModel { get; private set; }
@@ -113,6 +158,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public Button Button { get; private set; }
 
         private bool _controlLoaded;
+        private VmUiControl _vmUiControl;
 
         static ListControl()
         {

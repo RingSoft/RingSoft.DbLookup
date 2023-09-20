@@ -48,15 +48,15 @@
 
                                     <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding AdvancedFindId, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
 
-                                    <Label Grid.Row="0" Grid.Column="2" Content="Name" HorizontalAlignment="Right"/>
+                                    <Label Grid.Row="0" Grid.Column="2" x:Name="NameLabel" Content="Name" HorizontalAlignment="Right"/>
 
-                                    <lc:AutoFillControl Grid.Row="0" Grid.Column="3" x:Name="NameAutoFillControl" Width="200"/>
+                                    <lc:AutoFillControl Grid.Row="0" Grid.Column="3" x:Name="NameAutoFillControl" Width="200" UiCommand="{Binding KeyAutoFillUiCommand}" UiLabel="{Binding ElementName=NameLabel}"/>
 
-                                    <Label Grid.Row="1" Grid.Column="0" Content="Table" HorizontalAlignment="Right"/>
+                                    <Label Grid.Row="1" Grid.Column="0" x:Name="TableLabel" Content="Table" HorizontalAlignment="Right"/>
 
                                     <!--<dec:TextComboBoxControl Grid.Row="1" Grid.Column="1" x:Name="TableComboBoxControl" Setup="{Binding TableComboBoxSetup}" SelectedItem="{Binding SelectedTableBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding TableIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="100"/>-->
 
-                                    <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding TableRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding TableRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding TableUiCommand}" UiLabel="{Binding ElementName=TableLabel}"/>
 
                                     <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="Refresh Now" IsTabStop="False"/>
 

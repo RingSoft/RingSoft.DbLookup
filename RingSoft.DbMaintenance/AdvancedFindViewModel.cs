@@ -345,6 +345,8 @@ namespace RingSoft.DbMaintenance
 
         public RelayCommand PrintLookupOutputCommand { get; set; }
 
+        public UiCommand TableUiCommand { get; set; }
+
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
         public IAdvancedFindView View { get; set; }
@@ -363,6 +365,8 @@ namespace RingSoft.DbMaintenance
         {
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindColumns);
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindFilters);
+
+            TableUiCommand = new UiCommand();
         }
 
         protected override void Initialize()
@@ -662,10 +666,8 @@ namespace RingSoft.DbMaintenance
             {
                 var message = "You must select a table before saving.";
                 var caption = "Invalid Table";
-                //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                View.OnValidationFail(
-                    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p => p.Table)
-                    , message, caption);
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                TableUiCommand.SetFocus();
                 return false;
             }
             return base.ValidateEntity(entity);

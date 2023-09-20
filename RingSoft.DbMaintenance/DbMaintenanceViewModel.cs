@@ -698,8 +698,8 @@ namespace RingSoft.DbMaintenance
                         {
                             var message = $"{lookupFieldColumn.FieldDefinition.Description} cannot be empty.";
                             var caption = "Invalid Key Value";
-                            //ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                            View.OnValidationFail(lookupFieldColumn.FieldDefinition, message, caption);
+                            ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                            KeyAutoFillUiCommand.SetFocus();
                             return DbMaintenanceResults.ValidationError;
                         }
                     }
@@ -1079,7 +1079,13 @@ namespace RingSoft.DbMaintenance
 
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
-            View.OnValidationFail(fieldDefinition, text, caption);
+            var uiMap = UiControls.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
+            if (uiMap != null)
+            {
+                uiMap.UiCommand.SetFocus();
+            }
+
+            ControlsGlobals.UserInterface.ShowMessageBox(text, caption, RsMessageBoxIcons.Exclamation);
         }
 
         public virtual bool ValidateEntityProperty(FieldDefinition fieldDefinition, string valueToValidate)

@@ -42,7 +42,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="fieldDefinition">The field definition that failed.</param>
         /// <param name="text">The message box text.</param>
         /// <param name="caption">The message box caption.</param>
-        void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption);
+        //void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption);
 
         /// <summary>
         /// Reset the view for new record.

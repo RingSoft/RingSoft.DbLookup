@@ -42,18 +42,31 @@
                 <RowDefinition Height="2.4*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
             <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
+            
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+         
                 <dec:StringReadOnlyBox Text="{Binding Path=OrderId}"  DesignText="999999888" Width="70"/>
-                <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2.5" DesignText="WANDK" Width="100" CharacterCasing="Upper"/>
+                
+                <Label x:Name="CustomerLabel" Content="Customer" Style="{StaticResource ControlLabel}"/>
+                
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2.5" DesignText="WANDK" Width="100" CharacterCasing="Upper" UiCommand="{Binding  CustomerUiCommand}" UiLabel="{Binding ElementName=CustomerLabel}"/>
+                
                 <dec:StringReadOnlyBox Width="200" Text="{Binding CompanyName}" DesignText="Rattlesnake Canyon Grocery"/>
+
             </StackPanel>
-            <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" x:Name="EmployeeLabel" Content="Employee" Style="{StaticResource ControlLabel}"/>
+
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150"/>
-                <Label Content="Ship Via" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Federal Shipping" Width="150"/>
+
+                <lc:AutoFillControl Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150" UiCommand="{Binding EmployeeUiCommand}" UiLabel="{Binding ElementName=EmployeeLabel}"/>
+
+                <Label x:Name="ShipViaLabel" Content="Ship Via" Style="{StaticResource ControlLabel}"/>
+
+                <lc:AutoFillControl Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Federal Shipping" Width="150" UiCommand="{Binding ShipViaUiCommand}" UiLabel="{Binding ElementName=ShipViaLabel}"/>
+
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">

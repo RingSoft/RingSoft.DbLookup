@@ -44,18 +44,31 @@
                 <RowDefinition Height="2.4*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
             <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
+
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+
                 <dec:StringReadOnlyBox Text="{Binding Path=OrderId}"  DesignText="999999888" Width="70"/>
-                <Label Content="Customer" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2.5" DesignText="WANDK" Width="100" CharacterCasing="Upper"/>
+
+                <Label x:Name="CustomerLabel" Content="Customer" Style="{StaticResource ControlLabel}"/>
+
+                <lc:AutoFillControl x:Name="CustomerControl" Setup="{Binding CustomersAutoFillSetup}" Value="{Binding Path=Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2.5" DesignText="WANDK" Width="100" CharacterCasing="Upper" UiCommand="{Binding  CustomerUiCommand}" UiLabel="{Binding ElementName=CustomerLabel}"/>
+
                 <dec:StringReadOnlyBox Width="200" Text="{Binding CompanyName}" DesignText="Rattlesnake Canyon Grocery"/>
+
             </StackPanel>
-            <Label Grid.Row="1" Grid.Column="0" Content="Employee" Style="{StaticResource ControlLabel}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" x:Name="EmployeeLabel" Content="Employee" Style="{StaticResource ControlLabel}"/>
+
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150"/>
-                <Label Content="Ship Via" Style="{StaticResource ControlLabel}"/>
-                <lc:AutoFillControl x:Name="ShipViaControl" Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Federal Shipping" Width="150"/>
+
+                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150" UiCommand="{Binding EmployeeUiCommand}" UiLabel="{Binding ElementName=EmployeeLabel}"/>
+
+                <Label x:Name="ShipViaLabel" Content="Ship Via" Style="{StaticResource ControlLabel}"/>
+
+                <lc:AutoFillControl Setup="{Binding ShipViaAutoFillSetup}" Value="{Binding Path=ShipVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Federal Shipping" Width="150" UiCommand="{Binding ShipViaUiCommand}" UiLabel="{Binding ElementName=ShipViaLabel}"/>
+
             </StackPanel>
             <Label Grid.Row="2" Grid.Column="0" Content="Order Date" Style="{StaticResource ControlLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
@@ -69,8 +82,11 @@
                 <TabItem Header="Details">
                     <deg:DataEntryGrid x:Name="DetailsGrid" Manager="{Binding DetailsGridManager}">
                         <deg:DataEntryGrid.Columns>
+
                             <deg:DataEntryGridTextColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.ProductColumnId}" Header="Product" DesignText="Chef Anton's Cajun Seasoning" Width="300"/>
+
                             <deg:DataEntryGridTextColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.QuantityColumnId}"  Header="Quantity" Alignment="Right" DesignText="1,000" Width="75"/>
+
                             <deg:DataEntryGridTextColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.PriceColumnId}" Header="Price" Alignment="Right" DesignText="$10,000.00" Width="100"/>
 
                             <deg:DataEntryGridTextColumn ColumnId="{x:Static vmlib:OrderDetailsGridManager.ExtendedPriceColumnId}" Header="Extended&#10;Price" Alignment="Right" DesignText="$100,000.00" Width="100"/>
@@ -133,8 +149,11 @@
                     <TextBlock Text="{Binding Path=TotalDiscount, StringFormat= 'c'}" Style="{StaticResource ReadOnlyNumericTextBlock}"/>
                 </Border>-->
                 <dec:DecimalReadOnlyBox Grid.Column="1" Grid.Row="1" Value="{Binding TotalDiscount}"/>
-                <Label Grid.Column="0" Grid.Row="2" Content="Freight" Style="{StaticResource ControlLabel}"/>
-                <dec:DecimalEditControl Grid.Column="1" Grid.Row="2" FormatType="Currency" Value="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="$100.00" HorizontalAlignment="Stretch"/>
+
+                <Label Grid.Column="0" Grid.Row="2" x:Name="FreightLabel" Content="Freight" Style="{StaticResource ControlLabel}"/>
+
+                <dec:DecimalEditControl Grid.Column="1" Grid.Row="2" FormatType="Currency" Value="{Binding Path=Freight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="$100.00" HorizontalAlignment="Stretch" UiLabel="{Binding ElementName=FreightLabel}"/>
+
                 <Label Grid.Column="0" Grid.Row="3" Content="Total" Style="{StaticResource ControlLabel}"/>
                 <dec:DecimalReadOnlyBox Grid.Column="1" Grid.Row="3" Value="{Binding Path=Total}"/>
             </Grid>

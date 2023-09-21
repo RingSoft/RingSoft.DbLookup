@@ -509,10 +509,10 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-            if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
-            {
-                View.ResetViewForNewRecord();
-            }
+            //if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
+            //{
+            //    View.ResetViewForNewRecord();
+            //}
 
         }
 
@@ -547,10 +547,10 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-            if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
-            {
-                View.ResetViewForNewRecord();
-            }
+            //if (!Processor.IsMaintenanceKeyDown(MaintenanceKey.Ctrl))
+            //{
+            //    View.ResetViewForNewRecord();
+            //}
         }
         /// <summary>
         /// Called when the Find button is clicked.
@@ -652,7 +652,8 @@ namespace RingSoft.DbMaintenance
             PrimaryKeyControlsEnabled = true;
             ReadOnlyMode = false;
 
-            View.ResetViewForNewRecord();
+            //View.ResetViewForNewRecord();
+            KeyAutoFillUiCommand.SetFocus();
             RecordDirty = false;
             FireNewEvent();
         }
@@ -884,10 +885,10 @@ namespace RingSoft.DbMaintenance
             RecordDirty = false;
             RecordsChanged = true;
 
-            if (!keyDown)
-            {
-                View.ResetViewForNewRecord();
-            }
+            //if (!keyDown)
+            //{
+            //    View.ResetViewForNewRecord();
+            //}
 
             return DbMaintenanceResults.Success;
         }

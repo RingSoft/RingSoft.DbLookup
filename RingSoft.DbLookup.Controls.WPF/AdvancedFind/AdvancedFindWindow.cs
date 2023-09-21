@@ -238,10 +238,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
-        public void LockTable(bool lockValue)
-        {
-            TableListControl.IsEnabled = !lockValue;
-        }
+        //public void LockTable(bool lockValue)
+        //{
+        //    TableListControl.IsEnabled = !lockValue;
+        //}
 
         static AdvancedFindWindow()
         {

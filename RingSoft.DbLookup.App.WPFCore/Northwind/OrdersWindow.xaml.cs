@@ -16,6 +16,10 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     public partial class OrdersWindow : IOrderView
     {
         public object OwnerWindow => this;
+        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
+        {
+            
+        }
 
         public override DbMaintenanceViewModelBase ViewModel => OrdersViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
@@ -37,35 +41,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
             };
 
             AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            TabControl.SelectedIndex = 0;
-            CustomerControl.Focus();
-            base.ResetViewForNewRecord();
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
-
-            if (fieldDefinition == table.GetFieldDefinition(p => p.CustomerID))
-                CustomerControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.EmployeeID))
-                EmployeeControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.ShipVia))
-                ShipViaControl.Focus();
-
-            base.OnValidationFail(fieldDefinition, text, caption);
-        }
-
-        public void OnGridValidationFailed()
-        {
-        }
-
-        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
-        {
         }
 
         private void ShowAdvancedFind()

@@ -312,7 +312,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 return false;
             }
-
+            else if (control == StatusBar)
+            {
+                return false;
+            }
             return true;
         }
 

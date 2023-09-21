@@ -24,7 +24,7 @@ namespace RingSoft.DbMaintenance
 
         void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount);
 
-        void LockTable(bool lockValue);
+        //void LockTable(bool lockValue);
 
         int GetRecordCount(bool showRecordCount);
 
@@ -509,7 +509,7 @@ namespace RingSoft.DbMaintenance
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, advancedFind.Name);
 
             ReadOnlyMode = false;
-            View.LockTable(true);
+            TableUiCommand.IsEnabled = false;
             RefreshSettingsCommand.IsEnabled = RefreshNowCommand.IsEnabled = true;
             return advancedFind;
         }
@@ -740,7 +740,8 @@ namespace RingSoft.DbMaintenance
         private void LockTable()
         {
             var lockValue = AdvancedFindInput?.LockTable != null;
-            View.LockTable(lockValue);
+            //View.LockTable(lockValue);
+            TableUiCommand.IsEnabled = !lockValue;
         }
 
         private void ClearRefresh()

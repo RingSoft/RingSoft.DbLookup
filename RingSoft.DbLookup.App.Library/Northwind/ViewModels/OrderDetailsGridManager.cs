@@ -65,6 +65,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 if (productRow != null)
                 {
                     OrderViewModel.OrderView.SetFocusToGrid(productRow, ProductColumnId);
+                    Grid?.GotoCell(productRow, ProductColumnId);
                 }
             }
         }

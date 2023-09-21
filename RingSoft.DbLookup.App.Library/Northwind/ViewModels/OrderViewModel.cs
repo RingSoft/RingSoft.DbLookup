@@ -428,6 +428,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public UiCommand CustomerUiCommand { get; } = new UiCommand();
+
+        public UiCommand EmployeeUiCommand { get; } = new UiCommand();
+
+        public UiCommand ShipViaUiCommand { get; } = new UiCommand();
+
         private readonly DateTime _newDateTime = DateTime.Today;
 
         private INorthwindLookupContext _lookupContext;
@@ -439,6 +445,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _orderDate = _newDateTime;
             _requiredDate = _shippedDate = null;
             TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
+
+            MapFieldToUiCommand(CustomerUiCommand, TableDefinition.GetFieldDefinition(p => p.CustomerID));
+            MapFieldToUiCommand(EmployeeUiCommand, TableDefinition.GetFieldDefinition(p => p.EmployeeID));
+            MapFieldToUiCommand(ShipViaUiCommand, TableDefinition.GetFieldDefinition(p => p.ShipVia));
         }
 
         protected override void Initialize()

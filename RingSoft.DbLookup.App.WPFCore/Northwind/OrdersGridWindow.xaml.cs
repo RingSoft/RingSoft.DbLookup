@@ -36,34 +36,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                         args.Handled = true;
             };
         }
-        public override void ResetViewForNewRecord()
-        {
-            TabControl.SelectedIndex = 0;
-            CustomerControl.Focus();
-            base.ResetViewForNewRecord();
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
-            var focusSuccess = true;
-
-            if (fieldDefinition == table.GetFieldDefinition(p => p.CustomerID))
-                focusSuccess = CustomerControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.EmployeeID))
-                focusSuccess = EmployeeControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.ShipVia))
-                focusSuccess = ShipViaControl.Focus();
-
-            if (focusSuccess)
-                base.OnValidationFail(fieldDefinition, text, caption);
-        }
-
-        public void OnGridValidationFailed()
-        {
-            TabControl.SelectedIndex = 0;
-            DetailsGrid.Focus();
-        }
 
         public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
         {

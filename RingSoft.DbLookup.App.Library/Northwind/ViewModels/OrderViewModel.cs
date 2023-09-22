@@ -521,6 +521,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
+        public override void OnNewButton()
+        {
+            base.OnNewButton();
+            CustomerUiCommand.SetFocus();
+        }
+
         protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID, GridMode);

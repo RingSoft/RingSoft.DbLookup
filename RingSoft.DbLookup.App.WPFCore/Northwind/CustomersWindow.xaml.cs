@@ -25,22 +25,5 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
             RegisterFormKeyControl(CustomerControl);
         }
-
-        public override void ResetViewForNewRecord()
-        {
-            TabControl.SelectedIndex = 0;
-            CustomerControl.Focus();
-            base.ResetViewForNewRecord();
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers;
-
-            if (fieldDefinition == table.GetFieldDefinition(p => p.CustomerID))
-                CustomerControl.Focus();
-
-            base.OnValidationFail(fieldDefinition, text, caption);
-        }
     }
 }

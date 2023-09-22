@@ -198,8 +198,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public UiCommand CompanyNameUiCommand { get; } = new UiCommand();
+
         private INorthwindLookupContext _lookupContext;
-        
+
+        public CustomerViewModel()
+        {
+            MapFieldToUiCommand(CompanyNameUiCommand
+                , TableDefinition.GetFieldDefinition(p => p.CompanyName));
+        }
+
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
@@ -230,6 +238,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(newEntity.CustomerID);
             KeyAutoFillValue = new AutoFillValue(primaryKeyValue, customer.CustomerID);
+            KeyAutoFillUiCommand.IsEnabled = false;
             CustomerId = KeyAutoFillValue.Text;
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();

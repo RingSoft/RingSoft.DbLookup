@@ -32,6 +32,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public abstract Control MaintenanceButtonsControl { get; set; }
 
+        private VmUiControl _keyAutoFillControlUiControl;
+
         public IDbMaintenanceView View { get; set; }
 
         public DbMaintenanceStatusBar StatusBar { get; set; }
@@ -165,6 +167,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Path = new PropertyPath(nameof(ViewModel.KeyAutoFillValue)),
                 Mode = BindingMode.TwoWay
             });
+
+            _keyAutoFillControlUiControl = new VmUiControl(keyAutoFillControl, ViewModel.KeyAutoFillUiCommand);
+            keyAutoFillControl.UiCommand = _keyAutoFillControlUiControl.Command;
 
             keyAutoFillControl.AutoFillLostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
             KeyAutoFillControl.SetReadOnlyMode(false);

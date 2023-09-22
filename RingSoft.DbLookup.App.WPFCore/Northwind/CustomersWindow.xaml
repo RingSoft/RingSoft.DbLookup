@@ -29,10 +29,15 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+
             <Label x:Name="CustomerIdLabel" Content="Customer ID" Style="{StaticResource ControlLabel}" IsEnabled="{Binding PrimaryKeyControlsEnabled}" />
-            <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper" UiCommand="{Binding KeyAutoFillUiCommand}" UiLabel="{Binding ElementName=CustomerIdLabel}"/>
-            <Label Grid.Row="0" Grid.Column="2" Content="Company Name" Style="{StaticResource ControlLabel}" />
-            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" DesignText="Ana Trujillo Emparedados y helados"/>
+
+            <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper" UiLabel="{Binding ElementName=CustomerIdLabel}"/>
+
+            <Label Grid.Row="0" Grid.Column="2" x:Name="CompanyNameLabel" Content="Company Name" Style="{StaticResource ControlLabel}" />
+
+            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" DesignText="Ana Trujillo Emparedados y helados" UiCommand="{Binding CompanyNameUiCommand}" UiLabel="{Binding ElementName=CompanyNameLabel}"/>
+
             <Label Grid.Row="1" Grid.Column="0" Content="Contact Title" Style="{StaticResource ControlLabel}" />
             <dec:StringEditControl Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}"/>
             <Label Grid.Row="1" Grid.Column="2" Content="Contact Name" Style="{StaticResource ControlLabel}" />

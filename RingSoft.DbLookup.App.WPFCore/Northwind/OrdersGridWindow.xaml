@@ -63,7 +63,7 @@
 
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
-                <lc:AutoFillControl x:Name="EmployeeControl" Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150" UiCommand="{Binding EmployeeUiCommand}" UiLabel="{Binding ElementName=EmployeeLabel}"/>
+                <lc:AutoFillControl Setup="{Binding EmployeeAutoFillSetup}" Value="{Binding Path=Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="Margaret Peacock" Width="150" UiCommand="{Binding EmployeeUiCommand}" UiLabel="{Binding ElementName=EmployeeLabel}"/>
 
                 <Label x:Name="ShipViaLabel" Content="Ship Via" Style="{StaticResource ControlLabel}"/>
 

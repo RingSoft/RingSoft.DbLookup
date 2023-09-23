@@ -411,10 +411,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupControl.LookupDataMaui.RefreshData(LookupControl.SearchText);
             if (AutoFillControl != null)
             {
-                AutoFillControl.RefreshValue(token.NewAutoFillValue);
+                AutoFillControl.RefreshValue(token);
             }
             //RefreshData?.Invoke(this, EventArgs.Empty);
-            if (token.DbSelect)
+            if (token.RefreshMode ==AutoFillRefreshModes.DbSelect)
             {
                 Close();
                 //LookupControl.LookupDataMaui.SetNewPrimaryKeyValue(token.NewAutoFillValue.PrimaryKeyValue);

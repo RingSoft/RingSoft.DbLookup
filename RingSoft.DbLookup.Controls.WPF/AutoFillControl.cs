@@ -432,20 +432,33 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        public void RefreshValue(AutoFillValue autoFillValue)
+        public void RefreshValue(LookupCallBackToken token)
         {
-            var process = autoFillValue != null;
-            if (process)
+            if (token.RefreshMode == AutoFillRefreshModes.DbDelete)
             {
-                process = Value == null || Value.PrimaryKeyValue.IsEqualTo(autoFillValue.PrimaryKeyValue);
-            }
-            if (process)
-            {
-                AutoFillDataMaui.SetValue(autoFillValue.PrimaryKeyValue, autoFillValue.Text, false);
-            }
+                if (Value != null && Value.PrimaryKeyValue.IsEqualTo(token.DeletedPrimaryKeyValue))
+                {
+                    AutoFillDataMaui.SetValue(null, string.Empty, false);
+                    Value = null;
+                    RaiseDirtyFlag();
+                }
 
-            Value = autoFillValue;
-            RaiseDirtyFlag();
+                return;
+            }
+            var process = token.NewAutoFillValue != null;
+            if (process)
+            {
+                if (token.RefreshMode == AutoFillRefreshModes.PkRefresh)
+                {
+                    process = Value != null && Value.PrimaryKeyValue.IsEqualTo(token.NewAutoFillValue.PrimaryKeyValue);
+                }
+            }
+            if (process)
+            {
+                AutoFillDataMaui.SetValue(token.NewAutoFillValue.PrimaryKeyValue, token.NewAutoFillValue.Text, false);
+                Value = token.NewAutoFillValue;
+                RaiseDirtyFlag();
+            }
         }
 
         public void OnSelect()

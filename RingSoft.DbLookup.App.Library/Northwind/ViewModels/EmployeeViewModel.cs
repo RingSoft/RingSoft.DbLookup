@@ -317,7 +317,25 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public UiCommand SupervisorUiCommand { get; } = new UiCommand();
+
+        public UiCommand FirstNameUiCommand { get; } = new UiCommand();
+
+        public UiCommand LastNameUiCommand { get; } = new UiCommand();
+
         private INorthwindLookupContext _lookupContext;
+
+        public EmployeeViewModel()
+        {
+            MapFieldToUiCommand(FirstNameUiCommand
+            , TableDefinition.GetFieldDefinition(p => p.FirstName));
+
+            MapFieldToUiCommand(LastNameUiCommand
+                , TableDefinition.GetFieldDefinition(p => p.LastName));
+
+            MapFieldToUiCommand(SupervisorUiCommand
+                , TableDefinition.GetFieldDefinition(p => p.ReportsTo));
+        }
 
         protected override void Initialize()
         {
@@ -346,6 +364,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrdersLookupDefinition = ordersLookup;
 
             base.Initialize();
+        }
+
+        public override void OnNewButton()
+        {
+            base.OnNewButton();
+            FirstNameUiCommand.SetFocus();
         }
 
         protected override Employee PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)

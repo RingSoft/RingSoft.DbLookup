@@ -156,6 +156,8 @@ namespace RingSoft.DbLookup.ModelDefinition
             return Context.CanDeleteTable(this, lookupDefinition);
         }
 
+        public bool ValidateDelete { get; private set; } = true;
+
         public bool TempTable { get; private set; }
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();

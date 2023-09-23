@@ -143,11 +143,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
-        public void RefreshValue(AutoFillValue autoFillValue)
+        public void RefreshValue(LookupCallBackToken token)
         {
-            if (autoFillValue.PrimaryKeyValue.IsEqualTo(Value.PrimaryKeyValue))
+            if (token.NewAutoFillValue.PrimaryKeyValue.IsEqualTo(Value.PrimaryKeyValue))
             {
-                Value = autoFillValue;
+                Value = token.NewAutoFillValue;
             }
         }
 

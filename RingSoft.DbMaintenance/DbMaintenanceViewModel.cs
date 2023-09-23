@@ -619,7 +619,7 @@ namespace RingSoft.DbMaintenance
                 {
                     LookupAddViewArgs.CallBackToken.NewAutoFillValue =
                         TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
-                    LookupAddViewArgs.CallBackToken.DbSelect = true;
+                    LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.DbSelect;
                 }
 
                 Processor.CloseWindow();
@@ -875,6 +875,8 @@ namespace RingSoft.DbMaintenance
                         LookupAddViewArgs.CallBackToken.NewAutoFillValue =
                             TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
                     }
+
+                    LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.PkRefresh;
                     LookupAddViewArgs.CallBackToken.OnRefreshData();
                 }
 
@@ -1207,7 +1209,10 @@ namespace RingSoft.DbMaintenance
                 if (LookupAddViewArgs != null && LookupAddViewArgs.CallBackToken != null)
                 {
                     LookupAddViewArgs.CallBackToken.NewAutoFillValue = null;
+                    LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.DbDelete;
                     LookupAddViewArgs.SelectedPrimaryKeyValue = null;
+                    LookupAddViewArgs.CallBackToken.DeletedPrimaryKeyValue
+                        = TableDefinition.GetPrimaryKeyValueFromEntity(Entity);
                     LookupAddViewArgs.CallBackToken.OnRefreshData(RefreshOperations.Delete);
                 }
 

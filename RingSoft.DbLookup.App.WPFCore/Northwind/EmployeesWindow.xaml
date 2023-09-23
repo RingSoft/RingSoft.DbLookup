@@ -38,12 +38,19 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
+
             <Label Style="{StaticResource ControlLabel}" Content="Employee ID"/>
+
             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=EmployeeId}" DesignText="123456789" HorizontalAlignment="Left" Width="100"/>
-            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="First Name"/>
-            <dec:StringEditControl x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}"/>
-            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Last Name"/>
-            <dec:StringEditControl x:Name="LastNameTextBox" Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" x:Name="FirstNameLabel" Style="{StaticResource ControlLabel}" Content="First Name"/>
+
+            <dec:StringEditControl x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}" UiCommand="{Binding FirstNameUiCommand}" UiLabel="{Binding ElementName=FirstNameLabel}"/>
+
+            <Label Grid.Row="1" Grid.Column="2" x:Name="LastNameLabel" Style="{StaticResource ControlLabel}" Content="Last Name"/>
+
+            <dec:StringEditControl x:Name="LastNameTextBox" Grid.Row="1" Grid.Column="3" Style="{StaticResource StandardTextBox}" Text="{Binding Path=LastName, Mode=TwoWay}" UiCommand="{Binding LastNameUiCommand}" UiLabel="{Binding ElementName=LastNameLabel}"/>
+
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Courtesy"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
                 <dec:StringEditControl Style="{StaticResource StandardTextBox}" Text="{Binding Path=TitleOfCourtesy, Mode=TwoWay}" Width="100"/>
@@ -54,8 +61,11 @@
             </StackPanel>
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Title"/>
             <dec:StringEditControl Grid.Row="3" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=Title, Mode=TwoWay}"/>
-            <Label Grid.Row="3" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Supervisor"/>
-            <lc:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}"/>
+            
+            <Label Grid.Row="3" Grid.Column="2" x:Name="ReportsToLabel" Style="{StaticResource ControlLabel}" Content="Supervisor"/>
+
+            <lc:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}" UiCommand="{Binding SupervisorUiCommand}" UiLabel="{Binding ElementName=ReportsToLabel}"/>
+
             <TabControl x:Name="TabControl" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
                 <TabItem Header="Contact Info">
                     <Grid Width="500" HorizontalAlignment="Left">

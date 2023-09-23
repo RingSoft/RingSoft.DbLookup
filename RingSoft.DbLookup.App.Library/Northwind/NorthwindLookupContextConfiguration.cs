@@ -45,6 +45,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public LookupDefinition<EmployeeLookup, Employee> EmployeesLookup { get; private set; }
 
+        public LookupDefinition<EmployeeTerritoryLookup, EmployeeTerritory> EmployeeTerritoryLookup { get; private set; }
+
         public LookupDefinition<ShipperLookup, Shipper> ShippersLookup { get; private set; }
 
         public LookupDefinition<SupplierLookup, Supplier> SuppliersLookup { get; private set; }
@@ -236,6 +238,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", p => p.FullName, 40);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
+
+            EmployeeTerritoryLookup = new LookupDefinition<EmployeeTerritoryLookup, EmployeeTerritory>
+                (_lookupContext.EmployeeTerritories);
+            EmployeeTerritoryLookup.Include(p => p.Employee)
+                .AddVisibleColumnDefinition(p => p.Employee
+                    , "Employee"
+                    , p => p.FullName, 50);
+            EmployeeTerritoryLookup.Include(p => p.Territory)
+                .AddVisibleColumnDefinition(p => p.Territory
+                    , "Territory"
+                    , p => p.TerritoryDescription, 50);
+            
+            _lookupContext.EmployeeTerritories.HasLookupDefinition(EmployeeTerritoryLookup);
 
             ShippersLookup = new LookupDefinition<ShipperLookup, Shipper>(_lookupContext.Shippers);
             ShippersLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 75);

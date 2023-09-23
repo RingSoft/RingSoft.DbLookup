@@ -17,7 +17,9 @@ namespace RingSoft.DbLookup.Lookup
 
         public AutoFillValue NewAutoFillValue { get; set; }
 
-        public bool DbSelect { get; set; }
+        public PrimaryKeyValue DeletedPrimaryKeyValue { get; set; }
+
+        public AutoFillRefreshModes RefreshMode { get; set; }
 
         public RefreshOperations RefreshOperation { get; private set; }
 

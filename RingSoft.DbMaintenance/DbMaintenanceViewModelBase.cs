@@ -368,6 +368,8 @@ namespace RingSoft.DbMaintenance
         public UiCommand SelectUiCommand { get; }
         public RelayCommand PrintCommand { get; }
         public UiCommand PrintUiCommand { get; }
+        public UiCommand MaintenanceButtonsUiCommand { get; }
+        public UiCommand StatusBarUiCommand { get; }
         public bool CheckDirtyFlag { get; set; } = true;
 
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
@@ -402,6 +404,9 @@ namespace RingSoft.DbMaintenance
             PrintUiCommand = new UiCommand();
             NewButtonEnabled = SaveButtonEnabled = true;
             KeyAutoFillUiCommand = new UiCommand();
+
+            MaintenanceButtonsUiCommand = new UiCommand();
+            StatusBarUiCommand = new UiCommand();
         }
 
         public void MapFieldToUiCommand(UiCommand uiCommand, FieldDefinition fieldDefinition)

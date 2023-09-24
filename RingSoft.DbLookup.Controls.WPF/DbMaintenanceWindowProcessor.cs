@@ -14,29 +14,35 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public abstract class DbMaintenanceWindowProcessor : IDbMaintenanceProcessor
     {
-        public abstract DbMaintenanceViewModelBase ViewModel { get; set; }
+        public abstract DbMaintenanceViewModelBase ViewModel { get; protected set; }
 
-        public AutoFillControl KeyAutoFillControl { get; set; }
+        public  AutoFillControl KeyAutoFillControl { get; protected set; }
 
-        public abstract Button SaveButton { get; set; }
-        public abstract Button SelectButton { get; set; }
-        public abstract Button DeleteButton { get; set; }
-        public abstract Button FindButton { get; set; }
-        public abstract Button NewButton { get; set;  }
-        public abstract Button CloseButton { get; set; }
-        public abstract Button NextButton { get; set;  }
-        public abstract Button PreviousButton { get; set; }
-        public abstract Button PrintButton { get; set; }
-
-        public abstract BaseWindow MaintenanceWindow { get; set; }
-
-        public abstract Control MaintenanceButtonsControl { get; set; }
+        public abstract Button SaveButton { get; protected set; }
+        public VmUiControl SaveButtonUiControl { get; private set; }
+        public abstract Button SelectButton { get; protected set; }
+        public VmUiControl SelectButtonUiControl { get; private set; }
+        public abstract Button DeleteButton { get; protected set; }
+        public VmUiControl DeleteButtonUiControl { get; private set; }
+        public abstract Button FindButton { get; protected set; }
+        public VmUiControl FindButtonUiControl { get; private set; }
+        public abstract Button NewButton { get; protected set;  }
+        public VmUiControl NewButtonUiControl { get; private set; }
+        public abstract Button CloseButton { get; protected set; }
+        public abstract Button NextButton { get; protected set;  }
+        public VmUiControl NextButtonUiControl { get; private set; }
+        public abstract Button PreviousButton { get; protected set; }
+        public VmUiControl PreviousButtonUiControl { get; private set; }
+        public abstract Button PrintButton { get; protected set; }
+        public VmUiControl PrintButtonUiControl { get; private set; }
+        public abstract BaseWindow MaintenanceWindow { get; protected set; }
+        public abstract Control MaintenanceButtonsControl { get; protected set; }
+        public VmUiControl MaintenanceButtonsUiControl { get; private set; }
+        public IDbMaintenanceView View { get; private set; }
+        public DbMaintenanceStatusBar StatusBar { get; private set; }
+        public VmUiControl StatusBarUiControl { get; private set; }
 
         private VmUiControl _keyAutoFillControlUiControl;
-
-        public IDbMaintenanceView View { get; set; }
-
-        public DbMaintenanceStatusBar StatusBar { get; set; }
 
 
         public virtual void SetupControl(IDbMaintenanceView view)
@@ -58,6 +64,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             NextButton.Command = ViewModel.NextCommand;
             PrintButton.Command = ViewModel.PrintCommand;
             CloseButton.Click += (_, _) => CloseWindow();
+
+            PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
+            NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
+            SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
+            DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
+            FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+            SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+            NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
+            PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
 
             MaintenanceWindow.ShowInTaskbar = false;
             MaintenanceWindow.EnterToTab = true;
@@ -102,6 +117,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             ViewModel = viewModel;
             View = view;
             SetupStatusBar(viewModel, statusBar);
+            MaintenanceButtonsUiControl =
+                new VmUiControl(MaintenanceButtonsControl, ViewModel.MaintenanceButtonsUiCommand);
+            if (statusBar != null)
+            {
+                StatusBarUiControl = new VmUiControl(statusBar, ViewModel.StatusBarUiCommand);
+            }
         }
 
         public void SetupStatusBar(DbMaintenanceViewModelBase viewModel, DbMaintenanceStatusBar statusBar)

@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="7.18.0" />
+    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="7.19.0" />
     <PackageReference Include="RingSoft.Printing.Interop" Version="7.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>

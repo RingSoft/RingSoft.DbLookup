@@ -807,7 +807,11 @@ namespace RingSoft.DbLookup.Lookup
             var entity = FilteredQuery.LastOrDefault();
             CurrentList.Clear();
             CurrentList.AddRange(GetPreviousRecordSet(entity, LookupControl.PageSize - 1));
-            CurrentList.Add(entity);
+            if (CurrentList.Count == LookupControl.PageSize - 1)
+            {
+                CurrentList.Add(entity);
+            }
+
             SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
         }
 

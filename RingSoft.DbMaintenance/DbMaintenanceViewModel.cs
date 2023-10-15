@@ -652,9 +652,9 @@ namespace RingSoft.DbMaintenance
             PrimaryKeyControlsEnabled = true;
             ReadOnlyMode = false;
 
-            //View.ResetViewForNewRecord();
             KeyAutoFillUiCommand.IsEnabled = true;
             KeyAutoFillUiCommand.SetFocus();
+            View.ResetViewForNewRecord();
             RecordDirty = false;
             FireNewEvent();
         }

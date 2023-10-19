@@ -289,15 +289,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (!_allowView)
             {
                 ViewButton.Visibility = AddButton.Visibility = Visibility.Collapsed;
-                if (LookupControl != null)
-                {
-                    LookupControl.ShowAdvancedFindButton = false;
-                }
+                //if (LookupControl != null)
+                //{
+                //    LookupControl.ShowAdvancedFindButton = false;
+                //}
             }
 
             if (LookupControl != null)
             {
                 LookupControl.SetLookupWindow(this);
+                LookupControl.AllowViewDetails = _allowView;
             }
         }
 

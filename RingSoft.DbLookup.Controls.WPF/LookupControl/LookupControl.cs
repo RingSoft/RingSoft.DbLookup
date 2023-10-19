@@ -240,6 +240,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowRecordCountProps { get; set; }
 
+        public bool AllowViewDetails { get; set; } = true;
+
         //--------------------------------------------------------------
 
         private LookupSearchForHost _lookupSearchForHost;
@@ -419,6 +421,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public ILookupWindow LookupWindow { get; private set; }
 
         public bool HideUserDoubleClickRowMessage { get; set; }
+
+        public bool AllowOnEnter { get; set; } = true;
 
         /// <summary>
         /// Occurs when a user wishes to add or view a selected lookup row.  Set Handled property to True to not send this message to the LookupContext.
@@ -2029,6 +2033,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var addViewArgs = new LookupAddViewArgs(lookupData, true, LookupFormModes.View, 
                 "", Window.GetWindow(this))
             {
+                AllowViewDetails = AllowViewDetails,
             };
 
             addViewArgs.InputParameter = new AdvancedFindInput
@@ -2120,7 +2125,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private bool OnEnter()
         {
-            if (ListView == null || LookupDefinition.ReadOnlyMode)
+            if (ListView == null || LookupDefinition.ReadOnlyMode || !AllowOnEnter)
             {
                 SystemSounds.Exclamation.Play();
             }

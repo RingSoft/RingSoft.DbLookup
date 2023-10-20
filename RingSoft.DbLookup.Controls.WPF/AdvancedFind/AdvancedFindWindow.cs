@@ -357,12 +357,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             ShowFiltersEllipse(false);
             if (LookupControl != null)
             {
-                if (_addViewArgs != null)
-                {
-                    LookupControl.HideUserDoubleClickRowMessage = !_addViewArgs.AllowViewDetails;
-                    LookupControl.AllowOnEnter = _addViewArgs.AllowViewDetails;
-                }
-
                 LookupControl.Loaded += (sender, args) =>
                 {
                     if (_refreshAfterLoad)

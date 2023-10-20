@@ -89,8 +89,6 @@
 
         public bool LookupReadOnlyMode { get; set; }
 
-        public bool AllowViewDetails { get; set; } = true;
-
         public PrimaryKeyValue ReadOnlyPrimaryKeyValue { get; set; }
 
         public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }

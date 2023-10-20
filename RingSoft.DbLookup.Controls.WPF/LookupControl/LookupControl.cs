@@ -240,8 +240,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowRecordCountProps { get; set; }
 
-        public bool AllowViewDetails { get; set; } = true;
-
         //--------------------------------------------------------------
 
         private LookupSearchForHost _lookupSearchForHost;
@@ -1438,7 +1436,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     if (LookupWindow == null && !HideUserDoubleClickRowMessage)
                     {
-                        ListTextBox.Visibility = Visibility.Visible;
+                        if (LookupDefinition.TableDefinition.CanViewTable)
+                        {
+                            ListTextBox.Visibility = Visibility.Visible;
+                        }
                     }
                     var showRecordCountButton = _dataSource.Count == PageSize;
                     if (showRecordCountButton)
@@ -2031,10 +2032,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SystemGlobals.AdvancedFindLookupContext.AdvancedFindLookup.GetLookupDataMaui(LookupDefinition, true);
 
             var addViewArgs = new LookupAddViewArgs(lookupData, true, LookupFormModes.View, 
-                "", Window.GetWindow(this))
-            {
-                AllowViewDetails = AllowViewDetails,
-            };
+                "", Window.GetWindow(this));
 
             addViewArgs.InputParameter = new AdvancedFindInput
             {

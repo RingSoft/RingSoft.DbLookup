@@ -298,7 +298,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl != null)
             {
                 LookupControl.SetLookupWindow(this);
-                LookupControl.AllowViewDetails = _allowView;
             }
         }
 

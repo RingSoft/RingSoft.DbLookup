@@ -147,6 +147,20 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ReadOnlyMode => _readOnlyMode;
 
+        public bool AllowAdvancedFind
+        {
+            get => _allowAdvancedFind;
+            set
+            {
+                if (value == _allowAdvancedFind) return;
+                _allowAdvancedFind = value;
+                if (LookupControl != null && !_allowAdvancedFind)
+                {
+                    LookupControl.AdvancedFindButton.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
         /// <summary>
         /// Occurs when a lookup row is selected by the user.
         /// </summary>
@@ -167,6 +181,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _readOnlyMode;
         private PrimaryKeyValue _readOnlyPrimaryKeyValue;
         private Size _oldSize;
+        private bool _allowAdvancedFind = true;
 
         static LookupWindow()
         {
@@ -210,7 +225,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     }
                 }
 
-                if (!LookupDefinition.TableDefinition.CanViewTable)
+                if (!LookupDefinition.TableDefinition.CanViewTable || !AllowAdvancedFind)
                 {
                     ViewButton.Visibility = Visibility.Collapsed;
                     LookupControl.ShowAdvancedFindButton = false;
@@ -298,6 +313,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupControl != null)
             {
                 LookupControl.SetLookupWindow(this);
+                if (!AllowAdvancedFind)
+                {
+                    LookupControl.ShowAdvancedFindButton = false;
+                }
             }
         }
 

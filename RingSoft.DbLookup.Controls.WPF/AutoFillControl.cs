@@ -497,6 +497,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public AutoFillDataMauiBase AutoFillDataMaui { get; private set; }
 
+        public bool AllowAdvancedFind { get; set; } = true;
+
 
         public event EventHandler ControlDirty;
         public event EventHandler LookupSelect;
@@ -1067,6 +1069,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 , this
                 , readOnlyPrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
+            lookupWindow.AllowAdvancedFind = AllowAdvancedFind;
 
             if (Popup != null)
                 Popup.IsOpen = false;

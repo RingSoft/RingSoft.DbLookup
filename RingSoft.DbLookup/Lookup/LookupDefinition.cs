@@ -297,7 +297,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns>
         /// The new Primary Key Value and new lookup entity.
         /// </returns>
-        public NewAddOnTheFlyResult ShowAddOnTheFlyWindow(string keyText, object ownerWindow,
+        public NewAddOnTheFlyResult ShowAddOnTheFlyWindow(string keyText, object ownerWindow  = null,
             PrimaryKeyValue newRecordPrimaryKeyValue = null, object addViewParameter = null, PrimaryKeyValue selectedPrimaryKeyValue = null)
         {
             var addNewRecordProcessor =

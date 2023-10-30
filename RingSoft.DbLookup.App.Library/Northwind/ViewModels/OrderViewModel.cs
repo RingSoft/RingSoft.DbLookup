@@ -16,8 +16,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public interface IOrderView : IDbMaintenanceView
     {
-        object OwnerWindow { get; }
-
         void SetFocusToGrid(OrderDetailsGridRow row, int columnId);
     }
 

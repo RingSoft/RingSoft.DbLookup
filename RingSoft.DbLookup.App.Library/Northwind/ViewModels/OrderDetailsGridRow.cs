@@ -125,7 +125,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             {
                                 var newProductResult =
                                     _lookupContext.NorthwindContextConfiguration.ProductsLookup.ShowAddOnTheFlyWindow(
-                                        item, _manager.OrderViewModel.OrderView.OwnerWindow);
+                                        item);
                                 if (newProductResult.NewPrimaryKeyValue != null
                                     && newProductResult.NewPrimaryKeyValue.IsValid())
                                 {

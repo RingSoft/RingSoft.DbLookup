@@ -745,7 +745,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (_customerDirty)
             {
-                if (Customer?.PrimaryKeyValue == null || !Customer.PrimaryKeyValue.IsValid)
+                if (Customer?.PrimaryKeyValue == null || !Customer.PrimaryKeyValue.IsValid())
                 {
                     CompanyName = string.Empty;
                 }
@@ -778,7 +778,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public bool ValidateCustomer()
         {
             if (Customer != null && !string.IsNullOrEmpty(Customer.Text) &&
-                !Customer.PrimaryKeyValue.IsValid)
+                !Customer.PrimaryKeyValue.IsValid())
             {
                 var message = "Invalid Customer!";
                 ControlsGlobals.UserInterface.ShowMessageBox(message, "Validation Fail", RsMessageBoxIcons.Exclamation);

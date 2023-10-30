@@ -1652,7 +1652,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             _currentPageSize = GetPageSize();
 
             if (String.IsNullOrEmpty(initialSearchFor) &&
-                (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid))
+                (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid()))
             {
                 //LookupData.GetInitData();
                 LookupDataMaui.GetInitData();
@@ -1661,7 +1661,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (SearchForHost != null)
                 {
-                    if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid)
+                    if (initialSearchForPrimaryKeyValue == null || !initialSearchForPrimaryKeyValue.IsValid())
                     {
                         var forceRefresh = SearchForHost.SearchText == initialSearchFor;
 

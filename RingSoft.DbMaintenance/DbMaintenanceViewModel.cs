@@ -300,7 +300,7 @@ namespace RingSoft.DbMaintenance
 
                 NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit;
 
-                if (primaryKeyValue != null && primaryKeyValue.IsValid)
+                if (primaryKeyValue != null && primaryKeyValue.IsValid())
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
 
                 if (LookupAddViewArgs.LookupReadOnlyMode)
@@ -565,7 +565,7 @@ namespace RingSoft.DbMaintenance
 
             var searchText = FindButtonInitialSearchFor;
             if (FindButtonLookupDefinition.InitialOrderByColumn != FindButtonLookupDefinition.InitialSortColumnDefinition &&
-                !FindButtonInitialSearchFor.IsNullOrEmpty() && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                !FindButtonInitialSearchFor.IsNullOrEmpty() && _lookupData.SelectedPrimaryKeyValue.IsValid())
             {
                 searchText =
                     FindButtonLookupDefinition.InitialOrderByColumn.GetTextForColumn(
@@ -615,7 +615,7 @@ namespace RingSoft.DbMaintenance
                     return;
 
                 _selectingRecord = true;
-                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())
                 {
                     LookupAddViewArgs.CallBackToken.NewAutoFillValue =
                         TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
@@ -870,7 +870,7 @@ namespace RingSoft.DbMaintenance
 
                 if (LookupAddViewArgs != null)
                 {
-                    if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid)
+                    if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())
                     {
                         LookupAddViewArgs.CallBackToken.NewAutoFillValue =
                             TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
@@ -1701,7 +1701,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="primaryKeyValue">The primary key value.</param>
         protected void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
         {
-            if (primaryKeyValue.IsValid)
+            if (primaryKeyValue.IsValid())
                 _lookupData.SelectPrimaryKey(primaryKeyValue);
         }
 

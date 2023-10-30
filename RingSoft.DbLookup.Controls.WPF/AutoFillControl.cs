@@ -1051,7 +1051,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 initialText = TextBox.Text;
 
             if (Setup.LookupDefinition.InitialOrderByColumn != Setup.LookupDefinition.InitialSortColumnDefinition &&
-                !initialText.IsNullOrEmpty() && Value.PrimaryKeyValue.IsValid)
+                !initialText.IsNullOrEmpty() && Value.PrimaryKeyValue.IsValid())
             {
                 initialText = Setup.LookupDefinition.InitialOrderByColumn.GetTextForColumn(Value.PrimaryKeyValue);
             }

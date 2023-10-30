@@ -126,7 +126,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                 var newProductResult =
                                     _lookupContext.NorthwindContextConfiguration.ProductsLookup.ShowAddOnTheFlyWindow(
                                         item, _manager.OrderViewModel.OrderView.OwnerWindow);
-                                if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
+                                if (newProductResult.NewPrimaryKeyValue != null
+                                    && newProductResult.NewPrimaryKeyValue.IsValid())
                                 {
                                     var newAutoFillValue = RsDbLookupAppGlobals
                                         .EfProcessor

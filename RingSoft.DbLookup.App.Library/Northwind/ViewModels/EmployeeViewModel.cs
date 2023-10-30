@@ -446,7 +446,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 HireDate = HireDate
             };
 
-            if (ReportsTo != null && ReportsTo.PrimaryKeyValue.IsValid)
+            if (ReportsTo != null && ReportsTo.PrimaryKeyValue.IsValid())
             {
                 var supervisor = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(ReportsTo.PrimaryKeyValue);
                 employee.ReportsTo = supervisor.EmployeeID;

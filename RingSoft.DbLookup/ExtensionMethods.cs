@@ -125,9 +125,22 @@ namespace RingSoft.DbLookup
             }
         }
 
+        public static bool IsValid(this PrimaryKeyValue pkValue)
+        {
+            if (pkValue == null)
+            {
+                return false;
+            }
+
+            return pkValue.IntIsValid;
+        }
         public static bool IsValid(this AutoFillValue autoFillValue)
         {
-            return autoFillValue?.PrimaryKeyValue != null && autoFillValue.PrimaryKeyValue.IsValid;
+            if (autoFillValue == null)
+            {
+                return false;
+            }
+            return autoFillValue.PrimaryKeyValue.IsValid();
         }
 
         public static string ConvertPropertyNameToDescription(this string propertyName)

@@ -219,7 +219,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public bool LocationLostFocusValidation(object ownerWindow)
         {
-            if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.IsValid &&
+            if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.IsValid() &&
                 !LocationAutoFillValue.Text.IsNullOrEmpty())
             {
                 var message =
@@ -230,7 +230,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.ShowAddOnTheFlyWindow(
                     LocationAutoFillValue.Text, ownerWindow);
 
-                if (!newRecord.NewPrimaryKeyValue.IsValid)
+                if (!newRecord.NewPrimaryKeyValue.IsValid())
                     return false;
 
                 LocationAutoFillValue = RsDbLookupAppGlobals
@@ -244,7 +244,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public bool ManufacturerLostFocusValidation(object ownerWindow)
         {
-            if (ManufacturerAutoFillValue != null && !ManufacturerAutoFillValue.PrimaryKeyValue.IsValid &&
+            if (ManufacturerAutoFillValue != null && !ManufacturerAutoFillValue.PrimaryKeyValue.IsValid() &&
                 !ManufacturerAutoFillValue.Text.IsNullOrEmpty())
             {
                 var message =
@@ -256,7 +256,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                     _lookupContext.MegaDbContextConfiguration.ManufacturersLookup.ShowAddOnTheFlyWindow(
                         ManufacturerAutoFillValue.Text, ownerWindow);
 
-                if (!newRecord.NewPrimaryKeyValue.IsValid)
+                if (!newRecord.NewPrimaryKeyValue.IsValid())
                     return false;
 
                 ManufacturerAutoFillValue = RsDbLookupAppGlobals

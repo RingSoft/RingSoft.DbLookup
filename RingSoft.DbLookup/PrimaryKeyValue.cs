@@ -72,7 +72,7 @@ namespace RingSoft.DbLookup
         /// <returns>
         ///   <c>false</c> if at least one value field is null; otherwise, <c>true</c>.
         /// </returns>
-        public bool IsValid
+        internal bool IntIsValid
         {
             get
             {
@@ -91,7 +91,7 @@ namespace RingSoft.DbLookup
             {
                 var result = string.Empty;
 
-                if (IsValid)
+                if (IntIsValid)
                 {
                     var firstRecord = true;
                     foreach (var keyValueField in KeyValueFields)

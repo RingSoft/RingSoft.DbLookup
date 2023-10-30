@@ -356,7 +356,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 query.AddOrderBySegment(primaryKeyField.FieldName, OrderByTypes.Ascending);
             }
 
-            if (primaryKey != null && primaryKey.IsValid && primaryKey.TableDefinition == this)
+            if (primaryKey != null && primaryKey.IsValid() && primaryKey.TableDefinition == this)
             {
                 if (primaryKey.KeyValueFields.Count > 1)
                 {
@@ -395,7 +395,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 }
             }
 
-            if (primaryKey == null || !primaryKey.IsValid)
+            if (primaryKey == null || !primaryKey.IsValid())
             {
                 ProcessChunkResult(query, result);
             }

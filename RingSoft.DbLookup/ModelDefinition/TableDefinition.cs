@@ -449,7 +449,7 @@ namespace RingSoft.DbLookup.ModelDefinition
             foreach (var fieldDefinition in fieldsToValidate)
             {
                 var autoFillValue = validationSource.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
-                if (autoFillValue != null && !autoFillValue.PrimaryKeyValue.IsValid &&
+                if (autoFillValue != null && !autoFillValue.PrimaryKeyValue.IsValid() &&
                     !autoFillValue.Text.IsNullOrEmpty())
                 {
                     var message = Context.ValidateFieldFailMessage(fieldDefinition);

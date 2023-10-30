@@ -325,7 +325,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ProductID = ProductId,
                 ProductName = KeyAutoFillValue.Text,
                 QuantityPerUnit = QuantityPerUnit,
-                UnitPrice = (float)UnitPrice,
+                UnitPrice = (float?)UnitPrice,
                 UnitsInStock = UnitsInStock,
                 UnitsOnOrder = UnitsOnOrder,
                 ReorderLevel = ReorderLevel,

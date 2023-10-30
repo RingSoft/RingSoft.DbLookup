@@ -233,8 +233,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 if (!newRecord.NewPrimaryKeyValue.IsValid)
                     return false;
 
-                LocationAutoFillValue =
-                    new AutoFillValue(newRecord.NewPrimaryKeyValue, newRecord.NewLookupEntity.Name);
+                LocationAutoFillValue = RsDbLookupAppGlobals
+                    .EfProcessor
+                    .MegaDbLookupContext
+                    .Locations
+                    .GetAutoFillValue(newRecord.NewPrimaryKeyValue.KeyString);
             }
             return true;
         }
@@ -256,8 +259,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 if (!newRecord.NewPrimaryKeyValue.IsValid)
                     return false;
 
-                ManufacturerAutoFillValue =
-                    new AutoFillValue(newRecord.NewPrimaryKeyValue, newRecord.NewLookupEntity.Name);
+                ManufacturerAutoFillValue = RsDbLookupAppGlobals
+                    .EfProcessor
+                    .MegaDbLookupContext
+                    .Manufacturers
+                    .GetAutoFillValue(newRecord.NewPrimaryKeyValue.KeyString);
+
             }
             return true;
         }

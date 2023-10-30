@@ -2,10 +2,8 @@
 
 namespace RingSoft.DbLookup
 {
-    public class NewAddOnTheFlyResult<TLookupEntity> where TLookupEntity : new()
+    public class NewAddOnTheFlyResult
     {
-        public TLookupEntity NewLookupEntity { get; private set; }
-
         public PrimaryKeyValue NewPrimaryKeyValue { get; private set; }
 
         internal NewAddOnTheFlyResult(PrimaryKeyValue newPrimaryKeyValue)
@@ -106,19 +104,21 @@ namespace RingSoft.DbLookup
             _lookupDefinition = lookupDefinition;
         }
 
-        public NewAddOnTheFlyResult<TLookupEntity> ShowAddOnTheFlyWindow()
+        public NewAddOnTheFlyResult ShowAddOnTheFlyWindow()
         {
             var lookupData =
                 _lookupDefinition
                     .TableDefinition
                     .LookupDefinition
                     .GetLookupDataMaui(_lookupDefinition, true);
+            lookupData.SetParentControls(this);
+            
             //var lookupData = new LookupData<TLookupEntity, TEntity>(_lookupDefinition, this);
             lookupData.LookupView += (sender, viewArgs) => { viewArgs.Handled = true; };
             var args = SetupProcessor(lookupData);
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
 
-            var result = new NewAddOnTheFlyResult<TLookupEntity>(lookupData.SelectedPrimaryKeyValue);
+            var result = new NewAddOnTheFlyResult(lookupData.SelectedPrimaryKeyValue);
             return result;
         }
     }

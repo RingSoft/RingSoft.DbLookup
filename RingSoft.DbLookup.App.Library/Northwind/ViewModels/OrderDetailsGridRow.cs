@@ -128,8 +128,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                         item, _manager.OrderViewModel.OrderView.OwnerWindow);
                                 if (newProductResult.NewPrimaryKeyValue != null && newProductResult.NewPrimaryKeyValue.IsValid)
                                 {
-                                    var newAutoFillValue = new AutoFillValue(newProductResult.NewPrimaryKeyValue,
-                                        newProductResult.NewLookupEntity.ProductName);
+                                    var newAutoFillValue = RsDbLookupAppGlobals
+                                        .EfProcessor
+                                        .NorthwindLookupContext
+                                        .Products
+                                        .GetAutoFillValue(newProductResult.NewPrimaryKeyValue.KeyString);
+
                                     validProduct = await SetProduct(newAutoFillValue);
                                 }
                             }

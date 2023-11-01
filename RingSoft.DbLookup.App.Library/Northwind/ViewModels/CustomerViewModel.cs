@@ -297,7 +297,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool SaveEntity(Customer entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveCustomer(entity);
+            return RsDbLookupAppGlobals
+                .EfProcessor
+                .NorthwindEfDataProcessor
+                .SaveCustomer(entity, MaintenanceMode == DbMaintenanceModes.AddMode);
         }
 
         protected override bool DeleteEntity()

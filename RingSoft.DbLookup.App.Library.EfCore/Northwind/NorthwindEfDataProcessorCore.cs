@@ -73,15 +73,13 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             return context.GetTable<Customer>().FirstOrDefault(f => f.CustomerID == customerId);
         }
 
-        public bool SaveCustomer(Customer customer)
+        public bool SaveCustomer(Customer customer, bool addMode)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Customer>();
-            if (table.FirstOrDefault(f => f.CustomerID == customer.CustomerID) == null)
+            if (addMode)
             {
                 return context.AddSaveEntity(customer, "Saving Customer");
             }
-
             return context.SaveEntity(customer, "Saving Customer");
         }
 

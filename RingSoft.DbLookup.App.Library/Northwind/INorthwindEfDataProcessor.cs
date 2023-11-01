@@ -9,7 +9,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         Customer GetCustomer(string customerId);
 
-        bool SaveCustomer(Customer customer);
+        bool SaveCustomer(Customer customer, bool addMode);
 
         bool DeleteCustomer(string customerId);
 

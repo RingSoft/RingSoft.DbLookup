@@ -14,6 +14,10 @@ using System.Text;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
+    public interface IOrderView : IDbMaintenanceView
+    {
+        void ShowAdvancedFind();
+    }
     public class OrderInput
     {
         public bool GridMode { get; set; }
@@ -423,10 +427,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public UiCommand ShipViaUiCommand { get; } = new UiCommand();
 
+        public RelayCommand AddModifyCommand { get; }
+
+        public RelayCommand ShowAdvFindCommand { get; }
+
+        public new IOrderView View { get; private set; }
+
+
         private readonly DateTime _newDateTime = DateTime.Today;
-
         private INorthwindLookupContext _lookupContext;
-
         private bool _customerDirty;
         
         public OrderViewModel()
@@ -440,6 +449,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             MapFieldToUiCommand(ShipViaUiCommand, TableDefinition.GetFieldDefinition(p => p.ShipVia));
 
             CustomerUiCommand.LostFocus += CustomerUiCommand_LostFocus;
+
+            AddModifyCommand = new RelayCommand((() =>
+            {
+                OnAddModify();
+            }));
+
+            ShowAdvFindCommand = new RelayCommand((() =>
+            {
+                if (View != null)
+                {
+                    View.ShowAdvancedFind();
+                }
+            }));
         }
 
         private async void CustomerUiCommand_LostFocus(object sender, UiLostFocusArgs e)
@@ -487,6 +509,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void Initialize()
         {
+            if (base.View is IOrderView orderView)
+            {
+                View = orderView;
+            }
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
             if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)

@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     /// <summary>
     /// Interaction logic for OrdersWindow.xaml
     /// </summary>
-    public partial class OrdersWindow
+    public partial class OrdersWindow : IOrderView
     {
         public override DbMaintenanceViewModelBase ViewModel => OrdersViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
@@ -23,21 +23,9 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             InitializeComponent();
             Initialize();
-
-            //CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
-            AddModifyButton.Click += (sender, args) => OrdersViewModel.OnAddModify();
-
-            //CustomerControl.PreviewLostKeyboardFocus += (sender, args) =>
-            //{
-            //    if (!this.IsWindowClosing(args.NewFocus))
-            //        if (!OrdersViewModel.ValidateCustomer())
-            //            args.Handled = true;
-            //};
-
-            AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
         }
 
-        private void ShowAdvancedFind()
+        public void ShowAdvancedFind()
         {
             var advancedFindWindow = new AdvancedFindWindow();
             advancedFindWindow.Loaded += (sender, args) => advancedFindWindow.ShowInTaskbar = true;

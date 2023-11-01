@@ -79,7 +79,7 @@
             <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
                 <TabItem Header="Details">
                     <DockPanel>
-                        <Button x:Name="AddModifyButton" Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top"/>
+                        <Button Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top" Command="{Binding AddModifyCommand}"/>
                         <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}" DesignText="Chef Anton's Cajun Seasoning">
                             <lc:LookupControl.LookupColumns>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="250" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
@@ -123,7 +123,7 @@
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
-                <Button x:Name="AdvancedFindButton" Content="_Advanced Find" />
+                <Button Content="_Advanced Find" Command="{Binding ShowAdvFindCommand}" />
 
             </StackPanel>
             <Grid Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">

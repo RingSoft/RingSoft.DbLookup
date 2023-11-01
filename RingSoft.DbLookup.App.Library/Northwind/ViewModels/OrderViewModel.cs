@@ -14,11 +14,6 @@ using System.Text;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
-    public interface IOrderView : IDbMaintenanceView
-    {
-        void SetFocusToGrid(OrderDetailsGridRow row, int columnId);
-    }
-
     public class OrderInput
     {
         public bool GridMode { get; set; }
@@ -27,11 +22,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     }
     public class OrderViewModel : DbMaintenanceViewModel<Order>
     {
-        public IOrderView OrderView { get; private set; }
-
-        //public override TableDefinition<Order> TableDefinition =>
-        //    RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders;
-
         #region Properties
 
         
@@ -418,6 +408,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
         #endregion
+
         public bool GridMode { get; set; }
 
         public bool SetInitialFocusToGrid { get; internal set; }
@@ -447,16 +438,56 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             MapFieldToUiCommand(CustomerUiCommand, TableDefinition.GetFieldDefinition(p => p.CustomerID));
             MapFieldToUiCommand(EmployeeUiCommand, TableDefinition.GetFieldDefinition(p => p.EmployeeID));
             MapFieldToUiCommand(ShipViaUiCommand, TableDefinition.GetFieldDefinition(p => p.ShipVia));
+
+            CustomerUiCommand.LostFocus += CustomerUiCommand_LostFocus;
+        }
+
+        private async void CustomerUiCommand_LostFocus(object sender, UiLostFocusArgs e)
+        {
+            if (Customer != null && !Customer.Text.IsNullOrEmpty() && !Customer.PrimaryKeyValue.IsValid())
+            {
+                var message = $"Customer {Customer.Text} was not found.  Do you wish to add it?";
+                var caption = "Invalid Customer";
+                var mbResult = await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, caption);
+                switch (mbResult)
+                {
+                    case MessageBoxButtonsResult.Yes:
+                        var aofResult = RsDbLookupAppGlobals
+                            .EfProcessor
+                            .NorthwindLookupContext
+                            .NorthwindContextConfiguration
+                            .CustomerIdLookup
+                            .ShowAddOnTheFlyWindow(Customer.Text);
+                        if (aofResult.NewPrimaryKeyValue.IsValid())
+                        {
+                            var customer = RsDbLookupAppGlobals
+                                .EfProcessor
+                                .NorthwindLookupContext
+                                .Customers
+                                .GetEntityFromPrimaryKeyValue(aofResult.NewPrimaryKeyValue);
+                            Customer = RsDbLookupAppGlobals
+                                .EfProcessor
+                                .NorthwindEfDataProcessor
+                                .GetCustomer(customer.CustomerID)
+                                .GetAutoFillValue();
+                        }
+                        else
+                        {
+                            e.ContinueFocusChange = false;
+                            return;
+                        }
+                        break;
+                    case MessageBoxButtonsResult.No:
+                        e.ContinueFocusChange = false;
+                        return;
+                }
+            }
+            OnCustomerIdLostFocus();
         }
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
-            
-
-            OrderView = View as IOrderView ??
-                             throw new ArgumentException(
-                                 $"ViewModel requires an {nameof(IOrderView)} interface.");
 
             if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
             {
@@ -739,7 +770,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteOrder(OrderId);
         }
 
-        public void OnCustomerIdLostFocus()
+        private void OnCustomerIdLostFocus()
         {
             if (_customerDirty)
             {

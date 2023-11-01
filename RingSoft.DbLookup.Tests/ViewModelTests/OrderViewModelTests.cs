@@ -10,8 +10,8 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
     [TestClass]
     public class OrderViewModelTests
     {
-        public static TestGlobals<OrderViewModel, TestOrderView> Globals { get; } =
-            new TestGlobals<OrderViewModel, TestOrderView>();
+        public static TestGlobals<OrderViewModel, TestDbMaintenanceView> Globals { get; } =
+            new TestGlobals<OrderViewModel, TestDbMaintenanceView>();
 
         [ClassInitialize]
         public static void Setup(TestContext testContext)

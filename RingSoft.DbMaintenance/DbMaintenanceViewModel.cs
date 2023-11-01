@@ -618,14 +618,16 @@ namespace RingSoft.DbMaintenance
                 if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())
                 {
                     LookupAddViewArgs.CallBackToken.NewAutoFillValue =
-                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
+                        TableDefinition
+                            .LookupDefinition
+                            .GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
                     LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.DbSelect;
                 }
 
                 Processor.CloseWindow();
                 //LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
-                LookupAddViewArgs.CallBackToken.OnRefreshData();
-
+                //LookupAddViewArgs.CallBackToken.OnRefreshData();
+                LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
             }
         }
 
@@ -877,7 +879,8 @@ namespace RingSoft.DbMaintenance
                     }
 
                     LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.PkRefresh;
-                    LookupAddViewArgs.CallBackToken.OnRefreshData();
+                    //LookupAddViewArgs.CallBackToken.OnRefreshData();
+                    LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
                 }
 
             }

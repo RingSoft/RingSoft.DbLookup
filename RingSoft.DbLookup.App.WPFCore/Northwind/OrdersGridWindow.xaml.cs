@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     /// <summary>
     /// Interaction logic for OrdersGridWindow.xaml
     /// </summary>
-    public partial class OrdersGridWindow : IOrderView
+    public partial class OrdersGridWindow
     {
         public object OwnerWindow => this;
 
@@ -27,21 +27,14 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
             Initialize();
 
-            CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
+            //CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
 
-            CustomerControl.PreviewLostKeyboardFocus += (sender, args) =>
-            {
-                if (!this.IsWindowClosing(args.NewFocus))
-                    if (!OrdersViewModel.ValidateCustomer())
-                        args.Handled = true;
-            };
-        }
-
-        public void SetFocusToGrid(OrderDetailsGridRow row, int columnId)
-        {
-            TabControl.SelectedIndex = 0;
-            DetailsGrid.Focus();
-            DetailsGrid.GotoCell(row, columnId);
+            //CustomerControl.PreviewLostKeyboardFocus += (sender, args) =>
+            //{
+            //    if (!this.IsWindowClosing(args.NewFocus))
+            //        if (!OrdersViewModel.ValidateCustomer())
+            //            args.Handled = true;
+            //};
         }
 
     }

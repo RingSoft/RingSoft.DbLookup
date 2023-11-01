@@ -268,6 +268,7 @@ namespace RingSoft.DbLookup.Lookup
             if (LookupControl.PageSize == 1 && FilteredQuery.Any())
             {
                 SelectedPrimaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(ProcessedQuery.FirstOrDefault());
+                var test = CurrentList;
             }
 
             CurrentList.Clear();

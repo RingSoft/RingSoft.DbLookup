@@ -53,10 +53,20 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (PreviousButton == null)
             {
-                throw new Exception("Maintenance Buttons Not Created");
+                throw new Exception("Previous Button Not Set in Db Maintenance Processor Override");
             }
             PreviousButton.Command = ViewModel.PreviousCommand;
+
+            if (NewButton == null)
+            {
+                throw new Exception("New Button Not Set in Db Maintenance Processor Override");
+            }
             NewButton.Command = ViewModel.NewCommand;
+
+            if (NewButton == null)
+            {
+                throw new Exception("New Button Not Set in Db Maintenance Processor Override");
+            }
             SaveButton.Command = ViewModel.SaveCommand;
             DeleteButton.Command = ViewModel.DeleteCommand;
             FindButton.Command = ViewModel.FindCommand;

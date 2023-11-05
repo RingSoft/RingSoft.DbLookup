@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         [StringLength(5)]
         public string CustomerID { get; set; }
 
-        public int? EmployeeID { get; set; }
+        public int EmployeeID { get; set; }
 
         public DateTime? OrderDate { get; set; }
 
@@ -30,7 +30,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         public DateTime? ShippedDate { get; set; }
 
-        public int? ShipVia { get; set; }
+        public int ShipVia { get; set; }
 
         [Column(TypeName = "money")]
         public double? Freight { get; set; }

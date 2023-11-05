@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -72,6 +73,15 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public override string FormatValue(string value)
         {
             return GblMethods.FormatValue(FieldDataType, value);
+        }
+
+        public override bool ValidateValueForSavingToDb(string value)
+        {
+            if (ParentJoinForeignKeyDefinition != null && value.IsNullOrEmpty())
+            {
+                return true;
+            }
+            return base.ValidateValueForSavingToDb(value);
         }
     }
 }

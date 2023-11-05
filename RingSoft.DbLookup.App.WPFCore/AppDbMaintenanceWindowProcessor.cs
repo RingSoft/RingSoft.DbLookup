@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             MaintenanceWindow = window;
             
             var dbMaintenanceButtons = (DbMaintenanceButtonsControl) buttonsControl;
-            SaveButton = dbMaintenanceButtons.SaveButton;
+            //SaveButton = dbMaintenanceButtons.SaveButton;
             SelectButton = dbMaintenanceButtons.SelectButton;
             DeleteButton = dbMaintenanceButtons.DeleteButton;
             FindButton = dbMaintenanceButtons.FindButton;

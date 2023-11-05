@@ -444,10 +444,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _requiredDate = _shippedDate = null;
             TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
 
-            MapFieldToUiCommand(CustomerUiCommand, TableDefinition.GetFieldDefinition(p => p.CustomerID));
-            MapFieldToUiCommand(EmployeeUiCommand, TableDefinition.GetFieldDefinition(p => p.EmployeeID));
-            MapFieldToUiCommand(ShipViaUiCommand, TableDefinition.GetFieldDefinition(p => p.ShipVia));
-
             CustomerUiCommand.LostFocus += CustomerUiCommand_LostFocus;
 
             AddModifyCommand = new RelayCommand((() =>
@@ -692,25 +688,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             order.CustomerID = Customer.GetEntity<Customer>().CustomerID;
             order.EmployeeID = Employee.GetEntity<Employee>().EmployeeID;
             order.ShipVia = ShipVia.GetEntity<Shipper>().ShipperID;
-
-            //if (Customer.IsValid())
-            //{
-            //    var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
-            //    order.CustomerID = customer.CustomerID;
-            //}
-
-            //if (Employee.IsValid())
-            //{
-            //    var employee = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(Employee.PrimaryKeyValue);
-            //    order.EmployeeID = employee.EmployeeID;
-            //}
-
-            //if (ShipVia.IsValid())
-            //{
-            //    var shipVia = _lookupContext.Shippers.GetEntityFromPrimaryKeyValue(ShipVia.PrimaryKeyValue);
-            //    order.ShipVia = shipVia.ShipperID;
-            //}
-
             order.OrderDate = OrderDate;
             order.OrderName = $"{GblMethods.FormatDateValue(OrderDate, DbDateTypes.DateOnly)} {order.CustomerID}";
             order.RequiredDate = RequiredDate;
@@ -767,19 +744,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             DetailsGridManager.SetupForNewRecord();
         }
 
-        protected override AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.CustomerID))
-                return Customer;
+        //protected override AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
+        //{
+        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.CustomerID))
+        //        return Customer;
 
-            if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.EmployeeID))
-                return Employee;
+        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.EmployeeID))
+        //        return Employee;
 
-            if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.ShipVia))
-                return ShipVia;
+        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.ShipVia))
+        //        return ShipVia;
 
-            return base.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
-        }
+        //    return base.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
+        //}
 
         protected override bool SaveEntity(Order entity)
         {

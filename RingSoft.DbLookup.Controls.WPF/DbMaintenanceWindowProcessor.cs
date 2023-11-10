@@ -14,9 +14,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public abstract class DbMaintenanceWindowProcessor : IDbMaintenanceProcessor
     {
-        public abstract DbMaintenanceViewModelBase ViewModel { get; protected set; }
+        public DbMaintenanceViewModelBase ViewModel { get; private set; }
 
-        public  AutoFillControl KeyAutoFillControl { get; protected set; }
+        public  AutoFillControl KeyAutoFillControl { get; private set; }
 
         public abstract Button SaveButton { get; protected set; }
         public VmUiControl SaveButtonUiControl { get; private set; }
@@ -35,8 +35,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public VmUiControl PreviousButtonUiControl { get; private set; }
         public abstract Button PrintButton { get; protected set; }
         public VmUiControl PrintButtonUiControl { get; private set; }
-        public abstract BaseWindow MaintenanceWindow { get; protected set; }
-        public abstract Control MaintenanceButtonsControl { get; protected set; }
+        public BaseWindow MaintenanceWindow { get; private set; }
+        public Control MaintenanceButtonsControl { get; private set; }
         public VmUiControl MaintenanceButtonsUiControl { get; private set; }
         public IDbMaintenanceView View { get; private set; }
         public DbMaintenanceStatusBar StatusBar { get; private set; }

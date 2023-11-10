@@ -11,7 +11,6 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
         }
 
-        public override DbMaintenanceViewModelBase ViewModel { get; protected set; }
         public override Button SaveButton { get; protected set; }
         public override Button SelectButton { get; protected set; }
         public override Button DeleteButton { get; protected set; }
@@ -21,8 +20,6 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override Button NextButton { get; protected set; }
         public override Button PreviousButton { get; protected set; }
         public override Button PrintButton { get; protected set; }
-        public override BaseWindow MaintenanceWindow { get;protected set; }
-        public override Control MaintenanceButtonsControl { get; protected set; }
 
         public override void Initialize(BaseWindow window, Control buttonsControl,
             DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)

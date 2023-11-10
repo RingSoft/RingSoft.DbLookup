@@ -43,13 +43,14 @@ namespace RingSoft.DbLookup.Controls.WPF
         public VmUiControl StatusBarUiControl { get; private set; }
 
         private VmUiControl _keyAutoFillControlUiControl;
+        private bool _registerKeyControl;
+        private LookupAddViewArgs _lookupAddViewArgs;
 
-
-        public virtual void SetupControl(IDbMaintenanceView view)
+        protected virtual void SetupControl(IDbMaintenanceView view)
         {
-            ViewModel.Processor = this;
+            //ViewModel.Processor = this;
 
-            View = view;
+            //View = view;
 
             if (PreviousButton == null)
             {
@@ -125,13 +126,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             MaintenanceWindow = window;
             MaintenanceButtonsControl = buttonsControl;
             ViewModel = viewModel;
+            ViewModel.Processor  = this;
             View = view;
+            SetupControl(view);
             SetupStatusBar(viewModel, statusBar);
             MaintenanceButtonsUiControl =
                 new VmUiControl(MaintenanceButtonsControl, ViewModel.MaintenanceButtonsUiCommand);
             if (statusBar != null)
             {
                 StatusBarUiControl = new VmUiControl(statusBar, ViewModel.StatusBarUiCommand);
+            }
+
+            if (_registerKeyControl && KeyAutoFillControl != null)
+            {
+                RegisterFormKeyControl(KeyAutoFillControl);
+            }
+
+            if (_lookupAddViewArgs != null)
+            {
+                InitializeFromLookupData(_lookupAddViewArgs);
+                _lookupAddViewArgs = null;
             }
         }
 
@@ -179,6 +193,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         public virtual void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
         {
             KeyAutoFillControl = keyAutoFillControl;
+            if (ViewModel == null)
+            {
+                _registerKeyControl = true;
+                return;
+            }
             BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.IsDirtyProperty, new Binding
             {
                 Source = ViewModel,
@@ -212,16 +231,18 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)
         {
-            if (ViewModel != null)
+            if (ViewModel == null)
             {
-                ViewModel.InitializeFromLookupData(e);
-                LookupAddView?.Invoke(this, e);
-                if (e.LookupReadOnlyMode)
-                {
-                    SelectButton.Visibility = Visibility.Collapsed;
-                }
-                
+                _lookupAddViewArgs = e;
+                return;
             }
+            ViewModel.InitializeFromLookupData(e);
+            LookupAddView?.Invoke(this, e);
+            if (e.LookupReadOnlyMode)
+            {
+                SelectButton.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)

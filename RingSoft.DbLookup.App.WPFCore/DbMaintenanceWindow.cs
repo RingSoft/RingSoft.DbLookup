@@ -25,11 +25,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public IDbMaintenanceProcessor Processor { get; set; }
 
-        public void Initialize()
+        public DbMaintenanceWindow()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
-            Processor.Initialize(this, MaintenanceButtonsControl, ViewModel, this, DbStatusBar);
-            Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+            Loaded += (sender, args) =>
+            {
+                Processor.Initialize(this, MaintenanceButtonsControl, ViewModel, this, DbStatusBar);
+                Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+                ViewModel.OnViewLoaded(this);
+            };
+        }
+        public void Initialize()
+        {
         }
 
         protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)

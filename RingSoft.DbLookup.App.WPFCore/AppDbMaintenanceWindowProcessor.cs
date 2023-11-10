@@ -27,13 +27,13 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override void Initialize(BaseWindow window, Control buttonsControl,
             DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
-            ViewModel = viewModel;
-            MaintenanceButtonsControl = buttonsControl;
-            SetupStatusBar(viewModel, statusBar);
-            MaintenanceWindow = window;
-            
+            //ViewModel = viewModel;
+            //MaintenanceButtonsControl = buttonsControl;
+            //SetupStatusBar(viewModel, statusBar);
+            //MaintenanceWindow = window;
+
             var dbMaintenanceButtons = (DbMaintenanceButtonsControl) buttonsControl;
-            //SaveButton = dbMaintenanceButtons.SaveButton;
+            SaveButton = dbMaintenanceButtons.SaveButton;
             SelectButton = dbMaintenanceButtons.SelectButton;
             DeleteButton = dbMaintenanceButtons.DeleteButton;
             FindButton = dbMaintenanceButtons.FindButton;
@@ -43,7 +43,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             PreviousButton = dbMaintenanceButtons.PreviousButton;
             PrintButton = dbMaintenanceButtons.PrintButton;
 
-            SetupControl(view);
             base.Initialize(window, buttonsControl, viewModel, view, statusBar);
         }
     }

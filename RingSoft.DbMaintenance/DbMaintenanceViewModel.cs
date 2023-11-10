@@ -626,7 +626,7 @@ namespace RingSoft.DbMaintenance
 
                 Processor.CloseWindow();
                 //LookupAddViewArgs.LookupData.ViewSelectedRow(0, View);
-                //LookupAddViewArgs.CallBackToken.OnRefreshData();
+                LookupAddViewArgs.CallBackToken.OnRefreshData();  //Necessary to select drill down to AutoFillControl.
                 LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
             }
         }

@@ -22,7 +22,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public OrdersWindow()
         {
             InitializeComponent();
-            Initialize();
         }
 
         public void ShowAdvancedFind()

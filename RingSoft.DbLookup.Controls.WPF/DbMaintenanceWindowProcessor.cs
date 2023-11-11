@@ -18,22 +18,22 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public  AutoFillControl KeyAutoFillControl { get; private set; }
 
-        public abstract Button SaveButton { get; protected set; }
+        public abstract Button SaveButton { get; }
         public VmUiControl SaveButtonUiControl { get; private set; }
-        public abstract Button SelectButton { get; protected set; }
+        public abstract Button SelectButton { get; }
         public VmUiControl SelectButtonUiControl { get; private set; }
-        public abstract Button DeleteButton { get; protected set; }
+        public abstract Button DeleteButton { get; }
         public VmUiControl DeleteButtonUiControl { get; private set; }
-        public abstract Button FindButton { get; protected set; }
+        public abstract Button FindButton { get; }
         public VmUiControl FindButtonUiControl { get; private set; }
-        public abstract Button NewButton { get; protected set;  }
+        public abstract Button NewButton { get; }
         public VmUiControl NewButtonUiControl { get; private set; }
-        public abstract Button CloseButton { get; protected set; }
-        public abstract Button NextButton { get; protected set;  }
+        public abstract Button CloseButton { get; }
+        public abstract Button NextButton { get; }
         public VmUiControl NextButtonUiControl { get; private set; }
-        public abstract Button PreviousButton { get; protected set; }
+        public abstract Button PreviousButton { get; }
         public VmUiControl PreviousButtonUiControl { get; private set; }
-        public abstract Button PrintButton { get; protected set; }
+        public abstract Button PrintButton { get; }
         public VmUiControl PrintButtonUiControl { get; private set; }
         public BaseWindow MaintenanceWindow { get; private set; }
         public Control MaintenanceButtonsControl { get; private set; }
@@ -46,44 +46,60 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _registerKeyControl;
         private LookupAddViewArgs _lookupAddViewArgs;
 
-        protected virtual void SetupControl(IDbMaintenanceView view)
+        protected virtual void SetupControl()
         {
-            //ViewModel.Processor = this;
-
-            //View = view;
-
-            if (PreviousButton == null)
+            if (PreviousButton != null)
             {
-                throw new Exception("Previous Button Not Set in Db Maintenance Processor Override");
+                PreviousButton.Command = ViewModel.PreviousCommand;
+                PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
             }
-            PreviousButton.Command = ViewModel.PreviousCommand;
-
-            if (NewButton == null)
+           
+            if (NewButton != null)
             {
-                throw new Exception("New Button Not Set in Db Maintenance Processor Override");
+                NewButton.Command = ViewModel.NewCommand;
+                NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
             }
-            NewButton.Command = ViewModel.NewCommand;
 
-            if (NewButton == null)
+            if (SaveButton != null)
             {
-                throw new Exception("New Button Not Set in Db Maintenance Processor Override");
+                SaveButton.Command = ViewModel.SaveCommand;
+                SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
             }
-            SaveButton.Command = ViewModel.SaveCommand;
-            DeleteButton.Command = ViewModel.DeleteCommand;
-            FindButton.Command = ViewModel.FindCommand;
-            SelectButton.Command = ViewModel.SelectCommand;
-            NextButton.Command = ViewModel.NextCommand;
-            PrintButton.Command = ViewModel.PrintCommand;
-            CloseButton.Click += (_, _) => CloseWindow();
 
-            PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
-            NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
-            SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
-            DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
-            FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
-            SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
-            NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
-            PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
+            if (DeleteButton != null)
+            {
+                DeleteButton.Command = ViewModel.DeleteCommand;
+                DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
+            }
+
+            if (FindButton != null)
+            {
+                FindButton.Command = ViewModel.FindCommand;
+                FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+            }
+
+            if (SelectButton != null)
+            {
+                SelectButton.Command = ViewModel.SelectCommand;
+                SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+            }
+
+            if (NextButton != null)
+            {
+                NextButton.Command = ViewModel.NextCommand;
+                NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
+            }
+
+            if (PrintButton != null)
+            {
+                PrintButton.Command = ViewModel.PrintCommand;
+                PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
+            }
+
+            if (CloseButton != null)
+            {
+                CloseButton.Click += (_, _) => CloseWindow();
+            }
 
             MaintenanceWindow.ShowInTaskbar = false;
             MaintenanceWindow.EnterToTab = true;
@@ -128,7 +144,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ViewModel = viewModel;
             ViewModel.Processor  = this;
             View = view;
-            SetupControl(view);
+            SetupControl();
             SetupStatusBar(viewModel, statusBar);
             MaintenanceButtonsUiControl =
                 new VmUiControl(MaintenanceButtonsControl, ViewModel.MaintenanceButtonsUiCommand);

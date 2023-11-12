@@ -120,10 +120,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
             var table = context.GetTable<Order>();
-            //var entitys = context.Orders
-            //    .Include(p => p.Customer)
-            //    .Where(p => p.Customer.CompanyName.Contains("w", StringComparison.CurrentCultureIgnoreCase))
-            //    .OrderBy(p => p.OrderName);
 
             if (gridMode)
             {
@@ -148,7 +144,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var dataContext = SystemGlobals.DataRepository.GetDataContext();
             var result = dataContext.SaveEntity(order, "Saving Order");
             var context = new NorthwindDbContextEfCore();
-            //var result = context.SaveEntity(context.Orders, order, "Saving Order");
             if (result && details != null)
             {
                 context.OrderDetails.RemoveRange(context.OrderDetails.Where(w => w.OrderID == order.OrderID));
@@ -165,10 +160,14 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public bool DeleteOrder(int orderId)
         {
-            var context = new NorthwindDbContextEfCore();
-            var order = context.Orders.FirstOrDefault(p => p.OrderID == orderId);
-            context.OrderDetails.RemoveRange(context.OrderDetails.Where(w => w.OrderID == order.OrderID));
-            return context.DeleteEntity(context.Orders, order, "Deleting Order");
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var orderDetails = context.GetTable<Order_Detail>()
+                .Where(p => p.OrderID == orderId);
+            context.RemoveRange(orderDetails);
+
+            var table = context.GetTable<Order>();
+            var order = table.FirstOrDefault(p => p.OrderID == orderId);
+            return context.DeleteEntity(order, "Deleting Order");
         }
 
         public List<Order_Detail> GetOrderDetails(int orderId)

@@ -540,34 +540,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             DetailsGridManager = new OrderDetailsGridManager(this);
 
-            //RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetAdvancedFindDbContext();
-
-            //var querySet = new QuerySet();
-            //var lookupDefinition =
-            //    new LookupDefinition<OrderDetailLookup, Order_Detail>(
-            //        RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails, 2);
-
-            ////var lookupDefinition =
-            ////    new LookupDefinitionBase(2);
-
-            //lookupDefinition.GetCountQuery(querySet, "Test");
-
-            //var countResult = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.DataProcessor.GetData(querySet);
-            //var count = lookupDefinition.GetCount(countResult, "Test");
-
-            //var advancedFind = new AdvancedFind.AdvancedFind { Id = 2 };
-            //var primaryKey =
-            //    SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetPrimaryKeyValueFromEntity(advancedFind);
-
-            //var advFindLookup =
-            //    new LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind>(SystemGlobals
-            //        .AdvancedFindLookupContext.AdvancedFinds);
-            //advFindLookup.ShowAddOnTheFlyWindow(primaryKey);
-
-            double init = 1326;
-            var test = init / 5;
-            var ceiling = Math.Ceiling(test);
-            var max = ceiling * 5;
 
             base.Initialize();
         }
@@ -586,9 +558,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
             _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, order.OrderID);
 
-            //_orderDetailsLookup.TableFilterDefinition.Include(p => p.Product)
-            //    .Include(p => p.Category)
-            //    .AddFixedFilter(p => p.CategoryName, Conditions.Contains, "mea");
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
             ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == OrderId);
 

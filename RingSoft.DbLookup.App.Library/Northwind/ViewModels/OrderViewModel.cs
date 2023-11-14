@@ -624,7 +624,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
             else
             {
-                var orderDetails = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetails(OrderId);
+                var orderDetails = RsDbLookupAppGlobals
+                    .EfProcessor
+                    .NorthwindEfDataProcessor
+                    .GetOrderDetails(OrderId);
 
                 foreach (var orderDetail in orderDetails)
                 {

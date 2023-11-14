@@ -172,8 +172,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public List<Order_Detail> GetOrderDetails(int orderId)
         {
-            var context = new NorthwindDbContextEfCore();
-            var result = context.OrderDetails.Where(w => w.OrderID == orderId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Order_Detail>();
+            var result = table.Where(p => p.OrderID == orderId);
             return result.ToList();
         }
 

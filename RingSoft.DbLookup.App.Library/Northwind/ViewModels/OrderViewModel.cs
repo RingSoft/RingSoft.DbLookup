@@ -431,6 +431,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public RelayCommand ShowAdvFindCommand { get; }
 
+        public AutoFillValue DefaultCustomerAutoFillValue { get; private set; }
+
+        public string DefaultCustomerName { get; private set; }
+
+        public AutoFillValue DefaultEmployeeAutoFillValue { get; private set; }
+
         public new IOrderView View { get; private set; }
 
 
@@ -518,6 +524,31 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             else
             {
                 ViewModelInput = new NorthwindViewModelInput();
+            }
+
+            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
+            {
+                var table = LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition;
+                if (table == _lookupContext.Customers)
+                {
+                    var customer =
+                        _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
+                            .ParentWindowPrimaryKeyValue);
+                    customer =
+                        RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(customer.CustomerID);
+                    DefaultCustomerAutoFillValue = new AutoFillValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue, customer.CustomerID);
+                    DefaultCustomerName = customer.CompanyName;
+                }
+                else if (table == _lookupContext.Employees)
+                {
+                    if (_lookupContext.Employees != null)
+                    {
+                        var employee =
+                            _lookupContext.Employees.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
+                                .ParentWindowPrimaryKeyValue);
+                        DefaultEmployeeAutoFillValue = employee.GetAutoFillValue();
+                    }
+                }
             }
 
             InputParameter = ViewModelInput;
@@ -678,39 +709,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override void ClearData()
         {
             OrderId = 0;
-            Customer = Employee = ShipVia = null;
+            Customer = DefaultCustomerAutoFillValue;
+            Employee = DefaultEmployeeAutoFillValue;
+            ShipVia = null;
             OrderDate = _newDateTime;
             RequiredDate = ShippedDate = null;
-            CompanyName = string.Empty;
+            CompanyName = DefaultCustomerName;
             SubTotal = TotalDiscount = Total = 0;
             Freight = 0;
             ShipName = Address = City = Region = PostalCode = Country = null;
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
-
-            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
-            {
-                var table = LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition;
-                if (table == _lookupContext.Customers)
-                {
-                    var customer =
-                        _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
-                            .ParentWindowPrimaryKeyValue);
-                    customer =
-                        RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(customer.CustomerID);
-                    Customer = new AutoFillValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue, customer.CustomerID);
-                    CompanyName = customer.CompanyName;
-                }
-                else if (table == _lookupContext.Employees)
-                {
-                    if (_lookupContext.Employees != null)
-                    {
-                        var employee =
-                            _lookupContext.Employees.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
-                                .ParentWindowPrimaryKeyValue);
-                        Employee = EmployeeAutoFillSetup.GetAutoFillValueForIdValue(employee.EmployeeID);
-                    }
-                }
-            }
 
             _customerDirty = false;
             DetailsGridManager.SetupForNewRecord();

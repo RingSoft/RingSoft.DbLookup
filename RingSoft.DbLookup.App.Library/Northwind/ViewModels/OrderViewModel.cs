@@ -534,9 +534,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     var customer =
                         _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                             .ParentWindowPrimaryKeyValue);
-                    customer =
-                        RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(customer.CustomerID);
-                    DefaultCustomerAutoFillValue = new AutoFillValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue, customer.CustomerID);
+                    customer = customer.FillOutProperties();
+                    DefaultCustomerAutoFillValue = customer.GetAutoFillValue();
                     DefaultCustomerName = customer.CompanyName;
                 }
                 else if (table == _lookupContext.Employees)
@@ -544,9 +543,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     if (_lookupContext.Employees != null)
                     {
                         var employee =
-                            _lookupContext.Employees.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
+                            _lookupContext.Employees
+                                .GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                                 .ParentWindowPrimaryKeyValue);
-                        DefaultEmployeeAutoFillValue = employee.GetAutoFillValue();
+                        DefaultEmployeeAutoFillValue = employee.FillOutProperties().GetAutoFillValue();
                     }
                 }
             }

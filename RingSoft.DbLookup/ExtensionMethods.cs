@@ -299,6 +299,45 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
+        public static TEntity FillOutProperties<TEntity>(this TEntity entity) where TEntity : class, new()
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+            var tableDefinition = SystemGlobals
+                .LookupContext
+                .TableDefinitions
+                .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
+            if (tableDefinition is TableDefinition<TEntity> fullTable)
+            {
+                var filter = new TableFilterDefinition<TEntity>(fullTable);
+                var primaryKey = fullTable.GetPrimaryKeyValueFromEntity(entity);
+                if (primaryKey.IsValid())
+                {
+                    foreach (var primaryKeyField in fullTable.PrimaryKeyFields)
+                    {
+                        var fieldValue = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
+                        filter.AddFixedFilter(primaryKeyField, Conditions.Equals, fieldValue);
+                    }
+
+                    var context = SystemGlobals.DataRepository.GetDataContext();
+                    var table = context.GetTable<TEntity>();
+                    var param = GblMethods.GetParameterExpression<TEntity>();
+                    var expr = filter.GetWhereExpresssion<TEntity>(param);
+                    var query = FilterItemDefinition.FilterQuery(table, param, expr);
+                    if (query.Any())
+                    {
+                        var result = query.FirstOrDefault();
+                        return result;
+                    }
+                }
+            }
+
+            return entity;
+        }
+
+
         public static DataTable ConvertEnumerableToDataTable<TEntity>(this IEnumerable<TEntity> data) where TEntity : class, new()
         {
             var entityName = typeof(TEntity).Name;

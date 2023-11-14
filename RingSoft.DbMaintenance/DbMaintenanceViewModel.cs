@@ -229,7 +229,10 @@ namespace RingSoft.DbMaintenance
 
         private void _lookupData_LookupDataChanged1(object sender, LookupDataMauiOutput e)
         {
-            //if (e. >= 0)
+            if (_lookupData.SelectedPrimaryKeyValue == null)
+            {
+                return;
+            }
             {
                 MaintenanceMode = DbMaintenanceModes.EditMode;
                 TEntity newEntity =

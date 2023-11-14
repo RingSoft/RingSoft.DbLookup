@@ -134,6 +134,9 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
 
             Globals.ViewModel.GridMode = true;
             Globals.ViewModel.OnRecordSelected(loadOrder.GetAutoFillValue().PrimaryKeyValue);
+            Globals.ViewModel.SaveCommand.Execute(null);
+            var odTable = context.GetTable<Order_Detail>();
+            Assert.AreEqual(1, odTable.Count());
         }
     }
 }

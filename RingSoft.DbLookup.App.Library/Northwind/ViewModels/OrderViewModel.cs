@@ -661,7 +661,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             order.OrderName = $"{GblMethods.FormatDateValue(OrderDate, DbDateTypes.DateOnly)} {order.CustomerID}";
             order.RequiredDate = RequiredDate;
             order.ShippedDate = ShippedDate;
-            order.Freight = (float)Freight;
+            order.Freight = Freight.GetValueOrDefault();
             order.ShipName = ShipName;
             order.ShipAddress = Address;
             order.ShipCity = City;
@@ -773,7 +773,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
+            {
                 OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+                RefreshTotalControls();
+            }
         }
 
         public bool ValidateCustomer()

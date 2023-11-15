@@ -302,6 +302,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();
 
+            _lookupContext.OrderDetails.IsGridTable();
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.Discount)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 

@@ -548,6 +548,28 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public void FillOutEntity(TEntity entity, bool processChildKeys = true)
         {
+            FillOutParentJoins(entity);
+
+            if (processChildKeys)
+            {
+                foreach (var childKey in ChildKeys)
+                {
+                    FillOutChildKey(entity, childKey);
+                }
+            }
+        }
+
+        public void FillOutChildKey(TEntity entity, ForeignKeyDefinition childKey)
+        {
+            var result = childKey.ForeignTable.GetJoinCollection(entity, childKey);
+            if (result != null)
+            {
+                GblMethods.SetPropertyObject(entity, childKey.CollectionName, result);
+            }
+        }
+
+        public void FillOutParentJoins(TEntity entity)
+        {
             var parentJoins = FieldDefinitions
                 .Where(p => p.ParentJoinForeignKeyDefinition != null);
 
@@ -556,20 +578,8 @@ namespace RingSoft.DbLookup.ModelDefinition
                 var childObject = GetParentObject(entity, fieldDefinition);
                 GblMethods.SetPropertyObject(
                     entity
-                    ,fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
+                    , fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
                     , childObject);
-            }
-
-            if (processChildKeys)
-            {
-                foreach (var childKey in ChildKeys)
-                {
-                    var result = childKey.ForeignTable.GetJoinCollection(entity, childKey);
-                    if (result != null)
-                    {
-                        GblMethods.SetPropertyObject(entity, childKey.CollectionName, result);
-                    }
-                }
             }
         }
 
@@ -664,6 +674,12 @@ namespace RingSoft.DbLookup.ModelDefinition
                 FillOutObject(entity);
             }
             return result;
+        }
+
+        public new TableDefinition<TEntity> IsGridTable(bool value = true)
+        {
+            base.IsGridTable(value);
+            return this;
         }
     }
 }

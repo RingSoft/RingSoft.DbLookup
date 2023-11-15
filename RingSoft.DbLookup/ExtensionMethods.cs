@@ -321,8 +321,7 @@ namespace RingSoft.DbLookup
                         filter.AddFixedFilter(primaryKeyField, Conditions.Equals, fieldValue);
                     }
 
-                    var context = SystemGlobals.DataRepository.GetDataContext();
-                    var table = context.GetTable<TEntity>();
+                    var table = fullTable.Context.GetQueryableTable<TEntity>(fullTable);
                     var param = GblMethods.GetParameterExpression<TEntity>();
                     var expr = filter.GetWhereExpresssion<TEntity>(param);
                     var query = FilterItemDefinition.FilterQuery(table, param, expr);

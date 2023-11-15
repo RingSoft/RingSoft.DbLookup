@@ -221,6 +221,74 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
+        public override IQueryable<TEntity> GetQueryableTable<TEntity>(TableDefinition<TEntity> tableDefinition
+        , IDbContext context = null) where TEntity : class
+        {
+            if (context == null)
+            {
+                context = SystemGlobals.DataRepository.GetDataContext();
+            }
+
+            var query = context.GetTable<TEntity>();
+            
+            var includes = new List<string>();
+            var parentObjects = tableDefinition
+                .FieldDefinitions
+                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+
+            foreach (var fieldDefinition in parentObjects)
+            {
+                includes.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition));
+            }
+
+            var gridKeys = tableDefinition.ChildKeys
+                .Where(p => p.ForeignTable.GridTable);
+
+            foreach (var key in gridKeys)
+            {
+                includes.AddRange(GetIncludes(key));
+            }
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query;
+        }
+
+        public List<string> GetIncludes(ForeignKeyDefinition foreignKeyDefinition, string parentInclude = "")
+        {
+            var include = foreignKeyDefinition.ForeignObjectPropertyName;
+            if (!parentInclude.IsNullOrEmpty())
+            {
+                include = $"{parentInclude}.{include}";
+            }
+            var result = new List<string>();
+            result.Add(include);
+            var parentObjects = foreignKeyDefinition.PrimaryTable
+                .FieldDefinitions
+                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+            foreach (var fieldDefinition in parentObjects)
+            {
+                if (fieldDefinition.AllowRecursion)
+                {
+                    result.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition, include));
+                }
+                else
+                {
+                    parentInclude = include;
+                    include = fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName;
+                    if (!parentInclude.IsNullOrEmpty())
+                    {
+                        include = $"{parentInclude}.{include}";
+                    }
+                    result.Add(include);
+                }
+            }
+            return result;
+        }
+
         public override AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
         {
             var autoFillMaui = new AutoFillDataMaui<TEntity>(setup, control);

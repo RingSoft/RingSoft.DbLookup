@@ -158,6 +158,8 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public bool ValidateDelete { get; private set; } = true;
 
+        public bool GridTable { get; private set; }
+
         public bool TempTable { get; private set; }
 
         private readonly List<FieldDefinition> _fields = new List<FieldDefinition>();
@@ -617,5 +619,11 @@ namespace RingSoft.DbLookup.ModelDefinition
         public abstract object GetJoinParentObject<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new();
 
         public abstract object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new();
+
+        public TableDefinitionBase IsGridTable(bool value = true)
+        {
+            GridTable = value; 
+            return this;
+        }
     }
 }

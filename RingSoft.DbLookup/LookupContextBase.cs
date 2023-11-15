@@ -357,6 +357,10 @@ namespace RingSoft.DbLookup
         , IDbContext context = null)
             where TEntity : class, new();
 
+        public abstract IQueryable<TEntity> GetQueryableTable<TEntity>(TableDefinition<TEntity> tableDefinition
+            , IDbContext context = null) where TEntity : class, new();
+
+
         public abstract AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
             where TEntity : class, new();
 

@@ -246,7 +246,18 @@ namespace RingSoft.DbLookup.EfCore
 
             foreach (var key in gridKeys)
             {
-                includes.AddRange(GetIncludes(key));
+                includes.Add(key.CollectionName);
+                parentObjects = key
+                    .ForeignTable
+                    .FieldDefinitions
+                    .Where(p => p.ParentJoinForeignKeyDefinition != null
+                                && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
+                foreach (var fieldDefinition in parentObjects)
+                {
+                    includes.AddRange(GetIncludes(fieldDefinition
+                        .ParentJoinForeignKeyDefinition
+                    , key.CollectionName));
+                }
             }
 
             foreach (var include in includes)
@@ -257,7 +268,8 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
-        public List<string> GetIncludes(ForeignKeyDefinition foreignKeyDefinition, string parentInclude = "")
+        public List<string> GetIncludes(ForeignKeyDefinition foreignKeyDefinition
+            , string parentInclude = "")
         {
             var include = foreignKeyDefinition.ForeignObjectPropertyName;
             if (!parentInclude.IsNullOrEmpty())
@@ -273,7 +285,8 @@ namespace RingSoft.DbLookup.EfCore
             {
                 if (fieldDefinition.AllowRecursion)
                 {
-                    result.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition, include));
+                    result.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition
+                        , include));
                 }
                 else
                 {

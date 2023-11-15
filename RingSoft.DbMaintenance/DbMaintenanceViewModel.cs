@@ -1615,7 +1615,11 @@ namespace RingSoft.DbMaintenance
         /// <param name="newEntity">The entity containing just the primary key values.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
         /// <returns>An entity populated from the database.</returns>
-        protected abstract TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
+        protected virtual TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
+        {
+            var entity = newEntity.FillOutProperties();
+            return entity;
+        }
 
         public void UnitTestLoadFromEntity(TEntity entity)
         {

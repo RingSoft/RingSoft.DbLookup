@@ -583,15 +583,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            //var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(newEntity.OrderID, GridMode);
-            var order = newEntity.FillOutProperties();
+            var order = base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
             OrderId = order.OrderID;
 
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID, Conditions.Equals, order.OrderID);
+            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID
+                , Conditions.Equals, order.OrderID);
 
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
-            ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == OrderId);
+            ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
 
             return order;
         }

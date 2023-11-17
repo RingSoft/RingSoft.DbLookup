@@ -13,8 +13,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public class OrderDetailsViewModel : DbMaintenanceViewModel<Order_Detail>
     {
-        public override TableDefinition<Order_Detail> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails;
+        #region Properties
 
         private int _orderId;
 
@@ -150,6 +149,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 OnPropertyChanged(nameof(Discount));
             }
         }
+
+        #endregion
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 

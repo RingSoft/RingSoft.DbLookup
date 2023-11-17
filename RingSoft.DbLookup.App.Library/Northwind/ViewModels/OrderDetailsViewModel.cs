@@ -154,6 +154,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public UiCommand ProductUiCommand { get; } = new UiCommand();
+
         private INorthwindLookupContext _lookupContext;
         private bool _productDirty;
 
@@ -191,7 +193,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             FindButtonLookupDefinition.FilterDefinition.CopyFrom(ViewLookupDefinition.FilterDefinition);
 
+            ProductUiCommand.LostFocus += ProductUiCommand_LostFocus;
+
             base.Initialize();
+        }
+
+        private void ProductUiCommand_LostFocus(object sender, UiLostFocusArgs e)
+        {
+            OnKeyControlLeave();
         }
 
         private void UpdateExtPrice()
@@ -208,6 +217,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
                 return string.Empty;
             }
+        }
+
+        public override void OnNewButton()
+        {
+            ProductUiCommand.IsEnabled = true;
+            base.OnNewButton();
         }
 
         public override void OnKeyControlLeave()
@@ -273,6 +288,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             }
 
+            ProductUiCommand.IsEnabled = false;
             return orderDetail;
         }
 

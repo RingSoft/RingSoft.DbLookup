@@ -19,7 +19,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             InitializeComponent();
 
-            ProductControl.LostFocus += (sender, args) => OrderDetailsViewModel.OnKeyControlLeave();
+            //ProductControl.LostFocus += (sender, args) => OrderDetailsViewModel.OnKeyControlLeave();
         }
 
         public override void ResetViewForNewRecord()

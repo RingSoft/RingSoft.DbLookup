@@ -37,8 +37,11 @@
             <dec:StringReadOnlyBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Customer}" DesignText="Ana Trujillo Emparedados y helados"/>
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Order Date"/>
             <dec:DateReadOnlyBox Grid.Row="2" Grid.Column="1" Value="{Binding OrderDate}" DesignText="01/01/2020"/>
-            <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Product"/>
-            <lc:AutoFillControl x:Name="ProductControl" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Setup="{Binding Path=ProductAutoFillSetup}" Value="{Binding Path=ProductAutoFillValue, Mode=TwoWay}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}" DesignText="Chef Anton's Cajun Seasoning"/>
+
+            <Label Grid.Row="3" Grid.Column="0" x:Name="ProductLabel" Style="{StaticResource ControlLabel}" Content="Product"/>
+
+            <lc:AutoFillControl x:Name="ProductControl" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Setup="{Binding Path=ProductAutoFillSetup}" Value="{Binding Path=ProductAutoFillValue, Mode=TwoWay}" DesignText="Chef Anton's Cajun Seasoning" UiCommand="{Binding ProductUiCommand}" UiLabel="{Binding ElementName=ProductLabel}"/>
+
             <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Quantity"/>
             <dec:IntegerEditControl Grid.Row="4" Grid.Column="1" Value="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DesignText="999,999"/>
             <Label Grid.Row="4" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Price"/>

@@ -583,28 +583,23 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var order = base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
-            OrderId = order.OrderID;
+            OrderId = newEntity.OrderID;
 
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
             _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID
-                , Conditions.Equals, order.OrderID);
+                , Conditions.Equals, newEntity.OrderID);
 
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
             ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
 
-            return order;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Order entity)
         {
             Customer = entity.Customer.GetAutoFillValue();
-
-            if (entity.Customer != null)
-                CompanyName = entity.Customer.CompanyName;
-
+            CompanyName = entity.Customer.CompanyName;
             Employee = entity.Employee.GetAutoFillValue();
-
             RequiredDate = entity.RequiredDate;
             if (entity.OrderDate == null)
                 OrderDate = _newDateTime;
@@ -765,8 +760,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 else
                 {
                     var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
-                    customer =
-                        RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(customer.CustomerID);
+                    customer = customer.FillOutProperties();
 
                     if (customer != null)
                     {

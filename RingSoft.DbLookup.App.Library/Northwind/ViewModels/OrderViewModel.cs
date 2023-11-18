@@ -337,7 +337,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     return;
 
                 _orderDetailsDataSourceChanged = value;
-                OnPropertyChanged(nameof(OrderDetailsDataSourceChanged));
+                OnPropertyChanged(nameof(OrderDetailsDataSourceChanged), false);
                 RefreshTotalControls();
             }
         }
@@ -353,7 +353,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     return;
 
                 _subTotal = value;
-                OnPropertyChanged(nameof(SubTotal));
+                OnPropertyChanged(nameof(SubTotal), false);
             }
         }
 
@@ -367,7 +367,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     return;
 
                 _totalDiscount = value;
-                OnPropertyChanged(nameof(TotalDiscount));
+                OnPropertyChanged(nameof(TotalDiscount), false);
             }
         }
 
@@ -382,7 +382,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     return;
 
                 _total = value;
-                OnPropertyChanged(nameof(Total));
+                OnPropertyChanged(nameof(Total), false);
             }
         }
 
@@ -781,7 +781,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
             {
                 OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
-                RefreshTotalControls();
             }
         }
 

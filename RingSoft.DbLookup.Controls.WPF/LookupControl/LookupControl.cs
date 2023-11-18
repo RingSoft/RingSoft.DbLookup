@@ -1399,6 +1399,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             
             if (sender is LookupDataMauiBase lookupDataMaui)
             {
+                DataSourceChanged = new LookupDataSourceChanged();
                 for (int row = 0; row < lookupDataMaui.RowCount; row++)
                 {
                     var dataItem = new DataItem(_columnMaps);
@@ -2207,7 +2208,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                             LookupDataMaui.ViewSelectedRow(Window.GetWindow(this), addViewParameter);
                         else
                             LookupDataMaui.AddNewRow(Window.GetWindow(this), addViewParameter);
-                        RefreshData(command.ResetSearchFor, String.Empty, LookupDataMaui.ParentWindowPrimaryKeyValue);
+                        RefreshData(command
+                            .ResetSearchFor, String.Empty, LookupDataMaui.ParentWindowPrimaryKeyValue);
                         break;
                     case LookupCommands.Reset:
                         ClearLookupControl();

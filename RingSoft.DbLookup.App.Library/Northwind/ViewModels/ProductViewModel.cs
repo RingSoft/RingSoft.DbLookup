@@ -214,6 +214,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public bool GridMode { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
 
         protected override void Initialize()
@@ -223,6 +225,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)
             {
                 ViewModelInput = viewModelInput;
+                if (viewModelInput.OrderInput != null)
+                {
+                    GridMode = viewModelInput.OrderInput.GridMode;
+                }
             }
             else
             {
@@ -268,7 +274,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             var orderInput = new OrderInput
             {
-                GridMode = true,
+                GridMode = GridMode,
                 ProductId = ProductId
             };
 

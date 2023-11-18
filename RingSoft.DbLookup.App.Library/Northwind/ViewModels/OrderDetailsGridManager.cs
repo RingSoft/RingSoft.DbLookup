@@ -56,6 +56,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public override void LoadGrid(IEnumerable<Order_Detail> entityList)
         {
+            entityList = entityList.OrderBy(p => p.Product.ProductName);
             base.LoadGrid(entityList);
             if (OrderViewModel.SetInitialFocusToGrid)
             {

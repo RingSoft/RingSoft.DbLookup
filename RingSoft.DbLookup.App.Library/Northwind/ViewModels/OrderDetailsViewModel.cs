@@ -221,7 +221,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public override void OnNewButton()
         {
-            ProductUiCommand.IsEnabled = true;
+            ProductUiCommand.IsReadOnly = false;
             base.OnNewButton();
         }
 
@@ -288,7 +288,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             }
 
-            ProductUiCommand.IsEnabled = false;
+            ProductUiCommand.IsReadOnly = true;
             return orderDetail;
         }
 

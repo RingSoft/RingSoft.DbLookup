@@ -276,8 +276,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override Order_Detail PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
-            var orderDetail = newEntity.FillOutProperties();
-
+            
             ReadOnlyMode =
                 ViewModelInput.OrderDetailsViewModels.Any(
                     a => a != this && a.OrderId == OrderId && a.ProductId == ProductId);
@@ -293,7 +292,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ProductUiCommand.IsReadOnly = true;
-            return orderDetail;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Order_Detail entity)
@@ -314,12 +313,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Order_Detail GetEntityData()
         {
-            var orderDetail = new Order_Detail();
-            orderDetail.OrderID = OrderId;
-            orderDetail.ProductID = ProductAutoFillValue.GetEntity<Product>().ProductID;
-            orderDetail.Quantity = Quantity;
-            orderDetail.UnitPrice = (float)Price;
-            orderDetail.Discount = (float)Discount;
+            var orderDetail = new Order_Detail
+            {
+                OrderID = OrderId,
+                ProductID = ProductAutoFillValue.GetEntity<Product>().ProductID,
+                Quantity = Quantity,
+                UnitPrice = (float)Price,
+                Discount = (float)Discount
+            };
             return orderDetail;
         }
 
@@ -357,9 +358,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool DeleteEntity()
         {
-            var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteOrderDetail(OrderId,
-                product.ProductID);
+            var product = ProductAutoFillValue.GetEntity<Product>();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Order_Detail>();
+            var oDetail = table
+                .FirstOrDefault(p => p.OrderID == OrderId && p.ProductID == product.ProductID);
+            if (oDetail != null)
+            {
+                return context.DeleteEntity(oDetail, "Deleting Order Detail");
+            }
+            return true;
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

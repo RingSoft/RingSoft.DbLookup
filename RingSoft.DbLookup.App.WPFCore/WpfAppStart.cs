@@ -171,7 +171,16 @@ namespace RingSoft.DbLookup.App.WPFCore
                 if (northwindViewModelInput.OrderInput.GridMode)
                     ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
                 else
-                    ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
+                {
+                    if (northwindViewModelInput.OrderInput.FromProductOrders)
+                    {
+                        ShowAddOnTheFlyWindow(new OrdersWindow(), e);
+                    }
+                    else
+                    {
+                        ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
+                    }
+                }
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)

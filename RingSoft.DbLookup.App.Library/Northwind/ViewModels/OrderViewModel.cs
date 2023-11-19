@@ -23,6 +23,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public bool GridMode { get; set; }
 
         public int ProductId { get; set; }
+
+        public bool FromProductOrders { get; set; }
     }
     public class OrderViewModel : DbMaintenanceViewModel<Order>
     {

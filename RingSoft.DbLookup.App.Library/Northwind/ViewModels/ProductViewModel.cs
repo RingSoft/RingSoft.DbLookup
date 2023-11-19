@@ -278,6 +278,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ProductId = ProductId
             };
 
+            if (!GridMode)
+            {
+                orderInput.FromProductOrders = true;
+            }
+
             ViewModelInput.OrderInput = orderInput;
             OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
 

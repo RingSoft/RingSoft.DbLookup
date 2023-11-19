@@ -156,6 +156,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public UiCommand ProductUiCommand { get; } = new UiCommand();
 
+        public Order Order { get; private set; }
+
         private INorthwindLookupContext _lookupContext;
         private bool _productDirty;
 
@@ -194,6 +196,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             FindButtonLookupDefinition.FilterDefinition.CopyFrom(ViewLookupDefinition.FilterDefinition);
 
             ProductUiCommand.LostFocus += ProductUiCommand_LostFocus;
+
+            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
+            {
+                var order = _lookupContext.Orders.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
+                    .ParentWindowPrimaryKeyValue);
+                Order = order.FillOutProperties();
+                LoadFromOrder();
+            }
+
 
             base.Initialize();
         }
@@ -265,13 +276,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override Order_Detail PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
-            var orderDetail =
-                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetail(newEntity.OrderID,
-                    newEntity.ProductID);
-
-            ProductAutoFillValue =
-                new AutoFillValue(_lookupContext.Products.GetPrimaryKeyValueFromEntity(orderDetail.Product),
-                    orderDetail.Product.ProductName);
+            var orderDetail = newEntity.FillOutProperties();
 
             ReadOnlyMode =
                 ViewModelInput.OrderDetailsViewModels.Any(
@@ -293,7 +298,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Order_Detail entity)
         {
-            LoadFromOrder(entity.Order);
+            Order = entity.Order;
+            LoadFromOrder();
+            ProductAutoFillValue = entity.Product.GetAutoFillValue();
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
             Discount = (double)entity.Discount;
@@ -309,13 +316,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             var orderDetail = new Order_Detail();
             orderDetail.OrderID = OrderId;
-            if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid())
-            {
-                var product =
-                    _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
-                orderDetail.ProductID = product.ProductID;
-            }
-
+            orderDetail.ProductID = ProductAutoFillValue.GetEntity<Product>().ProductID;
             orderDetail.Quantity = Quantity;
             orderDetail.UnitPrice = (float)Price;
             orderDetail.Discount = (float)Discount;
@@ -324,14 +325,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void ClearData()
         {
-            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
-            {
-                var order = _lookupContext.Orders.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
-                    .ParentWindowPrimaryKeyValue);
-                order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(order.OrderID, false);
-                LoadFromOrder(order);
-            }
-
+            LoadFromOrder();
             ProductAutoFillValue = null;
             Quantity = 0;
             Price = 0;
@@ -339,21 +333,26 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _productDirty = false;
         }
 
-        private void LoadFromOrder(Order order)
+        private void LoadFromOrder()
         {
-            OrderId = order.OrderID;
-            if (order.Customer == null)
-                Customer = string.Empty;
-            else
-                Customer = order.Customer.CompanyName;
-            if (order.OrderDate == null)
-                OrderDate = new DateTime(1980, 1, 1);
-            else
-                OrderDate = (DateTime)order.OrderDate;
+            OrderId = Order.OrderID;
+            Customer = Order.Customer.CompanyName;
+            OrderDate = (DateTime)Order.OrderDate;
         }
         protected override bool SaveEntity(Order_Detail entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveOrderDetail(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Order_Detail>();
+            var tableEntity = table.FirstOrDefault(p => p.OrderID == OrderId && p.ProductID == entity.ProductID);
+            if (tableEntity == null)
+            {
+                return context.AddSaveEntity(entity, "Saving Order Detail");
+            }
+            else
+            {
+                context = SystemGlobals.DataRepository.GetDataContext();
+                return context.SaveEntity(entity, "Saving Order Detail");
+            }
         }
 
         protected override bool DeleteEntity()

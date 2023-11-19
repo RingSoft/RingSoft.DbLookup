@@ -222,6 +222,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public override void OnNewButton()
         {
             ProductUiCommand.IsReadOnly = false;
+            ProductUiCommand.SetFocus();
             base.OnNewButton();
         }
 
@@ -248,11 +249,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private void LoadProductData()
         {
-            if (_productDirty && ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid())
+            if (_productDirty && ProductAutoFillValue.IsValid())
             {
-                var product =
-                    _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
-                product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
+                var product = ProductAutoFillValue.GetEntity<Product>().FillOutProperties();
                 if (product != null && product.UnitPrice != null)
                 {
                     Price = (double)product.UnitPrice;

@@ -18,22 +18,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public OrderDetailsWindow()
         {
             InitializeComponent();
-
-            //ProductControl.LostFocus += (sender, args) => OrderDetailsViewModel.OnKeyControlLeave();
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            ProductControl.Focus();
-            base.ResetViewForNewRecord();
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails;
-            if (fieldDefinition == table.GetFieldDefinition(p => p.ProductID))
-                ProductControl.Focus();
-            base.OnValidationFail(fieldDefinition, text, caption);
         }
     }
 }

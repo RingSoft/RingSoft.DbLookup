@@ -613,7 +613,7 @@ namespace RingSoft.DbLookup
 
         public static bool IsEqualTo<TEntity>(this TEntity first, TEntity last) where TEntity : class, new()
         {
-            var tableDef = first.GetTableDefinition();
+            var tableDef = GblMethods.GetTableDefinition<TEntity>();
             if (tableDef == null)
             {
                 return false;
@@ -621,20 +621,6 @@ namespace RingSoft.DbLookup
             var firstPk = tableDef.GetPrimaryKeyValueFromEntity(first);
             var lastPk = tableDef.GetPrimaryKeyValueFromEntity(last);
             return firstPk.IsEqualTo(lastPk);
-        }
-
-        public static TableDefinition<TEntity> GetTableDefinition<TEntity>(this TEntity entity) where TEntity : class, new()
-        {
-            var tableDefinition = SystemGlobals
-                .LookupContext
-                .TableDefinitions
-                .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
-            if (tableDefinition is TableDefinition<TEntity> fullTable)
-            {
-                return fullTable;
-            }
-
-            return null;
         }
     }
 }

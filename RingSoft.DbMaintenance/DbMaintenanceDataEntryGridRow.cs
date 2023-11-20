@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup;
@@ -63,6 +64,12 @@ namespace RingSoft.DbMaintenance
             }
 
             return true;
+        }
+
+        public virtual void ProcessHeaderObject(TEntity entity, object headerObject)
+        {
+            throw new Exception(
+                "Did you override Row's ProcessHeaderObject?  If so, don't call the base, otherwise, you need to override Row's ProcessHeaderObject and not call the base.");
         }
 
         public abstract void SaveToEntity(TEntity entity, int rowIndex);

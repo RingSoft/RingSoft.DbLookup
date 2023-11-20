@@ -1,4 +1,6 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
@@ -54,7 +56,16 @@ namespace RingSoft.DbMaintenance
             }
             return result;
         }
-            //if (entity.Formula.IsNullOrEmpty())
+
+        protected override IEnumerable<AdvancedFindColumn> GetExistingDbData(IQueryable<AdvancedFindColumn> table, object headerObject)
+        {
+            if (headerObject is AdvancedFind advFind)
+            {
+                return table.Where(p => p.AdvancedFindId == advFind.Id);
+            }
+            throw new Exception("Invalid Header Object");
+        }
+        //if (entity.Formula.IsNullOrEmpty())
             //{
             //    var tableDefinition =
             //        ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>

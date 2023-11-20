@@ -216,6 +216,14 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        public override void ProcessHeaderObject(AdvancedFindFilter entity, object headerObject)
+        {
+            if (headerObject is AdvancedFind advFind)
+            {
+                entity.AdvancedFindId = advFind.Id;
+            }
+        }
+
         public virtual void LoadFromFilterDefinition(FilterItemDefinition filter, bool isFixed, int rowIndex)
         {
             IsNew = false;

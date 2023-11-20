@@ -784,22 +784,30 @@ namespace RingSoft.DbMaintenance
 
         protected override bool SaveEntity(AdvancedFind entity)
         {
-            if (SystemGlobals.AdvancedFindDbProcessor == null)
-            {
-                throw new ApplicationException("SystemGlobals.AdvancedFindDbProcessor has not been set.");
-            }
-            var result = SystemGlobals.AdvancedFindDbProcessor.SaveAdvancedFind(entity, ColumnsManager.GetEntityList(),
-                FiltersManager.GetEntityList());
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var result = context.SaveEntity(entity, "Saving Advanced Find");
             if (result)
             {
-                View.CheckTableIsFocused();
+                ColumnsManager.SaveNoCommitData(context, entity);
+                FiltersManager.SaveNoCommitData(context, entity);
+                result = context.Commit("Saving Advanced Find Details");
             }
             return result;
         }
 
         protected override bool DeleteEntity()
         {
-            return SystemGlobals.AdvancedFindDbProcessor.DeleteAdvancedFind(AdvancedFindId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<AdvancedFind>();
+            var advFind = table
+                .FirstOrDefault(p => p.Id == AdvancedFindId);
+            if (advFind != null)
+            {
+                ColumnsManager.DeleteNoCommitData(advFind, context);
+                FiltersManager.DeleteNoCommitData(advFind, context);
+                return context.DeleteEntity(advFind, "Deleting Advanced Find");
+            }
+            return true;
         }
 
         private void AddColumn()

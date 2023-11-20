@@ -561,7 +561,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             CustomersAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.CustomerID))
             {
                 AddViewParameter = ViewModelInput,
-                //AllowLookupAdd = false
             };
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
                 {AddViewParameter = ViewModelInput};
@@ -672,35 +671,26 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Total = (SubTotal - TotalDiscount) + freight;
         }
         
-        protected override bool ValidateEntity(Order entity)
-        {
-            var result = base.ValidateEntity(entity);
-
-            if (result)
-                result = DetailsGridManager.ValidateGrid();
-
-            return result;
-        }
-
         protected override Order GetEntityData()
         {
-            var order = new Order();
-            order.OrderID = OrderId;
-            order.CustomerID = Customer.GetEntity<Customer>().CustomerID;
-            order.EmployeeID = Employee.GetEntity<Employee>().EmployeeID;
-            order.ShipVia = ShipVia.GetEntity<Shipper>().ShipperID;
-            order.OrderDate = OrderDate;
+            var order = new Order
+            {
+                OrderID = OrderId,
+                CustomerID = Customer.GetEntity<Customer>().CustomerID,
+                EmployeeID = Employee.GetEntity<Employee>().EmployeeID,
+                ShipVia = ShipVia.GetEntity<Shipper>().ShipperID,
+                OrderDate = OrderDate,
+                RequiredDate = RequiredDate,
+                ShippedDate = ShippedDate,
+                Freight = Freight.GetValueOrDefault(),
+                ShipName = ShipName,
+                ShipAddress = Address,
+                ShipCity = City,
+                ShipRegion = Region,
+                ShipPostalCode = PostalCode,
+                ShipCountry = Country
+            };
             order.OrderName = $"{GblMethods.FormatDateValue(OrderDate, DbDateTypes.DateOnly)} {order.CustomerID}";
-            order.RequiredDate = RequiredDate;
-            order.ShippedDate = ShippedDate;
-            order.Freight = Freight.GetValueOrDefault();
-            order.ShipName = ShipName;
-            order.ShipAddress = Address;
-            order.ShipCity = City;
-            order.ShipRegion = Region;
-            order.ShipPostalCode = PostalCode;
-            order.ShipCountry = Country;
-
             return order;
         }
 
@@ -722,33 +712,33 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             DetailsGridManager.SetupForNewRecord();
         }
 
-        //protected override AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
-        //{
-        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.CustomerID))
-        //        return Customer;
-
-        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.EmployeeID))
-        //        return Employee;
-
-        //    if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.ShipVia))
-        //        return ShipVia;
-
-        //    return base.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
-        //}
-
         protected override bool SaveEntity(Order entity)
         {
-            var orderDetails = DetailsGridManager.GetEntityList();
-            if (!GridMode)
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var result = context.SaveEntity(entity, "Saving Order");
+            if (!result)
             {
-                orderDetails = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetails(OrderId);
+                return result;
             }
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveOrder(entity, orderDetails);
+            if (GridMode)
+            {
+                DetailsGridManager.SaveNoCommitData(context, entity);
+                result = context.Commit("Saving Order Details");
+            }
+
+            return result;
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteOrder(OrderId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            
+            var table = context.GetTable<Order>();
+            var entity = table
+                .FirstOrDefault(p => p.OrderID == OrderId);
+            DetailsGridManager.DeleteNoCommitData(entity, context);
+
+            return context.DeleteEntity(entity, "Deleting Order");
         }
 
         private void OnCustomerIdLostFocus()
@@ -786,19 +776,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        public bool ValidateCustomer()
-        {
-            if (Customer != null && !string.IsNullOrEmpty(Customer.Text) &&
-                !Customer.PrimaryKeyValue.IsValid())
-            {
-                var message = "Invalid Customer!";
-                ControlsGlobals.UserInterface.ShowMessageBox(message, "Validation Fail", RsMessageBoxIcons.Exclamation);
-                return false;
-            }
-
-            return true;
-        }
-
         protected override TableFilterDefinitionBase GetAddViewFilter()
         {
             _lookupContext ??= RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
@@ -811,28 +788,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                         .SelectedPrimaryKeyValue);
 
                 GotoProductId = orderDetail.ProductID;
-
-                var sqlStringBuilder = new StringBuilder();
-                var sqlGen = _lookupContext.DataProcessor.SqlGenerator;
-
-                sqlStringBuilder.AppendLine(
-                    $"{sqlGen.FormatSqlObject(_lookupContext.Orders.TableName)}.{sqlGen.FormatSqlObject(_lookupContext.Orders.GetFieldDefinition(p => p.OrderID).FieldName)} IN");
-
-                sqlStringBuilder.AppendLine("(");
-
-                var query = new SelectQuery(_lookupContext.OrderDetails.TableName);
-                query.AddSelectColumn(_lookupContext.OrderDetails.GetFieldDefinition(p => p.OrderID).FieldName);
-                query.AddWhereItem(_lookupContext.OrderDetails.GetFieldDefinition(p => p.ProductID).FieldName,
-                    Conditions.Equals, GotoProductId);
-                sqlStringBuilder.AppendLine(_lookupContext.DataProcessor.SqlGenerator.GenerateSelectStatement(query));
-
-                sqlStringBuilder.AppendLine(")");
-
-                var tableFilterDefinition = new TableFilterDefinition<Order>(TableDefinition);
-                var sql = sqlStringBuilder.ToString();
-                tableFilterDefinition.AddFixedFilter("Order Details", null, "", sql);
-                
-                return tableFilterDefinition;
             }
 
             return base.GetAddViewFilter();

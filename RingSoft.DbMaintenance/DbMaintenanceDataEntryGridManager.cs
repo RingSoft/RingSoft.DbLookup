@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DbLookup;
 
 namespace RingSoft.DbMaintenance
 {
@@ -77,7 +78,28 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        public virtual List<TEntity> GetEntityList()
+        public void SaveNoCommitData(IDbContext context, object headerObject)
+        {
+            var table = context.GetTable<TEntity>();
+            var existingList = GetExistingDbData(table, headerObject);
+            var newList = GetEntityList(headerObject);
+            context.RemoveRange(existingList);
+            context.AddRange(newList);
+        }
+
+        public void DeleteNoCommitData(object headerObject, IDbContext context)
+        {
+            var table = context.GetTable<TEntity>();
+            var existingList = GetExistingDbData(table, headerObject);
+            context.RemoveRange(existingList);
+        }
+
+        protected virtual IEnumerable<TEntity> GetExistingDbData(IQueryable<TEntity> table, object headerObject)
+        {
+            throw new Exception("You must override Manager's GetExistingDbData and not call the base.");
+        }
+
+        public virtual List<TEntity> GetEntityList(object headerObject = null)
         {
             if (Grid != null)
             {
@@ -94,6 +116,11 @@ namespace RingSoft.DbMaintenance
                     {
                         var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
                         row.SaveToEntity(entity, rowIndex);
+                        if (headerObject != null)
+                        {
+                            row.ProcessHeaderObject(entity, headerObject);
+                        }
+
                         result.Add(entity);
                         rowIndex++;
                     }

@@ -4,6 +4,7 @@ using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbMaintenance;
 using System.Collections.Specialized;
 using System.Linq;
+using System;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -41,6 +42,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override DbMaintenanceDataEntryGridRow<Order_Detail> ConstructNewRowFromEntity(Order_Detail entity)
         {
             return new OrderDetailsGridRow(this);
+        }
+
+        protected override IEnumerable<Order_Detail> GetExistingDbData(IQueryable<Order_Detail> table, object headerObject)
+        {
+            if (headerObject is Order order)
+            {
+                return table.Where(p => p.OrderID == order.OrderID);
+            }
+            throw new Exception("Invalid Header Object");
         }
 
         protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)

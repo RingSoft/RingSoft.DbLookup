@@ -231,5 +231,16 @@ namespace RingSoft.DbMaintenance
             Manager.ViewModel.ResetLookup();
             base.Dispose();
         }
+
+        public override void ProcessHeaderObject(AdvancedFindColumn entity, object headerObject)
+        {
+            if (headerObject is AdvancedFind advFind)
+            {
+                entity.AdvancedFindId = advFind.Id;
+                return;
+            }
+            throw new Exception("Invalid Header Object");
+
+        }
     }
 }

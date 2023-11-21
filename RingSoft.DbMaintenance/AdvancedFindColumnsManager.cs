@@ -57,14 +57,6 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
-        protected override IEnumerable<AdvancedFindColumn> GetExistingDbData(IQueryable<AdvancedFindColumn> table, object headerObject)
-        {
-            if (headerObject is AdvancedFind advFind)
-            {
-                return table.Where(p => p.AdvancedFindId == advFind.Id);
-            }
-            throw new Exception("Invalid Header Object");
-        }
         //if (entity.Formula.IsNullOrEmpty())
             //{
             //    var tableDefinition =

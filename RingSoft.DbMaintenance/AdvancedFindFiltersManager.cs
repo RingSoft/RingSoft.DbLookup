@@ -94,16 +94,6 @@ namespace RingSoft.DbMaintenance
             };
         }
 
-        protected override IEnumerable<AdvancedFindFilter> GetExistingDbData(IQueryable<AdvancedFindFilter> table, object headerObject)
-        {
-            if (headerObject is AdvancedFind advFind)
-            {
-                return table.Where(p => p.AdvancedFindId == advFind.Id);
-            }
-            throw new Exception("Invalid Header Object");
-
-        }
-
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition, bool creatingNew = false)
         {
             if (creatingNew)

@@ -150,15 +150,10 @@ namespace RingSoft.DbMaintenance
             where THeaderEntity : class, new()
         {
             var table = context.GetTable<TEntity>();
-            var existingList = GetExistingDbData(table, headerEntity);
+            var existingList = GetExistingDbData(headerEntity, context);
             context.RemoveRange(existingList);
         }
-
-        protected virtual IEnumerable<TEntity> GetExistingDbData(IQueryable<TEntity> table, object headerObject)
-        {
-            throw new Exception("You must override Manager's GetExistingDbData and not call the base.");
-        }
-
+        
         public virtual List<TEntity> GetEntityList()
         {
             if (Grid != null)

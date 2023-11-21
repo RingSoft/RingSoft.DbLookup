@@ -258,6 +258,10 @@ namespace RingSoft.DbMaintenance
                         TableDefinition.FillOutEntity(Entity);
                     }
 
+                    if (KeyAutoFillSetup != null)
+                    {
+                        KeyAutoFillValue = Entity.GetAutoFillValue();
+                    }
                     LoadFromEntity(Entity);
                     Processor?.OnRecordSelected();
                 }

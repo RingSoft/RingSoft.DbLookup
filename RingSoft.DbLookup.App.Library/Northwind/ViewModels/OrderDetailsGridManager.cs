@@ -44,15 +44,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return new OrderDetailsGridRow(this);
         }
 
-        protected override IEnumerable<Order_Detail> GetExistingDbData(IQueryable<Order_Detail> table, object headerObject)
-        {
-            if (headerObject is Order order)
-            {
-                return table.Where(p => p.OrderID == order.OrderID);
-            }
-            throw new Exception("Invalid Header Object");
-        }
-
         protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnRowsChanged(e);

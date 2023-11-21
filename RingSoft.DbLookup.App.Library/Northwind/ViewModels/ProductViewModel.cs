@@ -319,19 +319,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 UnitsInStock = UnitsInStock,
                 UnitsOnOrder = UnitsOnOrder,
                 ReorderLevel = ReorderLevel,
-                Discontinued = Discontinued
+                Discontinued = Discontinued,
+                CategoryID = CategoryAutoFillValue.GetEntity<Category>().CategoryId,
+                SupplierID = SupplierAutoFillValue.GetEntity<Supplier>().SupplierID,
             };
 
-            if (CategoryAutoFillValue != null)
+            if (product.SupplierID == 0)
             {
-                product.CategoryID = _lookupContext.Categories
-                    .GetEntityFromPrimaryKeyValue(CategoryAutoFillValue.PrimaryKeyValue).CategoryId;
+                product.SupplierID = null;
             }
 
-            if (SupplierAutoFillValue != null)
+            if (product.CategoryID == 0)
             {
-                product.SupplierID = _lookupContext.Suppliers
-                    .GetEntityFromPrimaryKeyValue(SupplierAutoFillValue.PrimaryKeyValue).SupplierID;
+                product.CategoryID = null;
             }
 
             return product;
@@ -341,7 +341,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             ProductId = 0;
             QuantityPerUnit = string.Empty;
-
             CategoryAutoFillValue = null;
             SupplierAutoFillValue = null;
             UnitPrice = null;
@@ -352,12 +351,23 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool SaveEntity(Product entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveProduct(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.SaveEntity(entity, "Saving Product");
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteProduct(ProductId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Product>();
+            var entity = table
+                .FirstOrDefault(p => p.ProductID == ProductId);
+
+            if (entity != null)
+            {
+                return context.DeleteEntity(entity, "Deleting Product");
+            }
+
+            return true;
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

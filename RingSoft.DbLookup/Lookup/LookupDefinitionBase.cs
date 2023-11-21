@@ -370,8 +370,11 @@ namespace RingSoft.DbLookup.Lookup
             //ProcessVisibleColumnDefinition(column);
             //_visibleColumns.Add(column);
             AddVisibleColumnDefinition(column);
-            
-            column.ChildField = fieldDefinition.TableDefinition.PrimaryKeyFields[0];
+            if (TableDefinition.PrimaryKeyFields.Any())
+            {
+                column.ChildField = fieldDefinition.TableDefinition.PrimaryKeyFields[0];
+            }
+
             return column;
         }
 

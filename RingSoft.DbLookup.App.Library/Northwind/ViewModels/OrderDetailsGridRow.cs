@@ -31,8 +31,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public OrderDetailsGridRow(OrderDetailsGridManager manager) : base(manager)
         {
-            //DisplayStyleId = OrderDetailsGridManager.BlueDisplayStyleId;
-
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             _manager = manager;
 
@@ -82,7 +80,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             switch (column)
             {
                 case OrderDetailsGridColumns.Product:
-                    //return new DataEntryGridCellStyle {DisplayStyleId = OrderDetailsGridManager.BlueDisplayStyleId};
                     break;
                 case OrderDetailsGridColumns.ExtendedPrice:
                     return  new DataEntryGridCellStyle{State = DataEntryGridCellStates.Disabled};
@@ -118,6 +115,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             {
                                 item = autoFillCellProps.AutoFillValue.Text;
                             }
+
+                            if (item.IsNullOrEmpty())
+                            {
+                                ProductAutoFillValue = null;
+                                ProductId = 0;
+                                Quantity = 0;
+                                Price = 0;
+                                IsNew = true;
+                                Manager.Grid?.RefreshGridView();
+                                return;
+                            }
                             var message =
                                 $"'{item}' is not a valid Product.  Do you wish to create a new Product?";
                             if (await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Invalid Product") ==
@@ -126,8 +134,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                 var newProductResult =
                                     _lookupContext.NorthwindContextConfiguration.ProductsLookup.ShowAddOnTheFlyWindow(
                                         item);
-                                if (newProductResult.NewPrimaryKeyValue != null
-                                    && newProductResult.NewPrimaryKeyValue.IsValid())
+                                if (newProductResult.NewPrimaryKeyValue.IsValid())
                                 {
                                     var newAutoFillValue = RsDbLookupAppGlobals
                                         .EfProcessor
@@ -178,7 +185,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private async Task<bool> SetProduct(AutoFillValue productValue)
         {
-            var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(productValue.PrimaryKeyValue);
+            var product = productValue.GetEntity<Product>();
             var orderDetails = Manager.Rows.OfType<OrderDetailsGridRow>();
 
             var existingRow = orderDetails.FirstOrDefault(f => f.ProductId == product.ProductID);
@@ -188,7 +195,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 if (await ControlsGlobals.UserInterface.ShowYesNoMessageBox(message, "Duplicate Product detected.") ==
                     MessageBoxButtonsResult.Yes)
                 {
-                    _manager.Grid.GotoCell(existingRow, (int)OrderDetailsGridColumns.Product);
+                    _manager.GotoCell(existingRow, (int)OrderDetailsGridColumns.Product);
                 }
 
                 return false;
@@ -202,7 +209,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private void LoadFromProduct(Product product)
         {
-            product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(product.ProductID);
+            product = product.FillOutProperties();
             Quantity = 1;
             if (product.UnitPrice != null)
                 Price = (double) product.UnitPrice;
@@ -212,8 +219,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public override void LoadFromEntity(Order_Detail entity)
         {
             ProductId = entity.ProductID;
-            var productPrimaryKey = _lookupContext.Products.GetPrimaryKeyValueFromEntity(entity.Product);
-            ProductAutoFillValue = new AutoFillValue(productPrimaryKey, entity.Product.ProductName);
+            ProductAutoFillValue = entity.Product.GetAutoFillValue();
             Quantity = entity.Quantity;
             Price = entity.UnitPrice;
             Discount = (double) entity.Discount;
@@ -221,8 +227,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public override void SaveToEntity(Order_Detail entity, int rowIndex)
         {
-            var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
-            entity.ProductID = product.ProductID;
+            entity.ProductID = ProductId;
             entity.Quantity = (short)Quantity;
             entity.UnitPrice = (float)Price;
             entity.Discount = (float)Discount;

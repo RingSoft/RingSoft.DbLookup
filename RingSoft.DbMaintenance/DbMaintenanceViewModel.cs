@@ -651,6 +651,7 @@ namespace RingSoft.DbMaintenance
             ChangingEntity = true;
             ClearData();
             Processor.SetSaveStatus("", AlertLevels.Green);
+
             LastSavedDate = null;
             _startDate = DateTime.Now;
             KeyAutoFillValue = new AutoFillValue(new PrimaryKeyValue(TableDefinition), string.Empty);

@@ -15,8 +15,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public class EmployeeViewModel : DbMaintenanceViewModel<Employee>
     {
-        public override TableDefinition<Employee> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees;
+        #region Properties
 
         private int _employeeId;
         public int EmployeeId
@@ -315,9 +314,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        internal NorthwindViewModelInput ViewModelInput { get; private set; }
+        #endregion
 
-        public UiCommand SupervisorUiCommand { get; } = new UiCommand();
+        internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
         public UiCommand FirstNameUiCommand { get; } = new UiCommand();
 
@@ -332,9 +331,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             MapFieldToUiCommand(LastNameUiCommand
                 , TableDefinition.GetFieldDefinition(p => p.LastName));
-
-            MapFieldToUiCommand(SupervisorUiCommand
-                , TableDefinition.GetFieldDefinition(p => p.ReportsTo));
         }
 
         protected override void Initialize()
@@ -374,9 +370,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Employee PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(newEntity.EmployeeID);
-
-            EmployeeId = employee.EmployeeID;
+            EmployeeId = newEntity.EmployeeID;
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
@@ -385,7 +379,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             ReadOnlyMode = ViewModelInput.EmployeeViewModels.Any(a => a != this && a.EmployeeId == EmployeeId);
 
-            return employee;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Employee entity)
@@ -405,17 +399,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Extension = entity.Extension;
             Notes = entity.Notes;
             PhotoPath = entity.PhotoPath;
-
-            var supervisorPrimaryKey = _lookupContext.Employees.GetPrimaryKeyValueFromEntity(entity.Employee1);
-            if (entity.Employee1 != null)
-            {
-                ReportsTo = new AutoFillValue(supervisorPrimaryKey,
-                    $"{entity.Employee1.FirstName} {entity.Employee1.LastName}");
-            }
-            else
-            {
-                ReportsTo = new AutoFillValue(supervisorPrimaryKey, string.Empty);
-            }
+            ReportsTo = entity.Employee1.GetAutoFillValue();
 
             if (ReadOnlyMode)
                 ControlsGlobals.UserInterface.ShowMessageBox(
@@ -443,24 +427,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 Notes = Notes,
                 PhotoPath = PhotoPath,
                 BirthDate = BirthDate,
-                HireDate = HireDate
+                HireDate = HireDate,
+                ReportsTo = ReportsTo.GetEntity<Employee>().EmployeeID
             };
 
-            if (ReportsTo != null && ReportsTo.PrimaryKeyValue.IsValid())
+            if (employee.ReportsTo == 0)
             {
-                var supervisor = _lookupContext.Employees.GetEntityFromPrimaryKeyValue(ReportsTo.PrimaryKeyValue);
-                employee.ReportsTo = supervisor.EmployeeID;
+                employee.ReportsTo = null;
             }
 
             return employee;
-        }
-
-        protected override AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition == TableDefinition.GetFieldDefinition(p => p.ReportsTo))
-                return ReportsTo;
-
-            return base.GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
         }
 
         protected override void ClearData()
@@ -475,12 +451,22 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool SaveEntity(Employee entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SaveEmployee(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.SaveEntity(entity, "Saving Employee");
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteEmployee(EmployeeId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Employee>();
+            var employee = table
+                .FirstOrDefault(p => p.EmployeeID == EmployeeId);
+            if (employee != null)
+            {
+                return context.DeleteEntity(employee, "Deleting Employee");
+            }
+
+            return true;
         }
 
         public void OnAddModify()

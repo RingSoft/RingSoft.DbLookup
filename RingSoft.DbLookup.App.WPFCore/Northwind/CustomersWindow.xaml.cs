@@ -21,8 +21,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
             AddModifyButton.Click += (sender, args) => CustomersViewModel.OnAddModify();
 
-            Initialize();
-
             RegisterFormKeyControl(CustomerControl);
         }
     }

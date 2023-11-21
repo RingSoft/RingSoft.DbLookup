@@ -24,17 +24,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
             InitializeComponent();
 
             OrdersViewModel.GridMode = true;
-
-            Initialize();
-
-            //CustomerControl.LostFocus += (sender, args) => OrdersViewModel.OnCustomerIdLostFocus();
-
-            //CustomerControl.PreviewLostKeyboardFocus += (sender, args) =>
-            //{
-            //    if (!this.IsWindowClosing(args.NewFocus))
-            //        if (!OrdersViewModel.ValidateCustomer())
-            //            args.Handled = true;
-            //};
         }
 
     }

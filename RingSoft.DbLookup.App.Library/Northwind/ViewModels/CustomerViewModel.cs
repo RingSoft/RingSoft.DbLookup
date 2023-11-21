@@ -13,8 +13,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public class CustomerViewModel : DbMaintenanceViewModel<Customer>
     {
-        public override TableDefinition<Customer> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers;
+
+        #region Properties
 
         public string  CustomerId { get; set; }
 
@@ -196,6 +196,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        #endregion
+
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
         public UiCommand CompanyNameUiCommand { get; } = new UiCommand();
@@ -236,18 +238,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override Customer PopulatePrimaryKeyControls(Customer newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(newEntity.CustomerID);
-            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, customer.CustomerID);
             KeyAutoFillUiCommand.IsEnabled = false;
-            CustomerId = KeyAutoFillValue.Text;
+            CustomerId = newEntity.CustomerID;
 
             _ordersLookup.FilterDefinition.ClearFixedFilters();
             _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
-                customer.CustomerID);
+                newEntity.CustomerID);
 
             ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, ViewModelInput);
-            return customer;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Customer entity)
@@ -297,29 +297,32 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool SaveEntity(Customer entity)
         {
-            return RsDbLookupAppGlobals
-                .EfProcessor
-                .NorthwindEfDataProcessor
-                .SaveCustomer(entity, MaintenanceMode == DbMaintenanceModes.AddMode);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Customer>();
+            var existCustomer = table
+                .FirstOrDefault(p => p.CustomerID == entity.CustomerID);
+            context = SystemGlobals.DataRepository.GetDataContext();
+            if (existCustomer == null)
+            {
+                return context.AddSaveEntity(entity, "Saving Customer");
+            }
+
+            return context.SaveEntity(entity, "Saving Customer");
         }
 
         protected override bool DeleteEntity()
         {
-            var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(KeyAutoFillValue.Text);
-            if (customer == null)
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Customer>();
+            var existCustomer = table
+                .FirstOrDefault(p => p.CustomerID == CustomerId);
+            context = SystemGlobals.DataRepository.GetDataContext();
+            if (existCustomer != null)
             {
-                var message = $"Customer ID {KeyAutoFillValue.Text} was not found";
-                var fieldDefinition =
-                    RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers.GetFieldDefinition(p =>
-                        p.CustomerID);
-
-                KeyAutoFillUiCommand.SetFocus();
-                ControlsGlobals.UserInterface.ShowMessageBox(message, "Delete Validation Fail",
-                    RsMessageBoxIcons.Exclamation);
-                //View.OnValidationFail(fieldDefinition, message, "Delete Validation Fail");
-                return false;
+                return context.DeleteEntity(existCustomer, "Deleting Customer");
             }
-            return RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.DeleteCustomer(KeyAutoFillValue.Text);
+
+            return true;
         }
 
         public void OnAddModify()

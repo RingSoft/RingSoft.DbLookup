@@ -241,13 +241,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (ProductAutoFillValue != null && ProductAutoFillValue.PrimaryKeyValue.IsValid())
             {
-                var product =
-                    _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);
-                var orderDetail =
-                    RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrderDetail(OrderId,
-                        product.ProductID);
-
-                if (orderDetail != null)
+                var productId = ProductAutoFillValue.GetEntity<Product>().ProductID;
+                var orderDetail = new Order_Detail
+                {
+                    OrderID = OrderId,
+                    ProductID = productId,
+                };
+                orderDetail = orderDetail.FillOutProperties();
+                if (orderDetail.Order != null)
                 {
                     SelectPrimaryKey(_lookupContext.OrderDetails.GetPrimaryKeyValueFromEntity(orderDetail));
                 }

@@ -22,16 +22,17 @@ namespace RingSoft.DbLookup.App.Library.EfCore
 
         public override AutoFillValue OnAutoFillTextRequest(TableDefinitionBase tableDefinition, string idValue)
         {
-            if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
-            {
-                var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(idValue.ToInt());
-                var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees
-                    .GetPrimaryKeyValueFromEntity(employee);
-                if (employee != null)
-                {
-                    return new AutoFillValue(primaryKeyValue, employee.FirstName + " " + employee.LastName);
-                }
-            }
+            //if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
+            //{
+            //    var employee = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetEmployee(idValue.ToInt());
+            //    var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees
+            //        .GetPrimaryKeyValueFromEntity(employee);
+            //    if (employee != null)
+            //    {
+            //        return new AutoFillValue(primaryKeyValue, employee.FirstName + " " + employee.LastName);
+            //    }
+            //}
+
             //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
             //{
             //    var customer = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetCustomer(idValue);
@@ -46,15 +47,17 @@ namespace RingSoft.DbLookup.App.Library.EfCore
             //        .GetPrimaryKeyValueFromEntity(shipVia);
             //    return new AutoFillValue(primaryKeyValue, shipVia.CompanyName);
             //}
-            else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
-            {
-                var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(idValue.ToInt(), false);
-                var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders
-                    .GetPrimaryKeyValueFromEntity(order);
-                var orderTable = (TableDefinition<Order>) tableDefinition;
-                var orderDateField = orderTable.GetFieldDefinition(p => p.OrderDate);
-                return new AutoFillValue(primaryKeyValue, orderDateField.FormatValue(order.OrderDate.ToString()) + " - " + order.CustomerID);
-            }
+
+            //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
+            //{
+            //    var order = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetOrder(idValue.ToInt(), false);
+            //    var primaryKeyValue = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders
+            //        .GetPrimaryKeyValueFromEntity(order);
+            //    var orderTable = (TableDefinition<Order>) tableDefinition;
+            //    var orderDateField = orderTable.GetFieldDefinition(p => p.OrderDate);
+            //    return new AutoFillValue(primaryKeyValue, orderDateField.FormatValue(order.OrderDate.ToString()) + " - " + order.CustomerID);
+            //}
+
             //else if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
             //{
             //    var product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(idValue.ToInt());

@@ -676,10 +676,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
-        public new TableDefinition<TEntity> IsGridTable(bool value = true)
+        public new TableDefinition<TEntity>SetHeaderEntity<THeaderEntity>() where THeaderEntity : class, new()
         {
-            base.IsGridTable(value);
+            base.SetHeaderEntity<THeaderEntity>();
             return this;
         }
+
     }
 }

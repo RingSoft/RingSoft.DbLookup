@@ -292,7 +292,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override void LoadFromEntity(Product entity)
         {
-            PrimaryKeyValue primaryKey;
             SupplierAutoFillValue = entity.Supplier.GetAutoFillValue();
             CategoryAutoFillValue = entity.Category.GetAutoFillValue();
             QuantityPerUnit = entity.QuantityPerUnit;

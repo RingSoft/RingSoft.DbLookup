@@ -56,8 +56,9 @@ namespace RingSoft.DbLookup.EfCore
             {
                 return;
             }
-            base.Initialize();
             SystemGlobals.AdvancedFindLookupContext = this;
+            SystemGlobals.LookupContext = this;
+            base.Initialize();
             _advInitalizing = true;
             var configuration = new AdvancedFindLookupConfiguration(this);
             configuration.InitializeModel();
@@ -242,7 +243,7 @@ namespace RingSoft.DbLookup.EfCore
             }
 
             var gridKeys = tableDefinition.ChildKeys
-                .Where(p => p.ForeignTable.GridTable);
+                .Where(p => p.ForeignTable.HeaderTable == tableDefinition);
 
             foreach (var key in gridKeys)
             {

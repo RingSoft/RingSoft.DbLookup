@@ -491,10 +491,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                 .NorthwindLookupContext
                                 .Customers
                                 .GetEntityFromPrimaryKeyValue(aofResult.NewPrimaryKeyValue);
-                            Customer = RsDbLookupAppGlobals
-                                .EfProcessor
-                                .NorthwindEfDataProcessor
-                                .GetCustomer(customer.CustomerID)
+                            Customer = customer.FillOutProperties()
                                 .GetAutoFillValue();
                         }
                         else
@@ -652,11 +649,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
             else
             {
-                var orderDetails = RsDbLookupAppGlobals
-                    .EfProcessor
-                    .NorthwindEfDataProcessor
-                    .GetOrderDetails(OrderId);
-
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                var table = context.GetTable<Order_Detail>();
+                var orderDetails = table
+                    .Where(p => p.OrderID == OrderId);
                 foreach (var orderDetail in orderDetails)
                 {
                     var extendedPrice = orderDetail.Quantity * orderDetail.UnitPrice;

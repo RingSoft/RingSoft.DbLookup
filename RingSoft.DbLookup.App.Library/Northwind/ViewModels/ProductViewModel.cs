@@ -13,8 +13,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
     public class ProductViewModel : DbMaintenanceViewModel<Product>
     {
-        public override TableDefinition<Product> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products;
+        #region Properties
 
         private int _productId;
 
@@ -212,6 +211,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
+        #endregion
+
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
         public bool GridMode { get; private set; }
@@ -265,10 +266,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override Product PopulatePrimaryKeyControls(Product newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
-            var product = RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(ProductId);
-
-            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, product.ProductName);
-
             _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
             _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.ProductID, Conditions.Equals, ProductId);
 
@@ -290,32 +287,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ViewModelInput.ProductViewModels.Any(
                     a => a != this && a.ProductId == ProductId);
 
-            return product;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Product entity)
         {
             PrimaryKeyValue primaryKey;
-            if (entity.Supplier != null)
-            {
-                primaryKey = _lookupContext.Suppliers.GetPrimaryKeyValueFromEntity(entity.Supplier);
-                SupplierAutoFillValue = new AutoFillValue(primaryKey, entity.Supplier.CompanyName);
-            }
-            else
-            {
-                SupplierAutoFillValue = null;
-            }
-
-            if (entity.Category != null)
-            {
-                primaryKey = _lookupContext.Categories.GetPrimaryKeyValueFromEntity(entity.Category);
-                CategoryAutoFillValue = new AutoFillValue(primaryKey, entity.Category.CategoryName);
-            }
-            else
-            {
-                CategoryAutoFillValue = null;
-            }
-
+            SupplierAutoFillValue = entity.Supplier.GetAutoFillValue();
+            CategoryAutoFillValue = entity.Category.GetAutoFillValue();
             QuantityPerUnit = entity.QuantityPerUnit;
             UnitPrice = entity.UnitPrice;
             UnitsInStock = entity.UnitsInStock;

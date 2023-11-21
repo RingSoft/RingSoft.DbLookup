@@ -137,6 +137,9 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
             Globals.ViewModel.SaveCommand.Execute(null);
             var odTable = context.GetTable<Order_Detail>();
             Assert.AreEqual(1, odTable.Count());
+            Globals.ViewModel.DeleteCommand.Execute(null);
+            odTable = context.GetTable<Order_Detail>();
+            Assert.AreEqual(0, odTable.Count());
         }
     }
 }

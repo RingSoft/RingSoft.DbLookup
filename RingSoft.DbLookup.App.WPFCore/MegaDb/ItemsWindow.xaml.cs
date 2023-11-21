@@ -19,8 +19,6 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         {
             InitializeComponent();
 
-            Initialize();
-
             RegisterFormKeyControl(NameControl);
 
             LocationControl.PreviewLostKeyboardFocus += (sender, args) =>
@@ -48,12 +46,6 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
                 ManufacturerControl.Focus();
 
             base.OnValidationFail(fieldDefinition, text, caption);
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            NameControl.Focus();
-            base.ResetViewForNewRecord();
         }
     }
 }

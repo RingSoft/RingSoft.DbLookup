@@ -177,7 +177,8 @@ namespace RingSoft.DbLookup.Testing
         public void RemoveRange<TEntity>(IEnumerable<TEntity> listToRemove) where TEntity : class, new()
         {
             var table = GetList<TEntity>();
-            foreach (var entity in listToRemove)
+            var listToParse = listToRemove.ToList();
+            foreach (var entity in listToParse)
             {
                 if (table.Contains(entity))
                 {

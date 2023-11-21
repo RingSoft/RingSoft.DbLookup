@@ -722,7 +722,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
             if (GridMode)
             {
-                DetailsGridManager.SaveNoCommitData(context, entity);
+                DetailsGridManager.SaveNoCommitData(entity, context);
                 result = context.Commit("Saving Order Details");
             }
 

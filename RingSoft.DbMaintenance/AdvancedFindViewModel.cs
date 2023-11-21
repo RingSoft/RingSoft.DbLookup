@@ -788,8 +788,8 @@ namespace RingSoft.DbMaintenance
             var result = context.SaveEntity(entity, "Saving Advanced Find");
             if (result)
             {
-                ColumnsManager.SaveNoCommitData(context, entity);
-                FiltersManager.SaveNoCommitData(context, entity);
+                ColumnsManager.SaveNoCommitData(entity, context);
+                FiltersManager.SaveNoCommitData(entity, context);
                 result = context.Commit("Saving Advanced Find Details");
             }
             return result;

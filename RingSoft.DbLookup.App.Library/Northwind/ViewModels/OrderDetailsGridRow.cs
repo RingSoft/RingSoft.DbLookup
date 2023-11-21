@@ -219,17 +219,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Discount = (double) entity.Discount;
         }
 
-        public override void ProcessHeaderObject(Order_Detail entity, object headerObject)
-        {
-            if (headerObject is Order order)
-            {
-                entity.OrderID = order.OrderID;
-                return;
-            }
-            throw new Exception("Invalid Header Object");
-
-        }
-
         public override void SaveToEntity(Order_Detail entity, int rowIndex)
         {
             var product = _lookupContext.Products.GetEntityFromPrimaryKeyValue(ProductAutoFillValue.PrimaryKeyValue);

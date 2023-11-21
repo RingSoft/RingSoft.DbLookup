@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
@@ -78,19 +80,77 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        public void SaveNoCommitData(IDbContext context, object headerObject)
+        public void SaveNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
+            where THeaderEntity : class, new()
         {
-            var table = context.GetTable<TEntity>();
-            var existingList = GetExistingDbData(table, headerObject);
-            var newList = GetEntityList(headerObject);
-            context.RemoveRange(existingList);
-            context.AddRange(newList);
+            var headerTableDef = GblMethods.GetTableDefinition<THeaderEntity>();
+            var detailTableDef = GblMethods.GetTableDefinition<TEntity>();
+            if (headerTableDef == null || detailTableDef == null)
+            {
+                return;
+            }
+
+            var detailsList = GetEntityList();
+            var detailsFields = detailTableDef
+                .PrimaryKeyFields
+                .Where(p => p.ParentJoinForeignKeyDefinition != null
+                            && p.ParentJoinForeignKeyDefinition.PrimaryTable == headerTableDef);
+            foreach (var fieldDefinition in detailsFields)
+            {
+                foreach (var foreignKeyFieldJoin in fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins)
+                {
+                    foreach (var entity in detailsList)
+                    {
+                        var headerValue = GblMethods.GetPropertyValue(headerEntity,
+                            foreignKeyFieldJoin.PrimaryField.PropertyName);
+                        GblMethods.SetPropertyValue(entity, foreignKeyFieldJoin.ForeignField.PropertyName, headerValue);
+                    }
+                }
+            }
+
+            var existingData = GetExistingDbData(headerEntity, context);
+            context.RemoveRange(existingData);
+            context.AddRange(detailsList);
         }
 
-        public void DeleteNoCommitData(object headerObject, IDbContext context)
+        private IEnumerable<TEntity> GetExistingDbData<THeaderEntity>(THeaderEntity headerEntity,
+            IDbContext context) where THeaderEntity : class, new()
+        {
+            var headerTableDef = GblMethods.GetTableDefinition<THeaderEntity>();
+            var detailTableDef = GblMethods.GetTableDefinition<TEntity>();
+            if (headerTableDef == null || detailTableDef == null)
+            {
+                throw new Exception("Invalid Header Object or Details Object");
+            }
+
+            var detailsFields = detailTableDef
+                .PrimaryKeyFields
+                .Where(p => p.ParentJoinForeignKeyDefinition != null
+                            && p.ParentJoinForeignKeyDefinition.PrimaryTable == headerTableDef);
+
+            var filter = new TableFilterDefinition<TEntity>(detailTableDef);
+            foreach (var fieldDefinition in detailsFields)
+            {
+                foreach (var foreignKeyFieldJoin in fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins)
+                {
+                    var pkValue = GblMethods.GetPropertyValue(headerEntity,
+                        foreignKeyFieldJoin.PrimaryField.PropertyName);
+                    filter.AddFixedFieldFilter(foreignKeyFieldJoin.ForeignField, Conditions.Equals, pkValue);
+                }
+            }
+
+            var table = context.GetTable<TEntity>();
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = filter.GetWhereExpresssion<TEntity>(param);
+            var result = FilterItemDefinition.FilterQuery(table, param, expr);
+            return result;
+        }
+
+        public void DeleteNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
+            where THeaderEntity : class, new()
         {
             var table = context.GetTable<TEntity>();
-            var existingList = GetExistingDbData(table, headerObject);
+            var existingList = GetExistingDbData(table, headerEntity);
             context.RemoveRange(existingList);
         }
 
@@ -99,7 +159,7 @@ namespace RingSoft.DbMaintenance
             throw new Exception("You must override Manager's GetExistingDbData and not call the base.");
         }
 
-        public virtual List<TEntity> GetEntityList(object headerObject = null)
+        public virtual List<TEntity> GetEntityList()
         {
             if (Grid != null)
             {
@@ -116,11 +176,6 @@ namespace RingSoft.DbMaintenance
                     {
                         var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
                         row.SaveToEntity(entity, rowIndex);
-                        if (headerObject != null)
-                        {
-                            row.ProcessHeaderObject(entity, headerObject);
-                        }
-
                         result.Add(entity);
                         rowIndex++;
                     }

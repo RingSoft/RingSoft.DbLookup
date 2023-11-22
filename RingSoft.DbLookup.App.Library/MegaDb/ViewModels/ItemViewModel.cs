@@ -10,8 +10,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class ItemViewModel : DbMaintenanceViewModel<Item>
     {
-        public override TableDefinition<Item> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items;
+        #region Properties
 
         private int _itemId;
         public int ItemId
@@ -98,6 +97,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        #endregion
+
+        public Location DefaultLocation { get; private set; }
+
+        public AutoFillValue DefaultManufacturerAutoFillValue { get; private set; }
 
         private IMegaDbLookupContext _lookupContext;
         private MegaDbViewModelInput _viewModelInput;
@@ -121,29 +125,36 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             {
                 AddViewParameter = _viewModelInput
             };
+            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
+            {
+                if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition == _lookupContext.Locations)
+                {
+                    DefaultLocation = RsDbLookupAppGlobals
+                        .EfProcessor
+                        .MegaDbLookupContext
+                        .Locations
+                        .GetEntityFromPrimaryKeyValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue);
+                }
+                else if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition == _lookupContext.Manufacturers)
+                    SetNewManufacturerValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue);
+            }
+
             base.Initialize();
         }
 
         protected override Item PopulatePrimaryKeyControls(Item newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var item = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(newEntity.Id);
-            ItemId = item.Id;
-            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, item.Name);
+            ItemId = newEntity.Id;
 
             ReadOnlyMode = _viewModelInput.ItemViewModels.Any(a => a != this && a.ItemId == ItemId);
 
-            return item;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Item entity)
         {
-            LocationAutoFillValue =
-                new AutoFillValue(_lookupContext.Locations.GetPrimaryKeyValueFromEntity(entity.Location),
-                    entity.Location.Name);
-            ManufacturerAutoFillValue =
-                new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(entity.Manufacturer),
-                    entity.Manufacturer.Name);
-
+            LocationAutoFillValue = entity.Location.GetAutoFillValue();
+            ManufacturerAutoFillValue = entity.Manufacturer.GetAutoFillValue();
             IconType = entity.IconType;
 
             if (ReadOnlyMode)
@@ -154,26 +165,14 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override Item GetEntityData()
         {
-            var item = new Item {Id = ItemId, IconType = IconType};
-
-
-            if (KeyAutoFillValue != null)
-                item.Name = KeyAutoFillValue.Text;
-
-            if (LocationAutoFillValue != null)
+            var item = new Item
             {
-                var location =
-                    _lookupContext.Locations.GetEntityFromPrimaryKeyValue(LocationAutoFillValue.PrimaryKeyValue);
-                item.LocationId = location.Id;
-            }
-
-            if (ManufacturerAutoFillValue != null)
-            {
-                var manufacturer =
-                    _lookupContext.Manufacturers.GetEntityFromPrimaryKeyValue(ManufacturerAutoFillValue
-                        .PrimaryKeyValue);
-                item.ManufacturerId = manufacturer.Id;
-            }
+                Id = ItemId,
+                Name = KeyAutoFillValue.Text,
+                IconType = IconType,
+                LocationId = LocationAutoFillValue.GetEntity<Location>().Id,
+                ManufacturerId = ManufacturerAutoFillValue.GetEntity<Manufacturer>().Id,
+            };
 
             return item;
         }
@@ -182,21 +181,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             ItemId = 0;
             IconType = 0;
-            LocationAutoFillValue = ManufacturerAutoFillValue = null;
-            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
-            {
-                if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition == _lookupContext.Locations)
-                    SetNewLocationValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue);
-                else if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition == _lookupContext.Manufacturers)
-                    SetNewManufacturerValue(LookupAddViewArgs.ParentWindowPrimaryKeyValue);
-            }
-        }
-
-        private void SetNewLocationValue(PrimaryKeyValue primaryKeyValue)
-        {
-            var location = _lookupContext.Locations.GetEntityFromPrimaryKeyValue(primaryKeyValue);
-            location = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetLocation(location.Id);
-            LocationAutoFillValue = new AutoFillValue(primaryKeyValue, location.Name);
+            LocationAutoFillValue = DefaultLocation.FillOutProperties().GetAutoFillValue();
+            ManufacturerAutoFillValue = null;
         }
 
         private void SetNewManufacturerValue(PrimaryKeyValue primaryKeyValue)

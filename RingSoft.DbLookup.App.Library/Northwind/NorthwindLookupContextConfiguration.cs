@@ -277,7 +277,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         {
             try
             {
-                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.GetProduct(1);
+                RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetDataContext();
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                var table = context.GetTable<Product>();
+                var product = table
+                    .FirstOrDefault(p => p.ProductID == 1);
                 DataProcessor.IsValid = true;
             }
             catch (Exception e)

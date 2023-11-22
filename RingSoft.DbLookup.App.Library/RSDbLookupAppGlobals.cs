@@ -205,6 +205,7 @@ namespace RingSoft.DbLookup.App.Library
         public static void ConnectToNorthwind(INorthwindEfDataProcessor processor,
             INorthwindLookupContext lookupContext)
         {
+            processor.SetDataContext();
             try
             {
                 processor.GetProduct(1);
@@ -213,8 +214,6 @@ namespace RingSoft.DbLookup.App.Library
             {
                 Console.WriteLine(e);
             }
-            processor.SetAdvancedFindDbContext();
-            processor.SetAdvancedFindLookupContext();
         }
 
         public static void ConnectToMegaDb(IMegaDbEfDataProcessor processor, IMegaDbLookupContext lookupContext)

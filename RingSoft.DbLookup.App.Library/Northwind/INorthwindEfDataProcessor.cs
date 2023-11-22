@@ -7,6 +7,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
     {
         void CheckDataExists();
 
+        void SetDataContext();
+
         Customer GetCustomer(string customerId);
 
         bool SaveCustomer(Customer customer, bool addMode);
@@ -38,10 +40,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         bool SaveProduct(Product product);
 
         bool DeleteProduct(int productId);
-
-        void SetAdvancedFindDbContext();
-
-        void SetAdvancedFindLookupContext();
 
         Shipper GetShipper(int shipperId);
     }

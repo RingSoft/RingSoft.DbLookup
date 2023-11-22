@@ -123,7 +123,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
-            RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SetAdvancedFindDbContext();
 
             var stockLookupDefinition = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.Stocks);
             stockLookupDefinition.AddVisibleColumnDefinition(p => p.StockNumber, "Stock Number", p => p.StockNumber,

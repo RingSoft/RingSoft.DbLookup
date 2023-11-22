@@ -14,6 +14,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
     {
         public event EventHandler<ItemsTableSeederProgressArgs> ItemsTableSeederProgress;
 
+        public void SetDataContext()
+        {
+            var context = new MegaDbDbContextEfCore();
+        }
+
         public Item GetItem(int itemId)
         {
             var context = new MegaDbDbContextEfCore();
@@ -158,19 +163,5 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
                 f.StockNumber == stockNumber && f.Location == location && f.PurchasedDateTime == purchaseDate);
             return context.DeleteEntity(context.StockCostQuantities, stockCostQuantity, "Deleting Stock Item Purchase");
         }
-
-        public void SetAdvancedFindDbContext()
-        {
-            EfCoreGlobals.DbAdvancedFindContextCore = new MegaDbDbContextEfCore();
-            var processor = new AdvancedFindDataProcessorEfCore();
-            SystemGlobals.AdvancedFindDbProcessor = processor;
-            SystemGlobals.DataRepository = processor;
-        }
-
-        public void SetAdvancedFindLookupContext()
-        {
-
-        }
-
     }
 }

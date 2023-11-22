@@ -105,7 +105,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
-            RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SetAdvancedFindDbContext();
 
             if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is MegaDbViewModelInput viewModelInput)
                 _viewModelInput = viewModelInput;

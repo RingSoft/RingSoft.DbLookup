@@ -21,7 +21,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         public void CheckDataExists()
         {
-            SetAdvancedFindDbContext();
+            RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetDataContext();
             var context = SystemGlobals.DataRepository.GetDataContext();
             var ordersTable = context.GetTable<Order>();
             var any = false;
@@ -67,6 +67,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                 }
             }
         }
+
+        public void SetDataContext()
+        {
+            var context = new NorthwindDbContextEfCore();
+        }
+
         public Customer GetCustomer(string customerId)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -242,20 +248,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             var context = new NorthwindDbContextEfCore();
             var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
             return context.DeleteEntity(context.Products, product, "Deleting Product");
-        }
-
-        public void SetAdvancedFindDbContext()
-        {
-            EfCoreGlobals.DbAdvancedFindContextCore = new NorthwindDbContextEfCore();
-
-            var processor = new AdvancedFindDataProcessorEfCore();
-            SystemGlobals.DataRepository = processor;
-            SystemGlobals.AdvancedFindDbProcessor = processor;
-        }
-
-        public void SetAdvancedFindLookupContext()
-        {
-            
         }
 
         public Shipper GetShipper(int shipperId)

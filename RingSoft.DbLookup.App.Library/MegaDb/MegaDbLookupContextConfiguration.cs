@@ -112,7 +112,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         {
             try
             {
-                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(1);
+                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SetDataContext();
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                var table = context.GetTable<Item>();
+                var item = table
+                    .FirstOrDefault(p => p.Id == 1);
+                //RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetItem(1);
                 DataProcessor.IsValid = true;
             }
             catch (Exception e)

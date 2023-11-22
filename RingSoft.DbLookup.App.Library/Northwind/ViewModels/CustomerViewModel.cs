@@ -206,12 +206,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public CustomerViewModel()
         {
-            MapFieldToUiCommand(CompanyNameUiCommand
-                , TableDefinition.GetFieldDefinition(p => p.CompanyName));
         }
 
         protected override void Initialize()
         {
+            MapFieldToUiCommand(CompanyNameUiCommand
+                , TableDefinition.GetFieldDefinition(p => p.CompanyName));
+
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
 
             if (LookupAddViewArgs != null && LookupAddViewArgs.InputParameter is NorthwindViewModelInput viewModelInput)

@@ -208,7 +208,7 @@ namespace RingSoft.DbLookup.App.Library
             processor.SetDataContext();
             try
             {
-                processor.GetProduct(1);
+                var context = SystemGlobals.DataRepository.GetDataContext();
             }
             catch (Exception e)
             {

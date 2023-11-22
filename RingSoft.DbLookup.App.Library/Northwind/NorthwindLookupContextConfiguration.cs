@@ -53,8 +53,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public LookupDefinition<CategoryLookup, Category> CategoriesLookup { get; private set; }
 
-
-
         private INorthwindLookupContext _lookupContext;
         
         public NorthwindLookupContextConfiguration(INorthwindLookupContext lookupContext)

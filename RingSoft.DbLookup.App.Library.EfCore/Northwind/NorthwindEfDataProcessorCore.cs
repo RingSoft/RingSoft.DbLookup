@@ -14,14 +14,14 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindEfDataProcessorCore : INorthwindEfDataProcessor
     {
-        public NorthwindEfDataProcessorCore()
+        public void SetDataContext()
         {
-            
+            var context = new NorthwindDbContextEfCore();
         }
 
         public void CheckDataExists()
         {
-            RsDbLookupAppGlobals.EfProcessor.NorthwindEfDataProcessor.SetDataContext();
+            SetDataContext();
             var context = SystemGlobals.DataRepository.GetDataContext();
             var ordersTable = context.GetTable<Order>();
             var any = false;
@@ -66,11 +66,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                     }
                 }
             }
-        }
-
-        public void SetDataContext()
-        {
-            var context = new NorthwindDbContextEfCore();
         }
 
         public Customer GetCustomer(string customerId)

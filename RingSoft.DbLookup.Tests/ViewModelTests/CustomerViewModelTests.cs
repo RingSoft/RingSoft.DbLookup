@@ -14,12 +14,13 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
     [TestClass]
     public class CustomerViewModelTests
     {
-        public static TestGlobals<CustomerViewModel, TestDbMaintenanceView> Globals { get; } =
-            new TestGlobals<CustomerViewModel, TestDbMaintenanceView>();
+        public static TestGlobals<CustomerViewModel, TestDbMaintenanceView> Globals { get; private set; }
 
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
+            Globals = new TestGlobals<CustomerViewModel, TestDbMaintenanceView>();
+            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.SetAdvancedFind();
             Globals.Initialize();
         }
 

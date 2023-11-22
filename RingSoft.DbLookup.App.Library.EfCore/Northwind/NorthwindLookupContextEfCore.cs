@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             NorthwindContextConfiguration = new NorthwindLookupContextConfiguration(this);
             NorthwindDbContext = new NorthwindDbContextEfCore(this);
-            //SetAdvancedFind();
+            SetAdvancedFind();
             Initialize();
         }
 

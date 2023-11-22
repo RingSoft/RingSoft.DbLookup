@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbMaintenance;
@@ -10,12 +11,13 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
     [TestClass]
     public class OrderViewModelTests
     {
-        public static TestGlobals<OrderViewModel, TestDbMaintenanceView> Globals { get; } =
-            new TestGlobals<OrderViewModel, TestDbMaintenanceView>();
+        public static TestGlobals<OrderViewModel, TestDbMaintenanceView> Globals { get; private set; }
 
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
+            Globals = new TestGlobals<OrderViewModel, TestDbMaintenanceView>();
+            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.SetAdvancedFind();
             Globals.Initialize();
         }
 

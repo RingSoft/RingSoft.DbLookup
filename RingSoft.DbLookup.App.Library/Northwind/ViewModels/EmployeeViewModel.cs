@@ -318,6 +318,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public RelayCommand AddModifyCommand { get; }
+
         public UiCommand FirstNameUiCommand { get; } = new UiCommand();
 
         public UiCommand LastNameUiCommand { get; } = new UiCommand();
@@ -326,6 +328,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public EmployeeViewModel()
         {
+            AddModifyCommand = new RelayCommand(OnAddModify);
             MapFieldToUiCommand(FirstNameUiCommand
             , TableDefinition.GetFieldDefinition(p => p.FirstName));
 
@@ -469,7 +472,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return true;
         }
 
-        public void OnAddModify()
+        private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);

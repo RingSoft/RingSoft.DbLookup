@@ -18,8 +18,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public EmployeesWindow()
         {
             InitializeComponent();
-
-            AddModifyButton.Click += (sender, args) => EmployeeViewModel.OnAddModify();
         }
     }
 }

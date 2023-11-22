@@ -200,6 +200,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
 
+        public RelayCommand AddModifyCommand { get; private set; }
+
         public UiCommand CompanyNameUiCommand { get; } = new UiCommand();
 
         private INorthwindLookupContext _lookupContext;
@@ -247,7 +249,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 newEntity.CustomerID);
 
             ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, ViewModelInput);
+            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
@@ -326,7 +328,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return true;
         }
 
-        public void OnAddModify()
+        private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);

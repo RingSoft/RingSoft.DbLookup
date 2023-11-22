@@ -10,7 +10,7 @@
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Employees" Height="500" Width="600">
+        Title="Employees" Height="600" Width="600">
     <Window.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
     </Window.DataContext>
@@ -103,7 +103,7 @@
                 </TabItem>
                 <TabItem Header="Orders">
                     <DockPanel>
-                        <Button Content="_Add/Modify" x:Name="AddModifyButton" VerticalAlignment="Top"/>
+                        <Button Content="_Add/Modify" Command="{Binding AddModifyCommand}" VerticalAlignment="Top"/>
                         <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}">
                             <lc:LookupControl.LookupColumns>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderLookup}}" Width="100" Header="Order Date" DesignText="01/01/1980"/>

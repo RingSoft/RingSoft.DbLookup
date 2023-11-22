@@ -433,11 +433,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public RelayCommand ShowAdvFindCommand { get; }
 
-        public AutoFillValue DefaultCustomerAutoFillValue { get; private set; }
+        public Customer DefaultCustomer { get; private set; }
 
         public string DefaultCustomerName { get; private set; }
 
-        public AutoFillValue DefaultEmployeeAutoFillValue { get; private set; }
+        public Employee DefaultEmployee { get; private set; }
 
         public new IOrderView View { get; private set; }
 
@@ -533,9 +533,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     var customer =
                         _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                             .ParentWindowPrimaryKeyValue);
-                    customer = customer.FillOutProperties();
-                    DefaultCustomerAutoFillValue = customer.GetAutoFillValue();
-                    DefaultCustomerName = customer.CompanyName;
+                    DefaultCustomer = customer;
+                    DefaultCustomerName = customer.FillOutProperties().CompanyName;
                 }
                 else if (table == _lookupContext.Employees)
                 {
@@ -545,7 +544,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             _lookupContext.Employees
                                 .GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                                 .ParentWindowPrimaryKeyValue);
-                        DefaultEmployeeAutoFillValue = employee.FillOutProperties().GetAutoFillValue();
+                        DefaultEmployee = employee;
                     }
                 }
             }
@@ -693,8 +692,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override void ClearData()
         {
             OrderId = 0;
-            Customer = DefaultCustomerAutoFillValue;
-            Employee = DefaultEmployeeAutoFillValue;
+            Customer = DefaultCustomer.FillOutProperties().GetAutoFillValue();
+            Employee = DefaultEmployee.FillOutProperties().GetAutoFillValue();
             ShipVia = null;
             OrderDate = _newDateTime;
             RequiredDate = ShippedDate = null;

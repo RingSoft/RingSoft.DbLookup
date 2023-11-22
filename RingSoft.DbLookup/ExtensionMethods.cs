@@ -305,10 +305,8 @@ namespace RingSoft.DbLookup
             {
                 return null;
             }
-            var tableDefinition = SystemGlobals
-                .LookupContext
-                .TableDefinitions
-                .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
+
+            var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
             if (tableDefinition is TableDefinition<TEntity> fullTable)
             {
                 var filter = new TableFilterDefinition<TEntity>(fullTable);

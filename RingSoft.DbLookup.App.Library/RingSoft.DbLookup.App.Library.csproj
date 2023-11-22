@@ -21,9 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="DevLogix\DevLogix.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="MegaDb\MegaDb_MySqlScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

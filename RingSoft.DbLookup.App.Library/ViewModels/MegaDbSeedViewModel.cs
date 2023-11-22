@@ -1,11 +1,9 @@
-﻿using System;
+﻿using RingSoft.DbLookup.App.Library.MegaDb;
+using RingSoft.DbMaintenance;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
-using RingSoft.DbLookup.App.Library.DevLogix.Model;
-using RingSoft.DbLookup.App.Library.MegaDb;
-using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels
 {

@@ -26,30 +26,23 @@ namespace RingSoft.DbLookup.App.Library
         {
             RsDbLookupAppGlobals.Initialize(appName);
 
-            if (args.Contains("-devLogix"))
+            InitializeSplash();
+
+            SplashThread = new Thread(ShowSplash);
+            SplashThread.SetApartmentState(ApartmentState.STA);
+            SplashThread.IsBackground = true;
+            SplashThread.Start();
+
+            while (AppSplashWindow == null)
             {
-                ShowDevLogix();
+                Thread.Sleep(100);
             }
-            else
+            RsDbLookupAppGlobals.AppStartProgress += (sender, progressArgs) =>
             {
-                InitializeSplash();
+                AppSplashWindow.SetProgress(progressArgs.ProgressText);
+            };
 
-                SplashThread = new Thread(ShowSplash);
-                SplashThread.SetApartmentState(ApartmentState.STA);
-                SplashThread.IsBackground = true;
-                SplashThread.Start();
-
-                while (AppSplashWindow == null)
-                {
-                    Thread.Sleep(100);
-                }
-                RsDbLookupAppGlobals.AppStartProgress += (sender, progressArgs) =>
-                {
-                    AppSplashWindow.SetProgress(progressArgs.ProgressText);
-                };
-
-                FinishStartup();
-            }
+            FinishStartup();
         }
 
         protected void OnMainWindowShown()
@@ -76,8 +69,6 @@ namespace RingSoft.DbLookup.App.Library
         protected abstract void InitializeSplash();
 
         protected abstract void ShowSplash();
-
-        protected abstract void ShowDevLogix();
 
         protected abstract void FinishStartup();
     }

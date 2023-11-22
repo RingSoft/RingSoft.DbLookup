@@ -2,15 +2,12 @@
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.App.Library.EfCore;
 using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
-using RingSoft.DbLookup.App.WPFCore.DevLogix;
 using RingSoft.DbLookup.App.WPFCore.MegaDb;
 using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using System;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,7 +33,6 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private Application _application;
         private MainWindow _mainWindow;
-        private DevLogixTestWindow _devLogixTestWindow;
         private AppSplashWindow _splashWindow;
 
         public WpfAppStart(Application application)
@@ -69,15 +65,6 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             _splashWindow = new AppSplashWindow();
             _splashWindow.ShowDialog();
-        }
-
-        protected override void ShowDevLogix()
-        {
-            _devLogixTestWindow = new DevLogixTestWindow();
-
-            _application.MainWindow = _devLogixTestWindow;
-            _devLogixTestWindow.ShowDialog();
-            _application.Shutdown();
         }
 
         protected override void FinishStartup()

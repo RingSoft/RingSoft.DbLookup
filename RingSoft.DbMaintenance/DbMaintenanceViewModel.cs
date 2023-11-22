@@ -735,13 +735,6 @@ namespace RingSoft.DbMaintenance
             {
                 var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
                 var keyString = recordLockPrimaryKey.KeyString;
-                //var tableField =
-                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.Table);
-                //var pkField =
-                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.PrimaryKey);
-                //var dateField =
-                //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime);
-                //var userField = SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetFieldDefinition(p => p.User);
 
                 switch (MaintenanceMode)
                 {
@@ -754,76 +747,19 @@ namespace RingSoft.DbMaintenance
                             p => p.Table == TableDefinition.TableName
                                  && p.PrimaryKey == keyString
                                  && p.LockDateTime >= LockDate.ToUniversalTime());
-                        //var selectQuery =
-                        //    new SelectQuery(SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName);
-                        //selectQuery.AddWhereItem(tableField.FieldName, Conditions.Equals, TableDefinition.TableName);
-                        //selectQuery.AddWhereItem(pkField.FieldName, Conditions.Equals, keyString);
-                        //var lockDateWhere = selectQuery.AddWhereItem(dateField.FieldName, Conditions.GreaterThanEquals,
-                        //    LockDate.ToUniversalTime(),
-                        //    DbDateTypes.Millisecond);
-
-                        //var dataResult =
-                        //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
-                        //        selectQuery);
-
-                        //if (dataResult.ResultCode == GetDataResultCodes.Success)
                         {
-                            //var sqlGenerator = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                            //    .SqlGenerator;
-                            //var table = SystemGlobals.AdvancedFindLookupContext.RecordLocks.TableName;
-                            //table = sqlGenerator.FormatSqlObject(table);
 
                             if (recordLock != null)
                             {
-                                //var row = dataResult.DataSet.Tables[0].Rows[0];
                                 var message =
                                         $"You started editing this record on {LockDate.ToString("dddd, MMM dd yyyy")} at {LockDate.ToString("h:mm:ss tt")}.";
                                 message +=
                                     "  This record was saved by someone else while you were editing.  Do you wish to continue saving?";
-
-                                //var lockKey =
-                                //    new PrimaryKeyValue(SystemGlobals.AdvancedFindLookupContext.RecordLocks);
-                                //lockKey.PopulateFromDataRow(row);
                                 if (!Processor.ShowRecordLockWindow(SystemGlobals.AdvancedFindLookupContext.RecordLocks.GetPrimaryKeyValueFromEntity(recordLock), message, InputParameter))
                                 {
                                     return DbMaintenanceResults.ValidationError;
                                 }
                             }
-
-                            //selectQuery.RemoveWhereItem(lockDateWhere);
-                            //dataResult =
-                            //    SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor.GetData(
-                            //        selectQuery);
-
-                            //if (dataResult.DataSet.Tables[0].Rows.Count > 0)
-                            //{
-                            //    lockSql = GetUpdateLockSql(table, sqlGenerator, tableField, pkField, keyString,
-                            //        dateField, userField);
-                            //}
-                            //else
-                            //{
-                            //    var fields = sqlGenerator.FormatSqlObject(tableField.FieldName);
-                            //    var values = sqlGenerator.ConvertValueToSqlText(TableDefinition.TableName,
-                            //        ValueTypes.String, DbDateTypes.DateTime);
-
-                            //    fields += $", {sqlGenerator.FormatSqlObject(pkField.FieldName)}";
-                            //    values +=
-                            //        $", {sqlGenerator.ConvertValueToSqlText(keyString, ValueTypes.String, DbDateTypes.DateTime)}";
-
-                            //    fields += $", {sqlGenerator.FormatSqlObject(dateField.FieldName)}";
-                            //    var dateText = GetNowDateText();
-                            //    values +=
-                            //        $", {sqlGenerator.ConvertValueToSqlText(dateText, ValueTypes.DateTime, DbDateTypes.Millisecond)}";
-
-                            //    if (!SystemGlobals.UserName.IsNullOrEmpty())
-                            //    {
-                            //        fields += $", {sqlGenerator.FormatSqlObject(userField.FieldName)}";
-                            //        values +=
-                            //            $", {sqlGenerator.ConvertValueToSqlText(SystemGlobals.UserName, ValueTypes.String, DbDateTypes.DateTime)}";
-                            //    }
-
-                            //    lockSql = $"INSERT INTO {table} ({fields}) VALUES ({values})";
-                            //}
                         }
 
                         break;
@@ -832,6 +768,7 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
+            CheckSaveDeleted(entity);
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
@@ -853,14 +790,6 @@ namespace RingSoft.DbMaintenance
                 LockDate = DateTime.Now;
                 _savedKeyAutoFillValue = KeyAutoFillValue;
                 GetLastSavedDate(primaryKey);
-
-                //var recordLockResult = SystemGlobals.AdvancedFindLookupContext.RecordLocks.Context.DataProcessor
-                //    .ExecuteSql(lockSql);
-
-                //if (recordLockResult.ResultCode != GetDataResultCodes.Success)
-                //{
-                //    return DbMaintenanceResults.DatabaseError;
-                //}
             }
 
             _savingRecord = true;
@@ -1772,6 +1701,25 @@ namespace RingSoft.DbMaintenance
             if (raiseDirtyFlag)
                 RecordDirty = true;
             base.OnPropertyChanged(propertyName, raiseDirtyFlag);
+        }
+
+        public void CheckSaveDeleted(TEntity entity)
+        {
+            if (TableDefinition.IsIdentity())
+            {
+                var identityVal = TableDefinition.GetIdentityValue(entity);
+                if (identityVal > 0)
+                {
+                    var existEntity = entity.FillOutProperties(false);
+                    if (existEntity == null)
+                    {
+                        GblMethods.SetPropertyValue(entity
+                        , TableDefinition
+                            .GetIdentityField()
+                            .PropertyName, "0");
+                    }
+                }
+            }
         }
     }
 }

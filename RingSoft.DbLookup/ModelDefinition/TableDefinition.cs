@@ -704,5 +704,19 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
+        public int GetIdentityValue(TEntity entity)
+        {
+            var result = 0;
+            if (!IsIdentity())
+            {
+                return result;
+            }
+
+            foreach (var fieldDefinition in PrimaryKeyFields)
+            {
+                result = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName).ToInt();
+            }
+            return result;
+        }
     }
 }

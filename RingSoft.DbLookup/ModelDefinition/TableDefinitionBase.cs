@@ -629,5 +629,20 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public abstract bool ValidateAutoFillValue(AutoFillValue autoFillValue);
 
+        public bool IsIdentity()
+        {
+            var identity = PrimaryKeyFields.Count == 1 && PrimaryKeyFields[0].FieldDataType == FieldDataTypes.Integer;
+            return identity;
+        }
+
+        public IntegerFieldDefinition GetIdentityField()
+        {
+            IntegerFieldDefinition result = null;
+            if (IsIdentity())
+            {
+                return PrimaryKeyFields[0] as IntegerFieldDefinition;
+            }
+            return result;
+        }
     }
 }

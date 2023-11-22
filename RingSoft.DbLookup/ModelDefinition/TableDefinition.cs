@@ -682,5 +682,27 @@ namespace RingSoft.DbLookup.ModelDefinition
             return this;
         }
 
+        public override bool ValidateAutoFillValue(AutoFillValue autoFillValue)
+        {
+            if (autoFillValue.IsValid())
+            {
+                var entity = GetEntityFromPrimaryKeyValue(autoFillValue.PrimaryKeyValue);
+                if (entity != null)
+                {
+                    entity = entity.FillOutProperties();
+                    if (entity == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

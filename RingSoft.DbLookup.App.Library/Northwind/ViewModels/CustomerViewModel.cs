@@ -208,6 +208,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public CustomerViewModel()
         {
+            AddModifyCommand = new RelayCommand(OnAddModify);
         }
 
         protected override void Initialize()

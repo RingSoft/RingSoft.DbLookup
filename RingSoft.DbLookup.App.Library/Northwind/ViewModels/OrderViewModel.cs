@@ -433,11 +433,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public RelayCommand ShowAdvFindCommand { get; }
 
-        public Customer DefaultCustomer { get; private set; }
+        public AutoFillValue DefaultCustomerAutoFillValue { get; private set; }
 
         public string DefaultCustomerName { get; private set; }
 
-        public Employee DefaultEmployee { get; private set; }
+        public AutoFillValue DefaultEmployeeaAutoFillValue { get; private set; }
 
         public new IOrderView View { get; private set; }
 
@@ -533,7 +533,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     var customer =
                         _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                             .ParentWindowPrimaryKeyValue);
-                    DefaultCustomer = customer;
+                    DefaultCustomerAutoFillValue = customer.FillOutProperties().GetAutoFillValue();
                     DefaultCustomerName = customer.FillOutProperties().CompanyName;
                 }
                 else if (table == _lookupContext.Employees)
@@ -544,7 +544,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             _lookupContext.Employees
                                 .GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                                 .ParentWindowPrimaryKeyValue);
-                        DefaultEmployee = employee;
+                        DefaultEmployeeaAutoFillValue = employee.FillOutProperties().GetAutoFillValue();
                     }
                 }
             }
@@ -689,11 +689,21 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return order;
         }
 
+        protected override bool ValidateEntity(Order entity)
+        {
+            var result = base.ValidateEntity(entity);
+            if (result && GridMode)
+            {
+                result = DetailsGridManager.ValidateGrid();
+            }
+            return result;
+        }
+
         protected override void ClearData()
         {
             OrderId = 0;
-            Customer = DefaultCustomer.FillOutProperties().GetAutoFillValue();
-            Employee = DefaultEmployee.FillOutProperties().GetAutoFillValue();
+            Customer = DefaultCustomerAutoFillValue;
+            Employee = DefaultEmployeeaAutoFillValue;
             ShipVia = null;
             OrderDate = _newDateTime;
             RequiredDate = ShippedDate = null;

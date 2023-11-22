@@ -385,6 +385,14 @@ namespace RingSoft.DbLookup
                     return autoFillSetup.ForeignField.AllowNulls;
                 }
             }
+
+            if (!autoFillSetup
+                .LookupDefinition
+                .TableDefinition
+                .ValidateAutoFillValue(autoFillValue))
+            {
+                result = false;
+            }
             return result;
         }
 

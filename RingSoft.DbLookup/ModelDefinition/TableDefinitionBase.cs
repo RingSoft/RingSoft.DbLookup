@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -625,5 +626,8 @@ namespace RingSoft.DbLookup.ModelDefinition
             HeaderTable = GblMethods.GetTableDefinition<THeaderEntity>(); 
             return this;
         }
+
+        public abstract bool ValidateAutoFillValue(AutoFillValue autoFillValue);
+
     }
 }

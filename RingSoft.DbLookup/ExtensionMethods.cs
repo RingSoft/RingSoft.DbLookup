@@ -331,7 +331,7 @@ namespace RingSoft.DbLookup
                 }
             }
 
-            return entity;
+            return null;
         }
 
 

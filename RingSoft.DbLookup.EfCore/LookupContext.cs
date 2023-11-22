@@ -231,39 +231,41 @@ namespace RingSoft.DbLookup.EfCore
             }
 
             var query = context.GetTable<TEntity>();
-            
-            var includes = new List<string>();
-            var parentObjects = tableDefinition
-                .FieldDefinitions
-                .Where(p => p.ParentJoinForeignKeyDefinition != null);
-
-            foreach (var fieldDefinition in parentObjects)
+            if (getRelatedEntities)
             {
-                includes.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition));
-            }
-
-            var gridKeys = tableDefinition.ChildKeys
-                .Where(p => p.ForeignTable.HeaderTable == tableDefinition);
-
-            foreach (var key in gridKeys)
-            {
-                includes.Add(key.CollectionName);
-                parentObjects = key
-                    .ForeignTable
+                var includes = new List<string>();
+                var parentObjects = tableDefinition
                     .FieldDefinitions
-                    .Where(p => p.ParentJoinForeignKeyDefinition != null
-                                && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
+                    .Where(p => p.ParentJoinForeignKeyDefinition != null);
+
                 foreach (var fieldDefinition in parentObjects)
                 {
-                    includes.AddRange(GetIncludes(fieldDefinition
-                        .ParentJoinForeignKeyDefinition
-                    , key.CollectionName));
+                    includes.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition));
                 }
-            }
 
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
+                var gridKeys = tableDefinition.ChildKeys
+                    .Where(p => p.ForeignTable.HeaderTable == tableDefinition);
+
+                foreach (var key in gridKeys)
+                {
+                    includes.Add(key.CollectionName);
+                    parentObjects = key
+                        .ForeignTable
+                        .FieldDefinitions
+                        .Where(p => p.ParentJoinForeignKeyDefinition != null
+                                    && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
+                    foreach (var fieldDefinition in parentObjects)
+                    {
+                        includes.AddRange(GetIncludes(fieldDefinition
+                                .ParentJoinForeignKeyDefinition
+                            , key.CollectionName));
+                    }
+                }
+
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
             }
 
             return query;

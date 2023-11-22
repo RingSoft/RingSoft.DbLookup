@@ -804,9 +804,9 @@ namespace RingSoft.DbMaintenance
                 if (MaintenanceMode == DbMaintenanceModes.AddMode)
                 {
                     var context = SystemGlobals.DataRepository.GetDataContext();
-                    _lookupData.SelectPrimaryKey(primaryKey);
                 }
 
+                _lookupData.SelectPrimaryKey(primaryKey);
                 if (LookupAddViewArgs != null)
                 {
                     if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())

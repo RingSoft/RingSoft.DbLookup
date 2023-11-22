@@ -209,7 +209,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         private void LoadFromProduct(Product product)
         {
-            product = product.FillOutProperties();
+            product = product.FillOutProperties(false);
             Quantity = 1;
             if (product.UnitPrice != null)
                 Price = (double) product.UnitPrice;

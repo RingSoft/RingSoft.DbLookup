@@ -223,7 +223,7 @@ namespace RingSoft.DbLookup.EfCore
         }
 
         public override IQueryable<TEntity> GetQueryableTable<TEntity>(TableDefinition<TEntity> tableDefinition
-        , IDbContext context = null) where TEntity : class
+            , bool getRelatedEntities, IDbContext context = null) where TEntity : class
         {
             if (context == null)
             {

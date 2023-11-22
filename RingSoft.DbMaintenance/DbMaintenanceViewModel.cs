@@ -1622,7 +1622,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>An entity populated from the database.</returns>
         protected virtual TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var entity = newEntity.FillOutProperties();
+            var entity = newEntity.FillOutProperties(true);
             return entity;
         }
 

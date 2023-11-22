@@ -491,7 +491,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                                 .NorthwindLookupContext
                                 .Customers
                                 .GetEntityFromPrimaryKeyValue(aofResult.NewPrimaryKeyValue);
-                            Customer = customer.FillOutProperties()
+                            Customer = customer.FillOutProperties(false)
                                 .GetAutoFillValue();
                         }
                         else
@@ -532,9 +532,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 {
                     var customer =
                         _lookupContext.Customers.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
-                            .ParentWindowPrimaryKeyValue);
-                    DefaultCustomerAutoFillValue = customer.FillOutProperties().GetAutoFillValue();
-                    DefaultCustomerName = customer.FillOutProperties().CompanyName;
+                            .ParentWindowPrimaryKeyValue).FillOutProperties(false);
+                    DefaultCustomerAutoFillValue = customer.GetAutoFillValue();
+                    DefaultCustomerName = customer.CompanyName;
                 }
                 else if (table == _lookupContext.Employees)
                 {
@@ -544,7 +544,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                             _lookupContext.Employees
                                 .GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                                 .ParentWindowPrimaryKeyValue);
-                        DefaultEmployeeaAutoFillValue = employee.FillOutProperties().GetAutoFillValue();
+                        DefaultEmployeeaAutoFillValue = employee.FillOutProperties(false).GetAutoFillValue();
                     }
                 }
             }
@@ -757,7 +757,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 else
                 {
                     var customer = _lookupContext.Customers.GetEntityFromPrimaryKeyValue(Customer.PrimaryKeyValue);
-                    customer = customer.FillOutProperties();
+                    customer = customer.FillOutProperties(false);
 
                     if (customer != null)
                     {

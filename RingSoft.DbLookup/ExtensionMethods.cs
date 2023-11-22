@@ -299,7 +299,7 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
-        public static TEntity FillOutProperties<TEntity>(this TEntity entity) where TEntity : class, new()
+        public static TEntity FillOutProperties<TEntity>(this TEntity entity, bool getRelatedEntities) where TEntity : class, new()
         {
             if (entity == null)
             {
@@ -319,7 +319,7 @@ namespace RingSoft.DbLookup
                         filter.AddFixedFilter(primaryKeyField, Conditions.Equals, fieldValue);
                     }
 
-                    var table = fullTable.Context.GetQueryableTable(fullTable);
+                    var table = fullTable.Context.GetQueryableTable(fullTable, getRelatedEntities);
                     var param = GblMethods.GetParameterExpression<TEntity>();
                     var expr = filter.GetWhereExpresssion<TEntity>(param);
                     var query = FilterItemDefinition.FilterQuery(table, param, expr);

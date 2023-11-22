@@ -201,7 +201,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             {
                 var order = _lookupContext.Orders.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
                     .ParentWindowPrimaryKeyValue);
-                Order = order.FillOutProperties();
+                Order = order.FillOutProperties(true);
                 LoadFromOrder();
             }
 
@@ -247,7 +247,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     OrderID = OrderId,
                     ProductID = productId,
                 };
-                orderDetail = orderDetail.FillOutProperties();
+                orderDetail = orderDetail.FillOutProperties(true);
                 if (orderDetail.Order != null)
                 {
                     SelectPrimaryKey(_lookupContext.OrderDetails.GetPrimaryKeyValueFromEntity(orderDetail));
@@ -263,7 +263,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (_productDirty && ProductAutoFillValue.IsValid())
             {
-                var product = ProductAutoFillValue.GetEntity<Product>().FillOutProperties();
+                var product = ProductAutoFillValue.GetEntity<Product>().FillOutProperties(false);
                 if (product != null && product.UnitPrice != null)
                 {
                     Price = (double)product.UnitPrice;

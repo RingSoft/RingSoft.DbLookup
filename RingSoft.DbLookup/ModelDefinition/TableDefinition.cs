@@ -689,7 +689,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 var entity = GetEntityFromPrimaryKeyValue(autoFillValue.PrimaryKeyValue);
                 if (entity != null)
                 {
-                    entity = entity.FillOutProperties();
+                    entity = entity.FillOutProperties(false);
                     if (entity == null)
                     {
                         return false;

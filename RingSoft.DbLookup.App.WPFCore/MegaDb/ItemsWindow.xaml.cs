@@ -20,32 +20,6 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
             InitializeComponent();
 
             RegisterFormKeyControl(NameControl);
-
-            LocationControl.PreviewLostKeyboardFocus += (sender, args) =>
-            {
-                if (!ItemsViewModel.LocationLostFocusValidation(this))
-                    args.Handled = true;
-            };
-
-            ManufacturerControl.PreviewLostKeyboardFocus += (sender, args) =>
-            {
-                if (!ItemsViewModel.ManufacturerLostFocusValidation(this))
-                    args.Handled = true;
-            };
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items;
-
-            if (fieldDefinition == table.GetFieldDefinition(p => p.Name))
-                NameControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.LocationId))
-                LocationControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.ManufacturerId))
-                ManufacturerControl.Focus();
-
-            base.OnValidationFail(fieldDefinition, text, caption);
         }
     }
 }

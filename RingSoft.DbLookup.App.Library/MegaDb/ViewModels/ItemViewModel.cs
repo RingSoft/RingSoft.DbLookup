@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
-using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
-using RingSoft.DataEntryControls.Engine;
+using System.ComponentModel;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
@@ -101,9 +100,28 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public AutoFillValue DefaultLocationaAutoFillValue { get; private set; }
         public AutoFillValue DefaultManufacturerAutoFillValue { get; private set; }
+        public UiCommand LocationUiCommand { get; } = new UiCommand();
+        public UiCommand ManufacturerUiCommand { get; } = new UiCommand();
 
         private IMegaDbLookupContext _lookupContext;
         private MegaDbViewModelInput _viewModelInput;
+
+        public ItemViewModel()
+        {
+            LocationUiCommand.LostFocus += LocationUiCommand_LostFocus;
+
+            ManufacturerUiCommand.LostFocus += ManufacturerUiCommand_LostFocus;
+        }
+
+        private void ManufacturerUiCommand_LostFocus(object sender, UiLostFocusArgs e)
+        {
+            e.ContinueFocusChange = ManufacturerLostFocusValidation();
+        }
+
+        private void LocationUiCommand_LostFocus(object sender, UiLostFocusArgs e)
+        {
+            e.ContinueFocusChange = LocationLostFocusValidation();
+        }
 
         protected override void Initialize()
         {
@@ -209,7 +227,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             return true;
         }
 
-        public bool LocationLostFocusValidation(object ownerWindow)
+        private bool LocationLostFocusValidation()
         {
             if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.IsValid() &&
                 !LocationAutoFillValue.Text.IsNullOrEmpty())
@@ -220,7 +238,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                     return false;
 
                 var newRecord = _lookupContext.MegaDbContextConfiguration.LocationsLookup.ShowAddOnTheFlyWindow(
-                    LocationAutoFillValue.Text, ownerWindow);
+                    LocationAutoFillValue.Text);
 
                 if (!newRecord.NewPrimaryKeyValue.IsValid())
                     return false;
@@ -234,7 +252,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             return true;
         }
 
-        public bool ManufacturerLostFocusValidation(object ownerWindow)
+        private bool ManufacturerLostFocusValidation()
         {
             if (ManufacturerAutoFillValue != null && !ManufacturerAutoFillValue.PrimaryKeyValue.IsValid() &&
                 !ManufacturerAutoFillValue.Text.IsNullOrEmpty())
@@ -246,7 +264,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
                 var newRecord =
                     _lookupContext.MegaDbContextConfiguration.ManufacturersLookup.ShowAddOnTheFlyWindow(
-                        ManufacturerAutoFillValue.Text, ownerWindow);
+                        ManufacturerAutoFillValue.Text);
 
                 if (!newRecord.NewPrimaryKeyValue.IsValid())
                     return false;

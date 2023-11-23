@@ -33,11 +33,16 @@
             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Width="100" HorizontalAlignment="Left" Text="{Binding Path=ItemId}"/>
 
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
+
             <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3"/>
+
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Location"/>
-            <lc:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding LocationUiCommand}"/>
+
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Manufacturer"/>
-            <lc:AutoFillControl x:Name="ManufacturerControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding ManufacturerUiCommand}"/>
 
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Icon"/>
 

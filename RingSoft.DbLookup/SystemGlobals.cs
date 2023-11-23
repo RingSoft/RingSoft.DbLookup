@@ -84,5 +84,7 @@ namespace RingSoft.DbLookup
         }
 
         public static bool UnitTestMode { get; set; }
+
+        public static bool ValidateDeletedData { get; set; } = true;
     }
 }

@@ -686,6 +686,10 @@ namespace RingSoft.DbLookup.ModelDefinition
         {
             if (autoFillValue.IsValid())
             {
+                if (!SystemGlobals.ValidateDeletedData)
+                {
+                    return true;
+                }
                 var entity = GetEntityFromPrimaryKeyValue(autoFillValue.PrimaryKeyValue);
                 if (entity != null)
                 {

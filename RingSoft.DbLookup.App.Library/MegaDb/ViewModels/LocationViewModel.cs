@@ -13,8 +13,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class LocationViewModel : DbMaintenanceViewModel<Location>
     {
-        public override TableDefinition<Location> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations;
+        #region Properties
 
         private int _locationId;
         public int LocationId
@@ -58,6 +57,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        #endregion
+
         private MegaDbViewModelInput _viewModelInput;
 
         protected override void Initialize()
@@ -84,17 +85,15 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override Location PopulatePrimaryKeyControls(Location newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var location = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetLocation(newEntity.Id);
-            LocationId = location.Id;
-            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, location.Name);
+            LocationId = newEntity.Id;
 
             ReadOnlyMode = _viewModelInput.LocationViewModels.Any(a => a != this && a.LocationId == LocationId);
 
             _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, location.Id);
+            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, newEntity.Id);
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
 
-            return location;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Location entity)
@@ -107,9 +106,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override Location GetEntityData()
         {
-            var location = new Location();
-            location.Id = LocationId;
-            location.Name = KeyAutoFillValue.Text;
+            var location = new Location
+            {
+                Id = LocationId,
+                Name = KeyAutoFillValue.Text
+            };
 
             return location;
         }
@@ -118,7 +119,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             LocationId = 0;
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Clear);
-            //var test = LookupAddViewArgs;
         }
 
         protected override bool SaveEntity(Location entity)

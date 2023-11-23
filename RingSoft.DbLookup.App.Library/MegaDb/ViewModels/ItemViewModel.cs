@@ -191,12 +191,22 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override bool SaveEntity(Item entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SaveItem(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.SaveEntity(entity, "Saving Item");
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DeleteItem(ItemId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Item>();
+            var entity = table
+                .FirstOrDefault(p => p.Id == ItemId);
+            if (entity != null)
+            {
+                return context.DeleteEntity(entity, "Deleting Item");
+            }
+
+            return true;
         }
 
         public bool LocationLostFocusValidation(object ownerWindow)

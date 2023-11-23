@@ -38,8 +38,7 @@ namespace RingSoft.DbLookup
             {
                 if (_context == null)
                 {
-                    var message = $"Need To instantiate {nameof(LookupContextBase)}.";
-                    throw new ApplicationException(message);
+                    throw new Exception($"Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
                 }
                 return _context;
             }
@@ -76,7 +75,7 @@ namespace RingSoft.DbLookup
             {
                 if (_lookupContext == null)
                 {
-                    throw new Exception($"Need to Need To implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
+                    throw new Exception($"Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
                 }
                 return _lookupContext;
             }

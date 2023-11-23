@@ -104,7 +104,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
             modelBuilder.Entity<Location>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<Manufacturer>().Property(p => p.Name).IsRequired();
 
-            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
+            SystemDataRepositoryEfCore.ConfigureAdvancedFind(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

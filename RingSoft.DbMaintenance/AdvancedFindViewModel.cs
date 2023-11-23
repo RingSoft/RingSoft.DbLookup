@@ -118,9 +118,6 @@ namespace RingSoft.DbMaintenance
 
     public class AdvancedFindViewModel : DbMaintenanceViewModel<AdvancedFind>
     {
-        public override TableDefinition<AdvancedFind> TableDefinition =>
-            SystemGlobals.AdvancedFindLookupContext.AdvancedFinds;
-
         private int _advancedFindId;
 
         public int AdvancedFindId

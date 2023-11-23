@@ -26,7 +26,6 @@ namespace RingSoft.DbLookup.Tests
             ControlsGlobals.UserInterface = UserInterface;
 
             LookupContext = new TestLookupContext(new TestDbContext());
-            SystemGlobals.LookupContext = LookupContext;
             LookupControl = new TestLookupControl();
         }
 

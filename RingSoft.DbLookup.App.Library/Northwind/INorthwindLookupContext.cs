@@ -20,8 +20,5 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         TableDefinition<Shipper> Shippers { get; set; }
         TableDefinition<Supplier> Suppliers { get; set; }
         TableDefinition<Territory> Territories { get; set; }
-        string GetOrderFormula();
-        public void SetAdvancedFind();
-
     }
 }

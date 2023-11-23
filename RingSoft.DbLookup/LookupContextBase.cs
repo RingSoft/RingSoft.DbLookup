@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
+using RingSoft.DbLookup.RecordLocking;
 
 namespace RingSoft.DbLookup
 {
@@ -76,8 +78,19 @@ namespace RingSoft.DbLookup
     /// <summary>
     /// Contains all the table definitions used in this context.
     /// </summary>
-    public abstract class LookupContextBase
+    public abstract class LookupContextBase : IAdvancedFindLookupContext
     {
+        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
+        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
+        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
+        public LookupContextBase Context => this;
+        public TableDefinition<RecordLock> RecordLocks { get; set; }
+
+        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
+        public LookupDefinition<AdvancedFindLookup, AdvancedFindColumn> AdvancedFindColumnLookup { get; set; }
+        public LookupDefinition<AdvFindFilterLookup, AdvancedFindFilter> AdvancedFindFilterLookup { get; set; }
+        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
+
         /// <summary>
         /// Gets the table definitions.
         /// </summary>
@@ -173,6 +186,9 @@ namespace RingSoft.DbLookup
 
         public LookupContextBase()
         {
+            SystemGlobals.LookupContext = this;
+            SystemGlobals.AdvancedFindLookupContext = this;
+
             var properties = GetType().GetProperties();
             var entityDefinitionName = $"{nameof(TableDefinition<object>)}`1";
             foreach (var property in properties)
@@ -191,6 +207,8 @@ namespace RingSoft.DbLookup
         /// </summary>
         public virtual void Initialize()
         {
+            SystemGlobals.LookupContext = this;
+            SystemGlobals.AdvancedFindLookupContext = this;
             if (!Initialized)
             {
                 InitializeAdvFind();

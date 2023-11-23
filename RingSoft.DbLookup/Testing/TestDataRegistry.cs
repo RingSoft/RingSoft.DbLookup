@@ -247,6 +247,11 @@ namespace RingSoft.DbLookup.Testing
             DataContext = context;
         }
 
+        public void Initialize()
+        {
+            SystemGlobals.DataRepository = this;
+        }
+
         IDbContext IDataRepository.GetDataContext()
         {
             return DataContext;

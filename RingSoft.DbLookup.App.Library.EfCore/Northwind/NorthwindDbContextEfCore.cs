@@ -99,7 +99,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                 .WithMany(p => p.Employees1)
                 .HasForeignKey(p => p.ReportsTo);
 
-            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
+            SystemDataRepositoryEfCore.ConfigureAdvancedFind(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

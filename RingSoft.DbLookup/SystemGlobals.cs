@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup
 
     public static class SystemGlobals
     {
-        public static IAdvancedFindDbProcessor AdvancedFindDbProcessor { get; set; }
+        public static IAdvancedFindDbProcessor AdvancedFindDbProcessor { get; internal set; }
 
         public static string UserName { get; set; }
 
@@ -38,12 +38,12 @@ namespace RingSoft.DbLookup
             {
                 if (_context == null)
                 {
-                    var message = $"Need To Instantiate {nameof(IAdvancedFindLookupContext)}.";
+                    var message = $"Need To instantiate {nameof(LookupContextBase)}.";
                     throw new ApplicationException(message);
                 }
                 return _context;
             }
-            set => _context = value;
+            internal set => _context = value;
         }
 
         private static IDataRepository _dataRepository;
@@ -54,12 +54,12 @@ namespace RingSoft.DbLookup
             {
                 if (_dataRepository == null)
                 {
-                    var message = $"Need To Instantiate {nameof(IDataRepository)}.";
+                    var message = $"Need To implement and instantiate {nameof(SystemDataRepositoryBase)}.";
                     throw new ApplicationException(message);
                 }
                 return _dataRepository;
             }
-            set => _dataRepository = value;
+            internal set => _dataRepository = value;
         }
 
 
@@ -76,11 +76,11 @@ namespace RingSoft.DbLookup
             {
                 if (_lookupContext == null)
                 {
-                    throw new Exception("Need to set SystemGlobals.LookupContext");
+                    throw new Exception($"Need to Need To implement and instantiate {nameof(LookupContextBase)}.");
                 }
                 return _lookupContext;
             }
-            set => _lookupContext = value;
+            internal set => _lookupContext = value;
         }
 
         public static bool UnitTestMode { get; set; }

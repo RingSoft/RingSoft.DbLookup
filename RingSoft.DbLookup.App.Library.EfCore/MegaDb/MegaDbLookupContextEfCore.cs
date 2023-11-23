@@ -3,6 +3,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.EfCore;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.RecordLocking;
@@ -32,7 +33,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         {
             MegaDbContextConfiguration = new MegaDbLookupContextConfiguration(this);
             MegaDbDbContext = new MegaDbDbContextEfCore(this);
-            Initialize();
+            ((LookupContext)this).Initialize();
         }
 
         protected override void SetupModel()
@@ -49,12 +50,5 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         {
             MegaDbContextConfiguration.ConfigureLookups();
         }
-
-        public void SetAdvancedFind()
-        {
-            SystemGlobals.AdvancedFindLookupContext = this;
-            SystemGlobals.LookupContext = this;
-        }
-
     }
 }

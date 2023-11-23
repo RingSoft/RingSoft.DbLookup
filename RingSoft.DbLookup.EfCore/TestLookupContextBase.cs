@@ -14,7 +14,7 @@ namespace RingSoft.DbLookup.EfCore
         public TestLookupContextBase(DbContext context)
         {
             DataRepository = new TestDataRepository(new DataRepositoryRegistry());
-            SystemGlobals.DataRepository = DataRepository;
+            DataRepository.Initialize();
             _context = context;
             Initialize();
         }

@@ -6,6 +6,8 @@ namespace RingSoft.DbLookup
 {
     public interface IDataRepository
     {
+        void Initialize();
+
         IDbContext GetDataContext();
 
         //ILookupDataBase GetLookupDataBase<TEntity>(LookupDefinitionBase lookupDefinition, LookupUserInterface lookupUi)

@@ -1,32 +1,31 @@
-﻿using System;
+﻿using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.RecordLocking;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using RingSoft.DbLookup.AdvancedFind;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.RecordLocking;
 
-namespace RingSoft.DbLookup.EfCore
+namespace RingSoft.DbLookup
 {
-    public class AdvancedFindDataProcessorEfCore : IAdvancedFindDbProcessor, IDataRepository
+    public abstract class SystemDataRepositoryBase : IDataRepository, IAdvancedFindDbProcessor
     {
-        public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
+        public SystemDataRepositoryBase()
         {
-            modelBuilder.ApplyConfiguration(new RecordLockConfiguration());
-            modelBuilder.ApplyConfiguration(new AdvancedFindConfiguration());
-            modelBuilder.ApplyConfiguration(new AdvancedFindColumnConfiguration());
-            modelBuilder.ApplyConfiguration(new AdvancedFindFilterConfiguration());
+            Initialize();
+        }
 
+        public void Initialize()
+        {
+            SystemGlobals.AdvancedFindDbProcessor = this;
+            SystemGlobals.DataRepository = this;
         }
 
         public AdvancedFind.AdvancedFind GetAdvancedFind(int advancedFindId)
         {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            IQueryable<AdvancedFind.AdvancedFind> query = context.GetTable<AdvancedFind.AdvancedFind>();
-            return query.Include(p => p.Columns)
-                .Include(p => p.Filters)
-                .FirstOrDefault(p => p.Id == advancedFindId);
+            var advFind = new AdvancedFind.AdvancedFind
+            {
+                Id = advancedFindId,
+            };
+            return advFind.FillOutProperties(true);
         }
 
         public bool SaveAdvancedFind(AdvancedFind.AdvancedFind advancedFind, List<AdvancedFindColumn> columns,
@@ -38,7 +37,7 @@ namespace RingSoft.DbLookup.EfCore
             {
                 var columnsQuery = context.GetTable<AdvancedFindColumn>();
                 var oldColumns = columnsQuery.Where(p => p.AdvancedFindId == advancedFind.Id);
-                
+
                 foreach (var advancedFindColumn in columns)
                 {
                     advancedFindColumn.AdvancedFindId = advancedFind.Id;
@@ -49,7 +48,7 @@ namespace RingSoft.DbLookup.EfCore
                 var filtersQuery = context.GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
                     p => p.AdvancedFindId == advancedFind.Id);
-                
+
                 foreach (var advancedFindFilter in filters)
                 {
                     advancedFindFilter.AdvancedFindId = advancedFind.Id;
@@ -72,7 +71,7 @@ namespace RingSoft.DbLookup.EfCore
                 var columnsQuery = context.GetTable<AdvancedFindColumn>();
                 var oldColumns = columnsQuery.Where(
                     p => p.AdvancedFindId == advancedFindId);
-                
+
 
                 var filtersQuery = context.GetTable<AdvancedFindFilter>();
                 var oldFilters = filtersQuery.Where(
@@ -101,21 +100,8 @@ namespace RingSoft.DbLookup.EfCore
             return query.FirstOrDefault(p => p.Table == table && p.PrimaryKey == primaryKey);
         }
 
-        public IDbContext GetDataContext()
-        {
-            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-        }
+        public abstract IDbContext GetDataContext();
 
-        public virtual IDbContext GetDataContext(DbDataProcessor dataProcessor)
-        {
-            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-        }
-
-        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new()
-        {
-            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            var dbSet = context.GetTable<TEntity>();
-            return dbSet;
-        }
+        public abstract IDbContext GetDataContext(DbDataProcessor dataProcessor);
     }
 }

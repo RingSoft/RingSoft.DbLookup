@@ -17,7 +17,5 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         TableDefinition<StockMaster> Stocks { get; set; }
 
         TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
-
-        public void SetAdvancedFind();
     }
 }

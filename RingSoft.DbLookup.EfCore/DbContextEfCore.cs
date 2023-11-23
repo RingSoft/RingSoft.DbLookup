@@ -37,7 +37,6 @@ namespace RingSoft.DbLookup.EfCore
         public DbContextEfCore()
         {
             EfCoreGlobals.DbAdvancedFindContextCore = this;
-            SystemGlobals.AdvancedFindDbProcessor = new AdvancedFindDataProcessorEfCore();
         }
 
         public virtual IAdvancedFindDbContextEfCore GetNewDbContext()
@@ -53,7 +52,7 @@ namespace RingSoft.DbLookup.EfCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            AdvancedFindDataProcessorEfCore.ConfigureAdvancedFind(modelBuilder);
+            SystemDataRepositoryEfCore.ConfigureAdvancedFind(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
 

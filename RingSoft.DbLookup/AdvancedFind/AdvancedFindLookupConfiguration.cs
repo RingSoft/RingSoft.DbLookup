@@ -69,6 +69,7 @@ namespace RingSoft.DbLookup.AdvancedFind
             _lookupContext.AdvancedFinds.PriorityLevel = 10;
             _lookupContext.AdvancedFinds.IsAdvancedFind = true;
 
+            _lookupContext.AdvancedFindColumns.SetHeaderEntity<AdvancedFind>();
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.Formula).IsMemo();
 
             _lookupContext.AdvancedFindColumns.GetFieldDefinition(p => p.DecimalFormatType)
@@ -78,6 +79,7 @@ namespace RingSoft.DbLookup.AdvancedFind
                 .IsEnum<FieldDataTypes>();
             _lookupContext.AdvancedFindColumns.IsAdvancedFind = true;
 
+            _lookupContext.AdvancedFindFilters.SetHeaderEntity<AdvancedFind>();
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.Formula).IsMemo();
 
             _lookupContext.AdvancedFindFilters.GetFieldDefinition(p => p.EndLogic)

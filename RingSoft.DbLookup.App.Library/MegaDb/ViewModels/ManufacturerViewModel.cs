@@ -13,9 +13,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class ManufacturerViewModel : DbMaintenanceViewModel<Manufacturer>
     {
-        public override TableDefinition<Manufacturer> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers;
 
+        #region Properties
+
+        
         private int _manufacturerId;
         public int ManufacturerId
         {
@@ -57,6 +58,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 OnPropertyChanged(nameof(ItemsLookupCommand), false);
             }
         }
+
+        #endregion
 
         private IMegaDbLookupContext _lookupContext;
         private MegaDbViewModelInput _viewModelInput;

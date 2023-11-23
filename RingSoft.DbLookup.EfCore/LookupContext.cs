@@ -22,16 +22,6 @@ namespace RingSoft.DbLookup.EfCore
     /// <seealso cref="LookupContextBase" />
     public abstract class LookupContext : LookupContextBase, IAdvancedFindLookupContext
     {
-        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
-        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
-        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
-        public LookupContextBase Context => this;
-        public TableDefinition<RecordLock> RecordLocks { get; set; }
-
-        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
-        public LookupDefinition<AdvancedFindLookup, AdvancedFindColumn> AdvancedFindColumnLookup { get; set; }
-        public LookupDefinition<AdvFindFilterLookup, AdvancedFindFilter> AdvancedFindFilterLookup { get; set; }
-        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
 
         /// <summary>
         /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
@@ -56,8 +46,6 @@ namespace RingSoft.DbLookup.EfCore
             {
                 return;
             }
-            SystemGlobals.AdvancedFindLookupContext = this;
-            SystemGlobals.LookupContext = this;
             base.Initialize();
             _advInitalizing = true;
             var configuration = new AdvancedFindLookupConfiguration(this);

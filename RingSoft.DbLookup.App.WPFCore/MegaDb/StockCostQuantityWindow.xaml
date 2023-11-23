@@ -9,7 +9,7 @@
         xmlns:wpf="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Stock Purchases" Height="225" Width="400">
+        Title="Stock Purchases" Height="250" Width="400">
     <Window.DataContext>
         <vmlib:StockCostQuantityViewModel x:Name="StockCostQuantityViewModel"/>
     </Window.DataContext>

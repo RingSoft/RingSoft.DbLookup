@@ -31,6 +31,7 @@ namespace RingSoft.DbMaintenance
         {
             ControlsGlobals.UserInterface = this;
             SystemGlobals.UnitTestMode = true;
+            DataRepository.Initialize();
 
             var viewModel = (TViewModel)Activator.CreateInstance(typeof(TViewModel));
             ViewModel = viewModel;

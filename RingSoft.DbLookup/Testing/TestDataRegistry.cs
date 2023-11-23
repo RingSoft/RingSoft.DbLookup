@@ -239,7 +239,7 @@ namespace RingSoft.DbLookup.Testing
         }
     }
 
-    public class TestDataRepository : IDataRepository
+    public class TestDataRepository : SystemDataRepositoryBase, IDataRepository
     {
         public DataRepositoryRegistry DataContext { get; }
         public TestDataRepository(DataRepositoryRegistry context)
@@ -247,17 +247,17 @@ namespace RingSoft.DbLookup.Testing
             DataContext = context;
         }
 
-        public void Initialize()
-        {
-            SystemGlobals.DataRepository = this;
-        }
-
-        IDbContext IDataRepository.GetDataContext()
+        public override IDbContext GetDataContext()
         {
             return DataContext;
         }
 
-        public IDbContext GetDataContext(DbDataProcessor dataProcessor)
+        public override IDbContext GetDataContext(DbDataProcessor dataProcessor)
+        {
+            return DataContext;
+        }
+
+        IDbContext IDataRepository.GetDataContext()
         {
             return DataContext;
         }

@@ -76,7 +76,7 @@ namespace RingSoft.DbLookup
             {
                 if (_lookupContext == null)
                 {
-                    throw new Exception($"Need to Need To implement and instantiate {nameof(LookupContextBase)}.");
+                    throw new Exception($"Need to Need To implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
                 }
                 return _lookupContext;
             }

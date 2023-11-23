@@ -18,26 +18,7 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         public LocationWindow()
         {
             InitializeComponent();
-            Initialize();
-
-            AddModifyButton.Click += (sender, args) => LocationViewModel.OnAddModify();
-
             RegisterFormKeyControl(NameControl);
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            NameControl.Focus();
-            base.ResetViewForNewRecord();
-        }
-
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations;
-            if (fieldDefinition == table.GetFieldDefinition(p => p.Name))
-                NameControl.Focus();
-
-            base.OnValidationFail(fieldDefinition, text, caption);
         }
     }
 }

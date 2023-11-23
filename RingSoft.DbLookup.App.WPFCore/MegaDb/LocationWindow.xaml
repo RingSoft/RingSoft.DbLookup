@@ -10,7 +10,7 @@
      xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
      mc:Ignorable="d"
      Style="{StaticResource WindowStyle}"
-     Title="Locations" Height="400" Width="600">
+     Title="Locations" Height="500" Width="600">
     <Window.DataContext>
         <vmlib:LocationViewModel x:Name="LocationViewModel"/>
     </Window.DataContext>
@@ -36,7 +36,9 @@
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
             <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3" Width="200" HorizontalAlignment="Left"/>
             <Label Grid.Row="1" Grid.Column="1" Content="Items"/>
-            <Button x:Name="AddModifyButton" Grid.Row="2" Grid.Column="0" Content="_Add/Modify" Height="20" VerticalAlignment="Top"/>
+
+            <Button Grid.Row="2" Grid.Column="0" Content="_Add/Modify" Height="20" VerticalAlignment="Top" Command="{Binding AddModifyCommand}"/>
+
             <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}">
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>

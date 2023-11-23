@@ -59,6 +59,15 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         #endregion
 
+        public RelayCommand AddModifyCommand { get; }
+
+        public LocationViewModel()
+        {
+            AddModifyCommand = new RelayCommand((() =>
+            {
+                OnAddModify();
+            }));
+        }
         private MegaDbViewModelInput _viewModelInput;
 
         protected override void Initialize()
@@ -123,15 +132,23 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override bool SaveEntity(Location entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SaveLocation(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.SaveEntity(entity, "Saving Location");
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DeleteLocation(LocationId);
-        }
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Location>();
+            var entity = table
+                .FirstOrDefault(p => p.Id == LocationId);
+            if (entity == null)
+            {
+                return true;
+            }
+            return context.DeleteEntity(entity, "Deleting Location"); }
 
-        public void OnAddModify()
+        private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify);

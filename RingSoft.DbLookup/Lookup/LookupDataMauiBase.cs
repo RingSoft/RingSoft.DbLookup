@@ -191,5 +191,7 @@ namespace RingSoft.DbLookup.Lookup
             , PrinterSetupArgs printerSetupArgs);
 
         public abstract object GetEntityForPrimaryKey(PrimaryKeyValue primaryKeyValue);
+
+        public abstract void OnSizeChanged();
     }
 }

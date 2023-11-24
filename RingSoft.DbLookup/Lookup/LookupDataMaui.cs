@@ -1140,6 +1140,11 @@ namespace RingSoft.DbLookup.Lookup
             return query.FirstOrDefault();
         }
 
+        public override void OnSizeChanged()
+        {
+            RefreshData(LookupControl.SearchText);
+        }
+
         private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)
         {
             //if (TableDefinition.PrimaryKeyFields.Count > 1)

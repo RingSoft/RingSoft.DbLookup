@@ -1388,7 +1388,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
                 else
                 {
-                    //LookupData?.OnChangePageSize();
+                    LookupDataMaui.OnSizeChanged();
                 }
             }
         }

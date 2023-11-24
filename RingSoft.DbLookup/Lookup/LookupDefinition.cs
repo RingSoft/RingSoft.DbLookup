@@ -373,7 +373,7 @@ namespace RingSoft.DbLookup.Lookup
                 return string.Empty;
             }
 
-            var context = SystemGlobals.DataRepository.GetDataContext();
+            var context = SystemGlobals.DataRepository.GetDataContext(TableDefinition.Context.DataProcessor);
 
             var table = context.GetTable<TEntity>();
 

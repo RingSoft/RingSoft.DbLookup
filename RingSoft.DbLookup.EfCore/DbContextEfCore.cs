@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.EfCore
             EfCoreGlobals.DbAdvancedFindContextCore = this;
         }
 
-        public virtual IAdvancedFindDbContextEfCore GetNewDbContext()
+        public IAdvancedFindDbContextEfCore GetNewDbContext()
         {
             return GetNewDbContextEfCore();
         }

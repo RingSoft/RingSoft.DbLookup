@@ -239,7 +239,7 @@ namespace RingSoft.DbLookup.Testing
         }
     }
 
-    public class TestDataRepository : SystemDataRepositoryBase, IDataRepository
+    public class TestDataRepository : SystemDataRepository, IDataRepository
     {
         public DataRepositoryRegistry DataContext { get; }
         public TestDataRepository(DataRepositoryRegistry context)

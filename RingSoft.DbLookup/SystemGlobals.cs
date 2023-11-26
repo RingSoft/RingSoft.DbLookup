@@ -45,15 +45,15 @@ namespace RingSoft.DbLookup
             internal set => _context = value;
         }
 
-        private static IDataRepository _dataRepository;
+        private static SystemDataRepository _dataRepository;
 
-        public static IDataRepository DataRepository
+        public static SystemDataRepository DataRepository
         {
             get
             {
                 if (_dataRepository == null)
                 {
-                    var message = $"Need To implement and instantiate {nameof(SystemDataRepositoryBase)}.";
+                    var message = $"Need To implement and instantiate {nameof(SystemDataRepository)}.";
                     throw new ApplicationException(message);
                 }
                 return _dataRepository;

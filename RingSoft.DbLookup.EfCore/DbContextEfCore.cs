@@ -28,6 +28,15 @@ namespace RingSoft.DbLookup.EfCore
 {
     public abstract class DbContextEfCore : DbContext, IAdvancedFindDbContextEfCore
     {
+        public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new RecordLockConfiguration());
+            modelBuilder.ApplyConfiguration(new AdvancedFindConfiguration());
+            modelBuilder.ApplyConfiguration(new AdvancedFindColumnConfiguration());
+            modelBuilder.ApplyConfiguration(new AdvancedFindFilterConfiguration());
+
+        }
+
         public DbSet<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
         public DbSet<AdvancedFindColumn> AdvancedFindColumns { get; set; }
         public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
@@ -52,7 +61,7 @@ namespace RingSoft.DbLookup.EfCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SystemDataRepositoryEfCore.ConfigureAdvancedFind(modelBuilder);
+            ConfigureAdvancedFind(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
 

@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace RingSoft.DbLookup
 {
-    public abstract class SystemDataRepositoryBase : IDataRepository, IAdvancedFindDbProcessor
+    public abstract class SystemDataRepository : IDataRepository, IAdvancedFindDbProcessor
     {
-        public SystemDataRepositoryBase()
+        public SystemDataRepository()
         {
             Initialize();
         }

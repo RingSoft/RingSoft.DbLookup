@@ -1,27 +1,32 @@
-﻿using System.Linq;
+﻿using RingSoft.DbLookup.App.Library.EfCore.MegaDb;
+using RingSoft.DbLookup.App.Library.EfCore.Northwind;
 using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.EfCore;
 
 namespace RingSoft.DbLookup.App.Library.EfCore
 {
+    public enum DataRepositoryModes
+    {
+        Northwind = 1,
+        MegaDb = 2,
+    }
+
     public class SystemDataRepositoryEfCore : SystemDataRepository
     {
+        public static DataRepositoryModes RepositoryMode { get; set; }
 
         public override IDbContext GetDataContext()
         {
-            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
+            if (RepositoryMode == DataRepositoryModes.Northwind)
+            {
+                return new NorthwindDbContextEfCore();
+            }
+
+            return new MegaDbDbContextEfCore();
         }
 
         public override IDbContext GetDataContext(DbDataProcessor dataProcessor)
         {
-            return EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-        }
-
-        public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class, new()
-        {
-            var context = EfCoreGlobals.DbAdvancedFindContextCore.GetNewDbContext();
-            var dbSet = context.GetTable<TEntity>();
-            return dbSet;
+            return GetDataContext();
         }
     }
 }

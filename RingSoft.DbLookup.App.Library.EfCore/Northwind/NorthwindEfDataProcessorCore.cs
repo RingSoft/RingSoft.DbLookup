@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
     {
         public void SetDataContext()
         {
-            var context = new NorthwindDbContextEfCore();
+            SystemDataRepositoryEfCore.RepositoryMode = DataRepositoryModes.Northwind;
         }
 
         public void CheckDataExists()

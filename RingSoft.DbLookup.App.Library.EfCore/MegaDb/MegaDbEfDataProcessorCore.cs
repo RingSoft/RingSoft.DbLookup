@@ -16,7 +16,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 
         public void SetDataContext()
         {
-            var context = new MegaDbDbContextEfCore();
+            SystemDataRepositoryEfCore.RepositoryMode = DataRepositoryModes.MegaDb;
         }
 
         public Item GetItem(int itemId)

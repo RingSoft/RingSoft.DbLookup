@@ -26,7 +26,7 @@ namespace Microsoft.EntityFrameworkCore
 
 namespace RingSoft.DbLookup.EfCore
 {
-    public abstract class DbContextEfCore : DbContext, IAdvancedFindDbContextEfCore
+    public abstract class DbContextEfCore : DbContext, IDbContext
     {
         public static void ConfigureAdvancedFind(ModelBuilder modelBuilder)
         {
@@ -42,17 +42,6 @@ namespace RingSoft.DbLookup.EfCore
         public DbSet<AdvancedFindFilter> AdvancedFindFilters { get; set; }
 
         public DbSet<RecordLock> RecordLocks { get; set; }
-
-        public DbContextEfCore()
-        {
-            EfCoreGlobals.DbAdvancedFindContextCore = this;
-        }
-
-        public IAdvancedFindDbContextEfCore GetNewDbContext()
-        {
-            return GetNewDbContextEfCore();
-        }
-
 
         public DbContext GetDbContextEf()
         {

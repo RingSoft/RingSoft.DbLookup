@@ -2,6 +2,6 @@
 {
     public static class EfCoreGlobals
     {
-        public static IAdvancedFindDbContextEfCore DbAdvancedFindContextCore { get; internal set; }
+        //public static IAdvancedFindDbContextEfCore DbAdvancedFindContextCore { get; internal set; }
     }
 }

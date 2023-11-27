@@ -89,20 +89,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override Manufacturer PopulatePrimaryKeyControls(Manufacturer newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var manufacturer = RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetManufacturer(newEntity.Id);
-            ManufacturerId = manufacturer.Id;
-            KeyAutoFillValue = new AutoFillValue(_lookupContext.Manufacturers.GetPrimaryKeyValueFromEntity(manufacturer),
-                manufacturer.Name);
+            ManufacturerId = newEntity.Id;
 
             ReadOnlyMode =
                 _viewModelInput.ManufacturerViewModels.Any(a => a != this && a.ManufacturerId == ManufacturerId);
 
             _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, manufacturer.Id);
+            _itemsLookup.FilterDefinition
+                .AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, newEntity.Id);
 
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
 
-            return manufacturer;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Manufacturer entity)

@@ -282,7 +282,8 @@ namespace RingSoft.DbLookup
                 fullTable.FillOutEntity(entity);
             }
         }
-        public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity) where TEntity : class, new()
+        public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity
+            , LookupDefinitionBase lookupDefinition = null) where TEntity : class, new()
         {
             if (entity == null)
             {
@@ -292,7 +293,8 @@ namespace RingSoft.DbLookup
                 .FirstOrDefault(p => p.EntityName == entity.GetType().Name);
             if (table is TableDefinition<TEntity> fullTable)
             {
-                return fullTable.GetAutoFillValue(entity);
+                var primaryKey1 = fullTable.GetPrimaryKeyValueFromEntity(entity);
+                return fullTable.GetAutoFillValue(entity, primaryKey1.KeyString, lookupDefinition);
             }
 
             var primaryKey = new PrimaryKeyValue(table);

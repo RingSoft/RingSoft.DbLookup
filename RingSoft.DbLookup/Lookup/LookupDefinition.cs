@@ -362,7 +362,7 @@ namespace RingSoft.DbLookup.Lookup
 
             query = FilterItemDefinition.FilterQuery(query, param, fullExpr);
             var entity = query.Take(1).FirstOrDefault();
-            var autoFillValue = entity.GetAutoFillValue();
+            var autoFillValue = entity.GetAutoFillValue(this);
             return autoFillValue;
         }
 

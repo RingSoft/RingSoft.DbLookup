@@ -21,6 +21,8 @@
         /// </value>
         public string Text { get; }
 
+        public bool FromLookup { get; internal set; } = true;
+
         public AutoFillValue(PrimaryKeyValue primaryKeyValue, string text)
         {
             PrimaryKeyValue = primaryKeyValue;

@@ -72,6 +72,8 @@ namespace RingSoft.DbLookup
         public TableDefinitionBase TableDefinition { get; set; }
 
         public string PrimaryKeyString { get; set; }
+
+        public LookupDefinitionBase LookupDefinition { get; set; }
     }
 
     // ReSharper disable once InconsistentNaming
@@ -283,7 +285,10 @@ namespace RingSoft.DbLookup
             return message;
         }
 
-        public virtual AutoFillValue OnAutoFillTextRequest(TableDefinitionBase tableDefinition, string primaryKeyString)
+        public virtual AutoFillValue OnAutoFillTextRequest(
+            TableDefinitionBase tableDefinition
+            , string primaryKeyString
+            , LookupDefinitionBase lookupDefinition = null)
         {
             if (tableDefinition?.LookupDefinition == null)
             {
@@ -293,11 +298,20 @@ namespace RingSoft.DbLookup
             var request = new TableDefinitionValue
             {
                 TableDefinition = tableDefinition,
-                PrimaryKeyString = primaryKeyString
+                PrimaryKeyString = primaryKeyString,
+                LookupDefinition = lookupDefinition,
             };
             GetAutoFillText?.Invoke(this, request);
 
-            if (request.ReturnValue == null)
+            var go = request.ReturnValue == null;
+            if (go)
+            {
+                if (tableDefinition.PrimaryKeyFields.Count > 1)
+                {
+                    go = false;
+                }
+            }
+            if (go)
             {
                 if (tableDefinition?.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition
                     lookupFieldColumn)

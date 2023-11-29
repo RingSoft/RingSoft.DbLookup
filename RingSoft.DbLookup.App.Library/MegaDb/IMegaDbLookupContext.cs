@@ -1,6 +1,7 @@
 ﻿using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.ModelDefinition;
+using System;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb
 {
@@ -17,5 +18,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         TableDefinition<StockMaster> Stocks { get; set; }
 
         TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
+
+        event EventHandler<TableDefinitionValue> GetAutoFillText;
     }
 }

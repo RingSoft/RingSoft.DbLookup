@@ -390,11 +390,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             return primaryKeyValue;
         }
 
-        public AutoFillValue GetAutoFillValue(TEntity entity, string pkString = "")
+        public AutoFillValue GetAutoFillValue(TEntity entity
+            , string pkString = ""
+            , LookupDefinitionBase lookupDefinition = null)
         {
             if (PrimaryKeyFields.Count > 1)
             {
-                return Context.OnAutoFillTextRequest(this, pkString);
+                return Context.OnAutoFillTextRequest(this, pkString, lookupDefinition);
             }
 
             var primaryKey = new PrimaryKeyValue(this);

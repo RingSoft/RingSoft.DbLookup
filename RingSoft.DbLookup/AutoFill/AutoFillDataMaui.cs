@@ -369,6 +369,7 @@ namespace RingSoft.DbLookup.AutoFill
                 {
                     var primaryKey = new PrimaryKeyValue(Setup.LookupDefinition.TableDefinition);
                     autoFillValue = new AutoFillValue(primaryKey, editText);
+                    autoFillValue.FromLookup = false;
                 }
             }
 

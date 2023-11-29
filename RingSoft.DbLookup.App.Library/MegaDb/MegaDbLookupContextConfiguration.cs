@@ -32,7 +32,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public MegaDbLookupContextConfiguration(IMegaDbLookupContext lookupContext)
         {
             _lookupContext = lookupContext;
+            _lookupContext.GetAutoFillText += _lookupContext_GetAutoFillText;
             Reinitialize();
+        }
+
+        private void _lookupContext_GetAutoFillText(object sender, TableDefinitionValue e)
+        {
+            
         }
 
         public override void Reinitialize(RegistrySettings registrySettings)

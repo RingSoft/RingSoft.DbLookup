@@ -192,26 +192,27 @@ namespace RingSoft.DbLookup.AutoFill
             {
                 if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition fieldColumn)
                 {
-                    var primaryKeyField = TableDefinition.PrimaryKeyFields.FirstOrDefault();
-                    var property = primaryKeyField.PropertyName;
+                    //var primaryKeyField = TableDefinition.PrimaryKeyFields.FirstOrDefault();
+                    var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+                    foreach (var keyValueField in primaryKey.KeyValueFields)
+                    {
+                        filter.AddFixedFieldFilter(keyValueField.FieldDefinition, Conditions.Equals,
+                            keyValueField.Value);
+                    }
                     var param = GblMethods.GetParameterExpression<TEntity>();
                     if (param != null)
                     {
                         var query = SystemGlobals.DataRepository.GetDataContext().GetTable<TEntity>();
-
-                        var value = GblMethods.GetPropertyValue(entity, property);
-                        var filterValue =
-                            value.GetPropertyFilterValue(primaryKeyField.FieldDataType, primaryKeyField.FieldType);
-
-                        var filter = FilterItemDefinition.GetBinaryExpression<TEntity>(param, property,
-                            Conditions.Equals, primaryKeyField.FieldType, filterValue);
-
-                        var filterQuery = FilterItemDefinition.FilterQuery(query, param, filter);
+                        var expr = filter.GetWhereExpresssion<TEntity>(param);
+                        var filterQuery = FilterItemDefinition.FilterQuery(query, param, expr);
                         entity = filterQuery.FirstOrDefault();
 
                         if (entity != null)
                         {
-                            OnOutputAutoFillData(new AutoFillOutputData(null, entity.GetAutoFillValue()));
+                            OnOutputAutoFillData(
+                                new AutoFillOutputData(
+                                    null
+                                    , entity.GetAutoFillValue(Setup.LookupDefinition)));
                         }
                     }
                 }

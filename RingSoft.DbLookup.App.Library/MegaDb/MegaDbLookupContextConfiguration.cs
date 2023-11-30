@@ -7,6 +7,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb
 {
@@ -38,7 +39,37 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         private void _lookupContext_GetAutoFillText(object sender, TableDefinitionValue e)
         {
-            
+            if (e.LookupDefinition == null)
+            {
+                return;
+            }
+
+            if (e.TableDefinition == _lookupContext.Stocks)
+            {
+                var primaryKey = new PrimaryKeyValue(e.TableDefinition);
+                primaryKey.LoadFromPrimaryString(e.PrimaryKeyString);
+                var stockMaster = _lookupContext
+                    .Stocks
+                    .GetEntityFromPrimaryKeyValue(primaryKey);
+                var lookupColumn = e.LookupDefinition.InitialOrderByColumn;
+                if (lookupColumn is LookupFieldColumnDefinition fieldColumn)
+                {
+                    if (fieldColumn.FieldDefinition ==
+                        _lookupContext
+                            .Stocks
+                            .GetFieldDefinition(p => p.StockNumber))
+                    {
+                        e.ReturnValue = new AutoFillValue(primaryKey, stockMaster.StockNumber);
+                    }
+                    else if (fieldColumn.FieldDefinition ==
+                             _lookupContext
+                                 .Stocks
+                                 .GetFieldDefinition(p => p.Location))
+                    {
+                        e.ReturnValue = new AutoFillValue(primaryKey, stockMaster.Location);
+                    }
+                }
+            }
         }
 
         public override void Reinitialize(RegistrySettings registrySettings)

@@ -53,17 +53,5 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         void OnItemsTableSeederProgress(ItemsTableSeederProgressArgs e);
 
         bool DoesItemsTableHaveData();
-
-        StockMaster GetStockItem(string stockNumber, string location);
-
-        bool SaveStockItem(StockMaster stockItem);
-
-        bool DeleteStockItem(string stockNumber, string location);
-
-        StockCostQuantity GetStockCostQuantity(string stockNumber, string location, DateTime purchaseDate);
-
-        bool SaveStockCostQuantity(StockCostQuantity stockCostQuantity);
-
-        bool DeleteStockCostQuantity(string stockNumber, string location, DateTime purchaseDate);
     }
 }

@@ -88,6 +88,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new StocksTableConfiguration());
+            modelBuilder.ApplyConfiguration(new MliLocationsTableConfiguration());
             modelBuilder.ApplyConfiguration(new StockConfiguration());
             modelBuilder.ApplyConfiguration(new StockCostQuantityConfiguration());
 

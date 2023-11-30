@@ -9,8 +9,20 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations
     {
         public void Configure(EntityTypeBuilder<StockMaster> builder)
         {
+            builder.Property(p => p.Id).HasColumnType(DbConstants.IntegerColumnType);
+            builder.Property(p => p.StockId).HasColumnType(DbConstants.IntegerColumnType);
+            builder.Property(p => p.MliLocationId).HasColumnType(DbConstants.IntegerColumnType);
             builder.Property(p => p.Price).HasColumnType(DbConstants.DecimalColumnType);
-            builder.HasKey(p => new {p.StockNumber, p.Location});
+
+            builder.HasOne(p => p.Stocks)
+                .WithMany(p => p.StockMasters)
+                .HasForeignKey(p => p.StockId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(p => p.MliLocations)
+                .WithMany(p => p.StockMasters)
+                .HasForeignKey(p => p.MliLocationId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

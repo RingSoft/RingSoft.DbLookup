@@ -10,6 +10,22 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class StockMasterViewModel : DbMaintenanceViewModel<StockMaster>
     {
+        private int _id;
+
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                if (_id == value)
+                {
+                    return;
+                }
+                _id = value;
+                OnPropertyChanged();
+            }
+        }
+
         private AutoFillSetup _stockNumberAutoFillSetup;
 
         public AutoFillSetup StockNumberAutoFillSetup

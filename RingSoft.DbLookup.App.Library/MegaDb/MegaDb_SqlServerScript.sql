@@ -369,6 +369,20 @@ REFERENCES [dbo].[Manufacturers] ([Id])
 GO
 ALTER TABLE [dbo].[Items] CHECK CONSTRAINT [FK_Items_Manufacturers]
 GO
+ALTER TABLE [dbo].[StockMaster]  WITH CHECK ADD  CONSTRAINT [FK_StockMaster_MliLocationsTable] FOREIGN KEY([MliLocationId])
+REFERENCES [dbo].[MliLocationsTable] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[StockMaster] CHECK CONSTRAINT [FK_StockMaster_MliLocationsTable]
+GO
+ALTER TABLE [dbo].[StockMaster]  WITH CHECK ADD  CONSTRAINT [FK_StockMaster_StocksTable] FOREIGN KEY([StockId])
+REFERENCES [dbo].[StocksTable] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[StockMaster] CHECK CONSTRAINT [FK_StockMaster_StocksTable]
+GO
 USE [master]
 GO
 ALTER DATABASE [MegaDb] SET  READ_WRITE 

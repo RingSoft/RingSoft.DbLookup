@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations;
+using RingSoft.DbLookup.App.Library.LibLookupContext;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.EfCore;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using RingSoft.DbLookup.AdvancedFind;
-using RingSoft.DbLookup.App.Library.LibLookupContext;
-using RingSoft.DbLookup.EfCore;
-using RingSoft.DbLookup.RecordLocking;
-using System.Linq;
-using RingSoft.DbLookup.DataProcessor;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -26,7 +22,11 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
 
         public static MegaDbLookupContextEfCore LookupContext { get; private set; }
 
-        public DbSet<StockMaster> Stocks { get; set; }
+        public DbSet<StocksTable> StocksTable { get; set; }
+
+        public DbSet<MliLocationsTable> MliLocationsTable { get; set; }
+
+        public DbSet<StockMaster> StockMasters { get; set; }
 
         public DbSet<StockCostQuantity> StockCostQuantities { get; set; }
 

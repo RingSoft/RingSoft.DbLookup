@@ -19,6 +19,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         public LookupDefinition<ManufacturerLookup, Manufacturer> ManufacturersLookup { get; private set; }
 
+        public LookupDefinition<StocksTableLookup, StocksTable> StocksTableLookup { get; private set; }
+
+        public LookupDefinition<MliLocationsTableLookup, MliLocationsTable> MliLocationsTableLookup { get; private set; }
+
         public LookupDefinition<StockMasterLookup, StockMaster> StockMasterLookup { get; set; }
 
         public LookupDefinition<StockCostQuantityLookup, StockCostQuantity> StockCostQuantityLookup { get; set; }
@@ -33,43 +37,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         public MegaDbLookupContextConfiguration(IMegaDbLookupContext lookupContext)
         {
             _lookupContext = lookupContext;
-            _lookupContext.GetAutoFillText += _lookupContext_GetAutoFillText;
             Reinitialize();
-        }
-
-        private void _lookupContext_GetAutoFillText(object sender, TableDefinitionValue e)
-        {
-            if (e.LookupDefinition == null)
-            {
-                return;
-            }
-
-            if (e.TableDefinition == _lookupContext.Stocks)
-            {
-                var primaryKey = new PrimaryKeyValue(e.TableDefinition);
-                primaryKey.LoadFromPrimaryString(e.PrimaryKeyString);
-                var stockMaster = _lookupContext
-                    .Stocks
-                    .GetEntityFromPrimaryKeyValue(primaryKey);
-                var lookupColumn = e.LookupDefinition.InitialOrderByColumn;
-                if (lookupColumn is LookupFieldColumnDefinition fieldColumn)
-                {
-                    if (fieldColumn.FieldDefinition ==
-                        _lookupContext
-                            .Stocks
-                            .GetFieldDefinition(p => p.StockNumber))
-                    {
-                        e.ReturnValue = new AutoFillValue(primaryKey, stockMaster.StockNumber);
-                    }
-                    else if (fieldColumn.FieldDefinition ==
-                             _lookupContext
-                                 .Stocks
-                                 .GetFieldDefinition(p => p.Location))
-                    {
-                        e.ReturnValue = new AutoFillValue(primaryKey, stockMaster.Location);
-                    }
-                }
-            }
         }
 
         public override void Reinitialize(RegistrySettings registrySettings)
@@ -118,16 +86,44 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
             _lookupContext.Manufacturers.HasLookupDefinition(ManufacturersLookup);
 
-            StockMasterLookup = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.Stocks);
-            StockMasterLookup.AddVisibleColumnDefinition(p => p.StockNumber, "Stock Number", p => p.StockNumber, 40);
-            StockMasterLookup.AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Location, 40);
-            StockMasterLookup.AddVisibleColumnDefinition(p => p.Price, "Price", p => p.Price, 20);
+            StocksTableLookup = new LookupDefinition<StocksTableLookup, StocksTable>(_lookupContext.StocksTable);
+            StocksTableLookup.AddVisibleColumnDefinition(p => p.Name, "Stock Name", p => p.Name, 99);
 
-            _lookupContext.Stocks.HasLookupDefinition(StockMasterLookup);
+            _lookupContext.StocksTable.HasLookupDefinition(StocksTableLookup);
+
+            MliLocationsTableLookup = new LookupDefinition<MliLocationsTableLookup, MliLocationsTable>(_lookupContext.MliLocationsTable);
+            MliLocationsTableLookup.AddVisibleColumnDefinition(
+                p => p.Name
+                , "Location", p => p.Name, 99);
+
+            _lookupContext.MliLocationsTable.HasLookupDefinition(MliLocationsTableLookup);
+
+            StockMasterLookup = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.StockMasters);
+
+            StockMasterLookup = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.StockMasters);
+            StockMasterLookup.Include(p => p.Stock)
+                .AddVisibleColumnDefinition(p => p.StockNumber
+                    , "Stock Number"
+                    , p => p.Name, 40);
+            StockMasterLookup.Include(p => p.MliLocation)
+                .AddVisibleColumnDefinition(p => p.Location
+                    , "Location"
+                    , p => p.Name, 40);
+            StockMasterLookup
+                .AddVisibleColumnDefinition(p => p.Price
+                    , "Price", p => p.Price, 20);
+
+            _lookupContext.StockMasters.HasLookupDefinition(StockMasterLookup);
 
             StockCostQuantityLookup = new LookupDefinition<StockCostQuantityLookup, StockCostQuantity>(_lookupContext.StockCostQuantities);
-            StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.StockNumber, "Stock Number", p => p.StockNumber, 25);
-            StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Location, 25);
+            StockCostQuantityLookup.Include(p => p.StockMaster)
+                .Include(p => p.Stock)
+                .AddVisibleColumnDefinition(p => p.StockNumber
+                    , "Stock Number", p => p.Name, 25);
+            StockCostQuantityLookup.Include(p => p.StockMaster)
+                .Include(p => p.MliLocation)
+                .AddVisibleColumnDefinition(p => p.Location
+                    , "Location", p => p.Name, 25);
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.PurchasedDate, "Purchased Date",
                 p => p.PurchasedDateTime, 20);
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);
@@ -182,9 +178,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             _lookupContext.Locations.HasDescription("Locations");
             _lookupContext.Manufacturers.HasDescription("Manufacturers");
 
-            _lookupContext.Stocks.HasDescription("Stocks").HasRecordDescription("Stock Item");
-            _lookupContext.Stocks.GetFieldDefinition(p => p.StockNumber).HasDescription("Stock Number");
-            _lookupContext.Stocks.GetFieldDefinition(p => p.Price).HasDecimalFieldType(DecimalFieldTypes.Currency);
+            _lookupContext.StockMasters.HasDescription("Stocks").HasRecordDescription("Stock Item");
+            _lookupContext.StockMasters.GetFieldDefinition(p => p.StockId).HasDescription("Stock Number");
+            _lookupContext.StockMasters.GetFieldDefinition(p => p.Price).HasDecimalFieldType(DecimalFieldTypes.Currency);
 
             _lookupContext.StockCostQuantities.HasDescription("Stock Purchases");
             _lookupContext.StockCostQuantities.GetFieldDefinition(p => p.Quantity).HasDecimalCount(2);

@@ -5,9 +5,9 @@ using RingSoft.DbLookup.EfCore;
 
 namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb.Configurations
 {
-    public class MliLocationsTableConfiguration : IEntityTypeConfiguration<MLILocationsTable>
+    public class MliLocationsTableConfiguration : IEntityTypeConfiguration<MliLocationsTable>
     {
-        public void Configure(EntityTypeBuilder<MLILocationsTable> builder)
+        public void Configure(EntityTypeBuilder<MliLocationsTable> builder)
         {
             builder.Property(p => p.Id).HasColumnType(DbConstants.IntegerColumnType);
             builder.Property(p => p.Name).HasColumnType(DbConstants.StringColumnType);

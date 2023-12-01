@@ -10,9 +10,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class StockMasterViewModel : DbMaintenanceViewModel<StockMaster>
     {
-        public override TableDefinition<StockMaster> TableDefinition =>
-            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks;
-
         private AutoFillSetup _stockNumberAutoFillSetup;
 
         public AutoFillSetup StockNumberAutoFillSetup
@@ -124,22 +121,16 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
 
-            var stockLookupDefinition = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.Stocks);
-            stockLookupDefinition.AddVisibleColumnDefinition(p => p.StockNumber, "Stock Number", p => p.StockNumber,
-                99).IsDistinct();
-
-            StockNumberAutoFillSetup = new AutoFillSetup(stockLookupDefinition)
+            StockNumberAutoFillSetup = new AutoFillSetup(
+                TableDefinition.GetFieldDefinition(p => p.StockId))
             {
                 AllowLookupAdd = false,
                 AllowLookupView = false
             };
 
-            var locationLookupDefinition = new LookupDefinition<StockMasterLookup, StockMaster>(_lookupContext.Stocks);
-            locationLookupDefinition.Title = "Stock Locations";
-            locationLookupDefinition.AddVisibleColumnDefinition(p => p.Location, "Location", p => p.Location, 99)
-                .IsDistinct();
 
-            LocationAutoFillSetup = new AutoFillSetup(locationLookupDefinition)
+            LocationAutoFillSetup = new AutoFillSetup(
+                TableDefinition.GetFieldDefinition(p => p.MliLocationId))
             {
                 AllowLookupAdd = false,
                 AllowLookupView = false
@@ -151,75 +142,31 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        public override void OnKeyControlLeave()
-        {
-            if (StockNumberAutoFillValue != null && LocationAutoFillValue != null)
-            {
-                var stockItem =
-                    RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetStockItem(StockNumberAutoFillValue.Text,
-                        LocationAutoFillValue.Text);
-                if (stockItem != null)
-                    SelectPrimaryKey(_lookupContext.Stocks.GetPrimaryKeyValueFromEntity(stockItem));
-            }
-        }
-
-        protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
-        {
-            StockNumberAutoFillValue = new AutoFillValue(primaryKeyValue, newEntity.StockNumber);
-            LocationAutoFillValue = new AutoFillValue(primaryKeyValue, newEntity.Location);
-
-            var stockItem =
-                RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.GetStockItem(newEntity.StockNumber,
-                    newEntity.Location);
-
-            _stockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
-            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.StockNumber, Conditions.Equals,
-                StockNumberAutoFillValue.Text);
-            _stockCostQuantityLookupDefinition.FilterDefinition.AddFixedFilter(p => p.Location, Conditions.Equals,
-                LocationAutoFillValue.Text);
-
-            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
-
-            return stockItem;
-        }
-
         protected override void LoadFromEntity(StockMaster entity)
         {
-            Price = entity.Price;
+            
         }
 
         protected override StockMaster GetEntityData()
         {
-            var stockItem = new StockMaster();
-
-            if (StockNumberAutoFillValue != null)
-                stockItem.StockNumber = StockNumberAutoFillValue.Text;
-
-            if (LocationAutoFillValue != null)
-                stockItem.Location = LocationAutoFillValue.Text;
-
-            stockItem.Price = Price;
-
-            return stockItem;
+            throw new System.NotImplementedException();
         }
 
         protected override void ClearData()
         {
-            StockNumberAutoFillValue = LocationAutoFillValue = null;
-            Price = 0;
-            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Clear);
+            
         }
 
         protected override bool SaveEntity(StockMaster entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SaveStockItem(entity);
+            throw new System.NotImplementedException();
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DeleteStockItem(
-                StockNumberAutoFillValue.Text, LocationAutoFillValue.Text);
+            throw new System.NotImplementedException();
         }
+
 
         public void OnAddModify()
         {

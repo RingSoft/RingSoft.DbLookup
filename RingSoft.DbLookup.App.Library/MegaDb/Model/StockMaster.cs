@@ -14,12 +14,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.Model
         [Required]
         public int StockId { get; set; }
 
-        public virtual StocksTable Stocks { get; set; }
+        public virtual StocksTable Stock { get; set; }
 
         [Required]
         public int MliLocationId { get; set; }
 
-        public virtual MLILocationsTable MliLocations { get; set; }
+        public virtual MliLocationsTable MliLocation { get; set; }
 
         [Required]
         public double Price { get; set; }

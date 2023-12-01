@@ -117,7 +117,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                 ShowAddOnTheFlyWindow(new ManufacturerWindow(), e);
             }
             else if (e.LookupData.LookupDefinition.TableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks)
+                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockMasters)
             {
                 ShowAddOnTheFlyWindow(new StockMasterWindow(), e);
             }

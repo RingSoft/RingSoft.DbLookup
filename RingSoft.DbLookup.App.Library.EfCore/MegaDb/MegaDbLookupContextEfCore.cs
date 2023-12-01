@@ -19,7 +19,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public TableDefinition<Item> Items { get; set; }
         public TableDefinition<Location> Locations { get; set; }
         public TableDefinition<Manufacturer> Manufacturers { get; set; }
-        public TableDefinition<StockMaster> Stocks { get; set; }
+        public TableDefinition<StocksTable> StocksTable { get; set; }
+        public TableDefinition<MliLocationsTable> MliLocationsTable { get; set; }
+        public TableDefinition<StockMaster> StockMasters { get; set; }
         public TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
         public LookupContextBase Context => this;
         public TableDefinition<RecordLock> RecordLocks { get; set; }

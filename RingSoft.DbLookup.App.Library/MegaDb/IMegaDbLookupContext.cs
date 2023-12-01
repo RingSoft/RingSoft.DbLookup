@@ -15,7 +15,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         TableDefinition<Manufacturer> Manufacturers { get; set; }
 
-        TableDefinition<StockMaster> Stocks { get; set; }
+        TableDefinition<StocksTable> StocksTable { get; set; }
+
+        TableDefinition<MliLocationsTable> MliLocationsTable { get; set; }
+
+        TableDefinition<StockMaster> StockMasters { get; set; }
 
         TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
 

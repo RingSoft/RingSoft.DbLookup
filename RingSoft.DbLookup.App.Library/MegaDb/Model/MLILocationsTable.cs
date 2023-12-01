@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb.Model
 {
-    public class MLILocationsTable
+    public class MliLocationsTable
     {
         [Required]
         [Key]
@@ -15,7 +15,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.Model
 
         public virtual ICollection<StockMaster> StockMasters { get; set; }
 
-        public MLILocationsTable()
+        public MliLocationsTable()
         {
             StockMasters = new HashSet<StockMaster>();
         }

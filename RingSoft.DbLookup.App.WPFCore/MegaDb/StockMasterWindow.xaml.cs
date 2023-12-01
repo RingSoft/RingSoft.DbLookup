@@ -36,18 +36,6 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
             base.ResetViewForNewRecord();
         }
 
-        public override void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            var table = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Stocks;
-
-            if (fieldDefinition == table.GetFieldDefinition(p => p.StockNumber))
-                StockNumberControl.Focus();
-            else if (fieldDefinition == table.GetFieldDefinition(p => p.Location))
-                LocationControl.Focus();
-
-            base.OnValidationFail(fieldDefinition, text, caption);
-        }
-
         private void ShowAdvancedFind()
         {
             var advancedFindWindow = new AdvancedFindWindow();

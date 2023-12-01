@@ -128,39 +128,24 @@ CREATE TABLE [dbo].[Manufacturers](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StockCostQuantity]    Script Date: 2/12/2020 1:45:17 PM ******/
+/****** Object:  Table [dbo].[MliLocationsTable]    Script Date: 11/30/2023 10:16:48 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[StockCostQuantity](
-	[StockNumber] [nvarchar](50) NOT NULL,
-	[Location] [nvarchar](50) NOT NULL,
-	[PurchasedDateTime] [datetime] NOT NULL,
-	[Quantity] [double](18, 4) NOT NULL,
-	[Cost] [double](18, 4) NOT NULL,
- CONSTRAINT [PK_StockCostQuantity] PRIMARY KEY CLUSTERED 
-(
-	[StockNumber] ASC,
-	[Location] ASC,
-	[PurchasedDateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+CREATE TABLE [dbo].[MliLocationsTable](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StockMaster]    Script Date: 2/12/2020 1:45:17 PM ******/
+/****** Object:  Table [dbo].[StocksTable]    Script Date: 11/30/2023 10:16:48 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[StockMaster](
-	[StockNumber] [nvarchar](50) NOT NULL,
-	[Location] [nvarchar](50) NOT NULL,
-	[Price] [double](18, 4) NOT NULL,
- CONSTRAINT [PK_StockMaster] PRIMARY KEY CLUSTERED 
-(
-	[StockNumber] ASC,
-	[Location] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+CREATE TABLE [dbo].[StocksTable](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL
 ) ON [PRIMARY]
 GO
 CREATE TABLE [dbo].[AdvancedFinds](
@@ -190,7 +175,7 @@ CREATE TABLE [dbo].[AdvancedFindColumns](
   [PrimaryFieldName] [nvarchar](50) NULL,
   [Path] [nvarchar](1000) NOT NULL,
   [Caption] [nvarchar](50) NOT NULL,
-  [PercentWidth] [double](18, 4) NOT NULL,
+  [PercentWidth] [decimal](18, 4) NOT NULL,
   [Formula] [ntext] NULL,
   [FieldDataType] [tinyint] NULL,
   [DecimalFormatType] [tinyint] NULL
@@ -285,64 +270,28 @@ GO
 INSERT [dbo].[Manufacturers] ([Id], [Name]) VALUES (5, N'Sam''s Choice')
 GO
 INSERT [dbo].[Manufacturers] ([Id], [Name]) VALUES (2, N'Western Family')
+
+SET IDENTITY_INSERT [dbo].[Manufacturers] OFF 
 GO
-SET IDENTITY_INSERT [dbo].[Manufacturers] OFF
+SET IDENTITY_INSERT [dbo].[MliLocationsTable] ON 
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Boise, ID', CAST(N'2016-01-12T00:00:00.000' AS DateTime), CAST(1.0000 AS Decimal(18, 4)), CAST(23.5800 AS Decimal(18, 4)))
+INSERT [dbo].[MliLocationsTable] ([Id], [Name]) VALUES (1, N'Seattle, WA')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Boise, ID', CAST(N'2016-02-12T00:00:00.000' AS DateTime), CAST(3.0000 AS Decimal(18, 4)), CAST(29.3600 AS Decimal(18, 4)))
+INSERT [dbo].[MliLocationsTable] ([Id], [Name]) VALUES (2, N'Portland, OR')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Boise, ID', CAST(N'2016-03-14T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(28.5400 AS Decimal(18, 4)))
+INSERT [dbo].[MliLocationsTable] ([Id], [Name]) VALUES (3, N'Boise, ID')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Portland, OR', CAST(N'2016-01-12T00:00:00.000' AS DateTime), CAST(3.0000 AS Decimal(18, 4)), CAST(55.3600 AS Decimal(18, 4)))
+INSERT [dbo].[MliLocationsTable] ([Id], [Name]) VALUES (4, N'Spokane, WA')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Portland, OR', CAST(N'2016-02-01T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(54.3600 AS Decimal(18, 4)))
+SET IDENTITY_INSERT [dbo].[MliLocationsTable] OFF
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Portland, OR', CAST(N'2016-02-12T00:00:00.000' AS DateTime), CAST(4.0000 AS Decimal(18, 4)), CAST(51.2500 AS Decimal(18, 4)))
+SET IDENTITY_INSERT [dbo].[StocksTable] ON 
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Salt Lake City, UT', CAST(N'2016-03-14T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(32.3200 AS Decimal(18, 4)))
+INSERT [dbo].[StocksTable] ([Id], [Name]) VALUES (1, N'Chair #1 Swivel')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Salt Lake City, UT', CAST(N'2016-04-01T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(36.1200 AS Decimal(18, 4)))
+INSERT [dbo].[StocksTable] ([Id], [Name]) VALUES (2, N'Desk 30 X 48')
 GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Salt Lake City, UT', CAST(N'2016-05-12T00:00:00.000' AS DateTime), CAST(4.0000 AS Decimal(18, 4)), CAST(33.1200 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Seattle, WA', CAST(N'2016-02-12T00:00:00.000' AS DateTime), CAST(6.0000 AS Decimal(18, 4)), CAST(61.3500 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Seattle, WA', CAST(N'2016-03-01T00:00:00.000' AS DateTime), CAST(8.0000 AS Decimal(18, 4)), CAST(59.3300 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Chair #1 Swivel', N'Seattle, WA', CAST(N'2016-04-15T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(58.6400 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Boise, ID', CAST(N'2016-01-16T00:00:00.000' AS DateTime), CAST(3.0000 AS Decimal(18, 4)), CAST(125.3600 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Boise, ID', CAST(N'2016-02-21T00:00:00.000' AS DateTime), CAST(3.0000 AS Decimal(18, 4)), CAST(128.9800 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Boise, ID', CAST(N'2016-03-25T00:00:00.000' AS DateTime), CAST(4.0000 AS Decimal(18, 4)), CAST(123.6500 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Portland, OR', CAST(N'2016-01-05T00:00:00.000' AS DateTime), CAST(3.0000 AS Decimal(18, 4)), CAST(135.6500 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Portland, OR', CAST(N'2016-01-30T00:00:00.000' AS DateTime), CAST(5.0000 AS Decimal(18, 4)), CAST(141.3200 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Portland, OR', CAST(N'2016-03-01T00:00:00.000' AS DateTime), CAST(4.0000 AS Decimal(18, 4)), CAST(138.7800 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Seattle, WA', CAST(N'2016-01-05T00:00:00.000' AS DateTime), CAST(12.0000 AS Decimal(18, 4)), CAST(178.2100 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Seattle, WA', CAST(N'2016-02-03T00:00:00.000' AS DateTime), CAST(4.0000 AS Decimal(18, 4)), CAST(169.9800 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockCostQuantity] ([StockNumber], [Location], [PurchasedDateTime], [Quantity], [Cost]) VALUES (N'Desk 30 X 48', N'Seattle, WA', CAST(N'2016-04-03T00:00:00.000' AS DateTime), CAST(2.0000 AS Decimal(18, 4)), CAST(171.2100 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Chair #1 Swivel', N'Boise, ID', CAST(55.3500 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Chair #1 Swivel', N'Portland, OR', CAST(78.3600 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Chair #1 Swivel', N'Salt Lake City, UT', CAST(65.0100 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Chair #1 Swivel', N'Seattle, WA', CAST(89.3200 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Desk 30 X 48', N'Boise, ID', CAST(156.3200 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Desk 30 X 48', N'Portland, OR', CAST(178.3900 AS Decimal(18, 4)))
-GO
-INSERT [dbo].[StockMaster] ([StockNumber], [Location], [Price]) VALUES (N'Desk 30 X 48', N'Seattle, WA', CAST(201.5500 AS Decimal(18, 4)))
+SET IDENTITY_INSERT [dbo].[StocksTable] OFF
 GO
 SET ANSI_PADDING ON
 GO
@@ -389,11 +338,6 @@ ALTER TABLE [dbo].[Items]  WITH CHECK ADD  CONSTRAINT [FK_Items_Manufacturers] F
 REFERENCES [dbo].[Manufacturers] ([Id])
 GO
 ALTER TABLE [dbo].[Items] CHECK CONSTRAINT [FK_Items_Manufacturers]
-GO
-ALTER TABLE [dbo].[StockCostQuantity]  WITH CHECK ADD  CONSTRAINT [FK_StockCostQuantity_StockMaster] FOREIGN KEY([StockNumber], [Location])
-REFERENCES [dbo].[StockMaster] ([StockNumber], [Location])
-GO
-ALTER TABLE [dbo].[StockCostQuantity] CHECK CONSTRAINT [FK_StockCostQuantity_StockMaster]
 GO
 USE [master]
 GO

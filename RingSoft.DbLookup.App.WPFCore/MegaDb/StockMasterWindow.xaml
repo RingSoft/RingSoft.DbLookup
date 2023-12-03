@@ -10,7 +10,7 @@
         xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
         mc:Ignorable="d"
         Style="{StaticResource WindowStyle}"
-        Title="Stock Master" Height="450" Width="600">
+        Title="Stock Master" Height="600" Width="600">
     <Window.DataContext>
         <vmlib:StockMasterViewModel x:Name="StockMasterViewModel"/>
     </Window.DataContext>
@@ -19,6 +19,7 @@
         <lc:DbMaintenanceStatusBar x:Name="StatusBar" DockPanel.Dock="Bottom"/>
         <Grid Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -31,17 +32,28 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Style="{StaticResource ControlLabel}" Content="Stock Number" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
-            <lc:AutoFillControl x:Name="StockNumberControl" Grid.Row="0" Grid.Column="1" Setup="{Binding Path=StockNumberAutoFillSetup}" Value="{Binding Path=StockNumberAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
-            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Location" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
-            <lc:AutoFillControl x:Name="LocationControl" Grid.Row="0" Grid.Column="3" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=PrimaryKeyControlsEnabled}"/>
-            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Price"/>
 
-            <dec:DecimalEditControl Grid.Row="1" Grid.Column="1" FormatType="Currency" Value="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextAlignment="Left" DesignText="$1,000,000.00" Width="125"/>
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Stock Master ID"/>
 
-            <Label Grid.Row="2" Grid.Column="1" Content="Purchases"/>
-            <Button x:Name="AddModifyButton" Grid.Row="3" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify"/>
-            <lc:LookupControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" Command="{Binding Path=StockCostQuantityCommand}">
+            <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Id}" Width="50" HorizontalAlignment="Left"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Stock Number" />
+
+            <lc:AutoFillControl x:Name="StockNumberControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=StockNumberAutoFillSetup}" Value="{Binding Path=StockNumberAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Location" />
+
+            <lc:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Price"/>
+
+            <dec:DecimalEditControl Grid.Row="2" Grid.Column="1" FormatType="Currency" Value="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextAlignment="Left" DesignText="$1,000,000.00" Width="125"/>
+
+            <Label Grid.Row="3" Grid.Column="1" Content="Purchases"/>
+
+            <Button x:Name="AddModifyButton" Grid.Row="4" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify"/>
+
+            <lc:LookupControl Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" Command="{Binding Path=StockCostQuantityCommand}">
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf PurchasedDate, Type={x:Type lm:StockCostQuantityLookup}}" Width="250" Header="Purchase Date" DesignText="01/01/1980"/>
                     <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:StockCostQuantityLookup}}" Width="100" Header="Quantity" TextAlignment="Right" DesignText="100,000"/>
@@ -49,7 +61,7 @@
                 </lc:LookupControl.LookupColumns>
             </lc:LookupControl>
 
-            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+            <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
                 <Button x:Name="AdvancedFindButton" Content="_Advanced Find" />
 
             </StackPanel>

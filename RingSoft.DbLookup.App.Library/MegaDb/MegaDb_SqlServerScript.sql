@@ -157,7 +157,7 @@ CREATE TABLE [dbo].[StockMaster](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[StockId] [int] NOT NULL,
 	[MliLocationId] [int] NOT NULL,
-	[Price] [decimal](38, 0) NOT NULL,
+	[Price] [decimal](38, 2) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

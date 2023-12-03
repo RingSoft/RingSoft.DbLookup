@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
+﻿using System.Linq;
+using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -158,29 +159,59 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
+        protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
+        {
+            Id = newEntity.Id;
+            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
+        }
+
         protected override void LoadFromEntity(StockMaster entity)
         {
-            
+            StockNumberAutoFillValue = entity.Stock.GetAutoFillValue();
+            LocationAutoFillValue = entity.MliLocation.GetAutoFillValue();
+            Price = entity.Price;
         }
 
         protected override StockMaster GetEntityData()
         {
-            throw new System.NotImplementedException();
+            var entity = new StockMaster
+            {
+                Id = Id,
+                StockId = StockNumberAutoFillValue.GetEntity<StocksTable>().Id,
+                MliLocationId = LocationAutoFillValue.GetEntity<MliLocationsTable>().Id,
+                Price = Price,
+            };
+            return entity;
         }
 
         protected override void ClearData()
         {
-            
+            Id = 0;
+            StockNumberAutoFillValue = null;
+            LocationAutoFillValue = null;
+            Price = 0;
+            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
         protected override bool SaveEntity(StockMaster entity)
         {
-            throw new System.NotImplementedException();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var result = context.SaveEntity(entity, "Saving Stock Master");
+            return result;
         }
 
         protected override bool DeleteEntity()
         {
-            throw new System.NotImplementedException();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<StockMaster>();
+            var stockMaster = table
+                .FirstOrDefault(p => p.Id == Id);
+            if (stockMaster != null)
+            {
+                return context.DeleteEntity(stockMaster, "Deleting Stock Master");
+            }
+
+            return true;
         }
 
 

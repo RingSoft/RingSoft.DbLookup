@@ -162,6 +162,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
         {
             Id = newEntity.Id;
+
+            StockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
+            StockCostQuantityLookupDefinition
+                .FilterDefinition
+                .AddFixedFilter(p => p.StockMasterId, Conditions.Equals, newEntity.Id);
+
+            _stockCostQuantityLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 

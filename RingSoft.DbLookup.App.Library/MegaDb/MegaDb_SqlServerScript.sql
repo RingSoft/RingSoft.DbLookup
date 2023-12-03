@@ -178,6 +178,23 @@ CREATE TABLE [dbo].[StocksTable](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+/****** Object:  Table [dbo].[StockCostQuantity]    Script Date: 12/3/2023 4:08:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StockCostQuantity](
+	[StockMasterId] [int] NOT NULL,
+	[PurchasedDateTime] [datetime] NOT NULL,
+	[Quantity] [decimal](38, 2) NOT NULL,
+	[Cost] [decimal](38, 2) NOT NULL,
+ CONSTRAINT [PK_StockCostQuantity] PRIMARY KEY CLUSTERED 
+(
+	[StockMasterId] ASC,
+	[PurchasedDateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 CREATE TABLE [dbo].[AdvancedFinds](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
@@ -325,6 +342,28 @@ SET IDENTITY_INSERT [dbo].[StocksTable] OFF
 GO
 SET ANSI_PADDING ON
 GO
+SET IDENTITY_INSERT [dbo].[StockMaster] ON 
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (1, 1, 2, CAST(11.75 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (2, 1, 3, CAST(12.35 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (3, 1, 1, CAST(13.32 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (4, 1, 4, CAST(11.36 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (5, 2, 2, CAST(21.65 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (6, 2, 3, CAST(22.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (7, 2, 4, CAST(24.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (8, 2, 1, CAST(25.32 AS Decimal(38, 2)))
+GO
+SET IDENTITY_INSERT [dbo].[StockMaster] OFF
+GO
+SET ANSI_PADDING ON
+GO
 /****** Object:  Index [IX_Items]    Script Date: 2/12/2020 1:45:17 PM ******/
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Items] ON [dbo].[Items]
 (
@@ -382,6 +421,13 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[StockMaster] CHECK CONSTRAINT [FK_StockMaster_StocksTable]
+GO
+ALTER TABLE [dbo].[StockCostQuantity]  WITH CHECK ADD  CONSTRAINT [FK_StockCostQuantity_StockMaster] FOREIGN KEY([StockMasterId])
+REFERENCES [dbo].[StockMaster] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[StockCostQuantity] CHECK CONSTRAINT [FK_StockCostQuantity_StockMaster]
 GO
 USE [master]
 GO

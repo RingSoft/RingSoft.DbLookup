@@ -168,7 +168,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 .FilterDefinition
                 .AddFixedFilter(p => p.StockMasterId, Conditions.Equals, newEntity.Id);
 
-            _stockCostQuantityLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 

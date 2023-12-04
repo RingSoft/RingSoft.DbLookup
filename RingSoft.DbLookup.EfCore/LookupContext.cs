@@ -196,16 +196,17 @@ namespace RingSoft.DbLookup.EfCore
             {
                 context = SystemGlobals.DataRepository.GetDataContext();
             }
-            
-            var query = context.GetTable<TEntity>();
-            var navProperties = lookupDefinition.GetAllNavigationProperties();
 
-            var includes = navProperties.GetAllIncludePropertiesFromNavProperties();
+            var tableDef = GblMethods.GetTableDefinition<TEntity>();
+            var query = GetQueryableTable(tableDef, true, context);
+            //var navProperties = lookupDefinition.GetAllNavigationProperties();
 
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            //var includes = navProperties.GetAllIncludePropertiesFromNavProperties();
+
+            //foreach (var include in includes)
+            //{
+            //    query = query.Include(include);
+            //}
 
             return query;
         }

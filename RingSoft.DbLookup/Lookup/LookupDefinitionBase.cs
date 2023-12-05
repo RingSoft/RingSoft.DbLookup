@@ -139,6 +139,8 @@ namespace RingSoft.DbLookup.Lookup
 
         public AdvancedFind.AdvancedFind Entity { get; internal set; }
 
+        public List<LookupFieldColumnDefinition> AdditOrderByColumns { get; } = new List<LookupFieldColumnDefinition>();
+
         public LookupColumnDefinitionBase KeyColumn
         {
             get
@@ -301,6 +303,10 @@ namespace RingSoft.DbLookup.Lookup
                                     columnType.PercentWidth,
                                     fieldColumn.JoinQueryTableAlias);
                                 newColumn.CopyFrom(columnType);
+                                if (fieldColumn.LookupDefinition.AdditOrderByColumns.Contains(fieldColumn))
+                                {
+                                    AddOrderByColumn(newColumn);
+                                }
                             }
                         }
 
@@ -1149,6 +1155,11 @@ namespace RingSoft.DbLookup.Lookup
         public void SetKeyColumn(LookupColumnDefinitionBase lookupColumnDefinition)
         {
             KeyColumn = lookupColumnDefinition;
+        }
+
+        public void AddOrderByColumn(LookupFieldColumnDefinition column)
+        {
+            AdditOrderByColumns.Add(column);
         }
     }
 }

@@ -67,6 +67,7 @@ namespace RingSoft.DbLookup.Lookup
             {
                 OrderByList.Add(fieldColumn);
             }
+            OrderByList.AddRange(lookupDefinition.AdditOrderByColumns);
 
             _orderByType = lookupDefinition.InitialOrderByType;
         }

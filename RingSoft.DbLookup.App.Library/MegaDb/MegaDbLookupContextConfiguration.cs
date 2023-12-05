@@ -105,10 +105,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
                 .AddVisibleColumnDefinition(p => p.StockNumber
                     , "Stock Number"
                     , p => p.Name, 40);
-            StockMasterLookup.Include(p => p.MliLocation)
+            var locationCol = StockMasterLookup.Include(p => p.MliLocation)
                 .AddVisibleColumnDefinition(p => p.Location
                     , "Location"
                     , p => p.Name, 40);
+
+            StockMasterLookup.AddOrderByColumn(locationCol);
             StockMasterLookup
                 .AddVisibleColumnDefinition(p => p.Price
                     , "Price", p => p.Price, 20);

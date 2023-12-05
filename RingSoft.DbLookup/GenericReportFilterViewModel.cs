@@ -526,6 +526,7 @@ namespace RingSoft.DbLookup
                 {
                     var filter = LookupToFilter.FilterDefinition.AddFixedFilter(lookupFieldColumn.FieldDefinition,
                         condition, filterText);
+                    filter.SetPropertyName = lookupFieldColumn.GetPropertyJoinName();
                     if (!LookupMode)
                     {
                         PrinterSetup.AddReportFilter(filter);

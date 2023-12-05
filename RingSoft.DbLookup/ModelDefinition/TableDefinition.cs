@@ -409,12 +409,18 @@ namespace RingSoft.DbLookup.ModelDefinition
                 primaryKey.KeyValueFields[0].Value =
                     GblMethods.GetPropertyValue(entity, PrimaryKeyFields[0].PropertyName);
 
+                //if (LookupDefinition != null
+                //    && LookupDefinition.InitialSortColumnDefinition != null
+                //    && LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                //{
+                //    textValue = GblMethods.GetPropertyValue(entity, lookupFieldColumn.FieldDefinition.PropertyName);
+                //}
                 if (LookupDefinition != null
-                    && LookupDefinition.InitialSortColumnDefinition != null
-                    && LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                    && LookupDefinition.KeyColumn != null)
                 {
-                    textValue = GblMethods.GetPropertyValue(entity, lookupFieldColumn.FieldDefinition.PropertyName);
+                    textValue = LookupDefinition.KeyColumn.GetFormattedValue(entity);
                 }
+
             }
 
             var result = new AutoFillValue(primaryKey, textValue);

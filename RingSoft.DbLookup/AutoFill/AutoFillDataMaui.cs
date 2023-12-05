@@ -202,17 +202,23 @@ namespace RingSoft.DbLookup.AutoFill
                     var param = GblMethods.GetParameterExpression<TEntity>();
                     if (param != null)
                     {
-                        var query = SystemGlobals.DataRepository.GetDataContext().GetTable<TEntity>();
+                        //var query = SystemGlobals.DataRepository.GetDataContext().GetTable<TEntity>();
+                        var query = Setup
+                            .LookupDefinition
+                            .TableDefinition
+                            .Context
+                            .GetQueryable<TEntity>(Setup.LookupDefinition);
                         var expr = filter.GetWhereExpresssion<TEntity>(param);
                         var filterQuery = FilterItemDefinition.FilterQuery(query, param, expr);
                         entity = filterQuery.FirstOrDefault();
 
                         if (entity != null)
                         {
+                            var autoFill = entity.GetAutoFillValue(Setup.LookupDefinition);
                             OnOutputAutoFillData(
                                 new AutoFillOutputData(
                                     null
-                                    , entity.GetAutoFillValue(Setup.LookupDefinition)));
+                                    , autoFill));
                         }
                     }
                 }

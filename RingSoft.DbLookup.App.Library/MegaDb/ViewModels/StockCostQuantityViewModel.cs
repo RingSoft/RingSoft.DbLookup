@@ -166,9 +166,17 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override bool DeleteEntity()
         {
-            throw new NotImplementedException();
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<StockCostQuantity>();
+            var costQuantity = table
+                .FirstOrDefault(p => p.StockMasterId == _parentStock.Id
+                                     && p.PurchasedDateTime == PurchaseDate);
+            if (costQuantity != null)
+            {
+                return context.DeleteEntity(costQuantity, "Deleting Cost/Quantity");
+            }
+
+            return true;
         }
-
-
     }
 }

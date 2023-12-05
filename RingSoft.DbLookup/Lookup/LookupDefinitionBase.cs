@@ -139,6 +139,19 @@ namespace RingSoft.DbLookup.Lookup
 
         public AdvancedFind.AdvancedFind Entity { get; internal set; }
 
+        public LookupColumnDefinitionBase KeyColumn
+        {
+            get
+            {
+                if (_keyColumn == null)
+                {
+                    return InitialSortColumnDefinition;
+                }
+                return _keyColumn;
+            }
+            internal set => _keyColumn = value;
+        }
+
         public event EventHandler<LookupWindowReturnArgs> WindowClosed;
 
         public void ClearVisibleColumns()
@@ -151,6 +164,7 @@ namespace RingSoft.DbLookup.Lookup
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
         private FieldDefinition _initialOrderByField;
+        private LookupColumnDefinitionBase _keyColumn;
 
         public LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {
@@ -1130,6 +1144,11 @@ namespace RingSoft.DbLookup.Lookup
         public virtual string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
         {
             return string.Empty;
+        }
+
+        public void SetKeyColumn(LookupColumnDefinitionBase lookupColumnDefinition)
+        {
+            KeyColumn = lookupColumnDefinition;
         }
     }
 }

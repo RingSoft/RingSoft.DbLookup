@@ -177,7 +177,8 @@ namespace RingSoft.DbLookup.TableProcessing
                         field = FieldToSearch;
                     }
 
-                    return JoinDefinition.GetPropertyJoinName(field.PropertyName);
+                    var result = JoinDefinition.GetPropertyJoinName(field.PropertyName);
+                    return result;
                 }
 
                 return SetPropertyName;
@@ -576,6 +577,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 field = FieldToSearch;
             }
 
+            var test = this;
             var value = stringValue.GetPropertyFilterValue(field.FieldDataType, field.FieldType);
             
             var result = GetBinaryExpression<TEntity>(param, PropertyName, Condition, field.FieldType, value);

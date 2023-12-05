@@ -222,6 +222,30 @@ INSERT INTO `manufacturers` VALUES (8,'Albertsons'),(4,'Amazon'),(3,'Generic'),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `mlilocationstable`
+--
+
+DROP TABLE IF EXISTS `mlilocationstable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mlilocationstable` (
+  `Id` int NOT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mlilocationstable`
+--
+
+LOCK TABLES `mlilocationstable` WRITE;
+/*!40000 ALTER TABLE `mlilocationstable` DISABLE KEYS */;
+INSERT INTO `mlilocationstable` VALUES (1,'Seattle, WA'),(2,'Portland, OR'),(3,'Boise, ID'),(4,'Spokane, WA');
+/*!40000 ALTER TABLE `mlilocationstable` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `stockcostquantity`
 --
 
@@ -229,13 +253,12 @@ DROP TABLE IF EXISTS `stockcostquantity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockcostquantity` (
-  `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `StockMasterId` int NOT NULL,
   `PurchasedDateTime` datetime(6) NOT NULL,
-  `Quantity` double(18,4) NOT NULL,
-  `Cost` double(18,4) NOT NULL,
-  PRIMARY KEY (`StockNumber`,`Location`,`PurchasedDateTime`),
-  CONSTRAINT `FK_StockCostQuantity_StockMaster` FOREIGN KEY (`StockNumber`, `Location`) REFERENCES `stockmaster` (`StockNumber`, `Location`)
+  `Quantity` decimal(38,2) NOT NULL,
+  `Cost` decimal(38,2) NOT NULL,
+  PRIMARY KEY (`StockMasterId`,`PurchasedDateTime`),
+  CONSTRAINT `FK_StockCostQuantity_StockMaster` FOREIGN KEY (`StockMasterId`) REFERENCES `stockmaster` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -245,7 +268,7 @@ CREATE TABLE `stockcostquantity` (
 
 LOCK TABLES `stockcostquantity` WRITE;
 /*!40000 ALTER TABLE `stockcostquantity` DISABLE KEYS */;
-INSERT INTO `stockcostquantity` VALUES ('Chair #1 Swivel','Boise, ID','2016-01-12 00:00:00.000000',1.0000,23.5800),('Chair #1 Swivel','Boise, ID','2016-02-12 00:00:00.000000',3.0000,29.3600),('Chair #1 Swivel','Boise, ID','2016-03-14 00:00:00.000000',5.0000,28.5400),('Chair #1 Swivel','Portland, OR','2016-01-12 00:00:00.000000',3.0000,55.3600),('Chair #1 Swivel','Portland, OR','2016-02-01 00:00:00.000000',5.0000,54.3600),('Chair #1 Swivel','Portland, OR','2016-02-12 00:00:00.000000',4.0000,51.2500),('Chair #1 Swivel','Salt Lake City, UT','2016-03-14 00:00:00.000000',5.0000,32.3200),('Chair #1 Swivel','Salt Lake City, UT','2016-04-01 00:00:00.000000',5.0000,36.1200),('Chair #1 Swivel','Salt Lake City, UT','2016-05-12 00:00:00.000000',4.0000,33.1200),('Chair #1 Swivel','Seattle, WA','2016-02-12 00:00:00.000000',6.0000,61.3500),('Chair #1 Swivel','Seattle, WA','2016-03-01 00:00:00.000000',8.0000,59.3300),('Chair #1 Swivel','Seattle, WA','2016-04-15 00:00:00.000000',5.0000,58.6400),('Desk 30 X 48','Boise, ID','2016-01-16 00:00:00.000000',3.0000,125.3600),('Desk 30 X 48','Boise, ID','2016-02-21 00:00:00.000000',3.0000,128.9800),('Desk 30 X 48','Boise, ID','2016-03-25 00:00:00.000000',4.0000,123.6500),('Desk 30 X 48','Portland, OR','2016-01-05 00:00:00.000000',3.0000,135.6500),('Desk 30 X 48','Portland, OR','2016-01-30 00:00:00.000000',5.0000,141.3200),('Desk 30 X 48','Portland, OR','2016-03-01 00:00:00.000000',4.0000,138.7800),('Desk 30 X 48','Seattle, WA','2016-01-05 00:00:00.000000',12.0000,178.2100),('Desk 30 X 48','Seattle, WA','2016-02-03 00:00:00.000000',4.0000,169.9800),('Desk 30 X 48','Seattle, WA','2016-04-03 00:00:00.000000',2.0000,171.2100);
+INSERT INTO `stockcostquantity` VALUES (1,'2023-11-21 00:00:00.000000',3.00,10.32),(1,'2023-11-28 00:00:00.000000',4.00,11.00),(1,'2023-12-04 00:00:00.000000',6.00,14.00),(2,'2023-11-28 00:00:00.000000',3.00,10.21),(2,'2023-11-29 00:00:00.000000',4.00,9.65),(2,'2023-12-01 00:00:00.000000',3.00,11.00),(3,'2023-11-14 00:00:00.000000',3.00,10.01),(3,'2023-11-15 00:00:00.000000',2.00,9.25),(3,'2023-11-21 00:00:00.000000',4.00,8.99),(4,'2023-12-05 00:00:00.000000',4.00,10.00),(4,'2023-12-06 00:00:00.000000',3.00,9.25),(4,'2023-12-07 00:00:00.000000',4.00,11.21),(5,'2023-11-27 00:00:00.000000',3.00,19.00),(5,'2023-11-28 00:00:00.000000',4.00,19.32),(5,'2023-12-01 00:00:00.000000',4.00,20.01),(6,'2023-11-21 00:00:00.000000',2.00,20.32),(6,'2023-11-22 00:00:00.000000',5.00,19.65),(6,'2023-11-30 00:00:00.000000',2.00,18.00),(7,'2023-12-12 00:00:00.000000',2.00,21.00),(7,'2023-12-14 00:00:00.000000',4.00,21.35),(7,'2023-12-21 00:00:00.000000',5.00,20.95),(8,'2023-12-03 00:00:00.000000',2.00,12.00),(8,'2023-12-04 00:00:00.000000',3.00,11.99);
 /*!40000 ALTER TABLE `stockcostquantity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,10 +280,15 @@ DROP TABLE IF EXISTS `stockmaster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockmaster` (
-  `StockNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Price` double(18,4) NOT NULL,
-  PRIMARY KEY (`StockNumber`,`Location`)
+  `Id` int NOT NULL,
+  `StockId` int NOT NULL,
+  `MliLocationId` int NOT NULL,
+  `Price` decimal(38,2) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_StockMaster_MliLocationsTable` (`MliLocationId`),
+  KEY `FK_StockMaster_StocksTable` (`StockId`),
+  CONSTRAINT `FK_StockMaster_MliLocationsTable` FOREIGN KEY (`MliLocationId`) REFERENCES `mlilocationstable` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_StockMaster_StocksTable` FOREIGN KEY (`StockId`) REFERENCES `stockstable` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -270,9 +298,34 @@ CREATE TABLE `stockmaster` (
 
 LOCK TABLES `stockmaster` WRITE;
 /*!40000 ALTER TABLE `stockmaster` DISABLE KEYS */;
-INSERT INTO `stockmaster` VALUES ('Chair #1 Swivel','Boise, ID',55.3500),('Chair #1 Swivel','Portland, OR',78.3600),('Chair #1 Swivel','Salt Lake City, UT',65.0100),('Chair #1 Swivel','Seattle, WA',89.3200),('Desk 30 X 48','Boise, ID',156.3200),('Desk 30 X 48','Portland, OR',178.3900),('Desk 30 X 48','Seattle, WA',201.5500);
+INSERT INTO `stockmaster` VALUES (1,1,2,11.75),(2,1,3,12.35),(3,1,1,13.32),(4,1,4,11.36),(5,2,2,21.65),(6,2,3,22.00),(7,2,4,24.00),(8,2,1,25.32);
 /*!40000 ALTER TABLE `stockmaster` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `stockstable`
+--
+
+DROP TABLE IF EXISTS `stockstable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stockstable` (
+  `Id` int NOT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stockstable`
+--
+
+LOCK TABLES `stockstable` WRITE;
+/*!40000 ALTER TABLE `stockstable` DISABLE KEYS */;
+INSERT INTO `stockstable` VALUES (1,'Chair #1 Swivel'),(2,'Desk 30 X 48');
+/*!40000 ALTER TABLE `stockstable` ENABLE KEYS */;
+UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

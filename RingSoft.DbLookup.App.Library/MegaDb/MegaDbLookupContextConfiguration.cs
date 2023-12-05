@@ -122,10 +122,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
                 .Include(p => p.Stock)
                 .AddVisibleColumnDefinition(p => p.StockNumber
                     , "Stock Number", p => p.Name, 25);
-            StockCostQuantityLookup.Include(p => p.StockMaster)
+            locationCol = StockCostQuantityLookup.Include(p => p.StockMaster)
                 .Include(p => p.MliLocation)
                 .AddVisibleColumnDefinition(p => p.Location
                     , "Location", p => p.Name, 25);
+            StockCostQuantityLookup.AddOrderByColumn(locationCol);
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.PurchasedDate, "Purchased Date",
                 p => p.PurchasedDateTime, 20);
             StockCostQuantityLookup.AddVisibleColumnDefinition(p => p.Quantity, "Quantity", p => p.Quantity, 15);

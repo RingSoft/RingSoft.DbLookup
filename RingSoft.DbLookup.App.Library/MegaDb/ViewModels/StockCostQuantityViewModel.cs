@@ -124,7 +124,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         public override void OnNewButton()
         {
             base.OnNewButton();
-            PurchaseDateUiCommand.IsEnabled = true;
+            PurchaseDateUiCommand.IsReadOnly = false;
             PurchaseDateUiCommand.SetFocus();
         }
 
@@ -137,7 +137,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 QuantityUiCommand.SetFocus();
             }
 
-            PurchaseDateUiCommand.IsEnabled = false;
+            PurchaseDateUiCommand.IsReadOnly = true;
 
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }

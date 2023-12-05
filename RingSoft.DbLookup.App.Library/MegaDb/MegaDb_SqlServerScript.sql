@@ -342,6 +342,52 @@ SET IDENTITY_INSERT [dbo].[StocksTable] OFF
 GO
 SET ANSI_PADDING ON
 GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (1, CAST(N'2023-11-21T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(10.32 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (1, CAST(N'2023-11-28T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(11.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (1, CAST(N'2023-12-04T00:00:00.000' AS DateTime), CAST(6.00 AS Decimal(38, 2)), CAST(14.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (2, CAST(N'2023-11-28T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(10.21 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (2, CAST(N'2023-11-29T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(9.65 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (2, CAST(N'2023-12-01T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(11.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (3, CAST(N'2023-11-14T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(10.01 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (3, CAST(N'2023-11-15T00:00:00.000' AS DateTime), CAST(2.00 AS Decimal(38, 2)), CAST(9.25 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (3, CAST(N'2023-11-21T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(8.99 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (4, CAST(N'2023-12-05T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(10.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (4, CAST(N'2023-12-06T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(9.25 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (4, CAST(N'2023-12-07T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(11.21 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (5, CAST(N'2023-11-27T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(19.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (5, CAST(N'2023-11-28T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(19.32 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (5, CAST(N'2023-12-01T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(20.01 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (6, CAST(N'2023-11-21T00:00:00.000' AS DateTime), CAST(2.00 AS Decimal(38, 2)), CAST(20.32 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (6, CAST(N'2023-11-22T00:00:00.000' AS DateTime), CAST(5.00 AS Decimal(38, 2)), CAST(19.65 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (6, CAST(N'2023-11-30T00:00:00.000' AS DateTime), CAST(2.00 AS Decimal(38, 2)), CAST(18.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (7, CAST(N'2023-12-12T00:00:00.000' AS DateTime), CAST(2.00 AS Decimal(38, 2)), CAST(21.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (7, CAST(N'2023-12-14T00:00:00.000' AS DateTime), CAST(4.00 AS Decimal(38, 2)), CAST(21.35 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (7, CAST(N'2023-12-21T00:00:00.000' AS DateTime), CAST(5.00 AS Decimal(38, 2)), CAST(20.95 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (8, CAST(N'2023-12-03T00:00:00.000' AS DateTime), CAST(2.00 AS Decimal(38, 2)), CAST(12.00 AS Decimal(38, 2)))
+GO
+INSERT [dbo].[StockCostQuantity] ([StockMasterId], [PurchasedDateTime], [Quantity], [Cost]) VALUES (8, CAST(N'2023-12-04T00:00:00.000' AS DateTime), CAST(3.00 AS Decimal(38, 2)), CAST(11.99 AS Decimal(38, 2)))
+GO
 SET IDENTITY_INSERT [dbo].[StockMaster] ON 
 GO
 INSERT [dbo].[StockMaster] ([Id], [StockId], [MliLocationId], [Price]) VALUES (1, 1, 2, CAST(11.75 AS Decimal(38, 2)))

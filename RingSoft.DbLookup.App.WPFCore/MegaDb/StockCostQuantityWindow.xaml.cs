@@ -17,16 +17,6 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         public StockCostQuantityWindow()
         {
             InitializeComponent();
-
-            PurchaseDateControl.LostFocus += (sender, args) => StockCostQuantityViewModel.OnKeyControlLeave();
-
-            Initialize();
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            PurchaseDateControl.Focus();
-            base.ResetViewForNewRecord();
         }
     }
 }

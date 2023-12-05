@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
@@ -82,6 +83,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        public UiCommand PurchaseDateUiCommand { get; } = new UiCommand();
+
+        public UiCommand QuantityUiCommand { get; } = new UiCommand();
+
         private IMegaDbLookupContext _lookupContext;
         private DateTime _newDate = DateTime.Today;
         private StockMaster _parentStock;
@@ -116,9 +121,23 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
+        public override void OnNewButton()
+        {
+            base.OnNewButton();
+            PurchaseDateUiCommand.IsEnabled = true;
+            PurchaseDateUiCommand.SetFocus();
+        }
+
         protected override StockCostQuantity PopulatePrimaryKeyControls(StockCostQuantity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             PurchaseDate = newEntity.PurchasedDateTime;
+
+            if (PurchaseDateUiCommand.IsFocused)
+            {
+                QuantityUiCommand.SetFocus();
+            }
+
+            PurchaseDateUiCommand.IsEnabled = false;
 
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }

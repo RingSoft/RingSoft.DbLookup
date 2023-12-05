@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
@@ -11,6 +12,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class StockMasterViewModel : DbMaintenanceViewModel<StockMaster>
     {
+        #region Properties
+
         private int _id;
 
         public int Id
@@ -132,7 +135,26 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        #endregion
+
+        public UiCommand StockUiCommand { get; } = new UiCommand();
+
+        public UiCommand LocationUiCommand { get; } = new UiCommand();
+
         private IMegaDbLookupContext _lookupContext;
+
+        public StockMasterViewModel()
+        {
+            StockUiCommand.LostFocus += (sender, args) =>
+            {
+                StockLocationLeave();
+            };
+
+            LocationUiCommand.LostFocus += (sender, args) =>
+            {
+                StockLocationLeave();
+            };
+        }
 
         protected override void Initialize()
         {
@@ -159,6 +181,15 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
+        public override void OnNewButton()
+        {
+            base.OnNewButton();
+            StockUiCommand.IsEnabled = true;
+            LocationUiCommand.IsEnabled = true;
+
+            StockUiCommand.SetFocus();
+        }
+
         protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
         {
             Id = newEntity.Id;
@@ -169,6 +200,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 .AddFixedFilter(p => p.StockMasterId, Conditions.Equals, newEntity.Id);
 
             StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+
+            StockUiCommand.IsEnabled = false;
+            LocationUiCommand.IsEnabled = false;
+
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
@@ -181,11 +216,37 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override StockMaster GetEntityData()
         {
+            var stockId = StockNumberAutoFillValue.GetEntity<StocksTable>().Id;
+            var locationId = LocationAutoFillValue.GetEntity<MliLocationsTable>().Id;
+            var context = SystemGlobals.DataRepository.GetDataContext();
+
+            if (stockId == 0 && !StockNumberAutoFillValue.Text.IsNullOrEmpty())
+            {
+                var stock = new StocksTable
+                {
+                    Name = StockNumberAutoFillValue.Text,
+                };
+                context.SaveEntity(stock, "Adding Stock Item");
+                stockId = stock.Id;
+                StockNumberAutoFillValue = stock.GetAutoFillValue();
+            }
+
+            if (locationId == 0 && !LocationAutoFillValue.Text.IsNullOrEmpty())
+            {
+                var location = new MliLocationsTable
+                {
+                    Name = LocationAutoFillValue.Text,
+                };
+                context.SaveEntity(location, "Adding Location");
+                locationId = location.Id;
+                LocationAutoFillValue = location.GetAutoFillValue();
+            }
+
             var entity = new StockMaster
             {
                 Id = Id,
-                StockId = StockNumberAutoFillValue.GetEntity<StocksTable>().Id,
-                MliLocationId = LocationAutoFillValue.GetEntity<MliLocationsTable>().Id,
+                StockId = stockId,
+                MliLocationId = locationId,
                 Price = Price,
             };
             return entity;
@@ -221,11 +282,30 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             return true;
         }
 
-
         public void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 StockCostQuantityCommand = GetLookupCommand(LookupCommands.AddModify);
+        }
+
+        private void StockLocationLeave()
+        {
+            if (StockNumberAutoFillValue.IsValid() && LocationAutoFillValue.IsValid())
+            {
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                var table = context.GetTable<StockMaster>();
+                var stockMasterRecord = table.FirstOrDefault(
+                    p => p.StockId == StockNumberAutoFillValue.GetEntity<StocksTable>().Id
+                         && p.MliLocationId == LocationAutoFillValue.GetEntity<MliLocationsTable>().Id);
+
+                if (stockMasterRecord != null
+                    && stockMasterRecord.Id != Id)
+                {
+                    KeyAutoFillValue = stockMasterRecord.GetAutoFillValue();
+                    KeyValueDirty = true;
+                    OnKeyControlLeave();
+                }
+            }
         }
     }
 }

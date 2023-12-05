@@ -37,13 +37,13 @@
 
             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Id}" Width="50" HorizontalAlignment="Left"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Stock Number" />
+            <Label Grid.Row="1" Grid.Column="0" x:Name="StockLabel" Style="{StaticResource ControlLabel}" Content="Stock Number" />
 
-            <lc:AutoFillControl x:Name="StockNumberControl" Grid.Row="1" Grid.Column="1" Setup="{Binding Path=StockNumberAutoFillSetup}" Value="{Binding Path=StockNumberAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="1" Setup="{Binding Path=StockNumberAutoFillSetup}" Value="{Binding Path=StockNumberAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding StockUiCommand}" UiLabel="{Binding ElementName=StockLabel}"/>
 
-            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Location" />
+            <Label Grid.Row="1" Grid.Column="2" x:Name="LocationLabel" Style="{StaticResource ControlLabel}" Content="Location" />
 
-            <lc:AutoFillControl x:Name="LocationControl" Grid.Row="1" Grid.Column="3" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="3" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding LocationUiCommand}" UiLabel="{Binding ElementName=LocationLabel}"/>
 
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Price"/>
 

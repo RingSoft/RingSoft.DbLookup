@@ -20,20 +20,12 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         {
             InitializeComponent();
 
-            StockNumberControl.LostFocus += (sender, args) => StockMasterViewModel.OnKeyControlLeave();
-            LocationControl.LostFocus += (sender, args) => StockMasterViewModel.OnKeyControlLeave();
 
             AddModifyButton.Click += (sender, args) => { StockMasterViewModel.OnAddModify(); };
 
             AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
 
             Initialize();
-        }
-
-        public override void ResetViewForNewRecord()
-        {
-            StockNumberControl.Focus();
-            base.ResetViewForNewRecord();
         }
 
         private void ShowAdvancedFind()

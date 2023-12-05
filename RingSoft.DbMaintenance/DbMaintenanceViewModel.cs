@@ -1037,7 +1037,7 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        private bool CheckDirty()
+        protected bool CheckDirty()
         {
             if (ReadOnlyMode)
                 return true;

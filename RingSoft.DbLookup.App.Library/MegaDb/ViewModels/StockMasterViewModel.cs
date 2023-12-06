@@ -145,6 +145,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public StockMasterViewModel()
         {
+            TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StocksTable);
+            TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.MliLocationsTable);
             StockUiCommand.LostFocus += (sender, args) =>
             {
                 StockLocationLeave();
@@ -274,12 +276,42 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             var table = context.GetTable<StockMaster>();
             var stockMaster = table
                 .FirstOrDefault(p => p.Id == Id);
+
+            var result = true;
             if (stockMaster != null)
             {
-                return context.DeleteEntity(stockMaster, "Deleting Stock Master");
+                result = context.DeleteEntity(stockMaster, "Deleting Stock Master");
             }
 
-            return true;
+            if (result)
+            {
+                if (!table.Any(p => p.StockId == stockMaster.StockId))
+                {
+                    var stocksTable = context.GetTable<StocksTable>();
+                    var stockRecord = stocksTable
+                        .FirstOrDefault(p => p.Id == stockMaster.StockId);
+                    if (stockRecord != null)
+                    {
+                        result = context.DeleteEntity(stockRecord, "Deleting Stock");
+                    }
+                }
+            }
+
+            if (result)
+            {
+                if (!table.Any(p => p.MliLocationId == stockMaster.MliLocationId))
+                {
+                    var locationsTable = context.GetTable<MliLocationsTable>();
+                    var locationRecord = locationsTable
+                        .FirstOrDefault(p => p.Id == stockMaster.MliLocationId);
+                    if (locationRecord != null)
+                    {
+                        result = context.DeleteEntity(locationRecord, "Deleting Location");
+                    }
+                }
+            }
+
+            return result;
         }
 
         public void OnAddModify()

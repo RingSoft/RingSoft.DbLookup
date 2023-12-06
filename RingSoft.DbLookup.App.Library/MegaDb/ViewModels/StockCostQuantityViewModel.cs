@@ -9,6 +9,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
     public class StockCostQuantityViewModel : DbMaintenanceViewModel<StockCostQuantity>
     {
+        #region Properties
+
         private string _stockNumber;
 
         public string StockNumber
@@ -83,6 +85,8 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
+        #endregion
+
         public UiCommand PurchaseDateUiCommand { get; } = new UiCommand();
 
         public UiCommand QuantityUiCommand { get; } = new UiCommand();
@@ -94,6 +98,28 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         public StockCostQuantityViewModel()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
+
+            PurchaseDateUiCommand.LostFocus += PurchaseDateUiCommand_LostFocus;
+        }
+
+        private void PurchaseDateUiCommand_LostFocus(object sender, UiLostFocusArgs e)
+        {
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<StockCostQuantity>();
+            var stockCq = table
+                .FirstOrDefault(p => p.StockMasterId == _parentStock.Id
+                && p.PurchasedDateTime == PurchaseDate);
+
+            if (stockCq != null)
+            {
+                var primaryKey = RsDbLookupAppGlobals
+                    .EfProcessor
+                    .MegaDbLookupContext
+                    .StockCostQuantities
+                    .GetPrimaryKeyValueFromEntity(stockCq);
+                KeyValueDirty = true;
+                SelectPrimaryKey(primaryKey);
+            }
         }
 
         protected override void Initialize()

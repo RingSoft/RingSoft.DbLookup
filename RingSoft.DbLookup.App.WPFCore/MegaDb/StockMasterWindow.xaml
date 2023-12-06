@@ -47,11 +47,11 @@
 
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Price"/>
 
-            <dec:DecimalEditControl Grid.Row="2" Grid.Column="1" FormatType="Currency" Value="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextAlignment="Left" DesignText="$1,000,000.00" Width="125"/>
+            <dec:DecimalEditControl Grid.Row="2" Grid.Column="1" FormatType="Currency" Value="{Binding Path=Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextAlignment="Left" DesignText="$1,000,000.00" Width="125" UiCommand="{Binding PriceUiCommand}"/>
 
             <Label Grid.Row="3" Grid.Column="1" Content="Purchases"/>
 
-            <Button x:Name="AddModifyButton" Grid.Row="4" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify"/>
+            <Button Grid.Row="4" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify" Command="{Binding AddViewCommand}"/>
 
             <lc:LookupControl Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" Command="{Binding Path=StockCostQuantityCommand}">
                 <lc:LookupControl.LookupColumns>
@@ -62,7 +62,7 @@
             </lc:LookupControl>
 
             <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
-                <Button x:Name="AdvancedFindButton" Content="_Advanced Find" />
+                <Button Content="_Advanced Find" Command="{Binding AdvFindCommand}"/>
 
             </StackPanel>
 

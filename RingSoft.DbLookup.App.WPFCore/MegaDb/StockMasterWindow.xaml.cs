@@ -4,13 +4,14 @@ using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 using System.Windows.Controls.Primitives;
+using RingSoft.DbLookup.App.Library.MegaDb.ViewModels;
 
 namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 {
     /// <summary>
     /// Interaction logic for StockMasterWindow.xaml
     /// </summary>
-    public partial class StockMasterWindow
+    public partial class StockMasterWindow : IStockMasterView
     {
         public override DbMaintenanceViewModelBase ViewModel => StockMasterViewModel;
         public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
@@ -19,16 +20,9 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
         public StockMasterWindow()
         {
             InitializeComponent();
-
-
-            AddModifyButton.Click += (sender, args) => { StockMasterViewModel.OnAddModify(); };
-
-            AdvancedFindButton.Click += (sender, args) => ShowAdvancedFind();
-
-            Initialize();
         }
 
-        private void ShowAdvancedFind()
+        public void ShowAdvancedFind()
         {
             var advancedFindWindow = new AdvancedFindWindow();
             advancedFindWindow.Loaded += (sender, args) => advancedFindWindow.ShowInTaskbar = true;

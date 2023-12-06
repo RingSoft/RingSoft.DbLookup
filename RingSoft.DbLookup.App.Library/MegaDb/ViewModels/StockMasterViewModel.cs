@@ -10,6 +10,10 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {
+    public interface IStockMasterView
+    {
+        void ShowAdvancedFind();
+    }
     public class StockMasterViewModel : DbMaintenanceViewModel<StockMaster>
     {
         #region Properties
@@ -141,6 +145,14 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         public UiCommand LocationUiCommand { get; } = new UiCommand();
 
+        public UiCommand PriceUiCommand { get; } = new UiCommand();
+
+        public RelayCommand AdvFindCommand { get; }
+
+        public RelayCommand AddViewCommand { get; }
+
+        public IStockMasterView View { get; private set; }
+
         private IMegaDbLookupContext _lookupContext;
 
         public StockMasterViewModel()
@@ -156,11 +168,26 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             {
                 StockLocationLeave();
             };
+
+            AdvFindCommand = new RelayCommand((() =>
+            {
+                View.ShowAdvancedFind();
+            }));
+
+            AddViewCommand = new RelayCommand((() =>
+            {
+                OnAddModify();
+            }));
         }
 
         protected override void Initialize()
         {
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext;
+
+            if (base.View is IStockMasterView stockMasterView)
+            {
+                View = stockMasterView;
+            }
 
             StockNumberAutoFillSetup = new AutoFillSetup(
                 TableDefinition.GetFieldDefinition(p => p.StockId))
@@ -202,6 +229,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 .AddFixedFilter(p => p.StockMasterId, Conditions.Equals, newEntity.Id);
 
             StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
+
+            if (StockUiCommand.IsFocused || LocationUiCommand.IsFocused)
+            {
+                PriceUiCommand.SetFocus();
+            }
 
             StockUiCommand.IsEnabled = false;
             LocationUiCommand.IsEnabled = false;
@@ -314,7 +346,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             return result;
         }
 
-        public void OnAddModify()
+        private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 StockCostQuantityCommand = GetLookupCommand(LookupCommands.AddModify);

@@ -60,8 +60,18 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         #endregion
 
+        public RelayCommand AddModifyCommand { get; }
+
         private IMegaDbLookupContext _lookupContext;
         private MegaDbViewModelInput _viewModelInput;
+
+        public ManufacturerViewModel()
+        {
+            AddModifyCommand = new RelayCommand((() =>
+            {
+                OnAddModify();
+            }));
+        }
 
         protected override void Initialize()
         {
@@ -128,15 +138,23 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override bool SaveEntity(Manufacturer entity)
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.SaveManufacturer(entity);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            return context.SaveEntity(entity, "Saving Manufacturer");
         }
 
         protected override bool DeleteEntity()
         {
-            return RsDbLookupAppGlobals.EfProcessor.MegaDbEfDataProcessor.DeleteManufacturer(ManufacturerId);
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<Manufacturer>();
+            var entity = table
+                .FirstOrDefault(p => p.Id == ManufacturerId);
+            if (entity == null)
+            {
+                return true;
+            }
+            return context.DeleteEntity(entity, "Deleting Manufacturer");
         }
-
-        public void OnAddModify()
+        private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
                 ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify);

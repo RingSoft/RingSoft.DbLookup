@@ -1,4 +1,5 @@
-﻿using RingSoft.DbLookup.App.Library.MegaDb.Model;
+﻿
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,22 +32,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
         void SetDataContext();
 
         Item GetItem(int itemId);
-
-        bool SaveItem(Item item);
-
-        bool DeleteItem(int itemId);
-
-        Location GetLocation(int locationId);
-
-        bool SaveLocation(Location location);
-
-        bool DeleteLocation(int locationId);
-
-        Manufacturer GetManufacturer(int manufacturerId);
-
-        bool SaveManufacturer(Manufacturer manufacturer);
-
-        bool DeleteManufacturer(int manufacturerId);
 
         Task<int> SeedItemsTable(int maxRecords, CancellationToken token);
 

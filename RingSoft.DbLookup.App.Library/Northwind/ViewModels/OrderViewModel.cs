@@ -566,12 +566,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrderDetailsLookupDefinition =
                 _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
 
-            AddLookup(OrderDetailsLookupDefinition, ViewModelInput);
+            RegisterLookup(OrderDetailsLookupDefinition, ViewModelInput);
 
             DetailsGridManager = new OrderDetailsGridManager(this);
             if (GridMode)
             {
-                AddGrid(DetailsGridManager);
+                RegisterGrid(DetailsGridManager);
             }
 
 

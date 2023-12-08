@@ -475,5 +475,36 @@ namespace RingSoft.DbLookup.Lookup
 
             return base.CopyDataTo(destinationProcessor, tableIndex);
         }
+
+        public override void FilterLookup<THeaderEntity>(THeaderEntity headerEntity, object addViewParameter = null)
+        {
+            FilterDefinition.ClearFixedFilters();
+            var headerTableDef = GblMethods.GetTableDefinition<THeaderEntity>();
+
+            if (headerTableDef == null)
+            {
+                throw new Exception("Invalid Header Object");
+            }
+
+            var detailsFields = TableDefinition
+                .PrimaryKeyFields
+                .Where(p => p.ParentJoinForeignKeyDefinition != null
+                            && p.ParentJoinForeignKeyDefinition.PrimaryTable == headerTableDef);
+
+            foreach (var fieldDefinition in detailsFields)
+            {
+                foreach (var foreignKeyFieldJoin in fieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins)
+                {
+                    var pkValue = GblMethods.GetPropertyValue(headerEntity,
+                        foreignKeyFieldJoin.PrimaryField.PropertyName);
+                    FilterDefinition.AddFixedFieldFilter(foreignKeyFieldJoin.ForeignField, Conditions.Equals, pkValue);
+                }
+            }
+
+            SetCommand(new LookupCommand(LookupCommands.Refresh
+            , headerTableDef.GetPrimaryKeyValueFromEntity(headerEntity), false));
+
+            base.FilterLookup(headerEntity, addViewParameter);
+        }
     }
 }

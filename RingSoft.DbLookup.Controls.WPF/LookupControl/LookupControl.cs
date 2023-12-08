@@ -582,12 +582,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             //    throw new ArgumentException(
             //        "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
+            LookupDefinition.CommandChanged += (sender, args) =>
+            {
+                Command = args.NewCommand;
+            };
+
+            var refreshPendingData = _refreshPendingData;
+            ClearLookupControl();
+            
             if (LookupDataMaui != null)
             {
-                ClearLookupControl();
+                //ClearLookupControl();
                 LookupColumns.Clear();
             }
-
+            
             if (LookupDefinition != null)
             {
                 LookupDataMaui =
@@ -667,11 +675,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (LookupDefinition?.InitialOrderByColumn != null)
                 SetActiveColumn(sortColumnIndex, LookupDefinition.InitialOrderByColumn.DataType);
 
-            if (_refreshPendingData != null)
+            if (refreshPendingData != null)
             {
-                RefreshData(true, _refreshPendingData.InitialSearchFor, _refreshPendingData.ParentWindowPrimaryKeyValue,
+                RefreshData(true, refreshPendingData.InitialSearchFor, refreshPendingData.ParentWindowPrimaryKeyValue,
                     true);
-                _refreshPendingData = null;
+                refreshPendingData = null;
             }
 
             _setupRan = _controlLoaded = true;
@@ -2277,6 +2285,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ListTextBox.Visibility = Visibility.Collapsed;
             }
+
+            GetRecordCountButton.Visibility = Visibility.Collapsed;
+            RecordCountStackPanel.Visibility = Visibility.Collapsed;
+            AdvancedFindButton.IsEnabled = false;
         }
 
         private void SetDesignText()

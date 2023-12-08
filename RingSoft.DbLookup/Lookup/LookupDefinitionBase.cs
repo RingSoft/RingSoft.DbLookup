@@ -15,6 +15,11 @@ using System.Data.Common;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public class LookupCommandChangedArgs
+    {
+        public LookupCommand NewCommand { get; set; }
+    }
+
     public class LookupWindowReturnArgs
     {
         public LookupDataMauiBase LookupData { get; internal set; }
@@ -155,6 +160,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         public event EventHandler<LookupWindowReturnArgs> WindowClosed;
+        public event EventHandler<LookupCommandChangedArgs> CommandChanged;
 
         public void ClearVisibleColumns()
         {
@@ -1160,6 +1166,21 @@ namespace RingSoft.DbLookup.Lookup
         public void AddOrderByColumn(LookupFieldColumnDefinition column)
         {
             AdditOrderByColumns.Add(column);
+        }
+
+        public void SetCommand(LookupCommand command)
+        {
+            var args = new LookupCommandChangedArgs
+            {
+                NewCommand = command
+            };
+            CommandChanged?.Invoke(this, args);
+        }
+
+        public virtual void FilterLookup<THeaderEntity>(THeaderEntity headerEntity, object addViewParameter = null)
+            where THeaderEntity : class, new()
+        {
+
         }
     }
 }

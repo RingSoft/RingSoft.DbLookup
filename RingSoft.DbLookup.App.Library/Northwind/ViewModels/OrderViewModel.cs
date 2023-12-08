@@ -566,7 +566,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrderDetailsLookupDefinition =
                 _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
 
+            AddLookup(OrderDetailsLookupDefinition, ViewModelInput);
+
             DetailsGridManager = new OrderDetailsGridManager(this);
+            if (GridMode)
+            {
+                AddGrid(DetailsGridManager);
+            }
 
 
             base.Initialize();
@@ -582,11 +588,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             OrderId = newEntity.OrderID;
 
-            _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.OrderID
-                , Conditions.Equals, newEntity.OrderID);
-
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
             ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
 
             return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
@@ -614,8 +615,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Region = entity.ShipRegion;
             PostalCode = entity.ShipPostalCode;
             Country = entity.ShipCountry;
-
-            DetailsGridManager.LoadGrid(entity.Order_Details);
 
             RefreshTotalControls();
             _customerDirty = false;
@@ -689,16 +688,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             return order;
         }
 
-        protected override bool ValidateEntity(Order entity)
-        {
-            var result = base.ValidateEntity(entity);
-            if (result && GridMode)
-            {
-                result = DetailsGridManager.ValidateGrid();
-            }
-            return result;
-        }
-
         protected override void ClearData()
         {
             OrderId = 0;
@@ -711,10 +700,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             SubTotal = TotalDiscount = Total = 0;
             Freight = 0;
             ShipName = Address = City = Region = PostalCode = Country = null;
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
 
             _customerDirty = false;
-            DetailsGridManager.SetupForNewRecord();
         }
 
         protected override bool SaveEntity(Order entity)

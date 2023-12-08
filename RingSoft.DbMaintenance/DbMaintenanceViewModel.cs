@@ -263,6 +263,11 @@ namespace RingSoft.DbMaintenance
                         KeyAutoFillValue = Entity.GetAutoFillValue();
                     }
                     LoadFromEntity(Entity);
+                    foreach (var dataEntryGridManagerBase in Grids)
+                    {
+                        dataEntryGridManagerBase.LoadGridFromHeaderEntity(Entity);
+                    }
+
                     Processor?.OnRecordSelected();
                 }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
@@ -650,6 +655,15 @@ namespace RingSoft.DbMaintenance
 
             ChangingEntity = true;
             ClearData();
+            foreach (var lookupMap in Lookups)
+            {
+                lookupMap.LookupDefinition.SetCommand(new LookupCommand(LookupCommands.Clear));
+            }
+
+            foreach (var grid in Grids)
+            {
+                grid.SetupForNewRecord();
+            }
             Processor.SetSaveStatus("", AlertLevels.Green);
 
             LastSavedDate = null;
@@ -988,6 +1002,13 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
+            foreach (var grid in Grids)
+            {
+                if (!grid.ValidateGrid())
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -1552,6 +1573,11 @@ namespace RingSoft.DbMaintenance
         protected virtual TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var entity = newEntity.FillOutProperties(true);
+
+            foreach (var lookupMap in Lookups)
+            {
+                lookupMap.LookupDefinition.FilterLookup(entity, lookupMap.AddViewParameter);
+            }
             return entity;
         }
 
@@ -1562,7 +1588,7 @@ namespace RingSoft.DbMaintenance
             var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
             LoadFromEntity(PopulatePrimaryKeyControls(entity, primaryKeyValue));
-            
+
             OnLookupDataChanged();
         }
 

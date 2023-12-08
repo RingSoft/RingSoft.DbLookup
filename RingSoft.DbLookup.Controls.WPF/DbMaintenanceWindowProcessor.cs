@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
@@ -140,6 +142,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
             MaintenanceWindow = window;
+
             MaintenanceButtonsControl = buttonsControl;
             ViewModel = viewModel;
             ViewModel.Processor  = this;

@@ -17,6 +17,12 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
+    public class LookupMap
+    {
+        public LookupDefinitionBase LookupDefinition { get; internal set; }
+
+        public object AddViewParameter { get; internal set; }
+    }
     public class UiControlMap
     {
         public UiCommand UiCommand { get; }
@@ -372,6 +378,14 @@ namespace RingSoft.DbMaintenance
         public UiCommand StatusBarUiCommand { get; }
         public bool CheckDirtyFlag { get; set; } = true;
 
+        private List<DbMaintenanceDataEntryGridManagerBase> _grids
+            = new List<DbMaintenanceDataEntryGridManagerBase>();
+        public IReadOnlyList<DbMaintenanceDataEntryGridManagerBase> Grids { get; }
+
+        private List<LookupMap> _lookups = new List<LookupMap>();
+
+        public IReadOnlyList<LookupMap> Lookups { get; }
+
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
         public event EventHandler InitializeEvent;
         public event EventHandler SaveEvent;
@@ -407,6 +421,9 @@ namespace RingSoft.DbMaintenance
 
             MaintenanceButtonsUiCommand = new UiCommand();
             StatusBarUiCommand = new UiCommand();
+
+            Grids = _grids.AsReadOnly();
+            Lookups = _lookups.AsReadOnly();
         }
 
         public void MapFieldToUiCommand(UiCommand uiCommand, FieldDefinition fieldDefinition)
@@ -835,6 +852,21 @@ namespace RingSoft.DbMaintenance
         public void NotifyProcessingHeader(PrinterDataProcessedEventArgs args)
         {
             PrintProcessingHeader?.Invoke(this, args);
+        }
+
+        public void AddLookup(LookupDefinitionBase lookupDefinition, object addViewParameter = null)
+        {
+            var lookupMap = new LookupMap
+            {
+                LookupDefinition = lookupDefinition,
+                AddViewParameter = addViewParameter,
+            };
+            _lookups.Add(lookupMap);
+        }
+
+        public void AddGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        {
+            _grids.Add(grid);
         }
 
         /// <summary>

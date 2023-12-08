@@ -8,15 +8,25 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
-    //public class AutoFillMap
-    public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DataEntryGridManager
-        where TEntity : class, new()
+    public abstract class DbMaintenanceDataEntryGridManagerBase : DataEntryGridManager
     {
         public DbMaintenanceViewModelBase ViewModel { get; }
 
-        public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel)
+        public DbMaintenanceDataEntryGridManagerBase(DbMaintenanceViewModelBase viewModel)
         {
             ViewModel = viewModel;
+        }
+        public abstract void LoadGridFromHeaderEntity<THeaderEntity>(THeaderEntity headerEntity) 
+            where THeaderEntity : class, new();
+
+        public abstract bool ValidateGrid();
+    }
+    public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
+        where TEntity : class, new()
+    {
+        public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel) : base(viewModel)
+        {
+            
         }
 
         protected override void Initialize()
@@ -66,7 +76,7 @@ namespace RingSoft.DbMaintenance
             base.RaiseDirtyFlag();
         }
 
-        public virtual bool ValidateGrid()
+        public override bool ValidateGrid()
         {
             if (Grid != null && !Grid.CommitCellEdit())
                 return false;
@@ -185,6 +195,29 @@ namespace RingSoft.DbMaintenance
             var result = false;
             result = Rows.Any(row => !row.IsNew);
             return result;
+        }
+
+        public override void LoadGridFromHeaderEntity<THeaderEntity>(THeaderEntity headerEntity)
+        {
+            var headerTableDef = GblMethods.GetTableDefinition<THeaderEntity>();
+            var detailTableDef = GblMethods.GetTableDefinition<TEntity>();
+            if (headerTableDef == null || detailTableDef == null)
+            {
+                throw new Exception("Invalid Header Object or Details Object");
+            }
+
+            var childKey = headerTableDef
+                .ChildKeys
+                .FirstOrDefault(p => p.ForeignTable == detailTableDef);
+
+            if (childKey != null)
+            {
+                var detailsPropertyObject = GblMethods.GetPropertyObject(headerEntity, childKey.CollectionName);
+                if (detailsPropertyObject is IEnumerable<TEntity> details)
+                {
+                    LoadGrid(details);
+                }
+            }
         }
     }
 }

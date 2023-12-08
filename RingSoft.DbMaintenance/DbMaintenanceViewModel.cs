@@ -1743,7 +1743,7 @@ namespace RingSoft.DbMaintenance
         protected virtual bool SaveEntity(TEntity entity)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
-            var result = context.SaveEntity(entity, $"Saving {TableDefinition.EntityName}");
+            var result = context.SaveEntity(entity, $"Saving {TableDefinition.Description}");
             if (!result)
             {
                 return result;
@@ -1765,9 +1765,37 @@ namespace RingSoft.DbMaintenance
         /// <returns></returns>
         protected virtual bool DeleteEntity()
         {
-            return true;
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<TEntity>();
+            var primaryKey = GetVmPrimaryKeyValue(context);
+            var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+            foreach (var primaryKeyKeyValueField in primaryKey.KeyValueFields)
+            {
+                filter.AddFixedFieldFilter(
+                    primaryKeyKeyValueField.FieldDefinition
+                    , Conditions.Equals
+                    , primaryKeyKeyValueField.Value);
+            }
+
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = filter.GetWhereExpresssion<TEntity>(param);
+            var query = FieldFilterDefinition.FilterQuery(table, param, expr);
+            var entity = query.FirstOrDefault();
+            if (entity != null)
+            {
+                foreach (var grid in Grids)
+                {
+                    grid.DeleteNoCommitData(entity, context);
+                }
+            }
+
+            return context.DeleteEntity(entity, $"Deleting {TableDefinition.Description}");
         }
 
+        public virtual PrimaryKeyValue GetVmPrimaryKeyValue(IDbContext context)
+        {
+            return TableDefinition.GetPrimaryKeyValueFromEntity(GetEntityData());
+        }
 
     }
 }

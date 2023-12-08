@@ -854,7 +854,7 @@ namespace RingSoft.DbMaintenance
             PrintProcessingHeader?.Invoke(this, args);
         }
 
-        public void AddLookup(LookupDefinitionBase lookupDefinition, object addViewParameter = null)
+        public void RegisterLookup(LookupDefinitionBase lookupDefinition, object addViewParameter = null)
         {
             var lookupMap = new LookupMap
             {
@@ -864,7 +864,7 @@ namespace RingSoft.DbMaintenance
             _lookups.Add(lookupMap);
         }
 
-        public void AddGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        public void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
         {
             _grids.Add(grid);
         }

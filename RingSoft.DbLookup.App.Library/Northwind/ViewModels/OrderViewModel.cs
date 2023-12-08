@@ -723,14 +723,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         protected override bool DeleteEntity()
         {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            
-            var table = context.GetTable<Order>();
-            var entity = table
-                .FirstOrDefault(p => p.OrderID == OrderId);
-            DetailsGridManager.DeleteNoCommitData(entity, context);
+            if (!GridMode)
+            {
+                var context = SystemGlobals.DataRepository.GetDataContext();
 
-            return context.DeleteEntity(entity, "Deleting Order");
+                var table = context.GetTable<Order>();
+                var entity = table
+                    .FirstOrDefault(p => p.OrderID == OrderId);
+                DetailsGridManager.DeleteNoCommitData(entity, context);
+
+                return context.DeleteEntity(entity, "Deleting Order");
+            }
+
+            return base.DeleteEntity();
         }
 
         private void OnCustomerIdLostFocus()

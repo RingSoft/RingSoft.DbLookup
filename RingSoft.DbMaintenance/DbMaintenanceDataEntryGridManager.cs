@@ -24,6 +24,9 @@ namespace RingSoft.DbMaintenance
         public abstract void SaveNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
             where THeaderEntity : class, new();
 
+        public abstract void DeleteNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
+            where THeaderEntity : class, new();
+
     }
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
         where TEntity : class, new()
@@ -159,8 +162,7 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
-        public void DeleteNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
-            where THeaderEntity : class, new()
+        public override void DeleteNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
         {
             var table = context.GetTable<TEntity>();
             var existingList = GetExistingDbData(headerEntity, context);

@@ -713,6 +713,21 @@ namespace RingSoft.DbMaintenance
 
             var entity = GetEntityData();
 
+            var children = TableDefinition
+                .FieldDefinitions
+                .Where(p => p.AllowNulls
+                    && p.ParentJoinForeignKeyDefinition != null
+                            && p.ParentJoinForeignKeyDefinition.PrimaryTable.IsIdentity());
+
+            foreach (var fieldDefinition in children)
+            {
+                var value = GblMethods.GetPropertyValue(entity, fieldDefinition.PropertyName).ToInt();
+                if (value == 0)
+                {
+                    GblMethods.SetPropertyObject(entity, fieldDefinition.PropertyName, null);
+                }
+            }
+
             if (Processor.KeyControlRegistered)
             {
                 if (KeyAutoFillValue == null || KeyAutoFillValue.Text.IsNullOrEmpty())

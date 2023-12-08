@@ -361,6 +361,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
 
             OrdersLookupDefinition = ordersLookup;
+            RegisterLookup(OrdersLookupDefinition);
 
             base.Initialize();
         }
@@ -374,11 +375,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override Employee PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)
         {
             EmployeeId = newEntity.EmployeeID;
-
-            _ordersLookup.FilterDefinition.ClearFixedFilters();
-            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.EmployeeID, Conditions.Equals,
-                EmployeeId);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
 
             ReadOnlyMode = ViewModelInput.EmployeeViewModels.Any(a => a != this && a.EmployeeId == EmployeeId);
 
@@ -434,11 +430,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 ReportsTo = ReportsTo.GetEntity<Employee>().EmployeeID
             };
 
-            if (employee.ReportsTo == 0)
-            {
-                employee.ReportsTo = null;
-            }
-
             return employee;
         }
 
@@ -449,27 +440,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Title = TitleOfCourtesy = Address = City = Region = PostalCode = Country = HomePhone = Extension = Notes= PhotoPath = null;
             BirthDate = HireDate = null;
             ReportsTo = null;
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Clear);
-        }
-
-        protected override bool SaveEntity(Employee entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            return context.SaveEntity(entity, "Saving Employee");
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Employee>();
-            var employee = table
-                .FirstOrDefault(p => p.EmployeeID == EmployeeId);
-            if (employee != null)
-            {
-                return context.DeleteEntity(employee, "Deleting Employee");
-            }
-
-            return true;
         }
 
         private void OnAddModify()

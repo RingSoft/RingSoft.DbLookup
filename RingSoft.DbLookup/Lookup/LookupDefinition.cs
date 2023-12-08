@@ -487,7 +487,7 @@ namespace RingSoft.DbLookup.Lookup
             }
 
             var detailsFields = TableDefinition
-                .PrimaryKeyFields
+                .FieldDefinitions
                 .Where(p => p.ParentJoinForeignKeyDefinition != null
                             && p.ParentJoinForeignKeyDefinition.PrimaryTable == headerTableDef);
 

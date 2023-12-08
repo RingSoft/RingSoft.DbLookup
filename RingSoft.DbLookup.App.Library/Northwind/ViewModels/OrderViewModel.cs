@@ -704,22 +704,22 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _customerDirty = false;
         }
 
-        protected override bool SaveEntity(Order entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var result = context.SaveEntity(entity, "Saving Order");
-            if (!result)
-            {
-                return result;
-            }
-            if (GridMode)
-            {
-                DetailsGridManager.SaveNoCommitData(entity, context);
-                result = context.Commit("Saving Order Details");
-            }
+        //protected override bool SaveEntity(Order entity)
+        //{
+        //    var context = SystemGlobals.DataRepository.GetDataContext();
+        //    var result = context.SaveEntity(entity, "Saving Order");
+        //    if (!result)
+        //    {
+        //        return result;
+        //    }
+        //    if (GridMode)
+        //    {
+        //        DetailsGridManager.SaveNoCommitData(entity, context);
+        //        result = context.Commit("Saving Order Details");
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         protected override bool DeleteEntity()
         {

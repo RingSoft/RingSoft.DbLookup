@@ -20,6 +20,10 @@ namespace RingSoft.DbMaintenance
             where THeaderEntity : class, new();
 
         public abstract bool ValidateGrid();
+
+        public abstract void SaveNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
+            where THeaderEntity : class, new();
+
     }
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
         where TEntity : class, new()
@@ -90,8 +94,7 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
-        public void SaveNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
-            where THeaderEntity : class, new()
+        public override void SaveNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
         {
             var headerTableDef = GblMethods.GetTableDefinition<THeaderEntity>();
             var detailTableDef = GblMethods.GetTableDefinition<TEntity>();

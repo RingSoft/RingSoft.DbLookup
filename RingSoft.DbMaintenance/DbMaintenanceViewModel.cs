@@ -1643,19 +1643,6 @@ namespace RingSoft.DbMaintenance
         protected abstract void ClearData();
 
         /// <summary>
-        /// Saves the entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns></returns>
-        protected abstract bool SaveEntity(TEntity entity);
-
-        /// <summary>
-        /// Deletes the entity.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract bool DeleteEntity();
-
-        /// <summary>
         /// Called when the key control looses focus.  Used to ensure no duplicate value in the key control is entered.
         /// </summary>
         public override void OnKeyControlLeave()
@@ -1747,5 +1734,40 @@ namespace RingSoft.DbMaintenance
                 }
             }
         }
+
+        /// <summary>
+        /// Saves the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        protected virtual bool SaveEntity(TEntity entity)
+        {
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var result = context.SaveEntity(entity, $"Saving {TableDefinition.EntityName}");
+            if (!result)
+            {
+                return result;
+            }
+
+            foreach (var grid in Grids)
+            {
+                grid.SaveNoCommitData(entity, context);
+                result = context.Commit("Saving Details");
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// Deletes the entity.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool DeleteEntity()
+        {
+            return true;
+        }
+
+
     }
 }

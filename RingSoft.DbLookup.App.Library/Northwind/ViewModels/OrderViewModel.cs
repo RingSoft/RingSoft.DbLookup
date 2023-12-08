@@ -313,20 +313,20 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private LookupCommand _orderDetailsLookupCommand;
+        //private LookupCommand _orderDetailsLookupCommand;
 
-        public LookupCommand OrderDetailsLookupCommand
-        {
-            get => _orderDetailsLookupCommand;
-            set
-            {
-                if (_orderDetailsLookupCommand == value)
-                    return;
+        //public LookupCommand OrderDetailsLookupCommand
+        //{
+        //    get => _orderDetailsLookupCommand;
+        //    set
+        //    {
+        //        if (_orderDetailsLookupCommand == value)
+        //            return;
 
-                _orderDetailsLookupCommand = value;
-                OnPropertyChanged(nameof(OrderDetailsLookupCommand), false);
-            }
-        }
+        //        _orderDetailsLookupCommand = value;
+        //        OnPropertyChanged(nameof(OrderDetailsLookupCommand), false);
+        //    }
+        //}
 
         private LookupDataSourceChanged _orderDetailsDataSourceChanged;
 
@@ -450,7 +450,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             _orderDate = _newDateTime;
             _requiredDate = _shippedDate = null;
-            TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
+            //TablesToDelete.Add(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
 
             CustomerUiCommand.LostFocus += CustomerUiCommand_LostFocus;
 
@@ -566,14 +566,15 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrderDetailsLookupDefinition =
                 _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
 
-            RegisterLookup(OrderDetailsLookupDefinition, ViewModelInput);
-
             DetailsGridManager = new OrderDetailsGridManager(this);
             if (GridMode)
             {
                 RegisterGrid(DetailsGridManager);
             }
-
+            else
+            {
+                RegisterLookup(OrderDetailsLookupDefinition, ViewModelInput);
+            }
 
             base.Initialize();
         }
@@ -704,40 +705,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _customerDirty = false;
         }
 
-        //protected override bool SaveEntity(Order entity)
-        //{
-        //    var context = SystemGlobals.DataRepository.GetDataContext();
-        //    var result = context.SaveEntity(entity, "Saving Order");
-        //    if (!result)
-        //    {
-        //        return result;
-        //    }
-        //    if (GridMode)
-        //    {
-        //        DetailsGridManager.SaveNoCommitData(entity, context);
-        //        result = context.Commit("Saving Order Details");
-        //    }
-
-        //    return result;
-        //}
-
-        protected override bool DeleteEntity()
-        {
-            if (!GridMode)
-            {
-                var context = SystemGlobals.DataRepository.GetDataContext();
-
-                var table = context.GetTable<Order>();
-                var entity = table
-                    .FirstOrDefault(p => p.OrderID == OrderId);
-                DetailsGridManager.DeleteNoCommitData(entity, context);
-
-                return context.DeleteEntity(entity, "Deleting Order");
-            }
-
-            return base.DeleteEntity();
-        }
-
         private void OnCustomerIdLostFocus()
         {
             if (_customerDirty)
@@ -769,7 +736,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
             {
-                OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+                OrderDetailsLookupDefinition.SetCommand(GetLookupCommand(LookupCommands.AddModify));
             }
         }
 

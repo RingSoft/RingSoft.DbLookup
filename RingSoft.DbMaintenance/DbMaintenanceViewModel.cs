@@ -1758,12 +1758,12 @@ namespace RingSoft.DbMaintenance
         protected virtual bool SaveEntity(TEntity entity)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
-            var result = context.SaveEntity(entity, $"Saving {TableDefinition.Description}");
+            var result = SaveHeader(entity, context);
+
             if (!result)
             {
                 return result;
             }
-
             foreach (var grid in Grids)
             {
                 grid.SaveNoCommitData(entity, context);
@@ -1772,6 +1772,37 @@ namespace RingSoft.DbMaintenance
 
             return result;
 
+        }
+
+        protected bool SaveHeader(TEntity entity, IDbContext context)
+        {
+            if (!TableDefinition.IsIdentity())
+            {
+                var table = context.GetTable<TEntity>();
+                var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+                foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
+                {
+                    var value = GblMethods.GetPropertyValue(entity, primaryKeyField.PropertyName);
+                    filter.AddFixedFieldFilter(primaryKeyField, Conditions.Equals, value);
+                }
+
+                var param = GblMethods.GetParameterExpression<TEntity>();
+                var expr = filter.GetWhereExpresssion<TEntity>(param);
+                var query = FieldFilterDefinition.FilterQuery(table, param, expr);
+                var tableEntity = query.FirstOrDefault();
+                if (tableEntity == null)
+                {
+                    return context.AddSaveEntity(entity, $"Saving {TableDefinition.Description}");
+                }
+                else
+                {
+                    context = SystemGlobals.DataRepository.GetDataContext();
+                    return context.SaveEntity(entity, $"Saving {TableDefinition.Description}");
+                }
+
+            }
+            var result = context.SaveEntity(entity, $"Saving {TableDefinition.Description}");
+            return result;
         }
 
         /// <summary>
@@ -1805,6 +1836,16 @@ namespace RingSoft.DbMaintenance
             }
 
             return context.DeleteEntity(entity, $"Deleting {TableDefinition.Description}");
+        }
+
+        public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        {
+            var gridTable = grid.TableDefinition;
+            if (!TablesToDelete.Contains(gridTable))
+            {
+                TablesToDelete.Add(gridTable);
+            }
+            base.RegisterGrid(grid);
         }
 
         public virtual PrimaryKeyValue GetVmPrimaryKeyValue(IDbContext context)

@@ -80,7 +80,7 @@
                 <TabItem Header="Details">
                     <DockPanel>
                         <Button Content="_Add/Modify" Height="20"  DockPanel.Dock="Left" VerticalAlignment="Top" Command="{Binding AddModifyCommand}"/>
-                        <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" Command="{Binding OrderDetailsLookupCommand}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}" DesignText="Chef Anton's Cajun Seasoning">
+                        <lc:LookupControl LookupDefinition="{Binding OrderDetailsLookupDefinition}" DataSourceChanged="{Binding Path=OrderDetailsDataSourceChanged, Mode=OneWayToSource}" DesignText="Chef Anton's Cajun Seasoning">
                             <lc:LookupControl.LookupColumns>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Product, Type={x:Type lm:OrderDetailLookup}}" Width="250" Header="Product" DesignText="Chef Anton's Cajun Seasoning"/>
                                 <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right" DesignText="1,000"/>

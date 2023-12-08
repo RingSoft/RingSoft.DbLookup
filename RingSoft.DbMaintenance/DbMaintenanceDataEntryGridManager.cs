@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup;
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 
@@ -27,10 +28,14 @@ namespace RingSoft.DbMaintenance
         public abstract void DeleteNoCommitData<THeaderEntity>(THeaderEntity headerEntity, IDbContext context)
             where THeaderEntity : class, new();
 
+        public abstract TableDefinitionBase TableDefinition { get; }
+
     }
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
         where TEntity : class, new()
     {
+        public override TableDefinitionBase TableDefinition => GblMethods.GetTableDefinition<TEntity>();
+
         public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel) : base(viewModel)
         {
             

@@ -260,14 +260,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             orderDetailsLookupDefinition.AddVisibleColumnDefinition(p => p.UnitPrice, p => p.UnitPrice);
             OrderDetailsLookupDefinition = orderDetailsLookupDefinition;
 
+            RegisterLookup(OrderDetailsLookupDefinition, ViewModelInput);
+
             base.Initialize();
         }
 
         protected override Product PopulatePrimaryKeyControls(Product newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
-            _orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            _orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.ProductID, Conditions.Equals, ProductId);
+            //_orderDetailsLookup.FilterDefinition.ClearFixedFilters();
+            //_orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.ProductID, Conditions.Equals, ProductId);
 
             var orderInput = new OrderInput
             {
@@ -281,7 +283,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ViewModelInput.OrderInput = orderInput;
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
+            //OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
 
             ReadOnlyMode =
                 ViewModelInput.ProductViewModels.Any(
@@ -323,16 +325,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 SupplierID = SupplierAutoFillValue.GetEntity<Supplier>().SupplierID,
             };
 
-            if (product.SupplierID == 0)
-            {
-                product.SupplierID = null;
-            }
-
-            if (product.CategoryID == 0)
-            {
-                product.CategoryID = null;
-            }
-
             return product;
         }
 
@@ -345,29 +337,29 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             UnitPrice = null;
             UnitsInStock = UnitsOnOrder = ReorderLevel = null;
             Discontinued = false;
-            OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
+            //OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
-        protected override bool SaveEntity(Product entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            return context.SaveEntity(entity, "Saving Product");
-        }
+        //protected override bool SaveEntity(Product entity)
+        //{
+        //    var context = SystemGlobals.DataRepository.GetDataContext();
+        //    return context.SaveEntity(entity, "Saving Product");
+        //}
 
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Product>();
-            var entity = table
-                .FirstOrDefault(p => p.ProductID == ProductId);
+        //protected override bool DeleteEntity()
+        //{
+        //    var context = SystemGlobals.DataRepository.GetDataContext();
+        //    var table = context.GetTable<Product>();
+        //    var entity = table
+        //        .FirstOrDefault(p => p.ProductID == ProductId);
 
-            if (entity != null)
-            {
-                return context.DeleteEntity(entity, "Deleting Product");
-            }
+        //    if (entity != null)
+        //    {
+        //        return context.DeleteEntity(entity, "Deleting Product");
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public override void OnWindowClosing(CancelEventArgs e)
         {

@@ -343,7 +343,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 lookupControl.LookupDefinition.CommandChanged += (sender, args) =>
                 {
-                    lookupControl.Command = args.NewCommand;
+                    lookupControl._commandToExecute = args.NewCommand;
+                    lookupControl.ExecuteCommand();
                 };
             }
 
@@ -371,6 +372,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             DependencyPropertyChangedEventArgs args)
         {
             var lookupControl = (LookupControl)obj;
+            lookupControl._commandToExecute = lookupControl.Command;
             lookupControl.ExecuteCommand();
         }
 
@@ -461,6 +463,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double _designModeHeaderLineHeight;
         private TextBox _designModeSearchForTextBox;
         private AdvancedFindModes _advancedFindMode = AdvancedFindModes.Done;
+        private LookupCommand _commandToExecute;
 
         static LookupControl()
         {
@@ -583,7 +586,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void SetupControl()
         {
-            if (Command != null && (Command.ClearColumns || LookupDefinition == null))
+            if (_commandToExecute != null && (_commandToExecute.ClearColumns || LookupDefinition == null))
                 return;
 
             //if (LookupDefinition.InitialSortColumnDefinition == null)
@@ -2067,7 +2070,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     lookupWindow.ApplyNewLookupDefinition(advancedFindWindow.ViewModel.LookupDefinition);
                 }
                 LookupDefinition = advancedFindWindow.ViewModel.LookupDefinition;
-                Command = new LookupCommand(LookupCommands.Reset);
+                _commandToExecute = new LookupCommand(LookupCommands.Reset);
                 if (lookupWindow != null)
                 {
                     lookupWindow.Reload();
@@ -2085,7 +2088,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 showRecordCount = true;
             }
-            else if (Command != null && Command.ClearColumns)
+            else if (_commandToExecute != null && _commandToExecute.ClearColumns)
             {
                 showRecordCount = true;
             }
@@ -2180,7 +2183,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void ExecuteCommand()
         {
-            var command = Command;
+            var command = _commandToExecute;
             if (command != null)
             {
                 switch (command.Command)

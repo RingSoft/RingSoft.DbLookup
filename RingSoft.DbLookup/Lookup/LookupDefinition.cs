@@ -501,8 +501,11 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
 
-            SetCommand(new LookupCommand(LookupCommands.Refresh
-            , headerTableDef.GetPrimaryKeyValueFromEntity(headerEntity), false));
+            var command = new LookupCommand(LookupCommands.Refresh
+                , headerTableDef.GetPrimaryKeyValueFromEntity(headerEntity), false);
+            command.AddViewParameter = addViewParameter;
+
+            SetCommand(command);
 
             base.FilterLookup(headerEntity, addViewParameter);
         }

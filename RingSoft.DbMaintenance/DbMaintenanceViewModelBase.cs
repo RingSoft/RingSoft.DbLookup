@@ -864,7 +864,7 @@ namespace RingSoft.DbMaintenance
             _lookups.Add(lookupMap);
         }
 
-        public void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        public virtual void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
         {
             _grids.Add(grid);
         }

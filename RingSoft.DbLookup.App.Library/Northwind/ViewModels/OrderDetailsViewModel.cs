@@ -156,6 +156,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public UiCommand ProductUiCommand { get; } = new UiCommand();
 
+        public UiCommand QuantityUiCommand { get; } = new UiCommand();
+
         public Order Order { get; private set; }
 
         private INorthwindLookupContext _lookupContext;
@@ -248,7 +250,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     ProductID = productId,
                 };
                 orderDetail = orderDetail.FillOutProperties(true);
-                if (orderDetail.Order != null)
+                if (orderDetail != null && orderDetail.Order != null)
                 {
                     SelectPrimaryKey(_lookupContext.OrderDetails.GetPrimaryKeyValueFromEntity(orderDetail));
                 }
@@ -290,6 +292,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     NewButtonEnabled = false;
                 }
 
+            }
+
+            if (ProductUiCommand.IsFocused)
+            {
+                QuantityUiCommand.SetFocus();
             }
 
             ProductUiCommand.IsReadOnly = true;
@@ -340,35 +347,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             OrderId = Order.OrderID;
             Customer = Order.Customer.CompanyName;
             OrderDate = (DateTime)Order.OrderDate;
-        }
-        protected override bool SaveEntity(Order_Detail entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Order_Detail>();
-            var tableEntity = table.FirstOrDefault(p => p.OrderID == OrderId && p.ProductID == entity.ProductID);
-            if (tableEntity == null)
-            {
-                return context.AddSaveEntity(entity, "Saving Order Detail");
-            }
-            else
-            {
-                context = SystemGlobals.DataRepository.GetDataContext();
-                return context.SaveEntity(entity, "Saving Order Detail");
-            }
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var product = ProductAutoFillValue.GetEntity<Product>();
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Order_Detail>();
-            var oDetail = table
-                .FirstOrDefault(p => p.OrderID == OrderId && p.ProductID == product.ProductID);
-            if (oDetail != null)
-            {
-                return context.DeleteEntity(oDetail, "Deleting Order Detail");
-            }
-            return true;
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

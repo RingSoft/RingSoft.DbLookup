@@ -1845,6 +1845,11 @@ namespace RingSoft.DbMaintenance
         public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
         {
             var gridTable = grid.TableDefinition;
+            if (gridTable.HeaderTable == null)
+            {
+                gridTable.SetHeaderEntity<TEntity>();
+            }
+
             if (!TablesToDelete.Contains(gridTable))
             {
                 TablesToDelete.Add(gridTable);

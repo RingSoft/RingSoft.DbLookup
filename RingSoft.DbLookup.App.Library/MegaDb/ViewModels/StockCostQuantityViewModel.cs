@@ -154,7 +154,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             PurchaseDateUiCommand.SetFocus();
         }
 
-        protected override StockCostQuantity PopulatePrimaryKeyControls(StockCostQuantity newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(StockCostQuantity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             PurchaseDate = newEntity.PurchasedDateTime;
 
@@ -164,8 +164,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
 
             PurchaseDateUiCommand.IsReadOnly = true;
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(StockCostQuantity entity)

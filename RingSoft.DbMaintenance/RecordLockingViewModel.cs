@@ -200,7 +200,7 @@ namespace RingSoft.DbMaintenance
             base.Initialize();
         }
 
-        protected override RecordLock PopulatePrimaryKeyControls(RecordLock newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(RecordLock newEntity, PrimaryKeyValue primaryKeyValue)
         {
             if (SystemGlobals.AdvancedFindDbProcessor == null)
             {
@@ -236,7 +236,6 @@ namespace RingSoft.DbMaintenance
                 }
             }
             View.SetupView();
-            return recordLock;
         }
 
         protected override void LoadFromEntity(RecordLock entity)

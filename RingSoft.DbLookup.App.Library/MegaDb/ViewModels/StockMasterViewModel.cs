@@ -219,7 +219,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             StockUiCommand.SetFocus();
         }
 
-        protected override StockMaster PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
         {
             Id = newEntity.Id;
 
@@ -237,8 +237,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
             StockUiCommand.IsEnabled = false;
             LocationUiCommand.IsEnabled = false;
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(StockMaster entity)

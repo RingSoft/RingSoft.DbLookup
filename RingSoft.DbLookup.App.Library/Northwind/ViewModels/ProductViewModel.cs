@@ -265,7 +265,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
-        protected override Product PopulatePrimaryKeyControls(Product newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Product newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
             //_orderDetailsLookup.FilterDefinition.ClearFixedFilters();
@@ -288,8 +288,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             ReadOnlyMode =
                 ViewModelInput.ProductViewModels.Any(
                     a => a != this && a.ProductId == ProductId);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Product entity)

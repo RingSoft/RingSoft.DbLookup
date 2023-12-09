@@ -164,13 +164,11 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override Item PopulatePrimaryKeyControls(Item newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Item newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ItemId = newEntity.Id;
 
             ReadOnlyMode = _viewModelInput.ItemViewModels.Any(a => a != this && a.ItemId == ItemId);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Item entity)

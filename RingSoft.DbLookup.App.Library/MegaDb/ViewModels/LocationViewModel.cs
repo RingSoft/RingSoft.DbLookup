@@ -92,7 +92,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override Location PopulatePrimaryKeyControls(Location newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Location newEntity, PrimaryKeyValue primaryKeyValue)
         {
             LocationId = newEntity.Id;
 
@@ -101,8 +101,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             _itemsLookup.FilterDefinition.ClearFixedFilters();
             _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, newEntity.Id);
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Location entity)

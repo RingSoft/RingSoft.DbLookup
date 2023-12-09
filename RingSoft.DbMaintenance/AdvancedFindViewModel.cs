@@ -478,7 +478,12 @@ namespace RingSoft.DbMaintenance
             }));
         }
 
-        protected override AdvancedFind PopulatePrimaryKeyControls(AdvancedFind newEntity,
+        protected override void PopulatePrimaryKeyControls(AdvancedFind newEntity, PrimaryKeyValue primaryKeyValue)
+        {
+            AdvancedFindId = newEntity.Id;
+        }
+
+        protected override AdvancedFind GetEntityFromDb(AdvancedFind newEntity,
             PrimaryKeyValue primaryKeyValue)
         {
             if (SystemGlobals.AdvancedFindDbProcessor == null)
@@ -501,10 +506,6 @@ namespace RingSoft.DbMaintenance
                                                                      == tableDefinition.Description);
 
             }
-            AdvancedFindId = advancedFind.Id;
-
-            KeyAutoFillValue = new AutoFillValue(primaryKeyValue, advancedFind.Name);
-
             ReadOnlyMode = false;
             TableUiCommand.IsEnabled = false;
             RefreshSettingsCommand.IsEnabled = RefreshNowCommand.IsEnabled = true;

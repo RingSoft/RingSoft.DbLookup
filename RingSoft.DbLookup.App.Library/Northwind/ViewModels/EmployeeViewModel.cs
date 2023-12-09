@@ -372,13 +372,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             FirstNameUiCommand.SetFocus();
         }
 
-        protected override Employee PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Employee newEntity, PrimaryKeyValue primaryKeyValue)
         {
             EmployeeId = newEntity.EmployeeID;
 
             ReadOnlyMode = ViewModelInput.EmployeeViewModels.Any(a => a != this && a.EmployeeId == EmployeeId);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Employee entity)

@@ -240,7 +240,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             base.Initialize();
         }
 
-        protected override Customer PopulatePrimaryKeyControls(Customer newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Customer newEntity, PrimaryKeyValue primaryKeyValue)
         {
             KeyAutoFillUiCommand.IsEnabled = false;
             CustomerId = newEntity.CustomerID;
@@ -251,7 +251,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
             OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Customer entity)

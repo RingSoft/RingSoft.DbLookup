@@ -243,7 +243,8 @@ namespace RingSoft.DbMaintenance
                 LockDate = DateTime.Now;
                 GetLastSavedDate(_lookupData.SelectedPrimaryKeyValue);
 
-                Entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                Entity = GetEntityFromDb(newEntity, _lookupData.SelectedPrimaryKeyValue);
                 if (Entity == null)
                 {
                     DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
@@ -438,7 +439,8 @@ namespace RingSoft.DbMaintenance
                 LockDate = DateTime.Now;
                 GetLastSavedDate(_lookupData.SelectedPrimaryKeyValue);
 
-                Entity = PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                PopulatePrimaryKeyControls(newEntity, _lookupData.SelectedPrimaryKeyValue);
+                Entity = GetEntityFromDb(newEntity, _lookupData.SelectedPrimaryKeyValue);
                 if (Entity == null)
                 {
                     DbDataProcessor.UserInterface.PlaySystemSound(RsMessageBoxIcons.Exclamation);
@@ -1178,7 +1180,7 @@ namespace RingSoft.DbMaintenance
 
                 if (!DeleteEntity())
                 {
-                    var entity = PopulatePrimaryKeyControls(Entity, null);
+                    var entity = GetEntityFromDb(Entity, null);
                     return DbMaintenanceResults.DatabaseError;
                 }
 
@@ -1585,7 +1587,9 @@ namespace RingSoft.DbMaintenance
         /// <param name="newEntity">The entity containing just the primary key values.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
         /// <returns>An entity populated from the database.</returns>
-        protected virtual TEntity PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
+        protected abstract void PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
+
+        protected virtual TEntity GetEntityFromDb(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var entity = newEntity.FillOutProperties(true);
 
@@ -1602,7 +1606,7 @@ namespace RingSoft.DbMaintenance
 
             var primaryKeyValue = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
-            LoadFromEntity(PopulatePrimaryKeyControls(entity, primaryKeyValue));
+            LoadFromEntity(GetEntityFromDb(entity, primaryKeyValue));
 
             OnLookupDataChanged();
         }

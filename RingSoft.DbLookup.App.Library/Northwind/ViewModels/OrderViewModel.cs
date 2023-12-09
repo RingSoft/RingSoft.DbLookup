@@ -585,13 +585,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             CustomerUiCommand.SetFocus();
         }
 
-        protected override Order PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Order newEntity, PrimaryKeyValue primaryKeyValue)
         {
             OrderId = newEntity.OrderID;
 
             ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Order entity)

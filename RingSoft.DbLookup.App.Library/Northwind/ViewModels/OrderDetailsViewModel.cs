@@ -276,7 +276,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        protected override Order_Detail PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
             
@@ -300,7 +300,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ProductUiCommand.IsReadOnly = true;
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Order_Detail entity)

@@ -97,7 +97,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             base.Initialize();
         }
 
-        protected override Manufacturer PopulatePrimaryKeyControls(Manufacturer newEntity, PrimaryKeyValue primaryKeyValue)
+        protected override void PopulatePrimaryKeyControls(Manufacturer newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ManufacturerId = newEntity.Id;
 
@@ -109,8 +109,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 .AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, newEntity.Id);
 
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
-
-            return base.PopulatePrimaryKeyControls(newEntity, primaryKeyValue);
         }
 
         protected override void LoadFromEntity(Manufacturer entity)

@@ -205,26 +205,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             ManufacturerAutoFillValue = DefaultManufacturerAutoFillValue;
         }
 
-        protected override bool SaveEntity(Item entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            return context.SaveEntity(entity, "Saving Item");
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Item>();
-            var entity = table
-                .FirstOrDefault(p => p.Id == ItemId);
-            if (entity != null)
-            {
-                return context.DeleteEntity(entity, "Deleting Item");
-            }
-
-            return true;
-        }
-
         private bool LocationLostFocusValidation()
         {
             if (LocationAutoFillValue != null && !LocationAutoFillValue.PrimaryKeyValue.IsValid() &&

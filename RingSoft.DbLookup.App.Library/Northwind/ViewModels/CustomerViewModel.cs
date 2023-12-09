@@ -236,7 +236,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 p => p.FullName, 20);
 
             OrdersLookupDefinition = ordersLookup;
-            RegisterLookup(OrdersLookupDefinition);
+            RegisterLookup(OrdersLookupDefinition, ViewModelInput);
 
             base.Initialize();
         }

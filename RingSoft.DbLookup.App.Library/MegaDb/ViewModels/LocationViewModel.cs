@@ -88,6 +88,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             itemsLookup.AddVisibleColumnDefinition(p => p.IconType, p => p.IconType);
 
             ItemsLookupDefinition = itemsLookup;
+            RegisterLookup(ItemsLookupDefinition, _viewModelInput);
 
             base.Initialize();
         }
@@ -97,10 +98,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             LocationId = newEntity.Id;
 
             ReadOnlyMode = _viewModelInput.LocationViewModels.Any(a => a != this && a.LocationId == LocationId);
-
-            _itemsLookup.FilterDefinition.ClearFixedFilters();
-            _itemsLookup.FilterDefinition.AddFixedFilter(p => p.LocationId, Conditions.Equals, newEntity.Id);
-            ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
         }
 
         protected override void LoadFromEntity(Location entity)
@@ -127,24 +124,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             LocationId = 0;
             ItemsLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
-
-        protected override bool SaveEntity(Location entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            return context.SaveEntity(entity, "Saving Location");
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Location>();
-            var entity = table
-                .FirstOrDefault(p => p.Id == LocationId);
-            if (entity == null)
-            {
-                return true;
-            }
-            return context.DeleteEntity(entity, "Deleting Location"); }
 
         private void OnAddModify()
         {

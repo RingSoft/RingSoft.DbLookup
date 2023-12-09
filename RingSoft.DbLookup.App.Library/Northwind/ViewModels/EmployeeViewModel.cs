@@ -361,7 +361,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
 
             OrdersLookupDefinition = ordersLookup;
-            RegisterLookup(OrdersLookupDefinition);
+            RegisterLookup(OrdersLookupDefinition, ViewModelInput);
 
             base.Initialize();
         }

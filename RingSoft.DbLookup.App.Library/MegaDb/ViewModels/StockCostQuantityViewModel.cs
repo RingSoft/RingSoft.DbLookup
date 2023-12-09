@@ -190,36 +190,5 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             Quantity = 1;
             Cost = 0;
         }
-
-        protected override bool SaveEntity(StockCostQuantity entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<StockCostQuantity>();
-            var costQuantity = table
-                .FirstOrDefault(p => p.StockMasterId == entity.StockMasterId
-                                     && p.PurchasedDateTime == entity.PurchasedDateTime);
-            if (costQuantity == null)
-            {
-                return context.AddSaveEntity(entity, "Saving Cost/Quantity");
-            }
-
-            context = SystemGlobals.DataRepository.GetDataContext();
-            return context.SaveEntity(entity, "Saving Cost/Quantity");
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<StockCostQuantity>();
-            var costQuantity = table
-                .FirstOrDefault(p => p.StockMasterId == _parentStock.Id
-                                     && p.PurchasedDateTime == PurchaseDate);
-            if (costQuantity != null)
-            {
-                return context.DeleteEntity(costQuantity, "Deleting Cost/Quantity");
-            }
-
-            return true;
-        }
     }
 }

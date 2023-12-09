@@ -206,6 +206,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
             StockCostQuantityLookupDefinition =
                 _lookupContext.MegaDbContextConfiguration.StockCostQuantityLookupFiltered.Clone();
+            RegisterLookup(StockCostQuantityLookupDefinition);
 
             base.Initialize();
         }
@@ -222,13 +223,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void PopulatePrimaryKeyControls(StockMaster newEntity, PrimaryKeyValue primaryKeyValue)
         {
             Id = newEntity.Id;
-
-            StockCostQuantityLookupDefinition.FilterDefinition.ClearFixedFilters();
-            StockCostQuantityLookupDefinition
-                .FilterDefinition
-                .AddFixedFilter(p => p.StockMasterId, Conditions.Equals, newEntity.Id);
-
-            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue);
 
             if (StockUiCommand.IsFocused || LocationUiCommand.IsFocused)
             {
@@ -290,7 +284,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             StockNumberAutoFillValue = null;
             LocationAutoFillValue = null;
             Price = 0;
-            StockCostQuantityCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
         protected override bool SaveEntity(StockMaster entity)

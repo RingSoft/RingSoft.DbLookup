@@ -1,13 +1,11 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
+using System.ComponentModel;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -268,8 +266,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         protected override void PopulatePrimaryKeyControls(Product newEntity, PrimaryKeyValue primaryKeyValue)
         {
             ProductId = newEntity.ProductID;
-            //_orderDetailsLookup.FilterDefinition.ClearFixedFilters();
-            //_orderDetailsLookup.FilterDefinition.AddFixedFilter(p => p.ProductID, Conditions.Equals, ProductId);
 
             var orderInput = new OrderInput
             {
@@ -283,7 +279,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ViewModelInput.OrderInput = orderInput;
-            //OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
 
             ReadOnlyMode =
                 ViewModelInput.ProductViewModels.Any(
@@ -335,29 +330,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             UnitPrice = null;
             UnitsInStock = UnitsOnOrder = ReorderLevel = null;
             Discontinued = false;
-            //OrderDetailsLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
-
-        //protected override bool SaveEntity(Product entity)
-        //{
-        //    var context = SystemGlobals.DataRepository.GetDataContext();
-        //    return context.SaveEntity(entity, "Saving Product");
-        //}
-
-        //protected override bool DeleteEntity()
-        //{
-        //    var context = SystemGlobals.DataRepository.GetDataContext();
-        //    var table = context.GetTable<Product>();
-        //    var entity = table
-        //        .FirstOrDefault(p => p.ProductID == ProductId);
-
-        //    if (entity != null)
-        //    {
-        //        return context.DeleteEntity(entity, "Deleting Product");
-        //    }
-
-        //    return true;
-        //}
 
         public override void OnWindowClosing(CancelEventArgs e)
         {

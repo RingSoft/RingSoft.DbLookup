@@ -236,6 +236,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 p => p.FullName, 20);
 
             OrdersLookupDefinition = ordersLookup;
+            RegisterLookup(OrdersLookupDefinition);
 
             base.Initialize();
         }
@@ -245,12 +246,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             KeyAutoFillUiCommand.IsEnabled = false;
             CustomerId = newEntity.CustomerID;
 
-            _ordersLookup.FilterDefinition.ClearFixedFilters();
-            _ordersLookup.FilterDefinition.AddFixedFilter(p => p.CustomerID, Conditions.Equals,
-                newEntity.CustomerID);
-
             ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Refresh, primaryKeyValue, ViewModelInput);
         }
 
         protected override void LoadFromEntity(Customer entity)
@@ -295,37 +291,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             CustomerId = CompanyName = string.Empty;
             Address = City = ContactName = ContactTitle = Country = Fax = Phone = PostalCode = Region = null;
-            OrdersLookupCommand = GetLookupCommand(LookupCommands.Clear);
-        }
-
-        protected override bool SaveEntity(Customer entity)
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Customer>();
-            var existCustomer = table
-                .FirstOrDefault(p => p.CustomerID == entity.CustomerID);
-            context = SystemGlobals.DataRepository.GetDataContext();
-            if (existCustomer == null)
-            {
-                return context.AddSaveEntity(entity, "Saving Customer");
-            }
-
-            return context.SaveEntity(entity, "Saving Customer");
-        }
-
-        protected override bool DeleteEntity()
-        {
-            var context = SystemGlobals.DataRepository.GetDataContext();
-            var table = context.GetTable<Customer>();
-            var existCustomer = table
-                .FirstOrDefault(p => p.CustomerID == CustomerId);
-            context = SystemGlobals.DataRepository.GetDataContext();
-            if (existCustomer != null)
-            {
-                return context.DeleteEntity(existCustomer, "Deleting Customer");
-            }
-
-            return true;
         }
 
         private void OnAddModify()

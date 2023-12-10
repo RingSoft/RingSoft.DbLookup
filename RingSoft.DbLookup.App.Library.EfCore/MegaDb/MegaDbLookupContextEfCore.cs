@@ -23,13 +23,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public TableDefinition<MliLocationsTable> MliLocationsTable { get; set; }
         public TableDefinition<StockMaster> StockMasters { get; set; }
         public TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
-        public LookupContextBase Context => this;
-        public TableDefinition<RecordLock> RecordLocks { get; set; }
-        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
-        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
-        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
-        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
-        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
 
         public MegaDbLookupContextEfCore()
         {

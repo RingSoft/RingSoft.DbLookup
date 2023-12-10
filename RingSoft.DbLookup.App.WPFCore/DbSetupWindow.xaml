@@ -32,7 +32,7 @@
                         <StackPanel Margin="0,10,0,10">
                             <StackPanel Orientation="Horizontal">
                                 <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.SqlServer}, Mode=TwoWay}" IsEnabled="{Binding Path=NorthwindSqlServerRadioEnabled}"/>
-                                <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.MySql}, Mode=TwoWay}" IsEnabled="{Binding Path=NorthwindMySqlRadioEnabled}"/>
+                                <!--<RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.MySql}, Mode=TwoWay}" IsEnabled="{Binding Path=NorthwindMySqlRadioEnabled}"/>-->
                                 <RadioButton Content="SQLite" Margin="0,0,5,0" IsChecked="{Binding Path=NorthwindDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:NorthwindDbPlatforms.Sqlite}, Mode=TwoWay}" IsEnabled="{Binding Path=NorthwindSqliteRadioEnabled}"/>
                             </StackPanel>
                             <Grid Margin="0,5,0,0" IsEnabled="{Binding Path=NorthwindSqliteControlsEnabled}">
@@ -52,7 +52,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 10">
                             <RadioButton Content="None" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.None}, Mode=TwoWay}" VerticalAlignment="Center"/>
                             <RadioButton Content="SQL Server" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.SqlServer}, Mode=TwoWay}" VerticalAlignment="Center"/>
-                            <RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.MySql}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbMySqlRadioEnabled}"/>
+                            <!--<RadioButton Content="MySQL" Margin="0,0,5,0" IsChecked="{Binding Path=MegaDbDbPlatform, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static lib:MegaDbPlatforms.MySql}, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Path=MegaDbMySqlRadioEnabled}"/>-->
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
@@ -113,7 +113,7 @@
                     </Grid>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="MySQL Settings">
+            <!--<TabItem Header="MySQL Settings">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -144,7 +144,7 @@
                     <Button x:Name="MySqlMegaDbTestConnectionButton" Grid.Row="6" Grid.Column="1" Content="Test Connection" Margin="0,0,5,0"/>
                     <Button x:Name="MySqlMegaDbCreateButton" Grid.Row="6" Grid.Column="2" Content="Create"/>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
             <Button x:Name="OkButton" Content="_OK" Width="75" IsDefault="True"/>

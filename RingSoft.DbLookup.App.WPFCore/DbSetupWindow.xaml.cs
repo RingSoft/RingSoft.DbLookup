@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 DbSetupViewModel.OnViewLoaded(this);
                 SqlServerPasswordBox.Password = DbSetupViewModel.SqlServerPassword;
-                MySqlPasswordBox.Password = DbSetupViewModel.MySqlPassword;
+                //MySqlPasswordBox.Password = DbSetupViewModel.MySqlPassword;
             };
             OkButton.Click += (sender, args) =>
             {
@@ -74,49 +74,49 @@ namespace RingSoft.DbLookup.App.WPFCore
                 DbSetupViewModel.ShowSqlServerMegaDbScript();
             };
 
-            MySqlNorthwindComboBox.GotFocus += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.OnMySqlDatabaseComboFocus();
-                FillDatabaseCombo(MySqlNorthwindComboBox, DbSetupViewModel.MySqlDatabaseNames);
-            };
+            //MySqlNorthwindComboBox.GotFocus += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.OnMySqlDatabaseComboFocus();
+            //    FillDatabaseCombo(MySqlNorthwindComboBox, DbSetupViewModel.MySqlDatabaseNames);
+            //};
 
-            MySqlNorthwindTestConnectionButton.Click += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.MySql);
-            };
+            //MySqlNorthwindTestConnectionButton.Click += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.ValidateNorthwindConnection(NorthwindDbPlatforms.MySql);
+            //};
 
-            MySqlNorthwindCreateButton.Click += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.ShowMySqlNorthwindScript();
-            };
+            //MySqlNorthwindCreateButton.Click += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.ShowMySqlNorthwindScript();
+            //};
 
-            MySqlMegaDbComboBox.GotFocus += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.OnMySqlDatabaseComboFocus();
-                FillDatabaseCombo(MySqlMegaDbComboBox, DbSetupViewModel.MySqlDatabaseNames);
-            };
+            //MySqlMegaDbComboBox.GotFocus += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.OnMySqlDatabaseComboFocus();
+            //    FillDatabaseCombo(MySqlMegaDbComboBox, DbSetupViewModel.MySqlDatabaseNames);
+            //};
 
-            MySqlMegaDbTestConnectionButton.Click += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.ValidateMegaDbConnection(MegaDbPlatforms.MySql);
-            };
+            //MySqlMegaDbTestConnectionButton.Click += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.ValidateMegaDbConnection(MegaDbPlatforms.MySql);
+            //};
 
-            MySqlMegaDbCreateButton.Click += (sender, args) =>
-            {
-                SavePasswords();
-                DbSetupViewModel.ShowMySqlMegaDbScript();
-            };
+            //MySqlMegaDbCreateButton.Click += (sender, args) =>
+            //{
+            //    SavePasswords();
+            //    DbSetupViewModel.ShowMySqlMegaDbScript();
+            //};
         }
 
         private void SavePasswords()
         {
             DbSetupViewModel.SqlServerPassword = SqlServerPasswordBox.Password;
-            DbSetupViewModel.MySqlPassword = MySqlPasswordBox.Password;
+            //DbSetupViewModel.MySqlPassword = MySqlPasswordBox.Password;
         }
 
         private void FillDatabaseCombo(ComboBox comboBox, List<string> list)
@@ -196,10 +196,10 @@ namespace RingSoft.DbLookup.App.WPFCore
                     TabControl.SelectedIndex = 1;
                     SqlServerNorthwindComboBox.Focus();
                     break;
-                case NorthwindDbPlatforms.MySql:
-                    TabControl.SelectedIndex = 2;
-                    MySqlNorthwindComboBox.Focus();
-                    break;
+                //case NorthwindDbPlatforms.MySql:
+                //    TabControl.SelectedIndex = 2;
+                //    MySqlNorthwindComboBox.Focus();
+                //    break;
                 case NorthwindDbPlatforms.Sqlite:
                     TabControl.SelectedIndex = 0;
                     NorthwindSqliteFileNameTextBox.Focus();
@@ -217,10 +217,10 @@ namespace RingSoft.DbLookup.App.WPFCore
                     TabControl.SelectedIndex = 1;
                     SqlServerMegaDbComboBox.Focus();
                     break;
-                case MegaDbPlatforms.MySql:
-                    TabControl.SelectedIndex = 2;
-                    MySqlMegaDbComboBox.Focus();
-                    break;
+                //case MegaDbPlatforms.MySql:
+                //    TabControl.SelectedIndex = 2;
+                //    MySqlMegaDbComboBox.Focus();
+                //    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
             }

@@ -27,14 +27,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public TableDefinition<Shipper> Shippers { get; set; }
         public TableDefinition<Supplier> Suppliers { get; set; }
         public TableDefinition<Territory> Territories { get; set; }
-        public LookupContextBase Context => this;
-        public TableDefinition<RecordLock> RecordLocks { get; set; }
-        public TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
-        public TableDefinition<AdvancedFindColumn> AdvancedFindColumns { get; set; }
-        public TableDefinition<AdvancedFindFilter> AdvancedFindFilters { get; set; }
-        public LookupDefinition<AdvancedFindLookup, AdvancedFind.AdvancedFind> AdvancedFindLookup { get; set; }
-        public LookupDefinition<RecordLockingLookup, RecordLock> RecordLockingLookup { get; set; }
-
 
         public NorthwindLookupContextEfCore()
         {

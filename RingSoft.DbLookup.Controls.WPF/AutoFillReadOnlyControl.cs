@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 09-23-2023
+// ***********************************************************************
+// <copyright file="AutoFillReadOnlyControl.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,40 +25,32 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:AutoFillReadOnlyControl/>
-    ///
+    /// Class AutoFillReadOnlyControl.
+    /// Implements the <see cref="Control" />
+    /// Implements the <see cref="IReadOnlyControl" />
+    /// Implements the <see cref="IAutoFillControl" />
     /// </summary>
+    /// <seealso cref="Control" />
+    /// <seealso cref="IReadOnlyControl" />
+    /// <seealso cref="IAutoFillControl" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class AutoFillReadOnlyControl : Control, IReadOnlyControl, IAutoFillControl
     {
+        /// <summary>
+        /// Gets or sets the text block.
+        /// </summary>
+        /// <value>The text block.</value>
         public TextBlock TextBlock { get; set; }
 
+        /// <summary>
+        /// Gets or sets the drop down button.
+        /// </summary>
+        /// <value>The drop down button.</value>
         public Button DropDownButton { get; set; }
 
+        /// <summary>
+        /// The setup property
+        /// </summary>
         public static readonly DependencyProperty SetupProperty =
             DependencyProperty.Register("Setup", typeof(AutoFillSetup), typeof(AutoFillReadOnlyControl),
                 new FrameworkPropertyMetadata(SetupChangedCallback));
@@ -53,15 +58,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Gets or sets the AutoFillSetup to determine how this control will behave.
         /// </summary>
-        /// <value>
-        /// The AutoFillSetup.
-        /// </value>
+        /// <value>The AutoFillSetup.</value>
         public AutoFillSetup Setup
         {
             get { return (AutoFillSetup) GetValue(SetupProperty); }
             set { SetValue(SetupProperty, value); }
         }
 
+        /// <summary>
+        /// Setups the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void SetupChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -69,6 +77,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             autoFillControl.CheckButton();
         }
 
+        /// <summary>
+        /// The value property
+        /// </summary>
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(AutoFillValue), typeof(AutoFillReadOnlyControl),
                 new FrameworkPropertyMetadata(ValueChangedCallback));
@@ -76,15 +87,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Gets or sets the AutoFillValue.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
+        /// <value>The value.</value>
         public AutoFillValue Value
         {
             get { return (AutoFillValue) GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
+        /// <summary>
+        /// Values the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void ValueChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -93,16 +107,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             autoFillControl.CheckButton();
         }
 
+        /// <summary>
+        /// The design text property
+        /// </summary>
         public static readonly DependencyProperty DesignTextProperty =
             DependencyProperty.Register("DesignText", typeof(string), typeof(AutoFillReadOnlyControl),
                 new FrameworkPropertyMetadata(DesignTextChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the design text.
+        /// </summary>
+        /// <value>The design text.</value>
         public string DesignText
         {
             get { return (string)GetValue(DesignTextProperty); }
             set { SetValue(DesignTextProperty, value); }
         }
 
+        /// <summary>
+        /// Designs the text changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DesignTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -111,6 +137,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Heights the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -130,6 +161,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets or sets the edit text.
+        /// </summary>
+        /// <value>The edit text.</value>
         public string EditText
         {
             get
@@ -141,8 +176,20 @@ namespace RingSoft.DbLookup.Controls.WPF
                 TextBlock.Text = value;
             }
         }
+        /// <summary>
+        /// Gets or sets the selection start.
+        /// </summary>
+        /// <value>The selection start.</value>
         public int SelectionStart { get; set; }
+        /// <summary>
+        /// Gets or sets the length of the selection.
+        /// </summary>
+        /// <value>The length of the selection.</value>
         public int SelectionLength { get; set; }
+        /// <summary>
+        /// Refreshes the value.
+        /// </summary>
+        /// <param name="token">The token.</param>
         public void RefreshValue(LookupCallBackToken token)
         {
             if (token.NewAutoFillValue.PrimaryKeyValue.IsEqualTo(Value.PrimaryKeyValue))
@@ -151,13 +198,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [select].
+        /// </summary>
         public void OnSelect()
         {
             
         }
 
+        /// <summary>
+        /// The pending automatic fill value
+        /// </summary>
         private AutoFillValue _pendingAutoFillValue;
 
+        /// <summary>
+        /// Initializes static members of the <see cref="AutoFillReadOnlyControl"/> class.
+        /// </summary>
         static AutoFillReadOnlyControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillReadOnlyControl),
@@ -168,6 +224,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             TextBlock = GetTemplateChild(nameof(TextBlock)) as TextBlock;
@@ -185,6 +244,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Shows the lookup window.
+        /// </summary>
         public virtual void ShowLookupWindow()
         {
             var initialText = TextBlock.Text;
@@ -220,6 +282,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Setups the control.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
         private void SetupControl()
         {
             if (Setup.LookupDefinition == null || Setup.LookupDefinition.InitialSortColumnDefinition == null)
@@ -227,6 +293,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
         }
 
+        /// <summary>
+        /// Sets the value.
+        /// </summary>
         private void SetValue()
         {
             if (Value == null)
@@ -244,16 +313,26 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Clears the value.
+        /// </summary>
         private void ClearValue()
         {
             TextBlock.Text = string.Empty;
         }
 
+        /// <summary>
+        /// Sets the read only mode.
+        /// </summary>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public void SetReadOnlyMode(bool readOnlyValue)
         {
             DropDownButton.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Sets the design text.
+        /// </summary>
         private void SetDesignText()
         {
             if (DesignerProperties.GetIsInDesignMode(this) && !DesignText.IsNullOrEmpty() && TextBlock != null)
@@ -262,6 +341,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Checks the button.
+        /// </summary>
         private void CheckButton()
         {
             if (Setup != null)

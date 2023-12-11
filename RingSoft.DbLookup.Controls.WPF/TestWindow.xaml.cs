@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="TestWindow.xaml.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,6 +30,9 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public partial class TestWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestWindow"/> class.
+        /// </summary>
         public TestWindow()
         {
             InitializeComponent();

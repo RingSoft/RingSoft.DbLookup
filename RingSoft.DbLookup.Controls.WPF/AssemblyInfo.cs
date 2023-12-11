@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 01-16-2023
+// ***********************************************************************
+// <copyright file="AssemblyInfo.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System.Windows;
 
 [assembly: ThemeInfo(

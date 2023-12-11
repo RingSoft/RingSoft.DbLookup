@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 01-29-2023
+//
+// Last Modified By : petem
+// Last Modified On : 03-30-2023
+// ***********************************************************************
+// <copyright file="PrintingProcessingWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -19,55 +32,69 @@ using RingSoft.DataEntryControls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:PrintingProcessingWindow/>
-    ///
+    /// Class PrintingProcessingWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="RingSoft.DbLookup.IPrintingProcessingView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="RingSoft.DbLookup.IPrintingProcessingView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class PrintingProcessingWindow : BaseWindow, IPrintingProcessingView
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public PrintingProcessingViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// Gets the part text control.
+        /// </summary>
+        /// <value>The part text control.</value>
         public StringReadOnlyBox PartTextControl { get; private set; }
 
+        /// <summary>
+        /// Gets the part progress bar.
+        /// </summary>
+        /// <value>The part progress bar.</value>
         public ProgressBar PartProgressBar { get; private set; }
 
+        /// <summary>
+        /// Gets the current control.
+        /// </summary>
+        /// <value>The current control.</value>
         public StringReadOnlyBox CurrentControl { get; private set; }
 
+        /// <summary>
+        /// Gets the current progress bar.
+        /// </summary>
+        /// <value>The current progress bar.</value>
         public ProgressBar CurrentProgressBar { get; private set; }
 
+        /// <summary>
+        /// Gets the cancel button.
+        /// </summary>
+        /// <value>The cancel button.</value>
         public Button CancelButton { get; private set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="PrintingProcessingWindow"/> class.
+        /// </summary>
         static PrintingProcessingWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PrintingProcessingWindow), new FrameworkPropertyMetadata(typeof(PrintingProcessingWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrintingProcessingWindow"/> class.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public PrintingProcessingWindow(PrinterSetupArgs printerSetupArgs)
         {
             Loaded += (s, e) =>
@@ -78,6 +105,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -91,6 +121,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Updates the status.
+        /// </summary>
         public void UpdateStatus()
         {
             var part = (int)ViewModel.ProcessType;
@@ -138,6 +171,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         public void CloseWindow()
         {
             Dispatcher.Invoke(() =>
@@ -146,6 +182,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
         }
 
+        /// <summary>
+        /// Enables the abort button.
+        /// </summary>
+        /// <param name="enable">if set to <c>true</c> [enable].</param>
         public void EnableAbortButton(bool enable)
         {
             if (Dispatcher != null)
@@ -158,6 +198,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Handles the <see cref="E:Closing" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
         protected override void OnClosing(CancelEventArgs e)
         {
             ViewModel.OnWindowClosing();

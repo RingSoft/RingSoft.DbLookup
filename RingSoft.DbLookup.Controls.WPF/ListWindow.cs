@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 03-04-2023
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="ListWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -28,51 +41,65 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:ListWindow/>
-    ///
+    /// Class ListWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="RingSoft.DbLookup.IListWindowView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="RingSoft.DbLookup.IListWindowView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class ListWindow : BaseWindow, IListWindowView
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public ListWindowViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the search for stack panel.
+        /// </summary>
+        /// <value>The search for stack panel.</value>
         public StackPanel SearchForStackPanel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the search for label.
+        /// </summary>
+        /// <value>The search for label.</value>
         public Label SearchForLabel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ListView.
+        /// </summary>
+        /// <value>The ListView.</value>
         public ListView ListView { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lookup grid view.
+        /// </summary>
+        /// <value>The lookup grid view.</value>
         public GridView LookupGridView { get; set; }
 
+        /// <summary>
+        /// Gets or sets the scroll bar.
+        /// </summary>
+        /// <value>The scroll bar.</value>
         public ScrollBar ScrollBar { get; set; }
 
+        /// <summary>
+        /// The lookup search for host
+        /// </summary>
         private LookupSearchForHost _lookupSearchForHost;
+        /// <summary>
+        /// Gets or sets the search for host.
+        /// </summary>
+        /// <value>The search for host.</value>
         public LookupSearchForHost SearchForHost
         {
             get => _lookupSearchForHost;
@@ -95,21 +122,55 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
         }
+        /// <summary>
+        /// Gets the lookup columns.
+        /// </summary>
+        /// <value>The lookup columns.</value>
         public ObservableCollection<LookupColumnBase> LookupColumns { get; }
 
+        /// <summary>
+        /// The data source
+        /// </summary>
         private DataTable _dataSource = new DataTable("DataSourceTable");
+        /// <summary>
+        /// The last direction
+        /// </summary>
         private ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        /// <summary>
+        /// The last header clicked
+        /// </summary>
         private GridViewColumnHeader _lastHeaderClicked;
+        /// <summary>
+        /// The sort column
+        /// </summary>
         private ListControlColumn _sortColumn;
+        /// <summary>
+        /// The item height
+        /// </summary>
         private double _itemHeight;
+        /// <summary>
+        /// The old size
+        /// </summary>
         private Size _oldSize;
+        /// <summary>
+        /// The pre scroll thumb position
+        /// </summary>
         private double _preScrollThumbPosition;
-        
+
+        /// <summary>
+        /// Initializes static members of the <see cref="ListWindow"/> class.
+        /// </summary>
         static ListWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ListWindow), new FrameworkPropertyMetadata(typeof(ListWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListWindow"/> class.
+        /// </summary>
+        /// <param name="setup">The setup.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <param name="selectedRow">The selected row.</param>
         public ListWindow(ListControlSetup setup, ListControlDataSource dataSource, ListControlDataSourceRow selectedRow)
         {
             var loaded = false;
@@ -147,6 +208,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -170,6 +234,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Handles the PreviewMouseWheel event of the ListView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="MouseWheelEventArgs"/> instance containing the event data.</param>
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
@@ -180,6 +249,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the ListView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
@@ -190,32 +265,57 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Lookups the control size changed.
+        /// </summary>
         private void LookupControlSizeChanged()
         {
             var pageSize = GetPageSize();
             ViewModel.PageSize = pageSize;
         }
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         public void CloseWindow()
         {
             Close();
         }
 
+        /// <summary>
+        /// Handles the PreviewKeyDown event of the SearchForControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             OnListViewKeyDown(e);
         }
 
+        /// <summary>
+        /// Handles the TextChanged event of the SearchForControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
             ViewModel.SearchText = SearchForHost.SearchText;
         }
 
+        /// <summary>
+        /// Handles the PreviewLostKeyboardFocus event of the Control control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyboardFocusChangedEventArgs"/> instance containing the event data.</param>
         private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (ReferenceEquals(e.NewFocus, ListView))
                 e.Handled = true;
         }
 
+        /// <summary>
+        /// Handles the <see cref="E:ListViewKeyDown" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void OnListViewKeyDown(KeyEventArgs e)
         {
             if (SearchForHost != null && SearchForHost.Control.IsKeyboardFocusWithin)
@@ -314,6 +414,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [down arrow].
+        /// </summary>
         protected void OnDownArrow()
         {
             if (ListView == null)
@@ -335,6 +438,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [up arrow].
+        /// </summary>
         protected void OnUpArrow()
         {
             if (ListView == null)
@@ -356,6 +462,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [page down].
+        /// </summary>
+        /// <param name="checkSelectedIndex">if set to <c>true</c> [check selected index].</param>
         private void OnPageDown(bool checkSelectedIndex = true)
         {
             if (ListView == null)
@@ -378,6 +488,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [page up].
+        /// </summary>
+        /// <param name="checkSelectedIndex">if set to <c>true</c> [check selected index].</param>
         private void OnPageUp(bool checkSelectedIndex = true)
         {
             if (ListView == null)
@@ -400,6 +514,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [end].
+        /// </summary>
+        /// <param name="checkSelectedIndex">if set to <c>true</c> [check selected index].</param>
         private void OnEnd(bool checkSelectedIndex = true)
         {
             if (ListView == null)
@@ -418,6 +536,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [home].
+        /// </summary>
+        /// <param name="checkSelectedIndex">if set to <c>true</c> [check selected index].</param>
         private void OnHome(bool checkSelectedIndex = true)
         {
             if (ListView == null)
@@ -433,12 +555,19 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ListView.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Called when [enter].
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool OnEnter()
         {
             ViewModel.SelectCommand.Execute(null);
             return true;
         }
 
+        /// <summary>
+        /// Initializes the ListView.
+        /// </summary>
         public void InitializeListView()
         {
             LookupGridView?.Columns.Clear();
@@ -456,6 +585,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             SetActiveColumn(0, FieldDataTypes.String);
         }
 
+        /// <summary>
+        /// Fills the ListView.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void FillListView()
         {
             ListView.ItemsSource = ViewModel.OutputTable.DefaultView;
@@ -476,6 +609,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Handles the Scroll event of the ScrollBar control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ScrollEventArgs"/> instance containing the event data.</param>
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
             e.Handled = true;
@@ -507,12 +645,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Adds the column to grid.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="width">The width.</param>
         private void AddColumnToGrid(ListControlColumn column, double width)
         {
             var gridColumn = AddGridViewColumn(column.Caption, width, $"COLUMN{column.ColumnId}");
         }
 
 
+        /// <summary>
+        /// Adds the grid view column.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="dataColumnName">Name of the data column.</param>
+        /// <returns>GridViewColumn.</returns>
         private GridViewColumn AddGridViewColumn(string caption, double width, string dataColumnName)
         {
             var columnHeader = new GridViewColumnHeader { Content = caption }; // + "\r\nLine2\r\nLine3"};
@@ -537,6 +687,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return gridColumn;
         }
+        /// <summary>
+        /// Grids the view column header clicked handler.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
@@ -549,6 +704,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Called when [column click].
+        /// </summary>
+        /// <param name="columnIndex">Index of the column.</param>
+        /// <param name="mouseClick">if set to <c>true</c> [mouse click].</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void OnColumnClick(int columnIndex, bool mouseClick)
         {
             if (LookupGridView == null)
@@ -650,11 +811,21 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SearchForHost?.Control.Focus();
             }
         }
+        /// <summary>
+        /// Gets the index of visible column definition.
+        /// </summary>
+        /// <param name="listControlColumn">The list control column.</param>
+        /// <returns>System.Int32.</returns>
         private int GetIndexOfVisibleColumnDefinition(ListControlColumn listControlColumn)
         {
             var lookupColumn = ViewModel.ControlSetup.ColumnList.FirstOrDefault(listControlColumn);
             return ViewModel.ControlSetup.GetIndexOfColumn(lookupColumn);
         }
+        /// <summary>
+        /// Sets the active column.
+        /// </summary>
+        /// <param name="sortColumnIndex">Index of the sort column.</param>
+        /// <param name="dataType">Type of the data.</param>
         private void SetActiveColumn(int sortColumnIndex, FieldDataTypes dataType)
         {
             if (SearchForStackPanel != null)
@@ -692,6 +863,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Initializes the header.
+        /// </summary>
+        /// <param name="sortColumnIndex">Index of the sort column.</param>
         private void InitializeHeader(int sortColumnIndex)
         {
             if (ListView == null || LookupGridView == null)
@@ -723,6 +898,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             ResetColumnHeaderSort(sortColumnIndex);
         }
 
+        /// <summary>
+        /// Gets the height of the header.
+        /// </summary>
+        /// <param name="header">The header.</param>
+        /// <returns>System.Double.</returns>
         private double GetHeaderHeight(GridViewHeaderRowPresenter header)
         {
             var height = header.ActualHeight;
@@ -755,6 +935,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return height;
         }
+        /// <summary>
+        /// Gets the column header data template.
+        /// </summary>
+        /// <returns>DataTemplate.</returns>
         private DataTemplate GetColumnHeaderDataTemplate()
         {
             var template = new DataTemplate();
@@ -773,6 +957,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             return template;
         }
 
+        /// <summary>
+        /// Resets the column header sort.
+        /// </summary>
+        /// <param name="sortColumnIndex">Index of the sort column.</param>
         private void ResetColumnHeaderSort(int sortColumnIndex)
         {
             if (ListView == null || LookupGridView == null)
@@ -789,6 +977,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             GridViewSort.ApplySort(_lastDirection, ListView, _lastHeaderClicked);
         }
 
+        /// <summary>
+        /// Gets the size of the page.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         private int GetPageSize()
         {
             if (ListView == null || LookupGridView == null)
@@ -841,6 +1033,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Finds the visual child.
+        /// </summary>
+        /// <typeparam name="TChildItem">The type of the t child item.</typeparam>
+        /// <param name="obj">The object.</param>
+        /// <returns>TChildItem.</returns>
         private TChildItem FindVisualChild<TChildItem>(DependencyObject obj)
             where TChildItem : DependencyObject
 

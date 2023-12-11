@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-10-2023
+// ***********************************************************************
+// <copyright file="LookupControlsGlobals.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Diagnostics;
 using System.Media;
 using RingSoft.DataEntryControls.WPF;
@@ -19,13 +32,26 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class ControlsUserInterface.
+    /// Implements the <see cref="RingSoft.DbLookup.IDbLookupUserInterface" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbLookup.IDbLookupUserInterface" />
     public class ControlsUserInterface : IDbLookupUserInterface
     {
+        /// <summary>
+        /// Gets the active window.
+        /// </summary>
+        /// <returns>Window.</returns>
         public static Window GetActiveWindow()
         {
             var activeWindow = WPFControlsGlobals.ActiveWindow;
             return activeWindow;
         }
+        /// <summary>
+        /// Shows the data process execution result.
+        /// </summary>
+        /// <param name="dataProcessResult">The data process result.</param>
         public void ShowDataProcessResult(DataProcessResult dataProcessResult)
         {
             var activeWindow = GetActiveWindow();
@@ -48,6 +74,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Shows the add on the fly window.
+        /// </summary>
+        /// <param name="e">The e.</param>
         public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
         {
             var activeWindow = GetActiveWindow();
@@ -83,6 +113,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Plays the system sound.
+        /// </summary>
+        /// <param name="icon">The icon.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">icon - null</exception>
         public void PlaySystemSound(RsMessageBoxIcons icon)
         {
             switch (icon)
@@ -99,11 +134,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets the owner window.
+        /// </summary>
+        /// <returns>System.Object.</returns>
         public object GetOwnerWindow()
         {
             return GetActiveWindow();
         }
 
+        /// <summary>
+        /// Formats the value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="hostId">The host identifier.</param>
+        /// <returns>System.String.</returns>
         public string FormatValue(string value, int hostId)
         {
             return LookupControlsGlobals.LookupControlSearchForFactory.FormatValue(hostId, value);
@@ -120,21 +165,52 @@ namespace RingSoft.DbLookup.Controls.WPF
         //}
 
     }
+    /// <summary>
+    /// Class LookupControlsGlobals.
+    /// </summary>
     public static class LookupControlsGlobals
     {
+        /// <summary>
+        /// Gets the active window.
+        /// </summary>
+        /// <value>The active window.</value>
         public static Window ActiveWindow => ControlsUserInterface.GetActiveWindow();
 
+        /// <summary>
+        /// Gets or sets the lookup window factory.
+        /// </summary>
+        /// <value>The lookup window factory.</value>
         public static LookupWindowFactory LookupWindowFactory { get; set; } = new LookupWindowFactory();
 
+        /// <summary>
+        /// Gets or sets the lookup control search for factory.
+        /// </summary>
+        /// <value>The lookup control search for factory.</value>
         public static LookupSearchForHostFactory LookupControlSearchForFactory { get; set; } = new LookupSearchForHostFactory();
 
+        /// <summary>
+        /// Gets or sets the lookup control column factory.
+        /// </summary>
+        /// <value>The lookup control column factory.</value>
         public static LookupControlColumnFactory LookupControlColumnFactory { get; set; } =
             new LookupControlColumnFactory();
 
+        /// <summary>
+        /// Gets or sets the lookup control content template factory.
+        /// </summary>
+        /// <value>The lookup control content template factory.</value>
         public static LookupControlContentTemplateFactory LookupControlContentTemplateFactory { get; set; } =
             new LookupControlContentTemplateFactory();
 
+        /// <summary>
+        /// The database maint processor factory
+        /// </summary>
         private static DbMaintenanceProcessorFactory _dbMaintProcessorFactory;
+        /// <summary>
+        /// Gets or sets the database maintenance processor factory.
+        /// </summary>
+        /// <value>The database maintenance processor factory.</value>
+        /// <exception cref="System.Exception">You must implement IDbMaintenanceProcessor and override DbMaintenanceProcessorFactory and set it to LookupControlsGlobals.DbMaintenanceProcessorFactory.</exception>
         public static DbMaintenanceProcessorFactory DbMaintenanceProcessorFactory
         {
             get
@@ -152,9 +228,20 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
         }
 
+        /// <summary>
+        /// The user interface
+        /// </summary>
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 
+        /// <summary>
+        /// The database maintenance buttons factory
+        /// </summary>
         private static DbMaintenanceButtonsFactory _dbMaintenanceButtonsFactory;
+        /// <summary>
+        /// Gets or sets the database maintenance buttons factory.
+        /// </summary>
+        /// <value>The database maintenance buttons factory.</value>
+        /// <exception cref="System.Exception">You must implement DbMaintenanceButtonsFactory and set it to LookupControlsGlobals.LookupControlsGlobals.DbMaintenanceButtonsFactory.</exception>
         public static DbMaintenanceButtonsFactory DbMaintenanceButtonsFactory
         {
             get
@@ -173,6 +260,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Initializes the UI.
+        /// </summary>
+        /// <param name="programDataFolder">The program data folder.</param>
         public static void InitUi(string programDataFolder = "")
         {
             if (programDataFolder.IsNullOrEmpty())
@@ -185,6 +276,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
 
+        /// <summary>
+        /// Prints the document.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public static async void PrintDocument(PrinterSetupArgs printerSetupArgs)
         {
 
@@ -199,6 +294,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             optionsWindow.ShowDialog();
         }
 
+        /// <summary>
+        /// Determines whether [is shift key down].
+        /// </summary>
+        /// <returns><c>true</c> if [is shift key down]; otherwise, <c>false</c>.</returns>
         public static bool IsShiftKeyDown()
         {
             if (Keyboard.IsKeyDown(Key.LeftShift))
@@ -210,6 +309,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Handles the value fail.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="autoFillMap">The automatic fill map.</param>
         public static void HandleValFail(Window window, DbAutoFillMap autoFillMap)
         {
             var caption = "Validation Fail";
@@ -231,6 +335,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets the automatic fills.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>List&lt;DbAutoFillMap&gt;.</returns>
         public static List<DbAutoFillMap> GetAutoFills(Window window)
         {
             var result = new List<DbAutoFillMap>();
@@ -241,6 +350,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return result;
         }
 
+        /// <summary>
+        /// Fills the automatic fill maps.
+        /// </summary>
+        /// <param name="autoFills">The automatic fills.</param>
+        /// <param name="result">The result.</param>
         private static void FillAutoFillMaps(List<AutoFillControl> autoFills, List<DbAutoFillMap> result)
         {
             foreach (var autoFillControl in autoFills)

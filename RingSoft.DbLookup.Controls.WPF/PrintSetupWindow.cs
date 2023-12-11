@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 02-06-2023
+//
+// Last Modified By : petem
+// Last Modified On : 02-07-2023
+// ***********************************************************************
+// <copyright file="PrintSetupWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,51 +34,57 @@ using RingSoft.Printing.Interop;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:PrintSetupWindow/>
-    ///
+    /// Class PrintSetupWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="RingSoft.DbLookup.IPrinterSetupView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="RingSoft.DbLookup.IPrinterSetupView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class PrintSetupWindow : BaseWindow, IPrinterSetupView
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public PrinterSetupViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// Gets the file panel.
+        /// </summary>
+        /// <value>The file panel.</value>
         public StackPanel FilePanel { get; private set; }
 
+        /// <summary>
+        /// Gets the number copies grid.
+        /// </summary>
+        /// <value>The number copies grid.</value>
         public Grid NumberCopiesGrid { get; private set; }
 
+        /// <summary>
+        /// Gets the file type grid.
+        /// </summary>
+        /// <value>The file type grid.</value>
         public Grid FileTypeGrid { get; private set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="PrintSetupWindow"/> class.
+        /// </summary>
         static PrintSetupWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PrintSetupWindow), new FrameworkPropertyMetadata(typeof(PrintSetupWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrintSetupWindow"/> class.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public PrintSetupWindow(PrinterSetupArgs printerSetupArgs)
         {
             Loaded += (sender, args) =>
@@ -74,6 +93,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -85,6 +107,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
         public void PrintOutput()
         {
             var window = new PrintingProcessingWindow(ViewModel.PrinterSetupArgs);
@@ -94,11 +119,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             Close();
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         public void CloseWindow()
         {
             Close();
         }
 
+        /// <summary>
+        /// Updates the view.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void UpdateView()
         {
             NumberCopiesGrid.Visibility = Visibility.Collapsed;
@@ -125,6 +157,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets the file.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string GetFile()
         {
             var file = new FileInfo(ViewModel.OutputFileName);

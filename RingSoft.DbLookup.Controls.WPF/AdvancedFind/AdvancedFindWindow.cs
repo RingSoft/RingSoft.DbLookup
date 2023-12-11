@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-07-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -26,67 +39,133 @@ using TreeView = System.Windows.Controls.TreeView;
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind;assembly=RingSoft.DbLookup.Controls.WPF.AdvancedFind"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:AdvancedFindWindow/>
-    ///
+    /// Class AdvancedFindWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="IAdvancedFindView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="IAdvancedFindView" />
+    /// <font color="red">Badly formed XML comment.</font>
     [TemplatePart(Name = "ButtonsPanel", Type = typeof(StackPanel))]
     public class AdvancedFindWindow : BaseWindow, IAdvancedFindView
     {
+        /// <summary>
+        /// Gets or sets the buttons panel.
+        /// </summary>
+        /// <value>The buttons panel.</value>
         public StackPanel ButtonsPanel { get; set; }
+        /// <summary>
+        /// Gets or sets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; set; }
+        /// <summary>
+        /// Gets or sets the status bar.
+        /// </summary>
+        /// <value>The status bar.</value>
         public DbMaintenanceStatusBar StatusBar { get; set; }
+        /// <summary>
+        /// Gets or sets the name automatic fill control.
+        /// </summary>
+        /// <value>The name automatic fill control.</value>
         public AutoFillControl NameAutoFillControl { get; set; }
+        /// <summary>
+        /// Gets or sets the TreeView.
+        /// </summary>
+        /// <value>The TreeView.</value>
         public TreeView TreeView { get; set; }
         //public TextComboBoxControl TableComboBoxControl { get; set; }
 
+        /// <summary>
+        /// Gets or sets the table list control.
+        /// </summary>
+        /// <value>The table list control.</value>
         public ListControl TableListControl { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lookup control.
+        /// </summary>
+        /// <value>The lookup control.</value>
         public LookupControl LookupControl { get; set; }
+        /// <summary>
+        /// Gets or sets the tab control.
+        /// </summary>
+        /// <value>The tab control.</value>
         public TabControl TabControl { get; set; }
+        /// <summary>
+        /// Gets or sets the columns tab item.
+        /// </summary>
+        /// <value>The columns tab item.</value>
         public TabItem ColumnsTabItem { get; set; }
+        /// <summary>
+        /// Gets or sets the columns grid.
+        /// </summary>
+        /// <value>The columns grid.</value>
         public DataEntryGrid ColumnsGrid { get; set; }
+        /// <summary>
+        /// Gets or sets the filter ellipse.
+        /// </summary>
+        /// <value>The filter ellipse.</value>
         public Ellipse FilterEllipse { get; set; }
+        /// <summary>
+        /// Gets or sets the filters tab item.
+        /// </summary>
+        /// <value>The filters tab item.</value>
         public TabItem FiltersTabItem { get; set; }
+        /// <summary>
+        /// Gets or sets the filters grid.
+        /// </summary>
+        /// <value>The filters grid.</value>
         public DataEntryGrid FiltersGrid { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [apply to lookup definition].
+        /// </summary>
+        /// <value><c>true</c> if [apply to lookup definition]; otherwise, <c>false</c>.</value>
         public bool ApplyToLookupDefinition { get; set; }
 
+        /// <summary>
+        /// Gets or sets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public AdvancedFindViewModel ViewModel { get; set; }
 
+        /// <summary>
+        /// The buttons control
+        /// </summary>
         private Control _buttonsControl;
+        /// <summary>
+        /// The add view arguments
+        /// </summary>
         private LookupAddViewArgs _addViewArgs;
-        
+
+        /// <summary>
+        /// Gets or sets the processor.
+        /// </summary>
+        /// <value>The processor.</value>
         public IDbMaintenanceProcessor Processor { get; set; }
 
+        /// <summary>
+        /// The notify from formula exists
+        /// </summary>
         private bool _notifyFromFormulaExists;
+        /// <summary>
+        /// The name tab key pressed
+        /// </summary>
         private bool _nameTabKeyPressed;
+        /// <summary>
+        /// The refresh after load
+        /// </summary>
         private bool _refreshAfterLoad;
+        /// <summary>
+        /// The tree has focus
+        /// </summary>
         private bool _treeHasFocus;
 
+        /// <summary>
+        /// Shows from formula editor.
+        /// </summary>
+        /// <param name="fromFormula">From formula.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowFromFormulaEditor(ref string fromFormula)
         {
             var editor = new DataEntryGridMemoEditor(new DataEntryGridMemoValue(0){Text = fromFormula});
@@ -106,6 +185,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return false;
         }
 
+        /// <summary>
+        /// Shows the advanced filter window.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>AdvancedFilterReturn.</returns>
         public AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             var filterWindow = new AdvancedFilterWindow();
@@ -122,6 +207,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return null;
         }
 
+        /// <summary>
+        /// Shows the filters ellipse.
+        /// </summary>
+        /// <param name="showFiltersEllipse">if set to <c>true</c> [show filters ellipse].</param>
         public void ShowFiltersEllipse(bool showFiltersEllipse = true)
         {
             if (showFiltersEllipse)
@@ -134,12 +223,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Applies to lookup.
+        /// </summary>
         public void ApplyToLookup()
         {
             ApplyToLookupDefinition = true;
             Close();
         }
 
+        /// <summary>
+        /// Shows the SQL statement.
+        /// </summary>
         public void ShowSqlStatement()
         {
             //var sql = LookupControl.LookupData.GetSqlStatement();
@@ -164,6 +259,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             //window.ShowDialog();
         }
 
+        /// <summary>
+        /// Shows the refresh settings.
+        /// </summary>
+        /// <param name="advancedFind">The advanced find.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowRefreshSettings(DbLookup.AdvancedFind.AdvancedFind advancedFind)
         {
             var refreshRateWindow = new AdvancedFindRefreshRateWindow(advancedFind);
@@ -173,6 +273,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return refreshRateWindow.DialogResult.Value;
         }
 
+        /// <summary>
+        /// Sets the alert level.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="showCount">if set to <c>true</c> [show count].</param>
+        /// <param name="recordCount">The record count.</param>
         public void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount)
         {
             LookupControl.ShowRecordCount(recordCount, showCount);
@@ -192,6 +299,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Gets the record count.
+        /// </summary>
+        /// <param name="showRecordCount">if set to <c>true</c> [show record count].</param>
+        /// <returns>System.Int32.</returns>
         public int GetRecordCount(bool showRecordCount)
         {
             var recordCount = 0;
@@ -218,18 +330,31 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             return recordCount;
         }
 
+        /// <summary>
+        /// The template applied
+        /// </summary>
         private bool _templateApplied;
 
+        /// <summary>
+        /// Sets the add on fly focus.
+        /// </summary>
         public void SetAddOnFlyFocus()
         {
             LookupControl.Focus();
         }
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
+        /// <param name="printerSetup">The printer setup.</param>
         public void PrintOutput(PrinterSetupArgs printerSetup)
         {
             LookupControlsGlobals.PrintDocument(printerSetup);
         }
 
+        /// <summary>
+        /// Checks the table is focused.
+        /// </summary>
         public void CheckTableIsFocused()
         {
             if (TableListControl.IsKeyboardFocusWithin)
@@ -243,11 +368,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         //    TableListControl.IsEnabled = !lockValue;
         //}
 
+        /// <summary>
+        /// Initializes static members of the <see cref="AdvancedFindWindow"/> class.
+        /// </summary>
         static AdvancedFindWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFindWindow), new FrameworkPropertyMetadata(typeof(AdvancedFindWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindWindow"/> class.
+        /// </summary>
+        /// <param name="addViewArgs">The add view arguments.</param>
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
         {
             _addViewArgs = addViewArgs;
@@ -255,11 +387,18 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindWindow"/> class.
+        /// </summary>
         public AdvancedFindWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
+        /// <summary>
+        /// Invoked when an unhandled <see cref="E:System.Windows.Input.Keyboard.PreviewKeyDown" /> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
+        /// </summary>
+        /// <param name="e">The <see cref="T:System.Windows.Input.KeyEventArgs" /> that contains the event data.</param>
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
@@ -292,6 +431,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnPreviewKeyDown(e);
         }
 
+        /// <summary>
+        /// Focuses the filters tab.
+        /// </summary>
         private void FocusFiltersTab()
         {
             TabControl.SelectedItem = FiltersTabItem;
@@ -304,6 +446,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
@@ -339,6 +484,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -415,6 +563,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Handles the GotFocus event of the TreeView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void TreeView_GotFocus(object sender, RoutedEventArgs e)
         {
             var sendTab = true;
@@ -445,6 +598,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Handles the GotFocus event of the Border control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Border_GotFocus(object sender, RoutedEventArgs e)
         {
             if (_nameTabKeyPressed)
@@ -454,6 +612,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Called when [validation fail].
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="caption">The caption.</param>
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             Processor.OnValidationFail(fieldDefinition, text, caption);
@@ -468,22 +632,38 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Handles the automatic fill value fail.
+        /// </summary>
+        /// <param name="autoFillMap">The automatic fill map.</param>
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             LookupControlsGlobals.HandleValFail(this, autoFillMap);
         }
 
+        /// <summary>
+        /// Reset the view for new record.
+        /// </summary>
         public void ResetViewForNewRecord()
         {
             NameAutoFillControl?.Focus();
             _templateApplied = false;
         }
 
+        /// <summary>
+        /// Gets the automatic fills.
+        /// </summary>
+        /// <returns>List&lt;DbAutoFillMap&gt;.</returns>
         public List<DbAutoFillMap> GetAutoFills()
         {
             return null;
         }
 
+        /// <summary>
+        /// Shows the formula editor.
+        /// </summary>
+        /// <param name="formulaTreeViewItem">The formula TreeView item.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowFormulaEditor(TreeViewItem formulaTreeViewItem)
         {
             var editor = new AdvancedFindFormulaColumnWindow(new DataEntryGridMemoValue(0));

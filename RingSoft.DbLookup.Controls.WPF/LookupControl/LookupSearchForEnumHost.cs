@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 07-02-2023
+//
+// Last Modified By : petem
+// Last Modified On : 07-02-2023
+// ***********************************************************************
+// <copyright file="LookupSearchForEnumHost.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.WPF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +24,17 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class LookupSearchForEnumHost.
+    /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost{RingSoft.DataEntryControls.WPF.TextComboBoxControl}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost{RingSoft.DataEntryControls.WPF.TextComboBoxControl}" />
     internal class LookupSearchForEnumHost : LookupSearchForHost<TextComboBoxControl>
     {
+        /// <summary>
+        /// Gets or sets the search text.
+        /// </summary>
+        /// <value>The search text.</value>
         public override string SearchText
         {
             get => Control.SelectedItem.NumericValue.ToString();
@@ -24,20 +46,40 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Control.SelectedItem = item;
             } 
         }
+        /// <summary>
+        /// Gets or sets the setup.
+        /// </summary>
+        /// <value>The setup.</value>
         public TextComboBoxControlSetup Setup { get; set; }
 
+        /// <summary>
+        /// Gets or sets the default width.
+        /// </summary>
+        /// <value>The default width.</value>
         public double DefaultWidth { get; set; } = 100;
 
+        /// <summary>
+        /// Selects all.
+        /// </summary>
         public override void SelectAll()
         {
             
         }
 
+        /// <summary>
+        /// Constructs the control.
+        /// </summary>
+        /// <returns>TextComboBoxControl.</returns>
         protected override TextComboBoxControl ConstructControl()
         {
             return new TextComboBoxControl();
         }
 
+        /// <summary>
+        /// Initializes the specified control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="columnDefinition">The column definition.</param>
         protected override void Initialize(TextComboBoxControl control, LookupColumnDefinitionBase columnDefinition)
         {
             Setup = new TextComboBoxControlSetup();
@@ -58,6 +100,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             control.Width = DefaultWidth;
         }
 
+        /// <summary>
+        /// Initializes the specified control.
+        /// </summary>
+        /// <param name="control">The control.</param>
         protected override void Initialize(TextComboBoxControl control)
         {
             

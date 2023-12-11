@@ -1,4 +1,17 @@
-﻿using System.Collections.Generic;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 03-04-2023
+//
+// Last Modified By : petem
+// Last Modified On : 09-20-2023
+// ***********************************************************************
+// <copyright file="ListControl.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,46 +21,37 @@ using RingSoft.DataEntryControls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:ListControl/>
-    ///
+    /// Class ListControl.
+    /// Implements the <see cref="Control" />
+    /// Implements the <see cref="RingSoft.DbLookup.IListControlView" />
     /// </summary>
+    /// <seealso cref="Control" />
+    /// <seealso cref="RingSoft.DbLookup.IListControlView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class ListControl : Control, IListControlView
     {
+        /// <summary>
+        /// The setup property
+        /// </summary>
         public static readonly DependencyProperty SetupProperty =
             DependencyProperty.Register("Setup", typeof(ListControlSetup), typeof(ListControl),
                 new FrameworkPropertyMetadata(SetupChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the setup.
+        /// </summary>
+        /// <value>The setup.</value>
         public ListControlSetup Setup
         {
             get { return (ListControlSetup)GetValue(SetupProperty); }
             set { SetValue(SetupProperty, value); }
         }
 
+        /// <summary>
+        /// Setups the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void SetupChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -56,16 +60,28 @@ namespace RingSoft.DbLookup.Controls.WPF
                 listControl.SetupControl();
         }
 
+        /// <summary>
+        /// The data source property
+        /// </summary>
         public static readonly DependencyProperty DataSourceProperty =
             DependencyProperty.Register("DataSource", typeof(ListControlDataSource), typeof(ListControl),
                 new FrameworkPropertyMetadata(DataSourceChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the data source.
+        /// </summary>
+        /// <value>The data source.</value>
         public ListControlDataSource DataSource
         {
             get { return (ListControlDataSource)GetValue(DataSourceProperty); }
             set { SetValue(DataSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Datas the source changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DataSourceChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -76,16 +92,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The data row property
+        /// </summary>
         public static readonly DependencyProperty DataRowProperty =
             DependencyProperty.Register("DataRow", typeof(ListControlDataSourceRow), typeof(ListControl),
                 new FrameworkPropertyMetadata(DataRowChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the data row.
+        /// </summary>
+        /// <value>The data row.</value>
         public ListControlDataSourceRow DataRow
         {
             get { return (ListControlDataSourceRow)GetValue(DataRowProperty); }
             set { SetValue(DataRowProperty, value); }
         }
 
+        /// <summary>
+        /// Datas the row changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DataRowChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -105,16 +133,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The UI command property
+        /// </summary>
         public static readonly DependencyProperty UiCommandProperty =
             DependencyProperty.Register(nameof(UiCommand), typeof(UiCommand), typeof(ListControl),
                 new FrameworkPropertyMetadata(UiCommandChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the UI command.
+        /// </summary>
+        /// <value>The UI command.</value>
         public UiCommand UiCommand
         {
             get { return (UiCommand)GetValue(UiCommandProperty); }
             set { SetValue(UiCommandProperty, value); }
         }
 
+        /// <summary>
+        /// UIs the command changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void UiCommandChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -130,16 +170,28 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The UI label property
+        /// </summary>
         public static readonly DependencyProperty UiLabelProperty =
             DependencyProperty.Register(nameof(UiLabel), typeof(Label), typeof(ListControl),
                 new FrameworkPropertyMetadata(UiLabelChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the UI label.
+        /// </summary>
+        /// <value>The UI label.</value>
         public Label UiLabel
         {
             get { return (Label)GetValue(UiLabelProperty); }
             set { SetValue(UiLabelProperty, value); }
         }
 
+        /// <summary>
+        /// UIs the label changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void UiLabelChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -149,22 +201,50 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public ListControlViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// Gets the text box.
+        /// </summary>
+        /// <value>The text box.</value>
         public StringEditControl TextBox { get; private set; }
 
+        /// <summary>
+        /// Gets the button.
+        /// </summary>
+        /// <value>The button.</value>
         public Button Button { get; private set; }
 
+        /// <summary>
+        /// The control loaded
+        /// </summary>
         private bool _controlLoaded;
+        /// <summary>
+        /// The vm UI control
+        /// </summary>
         private VmUiControl _vmUiControl;
 
+        /// <summary>
+        /// Initializes static members of the <see cref="ListControl"/> class.
+        /// </summary>
         static ListControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ListControl), new FrameworkPropertyMetadata(typeof(ListControl)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListControl"/> class.
+        /// </summary>
         public ListControl()
         {
             Loaded += (sender, args) =>
@@ -188,12 +268,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// Setups the control.
+        /// </summary>
         private void SetupControl()
         {
             ViewModel.Setup = Setup;
             ViewModel.DataSource = DataSource;
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -204,6 +290,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Invoked when an unhandled <see cref="E:System.Windows.Input.Keyboard.KeyDown" /> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
+        /// </summary>
+        /// <param name="e">The <see cref="T:System.Windows.Input.KeyEventArgs" /> that contains the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.F5)
@@ -213,6 +303,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnKeyDown(e);
         }
 
+        /// <summary>
+        /// Shows the lookup window.
+        /// </summary>
+        /// <returns>ListControlDataSourceRow.</returns>
         public ListControlDataSourceRow ShowLookupWindow()
         {
             var window = new ListWindow(ViewModel.Setup, ViewModel.DataSource, DataRow);
@@ -226,6 +320,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             return null;
         }
 
+        /// <summary>
+        /// Selects the data row.
+        /// </summary>
+        /// <param name="selectedIRow">The selected i row.</param>
         public void SelectDataRow(ListControlDataSourceRow selectedIRow)
         {
             DataRow = selectedIRow;

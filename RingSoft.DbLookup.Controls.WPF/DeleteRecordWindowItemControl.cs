@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 01-16-2023
+// ***********************************************************************
+// <copyright file="DeleteRecordWindowItemControl.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -15,43 +28,43 @@ using RingSoft.DbMaintenance;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:DeleteWindowTabItem/>
-    ///
+    /// Class DeleteRecordWindowItemControl.
+    /// Implements the <see cref="Control" />
     /// </summary>
+    /// <seealso cref="Control" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class DeleteRecordWindowItemControl : Control
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
+        /// <summary>
+        /// Gets the delete all CheckBox.
+        /// </summary>
+        /// <value>The delete all CheckBox.</value>
         public CheckBox DeleteAllCheckBox { get; private set; }
+        /// <summary>
+        /// Gets the null all CheckBox.
+        /// </summary>
+        /// <value>The null all CheckBox.</value>
         public CheckBox NullAllCheckBox { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public DeleteRecordItemViewModel ViewModel { get; private set; }
+        /// <summary>
+        /// Gets the delete table.
+        /// </summary>
+        /// <value>The delete table.</value>
         public DeleteTable DeleteTable { get; private set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="DeleteRecordWindowItemControl"/> class.
+        /// </summary>
         static DeleteRecordWindowItemControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DeleteRecordWindowItemControl), new FrameworkPropertyMetadata(typeof(DeleteRecordWindowItemControl)));
@@ -62,16 +75,26 @@ namespace RingSoft.DbLookup.Controls.WPF
                 new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteRecordWindowItemControl"/> class.
+        /// </summary>
+        /// <param name="deleteTable">The delete table.</param>
         public DeleteRecordWindowItemControl(DeleteTable deleteTable)
         {
             DeleteTable = deleteTable;
         }
 
+        /// <summary>
+        /// Sets the initial focus CheckBox.
+        /// </summary>
         public void SetInitialFocusCheckBox()
         {
             DeleteAllCheckBox.Focus();
         }
 
+        /// <summary>
+        /// Called when [apply template].
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;

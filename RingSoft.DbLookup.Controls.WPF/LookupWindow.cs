@@ -1,4 +1,17 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-29-2023
+// ***********************************************************************
+// <copyright file="LookupWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DataEntryControls.Engine;
 using System;
 using System.ComponentModel;
@@ -11,34 +24,15 @@ using RingSoft.DbLookup.AutoFill;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:NewLookupWindow/>
-    ///
+    /// Class LookupWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="ILookupWindow" />
+    /// Implements the <see cref="INotifyPropertyChanged" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="ILookupWindow" />
+    /// <seealso cref="INotifyPropertyChanged" />
+    /// <font color="red">Badly formed XML comment.</font>
     [TemplatePart(Name = "LookupControl", Type = typeof(LookupControl))]
     [TemplatePart(Name = "SelectButton", Type = typeof(Button))]
     [TemplatePart(Name = "AddButton", Type = typeof(Button))]
@@ -46,7 +40,14 @@ namespace RingSoft.DbLookup.Controls.WPF
     [TemplatePart(Name = "CloseButton", Type = typeof(Button))]
     public class LookupWindow : BaseWindow, ILookupWindow, INotifyPropertyChanged
     {
+        /// <summary>
+        /// The lookup definition
+        /// </summary>
         private LookupDefinitionBase _lookupDefinition;
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;
@@ -57,8 +58,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The lookup control
+        /// </summary>
         private LookupControl _lookupControl;
 
+        /// <summary>
+        /// Gets or sets the lookup control.
+        /// </summary>
+        /// <value>The lookup control.</value>
         public LookupControl LookupControl
         {
             get => _lookupControl;
@@ -75,8 +83,15 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
 
+        /// <summary>
+        /// The select button
+        /// </summary>
         private Button _selectButton;
 
+        /// <summary>
+        /// Gets or sets the select button.
+        /// </summary>
+        /// <value>The select button.</value>
         public Button SelectButton
         {
             get => _selectButton;
@@ -91,8 +106,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The add button
+        /// </summary>
         private Button _addButton;
 
+        /// <summary>
+        /// Gets or sets the add button.
+        /// </summary>
+        /// <value>The add button.</value>
         public Button AddButton
         {
             get => _addButton;
@@ -107,8 +129,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The view button
+        /// </summary>
         private Button _viewButton;
 
+        /// <summary>
+        /// Gets or sets the view button.
+        /// </summary>
+        /// <value>The view button.</value>
         public Button ViewButton
         {
             get => _viewButton;
@@ -123,8 +152,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// The close button
+        /// </summary>
         private Button _closeButton;
 
+        /// <summary>
+        /// Gets or sets the close button.
+        /// </summary>
+        /// <value>The close button.</value>
         public Button CloseButton
         {
             get => _closeButton;
@@ -139,14 +175,34 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets or sets the add view parameter.
+        /// </summary>
+        /// <value>The add view parameter.</value>
         public object AddViewParameter { get; set; }
 
+        /// <summary>
+        /// Gets or sets the initial search for primary key value.
+        /// </summary>
+        /// <value>The initial search for primary key value.</value>
         public PrimaryKeyValue InitialSearchForPrimaryKeyValue { get; set; }
 
+        /// <summary>
+        /// Gets the automatic fill control.
+        /// </summary>
+        /// <value>The automatic fill control.</value>
         public IAutoFillControl AutoFillControl { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether [read only mode].
+        /// </summary>
+        /// <value><c>true</c> if [read only mode]; otherwise, <c>false</c>.</value>
         public bool ReadOnlyMode => _readOnlyMode;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow advanced find].
+        /// </summary>
+        /// <value><c>true</c> if [allow advanced find]; otherwise, <c>false</c>.</value>
         public bool AllowAdvancedFind
         {
             get => _allowAdvancedFind;
@@ -171,24 +227,61 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupView;
 
+        /// <summary>
+        /// Occurs when [refresh data].
+        /// </summary>
         public event EventHandler RefreshData;
+        /// <summary>
+        /// Occurs when [apply new lookup].
+        /// </summary>
         public event EventHandler ApplyNewLookup;
 
+        /// <summary>
+        /// The allow view
+        /// </summary>
         private bool _allowView;
 
+        /// <summary>
+        /// The initial search for
+        /// </summary>
         private string _initialSearchFor;
 
+        /// <summary>
+        /// The read only mode
+        /// </summary>
         private bool _readOnlyMode;
+        /// <summary>
+        /// The read only primary key value
+        /// </summary>
         private PrimaryKeyValue _readOnlyPrimaryKeyValue;
+        /// <summary>
+        /// The old size
+        /// </summary>
         private Size _oldSize;
+        /// <summary>
+        /// The allow advanced find
+        /// </summary>
         private bool _allowAdvancedFind = true;
 
+        /// <summary>
+        /// Initializes static members of the <see cref="LookupWindow"/> class.
+        /// </summary>
         static LookupWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(typeof(LookupWindow)));
             ShowInTaskbarProperty.OverrideMetadata(typeof(LookupWindow), new FrameworkPropertyMetadata(false));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupWindow"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="allowAdd">if set to <c>true</c> [allow add].</param>
+        /// <param name="allowView">if set to <c>true</c> [allow view].</param>
+        /// <param name="initialSearchFor">The initial search for.</param>
+        /// <param name="autoFillControl">The automatic fill control.</param>
+        /// <param name="readOnlyValue">The read only value.</param>
+        /// <exception cref="System.ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
         public LookupWindow(LookupDefinitionBase lookupDefinition
             , bool allowAdd
             , bool allowView
@@ -258,6 +351,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// Handles the Loaded event of the LookupControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void LookupControl_Loaded(object sender, RoutedEventArgs e)
         {
             Reload();
@@ -267,6 +365,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Reloads this instance.
+        /// </summary>
         public void Reload()
         {
             LookupControl.SelectedIndexChanged += (sender, args) => 
@@ -288,6 +389,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupControl.LookupDataMaui.LookupView += LookupData_LookupView;
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             LookupControl = GetTemplateChild("LookupControl") as LookupControl;
@@ -320,11 +424,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the CloseButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Handles the Click event of the ViewButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
             if (LookupControl == null)
@@ -352,6 +466,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
+        /// <summary>
+        /// Handles the Click event of the AddButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             if (LookupControl == null)
@@ -380,11 +499,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
+        /// <summary>
+        /// Handles the Click event of the SelectButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void SelectButton_Click(object sender, RoutedEventArgs e)
         {
             OnSelectButtonClick();
         }
 
+        /// <summary>
+        /// Called when [select button click].
+        /// </summary>
         public void OnSelectButtonClick()
         {
             if (LookupControl == null)
@@ -395,6 +522,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupSelect?.Invoke(this, args);
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the LookupData control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectedIndexChangedEventArgs"/> instance containing the event data.</param>
         private void LookupData_SelectedIndexChanged(object sender, SelectedIndexChangedEventArgs e)
         {
             if (e.NewIndex >= 0)
@@ -408,6 +540,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Lookups the data lookup view.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void LookupData_LookupView(object sender, LookupAddViewArgs e)
         {
             if (_readOnlyMode)
@@ -425,6 +562,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Lookups the call back refresh data.
+        /// </summary>
+        /// <param name="token">The token.</param>
         private void LookupCallBackRefreshData(LookupCallBackToken token)
         {
             LookupControl.LookupDataMaui.RefreshData(LookupControl.SearchText);
@@ -444,13 +585,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Called when [read only mode set].
+        /// </summary>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
             _readOnlyMode = readOnlyValue || LookupDefinition.ReadOnlyMode;
@@ -458,6 +610,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnReadOnlyModeSet(readOnlyValue);
         }
 
+        /// <summary>
+        /// Sets the control read only mode.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
         {
             if (readOnlyValue)
@@ -500,12 +657,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.SetControlReadOnlyMode(control, readOnlyValue);
         }
 
+        /// <summary>
+        /// Applies the new lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void ApplyNewLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
             ApplyNewLookup?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Selects the primary key.
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         public void SelectPrimaryKey(PrimaryKeyValue primaryKey)
         {
             if (LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue() == null)

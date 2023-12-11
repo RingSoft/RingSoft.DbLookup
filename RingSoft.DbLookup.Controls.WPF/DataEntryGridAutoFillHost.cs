@@ -1,4 +1,17 @@
-﻿using System.Windows;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 10-29-2023
+// ***********************************************************************
+// <copyright file="DataEntryGridAutoFillHost.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
@@ -8,30 +21,66 @@ using System;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class DataEntryGridAutoFillHost.
+    /// Implements the <see cref="RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost.DataEntryGridEditingControlHost{RingSoft.DbLookup.Controls.WPF.AutoFillControl}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost.DataEntryGridEditingControlHost{RingSoft.DbLookup.Controls.WPF.AutoFillControl}" />
     public class DataEntryGridAutoFillHost : DataEntryGridEditingControlHost<AutoFillControl>
     {
+        /// <summary>
+        /// Gets a value indicating whether this instance is drop down open.
+        /// </summary>
+        /// <value><c>true</c> if this instance is drop down open; otherwise, <c>false</c>.</value>
         public override bool IsDropDownOpen => Control.ContainsBoxIsOpen;
 
+        /// <summary>
+        /// Gets a value indicating whether [allow read only edit].
+        /// </summary>
+        /// <value><c>true</c> if [allow read only edit]; otherwise, <c>false</c>.</value>
         public override bool AllowReadOnlyEdit => true;
 
+        /// <summary>
+        /// Gets a value indicating whether [edit mode].
+        /// </summary>
+        /// <value><c>true</c> if [edit mode]; otherwise, <c>false</c>.</value>
         public bool EditMode { get; private set; }
 
+        /// <summary>
+        /// Gets the automatic fill cell props.
+        /// </summary>
+        /// <value>The automatic fill cell props.</value>
         public DataEntryGridAutoFillCellProps AutoFillCellProps { get; private set; }
 
+        /// <summary>
+        /// The grid read only mode
+        /// </summary>
         private bool _gridReadOnlyMode;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataEntryGridAutoFillHost"/> class.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
         public DataEntryGridAutoFillHost(DataEntryGrid grid) : base(grid)
         {
         }
 
-                
 
+
+        /// <summary>
+        /// Gets the cell value.
+        /// </summary>
+        /// <returns>DataEntryGridEditingCellProps.</returns>
         public override DataEntryGridEditingCellProps GetCellValue()
         {
             return new DataEntryGridAutoFillCellProps(Row, ColumnId,
                 Control.Setup, Control.Value);
         }
 
+        /// <summary>
+        /// Determines whether [has data changed].
+        /// </summary>
+        /// <returns><c>true</c> if [has data changed]; otherwise, <c>false</c>.</returns>
         public override bool HasDataChanged()
         {
             if (AutoFillCellProps.AlwaysUpdateOnSelect)
@@ -72,11 +121,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             return false;
         }
 
+        /// <summary>
+        /// Updates from cell props.
+        /// </summary>
+        /// <param name="cellProps">The cell props.</param>
         public override void UpdateFromCellProps(DataEntryGridCellProps cellProps)
         {
             AutoFillCellProps = (DataEntryGridAutoFillCellProps)cellProps;
         }
-        
+
+        /// <summary>
+        /// Called when [control loaded].
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="cellProps">The cell props.</param>
+        /// <param name="cellStyle">The cell style.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected override void OnControlLoaded(AutoFillControl control, DataEntryGridEditingCellProps cellProps,
             DataEntryGridCellStyle cellStyle)
         {
@@ -127,6 +187,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Imports the data grid cell properties.
+        /// </summary>
+        /// <param name="dataGridCell">The data grid cell.</param>
         protected override void ImportDataGridCellProperties(DataGridCell dataGridCell)
         {
             base.ImportDataGridCellProperties(dataGridCell);
@@ -136,6 +200,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance [can grid process key] the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if this instance [can grid process key] the specified key; otherwise, <c>false</c>.</returns>
         public override bool CanGridProcessKey(Key key)
         {
             switch (key)
@@ -167,6 +236,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return base.CanGridProcessKey(key);
         }
 
+        /// <summary>
+        /// Sets the read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool SetReadOnlyMode(bool readOnlyMode)
         {
             _gridReadOnlyMode = readOnlyMode;

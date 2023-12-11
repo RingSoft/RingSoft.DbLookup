@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-02-2023
+// ***********************************************************************
+// <copyright file="LookupSearchForHostFactory.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Windows.Controls;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -6,13 +19,33 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class LookupSearchForHostFactory.
+    /// </summary>
     public class LookupSearchForHostFactory
     {
+        /// <summary>
+        /// The search for string host identifier
+        /// </summary>
         public const int SearchForStringHostId = 0;
+        /// <summary>
+        /// The search for integer host identifier
+        /// </summary>
         public const int SearchForIntegerHostId = 1;
+        /// <summary>
+        /// The search for decimal host identifier
+        /// </summary>
         public const int SearchForDecimalHostId = 2;
+        /// <summary>
+        /// The search for date host identifier
+        /// </summary>
         public const int SearchForDateHostId = 3;
 
+        /// <summary>
+        /// Creates the search for host.
+        /// </summary>
+        /// <param name="columnDefinition">The column definition.</param>
+        /// <returns>LookupSearchForHost.</returns>
         internal LookupSearchForHost CreateSearchForHost(LookupColumnDefinitionBase columnDefinition)
         {
             var hostId = columnDefinition.SearchForHostId;
@@ -31,6 +64,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return searchForHost;
         }
 
+        /// <summary>
+        /// Creates the search for host.
+        /// </summary>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <returns>LookupSearchForHost.</returns>
         internal LookupSearchForHost CreateSearchForHost(FieldDataTypes fieldDataType)
         {
             var hostId = ConvertFieldDataTypeToSearchForHostId(fieldDataType);
@@ -41,6 +79,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Converts the field data type to search for host identifier.
+        /// </summary>
+        /// <param name="dataType">Type of the data.</param>
+        /// <returns>System.Int32.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">dataType - null</exception>
         public static int ConvertFieldDataTypeToSearchForHostId(FieldDataTypes dataType)
         {
             switch (dataType)
@@ -59,6 +103,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Creates the search for host.
+        /// </summary>
+        /// <param name="hostId">The host identifier.</param>
+        /// <returns>LookupSearchForHost.</returns>
         protected virtual LookupSearchForHost CreateSearchForHost(int? hostId)
         {
             if (hostId == SearchForDecimalHostId)
@@ -74,6 +123,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             return new LookupSearchForStringHost();
         }
 
+        /// <summary>
+        /// Formats the value.
+        /// </summary>
+        /// <param name="hostId">The host identifier.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public virtual string FormatValue(int hostId, string value)
         {
             return value;

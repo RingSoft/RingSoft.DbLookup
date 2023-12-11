@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 03-04-2023
+// ***********************************************************************
+// <copyright file="LookupSearchForDateHost.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -8,8 +21,17 @@ using System.Windows;
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class LookupSearchForDateHost.
+    /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForDropDownHost{RingSoft.DataEntryControls.WPF.DateEditControl}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForDropDownHost{RingSoft.DataEntryControls.WPF.DateEditControl}" />
     public class LookupSearchForDateHost : LookupSearchForDropDownHost<DateEditControl>
     {
+        /// <summary>
+        /// Gets or sets the search text.
+        /// </summary>
+        /// <value>The search text.</value>
         public override string SearchText
         {
             get
@@ -38,19 +60,44 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default width of the date only.
+        /// </summary>
+        /// <value>The default width of the date only.</value>
         protected virtual double? DefaultDateOnlyWidth { get; set; } = 100;
 
+        /// <summary>
+        /// Gets or sets the default width of the date time.
+        /// </summary>
+        /// <value>The default width of the date time.</value>
         protected virtual double? DefaultDateTimeWidth { get; set; } = 175;
 
+        /// <summary>
+        /// Gets a value indicating whether [convert to local time].
+        /// </summary>
+        /// <value><c>true</c> if [convert to local time]; otherwise, <c>false</c>.</value>
         public bool ConvertToLocalTime { get; private set; }
 
+        /// <summary>
+        /// The current value
+        /// </summary>
         private DateTime? _currentValue;
 
+        /// <summary>
+        /// Constructs the control.
+        /// </summary>
+        /// <returns>DateEditControl.</returns>
         protected override DateEditControl ConstructControl()
         {
             return new DateEditControl();
         }
 
+        /// <summary>
+        /// Initializes the specified control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="columnDefinition">The column definition.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected override void Initialize(DateEditControl control, LookupColumnDefinitionBase columnDefinition)
         {
             switch (columnDefinition.ColumnType)
@@ -83,6 +130,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Initializes the specified control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected override void Initialize(DateEditControl control)
         {
             Control.AllowNullValue = true;

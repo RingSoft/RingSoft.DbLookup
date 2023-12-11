@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-10-2023
+// ***********************************************************************
+// <copyright file="DbMaintenanceWindowProcessor.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Media;
 using System.Windows;
@@ -14,40 +27,157 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class DbMaintenanceWindowProcessor.
+    /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.IDbMaintenanceProcessor" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbLookup.Controls.WPF.IDbMaintenanceProcessor" />
     public abstract class DbMaintenanceWindowProcessor : IDbMaintenanceProcessor
     {
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public DbMaintenanceViewModelBase ViewModel { get; private set; }
 
-        public  AutoFillControl KeyAutoFillControl { get; private set; }
+        /// <summary>
+        /// Gets the key automatic fill control.
+        /// </summary>
+        /// <value>The key automatic fill control.</value>
+        public AutoFillControl KeyAutoFillControl { get; private set; }
 
+        /// <summary>
+        /// Gets the save button.
+        /// </summary>
+        /// <value>The save button.</value>
         public abstract Button SaveButton { get; }
+        /// <summary>
+        /// Gets the save button UI control.
+        /// </summary>
+        /// <value>The save button UI control.</value>
         public VmUiControl SaveButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the select button.
+        /// </summary>
+        /// <value>The select button.</value>
         public abstract Button SelectButton { get; }
+        /// <summary>
+        /// Gets the select button UI control.
+        /// </summary>
+        /// <value>The select button UI control.</value>
         public VmUiControl SelectButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the delete button.
+        /// </summary>
+        /// <value>The delete button.</value>
         public abstract Button DeleteButton { get; }
+        /// <summary>
+        /// Gets the delete button UI control.
+        /// </summary>
+        /// <value>The delete button UI control.</value>
         public VmUiControl DeleteButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the find button.
+        /// </summary>
+        /// <value>The find button.</value>
         public abstract Button FindButton { get; }
+        /// <summary>
+        /// Gets the find button UI control.
+        /// </summary>
+        /// <value>The find button UI control.</value>
         public VmUiControl FindButtonUiControl { get; private set; }
+        /// <summary>
+        /// Creates new button.
+        /// </summary>
+        /// <value>The new button.</value>
         public abstract Button NewButton { get; }
+        /// <summary>
+        /// Creates new buttonuicontrol.
+        /// </summary>
+        /// <value>The new button UI control.</value>
         public VmUiControl NewButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the close button.
+        /// </summary>
+        /// <value>The close button.</value>
         public abstract Button CloseButton { get; }
+        /// <summary>
+        /// Gets the next button.
+        /// </summary>
+        /// <value>The next button.</value>
         public abstract Button NextButton { get; }
+        /// <summary>
+        /// Gets the next button UI control.
+        /// </summary>
+        /// <value>The next button UI control.</value>
         public VmUiControl NextButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the previous button.
+        /// </summary>
+        /// <value>The previous button.</value>
         public abstract Button PreviousButton { get; }
+        /// <summary>
+        /// Gets the previous button UI control.
+        /// </summary>
+        /// <value>The previous button UI control.</value>
         public VmUiControl PreviousButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the print button.
+        /// </summary>
+        /// <value>The print button.</value>
         public abstract Button PrintButton { get; }
+        /// <summary>
+        /// Gets the print button UI control.
+        /// </summary>
+        /// <value>The print button UI control.</value>
         public VmUiControl PrintButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the maintenance window.
+        /// </summary>
+        /// <value>The maintenance window.</value>
         public BaseWindow MaintenanceWindow { get; private set; }
+        /// <summary>
+        /// Gets the maintenance buttons control.
+        /// </summary>
+        /// <value>The maintenance buttons control.</value>
         public Control MaintenanceButtonsControl { get; private set; }
+        /// <summary>
+        /// Gets the maintenance buttons UI control.
+        /// </summary>
+        /// <value>The maintenance buttons UI control.</value>
         public VmUiControl MaintenanceButtonsUiControl { get; private set; }
+        /// <summary>
+        /// Gets the view.
+        /// </summary>
+        /// <value>The view.</value>
         public IDbMaintenanceView View { get; private set; }
+        /// <summary>
+        /// Gets the status bar.
+        /// </summary>
+        /// <value>The status bar.</value>
         public DbMaintenanceStatusBar StatusBar { get; private set; }
+        /// <summary>
+        /// Gets the status bar UI control.
+        /// </summary>
+        /// <value>The status bar UI control.</value>
         public VmUiControl StatusBarUiControl { get; private set; }
 
+        /// <summary>
+        /// The key automatic fill control UI control
+        /// </summary>
         private VmUiControl _keyAutoFillControlUiControl;
+        /// <summary>
+        /// The register key control
+        /// </summary>
         private bool _registerKeyControl;
+        /// <summary>
+        /// The lookup add view arguments
+        /// </summary>
         private LookupAddViewArgs _lookupAddViewArgs;
 
+        /// <summary>
+        /// Setups the control.
+        /// </summary>
         protected virtual void SetupControl()
         {
             if (PreviousButton != null)
@@ -115,11 +245,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         public virtual void CloseWindow()
         {
             MaintenanceWindow.Close();
         }
 
+        /// <summary>
+        /// Handles the PreviewKeyDown event of the DbMaintenanceWindow control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         protected virtual void DbMaintenanceWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
@@ -138,6 +276,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Initializes the specified window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="buttonsControl">The buttons control.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="view">The view.</param>
+        /// <param name="statusBar">The status bar.</param>
         public virtual void Initialize(BaseWindow window, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
             IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
@@ -168,6 +314,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Setups the status bar.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="statusBar">The status bar.</param>
         public void SetupStatusBar(DbMaintenanceViewModelBase viewModel, DbMaintenanceStatusBar statusBar)
         {
             if (statusBar == null)
@@ -184,6 +335,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Sets the save status.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="alertLevel">The alert level.</param>
         public void SetSaveStatus(string message, AlertLevels alertLevel)
         {
             if (StatusBar != null)
@@ -192,6 +348,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets the automatic fills.
+        /// </summary>
+        /// <returns>List&lt;DbAutoFillMap&gt;.</returns>
         public List<DbAutoFillMap> GetAutoFills()
         {
             if (View is Window window)
@@ -201,6 +361,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             return null;
         }
 
+        /// <summary>
+        /// Handles the automatic fill value fail.
+        /// </summary>
+        /// <param name="autoFillMap">The automatic fill map.</param>
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             if (View is Window window)
@@ -209,6 +373,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Registers the form key control.
+        /// </summary>
+        /// <param name="keyAutoFillControl">The key automatic fill control.</param>
         public virtual void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
         {
             KeyAutoFillControl = keyAutoFillControl;
@@ -245,9 +413,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             KeyControlRegistered = true;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [key control registered].
+        /// </summary>
+        /// <value><c>true</c> if [key control registered]; otherwise, <c>false</c>.</value>
         public bool KeyControlRegistered { get; set; }
+        /// <summary>
+        /// Occurs when [lookup add view].
+        /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
+        /// <summary>
+        /// Initializes from lookup data.
+        /// </summary>
+        /// <param name="e">The e.</param>
         public virtual void InitializeFromLookupData(LookupAddViewArgs e)
         {
             if (ViewModel == null)
@@ -264,11 +443,20 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// Called when [validation fail].
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="caption">The caption.</param>
         public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             MessageBox.Show(text, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
         public virtual void OnRecordSelected()
         {
             if (FocusManager.GetFocusedElement(MaintenanceWindow) is TextBox textBox)
@@ -279,8 +467,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Occurs when [debug show find].
+        /// </summary>
         public event EventHandler DebugShowFind;
 
+        /// <summary>
+        /// Shows the find lookup window.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="allowAdd">if set to <c>true</c> [allow add].</param>
+        /// <param name="allowView">if set to <c>true</c> [allow view].</param>
+        /// <param name="initialSearchFor">The initial search for.</param>
+        /// <param name="initialSearchForPrimaryKey">The initial search for primary key.</param>
         public virtual void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView,
             string initialSearchFor, PrimaryKeyValue initialSearchForPrimaryKey)
         {
@@ -311,6 +510,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.Show();
         }
 
+        /// <summary>
+        /// Shows the yes no cancel message.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="playSound">if set to <c>true</c> [play sound].</param>
+        /// <returns>MessageButtons.</returns>
         public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
             if (playSound)
@@ -328,6 +534,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             return MessageButtons.Cancel;
         }
 
+        /// <summary>
+        /// Shows the yes no message.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="playSound">if set to <c>true</c> [play sound].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
             if (playSound)
@@ -340,21 +553,36 @@ namespace RingSoft.DbLookup.Controls.WPF
             return false;
         }
 
+        /// <summary>
+        /// Shows the record saved message.
+        /// </summary>
         public virtual void ShowRecordSavedMessage()
         {
             MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        /// <summary>
+        /// Sets the read only mode.
+        /// </summary>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public virtual void SetReadOnlyMode(bool readOnlyValue)
         {
             
         }
 
+        /// <summary>
+        /// Called when [record select].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
         public virtual void OnRecordSelect(LookupSelectArgs args)
         {
             OnRecordSelected();
         }
 
+        /// <summary>
+        /// Called when [read only mode set].
+        /// </summary>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public virtual void OnReadOnlyModeSet(bool readOnlyValue)
         {
             if (MaintenanceWindow != null && MaintenanceButtonsControl != null)
@@ -372,6 +600,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Activates this instance.
+        /// </summary>
         public void Activate()
         {
             if (MaintenanceWindow != null)
@@ -382,6 +613,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Sets the control read only mode.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool SetControlReadOnlyMode(Control control, bool readOnlyValue)
         {
             if (control == KeyAutoFillControl)
@@ -395,11 +632,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             return true;
         }
 
+        /// <summary>
+        /// Checks the add on fly mode.
+        /// </summary>
         public void CheckAddOnFlyMode()
         {
             
         }
 
+        /// <summary>
+        /// Checks the delete tables.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool CheckDeleteTables(DeleteTables deleteTables)
         {
             var deleteWindow = new DeleteRecordWindow(deleteTables);
@@ -413,6 +658,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             return false;
         }
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
             var filterWindow = new GenericReportFilterWindow(printerSetupArgs);
@@ -421,12 +670,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             filterWindow.ShowDialog();
         }
 
+        /// <summary>
+        /// Sets the window read only mode.
+        /// </summary>
         public virtual void SetWindowReadOnlyMode()
         {
             SaveButton.IsEnabled = DeleteButton.IsEnabled = NewButton.IsEnabled = false;
             SelectButton.IsEnabled = false;
         }
 
+        /// <summary>
+        /// Shows the record lock window.
+        /// </summary>
+        /// <param name="lockKey">The lock key.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="inputParameter">The input parameter.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
         {
             var recordLockInputParameter = new RecordLockingInputParameter
@@ -443,6 +702,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             return recordLockInputParameter.ContinueSave;
         }
 
+        /// <summary>
+        /// Determines whether [is maintenance key down] [the specified key].
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if [is maintenance key down] [the specified key]; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">key - null</exception>
         public bool IsMaintenanceKeyDown(MaintenanceKey key)
         {
             switch (key)

@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-08-2023
+// ***********************************************************************
+// <copyright file="AdvancedFilterWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -23,77 +36,174 @@ using TreeViewItem = System.Windows.Controls.TreeViewItem;
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.AdvancedFind;assembly=RingSoft.DbLookup.Controls.WPF.AdvancedFind"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:AdvancedFilterWindow/>
-    ///
+    /// Class AdvancedFilterWindow.
+    /// Implements the <see cref="BaseWindow" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class AdvancedFilterWindow : BaseWindow
     {
+        /// <summary>
+        /// Gets or sets the TreeView item.
+        /// </summary>
+        /// <value>The TreeView item.</value>
         public DbLookup.AdvancedFind.TreeViewItem TreeViewItem { get; set; }
+        /// <summary>
+        /// Gets or sets the input filter return.
+        /// </summary>
+        /// <value>The input filter return.</value>
         public AdvancedFilterReturn InputFilterReturn { get; set; }
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public AdvancedFilterViewModel ViewModel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the field label.
+        /// </summary>
+        /// <value>The field label.</value>
         public Label FieldLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the field control.
+        /// </summary>
+        /// <value>The field control.</value>
         public StringReadOnlyBox FieldControl { get; set; }
+        /// <summary>
+        /// Gets or sets the display label.
+        /// </summary>
+        /// <value>The display label.</value>
         public Label DisplayLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the display control.
+        /// </summary>
+        /// <value>The display control.</value>
         public StringEditControl DisplayControl { get; set; }
+        /// <summary>
+        /// Gets or sets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; set; }
+        /// <summary>
+        /// Gets or sets the memo editor.
+        /// </summary>
+        /// <value>The memo editor.</value>
         public DataEntryMemoEditor MemoEditor { get; set; }
+        /// <summary>
+        /// Gets or sets the formula value type label.
+        /// </summary>
+        /// <value>The formula value type label.</value>
         public Label FormulaValueTypeLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the formula value type ComboBox.
+        /// </summary>
+        /// <value>The formula value type ComboBox.</value>
         public TextComboBoxControl FormulaValueTypeComboBox { get; set; }
+        /// <summary>
+        /// Gets or sets the condition label.
+        /// </summary>
+        /// <value>The condition label.</value>
         public Label ConditionLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the condition ComboBox.
+        /// </summary>
+        /// <value>The condition ComboBox.</value>
         public TextComboBoxControl ConditionComboBox { get; set; }
-        public  Label SearchForLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the search for label.
+        /// </summary>
+        /// <value>The search for label.</value>
+        public Label SearchForLabel { get; set; }
+        /// <summary>
+        /// Gets or sets the search for string control.
+        /// </summary>
+        /// <value>The search for string control.</value>
         public StringEditControl SearchForStringControl { get; set; }
+        /// <summary>
+        /// Gets or sets the search for automatic fill control.
+        /// </summary>
+        /// <value>The search for automatic fill control.</value>
         public AutoFillControl SearchForAutoFillControl { get; set; }
+        /// <summary>
+        /// Gets or sets the search for decimal control.
+        /// </summary>
+        /// <value>The search for decimal control.</value>
         public DecimalEditControl SearchForDecimalControl { get; set; }
+        /// <summary>
+        /// Gets or sets the search for integer control.
+        /// </summary>
+        /// <value>The search for integer control.</value>
         public IntegerEditControl SearchForIntegerControl { get; set; }
+        /// <summary>
+        /// Gets or sets the search for date control.
+        /// </summary>
+        /// <value>The search for date control.</value>
         public DateEditControl SearchForDateControl { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date filter type ComboBox control.
+        /// </summary>
+        /// <value>The date filter type ComboBox control.</value>
         public TextComboBoxControl DateFilterTypeComboBoxControl { get; set; }
+        /// <summary>
+        /// Gets or sets the date panel.
+        /// </summary>
+        /// <value>The date panel.</value>
         public StackPanel DatePanel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date value control.
+        /// </summary>
+        /// <value>The date value control.</value>
         public IntegerEditControl DateValueControl { get; set; }
 
+        /// <summary>
+        /// Gets or sets the search for bool ComboBox control.
+        /// </summary>
+        /// <value>The search for bool ComboBox control.</value>
         public TextComboBoxControl SearchForBoolComboBoxControl { get; set; }
+        /// <summary>
+        /// Gets or sets the ok button.
+        /// </summary>
+        /// <value>The ok button.</value>
         public Button OKButton { get; set; }
+        /// <summary>
+        /// Gets or sets the cancel button.
+        /// </summary>
+        /// <value>The cancel button.</value>
         public Button CancelButton { get; set; }
 
+        /// <summary>
+        /// The form add
+        /// </summary>
         private bool _formAdd;
+        /// <summary>
+        /// The loading
+        /// </summary>
         private bool _loading = true;
 
+        /// <summary>
+        /// Gets or sets the filter return.
+        /// </summary>
+        /// <value>The filter return.</value>
         public AdvancedFilterReturn FilterReturn { get; set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="AdvancedFilterWindow"/> class.
+        /// </summary>
         static AdvancedFilterWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedFilterWindow), new FrameworkPropertyMetadata(typeof(AdvancedFilterWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFilterWindow"/> class.
+        /// </summary>
         public AdvancedFilterWindow()
         {
             Loaded += (sender, args) =>
@@ -103,6 +213,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 _loading = false;
             };
         }
+        /// <summary>
+        /// Initializes the specified tree view item.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void Initialize(DbLookup.AdvancedFind.TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             _formAdd = true;
@@ -110,12 +225,19 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             LookupDefinition = lookupDefinition;
         }
 
+        /// <summary>
+        /// Initializes the specified input filter return.
+        /// </summary>
+        /// <param name="inputFilterReturn">The input filter return.</param>
         public void Initialize(AdvancedFilterReturn inputFilterReturn)
         {
             InputFilterReturn = inputFilterReturn;
             LookupDefinition = inputFilterReturn.LookupDefinition;
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -218,6 +340,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Hides the search values.
+        /// </summary>
         private void HideSearchValues()
         {
             SearchForStringControl.Visibility = Visibility.Collapsed;
@@ -228,6 +353,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             SearchForBoolComboBoxControl.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Setups the date controls.
+        /// </summary>
         private void SetupDateControls()
         {
             DateValueControl.Visibility = Visibility.Collapsed;
@@ -248,6 +376,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                     break;
             }
         }
+        /// <summary>
+        /// Checks the condition.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool CheckCondition()
         {
             switch (ViewModel.Condition)
@@ -261,6 +393,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Views the model on validation fail.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void ViewModel_OnValidationFail(object sender, ValidationFailArgs e)
         {
             switch (e.Control)
@@ -282,6 +420,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Searches the value fail focus.
+        /// </summary>
         private void SearchValueFailFocus()
         {
             if (SearchForStringControl.Visibility == Visibility.Visible)
@@ -324,6 +465,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Setups the control new.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void SetupControlNew()
         {
             switch (ViewModel.Type)
@@ -350,6 +495,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         }
 
+        /// <summary>
+        /// Sets the field search.
+        /// </summary>
         private void SetFieldSearch()
         {
             if (ViewModel.FieldDefinition.ParentJoinForeignKeyDefinition != null)
@@ -381,6 +529,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Shows the search value.
+        /// </summary>
+        /// <param name="dataType">Type of the data.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void ShowSearchValue(FieldDataTypes dataType)
         {
             if (CheckCondition())

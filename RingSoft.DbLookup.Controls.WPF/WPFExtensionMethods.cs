@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="WPFExtensionMethods.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.IO.Packaging;
 using System.Reflection;
 using System.Windows;
@@ -9,8 +22,17 @@ using System.Windows.Navigation;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    /// <summary>
+    /// Class WpfExtensionMethods.
+    /// </summary>
     internal static class WpfExtensionMethods
     {
+        /// <summary>
+        /// Loads the view from URI.
+        /// </summary>
+        /// <param name="userControl">The user control.</param>
+        /// <param name="baseUri">The base URI.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public static void LoadViewFromUri(this UserControl userControl, string baseUri)
         {
             try

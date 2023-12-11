@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="NameOfExtension.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Markup;
@@ -15,16 +28,30 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Gets or sets the class type.
         /// </summary>
-        /// <value>
-        /// The type.
-        /// </value>
+        /// <value>The type.</value>
         public Type Type { get; set; }
+        /// <summary>
+        /// Gets the member.
+        /// </summary>
+        /// <value>The member.</value>
         public string Member { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NameOfExtension"/> class.
+        /// </summary>
+        /// <param name="member">The member.</param>
         public NameOfExtension(string member)
         {
             Member = member;
         }
+        /// <summary>
+        /// Provides the value.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="System.ArgumentNullException">serviceProvider</exception>
+        /// <exception cref="System.ArgumentException">Syntax for x:NameOf is [propertyName], Type={x:Type [className]}</exception>
+        /// <exception cref="System.ArgumentException">No property or field found for {Member} in {Type.Name}</exception>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)

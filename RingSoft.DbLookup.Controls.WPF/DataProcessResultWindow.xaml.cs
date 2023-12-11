@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="DataProcessResultWindow.xaml.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Windows;
 using System.Windows.Media;
 using RingSoft.DbLookup.DataProcessor;
@@ -10,6 +23,10 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public partial class DataProcessResultWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataProcessResultWindow"/> class.
+        /// </summary>
+        /// <param name="dataProcessResult">The data process result.</param>
         public DataProcessResultWindow(DataProcessResult dataProcessResult)
         {
             InitializeComponent();

@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 05-24-2023
+//
+// Last Modified By : petem
+// Last Modified On : 07-09-2023
+// ***********************************************************************
+// <copyright file="DbMaintenanceStatusBar.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -8,51 +21,56 @@ using RingSoft.DbMaintenance;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:DbStatusBar/>
-    ///
+    /// Class DbMaintenanceStatusBar.
+    /// Implements the <see cref="Control" />
     /// </summary>
+    /// <seealso cref="Control" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class DbMaintenanceStatusBar : Control
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
+        /// <summary>
+        /// Gets or sets the date read only box.
+        /// </summary>
+        /// <value>The date read only box.</value>
         public DateReadOnlyBox DateReadOnlyBox { get; set; }
+        /// <summary>
+        /// Gets or sets the status text box.
+        /// </summary>
+        /// <value>The status text box.</value>
         public StringReadOnlyBox StatusTextBox { get; set; }
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public DbMaintenanceStatusBarViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// The last saved date property
+        /// </summary>
         public static readonly DependencyProperty LastSavedDateProperty =
             DependencyProperty.Register("LastSavedDate", typeof(DateTime?), typeof(DbMaintenanceStatusBar),
                 new FrameworkPropertyMetadata(DateChangedCallback));
 
+        /// <summary>
+        /// Gets or sets the last saved date.
+        /// </summary>
+        /// <value>The last saved date.</value>
         public DateTime? LastSavedDate
         {
             get { return (DateTime?)GetValue(LastSavedDateProperty); }
             set { SetValue(LastSavedDateProperty, value); }
         }
 
+        /// <summary>
+        /// Dates the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DateChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -60,8 +78,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             statusBarControl.ViewModel.LastSavedDate = statusBarControl.LastSavedDate;
         }
 
+        /// <summary>
+        /// The is active
+        /// </summary>
         private bool _isActive = true;
 
+        /// <summary>
+        /// Initializes static members of the <see cref="DbMaintenanceStatusBar"/> class.
+        /// </summary>
         static DbMaintenanceStatusBar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(typeof(DbMaintenanceStatusBar)));
@@ -69,6 +93,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             IsTabStopProperty.OverrideMetadata(typeof(DbMaintenanceStatusBar), new FrameworkPropertyMetadata(false));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbMaintenanceStatusBar"/> class.
+        /// </summary>
         public DbMaintenanceStatusBar()
         {
             Loaded += (sender, args) =>
@@ -81,6 +108,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -101,6 +131,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Sets the save status.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="alertLevel">The alert level.</param>
         public void SetSaveStatus(string message, AlertLevels alertLevel)
         {
             if (!_isActive)

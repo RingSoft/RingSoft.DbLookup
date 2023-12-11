@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="AutoFillMemoCellControl.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -16,38 +29,20 @@ using RingSoft.DataEntryControls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.Themes"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF.Themes;assembly=RingSoft.DbLookup.Controls.WPF.Themes"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:AutoFillFormulaCellTemplate/>
-    ///
+    /// Class AutoFillMemoCellControl.
+    /// Implements the <see cref="Control" />
     /// </summary>
+    /// <seealso cref="Control" />
+    /// <font color="red">Badly formed XML comment.</font>
     [TemplatePart(Name = "TextBox", Type = typeof(StringEditControl))]
     [TemplatePart(Name = "Button", Type = typeof(Button))]
     public class AutoFillMemoCellControl : Control
     {
+        /// <summary>
+        /// Backgrounds the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void BackgroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -58,6 +53,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Heights the changed callback.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -77,6 +77,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Determines whether [is focused changed callback] [the specified object].
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void IsFocusedChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -88,15 +93,37 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Occurs when [show memo editor window].
+        /// </summary>
         public event EventHandler ShowMemoEditorWindow;
 
+        /// <summary>
+        /// Gets or sets the text box.
+        /// </summary>
+        /// <value>The text box.</value>
         public StringEditControl TextBox { get; set; }
 
+        /// <summary>
+        /// Gets or sets the button.
+        /// </summary>
+        /// <value>The button.</value>
         public Button Button { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        /// <value>The text.</value>
         public string Text { get; set; }
 
+        /// <summary>
+        /// Gets or sets the original text.
+        /// </summary>
+        /// <value>The original text.</value>
         public string OriginalText { get; set; }
+        /// <summary>
+        /// Initializes static members of the <see cref="AutoFillMemoCellControl"/> class.
+        /// </summary>
         static AutoFillMemoCellControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoFillMemoCellControl), new FrameworkPropertyMetadata(typeof(AutoFillMemoCellControl)));
@@ -116,6 +143,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoFillMemoCellControl"/> class.
+        /// </summary>
         public AutoFillMemoCellControl()
         {
             GotFocus += (sender, args) =>
@@ -132,6 +162,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             TextBox = GetTemplateChild(nameof(TextBox)) as StringEditControl;
@@ -150,6 +183,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Shows the memo editor.
+        /// </summary>
         private void ShowMemoEditor()
         {
             ShowMemoEditorWindow?.Invoke(this, EventArgs.Empty);

@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 01-30-2023
+//
+// Last Modified By : petem
+// Last Modified On : 02-28-2023
+// ***********************************************************************
+// <copyright file="GenericReportFilterWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
@@ -7,56 +20,74 @@ using RingSoft.Printing.Interop;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:GenericReportFilterWindow/>
-    ///
+    /// Class GenericReportFilterWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="RingSoft.DbLookup.IGenericReportFilterView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="RingSoft.DbLookup.IGenericReportFilterView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class GenericReportFilterWindow : BaseWindow, IGenericReportFilterView
     {
+        /// <summary>
+        /// Gets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; private set; }
 
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public GenericReportFilterViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// Gets the current CheckBox.
+        /// </summary>
+        /// <value>The current CheckBox.</value>
         public CheckBox CurrentCheckBox { get; private set; }
 
+        /// <summary>
+        /// Gets the current control.
+        /// </summary>
+        /// <value>The current control.</value>
         public AutoFillControl CurrentControl { get; private set; }
 
+        /// <summary>
+        /// Gets the beginning control.
+        /// </summary>
+        /// <value>The beginning control.</value>
         public AutoFillControl BeginningControl { get; private set; }
 
+        /// <summary>
+        /// Gets the ending control.
+        /// </summary>
+        /// <value>The ending control.</value>
         public AutoFillControl EndingControl { get; private set; }
 
+        /// <summary>
+        /// Gets the report type label.
+        /// </summary>
+        /// <value>The report type label.</value>
         public Label ReportTypeLabel { get; private set; }
+        /// <summary>
+        /// Gets the report type control.
+        /// </summary>
+        /// <value>The report type control.</value>
         public TextComboBoxControl ReportTypeControl { get; private set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="GenericReportFilterWindow"/> class.
+        /// </summary>
         static GenericReportFilterWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(GenericReportFilterWindow), new FrameworkPropertyMetadata(typeof(GenericReportFilterWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericReportFilterWindow"/> class.
+        /// </summary>
+        /// <param name="printerSetup">The printer setup.</param>
         public GenericReportFilterWindow(PrinterSetupArgs printerSetup)
         {
             Loaded += (s, e) =>
@@ -66,6 +97,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericReportFilterWindow"/> class.
+        /// </summary>
+        /// <param name="input">The input.</param>
         public GenericReportFilterWindow(GenericReportLookupFilterInput input)
         {
             Loaded += (sender, args) =>
@@ -75,6 +110,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -90,6 +128,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Refreshes the view.
+        /// </summary>
         public void RefreshView()
         {
             BeginningControl.IsEnabled = EndingControl.IsEnabled = !ViewModel.IsCurrentOnly;
@@ -107,16 +148,27 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         public void CloseWindow()
         {
             Close();
         }
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
         public void PrintOutput()
         {
             LookupControlsGlobals.PrintDocument(ViewModel.PrinterSetup);
         }
 
+        /// <summary>
+        /// Focuses the control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">control - null</exception>
         public void FocusControl(GenericFocusControls control)
         {
             switch (control)

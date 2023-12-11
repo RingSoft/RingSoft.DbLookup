@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.Controls.WPF
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 03-07-2023
+// ***********************************************************************
+// <copyright file="DeleteRecordWindow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.WPF;
@@ -10,52 +23,61 @@ using RingSoft.DbLookup.Lookup;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:DeleteRecordWindow/>
-    ///
+    /// Class DeleteRecordWindow.
+    /// Implements the <see cref="BaseWindow" />
+    /// Implements the <see cref="RingSoft.DbLookup.IDeleteRecordView" />
     /// </summary>
+    /// <seealso cref="BaseWindow" />
+    /// <seealso cref="RingSoft.DbLookup.IDeleteRecordView" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class DeleteRecordWindow : BaseWindow, IDeleteRecordView
     {
         //public TabControl TabControl { get; private set; }
+        /// <summary>
+        /// Gets or sets the border.
+        /// </summary>
+        /// <value>The border.</value>
         public Border Border { get; set; }
+        /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public DeleteRecordViewModel ViewModel { get; private set; }
+        /// <summary>
+        /// Gets the delete all CheckBox.
+        /// </summary>
+        /// <value>The delete all CheckBox.</value>
         public CheckBox DeleteAllCheckBox { get; private set; }
+        /// <summary>
+        /// Gets the lookup control.
+        /// </summary>
+        /// <value>The lookup control.</value>
         public LookupControl LookupControl { get; private set; }
 
+        /// <summary>
+        /// The old size
+        /// </summary>
         private Size _oldSize;
+        /// <summary>
+        /// Gets the delete tabs.
+        /// </summary>
+        /// <value>The delete tabs.</value>
         public List<DeleteRecordWindowItemControl> DeleteTabs { get; private set; } =
             new List<DeleteRecordWindowItemControl>();
 
 
+        /// <summary>
+        /// Initializes static members of the <see cref="DeleteRecordWindow"/> class.
+        /// </summary>
         static DeleteRecordWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DeleteRecordWindow), new FrameworkPropertyMetadata(typeof(DeleteRecordWindow)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteRecordWindow"/> class.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
         public DeleteRecordWindow(DeleteTables deleteTables)
         {
             var loaded = false;
@@ -88,6 +110,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
+        /// </summary>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -98,6 +123,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
+        /// <param name="result">if set to <c>true</c> [result].</param>
         public void CloseWindow(bool result)
         {
             DialogResult = result;

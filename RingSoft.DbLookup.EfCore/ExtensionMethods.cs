@@ -1,9 +1,25 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.EfCore
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="ExtensionMethods.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using Microsoft.EntityFrameworkCore;
 using RingSoft.DbLookup.DataProcessor;
 
 namespace RingSoft.DbLookup.EfCore
 {
+    /// <summary>
+    /// Class ExtensionMethods.
+    /// </summary>
     public static class ExtensionMethods
     {
         /// <summary>
@@ -14,9 +30,8 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns>
-        /// True if no errors occurred while saving.
-        /// </returns>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
+        /// <returns>True if no errors occurred while saving.</returns>
         public static bool SaveEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage, bool silent = false) where TEntity : class
         {
@@ -34,9 +49,8 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns>
-        /// True if no errors occurred while saving.
-        /// </returns>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
+        /// <returns>True if no errors occurred while saving.</returns>
         public static bool SaveNoCommitEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage, bool silent = false) where TEntity : class
         {
@@ -61,9 +75,7 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns>
-        /// True if no errors occured while saving.
-        /// </returns>
+        /// <returns>True if no errors occured while saving.</returns>
         public static bool AddNewEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage) where TEntity : class
         {
@@ -82,9 +94,8 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns>
-        /// True if no errors occured while saving.
-        /// </returns>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
+        /// <returns>True if no errors occured while saving.</returns>
         public static bool AddNewNoCommitEntity<TEntity>(this DbContext context, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage, bool silent = false) where TEntity : class
         {
@@ -109,7 +120,8 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns></returns>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool DeleteEntity<TEntity>(this DbContext dbContext, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage, bool silent = false) where TEntity : class
         {
@@ -132,7 +144,8 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="dbSet">The database set.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="debugMessage">The debug message.</param>
-        /// <returns></returns>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool DeleteNoCommitEntity<TEntity>(this DbContext dbContext, DbSet<TEntity> dbSet, TEntity entity,
             string debugMessage, bool silent = false) where TEntity : class
         {
@@ -154,6 +167,7 @@ namespace RingSoft.DbLookup.EfCore
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         /// <param name="debugMessage">The debug message.</param>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
         /// <returns>True, if data was saved without exceptions.</returns>
         public static bool SaveEfChanges(this DbContext dbContext, string debugMessage, bool silent = false)
         {
@@ -170,6 +184,12 @@ namespace RingSoft.DbLookup.EfCore
             return true;
         }
 
+        /// <summary>
+        /// Processes the exception.
+        /// </summary>
+        /// <param name="e">The e.</param>
+        /// <param name="debugMessage">The debug message.</param>
+        /// <param name="silent">if set to <c>true</c> [silent].</param>
         public static void ProcessException(this Exception e, string debugMessage, bool silent = false)
         {
             var exception = e;

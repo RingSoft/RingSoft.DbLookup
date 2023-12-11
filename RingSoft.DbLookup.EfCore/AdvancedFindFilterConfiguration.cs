@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.EfCore
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 01-24-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindFilterConfiguration.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +20,17 @@ using RingSoft.DbLookup.AdvancedFind;
 
 namespace RingSoft.DbLookup.EfCore
 {
+    /// <summary>
+    /// Class AdvancedFindFilterConfiguration.
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{RingSoft.DbLookup.AdvancedFind.AdvancedFindFilter}" />
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{RingSoft.DbLookup.AdvancedFind.AdvancedFindFilter}" />
     public class AdvancedFindFilterConfiguration : IEntityTypeConfiguration<AdvancedFindFilter>
     {
+        /// <summary>
+        /// Configures the specified builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<AdvancedFindFilter> builder)
         {
             builder.Property(p => p.AdvancedFindId).HasColumnType(DbConstants.IntegerColumnType);

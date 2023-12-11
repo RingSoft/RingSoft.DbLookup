@@ -1,10 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.EfCore
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-19-2022
+// ***********************************************************************
+// <copyright file="AdvancedFindConfiguration.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RingSoft.DbLookup.EfCore
 {
+    /// <summary>
+    /// Class AdvancedFindConfiguration.
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{RingSoft.DbLookup.AdvancedFind.AdvancedFind}" />
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{RingSoft.DbLookup.AdvancedFind.AdvancedFind}" />
     public class AdvancedFindConfiguration : IEntityTypeConfiguration<AdvancedFind.AdvancedFind>
     {
+        /// <summary>
+        /// Configures the specified builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<AdvancedFind.AdvancedFind> builder)
         {
             builder.Property(p => p.Disabled).HasColumnType(DbConstants.BoolColumnType);

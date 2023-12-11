@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup.EfCore
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-09-2023
+// ***********************************************************************
+// <copyright file="LookupContext.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,20 +39,25 @@ namespace RingSoft.DbLookup.EfCore
         /// <summary>
         /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
         /// </summary>
-        /// <value>
-        /// The database context.
-        /// </value>
+        /// <value>The database context.</value>
         protected abstract DbContext DbContext { get; }
 
+        /// <summary>
+        /// The adv initalizing
+        /// </summary>
         private bool _advInitalizing;
 
         //protected override void InitializeAdvFind()
         //{
-        
+
 
         //    base.InitializeAdvFind();
         //}
 
+        /// <summary>
+        /// Has the Entity Framework platform set up this object's table and field properties based on DbContext's model setup.
+        /// Derived classes constructor must execute this method.
+        /// </summary>
         public override void Initialize()
         {
             if (_advInitalizing)
@@ -54,6 +72,11 @@ namespace RingSoft.DbLookup.EfCore
             _advInitalizing = false;
         }
 
+        /// <summary>
+        /// Efs the initialize table definitions.
+        /// </summary>
+        /// <exception cref="System.Exception">DbContext must be instantiated before initialization.</exception>
+        /// <exception cref="System.Exception">Table Definition '{tableDefinition}' is not a DbSet in the DbContext class.</exception>
         protected override void EfInitializeTableDefinitions()
         {
             if (DbContext == null)
@@ -78,6 +101,9 @@ namespace RingSoft.DbLookup.EfCore
         }
 
 
+        /// <summary>
+        /// Efs the initialize field definitions.
+        /// </summary>
         protected override void EfInitializeFieldDefinitions()
         {
             foreach (var tableDefinition in TableDefinitions)
@@ -89,6 +115,11 @@ namespace RingSoft.DbLookup.EfCore
             SetupModel();
         }
 
+        /// <summary>
+        /// Initializes the fields.
+        /// </summary>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <param name="tableDefinition">The table definition.</param>
         private void InitializeFields(IEntityType entityType, TableDefinitionBase tableDefinition)
         {
             var properties = entityType.GetProperties();
@@ -103,6 +134,11 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
+        /// <summary>
+        /// Initializes the property.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
         private void InitializeProperty(IProperty property, FieldDefinition fieldDefinition)
         {
             fieldDefinition.IsRequired(!property.IsNullable);
@@ -156,6 +192,9 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
+        /// <summary>
+        /// Efs the initialize primary keys.
+        /// </summary>
         protected override void EfInitializePrimaryKeys()
         {
             foreach (var tableDefinition in TableDefinitions)
@@ -166,6 +205,11 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
+        /// <summary>
+        /// Setups the entity primary key.
+        /// </summary>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <param name="tableDefinition">The table definition.</param>
         private void SetupEntityPrimaryKey(IEntityType entityType, TableDefinitionBase tableDefinition)
         {
             var primaryKey = entityType.FindPrimaryKey();
@@ -180,6 +224,12 @@ namespace RingSoft.DbLookup.EfCore
             }
         }
 
+        /// <summary>
+        /// Gets the lookup data maui.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>LookupDataMauiBase.</returns>
         public override LookupDataMauiBase GetLookupDataMaui<TEntity>(LookupDefinitionBase lookupDefinition) 
             where TEntity : class
         {
@@ -187,8 +237,15 @@ namespace RingSoft.DbLookup.EfCore
             return lookupMaui;
         }
 
-        
 
+
+        /// <summary>
+        /// Gets the queryable.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public override IQueryable<TEntity> GetQueryable<TEntity>(LookupDefinitionBase lookupDefinition
             , IDbContext context = null) where TEntity : class
         {
@@ -215,6 +272,14 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
+        /// <summary>
+        /// Gets the queryable table.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="getRelatedEntities">if set to <c>true</c> [get related entities].</param>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public override IQueryable<TEntity> GetQueryableTable<TEntity>(TableDefinition<TEntity> tableDefinition
             , bool getRelatedEntities, IDbContext context = null) where TEntity : class
         {
@@ -264,6 +329,12 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
+        /// <summary>
+        /// Gets the includes.
+        /// </summary>
+        /// <param name="foreignKeyDefinition">The foreign key definition.</param>
+        /// <param name="parentInclude">The parent include.</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
         public List<string> GetIncludes(ForeignKeyDefinition foreignKeyDefinition
             , string parentInclude = "")
         {
@@ -298,6 +369,13 @@ namespace RingSoft.DbLookup.EfCore
             return result;
         }
 
+        /// <summary>
+        /// Gets the automatic fill data maui.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="setup">The setup.</param>
+        /// <param name="control">The control.</param>
+        /// <returns>AutoFillDataMauiBase.</returns>
         public override AutoFillDataMauiBase GetAutoFillDataMaui<TEntity>(AutoFillSetup setup, IAutoFillControl control)
         {
             var autoFillMaui = new AutoFillDataMaui<TEntity>(setup, control);

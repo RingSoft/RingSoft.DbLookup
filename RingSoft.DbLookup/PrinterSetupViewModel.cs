@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 02-06-2023
+//
+// Last Modified By : petem
+// Last Modified On : 02-07-2023
+// ***********************************************************************
+// <copyright file="PrinterSetupViewModel.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -9,20 +22,48 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup
 {
+    /// <summary>
+    /// Interface IPrinterSetupView
+    /// </summary>
     public interface IPrinterSetupView
     {
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
         void PrintOutput();
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
         void CloseWindow();
 
+        /// <summary>
+        /// Updates the view.
+        /// </summary>
         void UpdateView();
 
+        /// <summary>
+        /// Gets the file.
+        /// </summary>
+        /// <returns>System.String.</returns>
         string GetFile();
     }
+    /// <summary>
+    /// Class PrinterSetupViewModel.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class PrinterSetupViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The output type
+        /// </summary>
         private ReportOutputTypes _outputType;
 
+        /// <summary>
+        /// Gets or sets the type of the output.
+        /// </summary>
+        /// <value>The type of the output.</value>
         public ReportOutputTypes OutputType
         {
             get => _outputType;
@@ -38,8 +79,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The output file name
+        /// </summary>
         private string _outputFileName;
 
+        /// <summary>
+        /// Gets or sets the name of the output file.
+        /// </summary>
+        /// <value>The name of the output file.</value>
         public string OutputFileName
         {
             get => _outputFileName;
@@ -54,8 +102,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The number of copies
+        /// </summary>
         private int _numberOfCopies;
 
+        /// <summary>
+        /// Gets or sets the number of copies.
+        /// </summary>
+        /// <value>The number of copies.</value>
         public int NumberOfCopies
         {
             get => _numberOfCopies;
@@ -69,8 +124,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The file type box control setup
+        /// </summary>
         private TextComboBoxControlSetup _fileTypeBoxControlSetup;
 
+        /// <summary>
+        /// Gets or sets the file type box control setup.
+        /// </summary>
+        /// <value>The file type box control setup.</value>
         public TextComboBoxControlSetup FileTypeBoxControlSetup
         {
             get => _fileTypeBoxControlSetup;
@@ -84,8 +146,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The file type ComboBox item
+        /// </summary>
         private TextComboBoxItem _fileTypeComboBoxItem;
 
+        /// <summary>
+        /// Gets or sets the file type ComboBox item.
+        /// </summary>
+        /// <value>The file type ComboBox item.</value>
         public TextComboBoxItem FileTypeComboBoxItem
         {
             get => _fileTypeComboBoxItem;
@@ -100,22 +169,49 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the file.
+        /// </summary>
+        /// <value>The type of the file.</value>
         public ExportFileTypes FileType
         {
             get => (ExportFileTypes)FileTypeComboBoxItem.NumericValue;
             set => FileTypeComboBoxItem = FileTypeBoxControlSetup.GetItem((int)value);
         }
 
+        /// <summary>
+        /// Gets the view.
+        /// </summary>
+        /// <value>The view.</value>
         public IPrinterSetupView View { get; private set; }
 
+        /// <summary>
+        /// Gets the ok command.
+        /// </summary>
+        /// <value>The ok command.</value>
         public RelayCommand OkCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the cancel command.
+        /// </summary>
+        /// <value>The cancel command.</value>
         public RelayCommand CancelCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the file command.
+        /// </summary>
+        /// <value>The file command.</value>
         public RelayCommand FileCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the printer setup arguments.
+        /// </summary>
+        /// <value>The printer setup arguments.</value>
         public PrinterSetupArgs PrinterSetupArgs { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrinterSetupViewModel"/> class.
+        /// </summary>
         public PrinterSetupViewModel()
         {
             FileTypeBoxControlSetup = new TextComboBoxControlSetup();
@@ -133,6 +229,11 @@ namespace RingSoft.DbLookup
                 SetFileType();
             });
         }
+        /// <summary>
+        /// Initializes the specified view.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public void Initialize(IPrinterSetupView view, PrinterSetupArgs printerSetupArgs)
         {
             View = view;
@@ -144,6 +245,9 @@ namespace RingSoft.DbLookup
             View.UpdateView();
         }
 
+        /// <summary>
+        /// Called when [ok].
+        /// </summary>
         private void OnOk()
         {
             PrinterSetupArgs.PrintingProperties.ReportOutputType = OutputType;
@@ -154,6 +258,9 @@ namespace RingSoft.DbLookup
             View.PrintOutput();
         }
 
+        /// <summary>
+        /// Sets the type of the file.
+        /// </summary>
         private void SetFileType()
         {
             var fileName = OutputFileName;
@@ -198,6 +305,11 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets the extension.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public string GetExtension()
         {
             string extension;
@@ -228,13 +340,28 @@ namespace RingSoft.DbLookup
             return extension;
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Sets the field.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="field">The field.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;

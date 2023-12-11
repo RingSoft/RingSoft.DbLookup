@@ -1,8 +1,27 @@
-﻿using RingSoft.DbLookup.Lookup;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 06-06-2023
+// ***********************************************************************
+// <copyright file="FilterItemType.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
+    /// <summary>
+    /// Class FilterItemType.
+    /// Implements the <see cref="RingSoft.DbLookup.TableProcessing.FilterItemDefinition" />
+    /// </summary>
+    /// <typeparam name="TFilterItem">The type of the t filter item.</typeparam>
+    /// <seealso cref="RingSoft.DbLookup.TableProcessing.FilterItemDefinition" />
     public abstract class FilterItemType<TFilterItem> : FilterItemDefinition
         where TFilterItem : FilterItemType<TFilterItem>
     {
@@ -39,6 +58,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return (TFilterItem)this;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterItemType{TFilterItem}"/> class.
+        /// </summary>
+        /// <param name="tableFilterDefinition">The table filter definition.</param>
         protected FilterItemType(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
         }

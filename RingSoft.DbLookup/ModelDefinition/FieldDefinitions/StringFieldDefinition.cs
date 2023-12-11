@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-04-2023
+// ***********************************************************************
+// <copyright file="StringFieldDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
@@ -9,8 +22,16 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
     /// <seealso />
     public sealed class StringFieldDefinition : FieldDefinitionType<StringFieldDefinition>
     {
+        /// <summary>
+        /// Gets the type of the field data.
+        /// </summary>
+        /// <value>The type of the field data.</value>
         public override FieldDataTypes FieldDataType => FieldDataTypes.String;
 
+        /// <summary>
+        /// Gets the type of the value for use in queries.
+        /// </summary>
+        /// <value>The type of the value.</value>
         public override ValueTypes ValueType
         {
             get
@@ -24,19 +45,18 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Gets a value indicating whether this instance is a memo.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is memo; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if this instance is memo; otherwise, <c>false</c>.</value>
         public bool MemoField { get; private set; }
 
         /// <summary>
         /// Gets the maximum length.
         /// </summary>
-        /// <value>
-        /// The maximum length.
-        /// </value>
+        /// <value>The maximum length.</value>
         public int MaxLength { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringFieldDefinition"/> class.
+        /// </summary>
         internal StringFieldDefinition()
         {
         }
@@ -56,7 +76,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Sets the maximum length.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>StringFieldDefinition.</returns>
         public StringFieldDefinition HasMaxLength(int value)
         {
             MaxLength = value;
@@ -67,14 +87,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Formats the value to display.
         /// </summary>
         /// <param name="value">The value from the database.</param>
-        /// <returns>
-        /// The formatted value.
-        /// </returns>
+        /// <returns>The formatted value.</returns>
         public override string FormatValue(string value)
         {
             return GblMethods.FormatValue(FieldDataType, value);
         }
 
+        /// <summary>
+        /// Validates a value to see if it's a valid value to save to the database.
+        /// </summary>
+        /// <param name="value">The value to validate.</param>
+        /// <returns>True if the value is safe to save to the database.</returns>
         public override bool ValidateValueForSavingToDb(string value)
         {
             if (ParentJoinForeignKeyDefinition != null && value.IsNullOrEmpty())

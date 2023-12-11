@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 06-28-2023
+// ***********************************************************************
+// <copyright file="RelatedTableFilterDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.ModelDefinition;
@@ -14,19 +27,20 @@ namespace RingSoft.DbLookup.TableProcessing
     public class RelatedTableFilterDefinition<TRelatedEntity> : RelatedTableFilterDefinitionBase
         where TRelatedEntity : class, new()
     {
+        /// <summary>
+        /// The entity table definition
+        /// </summary>
         private TableDefinition<TRelatedEntity> _entityTableDefinition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RelatedTableFilterDefinition{TRelatedEntity}"/> class.
+        /// Initializes a new instance of the <see cref="RelatedTableFilterDefinition{TRelatedEntity}" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="parentAlias">The parent alias.</param>
-        /// <exception cref="ArgumentException">
-        /// Property '{propertyName}' was not configured by the Entity Framework.
-        /// or
-        /// </exception>
+        /// <exception cref="System.ArgumentException">Property '{propertyName}' was not configured by the Entity Framework.</exception>
+        /// <exception cref="System.ArgumentException"></exception>
         public RelatedTableFilterDefinition(TableFilterDefinitionBase tableFilterDefinition, TableDefinitionBase tableDefinition, 
             string propertyName, string parentAlias) : base(tableFilterDefinition)
         { 
@@ -51,7 +65,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </summary>
         /// <typeparam name="TParentRelatedEntity">The type of the parent related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
-        /// <returns></returns>
+        /// <returns>RelatedTableFilterDefinition&lt;TParentRelatedEntity&gt;.</returns>
         public RelatedTableFilterDefinition<TParentRelatedEntity> Include<TParentRelatedEntity>(
             Expression<Func<TRelatedEntity, TParentRelatedEntity>> relatedProperty)
             where TParentRelatedEntity : class, new()
@@ -64,6 +78,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return returnEntity;
         }
 
+        /// <summary>
+        /// Configures the field filter definition.
+        /// </summary>
+        /// <param name="fieldFilterDefinition">The field filter definition.</param>
         private void ConfigureFieldFilterDefinition(FieldFilterDefinition fieldFilterDefinition)
         {
             fieldFilterDefinition.JoinDefinition = TableFieldJoinDefinition;

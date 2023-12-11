@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 10-29-2023
+// ***********************************************************************
+// <copyright file="PrimaryKeyValue.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -16,21 +29,17 @@ namespace RingSoft.DbLookup
         /// <summary>
         /// Gets the field definition.
         /// </summary>
-        /// <value>
-        /// The field definition.
-        /// </value>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; }
 
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
+        /// <value>The value.</value>
         public string Value { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrimaryKeyValueField"/> class.
+        /// Initializes a new instance of the <see cref="PrimaryKeyValueField" /> class.
         /// </summary>
         /// <param name="fieldDefinition">The field definition.</param>
         public PrimaryKeyValueField(FieldDefinition fieldDefinition)
@@ -38,6 +47,10 @@ namespace RingSoft.DbLookup
             FieldDefinition = fieldDefinition;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             return Value;
@@ -51,27 +64,24 @@ namespace RingSoft.DbLookup
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; }
 
         /// <summary>
         /// Gets the primary key value fields.
         /// </summary>
-        /// <value>
-        /// The key value fields.
-        /// </value>
+        /// <value>The key value fields.</value>
         public IReadOnlyList<PrimaryKeyValueField> KeyValueFields => _fieldValues;
 
+        /// <summary>
+        /// The field values
+        /// </summary>
         private List<PrimaryKeyValueField> _fieldValues = new List<PrimaryKeyValueField>();
 
         /// <summary>
         /// Determines whether all the primary key value fields have data.
         /// </summary>
-        /// <returns>
-        ///   <c>false</c> if at least one value field is null; otherwise, <c>true</c>.
-        /// </returns>
+        /// <value><c>true</c> if [int is valid]; otherwise, <c>false</c>.</value>
         internal bool IntIsValid
         {
             get
@@ -85,6 +95,10 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets the key string.
+        /// </summary>
+        /// <value>The key string.</value>
         public string KeyString
         {
             get
@@ -109,7 +123,7 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrimaryKeyValue"/> class.
+        /// Initializes a new instance of the <see cref="PrimaryKeyValue" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public PrimaryKeyValue(TableDefinitionBase tableDefinition)
@@ -122,6 +136,10 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Populates from data row.
+        /// </summary>
+        /// <param name="dataRow">The data row.</param>
         public void PopulateFromDataRow(DataRow dataRow)
         {
             foreach (var keyValueField in _fieldValues)
@@ -131,6 +149,11 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Loads from identifier value.
+        /// </summary>
+        /// <param name="idValue">The identifier value.</param>
+        /// <exception cref="System.Exception">You can't run {nameof(LoadFromIdValue)} on PrimaryKeyValues that have more than 1 Primary Key Field</exception>
         public void LoadFromIdValue(string idValue)
         {
             if (KeyValueFields.Count > 1)
@@ -142,6 +165,10 @@ namespace RingSoft.DbLookup
             KeyValueFields[0].Value = idValue;
         }
 
+        /// <summary>
+        /// Loads from primary string.
+        /// </summary>
+        /// <param name="primaryKeyString">The primary key string.</param>
         public void LoadFromPrimaryString(string primaryKeyString)
         {
             var processedKeyString = primaryKeyString;
@@ -162,10 +189,8 @@ namespace RingSoft.DbLookup
         /// Determines whether this primary key value is equal to the specified compare to primary key value.
         /// </summary>
         /// <param name="compareTo">The compare to.</param>
-        /// <returns>
-        ///   <c>true</c> if the primary key value is equal to the specified compare to primary key value; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentException">Compare To Table Definition does not match this Table Definition</exception>
+        /// <returns><c>true</c> if the primary key value is equal to the specified compare to primary key value; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentException">Compare To Table Definition does not match this Table Definition</exception>
         public bool IsEqualTo(PrimaryKeyValue compareTo)
         {
             if (compareTo == null)
@@ -192,7 +217,7 @@ namespace RingSoft.DbLookup
         /// Copies from primary key value.
         /// </summary>
         /// <param name="sourcePrimaryKeyValue">The source primary key value.</param>
-        /// <exception cref="ArgumentException">Source Table Definition does not match this Table Definition</exception>
+        /// <exception cref="System.ArgumentException">Source Table Definition does not match this Table Definition</exception>
         public void CopyFromPrimaryKeyValue(PrimaryKeyValue sourcePrimaryKeyValue)
         {
             if (TableDefinition != sourcePrimaryKeyValue.TableDefinition)
@@ -206,6 +231,10 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Creates the record lock.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool CreateRecordLock()
         {
             return GblMethods.DoRecordLock(this);

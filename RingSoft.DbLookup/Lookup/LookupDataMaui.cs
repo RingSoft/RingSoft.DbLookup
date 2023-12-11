@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 06-01-2023
+//
+// Last Modified By : petem
+// Last Modified On : 12-05-2023
+// ***********************************************************************
+// <copyright file="LookupDataMaui.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
@@ -11,50 +24,151 @@ using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    /// <summary>
+    /// Enum LookupOperations
+    /// </summary>
     public enum LookupOperations
     {
+        /// <summary>
+        /// The get initialize data
+        /// </summary>
         GetInitData = 0,
+        /// <summary>
+        /// The page up
+        /// </summary>
         PageUp = 1,
+        /// <summary>
+        /// The page down
+        /// </summary>
         PageDown = 2,
+        /// <summary>
+        /// The record up
+        /// </summary>
         RecordUp = 3,
+        /// <summary>
+        /// The record down
+        /// </summary>
         RecordDown = 4,
+        /// <summary>
+        /// The goto bottom
+        /// </summary>
         GotoBottom = 5,
+        /// <summary>
+        /// The goto top
+        /// </summary>
         GotoTop = 6,
+        /// <summary>
+        /// The wheel forward
+        /// </summary>
         WheelForward = 7,
+        /// <summary>
+        /// The wheel backward
+        /// </summary>
         WheelBackward = 8,
+        /// <summary>
+        /// The search for change
+        /// </summary>
         SearchForChange = 9,
     }
+    /// <summary>
+    /// Class LookupDataMauiProcessInput.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     public class LookupDataMauiProcessInput<TEntity> where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets or sets the query.
+        /// </summary>
+        /// <value>The query.</value>
         public IQueryable<TEntity> Query { get; set; }
 
+        /// <summary>
+        /// Gets or sets the order by list.
+        /// </summary>
+        /// <value>The order by list.</value>
         public List<LookupFieldColumnDefinition> OrderByList { get; set; }
 
+        /// <summary>
+        /// Gets or sets the filter definition.
+        /// </summary>
+        /// <value>The filter definition.</value>
         public TableFilterDefinition<TEntity> FilterDefinition { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lookup expression.
+        /// </summary>
+        /// <value>The lookup expression.</value>
         public Expression LookupExpression { get; set; }
 
+        /// <summary>
+        /// Gets or sets the parameter.
+        /// </summary>
+        /// <value>The parameter.</value>
         public ParameterExpression Param { get; set; }
 
+        /// <summary>
+        /// Gets or sets the field filters.
+        /// </summary>
+        /// <value>The field filters.</value>
         public List<FieldFilterDefinition> FieldFilters { get; set; }
     }
+    /// <summary>
+    /// Class LookupDataMaui.
+    /// Implements the <see cref="RingSoft.DbLookup.Lookup.LookupDataMauiBase" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="RingSoft.DbLookup.Lookup.LookupDataMauiBase" />
     public class LookupDataMaui<TEntity> : LookupDataMauiBase where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinition<TEntity> TableDefinition { get; }
 
+        /// <summary>
+        /// Gets the base query.
+        /// </summary>
+        /// <value>The base query.</value>
         public IQueryable<TEntity> BaseQuery { get; private set; }
 
+        /// <summary>
+        /// Gets the filtered query.
+        /// </summary>
+        /// <value>The filtered query.</value>
         public IQueryable<TEntity> FilteredQuery { get; private set; }
 
+        /// <summary>
+        /// Gets the processed query.
+        /// </summary>
+        /// <value>The processed query.</value>
         public IQueryable<TEntity> ProcessedQuery { get; private set; }
 
+        /// <summary>
+        /// Gets the current list.
+        /// </summary>
+        /// <value>The current list.</value>
         public List<TEntity> CurrentList { get; } = new List<TEntity>();
 
+        /// <summary>
+        /// Gets the row count.
+        /// </summary>
+        /// <value>The row count.</value>
         public override int RowCount => CurrentList.Count;
 
+        /// <summary>
+        /// The order by type
+        /// </summary>
         private OrderByTypes _orderByType = OrderByTypes.Ascending;
+        /// <summary>
+        /// The add initial field
+        /// </summary>
         private bool _addInitialField = true;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupDataMaui{TEntity}"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
             : base(lookupDefinition)
         {
@@ -72,24 +186,43 @@ namespace RingSoft.DbLookup.Lookup
             _orderByType = lookupDefinition.InitialOrderByType;
         }
 
+        /// <summary>
+        /// Gets the initialize data.
+        /// </summary>
         public override void GetInitData()
         {
             RefreshData();
             FireLookupDataChangedEvent(GetOutputArgs());
         }
 
+        /// <summary>
+        /// Gets the formatted row value.
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>System.String.</returns>
         public override string GetFormattedRowValue(int rowIndex, LookupColumnDefinitionBase column)
         {
             var row = CurrentList[rowIndex];
             return column.GetFormattedValue(row);
         }
 
+        /// <summary>
+        /// Gets the database row value.
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>System.String.</returns>
         public override string GetDatabaseRowValue(int rowIndex, LookupColumnDefinitionBase column)
         {
             var row = CurrentList[rowIndex];
             return column.GetDatabaseValue(row);
         }
 
+        /// <summary>
+        /// Gets the record count.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         public override int GetRecordCount()
         {
             if (FilteredQuery == null)
@@ -113,12 +246,20 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Clears the data.
+        /// </summary>
         public override void ClearData()
         {
             CurrentList.Clear();
             FireLookupDataChangedEvent(GetOutputArgs());
         }
 
+        /// <summary>
+        /// Gets the primary key value for search text.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <returns>PrimaryKeyValue.</returns>
         public override PrimaryKeyValue GetPrimaryKeyValueForSearchText(string searchText)
         {
             MakeFilteredQuery(false);
@@ -151,6 +292,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Selects the primary key.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
         public override void SelectPrimaryKey(PrimaryKeyValue primaryKeyValue)
         {
             if (LookupWindow != null)
@@ -168,6 +313,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Sets the new primary key value.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
         public override void SetNewPrimaryKeyValue(PrimaryKeyValue primaryKeyValue)
         {
             var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKeyValue);
@@ -200,6 +349,12 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Views the selected row.
+        /// </summary>
+        /// <param name="ownerWindow">The owner window.</param>
+        /// <param name="inputParameter">The input parameter.</param>
+        /// <param name="lookupReadOnlyMode">if set to <c>true</c> [lookup read only mode].</param>
         public override void ViewSelectedRow(object ownerWindow, object inputParameter, bool lookupReadOnlyMode = false)
         {
             var selectedIndex = LookupControl.SelectedIndex;
@@ -232,6 +387,11 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Adds the new row.
+        /// </summary>
+        /// <param name="ownerWindow">The owner window.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public override void AddNewRow(object ownerWindow, object inputParameter = null)
         {
             SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
@@ -246,11 +406,18 @@ namespace RingSoft.DbLookup.Lookup
             LookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
+        /// <summary>
+        /// Refreshes the base query.
+        /// </summary>
         private void RefreshBaseQuery()
         {
             BaseQuery = LookupDefinition.TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
         }
 
+        /// <summary>
+        /// Refreshes the data.
+        /// </summary>
+        /// <param name="newText">The new text.</param>
         public override void RefreshData(string newText = "")
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
@@ -291,6 +458,10 @@ namespace RingSoft.DbLookup.Lookup
             FireLookupDataChangedEvent(GetOutputArgs());
         }
 
+        /// <summary>
+        /// Makes the filtered query.
+        /// </summary>
+        /// <param name="applyOrders">if set to <c>true</c> [apply orders].</param>
         private void MakeFilteredQuery(bool applyOrders = true)
         {
             if (BaseQuery == null)
@@ -334,6 +505,11 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Called when [column click].
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="resetSortOrder">if set to <c>true</c> [reset sort order].</param>
         public override void OnColumnClick(LookupFieldColumnDefinition column, bool resetSortOrder)
         {
             _addInitialField = false;
@@ -383,6 +559,9 @@ namespace RingSoft.DbLookup.Lookup
             GetInitData();
         }
 
+        /// <summary>
+        /// Called when [mouse wheel forward].
+        /// </summary>
         public override void OnMouseWheelForward()
         {
             if (!CurrentList.Any() || CurrentList.Count < 3 || AtBottom())
@@ -402,6 +581,9 @@ namespace RingSoft.DbLookup.Lookup
 
         }
 
+        /// <summary>
+        /// Called when [mouse wheel back].
+        /// </summary>
         public override void OnMouseWheelBack()
         {
             if (!CurrentList.Any() || CurrentList.Count < 3 || AtTop())
@@ -419,6 +601,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Determines whether [is there data].
+        /// </summary>
+        /// <returns><c>true</c> if [is there data]; otherwise, <c>false</c>.</returns>
         public override bool IsThereData()
         {
             MakeFilteredQuery(true);
@@ -434,11 +620,20 @@ namespace RingSoft.DbLookup.Lookup
             return false;
         }
 
+        /// <summary>
+        /// Sets the scroll position.
+        /// </summary>
+        /// <param name="scrollPosition">The scroll position.</param>
         private void SetScrollPosition(LookupScrollPositions scrollPosition)
         {
             ScrollPosition = scrollPosition;
         }
 
+        /// <summary>
+        /// Gets the scroll position.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>LookupScrollPositions.</returns>
         private LookupScrollPositions GetScrollPosition(TEntity entity)
         {
             var result = LookupScrollPositions.Middle;
@@ -459,6 +654,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the scroll position.
+        /// </summary>
+        /// <returns>LookupScrollPositions.</returns>
         private LookupScrollPositions GetScrollPosition()
         {
             var result = LookupScrollPositions.Disabled;
@@ -508,6 +707,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the previous record set.
+        /// </summary>
+        /// <param name="startEntity">The start entity.</param>
+        /// <param name="recordCount">The record count.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetPreviousRecordSet(TEntity startEntity, int recordCount)
         {
             var result = new List<TEntity>();
@@ -523,6 +728,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the previous record set.
+        /// </summary>
+        /// <param name="startEntity">The start entity.</param>
+        /// <param name="recordCount">The record count.</param>
+        /// <param name="rsAscending">if set to <c>true</c> [rs ascending].</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetPreviousRecordSet(TEntity startEntity, int recordCount, bool rsAscending)
         {
             var result = new List<TEntity>();
@@ -647,6 +859,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the next record set.
+        /// </summary>
+        /// <param name="startEntity">The start entity.</param>
+        /// <param name="recordCount">The record count.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetNextRecordSet(TEntity startEntity, int recordCount)
         {
             var result = new List<TEntity>();
@@ -661,6 +879,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the next record set.
+        /// </summary>
+        /// <param name="startEntity">The start entity.</param>
+        /// <param name="recordCount">The record count.</param>
+        /// <param name="rsAscending">if set to <c>true</c> [rs ascending].</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetNextRecordSet(TEntity startEntity, int recordCount, bool rsAscending)
         {
             var result = new List<TEntity>();
@@ -750,6 +975,10 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
+        /// <summary>
+        /// Gets the selected text.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public override string GetSelectedText()
         {
             var autoFillValue = LookupDefinition.GetAutoFillValue(SelectedPrimaryKeyValue);
@@ -759,6 +988,10 @@ namespace RingSoft.DbLookup.Lookup
             return text;
         }
 
+        /// <summary>
+        /// Gets the selected primary key value.
+        /// </summary>
+        /// <returns>PrimaryKeyValue.</returns>
         public override PrimaryKeyValue GetSelectedPrimaryKeyValue()
         {
             if (LookupControl.SelectedIndex < 0)
@@ -777,6 +1010,9 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        /// <summary>
+        /// Gotoes the top.
+        /// </summary>
         public override void GotoTop()
         {
             if (AtTop())
@@ -787,11 +1023,17 @@ namespace RingSoft.DbLookup.Lookup
             LookupControl.SetLookupIndex(0);
         }
 
+        /// <summary>
+        /// Ints the goto top.
+        /// </summary>
         private void IntGotoTop()
         {
             GetInitData();
         }
 
+        /// <summary>
+        /// Gotoes the bottom.
+        /// </summary>
         public override void GotoBottom()
         {
             if (AtBottom())
@@ -803,6 +1045,10 @@ namespace RingSoft.DbLookup.Lookup
             LookupControl.SetLookupIndex(LookupControl.PageSize - 1);
         }
 
+        /// <summary>
+        /// Ints the goto bottom.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
         private void IntGotoBottom(LookupOperations operation)
         {
             MakeFilteredQuery();
@@ -820,6 +1066,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Ats the bottom.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool AtBottom()
         {
             var result = false;
@@ -838,6 +1088,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Ats the top.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool AtTop()
         {
             var result = false;
@@ -856,6 +1110,9 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
+        /// <summary>
+        /// Gotoes the next record.
+        /// </summary>
         public override void GotoNextRecord()
         {
             if (!CurrentList.Any() || AtBottom())
@@ -877,6 +1134,9 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gotoes the previous record.
+        /// </summary>
         public override void GotoPreviousRecord()
         {
             if (!CurrentList.Any() || AtTop())
@@ -899,6 +1159,9 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gotoes the next page.
+        /// </summary>
         public override void GotoNextPage()
         {
             if (!CurrentList.Any() || AtBottom())
@@ -918,6 +1181,9 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gotoes the previous page.
+        /// </summary>
         public override void GotoPreviousPage()
         {
             if (!CurrentList.Any() || AtTop())
@@ -935,6 +1201,11 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Called when [search for change].
+        /// </summary>
+        /// <param name="searchForText">The search for text.</param>
+        /// <param name="initialValue">if set to <c>true</c> [initial value].</param>
         public override void OnSearchForChange(string searchForText, bool initialValue = false)
         {
             if (searchForText.IsNullOrEmpty())
@@ -1040,6 +1311,10 @@ namespace RingSoft.DbLookup.Lookup
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
         }
 
+        /// <summary>
+        /// Does the print output.
+        /// </summary>
+        /// <param name="pageSize">Size of the page.</param>
         public override void DoPrintOutput(int pageSize)
         {
             var printOutput = new LookupDataMauiPrintOutput();
@@ -1073,6 +1348,13 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the printer header row.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
+        /// <returns>PrintingInputHeaderRow.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override PrintingInputHeaderRow GetPrinterHeaderRow(PrimaryKeyValue primaryKeyValue, PrinterSetupArgs printerSetupArgs)
         {
             var headerRow = new PrintingInputHeaderRow();
@@ -1120,6 +1402,11 @@ namespace RingSoft.DbLookup.Lookup
             return headerRow;
         }
 
+        /// <summary>
+        /// Gets the entity for primary key.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>System.Object.</returns>
         public override object GetEntityForPrimaryKey(PrimaryKeyValue primaryKeyValue)
         {
             if (BaseQuery == null)
@@ -1141,11 +1428,19 @@ namespace RingSoft.DbLookup.Lookup
             return query.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Called when [size changed].
+        /// </summary>
         public override void OnSizeChanged()
         {
             RefreshData(LookupControl.SearchText);
         }
 
+        /// <summary>
+        /// Sets the lookup index from entity.
+        /// </summary>
+        /// <param name="param">The parameter.</param>
+        /// <param name="entity">The entity.</param>
         private void SetLookupIndexFromEntity(ParameterExpression param, TEntity entity)
         {
             //if (TableDefinition.PrimaryKeyFields.Count > 1)
@@ -1197,6 +1492,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the output arguments.
+        /// </summary>
+        /// <returns>LookupDataMauiOutput.</returns>
         public LookupDataMauiOutput GetOutputArgs()
         {
             var scrollPosition = GetScrollPosition();
@@ -1204,6 +1503,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the nearest entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="condition">The condition.</param>
+        /// <returns>TEntity.</returns>
         private TEntity GetNearestEntity(TEntity entity, Conditions condition)
         {
             TEntity result = null;
@@ -1357,6 +1662,11 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the null condition.
+        /// </summary>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <returns>Conditions.</returns>
         private Conditions GetNullCondition(bool ascending)
         {
             var nullCondition = Conditions.EqualsNull;
@@ -1386,6 +1696,11 @@ namespace RingSoft.DbLookup.Lookup
             return nullCondition;
         }
 
+        /// <summary>
+        /// Adds the primary key fields to filter.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="input">The input.</param>
         private void AddPrimaryKeyFieldsToFilter(TEntity entity, LookupDataMauiProcessInput<TEntity> input)
         {
             foreach (var primaryKeyField in TableDefinition.PrimaryKeyFields)
@@ -1400,6 +1715,13 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
+        /// <summary>
+        /// Gets the process input.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="getFilter">if set to <c>true</c> [get filter].</param>
+        /// <param name="oldFilter">The old filter.</param>
+        /// <returns>LookupDataMauiProcessInput&lt;TEntity&gt;.</returns>
         private LookupDataMauiProcessInput<TEntity> GetProcessInput(TEntity entity, bool getFilter = true
         , TableFilterDefinition<TEntity> oldFilter = null)
         {
@@ -1455,6 +1777,12 @@ namespace RingSoft.DbLookup.Lookup
         }
 
 
+        /// <summary>
+        /// Applies the order bys.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         private IQueryable<TEntity> ApplyOrderBys(IQueryable<TEntity> query, bool ascending)
         {
             var orderBys = OrderByList.OfType<LookupFieldColumnDefinition>();
@@ -1526,12 +1854,25 @@ namespace RingSoft.DbLookup.Lookup
             return query;
         }
 
+        /// <summary>
+        /// Handles the RefreshData event of the LookupCallBack control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void LookupCallBack_RefreshData(object sender, EventArgs e)
         {
             RefreshData(LookupControl.SearchText);
             OnDataSourceChanged();
         }
 
+        /// <summary>
+        /// Makes the list.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="topCount">The top count.</param>
+        /// <param name="bottomCount">The bottom count.</param>
+        /// <param name="setIndexToBottom">if set to <c>true</c> [set index to bottom].</param>
+        /// <param name="operation">The operation.</param>
         private void MakeList(TEntity entity, int topCount, int bottomCount, bool setIndexToBottom
         , LookupOperations operation)
         {
@@ -1640,6 +1981,15 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        /// <param name="nextEntity">The next entity.</param>
+        /// <param name="operation">The operation.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="previous">if set to <c>true</c> [previous].</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetPage(TEntity nextEntity, LookupOperations operation, int count
             , bool previous, TableFilterDefinition<TEntity> filter = null)
         {
@@ -1699,6 +2049,19 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the filter page query.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="input">The input.</param>
+        /// <param name="checkPrimaryKey">if set to <c>true</c> [check primary key].</param>
+        /// <param name="addedPrimaryKeyToFilter">if set to <c>true</c> [added primary key to filter].</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="hasMultiRecs">if set to <c>true</c> [has multi recs].</param>
+        /// <param name="checkNull">if set to <c>true</c> [check null].</param>
+        /// <returns>IEnumerable&lt;TEntity&gt;.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private IEnumerable<TEntity> GetFilterPageQuery(
             TEntity entity
             , int count
@@ -1745,6 +2108,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Doeses the filter have more than1 record.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="input">The input.</param>
+        /// <param name="addFilters">if set to <c>true</c> [add filters].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool DoesFilterHaveMoreThan1Record(TEntity entity, LookupDataMauiProcessInput<TEntity> input, bool addFilters)
         {
             var lastFilter = input.FieldFilters.LastOrDefault();
@@ -1778,6 +2148,18 @@ namespace RingSoft.DbLookup.Lookup
             return hasMoreThan1Record;
         }
 
+        /// <summary>
+        /// Adds the aditional list.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="inputList">The input list.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="addedPrimaryKey">if set to <c>true</c> [added primary key].</param>
+        /// <param name="topEntity">The top entity.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="operation">The operation.</param>
+        /// <param name="filterIndex">Index of the filter.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> AddAditionalList(
             LookupDataMauiProcessInput<TEntity> input
             , List<TEntity> inputList
@@ -1876,6 +2258,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Sets the last filter condition.
+        /// </summary>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="lastFilter">The last filter.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void SetLastFilterCondition(bool ascending, FieldFilterDefinition lastFilter)
         {
             switch (_orderByType)
@@ -1907,6 +2295,12 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Processes the page output.
+        /// </summary>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="result">The result.</param>
+        /// <param name="newList">The new list.</param>
         private static void ProcessPageOutput(bool ascending, List<TEntity> result, List<TEntity> newList)
         {
             if (ascending)
@@ -1919,6 +2313,13 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Proceses the add filters.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="filterIndex">Index of the filter.</param>
+        /// <param name="addedPrimaryKey">if set to <c>true</c> [added primary key].</param>
+        /// <param name="topEntity">The top entity.</param>
         private void ProcesAddFilters(LookupDataMauiProcessInput<TEntity> input
             , int filterIndex
             , bool addedPrimaryKey
@@ -1942,6 +2343,13 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified top entity is end.
+        /// </summary>
+        /// <param name="topEntity">The top entity.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="lastFilter">The last filter.</param>
+        /// <returns><c>true</c> if the specified top entity is end; otherwise, <c>false</c>.</returns>
         private bool IsEnd(TEntity topEntity, bool ascending, FieldFilterDefinition lastFilter)
         {
             var isEnd = false;
@@ -1963,6 +2371,18 @@ namespace RingSoft.DbLookup.Lookup
             return isEnd;
         }
 
+        /// <summary>
+        /// Adds the additional list null.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="inputList">The input list.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="addedPrimaryKey">if set to <c>true</c> [added primary key].</param>
+        /// <param name="topEntity">The top entity.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="operation">The operation.</param>
+        /// <param name="filterIndex">Index of the filter.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> AddAdditionalListNull(
             LookupDataMauiProcessInput<TEntity> input
             , List<TEntity> inputList
@@ -2106,6 +2526,14 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the output result.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <param name="count">The count.</param>
+        /// <param name="input">The input.</param>
+        /// <returns>IEnumerable&lt;TEntity&gt;.</returns>
         private IEnumerable<TEntity> GetOutputResult(IQueryable<TEntity> query, bool ascending, int count
         , LookupDataMauiProcessInput<TEntity> input)
         {
@@ -2138,6 +2566,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="column">The column.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
         private void AddFilter(LookupDataMauiProcessInput<TEntity> input,
             LookupColumnDefinitionBase column, Conditions condition, string value)
         {
@@ -2153,6 +2588,11 @@ namespace RingSoft.DbLookup.Lookup
             input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
         }
 
+        /// <summary>
+        /// Removes the filter.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="filterItem">The filter item.</param>
         private void RemoveFilter(LookupDataMauiProcessInput<TEntity> input, FilterItemDefinition filterItem)
         {
             if (filterItem is FieldFilterDefinition fieldFilter)
@@ -2163,6 +2603,11 @@ namespace RingSoft.DbLookup.Lookup
             input.FieldFilters = input.FilterDefinition.FixedFilters.OfType<FieldFilterDefinition>().ToList();
         }
 
+        /// <summary>
+        /// Determines whether [has more than1 record] [the specified input].
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns><c>true</c> if [has more than1 record] [the specified input]; otherwise, <c>false</c>.</returns>
         private bool HasMoreThan1Record(LookupDataMauiProcessInput<TEntity> input)
         {
             var result = false;
@@ -2173,6 +2618,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the query from filter.
+        /// </summary>
+        /// <param name="newFilter">The new filter.</param>
+        /// <param name="input">The input.</param>
+        /// <param name="ascending">if set to <c>true</c> [ascending].</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         private IQueryable<TEntity> GetQueryFromFilter(TableFilterDefinition<TEntity> newFilter
             , LookupDataMauiProcessInput<TEntity> input, bool ascending)
         {
@@ -2194,6 +2646,12 @@ namespace RingSoft.DbLookup.Lookup
             return query;
         }
 
+        /// <summary>
+        /// Gets the contains expr.
+        /// </summary>
+        /// <param name="param">The parameter.</param>
+        /// <param name="condition">The condition.</param>
+        /// <returns>Expression.</returns>
         private Expression GetContainsExpr(ParameterExpression param, Conditions? condition = null)
         {
             Expression containsExpr = null;
@@ -2232,6 +2690,12 @@ namespace RingSoft.DbLookup.Lookup
             return containsExpr;
         }
 
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        /// <returns>List&lt;TEntity&gt;.</returns>
         private List<TEntity> GetNextPage(TEntity entity, int count)
         {
             var result = new List<TEntity>();

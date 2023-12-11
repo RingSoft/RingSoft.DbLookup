@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-05-2023
+// ***********************************************************************
+// <copyright file="FilterItemDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -11,10 +24,22 @@ using System.Reflection;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
+    /// <summary>
+    /// Enum FilterItemTypes
+    /// </summary>
     public enum FilterItemTypes
     {
+        /// <summary>
+        /// The field
+        /// </summary>
         Field = 0,
+        /// <summary>
+        /// The formula
+        /// </summary>
         Formula = 1,
+        /// <summary>
+        /// The advanced find
+        /// </summary>
         AdvancedFind = 2
     }
 
@@ -26,41 +51,31 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the type.
         /// </summary>
-        /// <value>
-        /// The type.
-        /// </value>
+        /// <value>The type.</value>
         public abstract FilterItemTypes Type { get; }
 
         /// <summary>
         /// Gets the table filter definition.
         /// </summary>
-        /// <value>
-        /// The table filter definition.
-        /// </value>
+        /// <value>The table filter definition.</value>
         public TableFilterDefinitionBase TableFilterDefinition { get; internal set; }
 
         /// <summary>
         /// Gets the left parentheses count.
         /// </summary>
-        /// <value>
-        /// The left parentheses count.
-        /// </value>
+        /// <value>The left parentheses count.</value>
         public int LeftParenthesesCount { get; set; }
 
         /// <summary>
         /// Gets the right parentheses count.
         /// </summary>
-        /// <value>
-        /// The right parentheses count.
-        /// </value>
+        /// <value>The right parentheses count.</value>
         public int RightParenthesesCount { get; set; }
 
         /// <summary>
         /// Gets the end logic.
         /// </summary>
-        /// <value>
-        /// The end logic.
-        /// </value>
+        /// <value>The end logic.</value>
         public EndLogics EndLogic { get; set; }
 
         /// <summary>
@@ -69,9 +84,13 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <value>
         /// The join definition.
         /// </value>
-        
+
         private TableFieldJoinDefinition _joinDefinition;
 
+        /// <summary>
+        /// Gets or sets the join definition.
+        /// </summary>
+        /// <value>The join definition.</value>
         public TableFieldJoinDefinition JoinDefinition
         {
             get { return _joinDefinition; }
@@ -83,30 +102,63 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
+        /// <summary>
+        /// Gets or sets the table description.
+        /// </summary>
+        /// <value>The table description.</value>
         public string TableDescription { get; set; }
 
+        /// <summary>
+        /// Gets or sets the field description.
+        /// </summary>
+        /// <value>The field description.</value>
         public string FieldDescription { get; set; }
 
+        /// <summary>
+        /// Gets or sets the report description.
+        /// </summary>
+        /// <value>The report description.</value>
         public string ReportDescription { get; set; }
 
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>The path.</value>
         public string Path { get; internal set; }
 
+        /// <summary>
+        /// Gets the type of the TreeView.
+        /// </summary>
+        /// <value>The type of the TreeView.</value>
         public abstract TreeViewType TreeViewType { get; }
 
+        /// <summary>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <value>The name of the property.</value>
         public abstract string PropertyName { get; internal set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is fixed.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fixed; otherwise, <c>false</c>.</value>
         public bool IsFixed { get; internal set; }
 
         /// <summary>
         /// Gets the value to filter.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
+        /// <value>The value.</value>
         public string Value { get; internal set; }
 
+        /// <summary>
+        /// The display value
+        /// </summary>
         private string _displayValue;
 
+        /// <summary>
+        /// Gets or sets the display value.
+        /// </summary>
+        /// <value>The display value.</value>
         public string DisplayValue
         {
             get
@@ -122,14 +174,33 @@ namespace RingSoft.DbLookup.TableProcessing
 
 
 
+        /// <summary>
+        /// Gets the type of the date filter.
+        /// </summary>
+        /// <value>The type of the date filter.</value>
         public DateFilterTypes DateFilterType { get; private set; }
 
+        /// <summary>
+        /// Gets the date filter value.
+        /// </summary>
+        /// <value>The date filter value.</value>
         public int DateFilterValue { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the type of the value.
+        /// </summary>
+        /// <value>The type of the value.</value>
         public ValueTypes ValueType { get; set; }
 
+        /// <summary>
+        /// The date type
+        /// </summary>
         private DbDateTypes? _dateType;
-            
+
+        /// <summary>
+        /// Gets the type of the date.
+        /// </summary>
+        /// <value>The type of the date.</value>
         public DbDateTypes DateType
         {
             get
@@ -148,16 +219,34 @@ namespace RingSoft.DbLookup.TableProcessing
             internal set => _dateType = value;
         }
 
+        /// <summary>
+        /// Gets or sets the lookup column.
+        /// </summary>
+        /// <value>The lookup column.</value>
         internal LookupColumnDefinitionBase LookupColumn { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="FilterItemDefinition"/> is processed.
+        /// </summary>
+        /// <value><c>true</c> if processed; otherwise, <c>false</c>.</value>
         public bool Processed { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterItemDefinition"/> class.
+        /// </summary>
+        /// <param name="tableFilterDefinition">The table filter definition.</param>
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)
         {
             TableFilterDefinition = tableFilterDefinition;
             TableDescription = tableFilterDefinition.TableDefinition.Description;
         }
 
+        /// <summary>
+        /// Gets the property value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         public string GetPropertyValue<TEntity>(TEntity entity) where TEntity : class, new()
         {
             if (LookupColumn != null)
@@ -172,6 +261,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return Value;
         }
 
+        /// <summary>
+        /// Copies from.
+        /// </summary>
+        /// <param name="source">The source.</param>
         internal virtual void CopyFrom(FilterItemDefinition source)
         {
             LeftParenthesesCount = source.LeftParenthesesCount;
@@ -188,6 +281,9 @@ namespace RingSoft.DbLookup.TableProcessing
             LookupColumn = source.LookupColumn;
         }
 
+        /// <summary>
+        /// Sets the table description.
+        /// </summary>
         public virtual void SetTableDescription()
         {
             if (JoinDefinition != null && JoinDefinition.ForeignKeyDefinition != null)
@@ -198,8 +294,19 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
+        /// <summary>
+        /// Gets the report text.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="printMode">if set to <c>true</c> [print mode].</param>
+        /// <returns>System.String.</returns>
         public abstract string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode);
 
+        /// <summary>
+        /// Gets the print text.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>System.String.</returns>
         public string GetPrintText(LookupDefinitionBase lookupDefinition)
         {
             var lParen = GblMethods.StringDuplicate("(", LeftParenthesesCount);
@@ -210,6 +317,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Prints the end logic text.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string PrintEndLogicText()
         {
             var enumTranslation = new EnumFieldTranslation();
@@ -221,6 +332,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the date report text.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string GetDateReportText()
         {
             var result = string.Empty;
@@ -245,6 +360,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the condition text.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static string GetConditionText(Conditions condition)
         {
             var searchValue = string.Empty;
@@ -293,6 +414,13 @@ namespace RingSoft.DbLookup.TableProcessing
             return searchValue;
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition, string path = "")
         {
             LeftParenthesesCount = entity.LeftParentheses;
@@ -345,6 +473,10 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        /// <summary>
+        /// Saves to entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public virtual void SaveToEntity(AdvancedFindFilter entity)
         {
             entity.Path = Path;
@@ -362,6 +494,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Loads from filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <returns>System.String.</returns>
         public virtual string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             var searchValue = filterReturn.SearchValue;
@@ -377,11 +515,21 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        /// <summary>
+        /// Converts to universal time.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>DateTime.</returns>
         protected internal virtual DateTime ConvertToUniversalTime(DateTime date)
         {
             return date;
         }
 
+        /// <summary>
+        /// Gets the search value.
+        /// </summary>
+        /// <param name="searchValue">The search value.</param>
+        /// <returns>System.String.</returns>
         public virtual string GetSearchValue(string searchValue)
         {
             if (ValueType == ValueTypes.DateTime)
@@ -404,6 +552,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return searchValue;
         }
 
+        /// <summary>
+        /// Saves to filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
         public virtual void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
             filterReturn.Path = Path;
@@ -414,6 +566,14 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the table field for filter.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="filterField">The filter field.</param>
+        /// <returns>TableDefinitionBase.</returns>
         protected internal TableDefinitionBase GetTableFieldForFilter(LookupDefinitionBase lookupDefinition,
             AdvancedFindFilter entity, out FieldDefinition fieldDefinition,
             out FieldDefinition filterField)
@@ -451,6 +611,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return tableDefinition;
         }
 
+        /// <summary>
+        /// Converts the date.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         protected internal virtual string ConvertDate(string value)
         {
             switch (DateFilterType)
@@ -465,6 +630,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return value;
         }
 
+        /// <summary>
+        /// Gets the report begin text print mode.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>System.String.</returns>
         protected internal virtual string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
         {
             var result = string.Empty;
@@ -490,10 +660,22 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the new filter item definition.
+        /// </summary>
+        /// <returns>FilterItemDefinition.</returns>
         public abstract FilterItemDefinition GetNewFilterItemDefinition();
 
+        /// <summary>
+        /// Gets the new path.
+        /// </summary>
+        /// <returns>System.String.</returns>
         internal abstract string GetNewPath();
 
+        /// <summary>
+        /// Copies to new filter.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void CopyToNewFilter(LookupDefinitionBase lookupDefinition)
         {
             var newFilter = GetNewFilterItemDefinition();
@@ -513,6 +695,11 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the joins.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="newFilter">The new filter.</param>
         private void GetJoins(LookupDefinitionBase lookupDefinition, FilterItemDefinition newFilter)
         {
             var foundItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path);
@@ -529,12 +716,28 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the maui filter.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="param">The parameter.</param>
+        /// <returns>Expression.</returns>
         public virtual Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
             Processed = true;
             return null;
         }
 
+        /// <summary>
+        /// Gets the string expression.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="param">The parameter.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Expression.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">condition - null</exception>
         public static Expression GetStringExpression<TEntity>(
             ParameterExpression param, string property, Conditions condition, string value)
         {
@@ -620,6 +823,14 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the binary expression.
+        /// </summary>
+        /// <param name="returnExpression">The return expression.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="constantExpression">The constant expression.</param>
+        /// <returns>BinaryExpression.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">condition - null</exception>
         public static BinaryExpression GetBinaryExpression(Expression returnExpression, Conditions condition,
             ConstantExpression constantExpression)
         {
@@ -662,6 +873,18 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the binary expression.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="param">The parameter.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="fieldType">Type of the field.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Expression.</returns>
+        /// <exception cref="System.ArgumentNullException">Value cannot be null.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">condition - null</exception>
         public static Expression GetBinaryExpression<TEntity>(ParameterExpression param, string property, Conditions condition, System.Type fieldType, object value = null)
         {
             Expression result = null;
@@ -741,6 +964,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Creates the null propagation expression.
+        /// </summary>
+        /// <param name="o">The o.</param>
+        /// <param name="property">The property.</param>
+        /// <returns>Expression.</returns>
         public static Expression CreateNullPropagationExpression(Expression o, string property)
         {
             Expression propertyAccess = Expression.Property(o, property);
@@ -758,6 +987,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return Expression.Condition(condition, nullResult, propertyAccess);
         }
 
+        /// <summary>
+        /// Gets the where method.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <returns>MethodInfo.</returns>
         public static MethodInfo GetWhereMethod<TEntity>()
         {
             var methods = typeof(Queryable).GetMethods();
@@ -772,6 +1006,12 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
+        /// <summary>
+        /// Gets the property expression.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        /// <param name="param">The parameter.</param>
+        /// <returns>Expression.</returns>
         public static Expression GetPropertyExpression(string property, ParameterExpression param)
         {
             var first = true;
@@ -793,6 +1033,14 @@ namespace RingSoft.DbLookup.TableProcessing
             return returnExpression;
         }
 
+        /// <summary>
+        /// Filters the query.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="param">The parameter.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public static IQueryable<TEntity> FilterQuery<TEntity>(IQueryable<TEntity> source, ParameterExpression param, Expression expression)
         {
             var whereLambda = Expression.Lambda<Func<TEntity, bool>>(expression, param);
@@ -806,6 +1054,14 @@ namespace RingSoft.DbLookup.TableProcessing
             return whereQueryable;
         }
 
+        /// <summary>
+        /// Appends the expression.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <param name="endLogic">The end logic.</param>
+        /// <returns>Expression.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">endLogic - null</exception>
         public static Expression AppendExpression(Expression left, Expression right, EndLogics endLogic)
         {
             var result = left;

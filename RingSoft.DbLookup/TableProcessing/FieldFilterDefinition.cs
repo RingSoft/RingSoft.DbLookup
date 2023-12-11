@@ -1,4 +1,17 @@
-﻿
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-04-2023
+// ***********************************************************************
+// <copyright file="FieldFilterDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
@@ -11,22 +24,49 @@ using System.Linq.Expressions;
 
 namespace RingSoft.DbLookup.TableProcessing
 {
+    /// <summary>
+    /// Enum DateFilterTypes
+    /// </summary>
     public enum DateFilterTypes
     {
+        /// <summary>
+        /// The specific date
+        /// </summary>
         [Description("Specific Date")]
         SpecificDate = 0,
+        /// <summary>
+        /// The days
+        /// </summary>
         [Description("Day(s) Ago")]
         Days = 1,
+        /// <summary>
+        /// The weeks
+        /// </summary>
         [Description("Week(s) Ago")]
         Weeks = 2,
+        /// <summary>
+        /// The months
+        /// </summary>
         [Description("Month(s) Ago")]
         Months = 3,
+        /// <summary>
+        /// The years
+        /// </summary>
         [Description("Year(s) Ago")]
         Years = 4,
+        /// <summary>
+        /// The hours
+        /// </summary>
         [Description("Hour(s) Ago")]
         Hours = 5,
+        /// <summary>
+        /// The minutes
+        /// </summary>
         [Description("Minute(s) Ago")]
         Minutes = 6,
+        /// <summary>
+        /// The seconds
+        /// </summary>
         [Description("Second(s) Ago")]
         Seconds = 7,
     }
@@ -36,6 +76,10 @@ namespace RingSoft.DbLookup.TableProcessing
     /// </summary>
     public class FieldFilterDefinition : FilterItemType<FieldFilterDefinition>
     {
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public override FilterItemTypes Type => FilterItemTypes.Field;
 
 
@@ -47,6 +91,10 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         private FieldDefinition _fieldDefinition;
 
+        /// <summary>
+        /// Gets the field definition.
+        /// </summary>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition
         {
             get => _fieldDefinition;
@@ -69,9 +117,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the condition.
         /// </summary>
-        /// <value>
-        /// The condition.
-        /// </value>
+        /// <value>The condition.</value>
         public Conditions Condition { get; set; }
 
         /// <summary>
@@ -82,6 +128,11 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         private bool _caseSensitive;
 
+        /// <summary>
+        /// Gets a value indicating whether [case sensitive].
+        /// </summary>
+        /// <value><c>true</c> if [case sensitive]; otherwise, <c>false</c>.</value>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public bool CaseSensitive
         {
             get
@@ -109,21 +160,33 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets a value indicating whether to cast enum value as int.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if cast enum value as int; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if cast enum value as int; otherwise, <c>false</c>.</value>
         public bool CastEnumValueAsInt { get; internal set; } = true;
 
+        /// <summary>
+        /// The parent field
+        /// </summary>
         private FieldDefinition _parentField;
 
+        /// <summary>
+        /// Gets or sets the parent field.
+        /// </summary>
+        /// <value>The parent field.</value>
         public FieldDefinition ParentField
         {
             get => _parentField;
             set { _parentField = value; }
         }
 
+        /// <summary>
+        /// The field to search
+        /// </summary>
         private FieldDefinition _fieldToSearch;
 
+        /// <summary>
+        /// Gets the field to search.
+        /// </summary>
+        /// <value>The field to search.</value>
         public FieldDefinition FieldToSearch
         {
             get
@@ -137,14 +200,34 @@ namespace RingSoft.DbLookup.TableProcessing
             internal set => _fieldToSearch = value;
         }
 
+        /// <summary>
+        /// Gets the formula to search.
+        /// </summary>
+        /// <value>The formula to search.</value>
         public ILookupFormula FormulaToSearch { get; internal set; }
 
+        /// <summary>
+        /// Gets the base lookup.
+        /// </summary>
+        /// <value>The base lookup.</value>
         public LookupDefinitionBase BaseLookup { get; internal set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is primary key.
+        /// </summary>
+        /// <value><c>true</c> if this instance is primary key; otherwise, <c>false</c>.</value>
         public bool IsPrimaryKey { get; internal set; }
 
+        /// <summary>
+        /// Gets the navigation properties.
+        /// </summary>
+        /// <value>The navigation properties.</value>
         public List<JoinInfo> NavigationProperties { get; internal set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldFilterDefinition"/> class.
+        /// </summary>
+        /// <param name="tableFilterDefinition">The table filter definition.</param>
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
         {
             
@@ -161,10 +244,22 @@ namespace RingSoft.DbLookup.TableProcessing
             return this;
         }
 
+        /// <summary>
+        /// Gets the type of the TreeView.
+        /// </summary>
+        /// <value>The type of the TreeView.</value>
         public override TreeViewType TreeViewType => TreeViewType.Field;
 
+        /// <summary>
+        /// Gets or sets the name of the set property.
+        /// </summary>
+        /// <value>The name of the set property.</value>
         public string SetPropertyName { get; set; }
 
+        /// <summary>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <value>The name of the property.</value>
         public override string PropertyName
         {
             get
@@ -190,6 +285,10 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Copies from.
+        /// </summary>
+        /// <param name="source">The source.</param>
         internal override void CopyFrom(FilterItemDefinition source)
         {
             var fieldFilterDefinition = (FieldFilterDefinition)source;
@@ -214,6 +313,11 @@ namespace RingSoft.DbLookup.TableProcessing
             base.CopyFrom(source);
         }
 
+        /// <summary>
+        /// Gets the report begin text print mode.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>System.String.</returns>
         protected internal override string GetReportBeginTextPrintMode(LookupDefinitionBase lookupDefinition)
         {
             var tableDescription = TableDescription;
@@ -223,6 +327,12 @@ namespace RingSoft.DbLookup.TableProcessing
             //return base.GetReportBeginTextPrintMode(lookupDefinition);
         }
 
+        /// <summary>
+        /// Gets the report text.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="printMode">if set to <c>true</c> [print mode].</param>
+        /// <returns>System.String.</returns>
         public override string GetReportText(LookupDefinitionBase lookupDefinition, bool printMode)
         {
             var result = string.Empty;
@@ -267,6 +377,13 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool LoadFromEntity(AdvancedFindFilter entity, LookupDefinitionBase lookupDefinition,
             string path = "")
         {
@@ -328,6 +445,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Saves to entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public override void SaveToEntity(AdvancedFindFilter entity)
         {
             entity.Operand = (byte)Condition;
@@ -336,6 +457,12 @@ namespace RingSoft.DbLookup.TableProcessing
             base.SaveToEntity(entity);
         }
 
+        /// <summary>
+        /// Loads from filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <returns>System.String.</returns>
         public override string LoadFromFilterReturn(AdvancedFilterReturn filterReturn, TreeViewItem treeViewItem)
         {
             Condition = filterReturn.Condition;
@@ -358,6 +485,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Processes the found tree item.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
         private void ProcessFoundTreeItem(TreeViewItem treeViewItem)
         {
             Path = treeViewItem.MakePath();
@@ -413,6 +544,11 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Sets the join definition.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <param name="fieldToSearch">The field to search.</param>
         private void SetJoinDefinition(TreeViewItem treeViewItem, FieldDefinition fieldToSearch)
         {
             var newTreeViewItem = treeViewItem.BaseTree.FindFieldInTree(treeViewItem.Items, fieldToSearch);
@@ -430,6 +566,10 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Saves to filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
         public override void SaveToFilterReturn(AdvancedFilterReturn filterReturn)
         {
             filterReturn.Condition = Condition;
@@ -438,6 +578,10 @@ namespace RingSoft.DbLookup.TableProcessing
             base.SaveToFilterReturn(filterReturn);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             var result = GetReportBeginTextPrintMode(null);
@@ -447,6 +591,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Converts the date.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         protected internal override string ConvertDate(string value)
         {
             value = base.ConvertDate(value);
@@ -467,6 +616,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return value;
         }
 
+        /// <summary>
+        /// Gets the new filter item definition.
+        /// </summary>
+        /// <returns>FilterItemDefinition.</returns>
         public override FilterItemDefinition GetNewFilterItemDefinition()
         {
             var result = new FieldFilterDefinition(TableFilterDefinition);
@@ -474,6 +627,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Gets the new path.
+        /// </summary>
+        /// <returns>System.String.</returns>
         internal override string GetNewPath()
         {
             if (!Path.IsNullOrEmpty())
@@ -504,6 +661,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return path;// + FieldDefinition.MakePath();
         }
 
+        /// <summary>
+        /// Converts to universal time.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>DateTime.</returns>
         protected internal override DateTime ConvertToUniversalTime(DateTime date)
         {
             if (FieldDefinition is DateFieldDefinition dateField)
@@ -516,6 +678,9 @@ namespace RingSoft.DbLookup.TableProcessing
             return base.ConvertToUniversalTime(date);
         }
 
+        /// <summary>
+        /// Sets the table description.
+        /// </summary>
         public override void SetTableDescription()
         {
             if (Path.IsNullOrEmpty())
@@ -539,6 +704,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the maui filter.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="param">The parameter.</param>
+        /// <returns>Expression.</returns>
         public override Expression GetMauiFilter<TEntity>(ParameterExpression param)
         {
             if (FormulaToSearch != null)
@@ -584,6 +755,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Determines whether [is nullable filter].
+        /// </summary>
+        /// <returns><c>true</c> if [is nullable filter]; otherwise, <c>false</c>.</returns>
         public bool IsNullableFilter()
         {
             var result = FieldDefinition.AllowNulls;
@@ -610,6 +785,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Determines whether [is null filter].
+        /// </summary>
+        /// <returns><c>true</c> if [is null filter]; otherwise, <c>false</c>.</returns>
         public bool IsNullFilter()
         {
             var result = false;
@@ -620,6 +799,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Sets the field to display.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
         public void SetFieldToDisplay(Conditions condition)
         {
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)

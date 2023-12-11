@@ -1,4 +1,17 @@
-﻿using System.Collections.Generic;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 06-19-2023
+// ***********************************************************************
+// <copyright file="DeleteRecordItemViewModel.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,11 +24,23 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup
 {
+    /// <summary>
+    /// Class DeleteRecordItemViewModel.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class DeleteRecordItemViewModel : INotifyPropertyChanged
     {
-		private bool _deleteAllRecords;
+        /// <summary>
+        /// The delete all records
+        /// </summary>
+        private bool _deleteAllRecords;
 
-		public bool DeleteAllRecords
+        /// <summary>
+        /// Gets or sets a value indicating whether [delete all records].
+        /// </summary>
+        /// <value><c>true</c> if [delete all records]; otherwise, <c>false</c>.</value>
+        public bool DeleteAllRecords
 		{
 			get => _deleteAllRecords;
             set
@@ -30,8 +55,15 @@ namespace RingSoft.DbLookup
             }
 		}
 
+        /// <summary>
+        /// The null all records
+        /// </summary>
         private bool _nullAllRecords;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [null all records].
+        /// </summary>
+        /// <value><c>true</c> if [null all records]; otherwise, <c>false</c>.</value>
         public bool NullAllRecords
         {
             get => _nullAllRecords;
@@ -48,8 +80,15 @@ namespace RingSoft.DbLookup
         }
 
 
+        /// <summary>
+        /// The lookup definition
+        /// </summary>
         private LookupDefinitionBase _lookupDefinition;
 
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;
@@ -64,8 +103,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The lookup command
+        /// </summary>
         private LookupCommand _lookupCommand;
 
+        /// <summary>
+        /// Gets or sets the lookup command.
+        /// </summary>
+        /// <value>The lookup command.</value>
         public LookupCommand LookupCommand
         {
             get => _lookupCommand;
@@ -79,8 +125,16 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets the delete table.
+        /// </summary>
+        /// <value>The delete table.</value>
         public DeleteTable DeleteTable { get; private set; }
 
+        /// <summary>
+        /// Initializes the specified delete table.
+        /// </summary>
+        /// <param name="deleteTable">The delete table.</param>
         public void Initialize(DeleteTable deleteTable)
         {
             DeleteTable = deleteTable;
@@ -193,6 +247,13 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Processes the field joins.
+        /// </summary>
+        /// <param name="deleteTable">The delete table.</param>
+        /// <param name="joins">The joins.</param>
+        /// <param name="parentJoin">The parent join.</param>
+        /// <returns>LookupJoin.</returns>
         private LookupJoin ProcessFieldJoins(DeleteTable deleteTable, List<TableFieldJoinDefinition> joins, LookupJoin parentJoin = null)
         {
             LookupJoin join = null;
@@ -229,13 +290,28 @@ namespace RingSoft.DbLookup
             return join;
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Sets the field.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="field">The field.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;

@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-29-2023
+// ***********************************************************************
+// <copyright file="ExtensionMethods.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
@@ -16,16 +29,36 @@ using RingSoft.DbLookup.TableProcessing;
 namespace RingSoft.DbLookup
 {
     /// <summary>
+    /// Class JoinInfo.
+    /// </summary>
+    /// <font color="red">Badly formed XML comment.</font>
     public class JoinInfo
     {
+        /// <summary>
+        /// Gets or sets the parent join.
+        /// </summary>
+        /// <value>The parent join.</value>
         public TableFieldJoinDefinition ParentJoin { get; set; }
 
+        /// <summary>
+        /// Gets or sets the child join.
+        /// </summary>
+        /// <value>The child join.</value>
         public TableFieldJoinDefinition ChildJoin { get; set; }
     }
 
+    /// <summary>
+    /// Class ExtensionMethods.
+    /// </summary>
     public static class ExtensionMethods
     {
 
+        /// <summary>
+        /// Trims the right.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="trimChars">The trim chars.</param>
+        /// <returns>System.String.</returns>
         public static string TrimRight(this string value, string trimChars)
         {
             return value.LeftStr(value.Length - trimChars.Length);
@@ -34,7 +67,7 @@ namespace RingSoft.DbLookup
         #region Property Name
 
         /// <summary>
-        /// Gets the full name of the property. (u => u.UserId returns "UserId")
+        /// Gets the full name of the property. (u =&gt; u.UserId returns "UserId")
         /// </summary>
         /// <typeparam name="T">The first parameter of the Func.</typeparam>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -57,6 +90,12 @@ namespace RingSoft.DbLookup
         }
 
         // code adjusted to prevent horizontal overflow
+        /// <summary>
+        /// Tries the find member expression.
+        /// </summary>
+        /// <param name="exp">The exp.</param>
+        /// <param name="memberExp">The member exp.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private static bool TryFindMemberExpression
             (Expression exp, out MemberExpression memberExp)
         {
@@ -85,6 +124,11 @@ namespace RingSoft.DbLookup
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified exp is conversion.
+        /// </summary>
+        /// <param name="exp">The exp.</param>
+        /// <returns><c>true</c> if the specified exp is conversion; otherwise, <c>false</c>.</returns>
         private static bool IsConversion(Expression exp)
         {
             return (
@@ -95,6 +139,12 @@ namespace RingSoft.DbLookup
 
         #endregion
 
+        /// <summary>
+        /// Converts the type of the database date type to date format.
+        /// </summary>
+        /// <param name="dbDateType">Type of the database date.</param>
+        /// <returns>DateFormatTypes.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">dbDateType - null</exception>
         public static DateFormatTypes ConvertDbDateTypeToDateFormatType(this DbDateTypes dbDateType)
         {
             switch (dbDateType)
@@ -109,6 +159,12 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Converts the type of the decimal field type to decimal edit format.
+        /// </summary>
+        /// <param name="decimalFieldType">Type of the decimal field.</param>
+        /// <returns>DecimalEditFormatTypes.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">decimalFieldType - null</exception>
         public static DecimalEditFormatTypes ConvertDecimalFieldTypeToDecimalEditFormatType(
             this DecimalFieldTypes decimalFieldType)
         {
@@ -125,6 +181,11 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <param name="pkValue">The pk value.</param>
+        /// <returns><c>true</c> if the specified pk value is valid; otherwise, <c>false</c>.</returns>
         public static bool IsValid(this PrimaryKeyValue pkValue)
         {
             if (pkValue == null)
@@ -134,6 +195,11 @@ namespace RingSoft.DbLookup
 
             return pkValue.IntIsValid;
         }
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <returns><c>true</c> if the specified automatic fill value is valid; otherwise, <c>false</c>.</returns>
         public static bool IsValid(this AutoFillValue autoFillValue)
         {
             if (autoFillValue == null)
@@ -143,6 +209,11 @@ namespace RingSoft.DbLookup
             return autoFillValue.PrimaryKeyValue.IsValid();
         }
 
+        /// <summary>
+        /// Converts the property name to description.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>System.String.</returns>
         public static string ConvertPropertyNameToDescription(this string propertyName)
         {
             var newDescription = string.Empty;
@@ -173,6 +244,12 @@ namespace RingSoft.DbLookup
             return newDescription;
         }
 
+        /// <summary>
+        /// Converts the type of the field type into value.
+        /// </summary>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <returns>ValueTypes.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static ValueTypes ConvertFieldTypeIntoValueType(this FieldDataTypes fieldDataType)
         {
             var valueType = ValueTypes.String;
@@ -202,11 +279,23 @@ namespace RingSoft.DbLookup
 
         }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="primaryKeyString">The primary key string.</param>
+        /// <returns>AutoFillValue.</returns>
         public static AutoFillValue GetAutoFillValue(this TableDefinitionBase tableDefinition, string primaryKeyString)
         {
             return tableDefinition.Context.OnAutoFillTextRequest(tableDefinition, primaryKeyString);
         }
 
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <returns>TEntity.</returns>
         public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue)
             where TEntity : class, new()
         {
@@ -223,6 +312,13 @@ namespace RingSoft.DbLookup
             return new TEntity();
         }
 
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <returns>TEntity.</returns>
         public static TEntity GetEntity<TEntity>(this AutoFillValue autoFillValue,
             TableDefinition<TEntity> tableDefinition) where TEntity : class, new()
         {
@@ -235,6 +331,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Converts to date.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Nullable&lt;DateTime&gt;.</returns>
         public static DateTime? ToDate(this string value)
         {
             DateTime? result = null;
@@ -245,6 +346,12 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Converts to fielddatatype.
+        /// </summary>
+        /// <param name="valueType">Type of the value.</param>
+        /// <returns>FieldDataTypes.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">valueType - null</exception>
         public static FieldDataTypes ToFieldDataType(this ValueTypes valueType)
         {
             var result = FieldDataTypes.String;
@@ -273,6 +380,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Fills the out entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
         public static void FillOutEntity<TEntity>(this TEntity entity) where TEntity : class, new()
         {
             var table = SystemGlobals.LookupContext.TableDefinitions
@@ -282,6 +394,13 @@ namespace RingSoft.DbLookup
                 fullTable.FillOutEntity(entity);
             }
         }
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>AutoFillValue.</returns>
         public static AutoFillValue GetAutoFillValue<TEntity>(this TEntity entity
             , LookupDefinitionBase lookupDefinition = null) where TEntity : class, new()
         {
@@ -301,6 +420,13 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
+        /// <summary>
+        /// Fills the out properties.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <param name="getRelatedEntities">if set to <c>true</c> [get related entities].</param>
+        /// <returns>TEntity.</returns>
         public static TEntity FillOutProperties<TEntity>(this TEntity entity, bool getRelatedEntities) where TEntity : class, new()
         {
             if (entity == null)
@@ -337,6 +463,12 @@ namespace RingSoft.DbLookup
         }
 
 
+        /// <summary>
+        /// Converts the enumerable to data table.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="data">The data.</param>
+        /// <returns>DataTable.</returns>
         public static DataTable ConvertEnumerableToDataTable<TEntity>(this IEnumerable<TEntity> data) where TEntity : class, new()
         {
             var entityName = typeof(TEntity).Name;
@@ -363,6 +495,12 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Validates the automatic fill.
+        /// </summary>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="autoFillSetup">The automatic fill setup.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool ValidateAutoFill(this AutoFillValue autoFillValue, AutoFillSetup autoFillSetup)
         {
             var result = true;
@@ -398,6 +536,13 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the name of the property join.
+        /// </summary>
+        /// <param name="tableFieldJoinDefinition">The table field join definition.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="useParent">if set to <c>true</c> [use parent].</param>
+        /// <returns>System.String.</returns>
         public static string GetPropertyJoinName(this TableFieldJoinDefinition tableFieldJoinDefinition, string propertyName, bool useParent = false)
         {
             var result = string.Empty;
@@ -420,6 +565,11 @@ namespace RingSoft.DbLookup
 
         }
 
+        /// <summary>
+        /// Gets the navigation properties.
+        /// </summary>
+        /// <param name="parentJoin">The parent join.</param>
+        /// <returns>List&lt;JoinInfo&gt;.</returns>
         public static List<JoinInfo> GetNavigationProperties(this IJoinParent parentJoin)
         {
             var result = new List<JoinInfo>();
@@ -443,6 +593,12 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the navigation properties.
+        /// </summary>
+        /// <param name="parentJoin">The parent join.</param>
+        /// <param name="returnParent">if set to <c>true</c> [return parent].</param>
+        /// <returns>List&lt;JoinInfo&gt;.</returns>
         public static List<JoinInfo> GetNavigationProperties(this TableFieldJoinDefinition parentJoin, bool returnParent = false)
         {
             var result = new List<JoinInfo>();
@@ -468,6 +624,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets all navigation properties.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>List&lt;JoinInfo&gt;.</returns>
         public static List<JoinInfo> GetAllNavigationProperties(this LookupDefinitionBase lookupDefinition)
         {
             var result = new List<JoinInfo>();
@@ -506,6 +667,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets all include properties from nav properties.
+        /// </summary>
+        /// <param name="joinsInfos">The joins infos.</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
         public static List<string> GetAllIncludePropertiesFromNavProperties(this List<JoinInfo> joinsInfos)
         {
             var result = new List<string>();
@@ -516,6 +682,12 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the include property from nav property.
+        /// </summary>
+        /// <param name="joinInfo">The join information.</param>
+        /// <param name="joinInfos">The join infos.</param>
+        /// <returns>System.String.</returns>
         public static string GetIncludePropertyFromNavProperty(this JoinInfo joinInfo, List<JoinInfo> joinInfos)
         {
             var result = joinInfo.ChildJoin.ForeignKeyDefinition.ForeignObjectPropertyName;
@@ -530,6 +702,14 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the property filter value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="valType">Type of the value.</param>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">dataType - null</exception>
         public static object GetPropertyFilterValue(this string value, FieldDataTypes dataType, Type valType)
         {
             var nullable = false;
@@ -614,11 +794,25 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Appends the expression.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <param name="endLogic">The end logic.</param>
+        /// <returns>Expression.</returns>
         public static Expression AppendExpression(this BinaryExpression left, BinaryExpression right, EndLogics endLogic)
         {
             return FilterItemDefinition.AppendExpression(left, right, endLogic);
         }
 
+        /// <summary>
+        /// Determines whether [is equal to] [the specified last].
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="first">The first.</param>
+        /// <param name="last">The last.</param>
+        /// <returns><c>true</c> if [is equal to] [the specified last]; otherwise, <c>false</c>.</returns>
         public static bool IsEqualTo<TEntity>(this TEntity first, TEntity last) where TEntity : class, new()
         {
             var tableDef = GblMethods.GetTableDefinition<TEntity>();

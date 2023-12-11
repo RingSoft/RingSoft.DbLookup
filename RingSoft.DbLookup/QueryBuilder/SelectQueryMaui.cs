@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 06-17-2023
+//
+// Last Modified By : petem
+// Last Modified On : 07-10-2023
+// ***********************************************************************
+// <copyright file="SelectQueryMaui.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -11,24 +24,62 @@ using FieldDefinition = RingSoft.DbLookup.ModelDefinition.FieldDefinitions.Field
 
 namespace RingSoft.DbLookup.QueryBuilder
 {
+    /// <summary>
+    /// Class SelectQueryColumnFieldMap.
+    /// </summary>
     public class SelectQueryColumnFieldMap
     {
+        /// <summary>
+        /// Gets the column.
+        /// </summary>
+        /// <value>The column.</value>
         public LookupFieldColumnDefinition Column { get; internal set; }
 
+        /// <summary>
+        /// Gets the field.
+        /// </summary>
+        /// <value>The field.</value>
         public FieldDefinition Field { get; internal set; }
 
+        /// <summary>
+        /// Gets the TreeView item.
+        /// </summary>
+        /// <value>The TreeView item.</value>
         public TreeViewItem TreeViewItem { get; internal set; }
     }
+    /// <summary>
+    /// Class SelectQueryMauiBase.
+    /// </summary>
     public abstract class SelectQueryMauiBase
     {
+        /// <summary>
+        /// Gets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition { get; }
 
+        /// <summary>
+        /// Gets the column maps.
+        /// </summary>
+        /// <value>The column maps.</value>
         public List<SelectQueryColumnFieldMap> ColumnMaps { get; }
 
+        /// <summary>
+        /// Gets the maximum records.
+        /// </summary>
+        /// <value>The maximum records.</value>
         public int MaxRecords { get; private set; }
 
+        /// <summary>
+        /// Gets the filter.
+        /// </summary>
+        /// <value>The filter.</value>
         public TableFilterDefinitionBase Filter { get; internal set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SelectQueryMauiBase"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public SelectQueryMauiBase(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition.Clone();
@@ -37,22 +88,54 @@ namespace RingSoft.DbLookup.QueryBuilder
             ColumnMaps = new List<SelectQueryColumnFieldMap>();
         }
 
+        /// <summary>
+        /// Sets the maximum records.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public void SetMaxRecords(int value)
         {
             MaxRecords = value;
         }
 
+        /// <summary>
+        /// Adds the column.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public abstract LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition
         , FieldDefinition parentField = null);
 
+        /// <summary>
+        /// Adds the column.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public abstract LookupFieldColumnDefinition AddColumn(TableDefinitionBase tableDefinition
             , FieldDefinition fieldDefinition);
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public abstract FieldFilterDefinition AddFilter(
             LookupFieldColumnDefinition column
             , Conditions condition
             , string value);
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <param name="filterField">The filter field.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public abstract FieldFilterDefinition AddFilter(
             LookupFieldColumnDefinition column
             , Conditions condition
@@ -60,26 +143,82 @@ namespace RingSoft.DbLookup.QueryBuilder
             , FieldDefinition parentField = null
             , FieldDefinition filterField = null);
 
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool GetData(IDbContext context = null);
 
+        /// <summary>
+        /// Records the count.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         public abstract int RecordCount();
 
+        /// <summary>
+        /// Sets the null.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool SetNull(LookupFieldColumnDefinition column, IDbContext context);
 
+        /// <summary>
+        /// Deletes all data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool DeleteAllData(IDbContext context);
 
+        /// <summary>
+        /// Gets the data result.
+        /// </summary>
+        /// <returns>List&lt;PrimaryKeyValue&gt;.</returns>
         public abstract List<PrimaryKeyValue> GetDataResult();
 
+        /// <summary>
+        /// Gets the property value.
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="property">The property.</param>
+        /// <returns>System.String.</returns>
         public abstract string GetPropertyValue(int rowIndex, string property);
     }
+    /// <summary>
+    /// Class SelectQueryMaui.
+    /// Implements the <see cref="RingSoft.DbLookup.QueryBuilder.SelectQueryMauiBase" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="RingSoft.DbLookup.QueryBuilder.SelectQueryMauiBase" />
     public class SelectQueryMaui<TEntity> : SelectQueryMauiBase where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinition<TEntity> TableDefinition { get; }
+        /// <summary>
+        /// Gets the filter.
+        /// </summary>
+        /// <value>The filter.</value>
         public new TableFilterDefinition<TEntity> Filter { get; }
 
+        /// <summary>
+        /// Gets the result.
+        /// </summary>
+        /// <value>The result.</value>
         public IQueryable<TEntity> Result { get; private set; }
+        /// <summary>
+        /// Gets the list result.
+        /// </summary>
+        /// <value>The list result.</value>
         public List<TEntity> ListResult { get; private set; } = new List<TEntity>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SelectQueryMaui{TEntity}"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public SelectQueryMaui(LookupDefinitionBase lookupDefinition)
         : base(lookupDefinition)
         {
@@ -88,6 +227,12 @@ namespace RingSoft.DbLookup.QueryBuilder
             base.Filter = Filter;
         }
 
+        /// <summary>
+        /// Adds the column.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public override LookupFieldColumnDefinition AddColumn(FieldDefinition fieldDefinition,
             FieldDefinition parentField = null)
         {
@@ -124,6 +269,12 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Adds the column.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public override LookupFieldColumnDefinition AddColumn(TableDefinitionBase tableDefinition
             , FieldDefinition fieldDefinition)
         {
@@ -146,6 +297,13 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public override FieldFilterDefinition AddFilter(
             LookupFieldColumnDefinition column
             , Conditions condition
@@ -159,6 +317,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <param name="filterField">The filter field.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public override FieldFilterDefinition AddFilter(
             LookupFieldColumnDefinition column
             , Conditions condition
@@ -194,6 +361,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool GetData(IDbContext context = null)
         {
             try
@@ -226,6 +398,10 @@ namespace RingSoft.DbLookup.QueryBuilder
             return true;
         }
 
+        /// <summary>
+        /// Records the count.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         public override int RecordCount()
         {
             if (Result == null)
@@ -236,6 +412,12 @@ namespace RingSoft.DbLookup.QueryBuilder
             return Result.Count();
         }
 
+        /// <summary>
+        /// Sets the null.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool SetNull(LookupFieldColumnDefinition column, IDbContext context)
         {
             var maxRecords = MaxRecords;
@@ -263,6 +445,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Deletes all data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool DeleteAllData(IDbContext context)
         {
             var maxRecords = MaxRecords;
@@ -292,6 +479,10 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Gets the data result.
+        /// </summary>
+        /// <returns>List&lt;PrimaryKeyValue&gt;.</returns>
         public override List<PrimaryKeyValue> GetDataResult()
         {
             var result = new List<PrimaryKeyValue>();
@@ -303,6 +494,13 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Gets the property value.
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="property">The property.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.Exception">Invalid Row Index</exception>
         public override string GetPropertyValue(int rowIndex, string property)
         {
             if (rowIndex > ListResult.Count - 1)
@@ -312,6 +510,10 @@ namespace RingSoft.DbLookup.QueryBuilder
             
             return GblMethods.GetPropertyValue(ListResult[rowIndex], property);
         }
+        /// <summary>
+        /// Deletes the properties.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         private void DeleteProperties(TEntity entity)
         {
             foreach (var fieldDefinition in TableDefinition.FieldDefinitions

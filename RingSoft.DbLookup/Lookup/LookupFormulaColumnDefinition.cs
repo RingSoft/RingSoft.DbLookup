@@ -1,4 +1,17 @@
-﻿using RingSoft.DbLookup.QueryBuilder;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-23-2023
+// ***********************************************************************
+// <copyright file="LookupFormulaColumnDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.QueryBuilder;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -12,10 +25,22 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    /// <summary>
+    /// Interface ILookupFormula
+    /// </summary>
     public interface ILookupFormula
     {
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
         int Id { get; }
 
+        /// <summary>
+        /// Gets the database value.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         string GetDatabaseValue(object entity);
     }
     /// <summary>
@@ -27,49 +52,37 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the type of the column.
         /// </summary>
-        /// <value>
-        /// The type of the column.
-        /// </value>
+        /// <value>The type of the column.</value>
         public override LookupColumnTypes ColumnType => LookupColumnTypes.Formula;
 
         /// <summary>
         /// Gets the type of the data.
         /// </summary>
-        /// <value>
-        /// The type of the data.
-        /// </value>
+        /// <value>The type of the data.</value>
         public override FieldDataTypes DataType => _dataType;
 
         /// <summary>
         /// Gets the type of the value.
         /// </summary>
-        /// <value>
-        /// The type of the value.
-        /// </value>
+        /// <value>The type of the value.</value>
         public ValueTypes ValueType => GblMethods.GetValueTypeForFieldDataType(DataType);
 
         /// <summary>
         /// Gets the select SQL alias.
         /// </summary>
-        /// <value>
-        /// The select SQL alias.
-        /// </value>
+        /// <value>The select SQL alias.</value>
         public override string SelectSqlAlias => _selectSqlAlias;
 
         /// <summary>
         /// Gets the number format string.
         /// </summary>
-        /// <value>
-        /// The number format string.
-        /// </value>
+        /// <value>The number format string.</value>
         public string NumberFormatString { get; internal set; }
 
         /// <summary>
         /// Gets the date format string.
         /// </summary>
-        /// <value>
-        /// The date format string.
-        /// </value>
+        /// <value>The date format string.</value>
         public string DateFormatString { get; private set; }
 
         /// <summary>
@@ -81,6 +94,10 @@ namespace RingSoft.DbLookup.Lookup
 
         private string _formula;
 
+        /// <summary>
+        /// Gets or sets the formula.
+        /// </summary>
+        /// <value>The formula.</value>
         public string Formula
         {
             get
@@ -104,16 +121,21 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the original formula.
+        /// </summary>
+        /// <value>The original formula.</value>
         public string OriginalFormula { get; private set; }
 
+        /// <summary>
+        /// The column culture
+        /// </summary>
         private CultureInfo _columnCulture;
 
         /// <summary>
         /// Gets the culture.
         /// </summary>
-        /// <value>
-        /// The culture.
-        /// </value>
+        /// <value>The culture.</value>
         public CultureInfo ColumnCulture
         {
             get
@@ -136,47 +158,71 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the number of digits to the right of the double point.
         /// </summary>
-        /// <value>
-        /// The double count.
-        /// </value>
+        /// <value>The double count.</value>
         public int DecimalCount { get; internal set; }
 
         /// <summary>
         /// Gets the type of the double field.
         /// </summary>
-        /// <value>
-        /// The type of the double field.
-        /// </value>
+        /// <value>The type of the double field.</value>
         public DecimalFieldTypes DecimalFieldType { get; set; }
 
         /// <summary>
         /// Gets the type of the date.
         /// </summary>
-        /// <value>
-        /// The type of the date.
-        /// </value>
+        /// <value>The type of the date.</value>
         public DbDateTypes DateType { get; set; }
 
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>The description.</value>
         public string Description { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the primary table.
+        /// </summary>
+        /// <value>The primary table.</value>
         public TableDefinitionBase PrimaryTable { get; set; }
 
+        /// <summary>
+        /// Gets or sets the primary field.
+        /// </summary>
+        /// <value>The primary field.</value>
         public FieldDefinition PrimaryField { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [convert to local time].
+        /// </summary>
+        /// <value><c>true</c> if [convert to local time]; otherwise, <c>false</c>.</value>
         public bool ConvertToLocalTime { get; private set; }
 
+        /// <summary>
+        /// Gets the formula object.
+        /// </summary>
+        /// <value>The formula object.</value>
         public ILookupFormula FormulaObject { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [allow nulls].
+        /// </summary>
+        /// <value><c>true</c> if [allow nulls]; otherwise, <c>false</c>.</value>
         public bool AllowNulls { get; internal set; }
 
+        /// <summary>
+        /// The select SQL alias
+        /// </summary>
         private readonly string _selectSqlAlias;
+        /// <summary>
+        /// The data type
+        /// </summary>
         private FieldDataTypes _dataType;
-        
+
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupFormulaColumnDefinition"/> class.
+        /// Initializes a new instance of the <see cref="LookupFormulaColumnDefinition" /> class.
         /// </summary>
-        /// <param name="formula">The formula.</param>
+        /// <param name="formulaObject">The formula object.</param>
         /// <param name="dataType">Type of the data.</param>
         internal LookupFormulaColumnDefinition(ILookupFormula formulaObject, FieldDataTypes dataType)
         {
@@ -191,6 +237,12 @@ namespace RingSoft.DbLookup.Lookup
             FormulaObject = formulaObject;
         }
 
+        /// <summary>
+        /// Processes the new visible column.
+        /// </summary>
+        /// <param name="columnDefinition">The column definition.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="copyFrom">if set to <c>true</c> [copy from].</param>
         protected internal override void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition, LookupDefinitionBase lookupDefinition,
             bool copyFrom = true)
         {
@@ -198,13 +250,24 @@ namespace RingSoft.DbLookup.Lookup
             LookupDefinition.TableDefinition.Context.RegisterLookupFormula(FormulaObject);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupFormulaColumnDefinition"/> class.
+        /// </summary>
         internal LookupFormulaColumnDefinition()
         {
             _selectSqlAlias = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
         }
 
+        /// <summary>
+        /// Gets the type of the TreeView.
+        /// </summary>
+        /// <value>The type of the TreeView.</value>
         public override TreeViewType TreeViewType => TreeViewType.Formula;
 
+        /// <summary>
+        /// Copies from.
+        /// </summary>
+        /// <param name="source">The source.</param>
         internal override void CopyFrom(LookupColumnDefinitionBase source)
         {
             if (source is LookupFormulaColumnDefinition formulaSource)
@@ -231,6 +294,11 @@ namespace RingSoft.DbLookup.Lookup
             base.CopyFrom(source);
         }
 
+        /// <summary>
+        /// Updates the formula.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition UpdateFormula(string formula)
         {
             Formula = formula;
@@ -243,6 +311,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="value">The number format string.</param>
         /// <returns>This object.</returns>
+        /// <exception cref="System.ArgumentException">Invalid format string.</exception>
         public LookupFormulaColumnDefinition HasNumberFormatString(string value)
         {
             var number = 100000.12;
@@ -266,6 +335,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="value">The date format string.</param>
         /// <returns>This object.</returns>
+        /// <exception cref="System.ArgumentException">Invalid date format string.</exception>
         public LookupFormulaColumnDefinition HasDateFormatString(string value)
         {
             var date = new DateTime(2000, 01, 01);
@@ -287,7 +357,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Sets the column culture identifier.
         /// </summary>
         /// <param name="cultureId">The culture identifier.</param>
-        /// <returns></returns>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition HasColumnCultureId(string cultureId)
         {
             ColumnCulture = new CultureInfo(cultureId);
@@ -299,9 +369,8 @@ namespace RingSoft.DbLookup.Lookup
         /// Formats the value to display in the lookup view.
         /// </summary>
         /// <param name="value">The value from the database.</param>
-        /// <returns>
-        /// The formatted value.
-        /// </returns>
+        /// <returns>The formatted value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="NotImplementedException"></exception>
         public override string FormatValue(string value)
         {
@@ -329,6 +398,11 @@ namespace RingSoft.DbLookup.Lookup
             return GblMethods.FormatValue(DataType, value);
         }
 
+        /// <summary>
+        /// Gets the text for column.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>System.String.</returns>
         public override string GetTextForColumn(PrimaryKeyValue primaryKeyValue)
         {
             var query = new SelectQuery(primaryKeyValue.TableDefinition.TableName);
@@ -396,29 +470,52 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
+        /// <summary>
+        /// Determines whether the specified value has description.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition HasDescription(string value)
         {
             Description = value;
             return this;
         }
 
+        /// <summary>
+        /// Determines whether [has data type] [the specified value].
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition HasDataType(FieldDataTypes value)
         {
             _dataType = value;
             return this;
         }
 
+        /// <summary>
+        /// Determines whether [has convert to local time] [the specified value].
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition HasConvertToLocalTime(bool value = true)
         {
             ConvertToLocalTime = value;
             return this;
         }
 
+        /// <summary>
+        /// Gets the formula for column.
+        /// </summary>
+        /// <returns>ILookupFormula.</returns>
         internal override ILookupFormula GetFormulaForColumn()
         {
             return FormulaObject;
         }
 
+        /// <summary>
+        /// Adds the new column definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
             var newColumn = new LookupFormulaColumnDefinition(FormulaObject, DataType);
@@ -431,6 +528,11 @@ namespace RingSoft.DbLookup.Lookup
             base.AddNewColumnDefinition(lookupDefinition);
         }
 
+        /// <summary>
+        /// Loads from TreeView item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>System.String.</returns>
         internal override string LoadFromTreeViewItem(TreeViewItem item)
         {
             if (item.FieldDefinition != null)
@@ -447,6 +549,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             if (Caption.IsNullOrEmpty())
@@ -456,6 +562,10 @@ namespace RingSoft.DbLookup.Lookup
             return base.ToString();
         }
 
+        /// <summary>
+        /// Saves to entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public override void SaveToEntity(AdvancedFindColumn entity)
         {
             entity.Formula = FormulaObject.Id.ToString();
@@ -468,6 +578,12 @@ namespace RingSoft.DbLookup.Lookup
             base.SaveToEntity(entity);
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
         {
             var formulaId = entity.Formula.ToInt();
@@ -527,11 +643,22 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the name of the property join.
+        /// </summary>
+        /// <param name="useDbField">if set to <c>true</c> [use database field].</param>
+        /// <returns>System.String.</returns>
         public override string GetPropertyJoinName(bool useDbField = false)
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Gets the database value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
             var result = string.Empty;
@@ -556,6 +683,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the formatted value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         public override string GetFormattedValue<TEntity>(TEntity entity)
         {
             var value = GetDatabaseValue(entity);

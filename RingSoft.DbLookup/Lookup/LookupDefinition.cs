@@ -1,4 +1,17 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-08-2023
+// ***********************************************************************
+// <copyright file="LookupDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 using System;
@@ -25,21 +38,17 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the filter definition.
         /// </summary>
-        /// <value>
-        /// The filter definition.
-        /// </value>
+        /// <value>The filter definition.</value>
         public new TableFilterDefinition<TEntity> FilterDefinition { get; }
 
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public new TableDefinition<TEntity> TableDefinition { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDefinition{TLookupEntity, TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupDefinition{TLookupEntity, TEntity}" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public LookupDefinition(TableDefinition<TEntity> tableDefinition) : base(tableDefinition)
@@ -49,6 +58,13 @@ namespace RingSoft.DbLookup.Lookup
             base.FilterDefinition = FilterDefinition = new TableFilterDefinition<TEntity>(TableDefinition);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupDefinition{TLookupEntity, TEntity}"/> class.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <param name="lookupRefresher">The lookup refresher.</param>
+        /// <exception cref="System.Exception"></exception>
         public LookupDefinition(TableDefinition<TEntity> tableDefinition, int advancedFindId
             , LookupRefresher lookupRefresher) : base(advancedFindId, lookupRefresher)
         {
@@ -59,6 +75,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Bases the clone.
+        /// </summary>
+        /// <returns>LookupDefinitionBase.</returns>
         protected override LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinition<TLookupEntity, TEntity>(TableDefinition);
@@ -80,7 +100,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="entityProperty">The entity property.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             Expression<Func<TEntity, object>> entityProperty)
@@ -88,6 +108,14 @@ namespace RingSoft.DbLookup.Lookup
             return AddVisibleColumnDefinition(lookupEntityProperty, string.Empty, entityProperty, 0);
         }
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="entityProperty">The entity property.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth)
@@ -102,7 +130,8 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="caption">The caption.</param>
         /// <param name="entityProperty">The entity property.</param>
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             string caption, Expression<Func<TEntity, object>> entityProperty, double percentWidth, string alias)
         {
@@ -115,8 +144,9 @@ namespace RingSoft.DbLookup.Lookup
         /// Adds a visible formula column definition.
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <param name="formula">The formula.</param>
-        /// <returns></returns>
+        /// <param name="lookupFormula">The lookup formula.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, ILookupFormula lookupFormula, string alias)
         {
@@ -128,9 +158,10 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="formula">The formula.</param>
+        /// <param name="lookupFormula">The lookup formula.</param>
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption, ILookupFormula lookupFormula,
             double percentWidth, string alias)
@@ -151,7 +182,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
-        /// <returns></returns>
+        /// <returns>LookupJoinTableEntity&lt;TLookupEntity, TEntity, TRelatedEntity&gt;.</returns>
         public LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity> Include<TRelatedEntity>(
             Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
             where TRelatedEntity : class
@@ -176,7 +207,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="entityProperty">The entity property.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             Expression<Func<TEntity, object>> entityProperty)
         {
@@ -189,7 +220,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         private LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty, FieldDefinition fieldDefinition)
         {
             ValidateProperty(lookupEntityProperty, true, string.Empty);
@@ -203,7 +234,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the column definition.
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
-        /// <returns></returns>
+        /// <returns>LookupColumnDefinitionBase.</returns>
         public LookupColumnDefinitionBase GetColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
         {
             var propertyName = lookupEntityProperty.GetFullPropertyName();
@@ -213,12 +244,26 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        /// <summary>
+        /// Gets the field column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition GetFieldColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
         {
             var column = GetColumnDefinition(lookupEntityProperty);
             return column as LookupFieldColumnDefinition;
         }
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         private LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty, string caption,
             FieldDefinition fieldDefinition,
@@ -234,6 +279,11 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        /// <summary>
+        /// Gets the field data type for property.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <returns>FieldDataTypes.</returns>
         private FieldDataTypes GetFieldDataTypeForProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty)
         {
             var propertyType = GetTypeFromExpression(lookupEntityProperty);
@@ -242,6 +292,15 @@ namespace RingSoft.DbLookup.Lookup
 
 
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
+        /// <summary>
+        /// Validates the property.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="hiddenProperty">if set to <c>true</c> [hidden property].</param>
+        /// <param name="columnName">Name of the column.</param>
+        /// <exception cref="System.ArgumentException">Visible bool column '{columnName}' will get converted to a string.  You must map this visible bool column to a string property.</exception>
+        /// <exception cref="System.ArgumentException">Visible enumerator column '{columnName}' will get converted to a string.  You must map this visible enumerator column to a string property.</exception>
+        /// <exception cref="System.ArgumentException">Property '{lookupEntityProperty.GetFullPropertyName()}' of type '{propertyType.Name}' is not supported.</exception>
         private void ValidateProperty(Expression<Func<TLookupEntity, object>> lookupEntityProperty, bool hiddenProperty, string columnName)
         {
             var propertyType = GetTypeFromExpression(lookupEntityProperty);
@@ -274,6 +333,11 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the type from expression.
+        /// </summary>
+        /// <param name="expr">The expr.</param>
+        /// <returns>Type.</returns>
         private Type GetTypeFromExpression(Expression<Func<TLookupEntity, object>> expr)
         {
             if ((expr.Body.NodeType == ExpressionType.Convert) ||
@@ -294,9 +358,8 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="ownerWindow">The owner window.</param>
         /// <param name="newRecordPrimaryKeyValue">The new record primary key value.</param>
         /// <param name="addViewParameter">The add-on-the-fly window's input parameter.</param>
-        /// <returns>
-        /// The new Primary Key Value and new lookup entity.
-        /// </returns>
+        /// <param name="selectedPrimaryKeyValue">The selected primary key value.</param>
+        /// <returns>The new Primary Key Value and new lookup entity.</returns>
         public NewAddOnTheFlyResult ShowAddOnTheFlyWindow(string keyText, object ownerWindow  = null,
             PrimaryKeyValue newRecordPrimaryKeyValue = null, object addViewParameter = null, PrimaryKeyValue selectedPrimaryKeyValue = null)
         {
@@ -310,6 +373,12 @@ namespace RingSoft.DbLookup.Lookup
             return addNewRecordProcessor.ShowAddOnTheFlyWindow();
         }
 
+        /// <summary>
+        /// Gets the lookup data maui.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="inputMode">if set to <c>true</c> [input mode].</param>
+        /// <returns>LookupDataMauiBase.</returns>
         public override LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode)
         {
             if (inputMode)
@@ -323,16 +392,31 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the automatic fill data maui.
+        /// </summary>
+        /// <param name="setup">The setup.</param>
+        /// <param name="control">The control.</param>
+        /// <returns>AutoFillDataMauiBase.</returns>
         public override AutoFillDataMauiBase GetAutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control)
         {
             return new AutoFillDataMaui<TEntity>(setup, control);
         }
 
+        /// <summary>
+        /// Gets the select query maui.
+        /// </summary>
+        /// <returns>SelectQueryMauiBase.</returns>
         public override SelectQueryMauiBase GetSelectQueryMaui()
         {
             return new SelectQueryMaui<TEntity>(this);
         }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
+        /// <returns>AutoFillValue.</returns>
         public override AutoFillValue GetAutoFillValue(PrimaryKeyValue primaryKey)
         {
             var query = TableDefinition.Context
@@ -366,6 +450,12 @@ namespace RingSoft.DbLookup.Lookup
             return autoFillValue;
         }
 
+        /// <summary>
+        /// Copies the data to.
+        /// </summary>
+        /// <param name="destinationProcessor">The destination processor.</param>
+        /// <param name="tableIndex">Index of the table.</param>
+        /// <returns>System.String.</returns>
         public override string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
         {
             if (TableDefinition.TempTable)
@@ -476,6 +566,13 @@ namespace RingSoft.DbLookup.Lookup
             return base.CopyDataTo(destinationProcessor, tableIndex);
         }
 
+        /// <summary>
+        /// Filters the lookup.
+        /// </summary>
+        /// <typeparam name="THeaderEntity">The type of the t header entity.</typeparam>
+        /// <param name="headerEntity">The header entity.</param>
+        /// <param name="addViewParameter">The add view parameter.</param>
+        /// <exception cref="System.Exception">Invalid Header Object</exception>
         public override void FilterLookup<THeaderEntity>(THeaderEntity headerEntity, object addViewParameter = null)
         {
             FilterDefinition.ClearFixedFilters();

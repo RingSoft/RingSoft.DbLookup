@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="DbDataProcessor.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -8,14 +21,38 @@ using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.DataProcessor
 {
+    /// <summary>
+    /// Enum DbFieldTypes
+    /// </summary>
     public enum DbFieldTypes
     {
+        /// <summary>
+        /// The integer
+        /// </summary>
         Integer,
+        /// <summary>
+        /// The string
+        /// </summary>
         String,
+        /// <summary>
+        /// The decimal
+        /// </summary>
         Decimal,
+        /// <summary>
+        /// The date time
+        /// </summary>
         DateTime,
+        /// <summary>
+        /// The byte
+        /// </summary>
         Byte,
+        /// <summary>
+        /// The bool
+        /// </summary>
         Bool,
+        /// <summary>
+        /// The memo
+        /// </summary>
         Memo
     }
     /// <summary>
@@ -26,54 +63,75 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <summary>
         /// Gets the database connection string.
         /// </summary>
-        /// <value>
-        /// The connection string.
-        /// </value>
+        /// <value>The connection string.</value>
         public abstract string ConnectionString { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to keep the database connection open after retrieving data.  If set to true,
         /// then the calling code will need to close the connection manually by running the CloseConnection method.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [keep database connection open]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [keep database connection open]; otherwise, <c>false</c>.</value>
         public bool KeepConnectionOpen { get; set; }
 
         /// <summary>
         /// Implement this to create and return the SQL generator which will be used in GetData.
         /// </summary>
-        /// <value>
-        /// The SQL generator.
-        /// </value>
+        /// <value>The SQL generator.</value>
         public abstract DbSelectSqlGenerator SqlGenerator { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is closed.
+        /// </summary>
+        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
         public bool IsClosed { get; internal set; }
 
         /// <summary>
         /// Gets the user interface for this class to interact with.
         /// </summary>
-        /// <value>
-        /// Gets the user interface.
-        /// </value>
+        /// <value>Gets the user interface.</value>
         public static IDbLookupUserInterface UserInterface { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [dont display exceptions].
+        /// </summary>
+        /// <value><c>true</c> if [dont display exceptions]; otherwise, <c>false</c>.</value>
         public static bool DontDisplayExceptions { get; set; }
 
+        /// <summary>
+        /// Gets the last exception.
+        /// </summary>
+        /// <value>The last exception.</value>
         public static string LastException { get; private set; }
 
 
+        /// <summary>
+        /// Gets a value indicating whether [show SQL window].
+        /// </summary>
+        /// <value><c>true</c> if [show SQL window]; otherwise, <c>false</c>.</value>
         internal static bool ShowSqlWindow => _showSqlWindow;
 
+        /// <summary>
+        /// The valid
+        /// </summary>
         private bool _valid;
 
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
         public bool IsValid
         {
             get => _valid;
             set => _valid= value;
         }
 
-            private static bool _showSqlWindow;
+        /// <summary>
+        /// The show SQL window
+        /// </summary>
+        private static bool _showSqlWindow;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbDataProcessor"/> class.
+        /// </summary>
         public DbDataProcessor()
         {
             if (UserInterface == null)
@@ -88,10 +146,11 @@ namespace RingSoft.DbLookup.DataProcessor
         {
             _showSqlWindow = value;
         }
-        
+
         /// <summary>
         /// Closes the database connection.
         /// </summary>
+        /// <param name="connection">The connection.</param>
         public virtual void CloseConnection(IDbConnection connection)
         {
             KeepConnectionOpen = false;
@@ -106,10 +165,23 @@ namespace RingSoft.DbLookup.DataProcessor
 
         }
 
+        /// <summary>
+        /// Gets the database list SQL.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public abstract string GetDatabaseListSql();
 
+        /// <summary>
+        /// Gets the drop database SQL.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
+        /// <returns>System.String.</returns>
         public abstract string GetDropDatabaseSql(string databaseName);
 
+        /// <summary>
+        /// Drops the database.
+        /// </summary>
+        /// <returns>DataProcessResult.</returns>
         public abstract DataProcessResult DropDatabase();
 
         /// <summary>
@@ -117,7 +189,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
-        /// <returns></returns>
+        /// <param name="showError">if set to <c>true</c> [show error].</param>
+        /// <returns>DataProcessResult.</returns>
         public DataProcessResult GetData(QueryBase query, bool setWaitCursor = true, bool showError = true)
         {
             var querySet = new QuerySet();
@@ -131,7 +204,9 @@ namespace RingSoft.DbLookup.DataProcessor
         /// </summary>
         /// <param name="querySet">The query set.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
-        /// <returns></returns>
+        /// <param name="showError">if set to <c>true</c> [show error].</param>
+        /// <returns>DataProcessResult.</returns>
+        /// <exception cref="System.Exception">Not Valid Anymore</exception>
         public DataProcessResult GetData(QuerySet querySet, bool setWaitCursor = true, bool showError = true)
         {
             throw new Exception("Not Valid Anymore");
@@ -144,7 +219,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="sqlStatement">The SQL statement.</param>
         /// <param name="clearConnectionPools">if set to <c>true</c> clear connection pools.</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
-        /// <returns></returns>
+        /// <param name="showError">if set to <c>true</c> [show error].</param>
+        /// <returns>DataProcessResult.</returns>
         public DataProcessResult ExecuteSql(string sqlStatement, bool clearConnectionPools = false, bool setWaitCursor = true, bool showError = true)
         {
             var sqlList = new List<string>();
@@ -158,7 +234,8 @@ namespace RingSoft.DbLookup.DataProcessor
         /// <param name="sqlsList">The SQLS list.</param>
         /// <param name="clearConnectionPools">if set to <c>true</c> [clear connection pools].</param>
         /// <param name="setWaitCursor">if set to <c>true</c> set mouse cursor to wait.</param>
-        /// <returns></returns>
+        /// <param name="showError">if set to <c>true</c> [show error].</param>
+        /// <returns>DataProcessResult.</returns>
         public DataProcessResult ExecuteSqls(List<string> sqlsList, bool clearConnectionPools = false, bool setWaitCursor = true, bool showError = true)
         {
             if (setWaitCursor)
@@ -208,6 +285,9 @@ namespace RingSoft.DbLookup.DataProcessor
             };
         }
 
+        /// <summary>
+        /// Clears the connection pools.
+        /// </summary>
         protected virtual void ClearConnectionPools()
         {
 
@@ -229,6 +309,12 @@ namespace RingSoft.DbLookup.DataProcessor
             ControlsGlobals.UserInterface.ShowMessageBox(exception.Message, debugMessage, RsMessageBoxIcons.Error);
         }
 
+        /// <summary>
+        /// Gets the identity insert SQL.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="setOn">if set to <c>true</c> [set on].</param>
+        /// <returns>System.String.</returns>
         public virtual string GetIdentityInsertSql(string tableName, bool setOn)
         {
             var strOn = "ON";
@@ -238,6 +324,10 @@ namespace RingSoft.DbLookup.DataProcessor
             return $"SET IDENTITY_INSERT {SqlGenerator.FormatSqlObject(tableName)} {strOn}";
         }
 
+        /// <summary>
+        /// Tests the connection.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool TestConnection();
     }
 }

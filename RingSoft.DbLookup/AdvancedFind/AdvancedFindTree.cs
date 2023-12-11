@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-11-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindTree.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -11,44 +24,133 @@ using System.Runtime.CompilerServices;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
+    /// <summary>
+    /// Enum TreeViewType
+    /// </summary>
     public enum TreeViewType
     {
+        /// <summary>
+        /// The field
+        /// </summary>
         Field = 0,
+        /// <summary>
+        /// The advanced find
+        /// </summary>
         AdvancedFind = 1,
+        /// <summary>
+        /// The formula
+        /// </summary>
         Formula = 2,
+        /// <summary>
+        /// The foreign table
+        /// </summary>
         ForeignTable = 3
     }
 
+    /// <summary>
+    /// Class TreeViewFormulaData.
+    /// </summary>
     public class TreeViewFormulaData
     {
+        /// <summary>
+        /// Gets or sets the formula.
+        /// </summary>
+        /// <value>The formula.</value>
         public string Formula { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the data.
+        /// </summary>
+        /// <value>The type of the data.</value>
         public FieldDataTypes DataType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the decimal format.
+        /// </summary>
+        /// <value>The type of the decimal format.</value>
         public DecimalEditFormatTypes DecimalFormatType { get; set; }
     }
 
+    /// <summary>
+    /// Class ProcessIncludeResult.
+    /// </summary>
     public class ProcessIncludeResult
     {
+        /// <summary>
+        /// Gets or sets the lookup join.
+        /// </summary>
+        /// <value>The lookup join.</value>
         public LookupJoin LookupJoin { get; set; }
+        /// <summary>
+        /// Gets or sets the column definition.
+        /// </summary>
+        /// <value>The column definition.</value>
         public LookupColumnDefinitionBase ColumnDefinition { get; set; }
     }
 
+    /// <summary>
+    /// Class TreeViewItem.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class TreeViewItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public TreeViewType Type { get; set; }
+        /// <summary>
+        /// Gets or sets the field definition.
+        /// </summary>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        /// <value>The items.</value>
         public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
+        /// <summary>
+        /// Gets or sets the parent join.
+        /// </summary>
+        /// <value>The parent join.</value>
         public ForeignKeyDefinition ParentJoin { get; set; }
         //public AdvancedFindViewModel ViewModel { get; set; }
+        /// <summary>
+        /// Gets or sets the include.
+        /// </summary>
+        /// <value>The include.</value>
         public LookupJoin Include { get; set; }
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        /// <value>The parent.</value>
         public TreeViewItem Parent { get; set; }
+        /// <summary>
+        /// Gets or sets the formula data.
+        /// </summary>
+        /// <value>The formula data.</value>
         public TreeViewFormulaData FormulaData { get; set; }
+        /// <summary>
+        /// Gets or sets the base tree.
+        /// </summary>
+        /// <value>The base tree.</value>
         public AdvancedFindTree BaseTree  { get; set; }
 
+        /// <summary>
+        /// The is selected
+        /// </summary>
         private bool _isSelected;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is selected.
+        /// </summary>
+        /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -66,8 +168,15 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// The selected tree item
+        /// </summary>
         private TreeViewItem _selectedTreeItem;
 
+        /// <summary>
+        /// Gets or sets the selected tree item.
+        /// </summary>
+        /// <value>The selected tree item.</value>
         public TreeViewItem SelectedTreeItem
         {
             get => _selectedTreeItem;
@@ -78,11 +187,19 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             return Name;
         }
 
+        /// <summary>
+        /// Makes the path.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string MakePath()
         {
             var result = string.Empty;
@@ -100,6 +217,12 @@ namespace RingSoft.DbLookup.AdvancedFind
             return result;
         }
 
+        /// <summary>
+        /// Creates the column.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>LookupColumnDefinitionBase.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public LookupColumnDefinitionBase CreateColumn(int index = -1)
         {
             LookupColumnDefinitionBase result = null;
@@ -132,27 +255,65 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
             return result;
         }
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
+    /// <summary>
+    /// Class TreeViewItems.
+    /// Implements the <see cref="System.Collections.Generic.List{RingSoft.DbLookup.AdvancedFind.TreeViewItem}" />
+    /// </summary>
+    /// <seealso cref="System.Collections.Generic.List{RingSoft.DbLookup.AdvancedFind.TreeViewItem}" />
     public class TreeViewItems : List<TreeViewItem>
     {
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public TreeViewType Type { get; set; }
+        /// <summary>
+        /// Gets or sets the field definition.
+        /// </summary>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        /// <value>The items.</value>
         public ObservableCollection<TreeViewItem> Items { get; set; } = new ObservableCollection<TreeViewItem>();
     }
 
 
+    /// <summary>
+    /// Class AdvancedFindTree.
+    /// </summary>
     public class AdvancedFindTree
     {
+        /// <summary>
+        /// The lookup definition
+        /// </summary>
         private LookupDefinitionBase _lookupDefinition;
 
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;
@@ -163,22 +324,44 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Gets or sets the tree root.
+        /// </summary>
+        /// <value>The tree root.</value>
         public ObservableCollection<TreeViewItem> TreeRoot { get; set; }
 
+        /// <summary>
+        /// Occurs when [selected tree item changed].
+        /// </summary>
         public event EventHandler<TreeViewItem> SelectedTreeItemChanged;
 
+        /// <summary>
+        /// The includes
+        /// </summary>
         private List<LookupJoin> _includes = new List<LookupJoin>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindTree"/> class.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public AdvancedFindTree(LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
         }
 
+        /// <summary>
+        /// Called when [selected tree item changed].
+        /// </summary>
+        /// <param name="selectedItem">The selected item.</param>
         internal void OnSelectedTreeItemChanged(TreeViewItem selectedItem)
         {
             SelectedTreeItemChanged?.Invoke(this, selectedItem);
         }
 
+        /// <summary>
+        /// Loads the tree.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
         public void LoadTree(string tableName)
         {
             var treeItems = new ObservableCollection<TreeViewItem>();
@@ -221,6 +404,13 @@ namespace RingSoft.DbLookup.AdvancedFind
 
         }
 
+        /// <summary>
+        /// Adds the tree item.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="treeItems">The tree items.</param>
+        /// <param name="join">The join.</param>
+        /// <param name="parent">The parent.</param>
         private void AddTreeItem(TableDefinitionBase table,
     ObservableCollection<TreeViewItem> treeItems,
     ForeignKeyDefinition join, TreeViewItem parent)
@@ -260,6 +450,11 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
 
+        /// <summary>
+        /// Adds the formula to tree.
+        /// </summary>
+        /// <param name="treeItems">The tree items.</param>
+        /// <param name="parent">The parent.</param>
         private void AddFormulaToTree(ObservableCollection<TreeViewItem> treeItems, TreeViewItem parent)
         {
             var formulaTreeItem = new TreeViewItem
@@ -272,6 +467,11 @@ namespace RingSoft.DbLookup.AdvancedFind
             treeItems.Add(formulaTreeItem);
         }
 
+        /// <summary>
+        /// Adds the advanced find to tree.
+        /// </summary>
+        /// <param name="treeViewItems">The tree view items.</param>
+        /// <param name="parent">The parent.</param>
         private void AddAdvancedFindToTree(ObservableCollection<TreeViewItem> treeViewItems, TreeViewItem parent)
         {
             var result = new TreeViewItem
@@ -285,6 +485,15 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             treeViewItems.Add(result);
         }
+        /// <summary>
+        /// Finds the field in tree.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="searchForRootFormula">if set to <c>true</c> [search for root formula].</param>
+        /// <param name="parentItem">The parent item.</param>
+        /// <param name="searchSubs">if set to <c>true</c> [search subs].</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
             bool searchForRootFormula = false, TreeViewItem parentItem = null, bool searchSubs = true)
         {
@@ -322,6 +531,15 @@ namespace RingSoft.DbLookup.AdvancedFind
             return foundTreeViewItem;
         }
 
+        /// <summary>
+        /// Finds the table in tree.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="parentItem">The parent item.</param>
+        /// <param name="checkKeys">if set to <c>true</c> [check keys].</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <param name="fiterField">The fiter field.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem FindTableInTree(TableDefinitionBase tableDefinition
             , TreeViewItem parentItem, bool checkKeys = true, FieldDefinition parentField = null
             , FieldDefinition fiterField = null)
@@ -400,6 +618,11 @@ namespace RingSoft.DbLookup.AdvancedFind
             return null;
         }
 
+        /// <summary>
+        /// Finds the table in tree.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem FindTableInTree(TableDefinitionBase tableDefinition)
         {
             TreeViewItem result = null;
@@ -440,11 +663,23 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
 
+        /// <summary>
+        /// Finds the af in tree.
+        /// </summary>
+        /// <param name="parentFieldDefinition">The parent field definition.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem FindAfInTree(FieldDefinition parentFieldDefinition)
         {
             return null;
         }
 
+        /// <summary>
+        /// Processes the found TreeView item.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="root">The root.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem ProcessFoundTreeViewItem(string path, TreeViewType type = TreeViewType.Field, TreeViewItem root = null)
         {
             TreeViewItem result = null;
@@ -515,6 +750,12 @@ namespace RingSoft.DbLookup.AdvancedFind
             return result;
         }
 
+        /// <summary>
+        /// Gets the field definition.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>FieldDefinition.</returns>
+        /// <exception cref="System.Exception">Could not find path '{path}'</exception>
         private FieldDefinition GetFieldDefinition(string path)
         {
             var sepPos = path.IndexOf("@");
@@ -541,6 +782,14 @@ namespace RingSoft.DbLookup.AdvancedFind
             throw new Exception($"Could not find path '{path}'");
         }
 
+        /// <summary>
+        /// Processes the found TreeView item.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <param name="decimalEditFormat">The decimal edit format.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
@@ -589,6 +838,11 @@ namespace RingSoft.DbLookup.AdvancedFind
             return foundTreeViewItem;
         }
 
+        /// <summary>
+        /// Makes the includes.
+        /// </summary>
+        /// <param name="selectedItem">The selected item.</param>
+        /// <returns>ProcessIncludeResult.</returns>
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem)
         {
             var result = new ProcessIncludeResult();
@@ -643,6 +897,11 @@ namespace RingSoft.DbLookup.AdvancedFind
             return result;
         }
 
+        /// <summary>
+        /// Sets the table field.
+        /// </summary>
+        /// <param name="selectedItem">The selected item.</param>
+        /// <param name="result">The result.</param>
         private void SetTableField(TreeViewItem selectedItem, ProcessIncludeResult result)
         {
             result.ColumnDefinition.Path = selectedItem.MakePath();
@@ -672,6 +931,12 @@ namespace RingSoft.DbLookup.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Processes the include.
+        /// </summary>
+        /// <param name="includeJoin">The include join.</param>
+        /// <param name="newInclude">The new include.</param>
+        /// <returns>LookupJoin.</returns>
         private LookupJoin ProcessInclude(LookupJoin includeJoin, LookupJoin newInclude)
         {
             if (newInclude != null)
@@ -690,6 +955,15 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             return includeJoin;
         }
+        /// <summary>
+        /// Selects the column description.
+        /// </summary>
+        /// <param name="selectedTreeViewItem">The selected TreeView item.</param>
+        /// <param name="child">The child.</param>
+        /// <param name="includeJoin">The include join.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <returns>ProcessIncludeResult.</returns>
         private ProcessIncludeResult SelectColumnDescription(TreeViewItem selectedTreeViewItem, TreeViewItem child,
             LookupJoin includeJoin, string caption, double percentWidth)
         {

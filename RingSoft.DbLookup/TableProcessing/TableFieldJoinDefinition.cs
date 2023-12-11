@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 06-01-2023
+// ***********************************************************************
+// <copyright file="TableFieldJoinDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
@@ -13,9 +26,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the foreign key definition.
         /// </summary>
-        /// <value>
-        /// The foreign key definition.
-        /// </value>
+        /// <value>The foreign key definition.</value>
         public ForeignKeyDefinition ForeignKeyDefinition { get; internal set; }
 
         /// <summary>
@@ -26,6 +37,10 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </value>
         private string _alias;
 
+        /// <summary>
+        /// Gets or sets the alias.
+        /// </summary>
+        /// <value>The alias.</value>
         public string Alias
         {
             get
@@ -45,25 +60,42 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the parent alias used in the SQL string.
         /// </summary>
-        /// <value>
-        /// The parent alias.
-        /// </value>
+        /// <value>The parent alias.</value>
         public string ParentAlias { get; internal set; }
 
+        /// <summary>
+        /// Gets the parent object.
+        /// </summary>
+        /// <value>The parent object.</value>
         public IJoinParent ParentObject { get; internal set; }
 
+        /// <summary>
+        /// Gets the type of the join.
+        /// </summary>
+        /// <value>The type of the join.</value>
         public JoinTypes JoinType { get; internal set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableFieldJoinDefinition"/> class.
+        /// </summary>
         internal TableFieldJoinDefinition()
         {
             
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             return Alias;
         }
 
+        /// <summary>
+        /// Copies from.
+        /// </summary>
+        /// <param name="source">The source.</param>
         internal void CopyFrom(TableFieldJoinDefinition source)
         {
             ForeignKeyDefinition = source.ForeignKeyDefinition;

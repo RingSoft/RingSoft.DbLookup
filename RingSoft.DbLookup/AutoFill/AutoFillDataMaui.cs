@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 06-08-2023
+//
+// Last Modified By : petem
+// Last Modified On : 12-04-2023
+// ***********************************************************************
+// <copyright file="AutoFillDataMaui.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -13,14 +26,35 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.AutoFill
 {
+    /// <summary>
+    /// Class AutoFillOutputData.
+    /// </summary>
     public class AutoFillOutputData
     {
+        /// <summary>
+        /// Gets the contains data.
+        /// </summary>
+        /// <value>The contains data.</value>
         public List<string> ContainsData { get; }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <value>The automatic fill value.</value>
         public AutoFillValue AutoFillValue { get; }
 
+        /// <summary>
+        /// Gets the begin text.
+        /// </summary>
+        /// <value>The begin text.</value>
         public string BeginText { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoFillOutputData"/> class.
+        /// </summary>
+        /// <param name="containsData">The contains data.</param>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="beginText">The begin text.</param>
         public AutoFillOutputData(List<string> containsData, AutoFillValue autoFillValue, string beginText = "")
         {
             ContainsData = containsData;
@@ -28,51 +62,129 @@ namespace RingSoft.DbLookup.AutoFill
             BeginText = beginText;
         }
     }
+    /// <summary>
+    /// Class AutoFillDataMauiBase.
+    /// </summary>
     public abstract class AutoFillDataMauiBase
     {
+        /// <summary>
+        /// Gets the setup.
+        /// </summary>
+        /// <value>The setup.</value>
         public AutoFillSetup Setup { get; }
 
+        /// <summary>
+        /// Gets the control.
+        /// </summary>
+        /// <value>The control.</value>
         public IAutoFillControl Control { get; }
 
+        /// <summary>
+        /// Occurs when [output data changed].
+        /// </summary>
         public event EventHandler<AutoFillOutputData> OutputDataChanged;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoFillDataMauiBase"/> class.
+        /// </summary>
+        /// <param name="setup">The setup.</param>
+        /// <param name="control">The control.</param>
         public AutoFillDataMauiBase(AutoFillSetup setup, IAutoFillControl control)
         {
             Setup = setup;
             Control = control;
         }
 
+        /// <summary>
+        /// Called when [output automatic fill data].
+        /// </summary>
+        /// <param name="outputData">The output data.</param>
         protected internal void OnOutputAutoFillData(AutoFillOutputData outputData)
         {
             OutputDataChanged?.Invoke(this, outputData);
         }
 
+        /// <summary>
+        /// Called when [key character pressed].
+        /// </summary>
+        /// <param name="keyChar">The key character.</param>
         public abstract void OnKeyCharPressed(char keyChar);
 
+        /// <summary>
+        /// Called when [backspace key down].
+        /// </summary>
         public abstract void OnBackspaceKeyDown();
 
+        /// <summary>
+        /// Called when [delete key down].
+        /// </summary>
         public abstract void OnDeleteKeyDown();
 
+        /// <summary>
+        /// Called when [lookup select].
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         public abstract void OnLookupSelect(PrimaryKeyValue primaryKey);
 
+        /// <summary>
+        /// Sets the value.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="refreshContainsList">if set to <c>true</c> [refresh contains list].</param>
         public abstract void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList);
 
+        /// <summary>
+        /// Gets the automatic fill contains item.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="beginText">The begin text.</param>
+        /// <returns>AutoFillContainsItem.</returns>
         public abstract AutoFillContainsItem GetAutoFillContainsItem(string text, string beginText);
 
+        /// <summary>
+        /// Called when [ListBox change].
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>AutoFillValue.</returns>
         public abstract AutoFillValue OnListBoxChange(AutoFillContainsItem item);
 
+        /// <summary>
+        /// Called when [paste].
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>AutoFillValue.</returns>
         public abstract AutoFillValue OnPaste(string text);
     }
 
+    /// <summary>
+    /// Class AutoFillDataMaui.
+    /// Implements the <see cref="RingSoft.DbLookup.AutoFill.AutoFillDataMauiBase" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="RingSoft.DbLookup.AutoFill.AutoFillDataMauiBase" />
     public class AutoFillDataMaui<TEntity> : AutoFillDataMauiBase where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinition<TEntity> TableDefinition { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoFillDataMaui{TEntity}"/> class.
+        /// </summary>
+        /// <param name="setup">The setup.</param>
+        /// <param name="control">The control.</param>
         public AutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control) : base(setup, control)
         {
             TableDefinition = GblMethods.GetTableDefinition<TEntity>();
         }
 
+        /// <summary>
+        /// Called when [key character pressed].
+        /// </summary>
+        /// <param name="keyChar">The key character.</param>
         public override void OnKeyCharPressed(char keyChar)
         {
             switch (keyChar)
@@ -113,6 +225,9 @@ namespace RingSoft.DbLookup.AutoFill
 
         }
 
+        /// <summary>
+        /// Called when [backspace key down].
+        /// </summary>
         public override void OnBackspaceKeyDown()
         {
             var text = Control.EditText;
@@ -146,6 +261,9 @@ namespace RingSoft.DbLookup.AutoFill
 
         }
 
+        /// <summary>
+        /// Called when [delete key down].
+        /// </summary>
         public override void OnDeleteKeyDown()
         {
             var text = Control.EditText;
@@ -185,6 +303,10 @@ namespace RingSoft.DbLookup.AutoFill
 
         }
 
+        /// <summary>
+        /// Called when [lookup select].
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         public override void OnLookupSelect(PrimaryKeyValue primaryKey)
         {
             var entity = TableDefinition.GetEntityFromPrimaryKeyValue(primaryKey);
@@ -225,6 +347,13 @@ namespace RingSoft.DbLookup.AutoFill
             }
         }
 
+        /// <summary>
+        /// Gets the right text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="selectionStart">The selection start.</param>
+        /// <param name="selectionLength">Length of the selection.</param>
+        /// <returns>System.String.</returns>
         private string GetRightText(string text, int selectionStart, int selectionLength)
         {
             if (text.IsNullOrEmpty())
@@ -233,6 +362,11 @@ namespace RingSoft.DbLookup.AutoFill
             return text.RightStr(text.Length - (selectionLength + selectionStart));
         }
 
+        /// <summary>
+        /// Gets the new text.
+        /// </summary>
+        /// <param name="beginText">The begin text.</param>
+        /// <returns>System.String.</returns>
         public string GetNewText(string beginText)
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
@@ -298,6 +432,11 @@ namespace RingSoft.DbLookup.AutoFill
             return result;
         }
 
+        /// <summary>
+        /// Gets the contains list.
+        /// </summary>
+        /// <param name="beginText">The begin text.</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
         private List<string> GetContainsList(string beginText)
         {
             var param = GblMethods.GetParameterExpression<TEntity>();
@@ -340,6 +479,12 @@ namespace RingSoft.DbLookup.AutoFill
             return result;
         }
 
+        /// <summary>
+        /// Called when [output].
+        /// </summary>
+        /// <param name="newText">The new text.</param>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="beginText">The begin text.</param>
         private void OnOutput(string newText, AutoFillValue autoFillValue = null, string beginText = "")
         {
             List<string> containsList = null;
@@ -363,6 +508,11 @@ namespace RingSoft.DbLookup.AutoFill
             OnOutputAutoFillData(outputData);
         }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <param name="editText">The edit text.</param>
+        /// <returns>AutoFillValue.</returns>
         private AutoFillValue GetAutoFillValue(string editText = "")
         {
             if (editText.IsNullOrEmpty())
@@ -383,6 +533,10 @@ namespace RingSoft.DbLookup.AutoFill
             return autoFillValue;
         }
 
+        /// <summary>
+        /// Gets the automatic fill data.
+        /// </summary>
+        /// <returns>AutoFillValue.</returns>
         private AutoFillValue GetAutoFillData()
         {
             if (Setup.LookupDefinition.InitialSortColumnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
@@ -418,6 +572,12 @@ namespace RingSoft.DbLookup.AutoFill
             return null;
         }
 
+        /// <summary>
+        /// Sets the value.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="refreshContainsList">if set to <c>true</c> [refresh contains list].</param>
         public override void SetValue(PrimaryKeyValue primaryKeyValue, string text, bool refreshContainsList)
         {
             if (refreshContainsList)
@@ -429,6 +589,12 @@ namespace RingSoft.DbLookup.AutoFill
             Control.SelectionStart = 0;
             Control.SelectionLength = Control.EditText.Length;
         }
+        /// <summary>
+        /// Gets the automatic fill contains item.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="beginText">The begin text.</param>
+        /// <returns>AutoFillContainsItem.</returns>
         public override AutoFillContainsItem GetAutoFillContainsItem(string text, string beginText)
         {
             var firstIndex = text.IndexOf(beginText, StringComparison.OrdinalIgnoreCase);
@@ -443,6 +609,11 @@ namespace RingSoft.DbLookup.AutoFill
             };
         }
 
+        /// <summary>
+        /// Called when [ListBox change].
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>AutoFillValue.</returns>
         public override AutoFillValue OnListBoxChange(AutoFillContainsItem item)
         {
             Control.EditText = item.ToString();
@@ -451,6 +622,11 @@ namespace RingSoft.DbLookup.AutoFill
             return GetAutoFillData();
         }
 
+        /// <summary>
+        /// Called when [paste].
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>AutoFillValue.</returns>
         public override AutoFillValue OnPaste(string text)
         {
             Control.EditText = text;

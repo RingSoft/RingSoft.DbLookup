@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="DbSelectSqlGenerator.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
@@ -8,23 +21,42 @@ using System.Text;
 
 namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
 {
-    /// <summary>Implement this interface to generate a SELECT SQL statement for a database platform based on what's in the Query object.</summary>
+    /// <summary>
+    /// Implement this interface to generate a SELECT SQL statement for a database platform based on what's in the Query object.
+    /// </summary>
     public abstract class DbSelectSqlGenerator
     {
+        /// <summary>
+        /// Gets the SQL object prefix character.
+        /// </summary>
+        /// <value>The SQL object prefix character.</value>
         public virtual char SqlObjectPrefixChar => '[';
+        /// <summary>
+        /// Gets the SQL object suffix character.
+        /// </summary>
+        /// <value>The SQL object suffix character.</value>
         public virtual char SqlObjectSuffixChar => ']';
 
         /// <summary>
         /// Gets the SQL prefix that needs to be at the beginning of each line in the generated SQL statement.  Useful in
         /// formatting nested SQL statements.  This usually contains TAB characters.
         /// </summary>
-        /// <value>
-        /// The SQL line prefix.
-        /// </value>
+        /// <value>The SQL line prefix.</value>
         public string SqlLinePrefix { get; protected set; }
 
+        /// <summary>
+        /// Formats the SQL object.
+        /// </summary>
+        /// <param name="sqlObject">The SQL object.</param>
+        /// <returns>System.String.</returns>
         public string FormatSqlObject(string sqlObject) => $"{SqlObjectPrefixChar}{sqlObject}{SqlObjectSuffixChar}";
 
+        /// <summary>
+        /// Generates the delete statement.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.Exception"></exception>
         public string GenerateDeleteStatement(SelectQuery query)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -70,6 +102,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sqlString;
         }
 
+        /// <summary>
+        /// Generates the set null statement.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <returns>System.String.</returns>
         public string GenerateSetNullStatement(SelectQuery query, string fieldName)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -105,8 +143,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the SELECT SQL statement.
         /// </summary>
         /// <param name="query">The QueryBuilder.QueryBase object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="count">The count.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public string GenerateSelectStatement(QueryBase query, int? count = null)
         {
             switch (query.QueryType)
@@ -135,7 +174,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates a SQL statement to count the number of records from the database.
         /// </summary>
         /// <param name="countQuery">The count query.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateCountQueryStatement(CountQuery countQuery)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -160,7 +199,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="selectQuery">The QueryBuilder.SelectQuery object containing all the data for the SQL statement.</param>
         /// <param name="skipOrderBy">if set to <c>true</c> then don't generate the ORDER BY clause.</param>
-        /// <returns></returns>
+        /// <param name="count">The count.</param>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateSelectQueryStatement(SelectQuery selectQuery, bool skipOrderBy = false, int? count = null)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -198,7 +238,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the SELECT clause.  Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
+        /// <param name="count">The count.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string GenerateSelectClause(SelectQuery query, int? count = null)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -270,6 +312,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Formats the select fragment formula.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="selectLinePrefix">The select line prefix.</param>
+        /// <returns>System.String.</returns>
         private string FormatSelectFragmentFormula(string formula, string selectLinePrefix)
         {
             var sql = $"{selectLinePrefix}(\r\n";
@@ -286,7 +334,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="tableAndFieldName">Name of the table and field combined e.g([TableName].[FieldName]).</param>
         /// <param name="translationInfo">The translation information.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateEnumeratorSqlFieldText(string tableAndFieldName, EnumFieldTranslation translationInfo)
         {
             var sql = $"CASE {tableAndFieldName}\r\n";
@@ -299,6 +347,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Formats the formula SQL text.
+        /// </summary>
+        /// <param name="sqlText">The SQL text.</param>
+        /// <param name="linePrefix">The line prefix.</param>
+        /// <returns>System.String.</returns>
         private string FormatFormulaSqlText(string sqlText, string linePrefix)
         {
             return sqlText.Replace("\r\n", $"\r\n{linePrefix}");
@@ -308,7 +362,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the top record count SQL text.  Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="query">The query.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateTopRecordCountSqlText(SelectQuery query)
         {
             if (query.MaxRecords > 0)
@@ -321,7 +375,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the FROM clause.  Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateFromClause(SelectQuery query)
         {
             if (!query.BaseTable.Formula.IsNullOrEmpty())
@@ -337,7 +391,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
         /// <param name="nestedQuery">The QueryBuilder.Query object containing all the data for the nested SQL statement.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateNestedQuery(SelectQuery query, SelectQuery nestedQuery)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -358,8 +412,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the JOIN clauses.  Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string GenerateJoins(SelectQuery query)
         {
             var sqlStringBuilder = new StringBuilder();
@@ -401,8 +455,8 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the where clause.  Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="query">The QueryBuilder.Query object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string GenerateWhereClause(SelectQuery query)
         {
             if (!query.WhereItems.Any())
@@ -507,7 +561,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="whereItem">The WhereItem object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateWhereItemSqlText(WhereItem whereItem)
         {
             var sqlFieldName = GenerateWhereItemSqlFieldNameText(whereItem);
@@ -530,7 +584,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Override if this method is not compatible with your database platform.
         /// </summary>
         /// <param name="whereItem">The WhereItem object containing all the data for the SQL statement.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateWhereItemSqlFieldNameText(WhereItem whereItem)
         {
             if (whereItem is WhereFormulaItem whereFormulaItem)
@@ -546,7 +600,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// Generates the where item enumerator SQL text.
         /// </summary>
         /// <param name="whereItem">The where item.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string GenerateWhereEnumItemSqlText(WhereEnumItem whereItem)
         {
             var tableField = $"{FormatSqlObject(whereItem.Table.GetTableName())}.{FormatSqlObject(whereItem.FieldName)}";
@@ -555,6 +609,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Generates the where item formula text.
+        /// </summary>
+        /// <param name="whereItem">The where item.</param>
+        /// <param name="formula">The formula.</param>
+        /// <returns>System.String.</returns>
         private string GenerateWhereItemFormulaText(WhereItem whereItem, string formula)
         {
             var tableField = string.Empty;
@@ -585,6 +645,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Generates the where item no value formula text.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <returns>System.String.</returns>
         private string GenerateWhereItemNoValueFormulaText(string formula)
         {
             var sql = "(\r\n";
@@ -599,8 +664,9 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="whereItem">The WhereItem object containing all the data for the SQL statement.</param>
         /// <param name="sqlFieldName">The field name in '[TableName].[FieldName]' format.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException">Condition - null</exception>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Condition - null</exception>
         protected virtual string GenerateConditionSqlText(WhereItem whereItem, string sqlFieldName)
         {
             var formula = false;
@@ -679,7 +745,7 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
         /// </summary>
         /// <param name="whereItem">The WhereItem object containing all the data to format the value.</param>
         /// <returns>A formatted value for use in a WHERE clause.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string FormatValueForSqlWhereItem(WhereItem whereItem)
         {
             var valueReturn = whereItem.Value;
@@ -734,6 +800,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return $"'{stringValue.Replace("'", "''")}'";
         }
 
+        /// <summary>
+        /// Generates the order by clause.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string GenerateOrderByClause(SelectQuery query)
         {
             if (!query.OrderBySegments.Any())
@@ -813,6 +885,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return orderByTableFieldSql;
         }
 
+        /// <summary>
+        /// Formats the order by formula fragment.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="selectLinePrefix">The select line prefix.</param>
+        /// <returns>System.String.</returns>
         private string FormatOrderByFormulaFragment(string formula, string selectLinePrefix)
         {
             var sql = $"{selectLinePrefix}(\r\n";
@@ -825,6 +903,12 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Generates the group by.
+        /// </summary>
+        /// <param name="distinctColumns">The distinct columns.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected virtual string GenerateGroupBy(IEnumerable<SelectColumn> distinctColumns)
         {
             var sql = $"{SqlLinePrefix}GROUP BY ";
@@ -859,6 +943,15 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return sql;
         }
 
+        /// <summary>
+        /// Converts the value to SQL text.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="valueType">Type of the value.</param>
+        /// <param name="dateType">Type of the date.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">dateType - null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public virtual string ConvertValueToSqlText(string value, ValueTypes valueType,DbDateTypes dateType)
         {
             if (value.IsNullOrEmpty())
@@ -907,6 +1000,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             }
         }
 
+        /// <summary>
+        /// Generates the insert SQL statement.
+        /// </summary>
+        /// <param name="insertDataStatement">The insert data statement.</param>
+        /// <returns>System.String.</returns>
         public virtual string GenerateInsertSqlStatement(InsertDataStatement insertDataStatement)
         {
             var table = FormatSqlObject(insertDataStatement.TableDefinition.TableName);
@@ -930,6 +1028,11 @@ namespace RingSoft.DbLookup.DataProcessor.SelectSqlGenerator
             return result;
         }
 
+        /// <summary>
+        /// Generates the update SQL.
+        /// </summary>
+        /// <param name="updateDataStatement">The update data statement.</param>
+        /// <returns>System.String.</returns>
         public virtual string GenerateUpdateSql(UpdateDataStatement updateDataStatement)
         {
             var result = string.Empty ;

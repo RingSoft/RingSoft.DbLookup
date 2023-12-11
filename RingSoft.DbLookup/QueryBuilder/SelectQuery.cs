@@ -1,75 +1,96 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 03-05-2023
+// ***********************************************************************
+// <copyright file="SelectQuery.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.QueryBuilder
 {
-    /// <summary>This class is used to build a SELECT SQL statement.  It is not comprehensive.</summary>
+    /// <summary>
+    /// This class is used to build a SELECT SQL statement.  It is not comprehensive.
+    /// </summary>
     public class SelectQuery : QueryBase
     {
         /// <summary>
         /// Gets the type of the query.
         /// </summary>
-        /// <value>
-        /// The type of the query.
-        /// </value>
+        /// <value>The type of the query.</value>
         public override QueryTypes QueryType => QueryTypes.SelectQuery;
 
         /// <summary>
         /// Gets the nested query.
         /// </summary>
-        /// <value>
-        /// The nested query.
-        /// </value>
+        /// <value>The nested query.</value>
         public SelectQuery NestedQuery { get; internal set; }
 
         /// <summary>
         /// Gets the maximum number of records to retrieve.
         /// </summary>
-        /// <value>
-        /// The maximum records.
-        /// </value>
+        /// <value>The maximum records.</value>
         public int MaxRecords { get; set; }
 
-        /// <summary>Gets the base table object attached to this query.</summary>
+        /// <summary>
+        /// Gets the base table object attached to this query.
+        /// </summary>
         /// <value>The base table. that is appears after the FROM keyword in a SQL statement.</value>
         public QueryTable BaseTable { get; private set; }
 
-        /// <summary>Gets the SELECT columns.</summary>
+        /// <summary>
+        /// Gets the SELECT columns.
+        /// </summary>
         /// <value>The columns in the SELECT statement.</value>
         public IReadOnlyList<SelectColumn> Columns => _columns;
 
         /// <summary>
         /// Gets the join tables.
         /// </summary>
-        /// <value>
-        /// The join tables.
-        /// </value>
+        /// <value>The join tables.</value>
         public IReadOnlyList<PrimaryJoinTable> JoinTables => _joinTables;
 
         /// <summary>
         /// Gets the where items.
         /// </summary>
-        /// <value>
-        /// The where items.
-        /// </value>
+        /// <value>The where items.</value>
         public IReadOnlyList<WhereItem> WhereItems => _whereItems;
 
         /// <summary>
         /// Gets the order by segments.
         /// </summary>
-        /// <value>
-        /// The order by segments.
-        /// </value>
+        /// <value>The order by segments.</value>
         public IReadOnlyList<OrderBySegment> OrderBySegments => _orderBySegments;
 
+        /// <summary>
+        /// The columns
+        /// </summary>
         private readonly List<SelectColumn> _columns = new List<SelectColumn>();
+        /// <summary>
+        /// The join tables
+        /// </summary>
         private readonly List<PrimaryJoinTable> _joinTables = new List<PrimaryJoinTable>();
+        /// <summary>
+        /// The where items
+        /// </summary>
         private readonly List<WhereItem> _whereItems = new List<WhereItem>();
+        /// <summary>
+        /// The order by segments
+        /// </summary>
         private readonly List<OrderBySegment> _orderBySegments = new List<OrderBySegment>();
 
-        /// <summary>Initializes a new instance of the <see cref="SelectQuery"/> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SelectQuery" /> class.
+        /// </summary>
         /// <param name="baseTableName">Name of the table for the FROM clause.</param>
         public SelectQuery(string baseTableName)
         {
@@ -81,13 +102,17 @@ namespace RingSoft.DbLookup.QueryBuilder
             };
         }
 
+        /// <summary>
+        /// Removes the select column.
+        /// </summary>
+        /// <param name="column">The column.</param>
         internal void RemoveSelectColumn(SelectColumn column)
         {
             _columns.Remove(column);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelectQuery"/> class.
+        /// Initializes a new instance of the <see cref="SelectQuery" /> class.
         /// </summary>
         /// <param name="queryName">The query name.</param>
         /// <param name="nestedQuery">The nested query.</param>
@@ -106,7 +131,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// Sets the maximum number of records to retrieve.
         /// </summary>
         /// <param name="maxRecords">The record count.</param>
-        /// <returns></returns>
+        /// <returns>SelectQuery.</returns>
         public SelectQuery SetMaxRecords(int maxRecords)
         {
             MaxRecords = maxRecords;
@@ -118,9 +143,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// </summary>
         /// <param name="name">The name of the column.</param>
         /// <param name="isDistinct">Is the column distinct?</param>
-        /// <returns>
-        /// This object.
-        /// </returns>
+        /// <returns>This object.</returns>
         public SelectQuery AddSelectColumn(string name, bool isDistinct = false)
         {
             return AddSelectColumn(name, string.Empty, isDistinct);
@@ -132,7 +155,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="name">The name of the column.</param>
         /// <param name="alias">The value appears after the "AS" keyword.</param>
         /// <param name="isDistinct">Is the column distinct?</param>
-        /// <returns></returns>
+        /// <returns>SelectQuery.</returns>
         //// <returns>This object.</returns>
         public SelectQuery AddSelectColumn(string name, string alias, bool isDistinct = false)
         {
@@ -145,9 +168,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="name">The name of the column.</param>
         /// <param name="queryTable">The query table object attached to this column.</param>
         /// <param name="isDistinct">Is the column distinct?</param>
-        /// <returns>
-        /// This object.
-        /// </returns>
+        /// <returns>This object.</returns>
         public SelectQuery AddSelectColumn(string name, QueryTable queryTable, bool isDistinct = false)
         {
             return AddSelectColumn(name, queryTable, string.Empty, isDistinct);
@@ -160,10 +181,8 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="queryTable">The query table object attached to this column.</param>
         /// <param name="alias">The value appears after the "AS" keyword.</param>
         /// <param name="isDistinct">Is the column distinct?</param>
-        /// <returns>
-        /// This object.
-        /// </returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <returns>This object.</returns>
+        /// <exception cref="System.ArgumentException"></exception>
         public SelectQuery AddSelectColumn(string name, QueryTable queryTable, string alias, bool isDistinct = false)
         {
             if (queryTable.Query != this)
@@ -187,7 +206,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// Creates a formula column and adds it to the columns list.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// /// <param name="formula">The formula.</param>
+        /// <param name="formula">The formula.</param>
         /// <returns>This object.</returns>
         public SelectQuery AddSelectFormulaColumn(string name, string formula)
         {
@@ -260,6 +279,14 @@ namespace RingSoft.DbLookup.QueryBuilder
             return AddSelectEnumColumn(queryTable, columnName, alias, enumFieldTranslation);
         }
 
+        /// <summary>
+        /// Adds the select enum column.
+        /// </summary>
+        /// <param name="queryTable">The query table.</param>
+        /// <param name="columnName">Name of the column.</param>
+        /// <param name="alias">The alias.</param>
+        /// <param name="translation">The translation.</param>
+        /// <returns>SelectQuery.</returns>
         internal SelectQuery AddSelectEnumColumn(QueryTable queryTable, string columnName, string alias, EnumFieldTranslation translation)
         {
             var selectEnumColumn = new SelectEnumColumn()
@@ -274,6 +301,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             return this;
         }
 
+        /// <summary>
+        /// Gets the query table mismatch message.
+        /// </summary>
+        /// <param name="queryTable">The query table.</param>
+        /// <returns>System.String.</returns>
         private string GetQueryTableMismatchMessage(QueryTable queryTable)
         {
             return
@@ -345,6 +377,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="condition">The condition.</param>
         /// <param name="value">The string value.</param>
         /// <param name="isMemo">if set to <c>true</c> [is memo/ntext].</param>
+        /// <param name="valueType">Type of the value.</param>
         /// <returns>The where item object that was created for further configuration.</returns>
         public WhereItem AddWhereItem(string fieldName, Conditions condition, string value, bool isMemo = false, ValueTypes valueType = ValueTypes.String)
         {
@@ -359,6 +392,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="condition">The condition.</param>
         /// <param name="value">The string value.</param>
         /// <param name="isMemo">if set to <c>true</c> [is memo].</param>
+        /// <param name="valueType">Type of the value.</param>
         /// <returns>The where item object that was created for further configuration.</returns>
         public WhereItem AddWhereItem(QueryTable table, string fieldName, Conditions condition, string value, bool isMemo = false, ValueTypes valueType = ValueTypes.String)
         {
@@ -396,6 +430,13 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Formats the date string.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dateType">Type of the date.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">dateType - null</exception>
         internal static string FormatDateString(DateTime value, DbDateTypes dateType)
         {
             string stringValue;
@@ -494,6 +535,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             return AddNewWhereItem(table, fieldName, condition, BoolToString(value), ValueTypes.Bool);
         }
 
+        /// <summary>
+        /// Bools to string.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>System.String.</returns>
         public static string BoolToString(bool value)
         {
             var stringValue = "1";
@@ -513,7 +559,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="type">The value type.</param>
         /// <param name="dateType">The date value type if ValueType is a DateTime.</param>
         /// <returns>The where item object that was created for further configuration.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
         public WhereItem AddWhereItem(QueryTable table, string fieldName, Conditions condition, string value,
             ValueTypes type, DbDateTypes dateType)
         {
@@ -534,6 +580,14 @@ namespace RingSoft.DbLookup.QueryBuilder
             return result;
         }
 
+        /// <summary>
+        /// Adds the where item check null.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="idField">The identifier field.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="checkString">if set to <c>true</c> [check string].</param>
+        /// <returns>WhereItem.</returns>
         public WhereItem AddWhereItemCheckNull(QueryTable table, string idField, Conditions condition, bool checkString)
         {
             var idWhere = AddNewWhereItem(table, idField, condition, string.Empty, ValueTypes.Numeric);
@@ -604,6 +658,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return AddWhereItemEnum(queryTable, fieldName, condition, value, enumFieldTranslation);
         }
 
+        /// <summary>
+        /// Adds the where item enum.
+        /// </summary>
+        /// <param name="queryTable">The query table.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="translation">The translation.</param>
+        /// <returns>WhereEnumItem.</returns>
         internal WhereEnumItem AddWhereItemEnum(QueryTable queryTable, string fieldName, Conditions condition, string value, EnumFieldTranslation translation)
         {
             var whereItemEnum = new WhereEnumItem
@@ -626,7 +689,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="formula">The formula.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, string value)
         {
             return AddWhereItemFormula(formula, condition, value, ValueTypes.String);
@@ -639,7 +702,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <param name="dateType">Type of the date.</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, DateTime value, DbDateTypes dateType)
         {
             return AddWhereItemFormula(formula, condition, FormatDateString(value, dateType), ValueTypes.DateTime);
@@ -651,7 +714,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="formula">The formula.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, int value)
         {
             return AddWhereItemFormula(formula, condition, value.ToString(), ValueTypes.Numeric);
@@ -663,7 +726,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="formula">The formula.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, double value)
         {
             return AddWhereItemFormula(formula, condition, value.ToString(CultureInfo.InvariantCulture),
@@ -676,7 +739,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="formula">The formula.</param>
         /// <param name="condition">The condition.</param>
         /// <param name="value">if set to <c>true</c> [value].</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, bool value)
         {
             return AddWhereItemFormula(formula, condition, BoolToString(value), ValueTypes.Bool);
@@ -686,7 +749,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// Creates a where item formula object and adds it to the WhereItems list.  Used for formulas that have no condition or value.
         /// </summary>
         /// <param name="formula">The formula.</param>
-        /// <returns></returns>
+        /// <returns>WhereFormulaItem.</returns>
         public WhereFormulaItem AddWhereItemFormula(string formula)
         {
             var whereItem = new WhereFormulaItem
@@ -699,6 +762,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return whereItem;
         }
 
+        /// <summary>
+        /// Adds the where item formula.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="valueType">Type of the value.</param>
+        /// <param name="dateType">Type of the date.</param>
+        /// <returns>WhereFormulaItem.</returns>
         internal WhereFormulaItem AddWhereItemFormula(string formula, Conditions condition, string value,
             ValueTypes valueType, DbDateTypes dateType = DbDateTypes.DateOnly)
         {
@@ -721,6 +793,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return whereItem;
         }
 
+        /// <summary>
+        /// Adds the new where item.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>WhereItem.</returns>
         private WhereItem AddNewWhereItem(QueryTable table, string fieldName, Conditions condition, string value,
             ValueTypes type)
         {
@@ -847,6 +928,15 @@ namespace RingSoft.DbLookup.QueryBuilder
             return AddOrderByEnumSegment(queryTable, fieldName, orderByType, enumFieldTranslation, isCaseSensitive);
         }
 
+        /// <summary>
+        /// Adds the order by enum segment.
+        /// </summary>
+        /// <param name="queryTable">The query table.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="orderByType">Type of the order by.</param>
+        /// <param name="translation">The translation.</param>
+        /// <param name="isCaseSensitive">if set to <c>true</c> [is case sensitive].</param>
+        /// <returns>SelectQuery.</returns>
         internal SelectQuery AddOrderByEnumSegment(QueryTable queryTable, string fieldName, OrderByTypes orderByType, EnumFieldTranslation translation, bool isCaseSensitive)
         {
             var orderByEnumSegment = new OrderByEnumSegment

@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-11-2023
+// ***********************************************************************
+// <copyright file="BoolFieldDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
 {
@@ -10,29 +23,30 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Gets the type of the field data.
         /// </summary>
-        /// <value>
-        /// The type of the field data.
-        /// </value>
+        /// <value>The type of the field data.</value>
         public override FieldDataTypes FieldDataType => FieldDataTypes.Bool;
 
         /// <summary>
         /// Gets the displayed true value text.
         /// </summary>
-        /// <value>
-        /// The true text.
-        /// </value>
+        /// <value>The true text.</value>
         public string TrueText { get; private set; } = "True";
 
         /// <summary>
         /// Gets the displayed false value text.
         /// </summary>
-        /// <value>
-        /// The false text.
-        /// </value>
+        /// <value>The false text.</value>
         public string FalseText { get; private set; } = "False";
 
+        /// <summary>
+        /// Gets the enum field.
+        /// </summary>
+        /// <value>The enum field.</value>
         public EnumFieldTranslation EnumField { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BoolFieldDefinition"/> class.
+        /// </summary>
         public BoolFieldDefinition()
         {
             EnumField = new EnumFieldTranslation();
@@ -43,7 +57,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </summary>
         /// <param name="trueText">The new True text.</param>
         /// <param name="falseText">The new False text.</param>
-        /// <returns></returns>
+        /// <returns>BoolFieldDefinition.</returns>
         public BoolFieldDefinition HasTrueFalseText(string trueText, string falseText)
         {
             TrueText = trueText;
@@ -55,14 +69,17 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Formats the value to display.
         /// </summary>
         /// <param name="value">The value from the database.</param>
-        /// <returns>
-        /// The formatted value.
-        /// </returns>
+        /// <returns>The formatted value.</returns>
         public override string FormatValue(string value)
         {
             return GblMethods.FormatValue(FieldDataType, value);
         }
 
+        /// <summary>
+        /// Gets the user value.
+        /// </summary>
+        /// <param name="dbIdValue">The database identifier value.</param>
+        /// <returns>System.String.</returns>
         public override string GetUserValue(string dbIdValue)
         {
             var boolValue = dbIdValue.ToBool();

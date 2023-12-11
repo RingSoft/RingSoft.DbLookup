@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 09-10-2023
+// ***********************************************************************
+// <copyright file="FieldDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Globalization;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
@@ -15,49 +28,37 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; internal set; }
 
         /// <summary>
         /// Gets the name of the field.
         /// </summary>
-        /// <value>
-        /// The name of the field.
-        /// </value>
+        /// <value>The name of the field.</value>
         public string FieldName { get; internal set; }
 
         /// <summary>
         /// Gets the name of the property.
         /// </summary>
-        /// <value>
-        /// The name of the property.
-        /// </value>
+        /// <value>The name of the property.</value>
         public string PropertyName { get; internal set; }
 
         /// <summary>
         /// Gets the type of the field data.
         /// </summary>
-        /// <value>
-        /// The type of the field data.
-        /// </value>
+        /// <value>The type of the field data.</value>
         public abstract FieldDataTypes FieldDataType { get; }
 
         /// <summary>
         /// Gets the type of the value for use in queries.
         /// </summary>
-        /// <value>
-        /// The type of the value.
-        /// </value>
+        /// <value>The type of the value.</value>
         public virtual ValueTypes ValueType => GblMethods.GetValueTypeForFieldDataType(FieldDataType);
 
         /// <summary>
         /// Gets the parent join foreign key definition.
         /// </summary>
-        /// <value>
-        /// The parent join foreign key definition.
-        /// </value>
+        /// <value>The parent join foreign key definition.</value>
         public ForeignKeyDefinition ParentJoinForeignKeyDefinition
         {
             get => _parentJoinForeignKeyDefinition;
@@ -70,9 +71,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <summary>
         /// Gets a value indicating whether this field allows null values.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [allow nulls]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [allow nulls]; otherwise, <c>false</c>.</value>
         public bool AllowNulls { get; internal set; }
 
         /// <summary>
@@ -83,8 +82,15 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </value>
         private string _description;
 
+        /// <summary>
+        /// The parent join foreign key definition
+        /// </summary>
         private ForeignKeyDefinition _parentJoinForeignKeyDefinition;
 
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>The description.</value>
         public string Description
         {
             get
@@ -107,10 +113,22 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             internal set { _description = value; }
         }
 
+        /// <summary>
+        /// Gets the search for host identifier.
+        /// </summary>
+        /// <value>The search for host identifier.</value>
         public virtual int? SearchForHostId { get; private set; }
 
+        /// <summary>
+        /// Gets the lookup control column identifier.
+        /// </summary>
+        /// <value>The lookup control column identifier.</value>
         public int LookupControlColumnId { get; internal set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [allow recursion].
+        /// </summary>
+        /// <value><c>true</c> if [allow recursion]; otherwise, <c>false</c>.</value>
         public bool AllowRecursion
         {
             get
@@ -127,27 +145,66 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [update only].
+        /// </summary>
+        /// <value><c>true</c> if [update only]; otherwise, <c>false</c>.</value>
         public bool UpdateOnly { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [allow user nulls].
+        /// </summary>
+        /// <value><c>true</c> if [allow user nulls]; otherwise, <c>false</c>.</value>
         public bool AllowUserNulls { get; private set; } = true;
 
+        /// <summary>
+        /// Gets a value indicating whether [skip print].
+        /// </summary>
+        /// <value><c>true</c> if [skip print]; otherwise, <c>false</c>.</value>
         public bool SkipPrint { get; private set; }
 
+        /// <summary>
+        /// Gets the formula object.
+        /// </summary>
+        /// <value>The formula object.</value>
         public ILookupFormula FormulaObject { get; private set; }
 
+        /// <summary>
+        /// Gets the type of the field.
+        /// </summary>
+        /// <value>The type of the field.</value>
         public System.Type FieldType { get; private set; }
 
+        /// <summary>
+        /// Sets the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
         internal void SetType(Type type)
         {
             FieldType = type;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [generated key].
+        /// </summary>
+        /// <value><c>true</c> if [generated key]; otherwise, <c>false</c>.</value>
         public bool GeneratedKey { get; private set; }
 
+        /// <summary>
+        /// Gets the search for condition.
+        /// </summary>
+        /// <value>The search for condition.</value>
         public Conditions? SearchForCondition { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance can format value.
+        /// </summary>
+        /// <value><c>true</c> if this instance can format value; otherwise, <c>false</c>.</value>
         public bool CanFormatValue { get; private set; } = true;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldDefinition"/> class.
+        /// </summary>
         internal FieldDefinition()
         {
             AllowNulls = true;
@@ -157,6 +214,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Sets the name of the field.  For use only by the Entity Framework classes.
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
+        /// <exception cref="System.ArgumentException">Field name '{fieldName}' already exists in this table.</exception>
         public void HasFieldName(string fieldName)
         {
             var field = TableDefinition.FieldDefinitions.FirstOrDefault(f => f.FieldName == fieldName);
@@ -185,6 +243,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <param name="parentFieldDefinition">The parent field definition.</param>
         /// <param name="propertyName">The object's property name</param>
         /// <returns>This object.</returns>
+        /// <exception cref="System.Exception">Table Definition '{TableDefinition.TableName}' already has a parent join defined.  You need to add a field to the ParentJoinForeignKey object instead.</exception>
         public ForeignKeyDefinition SetParentField(FieldDefinition parentFieldDefinition, string propertyName)
         {
             if (ParentJoinForeignKeyDefinition == null)
@@ -210,12 +269,15 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Determines whether this field will allow nulls.  For use only by the Entity Framework classes.
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
-        /// <returns></returns>
         public void IsRequired(bool value = true)
         {
             AllowNulls = !value;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             if (!Description.IsNullOrEmpty())
@@ -255,11 +317,19 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return true;
         }
 
+        /// <summary>
+        /// Determines whether [has search for host identifier] [the specified host identifier].
+        /// </summary>
+        /// <param name="hostId">The host identifier.</param>
         public void HasSearchForHostId(int hostId)
         {
             SearchForHostId = hostId;
         }
 
+        /// <summary>
+        /// Determines whether [has lookup control column identifier] [the specified lookup control column identifier].
+        /// </summary>
+        /// <param name="lookupControlColumnId">The lookup control column identifier.</param>
         public void HasLookupControlColumnId(int lookupControlColumnId)
         {
             LookupControlColumnId = lookupControlColumnId;
@@ -271,11 +341,19 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         //    return this;
         //}
 
+        /// <summary>
+        /// Sets the update only.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
         internal void SetUpdateOnly(bool value = true)
         {
             UpdateOnly = value;
         }
 
+        /// <summary>
+        /// Gets the SQL format object.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string GetSqlFormatObject()
         {
             var tableName = TableDefinition.TableName;
@@ -284,17 +362,31 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return result;
         }
 
+        /// <summary>
+        /// Determines whether this instance [can set null] the specified value.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>FieldDefinition.</returns>
         public FieldDefinition CanSetNull(bool value = true)
         {
             AllowUserNulls = value;
             return this;
         }
 
+        /// <summary>
+        /// Makes the path.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string MakePath()
         {
             return TableDefinition.TableName + "@" + FieldName + ";";
         }
 
+        /// <summary>
+        /// Gets the user value.
+        /// </summary>
+        /// <param name="dbIdValue">The database identifier value.</param>
+        /// <returns>System.String.</returns>
         public virtual string GetUserValue(string dbIdValue)
         {
             var result = string.Empty;
@@ -342,16 +434,30 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return result;
         }
 
+        /// <summary>
+        /// Formats the value for column map.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public virtual string FormatValueForColumnMap(string value)
         {
             return FormatValue(value);
         }
 
+        /// <summary>
+        /// Does the skip print.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
         internal void DoSkipPrint(bool value = true)
         {
             SkipPrint = value;
         }
 
+        /// <summary>
+        /// Determines whether [has formula object] [the specified lookup formula].
+        /// </summary>
+        /// <param name="lookupFormula">The lookup formula.</param>
+        /// <returns>FieldDefinition.</returns>
         internal FieldDefinition HasFormulaObject(ILookupFormula lookupFormula)
         {
             FormulaObject = lookupFormula;
@@ -359,6 +465,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return this;
         }
 
+        /// <summary>
+        /// Determines whether [is generated key] [the specified value].
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>FieldDefinition.</returns>
         internal FieldDefinition IsGeneratedKey(bool value = true)
         {
             GeneratedKey = value;

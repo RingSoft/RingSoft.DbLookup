@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 09-14-2023
+// ***********************************************************************
+// <copyright file="IntegerFieldDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Globalization;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
@@ -12,35 +25,43 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
     /// <seealso cref="IntegerFieldDefinition" />
     public sealed class IntegerFieldDefinition : FieldDefinitionType<IntegerFieldDefinition>
     {
+        /// <summary>
+        /// Gets the type of the field data.
+        /// </summary>
+        /// <value>The type of the field data.</value>
         public override FieldDataTypes FieldDataType => FieldDataTypes.Integer;
 
         /// <summary>
         /// Gets the number format string.
         /// </summary>
-        /// <value>
-        /// The number format string.
-        /// </value>
+        /// <value>The number format string.</value>
         public string NumberFormatString { get; private set; }
 
         /// <summary>
         /// Gets the culture.
         /// </summary>
-        /// <value>
-        /// The culture.
-        /// </value>
+        /// <value>The culture.</value>
         public CultureInfo Culture { get; private set; } = LookupDefaults.DefaultNumberCulture;
 
+        /// <summary>
+        /// The enum field
+        /// </summary>
         private EnumFieldTranslation _enumField;
         /// <summary>
         /// Gets the enum translation object which maps an enumerator value to its associated description.
         /// </summary>
-        /// <value>
-        /// The enum translation.
-        /// </value>
+        /// <value>The enum translation.</value>
         public EnumFieldTranslation EnumTranslation { get; private set; }
 
+        /// <summary>
+        /// Gets the content template identifier.
+        /// </summary>
+        /// <value>The content template identifier.</value>
         public int ContentTemplateId { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegerFieldDefinition"/> class.
+        /// </summary>
         internal IntegerFieldDefinition()
         {
             //var unused = HasNumberFormatString(GblMethods.GetNumFormat(0, false));
@@ -51,6 +72,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>This object.</returns>
+        /// <exception cref="System.ArgumentException">Invalid integer format string.</exception>
         public IntegerFieldDefinition HasNumberFormatString(string value)
         {
             var number = 100000;
@@ -73,7 +95,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Sets the culture identifier.
         /// </summary>
         /// <param name="cultureId">The culture identifier.</param>
-        /// <returns></returns>
+        /// <returns>IntegerFieldDefinition.</returns>
         public IntegerFieldDefinition HasCultureId(string cultureId)
         {
             Culture = new CultureInfo(cultureId);
@@ -84,9 +106,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Formats the value to display.
         /// </summary>
         /// <param name="value">The value from the database.</param>
-        /// <returns>
-        /// The formatted value.
-        /// </returns>
+        /// <returns>The formatted value.</returns>
         public override string FormatValue(string value)
         {
             if (TableDefinition.PrimaryKeyFields.Contains(this))
@@ -114,9 +134,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// Validates a value to see if it's a valid value to save to the database.
         /// </summary>
         /// <param name="value">The value to validate.</param>
-        /// <returns>
-        /// True if the value is safe to save to the database.
-        /// </returns>
+        /// <returns>True if the value is safe to save to the database.</returns>
         public override bool ValidateValueForSavingToDb(string value)
         {
             //if (!AllowNulls)
@@ -129,6 +147,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return base.ValidateValueForSavingToDb(value);
         }
 
+        /// <summary>
+        /// Determines whether this instance is enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>IntegerFieldDefinition.</returns>
         public IntegerFieldDefinition IsEnum<T>() where T : Enum
         {
             EnumTranslation = new EnumFieldTranslation();
@@ -136,11 +159,20 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return this;
         }
 
+        /// <summary>
+        /// Sets the enum translation.
+        /// </summary>
+        /// <param name="enumFieldTranslation">The enum field translation.</param>
         internal void SetEnumTranslation(EnumFieldTranslation enumFieldTranslation)
         {
             EnumTranslation = enumFieldTranslation;
         }
 
+        /// <summary>
+        /// Determines whether [has content template identifier] [the specified content template identifier].
+        /// </summary>
+        /// <param name="contentTemplateId">The content template identifier.</param>
+        /// <returns>IntegerFieldDefinition.</returns>
         public IntegerFieldDefinition HasContentTemplateId(int contentTemplateId)
         {
             ContentTemplateId = contentTemplateId;
@@ -150,6 +182,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return this;
         }
 
+        /// <summary>
+        /// Gets the user value.
+        /// </summary>
+        /// <param name="dbIdValue">The database identifier value.</param>
+        /// <returns>System.String.</returns>
         public override string GetUserValue(string dbIdValue)
         {
             if (ParentJoinForeignKeyDefinition == null && EnumTranslation != null)
@@ -166,6 +203,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             return base.GetUserValue(dbIdValue);
         }
 
+        /// <summary>
+        /// Formats the value for column map.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public override string FormatValueForColumnMap(string value)
         {
             if (EnumTranslation != null)

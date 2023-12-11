@@ -1,4 +1,17 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-07-2023
+// ***********************************************************************
+// <copyright file="LookupDefinitionBase.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.TableProcessing;
 using System;
@@ -15,13 +28,27 @@ using System.Data.Common;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    /// <summary>
+    /// Class LookupCommandChangedArgs.
+    /// </summary>
     public class LookupCommandChangedArgs
     {
+        /// <summary>
+        /// Creates new command.
+        /// </summary>
+        /// <value>The new command.</value>
         public LookupCommand NewCommand { get; set; }
     }
 
+    /// <summary>
+    /// Class LookupWindowReturnArgs.
+    /// </summary>
     public class LookupWindowReturnArgs
     {
+        /// <summary>
+        /// Gets the lookup data.
+        /// </summary>
+        /// <value>The lookup data.</value>
         public LookupDataMauiBase LookupData { get; internal set; }
     }
 
@@ -33,43 +60,38 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; set; }
 
         /// <summary>
         /// Gets the visible columns.
         /// </summary>
-        /// <value>
-        /// The visible columns.
-        /// </value>
+        /// <value>The visible columns.</value>
         public IReadOnlyList<LookupColumnDefinitionBase> VisibleColumns => _visibleColumns;
 
         /// <summary>
         /// Gets the hidden columns.
         /// </summary>
-        /// <value>
-        /// The hidden columns.
-        /// </value>
+        /// <value>The hidden columns.</value>
         public IReadOnlyList<LookupColumnDefinitionBase> HiddenColumns => _hiddenColumns;
 
         /// <summary>
         /// Gets the joins.
         /// </summary>
-        /// <value>
-        /// The joins.
-        /// </value>
+        /// <value>The joins.</value>
         public IReadOnlyList<TableFieldJoinDefinition> Joins => _joinsList;
 
+        /// <summary>
+        /// The initial sort lookup column definition
+        /// </summary>
         private LookupColumnDefinitionBase _initialSortLookupColumnDefinition;
 
         /// <summary>
         /// Gets and sets the initial sort column definition.
         /// </summary>
-        /// <value>
-        /// The initial sort column definition.
-        /// </value>
+        /// <value>The initial sort column definition.</value>
+        /// <exception cref="System.ArgumentException">Sort column {value.PropertyName}'s lookup definition does not match this.</exception>
+        /// <exception cref="System.ArgumentException"></exception>
         public LookupColumnDefinitionBase InitialSortColumnDefinition
         {
             get => _initialSortLookupColumnDefinition;
@@ -94,13 +116,19 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets and sets the initial type of the order by.
         /// </summary>
-        /// <value>
-        /// The initial type of the order by.
-        /// </value>
+        /// <value>The initial type of the order by.</value>
         public OrderByTypes InitialOrderByType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the initial order by column.
+        /// </summary>
+        /// <value>The initial order by column.</value>
         public LookupColumnDefinitionBase InitialOrderByColumn { get; set; }
 
+        /// <summary>
+        /// Gets or sets the initial order by field.
+        /// </summary>
+        /// <value>The initial order by field.</value>
         public FieldDefinition InitialOrderByField
         {
             get => _initialOrderByField;
@@ -113,39 +141,61 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the name of the lookup entity.
         /// </summary>
-        /// <value>
-        /// The name of the lookup entity.
-        /// </value>
+        /// <value>The name of the lookup entity.</value>
         public string LookupEntityName { get; internal set; }
 
         /// <summary>
         /// Gets the filter definition.
         /// </summary>
-        /// <value>
-        /// The filter definition.
-        /// </value>
+        /// <value>The filter definition.</value>
         public TableFilterDefinitionBase FilterDefinition { get; internal set; }
 
         /// <summary>
         /// Gets or sets the title that shows on the lookup window.
         /// </summary>
-        /// <value>
-        /// The title.
-        /// </value>
+        /// <value>The title.</value>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [read only mode].
+        /// </summary>
+        /// <value><c>true</c> if [read only mode]; otherwise, <c>false</c>.</value>
         public bool ReadOnlyMode { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow add on the fly].
+        /// </summary>
+        /// <value><c>true</c> if [allow add on the fly]; otherwise, <c>false</c>.</value>
         public bool AllowAddOnTheFly { get; set; } = true;
 
+        /// <summary>
+        /// Gets from formula.
+        /// </summary>
+        /// <value>From formula.</value>
         public string FromFormula { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the advanced find tree.
+        /// </summary>
+        /// <value>The advanced find tree.</value>
         public AdvancedFindTree AdvancedFindTree { get; set; }
 
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <value>The entity.</value>
         public AdvancedFind.AdvancedFind Entity { get; internal set; }
 
+        /// <summary>
+        /// Gets the addit order by columns.
+        /// </summary>
+        /// <value>The addit order by columns.</value>
         public List<LookupFieldColumnDefinition> AdditOrderByColumns { get; } = new List<LookupFieldColumnDefinition>();
 
+        /// <summary>
+        /// Gets the key column.
+        /// </summary>
+        /// <value>The key column.</value>
         public LookupColumnDefinitionBase KeyColumn
         {
             get
@@ -159,21 +209,49 @@ namespace RingSoft.DbLookup.Lookup
             internal set => _keyColumn = value;
         }
 
+        /// <summary>
+        /// Occurs when [window closed].
+        /// </summary>
         public event EventHandler<LookupWindowReturnArgs> WindowClosed;
+        /// <summary>
+        /// Occurs when [command changed].
+        /// </summary>
         public event EventHandler<LookupCommandChangedArgs> CommandChanged;
 
+        /// <summary>
+        /// Clears the visible columns.
+        /// </summary>
         public void ClearVisibleColumns()
         {
             _visibleColumns.Clear();
         }
 
 
+        /// <summary>
+        /// The visible columns
+        /// </summary>
         private readonly List<LookupColumnDefinitionBase> _visibleColumns = new List<LookupColumnDefinitionBase>();
+        /// <summary>
+        /// The hidden columns
+        /// </summary>
         private readonly List<LookupColumnDefinitionBase> _hiddenColumns = new List<LookupColumnDefinitionBase>();
+        /// <summary>
+        /// The joins list
+        /// </summary>
         private readonly List<TableFieldJoinDefinition> _joinsList = new List<TableFieldJoinDefinition>();
+        /// <summary>
+        /// The initial order by field
+        /// </summary>
         private FieldDefinition _initialOrderByField;
+        /// <summary>
+        /// The key column
+        /// </summary>
         private LookupColumnDefinitionBase _keyColumn;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
         public LookupDefinitionBase(TableDefinitionBase tableDefinition)
         {
             //tableDefinition.Context.Initialize();
@@ -181,11 +259,20 @@ namespace RingSoft.DbLookup.Lookup
             FilterDefinition = new TableFilterDefinitionBase(tableDefinition);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// </summary>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
         public LookupDefinitionBase(int advancedFindId)
         {
             Initialize(advancedFindId);
         }
 
+        /// <summary>
+        /// Initializes the specified advanced find identifier.
+        /// </summary>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <exception cref="System.Exception"></exception>
         private void Initialize(int advancedFindId)
         {
             Entity = SystemGlobals.AdvancedFindDbProcessor.GetAdvancedFind(advancedFindId);
@@ -227,6 +314,11 @@ namespace RingSoft.DbLookup.Lookup
                 }
             }
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// </summary>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <param name="lookupRefresher">The lookup refresher.</param>
         public LookupDefinitionBase(int advancedFindId, LookupRefresher lookupRefresher)
         {
             Initialize(advancedFindId);
@@ -247,6 +339,10 @@ namespace RingSoft.DbLookup.Lookup
             //if (Entity.YellowAlert != null) lookupRefresher.YellowAlert = Entity.YellowAlert.Value;
         }
 
+        /// <summary>
+        /// Bases the clone.
+        /// </summary>
+        /// <returns>LookupDefinitionBase.</returns>
         protected virtual LookupDefinitionBase BaseClone()
         {
             var clone = new LookupDefinitionBase(TableDefinition);
@@ -263,6 +359,10 @@ namespace RingSoft.DbLookup.Lookup
             return BaseClone();
         }
 
+        /// <summary>
+        /// Copies the lookup data.
+        /// </summary>
+        /// <param name="source">The source.</param>
         public virtual void CopyLookupData(LookupDefinitionBase source)
         {
             var initialOrderByIndex = source.VisibleColumns.ToList().IndexOf(source.InitialOrderByColumn);
@@ -288,6 +388,12 @@ namespace RingSoft.DbLookup.Lookup
             InitialOrderByField = source.InitialOrderByField;
         }
 
+        /// <summary>
+        /// Copies the columns.
+        /// </summary>
+        /// <param name="sourceColumnList">The source column list.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void CopyColumns(IReadOnlyList<LookupColumnDefinitionBase> sourceColumnList, bool hidden)
         {
             foreach (var columnType in sourceColumnList)
@@ -339,6 +445,12 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Adds the hidden column.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="join">The join.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         internal LookupFieldColumnDefinition AddHiddenColumn(FieldDefinition fieldDefinition, TableFieldJoinDefinition join = null)
         {
             var isPrimaryKey = fieldDefinition.TableDefinition.PrimaryKeyFields.Contains(fieldDefinition);
@@ -359,6 +471,13 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
+        /// <summary>
+        /// Adds the hidden column.
+        /// </summary>
+        /// <param name="lookupFormula">The lookup formula.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         internal LookupFormulaColumnDefinition AddHiddenColumn(ILookupFormula lookupFormula, FieldDataTypes dataType, string alias = "")
         {
             ValidateNonPrimaryKeyDistinctColumns();
@@ -373,6 +492,14 @@ namespace RingSoft.DbLookup.Lookup
             return columnDefinition;
         }
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(string caption, FieldDefinition fieldDefinition
             , double percentWidth, string alias)
         {
@@ -404,6 +531,10 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        /// <summary>
+        /// Validates the non primary key distinct columns.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Adding non-primary key fields to lookup definitions with distinct columns is not allowed.</exception>
         private void ValidateNonPrimaryKeyDistinctColumns()
         {
             if (GetDistinctColumns().Any())
@@ -411,6 +542,10 @@ namespace RingSoft.DbLookup.Lookup
                     "Adding non-primary key fields to lookup definitions with distinct columns is not allowed.");
         }
 
+        /// <summary>
+        /// Gets the distinct columns.
+        /// </summary>
+        /// <returns>List&lt;LookupFieldColumnDefinition&gt;.</returns>
         internal List<LookupFieldColumnDefinition> GetDistinctColumns()
         {
             var visibleDistinctColumns = GetDistinctColumns(VisibleColumns);
@@ -437,6 +572,11 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the distinct columns.
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <returns>List&lt;LookupFieldColumnDefinition&gt;.</returns>
         internal List<LookupFieldColumnDefinition> GetDistinctColumns(IReadOnlyList<LookupColumnDefinitionBase> columns)
         {
             var result = new List<LookupFieldColumnDefinition>();
@@ -453,6 +593,16 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="lookupFormula">The lookup formula.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="alias">The alias.</param>
+        /// <param name="allowNulls">if set to <c>true</c> [allow nulls].</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(string caption, ILookupFormula lookupFormula,
             double percentWidth, FieldDataTypes dataType, string alias, bool allowNulls = false)
         {
@@ -482,6 +632,10 @@ namespace RingSoft.DbLookup.Lookup
             return column;
         }
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="lookupColumn">The lookup column.</param>
         internal void AddVisibleColumnDefinition(LookupColumnDefinitionBase lookupColumn)
         {
             ProcessVisibleColumnDefinition(lookupColumn);
@@ -495,6 +649,10 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Processes the visible column definition.
+        /// </summary>
+        /// <param name="columnDefinition">The column definition.</param>
         internal void ProcessVisibleColumnDefinition(LookupColumnDefinitionBase columnDefinition)
         {
             if (InitialSortColumnDefinition == null || columnDefinition.ColumnIndexToAdd == 0)
@@ -504,6 +662,11 @@ namespace RingSoft.DbLookup.Lookup
             columnDefinition.SetupColumn();
         }
 
+        /// <summary>
+        /// Adds the join.
+        /// </summary>
+        /// <param name="lookupFieldJoin">The lookup field join.</param>
+        /// <returns>TableFieldJoinDefinition.</returns>
         internal TableFieldJoinDefinition AddJoin(TableFieldJoinDefinition lookupFieldJoin)
         {
             if (_joinsList.All(p => p.Alias != lookupFieldJoin.Alias))
@@ -523,6 +686,11 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        /// <summary>
+        /// Adds the copy join.
+        /// </summary>
+        /// <param name="lookupFieldJoin">The lookup field join.</param>
+        /// <returns>TableFieldJoinDefinition.</returns>
         public TableFieldJoinDefinition AddCopyJoin(TableFieldJoinDefinition lookupFieldJoin)
         {
             var result = new TableFieldJoinDefinition();
@@ -535,12 +703,17 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the index of visible column.
         /// </summary>
         /// <param name="visibleColumnDefinition">The visible column definition.</param>
-        /// <returns></returns>
+        /// <returns>System.Int32.</returns>
         public int GetIndexOfVisibleColumn(LookupColumnDefinitionBase visibleColumnDefinition)
         {
             return _visibleColumns.IndexOf(visibleColumnDefinition);
         }
 
+        /// <summary>
+        /// Includes the specified foreign field definition.
+        /// </summary>
+        /// <param name="foreignFieldDefinition">The foreign field definition.</param>
+        /// <returns>LookupJoin.</returns>
         public LookupJoin Include(FieldDefinition foreignFieldDefinition)
         {
             var lookupJoin = new LookupJoin(this, foreignFieldDefinition);
@@ -548,8 +721,22 @@ namespace RingSoft.DbLookup.Lookup
             return lookupJoin;
         }
 
+        /// <summary>
+        /// Gets or sets the parent object.
+        /// </summary>
+        /// <value>The parent object.</value>
         public IJoinParent ParentObject { get; set; }
+        /// <summary>
+        /// Gets or sets the child field.
+        /// </summary>
+        /// <value>The child field.</value>
         public FieldDefinition ChildField { get; set; }
+        /// <summary>
+        /// Makes the include.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="childField">The child field.</param>
+        /// <returns>LookupJoin.</returns>
         public LookupJoin MakeInclude(LookupDefinitionBase lookupDefinition, FieldDefinition childField = null)
         {
             if (childField == null)
@@ -559,12 +746,23 @@ namespace RingSoft.DbLookup.Lookup
             return Include(childField);
         }
 
+        /// <summary>
+        /// Adds the visible column definition field.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <returns>LookupColumnDefinitionBase.</returns>
         public LookupColumnDefinitionBase AddVisibleColumnDefinitionField(string caption, FieldDefinition fieldDefinition,
             double percentWidth)
         {
             return AddVisibleColumnDefinitionField(caption, fieldDefinition, percentWidth);
         }
 
+        /// <summary>
+        /// Deletes the visible column.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public void DeleteVisibleColumn(LookupColumnDefinitionBase column)
         {
             _visibleColumns.Remove(column);
@@ -574,6 +772,11 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Loads from adv find column entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>LookupColumnDefinitionBase.</returns>
         public LookupColumnDefinitionBase LoadFromAdvFindColumnEntity(AdvancedFindColumn entity)
         {
             LookupColumnDefinitionBase lookupColumn = null;
@@ -669,6 +872,14 @@ namespace RingSoft.DbLookup.Lookup
             //return result;
         }
 
+        /// <summary>
+        /// Loads from adv find filter.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="addFilterToLookup">if set to <c>true</c> [add filter to lookup].</param>
+        /// <param name="parentTreeItem">The parent tree item.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>FilterItemDefinition.</returns>
         public FilterItemDefinition LoadFromAdvFindFilter(AdvancedFindFilter entity, bool addFilterToLookup = true,
             TreeViewItem parentTreeItem = null, string path = "")
         {
@@ -903,6 +1114,13 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the table field for filter.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="filterField">The filter field.</param>
+        /// <returns>TableDefinitionBase.</returns>
         private TableDefinitionBase GetTableFieldForFilter(AdvancedFindFilter entity, out FieldDefinition fieldDefinition,
             out FieldDefinition filterField)
         {
@@ -939,6 +1157,13 @@ namespace RingSoft.DbLookup.Lookup
             return tableDefinition;
         }
 
+        /// <summary>
+        /// Sets the filter properties.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="filterItemDefinition">The filter item definition.</param>
+        /// <param name="foundItem">The found item.</param>
+        /// <param name="isAdvFind">if set to <c>true</c> [is adv find].</param>
         private void SetFilterProperties(AdvancedFindFilter entity, 
             FilterItemDefinition filterItemDefinition, TreeViewItem foundItem, bool isAdvFind = false)
         {
@@ -992,6 +1217,12 @@ namespace RingSoft.DbLookup.Lookup
         //    querySet.AddQuery(countQuery, name);
         //}
 
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <param name="countResult">The count result.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>System.Int32.</returns>
         public int GetCount(DataProcessResult countResult, string name)
         {
             if (countResult.ResultCode == GetDataResultCodes.Success)
@@ -1004,8 +1235,14 @@ namespace RingSoft.DbLookup.Lookup
             return 0;
         }
 
-        
 
+
+        /// <summary>
+        /// Shows the add on the fly window.
+        /// </summary>
+        /// <param name="selectedPrimaryKeyValue">The selected primary key value.</param>
+        /// <param name="addViewParameter">The add view parameter.</param>
+        /// <param name="ownerWindow">The owner window.</param>
         public void ShowAddOnTheFlyWindow(PrimaryKeyValue selectedPrimaryKeyValue = null
             , object addViewParameter = null, object ownerWindow = null)
         {
@@ -1020,6 +1257,13 @@ namespace RingSoft.DbLookup.Lookup
             addNewRecordProcessor.ShowAddOnTheFlyWindow();
         }
 
+        /// <summary>
+        /// Processes the search value.
+        /// </summary>
+        /// <param name="searchValue">The search value.</param>
+        /// <param name="filterType">Type of the filter.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">filterType - null</exception>
         public static string ProcessSearchValue(string searchValue, DateFilterTypes filterType)
         {
             var result = searchValue;
@@ -1071,6 +1315,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Adds all fields as hidden columns.
+        /// </summary>
+        /// <param name="copyData">if set to <c>true</c> [copy data].</param>
         public void AddAllFieldsAsHiddenColumns(bool copyData = false)
         {
             foreach (var fieldDefinition in TableDefinition.FieldDefinitions)
@@ -1128,46 +1376,89 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Fires the close event.
+        /// </summary>
+        /// <param name="lookupData">The lookup data.</param>
         public void FireCloseEvent(LookupDataMauiBase lookupData)
         {
             WindowClosed?.Invoke(this, new LookupWindowReturnArgs(){LookupData = lookupData});
         }
 
+        /// <summary>
+        /// Gets the lookup data maui.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="inputMode">if set to <c>true</c> [input mode].</param>
+        /// <returns>LookupDataMauiBase.</returns>
         public virtual LookupDataMauiBase GetLookupDataMaui(LookupDefinitionBase lookupDefinition, bool inputMode)
         {
             return null;
         }
 
+        /// <summary>
+        /// Gets the automatic fill data maui.
+        /// </summary>
+        /// <param name="setup">The setup.</param>
+        /// <param name="control">The control.</param>
+        /// <returns>AutoFillDataMauiBase.</returns>
         public virtual AutoFillDataMauiBase GetAutoFillDataMaui(AutoFillSetup setup, IAutoFillControl control)
         {
             return null;
         }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
+        /// <returns>AutoFillValue.</returns>
         public virtual AutoFillValue GetAutoFillValue(PrimaryKeyValue primaryKey)
         {
             return null;
         }
 
+        /// <summary>
+        /// Gets the select query maui.
+        /// </summary>
+        /// <returns>SelectQueryMauiBase.</returns>
         public virtual SelectQueryMauiBase GetSelectQueryMaui()
         {
             return null;
         }
 
+        /// <summary>
+        /// Copies the data to.
+        /// </summary>
+        /// <param name="destinationProcessor">The destination processor.</param>
+        /// <param name="tableIndex">Index of the table.</param>
+        /// <returns>System.String.</returns>
         public virtual string CopyDataTo(DbDataProcessor destinationProcessor, int tableIndex)
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Sets the key column.
+        /// </summary>
+        /// <param name="lookupColumnDefinition">The lookup column definition.</param>
         public void SetKeyColumn(LookupColumnDefinitionBase lookupColumnDefinition)
         {
             KeyColumn = lookupColumnDefinition;
         }
 
+        /// <summary>
+        /// Adds the order by column.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public void AddOrderByColumn(LookupFieldColumnDefinition column)
         {
             AdditOrderByColumns.Add(column);
         }
 
+        /// <summary>
+        /// Sets the command.
+        /// </summary>
+        /// <param name="command">The command.</param>
         public void SetCommand(LookupCommand command)
         {
             var args = new LookupCommandChangedArgs
@@ -1177,6 +1468,12 @@ namespace RingSoft.DbLookup.Lookup
             CommandChanged?.Invoke(this, args);
         }
 
+        /// <summary>
+        /// Filters the lookup.
+        /// </summary>
+        /// <typeparam name="THeaderEntity">The type of the t header entity.</typeparam>
+        /// <param name="headerEntity">The header entity.</param>
+        /// <param name="addViewParameter">The add view parameter.</param>
         public virtual void FilterLookup<THeaderEntity>(THeaderEntity headerEntity, object addViewParameter = null)
             where THeaderEntity : class, new()
         {

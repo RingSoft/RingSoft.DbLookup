@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 06-28-2023
+// ***********************************************************************
+// <copyright file="TableFilterDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
@@ -13,8 +26,15 @@ namespace RingSoft.DbLookup.TableProcessing
     public class TableFilterDefinition<TEntity> : TableFilterDefinitionBase 
         where TEntity : class, new()
     {
+        /// <summary>
+        /// The entity table definition
+        /// </summary>
         private TableDefinition<TEntity> _entityTableDefinition;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableFilterDefinition{TEntity}"/> class.
+        /// </summary>
+        /// <param name="entityTableDefinition">The entity table definition.</param>
         public TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition) : base(entityTableDefinition)
         {
             _entityTableDefinition = entityTableDefinition;
@@ -250,7 +270,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// </summary>
         /// <typeparam name="TRelatedEntity">The type of the related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
-        /// <returns></returns>
+        /// <returns>RelatedTableFilterDefinition&lt;TRelatedEntity&gt;.</returns>
         public RelatedTableFilterDefinition<TRelatedEntity> Include<TRelatedEntity>(
             Expression<Func<TEntity, TRelatedEntity>> relatedProperty)
             where TRelatedEntity : class, new()

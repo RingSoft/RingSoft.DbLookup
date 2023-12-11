@@ -1,4 +1,17 @@
-﻿
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-04-2023
+// ***********************************************************************
+// <copyright file="TableDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,10 +30,21 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RingSoft.DbLookup.ModelDefinition
 {
+    /// <summary>
+    /// Class ChunkResult.
+    /// </summary>
     public class ChunkResult
     {
+        /// <summary>
+        /// Gets the chunk.
+        /// </summary>
+        /// <value>The chunk.</value>
         public DataTable Chunk { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the bottom primary key.
+        /// </summary>
+        /// <value>The bottom primary key.</value>
         public PrimaryKeyValue BottomPrimaryKey { get; set; }
     }
 
@@ -32,6 +56,12 @@ namespace RingSoft.DbLookup.ModelDefinition
     public sealed class TableDefinition<TEntity> : TableDefinitionBase
         where TEntity : class, new()
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableDefinition{TEntity}"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="tablePropertyName">Name of the table property.</param>
+        /// <exception cref="System.ArgumentException">Table Definition: {this} - Property: {fieldName}.  Property type: {propertyInfo.PropertyType.Name} is not supported by this library.</exception>
         public TableDefinition(LookupContextBase context, string tablePropertyName)
         {
             Context = context;
@@ -103,6 +133,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        /// <summary>
+        /// Gets the table name of entity.
+        /// </summary>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>System.String.</returns>
         private string GetTableNameOfEntity(Type entityType)
         {
             var tableName = string.Empty;
@@ -112,6 +147,11 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
 
+        /// <summary>
+        /// Gets the field name of property.
+        /// </summary>
+        /// <param name="propertyInfo">The property information.</param>
+        /// <returns>System.String.</returns>
         private string GetFieldNameOfProperty(PropertyInfo propertyInfo)
         {
             var fieldName = propertyInfo.Name;
@@ -319,8 +359,8 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// Gets the field definition associated with the property name.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException">Property '{propertyName}' not found.</exception>
+        /// <returns>FieldDefinition.</returns>
+        /// <exception cref="System.ArgumentException">Property '{propertyName}' not found.</exception>
         public FieldDefinition GetPropertyField(string propertyName)
         {
             var field = FieldDefinitions.FirstOrDefault(f => f.PropertyName == propertyName);
@@ -336,6 +376,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// Adds the property to primary key.
         /// </summary>
         /// <param name="entityProperty">The entity property.</param>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public TableDefinition<TEntity> AddPropertyToPrimaryKey(Expression<Func<TEntity, object>> entityProperty)
         {
             var field = GetPropertyField(entityProperty.GetFullPropertyName());
@@ -347,8 +388,8 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// Gets the entity from primary key value.
         /// </summary>
         /// <param name="primaryKeyValue">The primary key value.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException">The passed in primary key value's table definition does not match this object</exception>
+        /// <returns>TEntity.</returns>
+        /// <exception cref="System.ArgumentException">The passed in primary key value's table definition does not match this object</exception>
         public TEntity GetEntityFromPrimaryKeyValue(PrimaryKeyValue primaryKeyValue)
         {
             if (primaryKeyValue.TableDefinition != this)
@@ -364,6 +405,10 @@ namespace RingSoft.DbLookup.ModelDefinition
             return entity;
         }
 
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <returns>System.Object.</returns>
         public override object GetEntity()
         {
             var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
@@ -375,7 +420,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// Gets the primary key value from entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <returns></returns>
+        /// <returns>PrimaryKeyValue.</returns>
         public PrimaryKeyValue GetPrimaryKeyValueFromEntity(TEntity entity)
         {
             var primaryKeyValue = new PrimaryKeyValue(this);
@@ -390,6 +435,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             return primaryKeyValue;
         }
 
+        /// <summary>
+        /// Gets the automatic fill value.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="pkString">The pk string.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>AutoFillValue.</returns>
         public AutoFillValue GetAutoFillValue(TEntity entity
             , string pkString = ""
             , LookupDefinitionBase lookupDefinition = null)
@@ -433,7 +485,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="validationSource">The validation source.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ValidateEntity(TEntity entity, IValidationSource validationSource)
         {
             var result = true;
@@ -479,7 +531,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <param name="validationSource">The validation source.</param>
         /// <param name="fieldDefinition">The field definition.</param>
         /// <param name="valueToValidate">The value to validate.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ValidateEntityProperty(IValidationSource validationSource, FieldDefinition fieldDefinition,
             string valueToValidate)
         {
@@ -497,6 +549,12 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
+        /// <summary>
+        /// Determines whether [is equal to] [the specified first].
+        /// </summary>
+        /// <param name="first">The first.</param>
+        /// <param name="second">The second.</param>
+        /// <returns><c>true</c> if [is equal to] [the specified first]; otherwise, <c>false</c>.</returns>
         public bool IsEqualTo(TEntity first, TEntity second)
         {
             var result = true;
@@ -526,17 +584,31 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        /// <summary>
+        /// Determines whether [is temporary table] [the specified value].
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public new TableDefinition<TEntity> IsTempTable(bool value = true)
         {
             return (TableDefinition<TEntity>)base.IsTempTable(value);
         }
 
+        /// <summary>
+        /// Shows the in adv find.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public TableDefinition<TEntity> ShowInAdvFind(bool value = true)
         {
             IsAdvancedFind = value;
             return this;
         }
 
+        /// <summary>
+        /// Determines whether this instance is identity.
+        /// </summary>
+        /// <returns><c>true</c> if this instance is identity; otherwise, <c>false</c>.</returns>
         public bool IsIdentity()
         {
             var identity = PrimaryKeyFields.Count == 1
@@ -545,6 +617,10 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         }
 
+        /// <summary>
+        /// Gets the identity field.
+        /// </summary>
+        /// <returns>IntegerFieldDefinition.</returns>
         public IntegerFieldDefinition GetIdentityField()
         {
             if (IsIdentity())
@@ -554,6 +630,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             return null;
         }
 
+        /// <summary>
+        /// Fills the out entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="processChildKeys">if set to <c>true</c> [process child keys].</param>
         public void FillOutEntity(TEntity entity, bool processChildKeys = true)
         {
             FillOutParentJoins(entity);
@@ -567,6 +648,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        /// <summary>
+        /// Fills the out child key.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="childKey">The child key.</param>
         public void FillOutChildKey(TEntity entity, ForeignKeyDefinition childKey)
         {
             var result = childKey.ForeignTable.GetJoinCollection(entity, childKey);
@@ -576,6 +662,10 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        /// <summary>
+        /// Fills the out parent joins.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public void FillOutParentJoins(TEntity entity)
         {
             var parentJoins = FieldDefinitions
@@ -591,6 +681,12 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        /// <summary>
+        /// Gets the parent object.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <returns>System.Object.</returns>
         private object GetParentObject(TEntity entity, FieldDefinition parentField)
         {
             var result = parentField
@@ -607,6 +703,10 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        /// <summary>
+        /// Fills the out object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
         public override void FillOutObject(object obj)
         {
             if (obj is TEntity entity)
@@ -615,6 +715,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        /// <summary>
+        /// Gets the join parent object.
+        /// </summary>
+        /// <typeparam name="TChildEntity">The type of the t child entity.</typeparam>
+        /// <param name="childEntity">The child entity.</param>
+        /// <param name="foreignKey">The foreign key.</param>
+        /// <returns>System.Object.</returns>
         public override object GetJoinParentObject<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
         {
             var tableFilter = GetTableFilter(childEntity, foreignKey);
@@ -638,6 +745,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        /// <summary>
+        /// Gets the table filter.
+        /// </summary>
+        /// <typeparam name="TChildEntity">The type of the t child entity.</typeparam>
+        /// <param name="childEntity">The child entity.</param>
+        /// <param name="foreignKey">The foreign key.</param>
+        /// <returns>TableFilterDefinition&lt;TEntity&gt;.</returns>
         private TableFilterDefinition<TEntity> GetTableFilter<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new()
         {
             var tableFilter = new TableFilterDefinition<TEntity>(this);
@@ -657,6 +771,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             return tableFilter;
         }
 
+        /// <summary>
+        /// Gets the join collection.
+        /// </summary>
+        /// <typeparam name="TChildEntity">The type of the t child entity.</typeparam>
+        /// <param name="childEntity">The child entity.</param>
+        /// <param name="foreignKey">The foreign key.</param>
+        /// <returns>System.Object.</returns>
         public override object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
         {
             var tableFilter = GetTableFilter(childEntity, foreignKey);
@@ -684,12 +805,22 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        /// <summary>
+        /// Sets the header entity.
+        /// </summary>
+        /// <typeparam name="THeaderEntity">The type of the t header entity.</typeparam>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public new TableDefinition<TEntity>SetHeaderEntity<THeaderEntity>() where THeaderEntity : class, new()
         {
             base.SetHeaderEntity<THeaderEntity>();
             return this;
         }
 
+        /// <summary>
+        /// Validates the automatic fill value.
+        /// </summary>
+        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool ValidateAutoFillValue(AutoFillValue autoFillValue)
         {
             if (autoFillValue.IsValid())
@@ -716,6 +847,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             return true;
         }
 
+        /// <summary>
+        /// Gets the identity value.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.Int32.</returns>
         public int GetIdentityValue(TEntity entity)
         {
             var result = 0;

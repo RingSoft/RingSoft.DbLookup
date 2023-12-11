@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-11-2023
+// ***********************************************************************
+// <copyright file="TableFilterDefinitionBase.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -21,13 +34,11 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the source.
         /// </summary>
-        /// <value>
-        /// The source.
-        /// </value>
+        /// <value>The source.</value>
         public TableFilterDefinitionBase Source { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableFilterCopiedArgs"/> class.
+        /// Initializes a new instance of the <see cref="TableFilterCopiedArgs" /> class.
         /// </summary>
         /// <param name="source">The source.</param>
         public TableFilterCopiedArgs(TableFilterDefinitionBase source)
@@ -44,30 +55,36 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <summary>
         /// Gets the fixed filters.
         /// </summary>
-        /// <value>
-        /// The fixed filters.
-        /// </value>
+        /// <value>The fixed filters.</value>
         public IReadOnlyList<FilterItemDefinition> FixedFilters => FixedBundle.Filters;
 
         /// <summary>
         /// Gets the user filters.
         /// </summary>
-        /// <value>
-        /// The user filters.
-        /// </value>
+        /// <value>The user filters.</value>
         public IReadOnlyList<FilterItemDefinition> UserFilters => UserBundle.Filters;
 
         /// <summary>
         /// Gets the joins.
         /// </summary>
-        /// <value>
-        /// The joins.
-        /// </value>
+        /// <value>The joins.</value>
         public IReadOnlyList<TableFieldJoinDefinition> Joins => _joinDefinitions;
 
+        /// <summary>
+        /// Gets or sets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; set; }
 
+        /// <summary>
+        /// Gets the fixed bundle.
+        /// </summary>
+        /// <value>The fixed bundle.</value>
         public FilterBundle FixedBundle { get; }
+        /// <summary>
+        /// Gets the user bundle.
+        /// </summary>
+        /// <value>The user bundle.</value>
         public FilterBundle UserBundle { get; }
 
         /// <summary>
@@ -78,8 +95,15 @@ namespace RingSoft.DbLookup.TableProcessing
         //private readonly List<FilterItemDefinition> _fixedFilterDefinitions = new List<FilterItemDefinition>();
         //private readonly List<FilterItemDefinition> _userFilterDefinitions = new List<FilterItemDefinition>();
 
+        /// <summary>
+        /// The join definitions
+        /// </summary>
         private readonly List<TableFieldJoinDefinition> _joinDefinitions = new List<TableFieldJoinDefinition>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableFilterDefinitionBase"/> class.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
         internal TableFilterDefinitionBase(TableDefinitionBase tableDefinition)
         {
             TableDefinition = tableDefinition;
@@ -95,16 +119,27 @@ namespace RingSoft.DbLookup.TableProcessing
             FixedBundle.ClearFilters();
         }
 
+        /// <summary>
+        /// Clears the user filters.
+        /// </summary>
         public void ClearUserFilters()
         {
             UserBundle.ClearFilters();
         }
 
+        /// <summary>
+        /// Adds the user filter.
+        /// </summary>
+        /// <param name="filterItem">The filter item.</param>
         internal void AddUserFilter(FilterItemDefinition filterItem)
         {
             UserBundle.AddFilter(filterItem);
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="filterItem">The filter item.</param>
         internal void AddFixedFilter(FilterItemDefinition filterItem)
         {
             FixedBundle.AddFilter(filterItem);
@@ -122,11 +157,21 @@ namespace RingSoft.DbLookup.TableProcessing
             OnTableFilterCopied(new TableFilterCopiedArgs(source));
         }
 
+        /// <summary>
+        /// Called when [table filter copied].
+        /// </summary>
+        /// <param name="e">The e.</param>
         protected void OnTableFilterCopied(TableFilterCopiedArgs e)
         {
             FilterCopied?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Copies the filters.
+        /// </summary>
+        /// <param name="sourceFilters">The source filters.</param>
+        /// <param name="destinationFilters">The destination filters.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void CopyFilters(IReadOnlyList<FilterItemDefinition> sourceFilters,
             List<FilterItemDefinition> destinationFilters)
         {
@@ -155,6 +200,13 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Creates the field filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition CreateFieldFilter(FieldDefinition fieldDefinition,
             Conditions condition,
             string value)
@@ -175,6 +227,15 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
+        /// <summary>
+        /// Creates the formula filter.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>FormulaFilterDefinition.</returns>
         public FormulaFilterDefinition CreateFormulaFilter(string formula, FieldDataTypes dataType, Conditions? condition,
             string value = "", string alias = "")
         {
@@ -195,6 +256,14 @@ namespace RingSoft.DbLookup.TableProcessing
             return formulaFilter;
         }
 
+        /// <summary>
+        /// Creates the add fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         private FieldFilterDefinition CreateAddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value, int index = -1)
         {
@@ -209,6 +278,15 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
+        /// <summary>
+        /// Creates the add fixed filter.
+        /// </summary>
+        /// <param name="description">The description.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="formula">The formula.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <returns>FormulaFilterDefinition.</returns>
         private FormulaFilterDefinition CreateAddFixedFilter(string description, Conditions? condition,
             string value, string formula, FieldDataTypes dataType)
         {
@@ -219,24 +297,53 @@ namespace RingSoft.DbLookup.TableProcessing
             return formulaFilter;
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         internal FieldFilterDefinition AddFixedFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value, int index = -1)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value, index);
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFilter(StringFieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value);
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFilter(IntegerFieldDefinition fieldDefinition, Conditions condition,
             int value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString());
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFilter(DecimalFieldDefinition fieldDefinition, Conditions condition,
             double value)
         {
@@ -244,36 +351,78 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
             DateTime value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFilter(BoolFieldDefinition fieldDefinition, Conditions condition,
             bool value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, SelectQuery.BoolToString(value));
         }
 
+        /// <summary>
+        /// Adds the fixed field filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddFixedFieldFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value)
         {
             return CreateAddFixedFilter(fieldDefinition, condition, value);
         }
 
+        /// <summary>
+        /// Adds the fixed filter.
+        /// </summary>
+        /// <param name="description">The description.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="formula">The formula.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <returns>FormulaFilterDefinition.</returns>
         public FormulaFilterDefinition AddFixedFilter(string description, Conditions? condition,
             string value, string formula, FieldDataTypes dataType = FieldDataTypes.String)
         {
             return CreateAddFixedFilter(description, condition, value, formula, dataType);
         }
 
+        /// <summary>
+        /// Adds the join.
+        /// </summary>
+        /// <param name="foreignKeyDefinition">The foreign key definition.</param>
         public void AddJoin(TableFieldJoinDefinition foreignKeyDefinition)
         {
             if (!_joinDefinitions.Contains(foreignKeyDefinition))
                 _joinDefinitions.Add(foreignKeyDefinition);
         }
 
+        /// <summary>
+        /// Adds the user filter.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>FieldFilterDefinition.</returns>
         public FieldFilterDefinition AddUserFilter(FieldDefinition fieldDefinition, Conditions condition,
             string value, int index = -1)
         {
@@ -296,11 +445,26 @@ namespace RingSoft.DbLookup.TableProcessing
             return fieldFilter;
         }
 
+        /// <summary>
+        /// Internals the add user filter.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="filter">The filter.</param>
         private void InternalAddUserFilter(int index, FilterItemDefinition filter)
         {
             UserBundle.InternalAddFilter(index, filter);
         }
 
+        /// <summary>
+        /// Adds the user filter.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="alias">The alias.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>FormulaFilterDefinition.</returns>
         public FormulaFilterDefinition AddUserFilter(string formula, Conditions condition, string value = "",
             string alias = "", FieldDataTypes dataType = FieldDataTypes.String, int index = -1)
         {
@@ -309,6 +473,15 @@ namespace RingSoft.DbLookup.TableProcessing
             return formulaFilter;
         }
 
+        /// <summary>
+        /// Adds the user filter.
+        /// </summary>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="addToUsersFilters">if set to <c>true</c> [add to users filters].</param>
+        /// <param name="index">The index.</param>
+        /// <returns>AdvancedFindFilterDefinition.</returns>
         public AdvancedFindFilterDefinition AddUserFilter(int advancedFindId, LookupDefinitionBase lookupDefinition,
             string path, bool addToUsersFilters = true, int index = -1)
         {
@@ -327,23 +500,40 @@ namespace RingSoft.DbLookup.TableProcessing
             return advancedFindFilter;
         }
 
+        /// <summary>
+        /// Removes the user filter.
+        /// </summary>
+        /// <param name="filterItem">The filter item.</param>
         public void RemoveUserFilter(FilterItemDefinition filterItem)
         {
             UserBundle.InternalRemoveFilter(filterItem);
         }
 
+        /// <summary>
+        /// Removes the fixed filter.
+        /// </summary>
+        /// <param name="filterItem">The filter item.</param>
         public void RemoveFixedFilter(FilterItemDefinition filterItem)
         {
             FixedBundle.InternalRemoveFilter(filterItem);
         }
 
-    internal void ProcessQuery(SelectQuery query)
+        /// <summary>
+        /// Processes the query.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        internal void ProcessQuery(SelectQuery query)
         {
             ProcessFieldJoins(query, Joins);
             ProcessFilters(query, FixedFilters);
             ProcessFilters(query, UserFilters);
         }
 
+        /// <summary>
+        /// Processes the filters.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="filters">The filters.</param>
         private void ProcessFilters(SelectQuery query, IReadOnlyList<FilterItemDefinition> filters)
         {
             WhereItem firstWhere = null, lastWhere = null;
@@ -391,6 +581,16 @@ namespace RingSoft.DbLookup.TableProcessing
             //}
         }
 
+        /// <summary>
+        /// Processes the filter.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="filterDefinition">The filter definition.</param>
+        /// <param name="lastWhere">The last where.</param>
+        /// <param name="firstWhere">The first where.</param>
+        /// <param name="advancedFindTree">The advanced find tree.</param>
+        /// <returns>List&lt;WhereItem&gt;.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public List<WhereItem> ProcessFilter(SelectQuery query, FilterItemDefinition filterDefinition, ref WhereItem lastWhere,
             ref WhereItem firstWhere,
             AdvancedFindTree advancedFindTree = null)
@@ -465,6 +665,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Processes the field filter.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="fieldFilterDefinition">The field filter definition.</param>
+        /// <returns>List&lt;WhereItem&gt;.</returns>
         private List<WhereItem> ProcessFieldFilter(SelectQuery query, FieldFilterDefinition fieldFilterDefinition)
         {
             var value = fieldFilterDefinition.Value;
@@ -532,6 +738,11 @@ namespace RingSoft.DbLookup.TableProcessing
             return result;
         }
 
+        /// <summary>
+        /// Processes the field joins.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="joins">The joins.</param>
         internal static void ProcessFieldJoins(SelectQuery query, IReadOnlyList<TableFieldJoinDefinition> joins)
         {
             foreach (var tableFieldJoinDefinition in joins)
@@ -576,6 +787,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the query table for field filter.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="fieldFilterDefinition">The field filter definition.</param>
+        /// <returns>QueryTable.</returns>
         internal QueryTable GetQueryTableForFieldFilter(SelectQuery query, FilterItemDefinition fieldFilterDefinition)
         {
             if (fieldFilterDefinition.JoinDefinition != null)
@@ -589,6 +806,12 @@ namespace RingSoft.DbLookup.TableProcessing
             return query.BaseTable;
         }
 
+        /// <summary>
+        /// Gets the query table for field filter.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns>QueryTable.</returns>
         internal QueryTable GetQueryTableForFieldFilter(SelectQuery query, FieldDefinition fieldDefinition)
         {
             if (fieldDefinition.TableDefinition.TableName != query.BaseTable.Name)
@@ -605,6 +828,13 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
 
+        /// <summary>
+        /// Processes the filter wheres.
+        /// </summary>
+        /// <param name="wheres">The wheres.</param>
+        /// <param name="firstWhereItem">The first where item.</param>
+        /// <param name="lastWhereItem">The last where item.</param>
+        /// <param name="filterDefinition">The filter definition.</param>
         public void ProcessFilterWheres(List<WhereItem> wheres
             , ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, FilterItemDefinition filterDefinition)
         {
@@ -621,6 +851,13 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        /// <summary>
+        /// Processes the filter wheres.
+        /// </summary>
+        /// <param name="wheres">The wheres.</param>
+        /// <param name="firstWhereItem">The first where item.</param>
+        /// <param name="lastWhereItem">The last where item.</param>
+        /// <param name="advancedFindFilter">The advanced find filter.</param>
         public void ProcessFilterWheres(List<WhereItem> wheres, ref WhereItem firstWhereItem, ref WhereItem lastWhereItem, AdvancedFindFilter advancedFindFilter)
         {
             if (wheres.Count > 0)
@@ -636,6 +873,11 @@ namespace RingSoft.DbLookup.TableProcessing
 
         }
 
+        /// <summary>
+        /// Loads the fixed from lookup.
+        /// </summary>
+        /// <param name="filterDefinition">The filter definition.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void LoadFixedFromLookup(TableFilterDefinitionBase filterDefinition)
         {
             foreach (var filterDefinitionFixedFilter in filterDefinition.FixedFilters)
@@ -660,6 +902,12 @@ namespace RingSoft.DbLookup.TableProcessing
             }
         }
 
+        /// <summary>
+        /// Gets the where expresssion.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="param">The parameter.</param>
+        /// <returns>Expression.</returns>
         public Expression GetWhereExpresssion<TEntity>(ParameterExpression param)
         {
             Expression result = null;

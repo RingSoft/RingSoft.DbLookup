@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 09-09-2023
+// ***********************************************************************
+// <copyright file="GblMethods.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.RecordLocking;
@@ -20,28 +33,74 @@ using Type = System.Type;
 
 namespace RingSoft.DbLookup
 {
+    /// <summary>
+    /// Enum FieldDataTypes
+    /// </summary>
     public enum FieldDataTypes
     {
+        /// <summary>
+        /// The string
+        /// </summary>
         String = 0,
+        /// <summary>
+        /// The integer
+        /// </summary>
         Integer = 1,
+        /// <summary>
+        /// The decimal
+        /// </summary>
         Decimal = 2,
         //Enum = 3,
+        /// <summary>
+        /// The date time
+        /// </summary>
         DateTime = 4,
+        /// <summary>
+        /// The bool
+        /// </summary>
         Bool = 5,
+        /// <summary>
+        /// The memo
+        /// </summary>
         Memo = 6
     }
 
+    /// <summary>
+    /// Enum OrderMethods
+    /// </summary>
     public enum OrderMethods
     {
+        /// <summary>
+        /// The order by
+        /// </summary>
         OrderBy = 0,
+        /// <summary>
+        /// The then by
+        /// </summary>
         ThenBy = 1,
+        /// <summary>
+        /// The order by descending
+        /// </summary>
         OrderByDescending = 2,
+        /// <summary>
+        /// The then by descending
+        /// </summary>
         ThenByDescending = 3,
     }
 
+    /// <summary>
+    /// Class GblMethods.
+    /// </summary>
     public static class GblMethods
     {
+        /// <summary>
+        /// The search for enum host identifier
+        /// </summary>
         public const int SearchForEnumHostId = 4;
+        /// <summary>
+        /// Gets or sets the last error.
+        /// </summary>
+        /// <value>The last error.</value>
         public static string LastError { get; set; }
 
         /// <summary>
@@ -77,7 +136,7 @@ namespace RingSoft.DbLookup
         /// Gets the percent format string used in formatting percent values.
         /// </summary>
         /// <param name="decimals">The decimals.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string GetPercentFormat(int decimals)
         {
             return $"P{decimals}";
@@ -114,6 +173,14 @@ namespace RingSoft.DbLookup
             return returnString;
         }
 
+        /// <summary>
+        /// Formats the date value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dateType">Type of the date.</param>
+        /// <param name="fullString">if set to <c>true</c> [full string].</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">value - null</exception>
         public static string FormatDateValue(this DateTime value, DbDateTypes dateType, bool fullString = true)
         {
             string formatString;
@@ -164,8 +231,9 @@ namespace RingSoft.DbLookup
         /// <param name="value">The value to format.</param>
         /// <param name="formatString">The format string.</param>
         /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="convertToLocalTime">if set to <c>true</c> [convert to local time].</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static string FormatValue(FieldDataTypes dataType, string value, string formatString = "", CultureInfo culture = null, bool convertToLocalTime = false)
         {
            
@@ -217,7 +285,7 @@ namespace RingSoft.DbLookup
         /// <param name="dataRow">The data row.</param>
         /// <param name="columnName">Name of the column.</param>
         /// <returns>The value for the column name.</returns>
-        /// <exception cref="ArgumentException">Column {columnName} does not exist in the DataRow.</exception>
+        /// <exception cref="System.ArgumentException">Column {columnName} does not exist in the DataRow.</exception>
         public static string GetRowValue(this DataRow dataRow, string columnName)
         {
             try
@@ -330,6 +398,13 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Sets the property object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model">The model.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
         public static void SetPropertyObject<T>(T model, string propertyName, object value) where T : new()
         {
             var property = model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
@@ -339,7 +414,15 @@ namespace RingSoft.DbLookup
             }
         }
 
-            public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
+        /// <summary>
+        /// Gets the property value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model">The model.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="dateType">Type of the date.</param>
+        /// <returns>System.String.</returns>
+        public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
         {
             var properties = model.GetType().GetProperties();
             var property =
@@ -376,6 +459,13 @@ namespace RingSoft.DbLookup
             return string.Empty;
         }
 
+        /// <summary>
+        /// Gets the property object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model">The model.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>System.Object.</returns>
         public static object GetPropertyObject<T>(T model, string propertyName)
         {
             var properties = model.GetType().GetProperties();
@@ -386,6 +476,12 @@ namespace RingSoft.DbLookup
             return value;
         }
 
+        /// <summary>
+        /// Gets the property.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>System.Object.</returns>
         public static object GetProperty<T>(string propertyName)
         {
             var properties = typeof(T).GetProperties();
@@ -396,6 +492,13 @@ namespace RingSoft.DbLookup
             return null;
         }
 
+        /// <summary>
+        /// Gets the property.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parentProperty">The parent property.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>System.Object.</returns>
         public static object GetProperty<T>(T parentProperty, string propertyName)
         {
             var properties = typeof(T).GetProperties();
@@ -407,6 +510,11 @@ namespace RingSoft.DbLookup
 
         }
 
+        /// <summary>
+        /// Gets the type of the field data type for.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>FieldDataTypes.</returns>
         public static FieldDataTypes GetFieldDataTypeForType(Type type)
         {
             if (type == typeof(DateTime)
@@ -442,6 +550,12 @@ namespace RingSoft.DbLookup
             return FieldDataTypes.String;
         }
 
+        /// <summary>
+        /// Gets the type of the value type for field data.
+        /// </summary>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <returns>ValueTypes.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">fieldDataType - null</exception>
         public static ValueTypes GetValueTypeForFieldDataType(FieldDataTypes fieldDataType)
         {
             switch (fieldDataType)
@@ -460,6 +574,12 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Formats the value for printer row key.
+        /// </summary>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public static string FormatValueForPrinterRowKey(FieldDataTypes fieldDataType, string value)
         {
             switch (fieldDataType)
@@ -480,6 +600,10 @@ namespace RingSoft.DbLookup
             return value;
         }
 
+        /// <summary>
+        /// Gets the name of the printing input executable file.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public static string GetPrintingInputExeFileName()
         {
             var jsonFile = $"{PrintingInteropGlobals.ProgramDataFolder}{PrintingInteropGlobals.InitializeJsonFileName}";
@@ -491,6 +615,10 @@ namespace RingSoft.DbLookup
             return jsonFile;
         }
 
+        /// <summary>
+        /// Validates the printing file.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static async Task<bool> ValidatePrintingFile()
         {
             if (GetPrintingInputExeFileName().IsNullOrEmpty())
@@ -513,6 +641,11 @@ namespace RingSoft.DbLookup
             return true;
         }
 
+        /// <summary>
+        /// Does the record lock.
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool DoRecordLock(PrimaryKeyValue primaryKey)
         {
             var result = true;
@@ -602,6 +735,10 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the now date text.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public static string GetNowDateText()
         {
             var newDate = DateTime.Now.ToUniversalTime();
@@ -609,6 +746,11 @@ namespace RingSoft.DbLookup
             return dateText;
         }
 
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public static TableDefinition<TEntity> GetTableDefinition<TEntity>() where TEntity : class, new()
         {
             TableDefinition<TEntity> tableDefinition = null;
@@ -624,6 +766,12 @@ namespace RingSoft.DbLookup
             return tableDefinition;
         }
 
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="property">The property.</param>
+        /// <returns>Type.</returns>
         private static Type GetType<TEntity>(string property)
         {
             Type type = typeof(TEntity);
@@ -643,6 +791,16 @@ namespace RingSoft.DbLookup
         }
 
 
+        /// <summary>
+        /// Applies the order.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="methodType">Type of the method.</param>
+        /// <param name="property">The property.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">methodType - null</exception>
+        /// <exception cref="System.ArgumentNullException">source</exception>
         public static IQueryable<TEntity> ApplyOrder<TEntity>(IQueryable<TEntity> source, OrderMethods methodType, string property)
         {
             var list = new List<TEntity>();
@@ -683,6 +841,12 @@ namespace RingSoft.DbLookup
             return queryAble;
         }
 
+        /// <summary>
+        /// Gets the type of the property.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="property">The property.</param>
+        /// <returns>Type.</returns>
         public static Type GetPropertyType<TEntity>(string property)
         {
             var type = typeof(TEntity);
@@ -696,7 +860,13 @@ namespace RingSoft.DbLookup
 
             return type;
         }
-        
+
+        /// <summary>
+        /// Gets the property information.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="property">The property.</param>
+        /// <returns>PropertyInfo.</returns>
         public static PropertyInfo GetPropertyInfo<TEntity>(string property)
         {
             PropertyInfo result  = null;
@@ -712,6 +882,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the type of the nullable.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Type.</returns>
         public static Type GetNullableType(Type type)
         {
             // Use Nullable.GetUnderlyingType() to remove the Nullable<T> wrapper if type is already nullable.
@@ -722,6 +897,12 @@ namespace RingSoft.DbLookup
                 return type;
         }
 
+        /// <summary>
+        /// Gets the lambda.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="property">The property.</param>
+        /// <returns>LambdaExpression.</returns>
         public static LambdaExpression GetLambda<TEntity>(string property)
         {
             System.Type type = typeof(TEntity);
@@ -746,6 +927,11 @@ namespace RingSoft.DbLookup
             return lambda;
         }
 
+        /// <summary>
+        /// Gets the parameter expression.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <returns>ParameterExpression.</returns>
         public static ParameterExpression GetParameterExpression<TEntity>()
         {
             var param = Expression.Parameter(typeof(TEntity), "p");

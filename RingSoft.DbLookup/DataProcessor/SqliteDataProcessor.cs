@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="SqliteDataProcessor.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.DataProcessor.SelectSqlGenerator;
 using System;
 using System.Data;
@@ -11,51 +24,66 @@ namespace RingSoft.DbLookup.DataProcessor
     /// <seealso cref="DbDataProcessor" />
     public class SqliteDataProcessor : DbDataProcessor
     {
+        /// <summary>
+        /// Gets the database connection string.
+        /// </summary>
+        /// <value>The connection string.</value>
         public override string ConnectionString => GenerateConnectionString();
 
+        /// <summary>
+        /// Implement this to create and return the SQL generator which will be used in GetData.
+        /// </summary>
+        /// <value>The SQL generator.</value>
         public override DbSelectSqlGenerator SqlGenerator => _generator;
 
         /// <summary>
         /// Gets or sets the name of the Sqlite .sqlite file.
         /// </summary>
-        /// <value>
-        /// The name of the file.
-        /// </value>
+        /// <value>The name of the file.</value>
         public string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the file path.
         /// </summary>
-        /// <value>
-        /// The file path.
-        /// </value>
+        /// <value>The file path.</value>
         public string FilePath { get; set; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        /// <value>
-        /// The password.
-        /// </value>
+        /// <value>The password.</value>
         public string Password { get; set; }
 
+        /// <summary>
+        /// The generator
+        /// </summary>
         private readonly SqliteSelectSqlGenerator _generator = new SqliteSelectSqlGenerator();
 
         /// <summary>
         /// Implement this to create and open the database connection.
         /// </summary>
+        /// <returns>System.String.</returns>
 
         public override string GetDatabaseListSql()
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Gets the drop database SQL.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
+        /// <returns>System.String.</returns>
         public override string GetDropDatabaseSql(string databaseName)
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Drops the database.
+        /// </summary>
+        /// <returns>DataProcessResult.</returns>
         public override DataProcessResult DropDatabase()
         {
             var path = FilePath;
@@ -79,6 +107,10 @@ namespace RingSoft.DbLookup.DataProcessor
             return result;
         }
 
+        /// <summary>
+        /// Generates the connection string.
+        /// </summary>
+        /// <returns>System.String.</returns>
         private string GenerateConnectionString()
         {
             if (!FilePath.EndsWith("\\"))
@@ -94,15 +126,29 @@ namespace RingSoft.DbLookup.DataProcessor
             return connectionString;
         }
 
+        /// <summary>
+        /// Closes the database connection.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
         public override void CloseConnection(IDbConnection connection)
         {
         }
 
+        /// <summary>
+        /// Gets the identity insert SQL.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="setOn">if set to <c>true</c> [set on].</param>
+        /// <returns>System.String.</returns>
         public override string GetIdentityInsertSql(string tableName, bool setOn)
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Tests the connection.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool TestConnection()
         {
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);

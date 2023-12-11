@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-16-2023
+// ***********************************************************************
+// <copyright file="LookupFieldColumnDefinition.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
@@ -19,17 +32,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the type of the column.
         /// </summary>
-        /// <value>
-        /// The type of the column.
-        /// </value>
+        /// <value>The type of the column.</value>
         public override LookupColumnTypes ColumnType => LookupColumnTypes.Field;
 
         /// <summary>
         /// Gets the type of the data.
         /// </summary>
-        /// <value>
-        /// The type of the data.
-        /// </value>
+        /// <value>The type of the data.</value>
         public override FieldDataTypes DataType
         {
             get
@@ -45,21 +54,24 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets the select SQL alias.
         /// </summary>
-        /// <value>
-        /// The select SQL alias.
-        /// </value>
+        /// <value>The select SQL alias.</value>
         public override string SelectSqlAlias => _selectSqlAlias;
 
         /// <summary>
         /// Gets the field definition.
         /// </summary>
-        /// <value>
-        /// The field definition.
-        /// </value>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; internal set; }
 
+        /// <summary>
+        /// The field to display
+        /// </summary>
         private FieldDefinition _fieldToDisplay;
 
+        /// <summary>
+        /// Gets the field to display.
+        /// </summary>
+        /// <value>The field to display.</value>
         public FieldDefinition FieldToDisplay
         {
             get
@@ -77,11 +89,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Gets a value indicating whether this column is distinct.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if distinct; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if distinct; otherwise, <c>false</c>.</value>
         public bool Distinct { get; private set; }
 
+        /// <summary>
+        /// Gets the search for host identifier.
+        /// </summary>
+        /// <value>The search for host identifier.</value>
         public override int? SearchForHostId
         {
             get
@@ -93,23 +107,41 @@ namespace RingSoft.DbLookup.Lookup
                 return result;
             }
             internal set => base.SearchForHostId = value;
-        } 
+        }
 
+        /// <summary>
+        /// Gets a value indicating whether [allow nulls].
+        /// </summary>
+        /// <value><c>true</c> if [allow nulls]; otherwise, <c>false</c>.</value>
         public bool AllowNulls { get; internal set; }
 
+        /// <summary>
+        /// The select SQL alias
+        /// </summary>
         private string _selectSqlAlias = string.Empty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition"/> class.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
         internal LookupFieldColumnDefinition(FieldDefinition fieldDefinition)
         {
             SetFieldDefinition(fieldDefinition);
             SetupColumn();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition"/> class.
+        /// </summary>
         internal LookupFieldColumnDefinition()
         {
 
         }
 
+        /// <summary>
+        /// Copies from.
+        /// </summary>
+        /// <param name="source">The source.</param>
         internal override void CopyFrom(LookupColumnDefinitionBase source)
         {
             if (source is LookupFieldColumnDefinition sourceFieldColumn)
@@ -127,9 +159,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Formats the value to display in the lookup view.
         /// </summary>
         /// <param name="value">The value from the database.</param>
-        /// <returns>
-        /// The formatted value.
-        /// </returns>
+        /// <returns>The formatted value.</returns>
         public override string FormatValue(string value)
         {
             if (SearchForHostId != null)
@@ -150,6 +180,12 @@ namespace RingSoft.DbLookup.Lookup
             return FieldDefinition.FormatValue(value);
         }
 
+        /// <summary>
+        /// Gets the text for column.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>System.String.</returns>
+        /// <exception cref="System.Exception">Invalid column primaryKey</exception>
         public override string GetTextForColumn(PrimaryKeyValue primaryKeyValue)
         {
             if (primaryKeyValue.TableDefinition != FieldDefinition.TableDefinition)
@@ -202,6 +238,10 @@ namespace RingSoft.DbLookup.Lookup
             return "";
         }
 
+        /// <summary>
+        /// Sets the field definition.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
         private void SetFieldDefinition(FieldDefinition fieldDefinition)
         {
             FieldDefinition = fieldDefinition;
@@ -219,6 +259,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>This object for fluent processing.</returns>
+        /// <exception cref="System.ArgumentException">The distinct value can only be set on primary key field columns where there are at least 2 fields in the primary key.</exception>
         public LookupFieldColumnDefinition IsDistinct(bool value = true)
         {
             var isPrimaryKey = FieldDefinition.TableDefinition.PrimaryKeyFields.Count > 1 &&
@@ -236,6 +277,11 @@ namespace RingSoft.DbLookup.Lookup
             return this;
         }
 
+        /// <summary>
+        /// Validates the non primary key fields.
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <exception cref="System.ArgumentException">Setting the distinct property value on primary key columns on lookup definitions with non-primary key columns is not allowed.</exception>
         private void ValidateNonPrimaryKeyFields(IReadOnlyList<LookupColumnDefinitionBase> columns)
         {
             var nonPrimaryFieldsFound = columns.Any(a => a.ColumnType == LookupColumnTypes.Formula);
@@ -252,8 +298,16 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Gets the type of the TreeView.
+        /// </summary>
+        /// <value>The type of the TreeView.</value>
         public override TreeViewType TreeViewType => TreeViewType.Field;
 
+        /// <summary>
+        /// Setups the default horizontal alignment.
+        /// </summary>
+        /// <returns>LookupColumnAlignmentTypes.</returns>
         protected override LookupColumnAlignmentTypes SetupDefaultHorizontalAlignment()
         {
             if (FieldDefinition != null)
@@ -277,11 +331,19 @@ namespace RingSoft.DbLookup.Lookup
             return base.SetupDefaultHorizontalAlignment();
         }
 
+        /// <summary>
+        /// Gets the field for column.
+        /// </summary>
+        /// <returns>FieldDefinition.</returns>
         public override FieldDefinition GetFieldForColumn()
         {
             return FieldDefinition;
         }
 
+        /// <summary>
+        /// Adds the new column definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public override void AddNewColumnDefinition(LookupDefinitionBase lookupDefinition)
         {
             LookupColumnDefinitionBase newColumn = new LookupFieldColumnDefinition(FieldDefinition);
@@ -315,6 +377,12 @@ namespace RingSoft.DbLookup.Lookup
             base.AddNewColumnDefinition(lookupDefinition);
         }
 
+        /// <summary>
+        /// Processes the new visible column.
+        /// </summary>
+        /// <param name="columnDefinition">The column definition.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="copyFrom">if set to <c>true</c> [copy from].</param>
         protected internal override void ProcessNewVisibleColumn(LookupColumnDefinitionBase columnDefinition, LookupDefinitionBase lookupDefinition,
             bool copyFrom = true)
         {
@@ -344,12 +412,22 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
 
+        /// <summary>
+        /// Loads from TreeView item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>System.String.</returns>
         internal override string LoadFromTreeViewItem(TreeViewItem item)
         {
             LookupDefinition = item.BaseTree.LookupDefinition;
             return base.LoadFromTreeViewItem(item);
         }
 
+        /// <summary>
+        /// Checks the foreign formula.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>ILookupFormula.</returns>
         private ILookupFormula CheckForeignFormula(TreeViewItem item)
         {
             if (FieldDefinition.ParentJoinForeignKeyDefinition != null && FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins.Count == 1)
@@ -387,6 +465,10 @@ namespace RingSoft.DbLookup.Lookup
             return null;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             if (Caption.IsNullOrEmpty())
@@ -396,6 +478,11 @@ namespace RingSoft.DbLookup.Lookup
             return base.ToString();
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         internal override void LoadFromEntity(AdvancedFindColumn entity, LookupDefinitionBase lookupDefinition)
         {
             TreeViewItem foundItem = null;
@@ -424,11 +511,21 @@ namespace RingSoft.DbLookup.Lookup
 
         }
 
+        /// <summary>
+        /// Formats the value for column map.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public override string FormatValueForColumnMap(string value)
         {
             return FieldDefinition.FormatValueForColumnMap(value);
         }
 
+        /// <summary>
+        /// Gets the name of the property join.
+        /// </summary>
+        /// <param name="useDbField">if set to <c>true</c> [use database field].</param>
+        /// <returns>System.String.</returns>
         public override string GetPropertyJoinName(bool useDbField = false)
         {
             var result = FieldDefinition.PropertyName;
@@ -454,6 +551,10 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the navigation properties.
+        /// </summary>
+        /// <returns>List&lt;JoinInfo&gt;.</returns>
         public List<JoinInfo> GetNavigationProperties()
         {
             if (ParentObject != null)
@@ -464,6 +565,12 @@ namespace RingSoft.DbLookup.Lookup
             return NavigationProperties;
         }
 
+        /// <summary>
+        /// Gets the database value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         public override string GetDatabaseValue<TEntity>(TEntity entity)
         {
             var result = string.Empty;
@@ -521,6 +628,12 @@ namespace RingSoft.DbLookup.Lookup
             return result;
         }
 
+        /// <summary>
+        /// Gets the formatted value.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
         public override string GetFormattedValue<TEntity>(TEntity entity)
         {
             var result = string.Empty;

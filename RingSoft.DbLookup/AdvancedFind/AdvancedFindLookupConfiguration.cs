@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-23-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindLookupConfiguration.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.RecordLocking;
@@ -6,15 +19,28 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
+    /// <summary>
+    /// Class AdvancedFindLookupConfiguration.
+    /// </summary>
     public class AdvancedFindLookupConfiguration
     {
+        /// <summary>
+        /// The lookup context
+        /// </summary>
         private IAdvancedFindLookupContext _lookupContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindLookupConfiguration"/> class.
+        /// </summary>
+        /// <param name="lookupContext">The lookup context.</param>
         public AdvancedFindLookupConfiguration(IAdvancedFindLookupContext lookupContext)
         {
             _lookupContext = lookupContext;
         }
 
+        /// <summary>
+        /// Configures the lookups.
+        /// </summary>
         public void ConfigureLookups()
         {
             var advancedFindLookup = new LookupDefinition<AdvancedFindLookup, AdvancedFind>(_lookupContext.AdvancedFinds);
@@ -62,6 +88,9 @@ namespace RingSoft.DbLookup.AdvancedFind
             _lookupContext.RecordLocks.HasLookupDefinition(recordLockingLookup);
         }
 
+        /// <summary>
+        /// Initializes the model.
+        /// </summary>
         public void InitializeModel()
         {
             _lookupContext.AdvancedFinds.GetFieldDefinition(p => p.FromFormula).IsMemo();

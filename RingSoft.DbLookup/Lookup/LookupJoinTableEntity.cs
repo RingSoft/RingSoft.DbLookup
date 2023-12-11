@@ -1,4 +1,17 @@
-﻿using RingSoft.DbLookup.ModelDefinition;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-01-2023
+// ***********************************************************************
+// <copyright file="LookupJoinTableEntity.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.TableProcessing;
 using System;
 using System.Linq;
@@ -16,10 +29,24 @@ namespace RingSoft.DbLookup.Lookup
     public class LookupJoinTableEntity<TLookupEntity, TEntity, TRelatedEntity>  : LookupJoin
         where TLookupEntity : new() where TEntity :class,  new() where TRelatedEntity : class
     {
+        /// <summary>
+        /// Gets the parent join definition.
+        /// </summary>
+        /// <value>The parent join definition.</value>
         public TableFieldJoinDefinition ParentJoinDefinition { get; internal set; }
 
+        /// <summary>
+        /// The lookup entity definition
+        /// </summary>
         private LookupDefinition<TLookupEntity, TEntity> _lookupEntityDefinition;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}"/> class.
+        /// </summary>
+        /// <param name="lookupEntityDefinition">The lookup entity definition.</param>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="propertyType">Type of the property.</param>
         internal LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition,
             TableDefinitionBase tableDefinition, string propertyName, string propertyType) : base(lookupEntityDefinition)
         {
@@ -27,11 +54,23 @@ namespace RingSoft.DbLookup.Lookup
             SetJoinDefinition(tableDefinition, propertyName, propertyType);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}"/> class.
+        /// </summary>
+        /// <param name="lookupEntityDefinition">The lookup entity definition.</param>
         private LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition) : base(lookupEntityDefinition)
         {
             _lookupEntityDefinition = lookupEntityDefinition;
         }
 
+        /// <summary>
+        /// Sets the join definition.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="propertyType">Type of the property.</param>
+        /// <exception cref="System.ArgumentException">Property type '{propertyType}' is not setup as a Table Definition in the Lookup Context.</exception>
+        /// <exception cref="System.ArgumentException">Property '{propertyName}' was not configured by the Entity Framework.</exception>
         private void SetJoinDefinition(TableDefinitionBase tableDefinition, string propertyName, string propertyType)
         {
             var foreignFieldDefinition = tableDefinition.FieldDefinitions.FirstOrDefault(f => f.ParentJoinForeignKeyDefinition != null &&
@@ -57,7 +96,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="entityProperty">The entity property.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(
             Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             Expression<Func<TRelatedEntity, object>> entityProperty)
@@ -72,7 +111,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="caption">The caption.</param>
         /// <param name="entityProperty">The entity property.</param>
         /// <param name="percentWidth">The percent of the lookup's total width.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             string caption, Expression<Func<TRelatedEntity, object>> entityProperty, double percentWidth)
         {
@@ -101,11 +140,21 @@ namespace RingSoft.DbLookup.Lookup
         //        path = parentObject.ChildJoinField.MakePath() + path;
         //        parentObject = parentObject.ParentObject;
         //    }
-            
+
         //    path = ParentField.MakePath() + path;
         //    columnDefinition.Path = path;
         //}
 
+        /// <summary>
+        /// Adds the visible column definition.
+        /// </summary>
+        /// <param name="lookupEntityProperty">The lookup entity property.</param>
+        /// <param name="caption">The caption.</param>
+        /// <param name="lookupFormula">The lookup formula.</param>
+        /// <param name="percentWidth">Width of the percent.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="allowNulls">if set to <c>true</c> [allow nulls].</param>
+        /// <returns>LookupFormulaColumnDefinition.</returns>
         public LookupFormulaColumnDefinition AddVisibleColumnDefinition(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             string caption, ILookupFormula lookupFormula, double percentWidth, FieldDataTypes dataType, bool allowNulls = false)
         {
@@ -131,7 +180,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <param name="lookupEntityProperty">The lookup entity property.</param>
         /// <param name="entityProperty">The entity property.</param>
-        /// <returns></returns>
+        /// <returns>LookupFieldColumnDefinition.</returns>
         public LookupFieldColumnDefinition AddHiddenColumn(Expression<Func<TLookupEntity, object>> lookupEntityProperty,
             Expression<Func<TRelatedEntity, object>> entityProperty)
         {
@@ -150,7 +199,7 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <typeparam name="TParentRelatedEntity">The type of the parent related entity.</typeparam>
         /// <param name="relatedProperty">The related property.</param>
-        /// <returns></returns>
+        /// <returns>LookupJoinTableEntity&lt;TLookupEntity, TEntity, TParentRelatedEntity&gt;.</returns>
         public LookupJoinTableEntity<TLookupEntity, TEntity, TParentRelatedEntity> Include<TParentRelatedEntity>(Expression<Func<TRelatedEntity, TParentRelatedEntity>> relatedProperty)
             where TParentRelatedEntity : class
 

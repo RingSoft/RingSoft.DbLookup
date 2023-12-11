@@ -1,11 +1,33 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 09-23-2023
+// ***********************************************************************
+// <copyright file="LookupCallBackToken.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using RingSoft.DbLookup.AutoFill;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    /// <summary>
+    /// Enum RefreshOperations
+    /// </summary>
     public enum RefreshOperations
     {
+        /// <summary>
+        /// The save
+        /// </summary>
         Save = 0,
+        /// <summary>
+        /// The delete
+        /// </summary>
         Delete = 1,
     }
     /// <summary>
@@ -13,14 +35,34 @@ namespace RingSoft.DbLookup.Lookup
     /// </summary>
     public class LookupCallBackToken
     {
+        /// <summary>
+        /// Gets or sets the lookup data.
+        /// </summary>
+        /// <value>The lookup data.</value>
         public LookupDataMauiBase LookupData { get; set; }
 
+        /// <summary>
+        /// Creates new autofillvalue.
+        /// </summary>
+        /// <value>The new automatic fill value.</value>
         public AutoFillValue NewAutoFillValue { get; set; }
 
+        /// <summary>
+        /// Gets or sets the deleted primary key value.
+        /// </summary>
+        /// <value>The deleted primary key value.</value>
         public PrimaryKeyValue DeletedPrimaryKeyValue { get; set; }
 
+        /// <summary>
+        /// Gets or sets the refresh mode.
+        /// </summary>
+        /// <value>The refresh mode.</value>
         public AutoFillRefreshModes RefreshMode { get; set; }
 
+        /// <summary>
+        /// Gets the refresh operation.
+        /// </summary>
+        /// <value>The refresh operation.</value>
         public RefreshOperations RefreshOperation { get; private set; }
 
         /// <summary>
@@ -28,12 +70,16 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler RefreshData;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LookupCallBackToken"/> class.
+        /// </summary>
         public LookupCallBackToken()
         {
         }
         /// <summary>
         /// Invokes the RefreshData event.
         /// </summary>
+        /// <param name="operation">The operation.</param>
         public void OnRefreshData(RefreshOperations operation = RefreshOperations.Save)
         {
             RefreshOperation = operation;

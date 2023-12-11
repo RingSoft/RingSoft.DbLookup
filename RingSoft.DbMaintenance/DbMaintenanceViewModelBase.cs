@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-08-2023
+// ***********************************************************************
+// <copyright file="DbMaintenanceViewModelBase.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -17,47 +30,116 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class LookupMap.
+    /// </summary>
     public class LookupMap
     {
+        /// <summary>
+        /// Gets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition { get; internal set; }
 
+        /// <summary>
+        /// Gets the add view parameter.
+        /// </summary>
+        /// <value>The add view parameter.</value>
         public object AddViewParameter { get; internal set; }
     }
+    /// <summary>
+    /// Class UiControlMap.
+    /// </summary>
     public class UiControlMap
     {
+        /// <summary>
+        /// Gets the UI command.
+        /// </summary>
+        /// <value>The UI command.</value>
         public UiCommand UiCommand { get; }
 
+        /// <summary>
+        /// Gets the field definition.
+        /// </summary>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UiControlMap"/> class.
+        /// </summary>
+        /// <param name="uiCommand">The UI command.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
         public UiControlMap(UiCommand uiCommand, FieldDefinition fieldDefinition)
         {
             UiCommand = uiCommand;
             FieldDefinition = fieldDefinition;
         }
     }
+    /// <summary>
+    /// Class SelectArgs.
+    /// </summary>
     public class SelectArgs
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SelectArgs"/> is cancel.
+        /// </summary>
+        /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
         public bool Cancel { get; set; }
     }
 
+    /// <summary>
+    /// Enum DbMaintenanceResults
+    /// </summary>
     public enum DbMaintenanceResults
     {
+        /// <summary>
+        /// The success
+        /// </summary>
         Success,
+        /// <summary>
+        /// The validation error
+        /// </summary>
         ValidationError,
+        /// <summary>
+        /// The database error
+        /// </summary>
         DatabaseError,
+        /// <summary>
+        /// The not allowed
+        /// </summary>
         NotAllowed
     }
 
+    /// <summary>
+    /// Enum DbMaintenanceModes
+    /// </summary>
     public enum DbMaintenanceModes
     {
+        /// <summary>
+        /// The add mode
+        /// </summary>
         AddMode = 0,
+        /// <summary>
+        /// The edit mode
+        /// </summary>
         EditMode = 1
     }
 
+    /// <summary>
+    /// Class CheckDirtyResultArgs.
+    /// </summary>
     public class CheckDirtyResultArgs
     {
+        /// <summary>
+        /// Gets the result.
+        /// </summary>
+        /// <value>The result.</value>
         public MessageButtons Result { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckDirtyResultArgs"/> class.
+        /// </summary>
+        /// <param name="result">The result.</param>
         internal CheckDirtyResultArgs(MessageButtons result)
         {
             Result = result;
@@ -73,51 +155,42 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public abstract TableDefinitionBase TableDefinitionBase { get; }
 
         /// <summary>
         /// Gets the view lookup definition used to get the next and previous record.
         /// </summary>
-        /// <value>
-        /// The view lookup definition.
-        /// </value>
+        /// <value>The view lookup definition.</value>
         protected LookupDefinitionBase ViewLookupDefinition { get; private set; }
 
         /// <summary>
         /// Gets the view.
         /// </summary>
-        /// <value>
-        /// The view.
-        /// </value>
+        /// <value>The view.</value>
         protected IDbMaintenanceView View { get; private set; }
 
         /// <summary>
         /// Gets the add-on-the fly arguments sent by the LookupControl or the LookupWindow.
         /// </summary>
-        /// <value>
-        /// The lookup add on the fly arguments.
-        /// </value>
+        /// <value>The lookup add on the fly arguments.</value>
         public LookupAddViewArgs LookupAddViewArgs { get; internal set; }
 
         /// <summary>
         /// Gets the initial search for text when the Find button is clicked.  By default it is the key auto fill text.
         /// </summary>
-        /// <value>
-        /// The find button initial search for.
-        /// </value>
+        /// <value>The find button initial search for.</value>
         protected virtual string FindButtonInitialSearchFor { get; } = string.Empty;
 
+        /// <summary>
+        /// The key automatic fill setup
+        /// </summary>
         private AutoFillSetup _keyAutoFillSetup;
 
         /// <summary>
         /// Gets the unique key control auto fill setup.
         /// </summary>
-        /// <value>
-        /// The unique key control auto fill setup.
-        /// </value>
+        /// <value>The unique key control auto fill setup.</value>
         public AutoFillSetup KeyAutoFillSetup
         {
             get => _keyAutoFillSetup;
@@ -131,8 +204,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The last saved date
+        /// </summary>
         private DateTime? _lastSavedDate;
 
+        /// <summary>
+        /// Gets or sets the last saved date.
+        /// </summary>
+        /// <value>The last saved date.</value>
         public DateTime? LastSavedDate
         {
             get => _lastSavedDate;
@@ -150,19 +230,18 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets or sets the find button lookup definition.  By default it is the Lookup definition attached to the Table definition.
         /// </summary>
-        /// <value>
-        /// The find button lookup definition.
-        /// </value>
+        /// <value>The find button lookup definition.</value>
         public LookupDefinitionBase FindButtonLookupDefinition { get; set; }
 
 
+        /// <summary>
+        /// The key automatic fill value
+        /// </summary>
         private AutoFillValue _keyAutoFillValue;
         /// <summary>
         /// Gets or sets the unique key control auto fill value.
         /// </summary>
-        /// <value>
-        /// The key auto fill value.
-        /// </value>
+        /// <value>The key auto fill value.</value>
         public AutoFillValue KeyAutoFillValue
         {
             get => _keyAutoFillValue;
@@ -176,16 +255,21 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the key automatic fill UI command.
+        /// </summary>
+        /// <value>The key automatic fill UI command.</value>
         public UiCommand KeyAutoFillUiCommand { get; }
 
+        /// <summary>
+        /// The primary key controls enabled
+        /// </summary>
         private bool _primaryKeyControlsEnabled;
 
         /// <summary>
         /// Gets or sets a value indicating whether the primary key controls are enabled.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if primary key controls enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if primary key controls enabled; otherwise, <c>false</c>.</value>
         public bool PrimaryKeyControlsEnabled
         {
             get => _primaryKeyControlsEnabled;
@@ -199,13 +283,14 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The select button enabled
+        /// </summary>
         private bool _selectButtonEnabled;
         /// <summary>
         /// Gets or sets a value indicating whether the Select button is enabled.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the select button is enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if the select button is enabled; otherwise, <c>false</c>.</value>
         public bool SelectButtonEnabled
         {
             get => _selectButtonEnabled;
@@ -218,13 +303,14 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The delete button enabled
+        /// </summary>
         private bool _deleteButtonEnabled;
         /// <summary>
         /// Gets or sets a value indicating whether the Delete button is enabled.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the delete button is enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if the delete button is enabled; otherwise, <c>false</c>.</value>
         public bool DeleteButtonEnabled
         {
             get => _deleteButtonEnabled;
@@ -239,14 +325,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The new button enabled
+        /// </summary>
         private bool _newButtonEnabled;
 
         /// <summary>
         /// Gets or sets a value indicating whether the New button is enabled.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the new button is enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if the new button is enabled; otherwise, <c>false</c>.</value>
         public bool NewButtonEnabled
         {
             get => _newButtonEnabled;
@@ -261,14 +348,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The save button enabled
+        /// </summary>
         private bool _saveButtonEnabled;
 
         /// <summary>
         /// Gets or sets a value indicating whether the Save button is enabled.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the save button is enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if the save button is enabled; otherwise, <c>false</c>.</value>
         public bool SaveButtonEnabled
         {
             get => _saveButtonEnabled;
@@ -283,14 +371,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The key value dirty
+        /// </summary>
         private bool _keyValueDirty;
 
         /// <summary>
         /// Gets or sets a value indicating whether the data in the user-editable unique key value control has been changed.  Used when focus leaves the unique user-editable control.  When that happens and this value is true, then the record matching that unique value is automatically loaded.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if data in the key value control has changed; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if data in the key value control has changed; otherwise, <c>false</c>.</value>
         public bool KeyValueDirty
         {
             get => _keyValueDirty;
@@ -309,19 +398,18 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets or sets the maintenance mode.
         /// </summary>
-        /// <value>
-        /// The maintenance mode.
-        /// </value>
+        /// <value>The maintenance mode.</value>
         public DbMaintenanceModes MaintenanceMode { get; protected set; }
 
+        /// <summary>
+        /// The record dirty
+        /// </summary>
         private bool _recordDirty;
 
         /// <summary>
         /// Gets or sets a value indicating whether the user has changed the data on this record and has yet to save.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if there are unsaved changes in this record; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if there are unsaved changes in this record; otherwise, <c>false</c>.</value>
         public bool RecordDirty
         {
             get => _recordDirty;
@@ -335,8 +423,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The read only mode
+        /// </summary>
         private bool _readOnlyMode;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [read only mode].
+        /// </summary>
+        /// <value><c>true</c> if [read only mode]; otherwise, <c>false</c>.</value>
         public bool ReadOnlyMode
         {
             get => _readOnlyMode;
@@ -350,54 +445,193 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the UI controls.
+        /// </summary>
+        /// <value>The UI controls.</value>
         public List<UiControlMap> UiControls { get; } = new List<UiControlMap>();
+        /// <summary>
+        /// Gets or sets the input parameter.
+        /// </summary>
+        /// <value>The input parameter.</value>
         public object InputParameter { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lock date.
+        /// </summary>
+        /// <value>The lock date.</value>
         public DateTime LockDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the processor.
+        /// </summary>
+        /// <value>The processor.</value>
         public IDbMaintenanceDataProcessor Processor { get; set; }
 
+        /// <summary>
+        /// Gets the previous command.
+        /// </summary>
+        /// <value>The previous command.</value>
         public RelayCommand PreviousCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the previous UI command.
+        /// </summary>
+        /// <value>The previous UI command.</value>
         public UiCommand PreviousUiCommand { get; }
+        /// <summary>
+        /// Gets the next command.
+        /// </summary>
+        /// <value>The next command.</value>
         public RelayCommand NextCommand { get; }
+        /// <summary>
+        /// Gets the next UI command.
+        /// </summary>
+        /// <value>The next UI command.</value>
         public UiCommand NextUiCommand { get; }
+        /// <summary>
+        /// Gets the save command.
+        /// </summary>
+        /// <value>The save command.</value>
         public RelayCommand SaveCommand { get; }
+        /// <summary>
+        /// Gets the save UI command.
+        /// </summary>
+        /// <value>The save UI command.</value>
         public UiCommand SaveUiCommand { get; }
+        /// <summary>
+        /// Gets the delete command.
+        /// </summary>
+        /// <value>The delete command.</value>
         public RelayCommand DeleteCommand { get; }
+        /// <summary>
+        /// Gets the delete UI command.
+        /// </summary>
+        /// <value>The delete UI command.</value>
         public UiCommand DeleteUiCommand { get; }
+        /// <summary>
+        /// Creates new command.
+        /// </summary>
+        /// <value>The new command.</value>
         public RelayCommand NewCommand { get; }
+        /// <summary>
+        /// Creates new uicommand.
+        /// </summary>
+        /// <value>The new UI command.</value>
         public UiCommand NewUiCommand { get; }
+        /// <summary>
+        /// Gets the find command.
+        /// </summary>
+        /// <value>The find command.</value>
         public RelayCommand FindCommand { get; }
+        /// <summary>
+        /// Gets the find UI command.
+        /// </summary>
+        /// <value>The find UI command.</value>
         public UiCommand FindUiCommand { get; }
+        /// <summary>
+        /// Gets the select command.
+        /// </summary>
+        /// <value>The select command.</value>
         public RelayCommand SelectCommand { get; }
+        /// <summary>
+        /// Gets the select UI command.
+        /// </summary>
+        /// <value>The select UI command.</value>
         public UiCommand SelectUiCommand { get; }
+        /// <summary>
+        /// Gets the print command.
+        /// </summary>
+        /// <value>The print command.</value>
         public RelayCommand PrintCommand { get; }
+        /// <summary>
+        /// Gets the print UI command.
+        /// </summary>
+        /// <value>The print UI command.</value>
         public UiCommand PrintUiCommand { get; }
+        /// <summary>
+        /// Gets the maintenance buttons UI command.
+        /// </summary>
+        /// <value>The maintenance buttons UI command.</value>
         public UiCommand MaintenanceButtonsUiCommand { get; }
+        /// <summary>
+        /// Gets the status bar UI command.
+        /// </summary>
+        /// <value>The status bar UI command.</value>
         public UiCommand StatusBarUiCommand { get; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [check dirty flag].
+        /// </summary>
+        /// <value><c>true</c> if [check dirty flag]; otherwise, <c>false</c>.</value>
         public bool CheckDirtyFlag { get; set; } = true;
 
+        /// <summary>
+        /// The grids
+        /// </summary>
         private List<DbMaintenanceDataEntryGridManagerBase> _grids
             = new List<DbMaintenanceDataEntryGridManagerBase>();
+        /// <summary>
+        /// Gets the grids.
+        /// </summary>
+        /// <value>The grids.</value>
         public IReadOnlyList<DbMaintenanceDataEntryGridManagerBase> Grids { get; }
 
+        /// <summary>
+        /// The lookups
+        /// </summary>
         private List<LookupMap> _lookups = new List<LookupMap>();
 
+        /// <summary>
+        /// Gets the lookups.
+        /// </summary>
+        /// <value>The lookups.</value>
         public IReadOnlyList<LookupMap> Lookups { get; }
 
+        /// <summary>
+        /// Occurs when [check dirty message shown].
+        /// </summary>
         public event EventHandler<CheckDirtyResultArgs> CheckDirtyMessageShown;
+        /// <summary>
+        /// Occurs when [initialize event].
+        /// </summary>
         public event EventHandler InitializeEvent;
+        /// <summary>
+        /// Occurs when [save event].
+        /// </summary>
         public event EventHandler SaveEvent;
+        /// <summary>
+        /// Occurs when [select event].
+        /// </summary>
         public event EventHandler<SelectArgs> SelectEvent;
+        /// <summary>
+        /// Occurs when [delete event].
+        /// </summary>
         public event EventHandler DeleteEvent;
+        /// <summary>
+        /// Occurs when [find event].
+        /// </summary>
         public event EventHandler FindEvent;
+        /// <summary>
+        /// Creates new event.
+        /// </summary>
         public event EventHandler NewEvent;
+        /// <summary>
+        /// Occurs when [close event].
+        /// </summary>
         public event EventHandler CloseEvent;
+        /// <summary>
+        /// Occurs when [next event].
+        /// </summary>
         public event EventHandler NextEvent;
+        /// <summary>
+        /// Occurs when [previous event].
+        /// </summary>
         public event EventHandler PreviousEvent;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbMaintenanceViewModelBase"/> class.
+        /// </summary>
         public DbMaintenanceViewModelBase()
         {
             PreviousCommand = new RelayCommand(OnGotoPreviousButton);
@@ -426,11 +660,20 @@ namespace RingSoft.DbMaintenance
             Lookups = _lookups.AsReadOnly();
         }
 
+        /// <summary>
+        /// Maps the field to UI command.
+        /// </summary>
+        /// <param name="uiCommand">The UI command.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
         public void MapFieldToUiCommand(UiCommand uiCommand, FieldDefinition fieldDefinition)
         {
             UiControls.Add(new UiControlMap(uiCommand, fieldDefinition));
         }
 
+        /// <summary>
+        /// Setups the specified lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         protected internal void Setup(LookupDefinitionBase lookupDefinition)
         {
             ViewLookupDefinition = lookupDefinition;
@@ -451,6 +694,9 @@ namespace RingSoft.DbMaintenance
             InternalInitialize();
         }
 
+        /// <summary>
+        /// Internals the initialize.
+        /// </summary>
         protected internal virtual void InternalInitialize()
         {
         }
@@ -483,7 +729,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the Save button is clicked.
         /// </summary>
-        /// <param name="unitTestMode"></param>
+        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         public abstract DbMaintenanceResults DoSave(bool unitTestMode = false);
 
@@ -495,6 +741,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the Delete button is clicked.
         /// </summary>
+        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         public abstract DbMaintenanceResults DoDelete(bool unitTestMode = false);
 
@@ -511,7 +758,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the user is trying to close the view.
         /// </summary>
-        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
         public abstract void OnWindowClosing(CancelEventArgs e);
 
         /// <summary>
@@ -520,34 +767,62 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The e.</param>
         public abstract void InitializeFromLookupData(LookupAddViewArgs e);
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
+        /// <param name="e">The e.</param>
         public abstract void OnRecordSelected(LookupSelectArgs e);
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         public abstract void OnRecordSelected(PrimaryKeyValue primaryKey);
 
+        /// <summary>
+        /// Called when [record dirty changed].
+        /// </summary>
+        /// <param name="newValue">if set to <c>true</c> [new value].</param>
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
         }
 
+        /// <summary>
+        /// Fires the initialize event.
+        /// </summary>
         protected void FireInitializeEvent()
         {
             InitializeEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the previous event.
+        /// </summary>
         protected void FirePreviousEvent()
         {
             PreviousEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the next event.
+        /// </summary>
         protected void FireNextEvent()
         {
             NextEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the find event.
+        /// </summary>
         protected void FireFindEvent()
         {
             FindEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the select event.
+        /// </summary>
+        /// <returns>SelectArgs.</returns>
         protected SelectArgs FireSelectEvent()
         {
             var selectArgs = new SelectArgs();
@@ -555,26 +830,42 @@ namespace RingSoft.DbMaintenance
             return selectArgs;
         }
 
+        /// <summary>
+        /// Fires the new event.
+        /// </summary>
         protected void FireNewEvent()
         {
             NewEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the save event.
+        /// </summary>
         protected void FireSaveEvent()
         {
             SaveEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the delete event.
+        /// </summary>
         protected void FireDeleteEvent()
         {
             DeleteEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Fires the close event.
+        /// </summary>
         protected void FireCloseEvent()
         {
             CloseEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Called when [read only mode changed].
+        /// </summary>
+        /// <param name="newValue">if set to <c>true</c> [new value].</param>
         protected virtual void OnReadOnlyModeChanged(bool newValue)
         {
             if (newValue)
@@ -597,16 +888,27 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [check dirty flag message shown].
+        /// </summary>
+        /// <param name="e">The e.</param>
         protected virtual void OnCheckDirtyFlagMessageShown(CheckDirtyResultArgs e)
         {
             CheckDirtyMessageShown?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
         protected virtual void PrintOutput()
         {
             Processor.PrintOutput(CreatePrinterSetupArgs());
         }
 
+        /// <summary>
+        /// Creates the printer setup arguments.
+        /// </summary>
+        /// <returns>PrinterSetupArgs.</returns>
         protected PrinterSetupArgs CreatePrinterSetupArgs()
         {
             var printLookup = FindButtonLookupDefinition.Clone();
@@ -624,6 +926,13 @@ namespace RingSoft.DbMaintenance
             return printerSetupArgs;
         }
 
+        /// <summary>
+        /// Setups the printer arguments.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
+        /// <param name="stringFieldIndex">Index of the string field.</param>
+        /// <param name="numericFieldIndex">Index of the numeric field.</param>
+        /// <param name="memoFieldIndex">Index of the memo field.</param>
         protected virtual void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs, int stringFieldIndex = 1
             , int numericFieldIndex = 1, int memoFieldIndex = 1)
         {
@@ -636,6 +945,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Maps the lookup columns.
+        /// </summary>
+        /// <param name="stringFieldIndex">Index of the string field.</param>
+        /// <param name="numericFieldIndex">Index of the numeric field.</param>
+        /// <param name="memoFieldIndex">Index of the memo field.</param>
+        /// <param name="hiddenColumn">The hidden column.</param>
+        /// <returns>PrintingColumnMap.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static PrintingColumnMap MapLookupColumns(ref int stringFieldIndex, ref int numericFieldIndex,
             ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn)
         {
@@ -695,6 +1013,12 @@ namespace RingSoft.DbMaintenance
             return columnMap;
         }
 
+        /// <summary>
+        /// Maps the memo field.
+        /// </summary>
+        /// <param name="memoFieldIndex">Index of the memo field.</param>
+        /// <param name="columnMap">The column map.</param>
+        /// <param name="hiddenColumn">The hidden column.</param>
         private static void MapMemoField(int memoFieldIndex, PrintingColumnMap columnMap,
             LookupColumnDefinitionBase hiddenColumn)
         {
@@ -710,6 +1034,12 @@ namespace RingSoft.DbMaintenance
                 caption);
         }
 
+        /// <summary>
+        /// Maps the string field.
+        /// </summary>
+        /// <param name="columnMap">The column map.</param>
+        /// <param name="lookupColumn">The lookup column.</param>
+        /// <param name="stringFieldIndex">Index of the string field.</param>
         private static void MapStringField(PrintingColumnMap columnMap, LookupColumnDefinitionBase lookupColumn,
             int stringFieldIndex)
         {
@@ -723,11 +1053,20 @@ namespace RingSoft.DbMaintenance
                 caption);
         }
 
+        /// <summary>
+        /// Processes the print output data.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public virtual void ProcessPrintOutputData(PrinterSetupArgs printerSetupArgs)
         {
             ProcessLookupPrintOutput(printerSetupArgs, this);
         }
 
+        /// <summary>
+        /// Processes the lookup print output.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
+        /// <param name="printProcessor">The print processor.</param>
         public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs, IPrintProcessor printProcessor)
         { 
             var lookupData = printerSetupArgs.LookupDefinition.TableDefinition.LookupDefinition
@@ -784,6 +1123,10 @@ namespace RingSoft.DbMaintenance
             MakeAdditionalFilter(printerSetupArgs);
         }
 
+        /// <summary>
+        /// Makes the additional filter.
+        /// </summary>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public static void MakeAdditionalFilter(PrinterSetupArgs printerSetupArgs)
         {
             var fixedText = GetFiltersText(printerSetupArgs.LookupDefinition.FilterDefinition
@@ -805,6 +1148,12 @@ namespace RingSoft.DbMaintenance
             printerSetupArgs.PrintingProperties.AdditionalFilter = result;
         }
 
+        /// <summary>
+        /// Gets the filters text.
+        /// </summary>
+        /// <param name="filterItemDefinitions">The filter item definitions.</param>
+        /// <param name="printerSetupArgs">The printer setup arguments.</param>
+        /// <returns>System.String.</returns>
         private static string GetFiltersText(List<FilterItemDefinition> filterItemDefinitions, PrinterSetupArgs printerSetupArgs)
         {
             var result = string.Empty;
@@ -848,12 +1197,24 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Occurs when [print processing header].
+        /// </summary>
         public event EventHandler<PrinterDataProcessedEventArgs> PrintProcessingHeader;
+        /// <summary>
+        /// Notifies the processing header.
+        /// </summary>
+        /// <param name="args">The <see cref="T:RingSoft.DbLookup.PrinterDataProcessedEventArgs" /> instance containing the event data.</param>
         public void NotifyProcessingHeader(PrinterDataProcessedEventArgs args)
         {
             PrintProcessingHeader?.Invoke(this, args);
         }
 
+        /// <summary>
+        /// Registers the lookup.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="addViewParameter">The add view parameter.</param>
         public void RegisterLookup(LookupDefinitionBase lookupDefinition, object addViewParameter = null)
         {
             var lookupMap = new LookupMap
@@ -864,6 +1225,10 @@ namespace RingSoft.DbMaintenance
             _lookups.Add(lookupMap);
         }
 
+        /// <summary>
+        /// Registers the grid.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
         public virtual void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
         {
             _grids.Add(grid);

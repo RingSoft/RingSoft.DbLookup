@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-20-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindFiltersManager.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -13,35 +26,97 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class AdvancedFindFiltersManager.
+    /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManager{RingSoft.DbLookup.AdvancedFind.AdvancedFindFilter}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManager{RingSoft.DbLookup.AdvancedFind.AdvancedFindFilter}" />
     public class AdvancedFindFiltersManager : DbMaintenanceDataEntryGridManager<AdvancedFindFilter>
     {
+        /// <summary>
+        /// The left parentheses column identifier
+        /// </summary>
         public const int LeftParenthesesColumnId = 1;
+        /// <summary>
+        /// The table column identifier
+        /// </summary>
         public const int TableColumnId = 2;
+        /// <summary>
+        /// The field column identifier
+        /// </summary>
         public const int FieldColumnId = 3;
+        /// <summary>
+        /// The search column identifier
+        /// </summary>
         public const int SearchColumnId = 4;
+        /// <summary>
+        /// The right parentheses column identifier
+        /// </summary>
         public const int RightParenthesesColumnId = 5;
+        /// <summary>
+        /// The end logic column identifier
+        /// </summary>
         public const int EndLogicColumnId = 6;
 
+        /// <summary>
+        /// Enum FilterColumns
+        /// </summary>
         public enum FilterColumns
         {
+            /// <summary>
+            /// The left parentheses
+            /// </summary>
             LeftParentheses = LeftParenthesesColumnId,
+            /// <summary>
+            /// The table
+            /// </summary>
             Table = TableColumnId,
+            /// <summary>
+            /// The field
+            /// </summary>
             Field = FieldColumnId,
+            /// <summary>
+            /// The search
+            /// </summary>
             Search = SearchColumnId,
+            /// <summary>
+            /// The right parentheses
+            /// </summary>
             RightParentheses = RightParenthesesColumnId,
+            /// <summary>
+            /// The end logic
+            /// </summary>
             EndLogic = EndLogicColumnId
         }
 
+        /// <summary>
+        /// Gets or sets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public AdvancedFindViewModel ViewModel { get; set; }
 
+        /// <summary>
+        /// The reset lookup
+        /// </summary>
         private bool _resetLookup = true;
+        /// <summary>
+        /// The adding new row
+        /// </summary>
         private bool _addingNewRow;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindFiltersManager"/> class.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
         public AdvancedFindFiltersManager(AdvancedFindViewModel viewModel) : base(viewModel)
         {
             ViewModel = viewModel;
         }
 
+        /// <summary>
+        /// Gets the new row.
+        /// </summary>
+        /// <returns>DataEntryGridRow.</returns>
         protected override DataEntryGridRow GetNewRow()
         {
             var result = new AdvancedFindNewFilterRow(this);
@@ -57,6 +132,11 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Constructs the new row from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>DbMaintenanceDataEntryGridRow&lt;AdvancedFindFilter&gt;.</returns>
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindFilter> ConstructNewRowFromEntity(
             AdvancedFindFilter entity)
         {
@@ -94,6 +174,12 @@ namespace RingSoft.DbMaintenance
             };
         }
 
+        /// <summary>
+        /// Loads from lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <param name="creatingNew">if set to <c>true</c> [creating new].</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition, bool creatingNew = false)
         {
             if (creatingNew)
@@ -147,6 +233,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Loads the new user filter.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
         public void LoadNewUserFilter(AdvancedFilterReturn filterReturn)
         {
             //var row = GetNewRow() as AdvancedFindFilterRow;
@@ -172,6 +262,10 @@ namespace RingSoft.DbMaintenance
             AddNewFilterRow(row);
         }
 
+        /// <summary>
+        /// Adds the new filter row.
+        /// </summary>
+        /// <param name="row">The row.</param>
         public void AddNewFilterRow(AdvancedFindFilterRow row)
         {
             var newIndex = GetNewRowIndex();
@@ -198,6 +292,10 @@ namespace RingSoft.DbMaintenance
             ViewModel.ResetLookup();
         }
 
+        /// <summary>
+        /// Gets the new index of the row.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         public int GetNewRowIndex()
         {
             var result = -1;
@@ -213,6 +311,11 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Determines whether this instance [can insert row] the specified start index.
+        /// </summary>
+        /// <param name="startIndex">The start index.</param>
+        /// <returns><c>true</c> if this instance [can insert row] the specified start index; otherwise, <c>false</c>.</returns>
         protected override bool CanInsertRow(int startIndex)
         {
             if (startIndex >= 0)
@@ -228,6 +331,10 @@ namespace RingSoft.DbMaintenance
             return base.CanInsertRow(startIndex);
         }
 
+        /// <summary>
+        /// Gets the last index of the row.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         private int GetLastRowIndex()
         {
             var lastRow = Rows.FirstOrDefault(p => p.IsNew);
@@ -235,6 +342,10 @@ namespace RingSoft.DbMaintenance
             return lastRowIndex;
         }
 
+        /// <summary>
+        /// Loads the grid.
+        /// </summary>
+        /// <param name="entityList">The entity list.</param>
         public override void LoadGrid(IEnumerable<AdvancedFindFilter> entityList)
         {
             ViewModel.LookupDefinition.FilterDefinition.ClearUserFilters();
@@ -262,6 +373,11 @@ namespace RingSoft.DbMaintenance
             //ViewModel.ResetLookup();
         }
 
+        /// <summary>
+        /// Processes the last filter row.
+        /// </summary>
+        /// <param name="theEnd">if set to <c>true</c> [the end].</param>
+        /// <param name="row">The row.</param>
         private void ProcessLastFilterRow(bool theEnd, AdvancedFindFilterRow row)
         {
             if (Rows.Any())
@@ -271,6 +387,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Handles the <see cref="E:RowsChanged" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -309,6 +430,10 @@ namespace RingSoft.DbMaintenance
             base.OnRowsChanged(e);
         }
 
+        /// <summary>
+        /// Clears the rows.
+        /// </summary>
+        /// <param name="addRowToBottom">if set to <c>true</c> [add row to bottom].</param>
         protected override void ClearRows(bool addRowToBottom = true)
         {
             var filterRows = Rows.OfType<AdvancedFindFilterRow>().ToList();
@@ -336,6 +461,9 @@ namespace RingSoft.DbMaintenance
             _resetLookup = true;
         }
 
+        /// <summary>
+        /// Finishes the off filter.
+        /// </summary>
         private void FinishOffFilter()
         {
             if (Rows.Any())
@@ -371,6 +499,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Validates the parentheses.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ValidateParentheses()
         {
             var result = true;
@@ -393,6 +525,10 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Adds the advanced find filter row.
+        /// </summary>
+        /// <param name="field">The field.</param>
         public void AddAdvancedFindFilterRow(FieldDefinition field = null)
         {
             var row = new AdvancedFindAfFilterRow(this
@@ -410,6 +546,10 @@ namespace RingSoft.DbMaintenance
             Grid?.GotoCell(row, (int)FilterColumns.Search);
         }
 
+        /// <summary>
+        /// Validates the advanced find.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ValidateAdvancedFind()
         {
             var rows = Rows.OfType<AdvancedFindAfFilterRow>().ToList();
@@ -428,6 +568,12 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Validates the advanced find.
+        /// </summary>
+        /// <param name="advancedFindList">The advanced find list.</param>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ValidateAdvancedFind(List<int> advancedFindList, int advancedFindId)
         {
             if (advancedFindId <= 0)
@@ -455,6 +601,9 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Adds the new row.
+        /// </summary>
         public void AddNewRow()
         {
             var newRow = GetNewRow();
@@ -462,6 +611,11 @@ namespace RingSoft.DbMaintenance
             Grid?.RefreshGridView();
         }
 
+        /// <summary>
+        /// Determines whether [is delete ok] [the specified row index].
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <returns><c>true</c> if [is delete ok] [the specified row index]; otherwise, <c>false</c>.</returns>
         public override bool IsDeleteOk(int rowIndex)
         {
             var rows = Rows.OfType<AdvancedFindFilterRow>().ToList();
@@ -478,6 +632,10 @@ namespace RingSoft.DbMaintenance
             return base.IsDeleteOk(rowIndex);
         }
 
+        /// <summary>
+        /// Removes the row.
+        /// </summary>
+        /// <param name="rowToDelete">The row to delete.</param>
         public override void RemoveRow(DataEntryGridRow rowToDelete)
         {
             if (rowToDelete.IsNew)
@@ -490,6 +648,9 @@ namespace RingSoft.DbMaintenance
             base.RemoveRow(rowToDelete);
         }
 
+        /// <summary>
+        /// Sets the focus to grid.
+        /// </summary>
         public void SetFocusToGrid()
         {
             Grid?.GotoCell(Rows[0], (SearchColumnId));

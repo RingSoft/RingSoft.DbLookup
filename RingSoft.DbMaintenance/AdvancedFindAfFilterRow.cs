@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 03-19-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindAfFilterRow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using RingSoft.DataEntryControls.Engine;
@@ -12,16 +25,39 @@ using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class AdvancedFindAfFilterRow.
+    /// Implements the <see cref="RingSoft.DbMaintenance.AdvancedFindFilterRow" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.AdvancedFindFilterRow" />
     public class AdvancedFindAfFilterRow : AdvancedFindFilterRow
     {
+        /// <summary>
+        /// Gets or sets the automatic fill setup.
+        /// </summary>
+        /// <value>The automatic fill setup.</value>
         public AutoFillSetup AutoFillSetup { get; set; }
 
+        /// <summary>
+        /// Gets or sets the automatic fill value.
+        /// </summary>
+        /// <value>The automatic fill value.</value>
         public AutoFillValue AutoFillValue { get; set; }
 
         //public AdvancedFindFilterDefinition Filter { get; set; }
 
+        /// <summary>
+        /// Gets or sets the advanced find identifier.
+        /// </summary>
+        /// <value>The advanced find identifier.</value>
         public int AdvancedFindId { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindAfFilterRow"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="primaryFieldDefinition">The primary field definition.</param>
         public AdvancedFindAfFilterRow(AdvancedFindFiltersManager manager
             , string path
             , FieldDefinition primaryFieldDefinition = null) : base(manager)
@@ -30,6 +66,10 @@ namespace RingSoft.DbMaintenance
             SetupTableField(primaryFieldDefinition);
         }
 
+        /// <summary>
+        /// Setups the table field.
+        /// </summary>
+        /// <param name="primaryFieldDefinition">The primary field definition.</param>
         private void SetupTableField(FieldDefinition primaryFieldDefinition)
         {
             var lookup = SystemGlobals.AdvancedFindLookupContext.AdvancedFindLookup.Clone();
@@ -90,6 +130,11 @@ namespace RingSoft.DbMaintenance
             };
         }
 
+        /// <summary>
+        /// Gets the cell props.
+        /// </summary>
+        /// <param name="columnId">The column identifier.</param>
+        /// <returns>DataEntryGridCellProps.</returns>
         public override DataEntryGridCellProps GetCellProps(int columnId)
         {
             var column = (AdvancedFindFiltersManager.FilterColumns) columnId;
@@ -106,6 +151,10 @@ namespace RingSoft.DbMaintenance
             return base.GetCellProps(columnId);
         }
 
+        /// <summary>
+        /// Sets the cell value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public override void SetCellValue(DataEntryGridEditingCellProps value)
         {
             var column = (AdvancedFindFiltersManager.FilterColumns)value.ColumnId;
@@ -123,6 +172,9 @@ namespace RingSoft.DbMaintenance
             base.SetCellValue(value);
         }
 
+        /// <summary>
+        /// Creates the filter definition.
+        /// </summary>
         private void CreateFilterDefinition()
         {
             var filter = FilterItemDefinition as AdvancedFindFilterDefinition;
@@ -148,6 +200,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the new index of the filter.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         protected override int GetNewFilterIndex()
         {
             var result = Manager.Rows.IndexOf(this);
@@ -157,6 +213,11 @@ namespace RingSoft.DbMaintenance
             return result - fixedItems.Count;
         }
 
+        /// <summary>
+        /// Saves to entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="rowIndex">Index of the row.</param>
         public override void SaveToEntity(AdvancedFindFilter entity, int rowIndex)
         {
             if (AutoFillValue != null && AutoFillValue.IsValid())
@@ -169,6 +230,10 @@ namespace RingSoft.DbMaintenance
             base.SaveToEntity(entity, rowIndex);
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public override void LoadFromEntity(AdvancedFindFilter entity)
         {
             AutoFillValue = Manager.ViewModel.TableDefinition.Context.OnAutoFillTextRequest(
@@ -178,6 +243,10 @@ namespace RingSoft.DbMaintenance
             base.LoadFromEntity(entity);
         }
 
+        /// <summary>
+        /// Validates the row.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool ValidateRow()
         {
             if (!AutoFillValue.IsValid())

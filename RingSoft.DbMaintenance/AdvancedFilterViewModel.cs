@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 07-24-2023
+// ***********************************************************************
+// <copyright file="AdvancedFilterViewModel.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
@@ -14,28 +27,71 @@ using System.Runtime.CompilerServices;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Enum TrueFalseValues
+    /// </summary>
     public enum TrueFalseValues
     {
+        /// <summary>
+        /// The true
+        /// </summary>
         True = 1,
+        /// <summary>
+        /// The false
+        /// </summary>
         False = 0
     }
 
+    /// <summary>
+    /// Enum ValidationFailControls
+    /// </summary>
     public enum ValidationFailControls
     {
+        /// <summary>
+        /// The condition
+        /// </summary>
         Condition = 1,
+        /// <summary>
+        /// The search value
+        /// </summary>
         SearchValue = 2,
+        /// <summary>
+        /// The formula
+        /// </summary>
         Formula = 3,
+        /// <summary>
+        /// The formula display value
+        /// </summary>
         FormulaDisplayValue = 4,
     }
 
+    /// <summary>
+    /// Class ValidationFailArgs.
+    /// </summary>
     public class ValidationFailArgs
     {
+        /// <summary>
+        /// Gets or sets the control.
+        /// </summary>
+        /// <value>The control.</value>
         public ValidationFailControls Control { get; set; }
     }
+    /// <summary>
+    /// Class AdvancedFilterViewModel.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class AdvancedFilterViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The table
+        /// </summary>
         private string _table;
 
+        /// <summary>
+        /// Gets or sets the table.
+        /// </summary>
+        /// <value>The table.</value>
         public string Table
         {
             get => _table;
@@ -50,8 +106,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The field
+        /// </summary>
         private string _field;
 
+        /// <summary>
+        /// Gets or sets the field.
+        /// </summary>
+        /// <value>The field.</value>
         public string Field
         {
             get => _field;
@@ -66,8 +129,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The formula
+        /// </summary>
         private string _formula;
 
+        /// <summary>
+        /// Gets or sets the formula.
+        /// </summary>
+        /// <value>The formula.</value>
         public string Formula
         {
             get => _formula;
@@ -82,8 +152,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The formula display value
+        /// </summary>
         private string _formulaDisplayValue;
 
+        /// <summary>
+        /// Gets or sets the formula display value.
+        /// </summary>
+        /// <value>The formula display value.</value>
         public string FormulaDisplayValue
         {
             get => _formulaDisplayValue;
@@ -98,8 +175,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The condition ComboBox setup
+        /// </summary>
         private TextComboBoxControlSetup _conditionComboBoxSetup;
 
+        /// <summary>
+        /// Gets or sets the condition ComboBox setup.
+        /// </summary>
+        /// <value>The condition ComboBox setup.</value>
         public TextComboBoxControlSetup ConditionComboBoxSetup
         {
             get => _conditionComboBoxSetup;
@@ -114,8 +198,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The condition ComboBox item
+        /// </summary>
         private TextComboBoxItem _conditionComboBoxItem;
 
+        /// <summary>
+        /// Gets or sets the condition ComboBox item.
+        /// </summary>
+        /// <value>The condition ComboBox item.</value>
         public TextComboBoxItem ConditionComboBoxItem
         {
             get => _conditionComboBoxItem;
@@ -130,6 +221,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets or sets the condition.
+        /// </summary>
+        /// <value>The condition.</value>
         public Conditions? Condition
         {
             get
@@ -143,8 +238,15 @@ namespace RingSoft.DbMaintenance
             set => ConditionComboBoxItem = ConditionComboBoxSetup.GetItem((int)value);
         }
 
+        /// <summary>
+        /// The formula value ComboBox setup
+        /// </summary>
         private TextComboBoxControlSetup _formulaValueComboBoxSetup;
 
+        /// <summary>
+        /// Gets or sets the formula value ComboBox setup.
+        /// </summary>
+        /// <value>The formula value ComboBox setup.</value>
         public TextComboBoxControlSetup FormulaValueComboBoxSetup
         {
             get => _formulaValueComboBoxSetup;
@@ -159,8 +261,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The formula value ComboBox item
+        /// </summary>
         private TextComboBoxItem _formulaValueComboBoxItem;
 
+        /// <summary>
+        /// Gets or sets the formula value ComboBox item.
+        /// </summary>
+        /// <value>The formula value ComboBox item.</value>
         public TextComboBoxItem FormulaValueComboBoxItem
         {
             get => _formulaValueComboBoxItem;
@@ -176,14 +285,25 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the formula value.
+        /// </summary>
+        /// <value>The type of the formula value.</value>
         public FieldDataTypes FormulaValueType
         {
             get => (FieldDataTypes)FormulaValueComboBoxItem.NumericValue;
             set => FormulaValueComboBoxItem = FormulaValueComboBoxSetup.GetItem((int)value);
         }
 
+        /// <summary>
+        /// The string search value
+        /// </summary>
         private string _stringSearchValue;
 
+        /// <summary>
+        /// Gets or sets the string search value.
+        /// </summary>
+        /// <value>The string search value.</value>
         public string StringSearchValue
         {
             get => _stringSearchValue;
@@ -198,8 +318,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The search value automatic fill setup
+        /// </summary>
         private AutoFillSetup _searchValueAutoFillSetup;
 
+        /// <summary>
+        /// Gets or sets the search value automatic fill setup.
+        /// </summary>
+        /// <value>The search value automatic fill setup.</value>
         public AutoFillSetup SearchValueAutoFillSetup
         {
             get => _searchValueAutoFillSetup;
@@ -214,8 +341,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The search value automatic fill value
+        /// </summary>
         private AutoFillValue _searchValueAutoFillValue;
 
+        /// <summary>
+        /// Gets or sets the search value automatic fill value.
+        /// </summary>
+        /// <value>The search value automatic fill value.</value>
         public AutoFillValue SearchValueAutoFillValue
         {
             get => _searchValueAutoFillValue;
@@ -230,8 +364,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The decimal search value decimal
+        /// </summary>
         private double _decimalSearchValueDecimal;
 
+        /// <summary>
+        /// Gets or sets the decimal search value decimal.
+        /// </summary>
+        /// <value>The decimal search value decimal.</value>
         public double DecimalSearchValueDecimal
         {
             get => _decimalSearchValueDecimal;
@@ -246,8 +387,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The integer search value
+        /// </summary>
         private int _integerSearchValue;
 
+        /// <summary>
+        /// Gets or sets the integer search value.
+        /// </summary>
+        /// <value>The integer search value.</value>
         public int IntegerSearchValue
         {
             get => _integerSearchValue;
@@ -262,8 +410,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The date filter type ComboBox control setup
+        /// </summary>
         private TextComboBoxControlSetup _dateFilterTypeComboBoxControlSetup;
 
+        /// <summary>
+        /// Gets or sets the date filter type ComboBox control setup.
+        /// </summary>
+        /// <value>The date filter type ComboBox control setup.</value>
         public TextComboBoxControlSetup DateFilterTypeComboBoxControlSetup
         {
             get => _dateFilterTypeComboBoxControlSetup;
@@ -277,8 +432,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The date filter type ComboBox item
+        /// </summary>
         private TextComboBoxItem _dateFilterTypeComboBoxItem;
 
+        /// <summary>
+        /// Gets or sets the date filter type ComboBox item.
+        /// </summary>
+        /// <value>The date filter type ComboBox item.</value>
         public TextComboBoxItem DateFilterTypeComboBoxItem
         {
             get => _dateFilterTypeComboBoxItem;
@@ -292,14 +454,25 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the date filter.
+        /// </summary>
+        /// <value>The type of the date filter.</value>
         public DateFilterTypes DateFilterType
         {
             get => (DateFilterTypes)DateFilterTypeComboBoxItem.NumericValue;
             set => DateFilterTypeComboBoxItem = DateFilterTypeComboBoxControlSetup.GetItem((int)value);
         }
 
+        /// <summary>
+        /// The date search value
+        /// </summary>
         private DateTime? _dateSearchValue;
 
+        /// <summary>
+        /// Gets or sets the date search value.
+        /// </summary>
+        /// <value>The date search value.</value>
         public DateTime? DateSearchValue
         {
             get => _dateSearchValue;
@@ -314,8 +487,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The date value setup
+        /// </summary>
         private IntegerEditControlSetup _dateValueSetup;
 
+        /// <summary>
+        /// Gets or sets the date value setup.
+        /// </summary>
+        /// <value>The date value setup.</value>
         public IntegerEditControlSetup DateValueSetup
         {
             get => _dateValueSetup;
@@ -330,8 +510,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The date value
+        /// </summary>
         private int _dateValue;
 
+        /// <summary>
+        /// Gets or sets the date value.
+        /// </summary>
+        /// <value>The date value.</value>
         public int DateValue
         {
             get => _dateValue;
@@ -346,8 +533,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The value ComboBox setup
+        /// </summary>
         private TextComboBoxControlSetup _valueComboBoxSetup;
 
+        /// <summary>
+        /// Gets or sets the value ComboBox setup.
+        /// </summary>
+        /// <value>The value ComboBox setup.</value>
         public TextComboBoxControlSetup ValueComboBoxSetup
         {
             get => _valueComboBoxSetup;
@@ -362,8 +556,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The value ComboBox item
+        /// </summary>
         private TextComboBoxItem  _valueComboBoxItem;
 
+        /// <summary>
+        /// Gets or sets the value ComboBox item.
+        /// </summary>
+        /// <value>The value ComboBox item.</value>
         public TextComboBoxItem  ValueComboBoxItem
         {
             get => _valueComboBoxItem;
@@ -378,6 +579,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [true false value].
+        /// </summary>
+        /// <value><c>true</c> if [true false value]; otherwise, <c>false</c>.</value>
         bool TrueFalseValue
         {
             get => ValueComboBoxItem.NumericValue == (int)TrueFalseValues.True;
@@ -385,22 +590,69 @@ namespace RingSoft.DbMaintenance
         }
 
         //public TreeViewItem TreeViewItem { get; set; }
+        /// <summary>
+        /// Gets or sets the filter return.
+        /// </summary>
+        /// <value>The filter return.</value>
         public AdvancedFilterReturn FilterReturn { get; set; }
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the field definition.
+        /// </summary>
+        /// <value>The field definition.</value>
         public FieldDefinition FieldDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the parent field definition.
+        /// </summary>
+        /// <value>The parent field definition.</value>
         public FieldDefinition ParentFieldDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public TreeViewType Type { get; set; }
+        /// <summary>
+        /// Gets or sets the path.
+        /// </summary>
+        /// <value>The path.</value>
         public string Path { get; set; }
 
+        /// <summary>
+        /// Occurs when [on validation fail].
+        /// </summary>
         public event EventHandler <ValidationFailArgs> OnValidationFail;
 
+        /// <summary>
+        /// The string field ComboBox control setup
+        /// </summary>
         private TextComboBoxControlSetup _stringFieldComboBoxControlSetup = new TextComboBoxControlSetup();
+        /// <summary>
+        /// The numeric field ComboBox control setup
+        /// </summary>
         private TextComboBoxControlSetup _numericFieldComboBoxControlSetup = new TextComboBoxControlSetup();
+        /// <summary>
+        /// The memo field ComboBox control setup
+        /// </summary>
         private TextComboBoxControlSetup _memoFieldComboBoxControlSetup = new TextComboBoxControlSetup();
+        /// <summary>
+        /// The enum field ComboBox control setup
+        /// </summary>
         private TextComboBoxControlSetup _enumFieldComboBoxControlSetup = new TextComboBoxControlSetup();
 
+        /// <summary>
+        /// The form add
+        /// </summary>
         private bool _formAdd;
 
+        /// <summary>
+        /// Initializes the specified filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void Initialize(AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
         {
             Path = filterReturn.Path;
@@ -432,6 +684,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Loads the window.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void LoadWindow()
         {
             if (_formAdd)
@@ -539,6 +795,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Processes the date return.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void ProcessDateReturn()
         {
             var process = false;
@@ -581,6 +841,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Initializes the specified tree view item.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
             Path = treeViewItem.MakePath();
@@ -602,6 +867,11 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        /// <summary>
+        /// Initializes the specified lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void Initialize( LookupDefinitionBase lookupDefinition)
         {
             LookupDefinition = lookupDefinition;
@@ -809,6 +1079,10 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        /// <summary>
+        /// Setups the condition for formula.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void SetupConditionForFormula()
         {
             switch (FormulaValueType)
@@ -830,6 +1104,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the advanced filter return.
+        /// </summary>
+        /// <returns>AdvancedFilterReturn.</returns>
         public AdvancedFilterReturn GetAdvancedFilterReturn()
         {
             var result = new AdvancedFilterReturn();
@@ -847,6 +1125,13 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Gets the filter return properties.
+        /// </summary>
+        /// <param name="filterType">Type of the filter.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="result">The result.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void GetFilterReturnProperties(TreeViewType filterType, FieldDefinition fieldDefinition,
             AdvancedFilterReturn result)
         {
@@ -890,6 +1175,12 @@ namespace RingSoft.DbMaintenance
         }
 
 
+        /// <summary>
+        /// Gets the search value.
+        /// </summary>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <param name="result">The result.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void GetSearchValue(FieldDataTypes fieldDataType, AdvancedFilterReturn result)
         {
             switch (fieldDataType)
@@ -928,6 +1219,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Sets the date properties.
+        /// </summary>
+        /// <param name="result">The result.</param>
         private void SetDateProperties(AdvancedFilterReturn result)
         {
             result.DateFilterType = DateFilterType;
@@ -942,6 +1237,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the automatic fill value result.
+        /// </summary>
+        /// <param name="result">The result.</param>
         private void GetAutoFillValueResult(AdvancedFilterReturn result)
         {
             if (SearchValueAutoFillValue != null)
@@ -993,6 +1292,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Validates the specified filter return.
+        /// </summary>
+        /// <param name="filterReturn">The filter return.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool Validate(AdvancedFilterReturn filterReturn)
         {
             if (Type == TreeViewType.Formula)
@@ -1070,8 +1374,15 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-08-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindViewModel.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.AutoFill;
@@ -14,24 +27,66 @@ using System.Linq;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Interface IAdvancedFindView
+    /// Extends the <see cref="RingSoft.DbMaintenance.IDbMaintenanceView" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.IDbMaintenanceView" />
     public interface IAdvancedFindView : IDbMaintenanceView
     {
+        /// <summary>
+        /// Shows the advanced filter window.
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
+        /// <param name="lookupDefinition">The lookup definition.</param>
+        /// <returns>AdvancedFilterReturn.</returns>
         AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition);
 
+        /// <summary>
+        /// Shows the filters ellipse.
+        /// </summary>
+        /// <param name="showFiltersEllipse">if set to <c>true</c> [show filters ellipse].</param>
         void ShowFiltersEllipse(bool showFiltersEllipse = true);
 
+        /// <summary>
+        /// Shows the refresh settings.
+        /// </summary>
+        /// <param name="advancedFind">The advanced find.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool ShowRefreshSettings(AdvancedFind advancedFind);
 
+        /// <summary>
+        /// Sets the alert level.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="showCount">if set to <c>true</c> [show count].</param>
+        /// <param name="recordCount">The record count.</param>
         void SetAlertLevel(AlertLevels level, string message, bool showCount, int recordCount);
 
         //void LockTable(bool lockValue);
 
+        /// <summary>
+        /// Gets the record count.
+        /// </summary>
+        /// <param name="showRecordCount">if set to <c>true</c> [show record count].</param>
+        /// <returns>System.Int32.</returns>
         int GetRecordCount(bool showRecordCount);
 
+        /// <summary>
+        /// Sets the add on fly focus.
+        /// </summary>
         void SetAddOnFlyFocus();
 
+        /// <summary>
+        /// Prints the output.
+        /// </summary>
+        /// <param name="printerSetup">The printer setup.</param>
         void PrintOutput(PrinterSetupArgs printerSetup);
 
+        /// <summary>
+        /// Checks the table is focused.
+        /// </summary>
         void CheckTableIsFocused();
     }
 
@@ -50,11 +105,30 @@ namespace RingSoft.DbMaintenance
     //    public LookupColumnDefinitionBase ColumnDefinition { get; set; }
     //}
 
+    /// <summary>
+    /// Class AdvancedFindInput.
+    /// </summary>
     public class AdvancedFindInput
     {
+        /// <summary>
+        /// Gets or sets the input parameter.
+        /// </summary>
+        /// <value>The input parameter.</value>
         public object InputParameter { get; set; }
+        /// <summary>
+        /// Gets or sets the lock table.
+        /// </summary>
+        /// <value>The lock table.</value>
         public TableDefinitionBase LockTable { get; set; }
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the width of the lookup.
+        /// </summary>
+        /// <value>The width of the lookup.</value>
         public double LookupWidth { get; set; }
     }
 
@@ -116,10 +190,22 @@ namespace RingSoft.DbMaintenance
     //}
 
 
+    /// <summary>
+    /// Class AdvancedFindViewModel.
+    /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceViewModel{RingSoft.DbLookup.AdvancedFind.AdvancedFind}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.DbMaintenanceViewModel{RingSoft.DbLookup.AdvancedFind.AdvancedFind}" />
     public class AdvancedFindViewModel : DbMaintenanceViewModel<AdvancedFind>
     {
+        /// <summary>
+        /// The advanced find identifier
+        /// </summary>
         private int _advancedFindId;
 
+        /// <summary>
+        /// Gets or sets the advanced find identifier.
+        /// </summary>
+        /// <value>The advanced find identifier.</value>
         public int AdvancedFindId
         {
             get => _advancedFindId;
@@ -193,8 +279,15 @@ namespace RingSoft.DbMaintenance
         //    }
         //}
 
+        /// <summary>
+        /// The table row
+        /// </summary>
         private ListControlDataSourceRow _tableRow;
 
+        /// <summary>
+        /// Gets or sets the table row.
+        /// </summary>
+        /// <value>The table row.</value>
         public ListControlDataSourceRow TableRow
         {
             get => _tableRow;
@@ -216,8 +309,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The table setup
+        /// </summary>
         private ListControlSetup _tableSetup;
 
+        /// <summary>
+        /// Gets or sets the table setup.
+        /// </summary>
+        /// <value>The table setup.</value>
         public ListControlSetup TableSetup
         {
             get => _tableSetup;
@@ -231,8 +331,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The table data source
+        /// </summary>
         private ListControlDataSource _tableDataSource;
 
+        /// <summary>
+        /// Gets or sets the table data source.
+        /// </summary>
+        /// <value>The table data source.</value>
         public ListControlDataSource TableDataSource
         {
             get => _tableDataSource;
@@ -247,8 +354,15 @@ namespace RingSoft.DbMaintenance
         }
 
 
+        /// <summary>
+        /// The tree root
+        /// </summary>
         private ObservableCollection<TreeViewItem> _treeRoot;
 
+        /// <summary>
+        /// Gets or sets the tree root.
+        /// </summary>
+        /// <value>The tree root.</value>
         public ObservableCollection<TreeViewItem> TreeRoot
         {
             get => _treeRoot;
@@ -264,8 +378,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The lookup definition
+        /// </summary>
         private LookupDefinitionBase _lookupDefinition;
 
+        /// <summary>
+        /// Gets or sets the lookup definition.
+        /// </summary>
+        /// <value>The lookup definition.</value>
         public LookupDefinitionBase LookupDefinition
         {
             get => _lookupDefinition;
@@ -279,8 +400,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The lookup command
+        /// </summary>
         private LookupCommand _lookupCommand;
 
+        /// <summary>
+        /// Gets or sets the lookup command.
+        /// </summary>
+        /// <value>The lookup command.</value>
         public LookupCommand LookupCommand
         {
             get => _lookupCommand;
@@ -294,8 +422,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The columns manager
+        /// </summary>
         private AdvancedFindColumnsManager _columnsManager;
 
+        /// <summary>
+        /// Gets or sets the columns manager.
+        /// </summary>
+        /// <value>The columns manager.</value>
         public AdvancedFindColumnsManager ColumnsManager
         {
             get => _columnsManager;
@@ -311,8 +446,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The filters manager
+        /// </summary>
         private AdvancedFindFiltersManager _filtersManager;
 
+        /// <summary>
+        /// Gets or sets the filters manager.
+        /// </summary>
+        /// <value>The filters manager.</value>
         public AdvancedFindFiltersManager FiltersManager
         {
             get => _filtersManager;
@@ -330,34 +472,92 @@ namespace RingSoft.DbMaintenance
 
 
 
+        /// <summary>
+        /// Gets or sets the add column command.
+        /// </summary>
+        /// <value>The add column command.</value>
         public RelayCommand AddColumnCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the add filter command.
+        /// </summary>
+        /// <value>The add filter command.</value>
         public RelayCommand AddFilterCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the import default lookup command.
+        /// </summary>
+        /// <value>The import default lookup command.</value>
         public RelayCommand ImportDefaultLookupCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the refresh settings command.
+        /// </summary>
+        /// <value>The refresh settings command.</value>
         public RelayCommand RefreshSettingsCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the refresh now command.
+        /// </summary>
+        /// <value>The refresh now command.</value>
         public RelayCommand RefreshNowCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the print lookup output command.
+        /// </summary>
+        /// <value>The print lookup output command.</value>
         public RelayCommand PrintLookupOutputCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the table UI command.
+        /// </summary>
+        /// <value>The table UI command.</value>
         public UiCommand TableUiCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the selected TreeView item.
+        /// </summary>
+        /// <value>The selected TreeView item.</value>
         public TreeViewItem SelectedTreeViewItem { get; set; }
 
+        /// <summary>
+        /// Gets the view.
+        /// </summary>
+        /// <value>The view.</value>
         public IAdvancedFindView View { get; set; }
 
+        /// <summary>
+        /// Gets or sets the advanced find input.
+        /// </summary>
+        /// <value>The advanced find input.</value>
         public AdvancedFindInput AdvancedFindInput { get; set; }
 
+        /// <summary>
+        /// Gets or sets the advanced find tree.
+        /// </summary>
+        /// <value>The advanced find tree.</value>
         public AdvancedFindTree AdvancedFindTree { get; set; }
 
+        /// <summary>
+        /// Gets the lookup refresher.
+        /// </summary>
+        /// <value>The lookup refresher.</value>
         public LookupRefresher LookupRefresher { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="AdvancedFindViewModel"/> is clearing.
+        /// </summary>
+        /// <value><c>true</c> if clearing; otherwise, <c>false</c>.</value>
         public bool Clearing { get; private set; }
 
+        /// <summary>
+        /// The record count
+        /// </summary>
         private int _recordCount;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindViewModel"/> class.
+        /// </summary>
         public AdvancedFindViewModel()
         {
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindColumns);
@@ -367,6 +567,9 @@ namespace RingSoft.DbMaintenance
             MapFieldToUiCommand(TableUiCommand, TableDefinition.GetFieldDefinition(p => p.Table));
         }
 
+        /// <summary>
+        /// Initializes this instance.  Executed after the view is loaded.
+        /// </summary>
         protected override void Initialize()
         {
             if (LookupAddViewArgs != null)
@@ -436,6 +639,9 @@ namespace RingSoft.DbMaintenance
             base.Initialize();
         }
 
+        /// <summary>
+        /// Locks the table row.
+        /// </summary>
         private void LockTableRow()
         {
             if (AdvancedFindInput != null)
@@ -445,11 +651,21 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Handles the RefreshRecordCountEvent event of the LookupRefresher control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void LookupRefresher_RefreshRecordCountEvent(object sender, EventArgs e)
         {
             ProcessRefresh();
         }
 
+        /// <summary>
+        /// Lookups the refresher set alert level event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void LookupRefresher_SetAlertLevelEvent(object sender, RefreshAlertLevelArgs e)
         {
 
@@ -457,6 +673,9 @@ namespace RingSoft.DbMaintenance
             View.SetAlertLevel(e.AlertLevel, message, LookupRefresher.RefreshRate != RefreshRate.None, _recordCount);
         }
 
+        /// <summary>
+        /// Creates the commands.
+        /// </summary>
         public void CreateCommands()
         {
             AddColumnCommand = new RelayCommand(AddColumn);
@@ -478,11 +697,24 @@ namespace RingSoft.DbMaintenance
             }));
         }
 
+        /// <summary>
+        /// Populates the primary key controls.  This is executed during record save and retrieval operations.
+        /// </summary>
+        /// <param name="newEntity">The entity containing just the primary key values.</param>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>An entity populated from the database.</returns>
         protected override void PopulatePrimaryKeyControls(AdvancedFind newEntity, PrimaryKeyValue primaryKeyValue)
         {
             AdvancedFindId = newEntity.Id;
         }
 
+        /// <summary>
+        /// Gets the entity from database.
+        /// </summary>
+        /// <param name="newEntity">The new entity.</param>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>AdvancedFind.</returns>
+        /// <exception cref="System.ApplicationException"></exception>
         protected override AdvancedFind GetEntityFromDb(AdvancedFind newEntity,
             PrimaryKeyValue primaryKeyValue)
         {
@@ -512,6 +744,10 @@ namespace RingSoft.DbMaintenance
             return advancedFind;
         }
 
+        /// <summary>
+        /// Loads this view model from the entity generated from PopulatePrimaryKeyControls.  This is executed only during record retrieval operations.
+        /// </summary>
+        /// <param name="entity">The entity that was loaded from the database by PopulatePrimaryKeyControls.</param>
         protected override void LoadFromEntity(AdvancedFind entity)
         {
             Clearing = true;
@@ -554,6 +790,10 @@ namespace RingSoft.DbMaintenance
             Clearing = false;
         }
 
+        /// <summary>
+        /// Loads the refresh settings.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         private void LoadRefreshSettings(AdvancedFind entity)
         {
             LookupRefresher.LoadFromAdvFind(entity);
@@ -561,6 +801,10 @@ namespace RingSoft.DbMaintenance
             LookupRefresher.ResetTimer();
         }
 
+        /// <summary>
+        /// Loads the tree.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
         private void LoadTree(string tableName)
         {
             CreateLookupDefinition();
@@ -642,6 +886,10 @@ namespace RingSoft.DbMaintenance
         //    treeViewItems.Add(result);
         //}
 
+        /// <summary>
+        /// Called when [TreeView item selected].
+        /// </summary>
+        /// <param name="treeViewItem">The tree view item.</param>
         public void OnTreeViewItemSelected(TreeViewItem treeViewItem)
         {
             SelectedTreeViewItem = treeViewItem;
@@ -652,6 +900,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Validates the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected override bool ValidateEntity(AdvancedFind entity)
         {
             if (!ValidateLookup())
@@ -672,6 +925,10 @@ namespace RingSoft.DbMaintenance
             return base.ValidateEntity(entity);
         }
 
+        /// <summary>
+        /// Gets the entity data.
+        /// </summary>
+        /// <returns>AdvancedFind.</returns>
         protected override AdvancedFind GetEntityData()
         {
             var advancedFind = new AdvancedFind();
@@ -697,6 +954,9 @@ namespace RingSoft.DbMaintenance
             return advancedFind;
         }
 
+        /// <summary>
+        /// Clears the data.
+        /// </summary>
         protected override void ClearData()
         {
             Clearing = true;
@@ -735,6 +995,9 @@ namespace RingSoft.DbMaintenance
             //LoadTree();
         }
 
+        /// <summary>
+        /// Locks the table.
+        /// </summary>
         private void LockTable()
         {
             var lockValue = AdvancedFindInput?.LockTable != null;
@@ -742,6 +1005,9 @@ namespace RingSoft.DbMaintenance
             TableUiCommand.IsEnabled = !lockValue;
         }
 
+        /// <summary>
+        /// Clears the refresh.
+        /// </summary>
         private void ClearRefresh()
         {
             LookupRefresher.RefreshRate = RefreshRate.None;
@@ -755,6 +1021,9 @@ namespace RingSoft.DbMaintenance
             LookupRefresher.ResetTimer();
         }
 
+        /// <summary>
+        /// Creates the lookup definition.
+        /// </summary>
         public void CreateLookupDefinition()
         {
             if (TableRow != null)
@@ -780,6 +1049,11 @@ namespace RingSoft.DbMaintenance
             PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = RefreshSettingsCommand.IsEnabled = false;
         }
 
+        /// <summary>
+        /// Saves the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected override bool SaveEntity(AdvancedFind entity)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -793,6 +1067,10 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Deletes the entity.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected override bool DeleteEntity()
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -808,6 +1086,9 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Adds the column.
+        /// </summary>
         private void AddColumn()
         {
             var startIndex = ColumnsManager.GetNewColumnIndex();
@@ -843,12 +1124,21 @@ namespace RingSoft.DbMaintenance
             ResetLookup();
         }
 
+        /// <summary>
+        /// Makes the includes.
+        /// </summary>
+        /// <param name="selectedItem">The selected item.</param>
+        /// <returns>ProcessIncludeResult.</returns>
         public ProcessIncludeResult MakeIncludes(TreeViewItem selectedItem)
         {
             return LookupDefinition.AdvancedFindTree.MakeIncludes(selectedItem);
         }
 
 
+        /// <summary>
+        /// Loads from lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
 
@@ -1065,6 +1355,10 @@ namespace RingSoft.DbMaintenance
             ResetLookup();
         }
 
+        /// <summary>
+        /// Resets the lookup.
+        /// </summary>
+        /// <param name="validate">if set to <c>true</c> [validate].</param>
         public void ResetLookup(bool validate = true)
         {
             var valResult = true;
@@ -1081,6 +1375,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Refreshes the lookup.
+        /// </summary>
+        /// <param name="refreshCount">if set to <c>true</c> [refresh count].</param>
         public void RefreshLookup(bool refreshCount = true)
         {
             if (ValidateLookup())
@@ -1093,6 +1391,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Validates the lookup.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ValidateLookup()
         {
             if (Clearing)
@@ -1116,6 +1418,10 @@ namespace RingSoft.DbMaintenance
             return false;
         }
 
+        /// <summary>
+        /// Clears the lookup.
+        /// </summary>
+        /// <param name="clearColumns">if set to <c>true</c> [clear columns].</param>
         public void ClearLookup(bool clearColumns = true)
         {
             if (clearColumns)
@@ -1131,6 +1437,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Adds the filter.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void AddFilter()
         {
             switch (SelectedTreeViewItem.Type)
@@ -1146,6 +1456,9 @@ namespace RingSoft.DbMaintenance
                     throw new ArgumentOutOfRangeException();
             }
         }
+        /// <summary>
+        /// Shows the filter window.
+        /// </summary>
         private void ShowFilterWindow()
         {
             var result = View.ShowAdvancedFilterWindow(SelectedTreeViewItem, LookupDefinition);
@@ -1156,18 +1469,37 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Finds the field in tree.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="searchForRootFormula">if set to <c>true</c> [search for root formula].</param>
+        /// <param name="parentItem">The parent item.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem FindFieldInTree(ObservableCollection<TreeViewItem> items, FieldDefinition fieldDefinition,
             bool searchForRootFormula = false, TreeViewItem parentItem = null)
         {
             return LookupDefinition.AdvancedFindTree.FindFieldInTree(items, fieldDefinition, searchForRootFormula, parentItem);
         }
 
+        /// <summary>
+        /// Processes the found TreeView item.
+        /// </summary>
+        /// <param name="formula">The formula.</param>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="fieldDataType">Type of the field data.</param>
+        /// <param name="decimalEditFormat">The decimal edit format.</param>
+        /// <returns>TreeViewItem.</returns>
         public TreeViewItem ProcessFoundTreeViewItem(string formula, FieldDefinition fieldDefinition,
             FieldDataTypes? fieldDataType = null, DecimalEditFormatTypes? decimalEditFormat = null)
         {
             return LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(formula, fieldDefinition, fieldDataType, decimalEditFormat);
         }
 
+        /// <summary>
+        /// Imports the default lookup.
+        /// </summary>
         private void ImportDefaultLookup()
         {
             var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
@@ -1193,6 +1525,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Applies to lookup.
+        /// </summary>
         private void ApplyToLookup()
         {
         //    var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
@@ -1208,6 +1543,9 @@ namespace RingSoft.DbMaintenance
         //    }
         }
 
+        /// <summary>
+        /// Shows the SQL.
+        /// </summary>
         private void ShowSql()
         {
         //    var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
@@ -1224,6 +1562,9 @@ namespace RingSoft.DbMaintenance
         //    }
         }
 
+        /// <summary>
+        /// Shows the refresh settings.
+        /// </summary>
         private void ShowRefreshSettings()
         {
             var keyDown = Processor.IsMaintenanceKeyDown(MaintenanceKey.Alt);
@@ -1241,6 +1582,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Refreshes the now.
+        /// </summary>
         private void RefreshNow()
         {
             if (ValidateLookup())
@@ -1250,6 +1594,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Processes the refresh.
+        /// </summary>
         private void ProcessRefresh()
         {
             //var lookupMaui = LookupDefinition.TableDefinition.LookupDefinition
@@ -1278,6 +1625,10 @@ namespace RingSoft.DbMaintenance
             RefreshLookup(false);
         }
 
+        /// <summary>
+        /// called when the user is trying to close the view.
+        /// </summary>
+        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
         public override void OnWindowClosing(CancelEventArgs e)
         {
             LookupRefresher.Dispose();

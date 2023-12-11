@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-20-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindColumnsManager.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -10,17 +23,37 @@ using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class AdvancedFindColumnsManager.
+    /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManager{RingSoft.DbLookup.AdvancedFind.AdvancedFindColumn}" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManager{RingSoft.DbLookup.AdvancedFind.AdvancedFindColumn}" />
     public class AdvancedFindColumnsManager : DbMaintenanceDataEntryGridManager<AdvancedFindColumn>
     {
+        /// <summary>
+        /// Gets or sets the view model.
+        /// </summary>
+        /// <value>The view model.</value>
         public new AdvancedFindViewModel ViewModel { get; set; }
 
+        /// <summary>
+        /// The adding new row
+        /// </summary>
         private bool _addingNewRow;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindColumnsManager"/> class.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
         public AdvancedFindColumnsManager(AdvancedFindViewModel viewModel) : base(viewModel)
         {
             ViewModel = viewModel;
         }
 
+        /// <summary>
+        /// Gets the new row.
+        /// </summary>
+        /// <returns>DataEntryGridRow.</returns>
         protected override DataEntryGridRow GetNewRow()
         {
             var result = new AdvancedFindNewColumnRow(this);
@@ -36,6 +69,9 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Adds the new row.
+        /// </summary>
         public void AddNewRow()
         {
             var newRow = GetNewRow();
@@ -43,6 +79,11 @@ namespace RingSoft.DbMaintenance
             Grid?.RefreshGridView();
         }
 
+        /// <summary>
+        /// Constructs the new row from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>DbMaintenanceDataEntryGridRow&lt;AdvancedFindColumn&gt;.</returns>
         protected override DbMaintenanceDataEntryGridRow<AdvancedFindColumn> ConstructNewRowFromEntity(AdvancedFindColumn entity)
         {
             AdvancedFindColumnRow result = null;
@@ -58,32 +99,36 @@ namespace RingSoft.DbMaintenance
         }
 
         //if (entity.Formula.IsNullOrEmpty())
-            //{
-            //    var tableDefinition =
-            //        ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
-            //            p.EntityName == entity.TableName);
+        //{
+        //    var tableDefinition =
+        //        ViewModel.TableDefinition.Context.TableDefinitions.FirstOrDefault(p =>
+        //            p.EntityName == entity.TableName);
 
-            //    if (tableDefinition != null && tableDefinition.CanViewTable)
-            //    {
-            //        var fieldDefinition =
-            //            tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
+        //    if (tableDefinition != null && tableDefinition.CanViewTable)
+        //    {
+        //        var fieldDefinition =
+        //            tableDefinition.FieldDefinitions.FirstOrDefault(p => p.FieldName == entity.FieldName);
 
-            //        var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
-            //        if (foundTreeViewItem == null)
-            //        {
-            //            ViewModel.ReadOnlyMode = true;
-            //            return null;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ViewModel.ReadOnlyMode = true;
-            //        return null;
-            //    }
-            //}
-            //return new AdvancedFindColumnRow(this);
+        //        var foundTreeViewItem = ViewModel.FindFieldInTree(ViewModel.TreeRoot, fieldDefinition);
+        //        if (foundTreeViewItem == null)
+        //        {
+        //            ViewModel.ReadOnlyMode = true;
+        //            return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ViewModel.ReadOnlyMode = true;
+        //        return null;
+        //    }
+        //}
+        //return new AdvancedFindColumnRow(this);
         //}
 
+        /// <summary>
+        /// Loads from lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         public void LoadFromLookupDefinition(LookupDefinitionBase lookupDefinition)
         {
             foreach (var column in lookupDefinition.VisibleColumns)
@@ -108,6 +153,10 @@ namespace RingSoft.DbMaintenance
             //}
         }
 
+        /// <summary>
+        /// Updates the width of the column.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public void UpdateColumnWidth(LookupColumnDefinitionBase column)
         {
             var columnRow = Rows.OfType<AdvancedFindColumnRow>()
@@ -115,6 +164,10 @@ namespace RingSoft.DbMaintenance
             columnRow?.UpdatePercentWidth();
         }
 
+        /// <summary>
+        /// Loads from column definition.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
             AdvancedFindColumnRow columnRow = null;
@@ -144,6 +197,10 @@ namespace RingSoft.DbMaintenance
             Grid?.RefreshGridView();
         }
 
+        /// <summary>
+        /// Gets the new index of the column.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         public int GetNewColumnIndex()
         {
             var newColumnRows = Rows.Where(p => p.IsNew == true);
@@ -161,6 +218,11 @@ namespace RingSoft.DbMaintenance
             return startIndex;
         }
 
+        /// <summary>
+        /// Determines whether [is delete ok] [the specified row index].
+        /// </summary>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <returns><c>true</c> if [is delete ok] [the specified row index]; otherwise, <c>false</c>.</returns>
         public override bool IsDeleteOk(int rowIndex)
         {
             var rows = Rows.OfType<AdvancedFindColumnRow>().ToList();
@@ -177,6 +239,10 @@ namespace RingSoft.DbMaintenance
         }
 
 
+        /// <summary>
+        /// Removes the row.
+        /// </summary>
+        /// <param name="rowToDelete">The row to delete.</param>
         public override void RemoveRow(DataEntryGridRow rowToDelete)
         {
             if (rowToDelete.IsNew)
@@ -190,6 +256,10 @@ namespace RingSoft.DbMaintenance
             base.RemoveRow(rowToDelete);
         }
 
+        /// <summary>
+        /// Determines whether [is sort column initial sort column].
+        /// </summary>
+        /// <returns><c>true</c> if [is sort column initial sort column]; otherwise, <c>false</c>.</returns>
         public bool IsSortColumnInitialSortColumn()
         {
             var result = false;

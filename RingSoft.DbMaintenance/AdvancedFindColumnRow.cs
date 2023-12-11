@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 11-20-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindColumnRow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,37 +26,117 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class AdvancedFindColumnRow.
+    /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridRow{RingSoft.DbLookup.AdvancedFind.AdvancedFindColumn}" />
+    /// Implements the <see cref="IDisposable" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridRow{RingSoft.DbLookup.AdvancedFind.AdvancedFindColumn}" />
+    /// <seealso cref="IDisposable" />
     public abstract class AdvancedFindColumnRow : DbMaintenanceDataEntryGridRow<AdvancedFindColumn>, IDisposable
     {
+        /// <summary>
+        /// The table column identifier
+        /// </summary>
         public const int TableColumnId = 1;
+        /// <summary>
+        /// The field column identifier
+        /// </summary>
         public const int FieldColumnId = 2;
+        /// <summary>
+        /// The name column identifier
+        /// </summary>
         public const int NameColumnId = 3;
+        /// <summary>
+        /// The percent column identifier
+        /// </summary>
         public const int PercentColumnId = 4;
 
+        /// <summary>
+        /// Enum AdvancedFindColumnColumns
+        /// </summary>
         public enum AdvancedFindColumnColumns
         {
+            /// <summary>
+            /// The table
+            /// </summary>
             Table = TableColumnId,
+            /// <summary>
+            /// The field
+            /// </summary>
             Field = FieldColumnId,
+            /// <summary>
+            /// The name
+            /// </summary>
             Name = NameColumnId,
+            /// <summary>
+            /// The percent width
+            /// </summary>
             PercentWidth = PercentColumnId
         }
 
+        /// <summary>
+        /// Gets or sets the table.
+        /// </summary>
+        /// <value>The table.</value>
         public string Table { get; set; }
+        /// <summary>
+        /// Gets or sets the field.
+        /// </summary>
+        /// <value>The field.</value>
         public string Field { get; set; }
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the width of the percent.
+        /// </summary>
+        /// <value>The width of the percent.</value>
         public double PercentWidth { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lookup field column definition.
+        /// </summary>
+        /// <value>The lookup field column definition.</value>
         public LookupFieldColumnDefinition LookupFieldColumnDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the lookup formula column definition.
+        /// </summary>
+        /// <value>The lookup formula column definition.</value>
         public LookupFormulaColumnDefinition LookupFormulaColumnDefinition { get; set; }
+        /// <summary>
+        /// Gets or sets the lookup column definition.
+        /// </summary>
+        /// <value>The lookup column definition.</value>
         public LookupColumnDefinitionBase LookupColumnDefinition { get; set; }
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; private set; }
+        /// <summary>
+        /// Gets or sets the manager.
+        /// </summary>
+        /// <value>The manager.</value>
         public new AdvancedFindColumnsManager Manager { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindColumnRow"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
         public AdvancedFindColumnRow(AdvancedFindColumnsManager manager) : base(manager)
         {
             Manager = manager;
         }
 
+        /// <summary>
+        /// Gets the cell props.
+        /// </summary>
+        /// <param name="columnId">The column identifier.</param>
+        /// <returns>DataEntryGridCellProps.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override DataEntryGridCellProps GetCellProps(int columnId)
         {
             var column = (AdvancedFindColumnColumns) columnId;
@@ -70,6 +163,12 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the cell style.
+        /// </summary>
+        /// <param name="columnId">The column identifier.</param>
+        /// <returns>DataEntryGridCellStyle.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override DataEntryGridCellStyle GetCellStyle(int columnId)
         {
             var column = (AdvancedFindColumnColumns) columnId;
@@ -96,6 +195,11 @@ namespace RingSoft.DbMaintenance
             return base.GetCellStyle(columnId);
         }
 
+        /// <summary>
+        /// Sets the cell value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override void SetCellValue(DataEntryGridEditingCellProps value)
         {
             var column = (AdvancedFindColumnColumns) value.ColumnId;
@@ -133,17 +237,30 @@ namespace RingSoft.DbMaintenance
             base.SetCellValue(value);
         }
 
+        /// <summary>
+        /// Loads from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public override void LoadFromEntity(AdvancedFindColumn entity)
         {
             LookupColumnDefinition = Manager.ViewModel.LookupDefinition.LoadFromAdvFindColumnEntity(entity);
             LoadFromColumnDefinition(LookupColumnDefinition);
         }
 
+        /// <summary>
+        /// Validates the row.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool ValidateRow()
         {
             return true;
         }
 
+        /// <summary>
+        /// Saves to entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="rowIndex">Index of the row.</param>
         public override void SaveToEntity(AdvancedFindColumn entity, int rowIndex)
         {
             entity.AdvancedFindId = Manager.ViewModel.AdvancedFindId;
@@ -151,6 +268,10 @@ namespace RingSoft.DbMaintenance
             LookupColumnDefinition.SaveToEntity(entity);
         }
 
+        /// <summary>
+        /// Loads from column definition.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public virtual void LoadFromColumnDefinition(LookupColumnDefinitionBase column)
         {
             LookupColumnDefinition = column;
@@ -166,6 +287,9 @@ namespace RingSoft.DbMaintenance
             PercentWidth = column.PercentWidth / 100;
         }
 
+        /// <summary>
+        /// Sets the formula table field.
+        /// </summary>
         private void SetFormulaTableField()
         {
             TableDefinition = LookupFormulaColumnDefinition.PrimaryTable;
@@ -214,6 +338,9 @@ namespace RingSoft.DbMaintenance
             Field = "<Formula>";
         }
 
+        /// <summary>
+        /// Updates the width of the percent.
+        /// </summary>
         public void UpdatePercentWidth()
         {
             PercentWidth = LookupColumnDefinition.PercentWidth / 100;
@@ -221,6 +348,9 @@ namespace RingSoft.DbMaintenance
                 Manager.Grid.UpdateRow(this);
         }
 
+        /// <summary>
+        /// Disposes this instance.
+        /// </summary>
         public override void Dispose()
         {
             Manager.ViewModel.LookupDefinition.DeleteVisibleColumn(LookupColumnDefinition);

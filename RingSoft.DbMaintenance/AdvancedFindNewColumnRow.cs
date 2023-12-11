@@ -1,15 +1,43 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 02-23-2023
+//
+// Last Modified By : petem
+// Last Modified On : 02-24-2023
+// ***********************************************************************
+// <copyright file="AdvancedFindNewColumnRow.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class AdvancedFindNewColumnRow.
+    /// Implements the <see cref="RingSoft.DbMaintenance.AdvancedFindColumnRow" />
+    /// </summary>
+    /// <seealso cref="RingSoft.DbMaintenance.AdvancedFindColumnRow" />
     public class AdvancedFindNewColumnRow : AdvancedFindColumnRow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedFindNewColumnRow"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
         public AdvancedFindNewColumnRow(AdvancedFindColumnsManager manager) : base(manager)
         {
             IsNew = true;
         }
 
+        /// <summary>
+        /// Gets the cell props.
+        /// </summary>
+        /// <param name="columnId">The column identifier.</param>
+        /// <returns>DataEntryGridCellProps.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override DataEntryGridCellProps GetCellProps(int columnId)
         {
             var column = (AdvancedFindColumnColumns)columnId;
@@ -31,6 +59,11 @@ namespace RingSoft.DbMaintenance
             return new DataEntryGridTextCellProps(this, columnId);
         }
 
+        /// <summary>
+        /// Gets the cell style.
+        /// </summary>
+        /// <param name="columnId">The column identifier.</param>
+        /// <returns>DataEntryGridCellStyle.</returns>
         public override DataEntryGridCellStyle GetCellStyle(int columnId)
         {
             return new DataEntryGridCellStyle { State = DataEntryGridCellStates.Disabled };

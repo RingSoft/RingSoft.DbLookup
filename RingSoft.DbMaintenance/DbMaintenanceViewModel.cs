@@ -1,4 +1,17 @@
-﻿using RingSoft.DataEntryControls.Engine;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbMaintenance
+// Author           : petem
+// Created          : 12-19-2022
+//
+// Last Modified By : petem
+// Last Modified On : 12-08-2023
+// ***********************************************************************
+// <copyright file="DbMaintenanceViewModel.cs" company="Peter Ringering">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.DataProcessor;
@@ -18,18 +31,43 @@ using Microsoft.VisualBasic;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Enum ViewModelOperations
+    /// </summary>
     public enum ViewModelOperations
     {
+        /// <summary>
+        /// The save
+        /// </summary>
         Save = 0,
+        /// <summary>
+        /// The delete
+        /// </summary>
         Delete = 1
     }
 
+    /// <summary>
+    /// Class ViewModelOperationPreviewEventArgs.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     public class ViewModelOperationPreviewEventArgs<TEntity> where TEntity : new()
     {
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <value>The entity.</value>
         public TEntity Entity { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ViewModelOperationPreviewEventArgs{TEntity}"/> is handled.
+        /// </summary>
+        /// <value><c>true</c> if handled; otherwise, <c>false</c>.</value>
         public bool Handled { get; set; }
 
+        /// <summary>
+        /// Gets the operation.
+        /// </summary>
+        /// <value>The operation.</value>
         public ViewModelOperations  Operation { get; internal set; }
     }
 
@@ -42,12 +80,36 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceViewModel<TEntity> : DbMaintenanceViewModelBase, ILookupControl, IValidationSource
         where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets the entity.
+        /// </summary>
+        /// <value>The entity.</value>
         public TEntity Entity { get; private set; }
 
+        /// <summary>
+        /// Gets the number of rows on a page.
+        /// </summary>
+        /// <value>The number of rows on the page.</value>
         public int PageSize { get; } = 1;
+        /// <summary>
+        /// Gets the type of the search.
+        /// </summary>
+        /// <value>The type of the search.</value>
         public LookupSearchTypes SearchType { get; } = LookupSearchTypes.Equals;
+        /// <summary>
+        /// Gets or sets the search text.
+        /// </summary>
+        /// <value>The search text.</value>
         public string SearchText { get; set; } = string.Empty;
+        /// <summary>
+        /// Gets the index of the selected.
+        /// </summary>
+        /// <value>The index of the selected.</value>
         public int SelectedIndex => 0;
+        /// <summary>
+        /// Sets the index of the lookup.
+        /// </summary>
+        /// <param name="index">The index.</param>
         public void SetLookupIndex(int index)
         {
         }
@@ -55,19 +117,19 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets the table definition.
         /// </summary>
-        /// <value>
-        /// The table definition.
-        /// </value>
+        /// <value>The table definition.</value>
         public virtual TableDefinition<TEntity> TableDefinition { get; }
 
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public override sealed TableDefinitionBase TableDefinitionBase => TableDefinition;
 
         /// <summary>
         /// Gets the initial search for text when the Find button is clicked.  By default it is the key auto fill text.
         /// </summary>
-        /// <value>
-        /// The find button initial search for.
-        /// </value>
+        /// <value>The find button initial search for.</value>
         protected override string FindButtonInitialSearchFor
         {
             get
@@ -84,61 +146,95 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets a value indicating whether this process has changed the data source.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if records changed; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if records changed; otherwise, <c>false</c>.</value>
         public bool RecordsChanged { get; private set; }
 
 
         /// <summary>
         /// Gets a value indicating whether the base entity is loading from the database or is being cleared.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if loading from the database or clearing; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if loading from the database or clearing; otherwise, <c>false</c>.</value>
         protected bool ChangingEntity { get; private set; }
 
         /// <summary>
         /// Gets the rename key auto fill value message caption.  Override this for localization.
         /// </summary>
-        /// <value>
-        /// The rename key auto fill value caption.  Override this for localization.
-        /// </value>
+        /// <value>The rename key auto fill value caption.  Override this for localization.</value>
         protected virtual string RenameKeyAutoFillValueCaption => "Change Unique Field Value";
 
         /// <summary>
         /// Gets the save changes message.  Override this for localization.
         /// </summary>
-        /// <value>
-        /// The save changes message.
-        /// </value>
+        /// <value>The save changes message.</value>
         protected virtual string SaveChangesMessage => "Do you wish to save your changes to this data?";
 
         /// <summary>
         /// Gets the confirm delete caption.  Override this for localization.
         /// </summary>
-        /// <value>
-        /// The confirm delete caption.
-        /// </value>
+        /// <value>The confirm delete caption.</value>
         protected virtual string ConfirmDeleteCaption => "Confirm Delete";
 
+        /// <summary>
+        /// Gets the tables to delete.
+        /// </summary>
+        /// <value>The tables to delete.</value>
         protected virtual List<TableDefinitionBase> TablesToDelete { get; } = new List<TableDefinitionBase>();
 
+        /// <summary>
+        /// Occurs when [view model operation preview].
+        /// </summary>
         public event EventHandler<ViewModelOperationPreviewEventArgs<TEntity>> ViewModelOperationPreview;
 
+        /// <summary>
+        /// Gets a value indicating whether [validate all at once].
+        /// </summary>
+        /// <value><c>true</c> if [validate all at once]; otherwise, <c>false</c>.</value>
         public bool ValidateAllAtOnce { get; set; }
 
+        /// <summary>
+        /// The lookup data
+        /// </summary>
         private LookupDataMauiBase _lookupData;
+        /// <summary>
+        /// From lookup form add view
+        /// </summary>
         private bool _fromLookupFormAddView;
+        /// <summary>
+        /// The saved key automatic fill value
+        /// </summary>
         private AutoFillValue _savedKeyAutoFillValue;
+        /// <summary>
+        /// The selecting record
+        /// </summary>
         private bool _selectingRecord;
+        /// <summary>
+        /// The saving record
+        /// </summary>
         private bool _savingRecord;
+        /// <summary>
+        /// The lookup read only mode
+        /// </summary>
         private bool _lookupReadOnlyMode;
+        /// <summary>
+        /// The read only automatic fill value
+        /// </summary>
         private AutoFillValue _readOnlyAutoFillValue;
+        /// <summary>
+        /// The start date
+        /// </summary>
         private DateTime? _startDate;
+        /// <summary>
+        /// The timer
+        /// </summary>
         private System.Timers.Timer _timer = new Timer(1000);
+        /// <summary>
+        /// The is active
+        /// </summary>
         private bool _isActive = true;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbMaintenanceViewModel{TEntity}"/> class.
+        /// </summary>
         public DbMaintenanceViewModel()
         {
             if (TableDefinition == null)
@@ -180,10 +276,18 @@ namespace RingSoft.DbMaintenance
             _timer.Enabled = true;
             _timer.Start();
         }
+        /// <summary>
+        /// Setups the view lookup definition.
+        /// </summary>
+        /// <param name="lookupDefinition">The lookup definition.</param>
         protected virtual void SetupViewLookupDefinition( LookupDefinitionBase lookupDefinition)
         {
 
         }
+        /// <summary>
+        /// Internals the initialize.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Table definition '{TableDefinition}' does not have a lookup definition setup.</exception>
         protected internal override void InternalInitialize()
         {
             if (TableDefinition.LookupDefinition == null)
@@ -227,6 +331,11 @@ namespace RingSoft.DbMaintenance
             Initialize();
         }
 
+        /// <summary>
+        /// Lookups the data lookup data changed1.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void _lookupData_LookupDataChanged1(object sender, LookupDataMauiOutput e)
         {
             if (_lookupData.SelectedPrimaryKeyValue == null)
@@ -278,6 +387,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the add view filter.
+        /// </summary>
+        /// <returns>TableFilterDefinitionBase.</returns>
         protected virtual TableFilterDefinitionBase GetAddViewFilter()
         {
             if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
@@ -333,6 +446,11 @@ namespace RingSoft.DbMaintenance
             FireInitializeEvent();
         }
 
+        /// <summary>
+        /// Gets the add view primary key value.
+        /// </summary>
+        /// <param name="addViewPrimaryKeyValue">The add view primary key value.</param>
+        /// <returns>PrimaryKeyValue.</returns>
         protected virtual PrimaryKeyValue GetAddViewPrimaryKeyValue(PrimaryKeyValue addViewPrimaryKeyValue)
         {
             var selectedPrimaryKeyValue = addViewPrimaryKeyValue;
@@ -415,7 +533,7 @@ namespace RingSoft.DbMaintenance
         /// Changes the sort column.
         /// </summary>
         /// <param name="column">The column.</param>
-        /// <exception cref="ArgumentException">Column {column.Caption} is not found in this view model's table lookup definition.</exception>
+        /// <exception cref="System.ArgumentException">Column {column.Caption} is not found in this view model's table lookup definition.</exception>
         protected void ChangeSortColumn(LookupColumnDefinitionBase column)
         {
             var columnIndex = _lookupData.LookupDefinition.GetIndexOfVisibleColumn(column);
@@ -426,6 +544,11 @@ namespace RingSoft.DbMaintenance
             _lookupData.OnColumnClick((LookupFieldColumnDefinition)column, true);
         }
 
+        /// <summary>
+        /// Lookups the data lookup data changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void _lookupData_LookupDataChanged(object sender, LookupDataChangedArgs e)
         {
             if (e.SelectedRowIndex >= 0)
@@ -460,6 +583,9 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Called when [lookup data changed].
+        /// </summary>
         private void OnLookupDataChanged()
         {
             if (_lookupData.SelectedPrimaryKeyValue.IsEqualTo(LookupAddViewArgs?.ReadOnlyPrimaryKeyValue))
@@ -478,6 +604,10 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        /// <summary>
+        /// Datas the exists.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool DataExists()
         {
             if (_lookupData.IsThereData())
@@ -600,11 +730,19 @@ namespace RingSoft.DbMaintenance
             //}
         }
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
+        /// <param name="e">The e.</param>
         public override void OnRecordSelected(LookupSelectArgs e)
         {
             OnRecordSelected(e.LookupData.SelectedPrimaryKeyValue);
         }
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         public override void OnRecordSelected(PrimaryKeyValue primaryKey)
         {
             if (!CheckDirty())
@@ -688,10 +826,10 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Called when the Save button is clicked.
         /// </summary>
-        /// <param name="unitTestMode"></param>
-        /// <returns>
-        /// The result.
-        /// </returns>
+        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
+        /// <returns>The result.</returns>
+        /// <exception cref="System.Exception">Processor is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public override DbMaintenanceResults DoSave(bool unitTestMode = false)
         {
             if (Processor == null)
@@ -867,6 +1005,10 @@ namespace RingSoft.DbMaintenance
             return DbMaintenanceResults.Success;
         }
 
+        /// <summary>
+        /// Gets the last saved date.
+        /// </summary>
+        /// <param name="primaryKey">The primary key.</param>
         private void GetLastSavedDate(PrimaryKeyValue primaryKey)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -892,6 +1034,17 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the update lock SQL.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="sqlGenerator">The SQL generator.</param>
+        /// <param name="tableField">The table field.</param>
+        /// <param name="pkField">The pk field.</param>
+        /// <param name="keyString">The key string.</param>
+        /// <param name="dateField">The date field.</param>
+        /// <param name="userField">The user field.</param>
+        /// <returns>System.String.</returns>
         private string GetUpdateLockSql(string table, DbSelectSqlGenerator sqlGenerator, StringFieldDefinition tableField,
             StringFieldDefinition pkField, string keyString, DateFieldDefinition dateField, StringFieldDefinition userField)
         {
@@ -927,6 +1080,10 @@ namespace RingSoft.DbMaintenance
             return lockSql;
         }
 
+        /// <summary>
+        /// Gets the now date text.
+        /// </summary>
+        /// <returns>System.String.</returns>
         private static string GetNowDateText()
         {
             var newDate = DateTime.Now.ToUniversalTime();
@@ -934,6 +1091,10 @@ namespace RingSoft.DbMaintenance
             return dateText;
         }
 
+        /// <summary>
+        /// Checks the key value text changed.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool CheckKeyValueTextChanged()
         {
             if (MaintenanceMode == DbMaintenanceModes.EditMode && _savedKeyAutoFillValue != null &&
@@ -965,7 +1126,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="recordDescription">The record description.</param>
         /// <param name="fieldDescription">The field description.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string RenameKeyAutoFillValueMessage(string recordDescription, string fieldDescription)
         {
             var message =
@@ -977,7 +1138,7 @@ namespace RingSoft.DbMaintenance
         /// Validates the entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool ValidateEntity(TEntity entity)
         {
             if (!TableDefinition.ValidateEntity(entity, this))
@@ -1029,6 +1190,10 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Processes the automatic fill validation response.
+        /// </summary>
+        /// <param name="autoFillMap">The automatic fill map.</param>
         private void ProcessAutoFillValidationResponse(DbAutoFillMap autoFillMap)
         {
             var caption = "Validation Fail";
@@ -1044,6 +1209,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Gets the automatic fill value for nullable foreign key field.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns>AutoFillValue.</returns>
         AutoFillValue IValidationSource.GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
         {
             return GetAutoFillValueForNullableForeignKeyField(fieldDefinition);
@@ -1053,12 +1223,18 @@ namespace RingSoft.DbMaintenance
         /// Override this to get the auto fill value for a nullable foreign key field.  Used by validation.  If the returned value has text but not a valid PrimaryKeyValue then it will fail validation.
         /// </summary>
         /// <param name="fieldDefinition">The field definition.</param>
-        /// <returns></returns>
+        /// <returns>AutoFillValue.</returns>
         protected virtual AutoFillValue GetAutoFillValueForNullableForeignKeyField(FieldDefinition fieldDefinition)
         {
             return null;
         }
 
+        /// <summary>
+        /// Called when [validation fail].
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="caption">The caption.</param>
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
             var uiMap = UiControls.FirstOrDefault(p => p.FieldDefinition == fieldDefinition);
@@ -1070,11 +1246,22 @@ namespace RingSoft.DbMaintenance
             ControlsGlobals.UserInterface.ShowMessageBox(text, caption, RsMessageBoxIcons.Exclamation);
         }
 
+        /// <summary>
+        /// Validates the entity property.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <param name="valueToValidate">The value to validate.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool ValidateEntityProperty(FieldDefinition fieldDefinition, string valueToValidate)
         {
             return true;
         }
 
+        /// <summary>
+        /// Checks the dirty.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected bool CheckDirty()
         {
             if (ReadOnlyMode)
@@ -1115,9 +1302,8 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Called when the Delete button is clicked.
         /// </summary>
-        /// <returns>
-        /// The result.
-        /// </returns>
+        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
+        /// <returns>The result.</returns>
         public override DbMaintenanceResults DoDelete(bool unitTestMode = false)
         {
             FireDeleteEvent();
@@ -1202,11 +1388,26 @@ namespace RingSoft.DbMaintenance
             return DbMaintenanceResults.Success;
         }
 
+        /// <summary>
+        /// Called when [deleted related tables].
+        /// </summary>
+        /// <param name="relatedTables">The related tables.</param>
         protected void OnDeletedRelatedTables(DeleteTables relatedTables)
         {
 
         }
 
+        /// <summary>
+        /// Processes the delete child field.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="childField">The child field.</param>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <param name="rootChild">The root child.</param>
+        /// <param name="parentDeleteTable">The parent delete table.</param>
+        /// <param name="prevField">The previous field.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ProcessDeleteChildField(List<FieldDefinition> fields
             , FieldDefinition childField
             , DeleteTables deleteTables
@@ -1450,6 +1651,14 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Makes the join table.
+        /// </summary>
+        /// <param name="childField">The child field.</param>
+        /// <param name="parentField">The parent field.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="parentTable">The parent table.</param>
+        /// <returns>PrimaryJoinTable.</returns>
         private static PrimaryJoinTable MakeJoinTable(FieldDefinition childField, FieldDefinition parentField,
             SelectQuery query, QueryTable parentTable = null)
         {
@@ -1470,6 +1679,11 @@ namespace RingSoft.DbMaintenance
             return joinTable;
         }
 
+        /// <summary>
+        /// Deletes the children.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected bool DeleteChildren(DeleteTables deleteTables)
         {
             var childFieldsProcessed = new List<FieldDefinition>();
@@ -1502,11 +1716,22 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Called when [tables deleted].
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
         public virtual void OnTablesDeleted(DeleteTables deleteTables)
         {
 
         }
 
+        /// <summary>
+        /// Processes the delete children.
+        /// </summary>
+        /// <param name="deleteTable">The delete table.</param>
+        /// <param name="sqls">The SQLS.</param>
+        /// <param name="childFieldsProcessed">The child fields processed.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls
             , List<FieldDefinition> childFieldsProcessed)
         {
@@ -1549,7 +1774,7 @@ namespace RingSoft.DbMaintenance
         /// Gets the confirm delete message.  Override this for localization.
         /// </summary>
         /// <param name="recordDescription">The record description.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected virtual string ConfirmDeleteMessage(string recordDescription)
         {
             var message = $"Are you sure you wish to delete this {recordDescription}?";
@@ -1589,6 +1814,12 @@ namespace RingSoft.DbMaintenance
         /// <returns>An entity populated from the database.</returns>
         protected abstract void PopulatePrimaryKeyControls(TEntity newEntity, PrimaryKeyValue primaryKeyValue);
 
+        /// <summary>
+        /// Gets the entity from database.
+        /// </summary>
+        /// <param name="newEntity">The new entity.</param>
+        /// <param name="primaryKeyValue">The primary key value.</param>
+        /// <returns>TEntity.</returns>
         protected virtual TEntity GetEntityFromDb(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
         {
             var entity = newEntity.FillOutProperties(true);
@@ -1600,6 +1831,10 @@ namespace RingSoft.DbMaintenance
             return entity;
         }
 
+        /// <summary>
+        /// Units the test load from entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public void UnitTestLoadFromEntity(TEntity entity)
         {
             MaintenanceMode = DbMaintenanceModes.EditMode;
@@ -1623,9 +1858,9 @@ namespace RingSoft.DbMaintenance
         /// <param name="command">The command type.</param>
         /// <param name="primaryKeyValue">The primary key value.</param>
         /// <param name="addViewParameter">The add-on-the-fly input parameter.</param>
-        /// <returns></returns>
+        /// <returns>LookupCommand.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">command - null</exception>
         /// <exception cref="ArgumentException">You must pass in a primary key value if KeyAutoFillValue is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">command - null</exception>
         protected LookupCommand GetLookupCommand(LookupCommands command, PrimaryKeyValue primaryKeyValue = null, object addViewParameter = null)
         {
             if (primaryKeyValue == null && KeyAutoFillValue != null)
@@ -1651,9 +1886,13 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Gets the entity data.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>TEntity.</returns>
         protected abstract TEntity GetEntityData();
 
+        /// <summary>
+        /// Units the test get entity data.
+        /// </summary>
+        /// <returns>TEntity.</returns>
         public TEntity UnitTestGetEntityData() => GetEntityData();
 
         /// <summary>
@@ -1695,7 +1934,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Attempts top save the record if in add mode and returns that result.  Execute this method prior to sending the AddModify LookupCommand.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>DbMaintenanceResults.</returns>
         protected virtual DbMaintenanceResults ExecuteAddModifyCommand()
         {
             var result = DbMaintenanceResults.Success;
@@ -1709,11 +1948,19 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Called when [view model operation preview].
+        /// </summary>
+        /// <param name="e">The e.</param>
         protected virtual void OnViewModelOperationPreview(ViewModelOperationPreviewEventArgs<TEntity> e)
         {
             ViewModelOperationPreview?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Called when [record dirty changed].
+        /// </summary>
+        /// <param name="newValue">if set to <c>true</c> [new value].</param>
         protected override void OnRecordDirtyChanged(bool newValue)
         {
             if (newValue)
@@ -1735,6 +1982,10 @@ namespace RingSoft.DbMaintenance
             base.OnPropertyChanged(propertyName, raiseDirtyFlag);
         }
 
+        /// <summary>
+        /// Checks the save deleted.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public void CheckSaveDeleted(TEntity entity)
         {
             if (TableDefinition.IsIdentity())
@@ -1758,7 +2009,7 @@ namespace RingSoft.DbMaintenance
         /// Saves the entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool SaveEntity(TEntity entity)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -1778,6 +2029,12 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        /// <summary>
+        /// Saves the header.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected bool SaveHeader(TEntity entity, IDbContext context)
         {
             if (!TableDefinition.IsIdentity())
@@ -1812,7 +2069,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Deletes the entity.
         /// </summary>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool DeleteEntity()
         {
             var context = SystemGlobals.DataRepository.GetDataContext();
@@ -1842,6 +2099,10 @@ namespace RingSoft.DbMaintenance
             return context.DeleteEntity(entity, $"Deleting {TableDefinition.Description}");
         }
 
+        /// <summary>
+        /// Registers the grid.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
         public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
         {
             var gridTable = grid.TableDefinition;
@@ -1857,6 +2118,11 @@ namespace RingSoft.DbMaintenance
             base.RegisterGrid(grid);
         }
 
+        /// <summary>
+        /// Gets the vm primary key value.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>PrimaryKeyValue.</returns>
         public virtual PrimaryKeyValue GetVmPrimaryKeyValue(IDbContext context)
         {
             return TableDefinition.GetPrimaryKeyValueFromEntity(GetEntityData());

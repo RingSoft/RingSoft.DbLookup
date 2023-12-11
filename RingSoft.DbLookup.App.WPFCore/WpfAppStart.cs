@@ -11,6 +11,7 @@ using System;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
+using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -42,9 +43,10 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void StartApp(string appSection, string[] args)
         {
-            SystemGlobals.ProgramDataFolder = ProgramDataFolder;
-            
-            LookupControlsGlobals.InitUi();
+            LookupControlsGlobals.InitUi(ProgramDataFolder);
+
+            LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
+            LookupControlsGlobals.DbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
 
             LookupControlsGlobals.LookupControlContentTemplateFactory =
                 new AppLookupContentTemplateFactory(_application);
@@ -69,21 +71,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         protected override void FinishStartup()
         {
-            var lookupUserInterface = DbDataProcessor.UserInterface;
-            DbDataProcessor.UserInterface = this;
-            var controlsUserInterface = ControlsGlobals.UserInterface;
-            ControlsGlobals.UserInterface = this;
+            //var lookupUserInterface = DbDataProcessor.UserInterface;
+            //DbDataProcessor.UserInterface = this;
+            //var controlsUserInterface = ControlsGlobals.UserInterface;
+            //ControlsGlobals.UserInterface = this;
 
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
 
-            DbDataProcessor.UserInterface = lookupUserInterface;
-            ControlsGlobals.UserInterface = controlsUserInterface;
+            //DbDataProcessor.UserInterface = lookupUserInterface;
+            //ControlsGlobals.UserInterface = controlsUserInterface;
 
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
-
-            LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
-            LookupControlsGlobals.DbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
 
             _application.MainWindow = _mainWindow;
             _mainWindow.Show();

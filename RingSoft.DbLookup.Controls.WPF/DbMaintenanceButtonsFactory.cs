@@ -3,21 +3,12 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class DbMaintenanceButtonsFactory
+    public abstract class DbMaintenanceButtonsFactory
     {
-        public virtual Control GetButtonsControl()
-        {
-            return new Control();
-        }
+        public abstract Control GetButtonsControl();
 
-        public virtual Control GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel)
-        {
-            return new Control();
-        }
+        public abstract Control GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel);
 
-        public virtual Control GetRecordLockingButtonsControl(RecordLockingViewModel viewModel)
-        {
-            return new Control();
-        }
+        public abstract Control GetRecordLockingButtonsControl(RecordLockingViewModel viewModel);
     }
 }

@@ -94,6 +94,10 @@ namespace RingSoft.DbLookup
 
         private async void LaunchPrinter()
         {
+            if (SystemGlobals.ProgramDataFolder.IsNullOrEmpty())
+            {
+                throw new Exception("SystemGlobals.ProgramDataFolder not set at app startup.");
+            }
             PrintingInteropGlobals.PropertiesProcessor.Properties = PrinterSetupArgs.PrintingProperties;
 
             var result = PrintingInteropGlobals.WriteJsons();

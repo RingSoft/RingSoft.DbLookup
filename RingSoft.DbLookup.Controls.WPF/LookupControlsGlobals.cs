@@ -134,14 +134,52 @@ namespace RingSoft.DbLookup.Controls.WPF
         public static LookupControlContentTemplateFactory LookupControlContentTemplateFactory { get; set; } =
             new LookupControlContentTemplateFactory();
 
-        public static DbMaintenanceProcessorFactory DbMaintenanceProcessorFactory { get; set; }
+        private static DbMaintenanceProcessorFactory _dbMaintProcessorFactory;
+        public static DbMaintenanceProcessorFactory DbMaintenanceProcessorFactory
+        {
+            get
+            {
+                if (_dbMaintProcessorFactory == null)
+                {
+                    throw new Exception(
+                        $"You must implement IDbMaintenanceProcessor and override DbMaintenanceProcessorFactory and set it to LookupControlsGlobals.DbMaintenanceProcessorFactory.");
+                }
+                return _dbMaintProcessorFactory;
+            } 
+            set
+            {
+            _dbMaintProcessorFactory = value;
+        }
+        }
 
         private static ControlsUserInterface _userInterface = new ControlsUserInterface();
 
-        public static DbMaintenanceButtonsFactory DbMaintenanceButtonsFactory { get; set; } = new DbMaintenanceButtonsFactory();
-
-        public static void InitUi()
+        private static DbMaintenanceButtonsFactory _dbMaintenanceButtonsFactory;
+        public static DbMaintenanceButtonsFactory DbMaintenanceButtonsFactory
         {
+            get
+            {
+                if (_dbMaintenanceButtonsFactory == null)
+                {
+                    throw new Exception(
+                        $"You must implement DbMaintenanceButtonsFactory and set it to LookupControlsGlobals.LookupControlsGlobals.DbMaintenanceButtonsFactory.");
+
+                }
+                return _dbMaintenanceButtonsFactory;
+            }
+            set
+            {
+                _dbMaintenanceButtonsFactory = value;
+            }
+        }
+
+        public static void InitUi(string programDataFolder = "")
+        {
+            if (programDataFolder.IsNullOrEmpty())
+            {
+                programDataFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\";
+            }
+            SystemGlobals.ProgramDataFolder = programDataFolder;
             DbDataProcessor.UserInterface = _userInterface;
             WPFControlsGlobals.InitUi();
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();

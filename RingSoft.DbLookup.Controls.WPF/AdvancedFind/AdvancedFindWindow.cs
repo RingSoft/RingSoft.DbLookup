@@ -11,30 +11,23 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.WPF;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
+using RingSoft.DbLookup.AdvancedFind;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
+using RingSoft.DbMaintenance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbMaintenance;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
-using Hardcodet.Wpf.TaskbarNotification;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.WPF.DataEntryGrid;
-using RingSoft.DbLookup.AdvancedFind;
-using RingSoft.DbLookup.Lookup;
-using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
-using RingSoft.DbLookup.QueryBuilder;
-using RingSoft.DbLookup.TableProcessing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using MessageBox = System.Windows.Forms.MessageBox;
 using TreeView = System.Windows.Controls.TreeView;
+using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
@@ -452,9 +445,45 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            if (Processor == null)
+            {
+                throw new Exception(
+                    "LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor() cannot return null.");
+            }
             ViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
             ViewModel.CreateCommands();
-            _buttonsControl = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetAdvancedFindButtonsControl(ViewModel);
+            var advFindButtons = LookupControlsGlobals.DbMaintenanceButtonsFactory.GetAdvancedFindButtonsControl(ViewModel);
+
+            if (advFindButtons == null)
+            {
+                throw new Exception(
+                    "You must implement and instantiate IAdvancedFindButtonsControl and inherit LookupControlsGlobals.DbMaintenanceButtonsFactory and override and return GetAdvancedFindButtonsControl.");
+            }
+            _buttonsControl = advFindButtons.DbMaintenanceButtonsControl;
+
+            if (_buttonsControl == null)
+            {
+                throw new Exception("IAdvancedFindButtons DbMaintenanceButtonsControl property cannot be null.");
+            }
+
+            if (advFindButtons.ImportDefaultLookupButton == null)
+            {
+                throw new Exception("IAdvancedFindButtons ImportDefaultLookupButton property cannot be null.");
+            }
+            advFindButtons.ImportDefaultLookupButton.Command = ViewModel.ImportDefaultLookupCommand;
+
+            if (advFindButtons.RefreshSettingsButton == null)
+            {
+                throw new Exception("IAdvancedFindButtons RefreshSettingsButton property cannot be null.");
+            }
+            advFindButtons.RefreshSettingsButton.Command = ViewModel.RefreshSettingsCommand;
+
+            if (advFindButtons.PrintLookupOutputButton == null)
+            {
+                throw new Exception("IAdvancedFindButtons PrintLookupOutputButton property cannot be null.");
+            }
+            advFindButtons.PrintLookupOutputButton.Command = ViewModel.PrintLookupOutputCommand;
+
             if (ButtonsPanel != null)
             {
                 ButtonsPanel.Children.Add(_buttonsControl);

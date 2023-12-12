@@ -82,14 +82,14 @@ namespace RingSoft.DbLookup
         /// Gets the advanced find lookup context.
         /// </summary>
         /// <value>The advanced find lookup context.</value>
-        /// <exception cref="System.Exception">Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.</exception>
+        /// <exception cref="System.Exception">Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.</exception>
         public static IAdvancedFindLookupContext AdvancedFindLookupContext
         {
             get
             {
                 if (_context == null)
                 {
-                    throw new Exception($"Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
+                    throw new Exception($"Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.");
                 }
                 return _context;
             }
@@ -105,14 +105,14 @@ namespace RingSoft.DbLookup
         /// Gets the data repository.
         /// </summary>
         /// <value>The data repository.</value>
-        /// <exception cref="System.ApplicationException"></exception>
+        /// <exception cref="System.ApplicationException">Need To inherit and instantiate {nameof(SystemDataRepository)}.</exception>
         public static SystemDataRepository DataRepository
         {
             get
             {
                 if (_dataRepository == null)
                 {
-                    var message = $"Need To implement and instantiate {nameof(SystemDataRepository)}.";
+                    var message = $"Need To inherit and instantiate {nameof(SystemDataRepository)}.";
                     throw new ApplicationException(message);
                 }
                 return _dataRepository;
@@ -147,14 +147,14 @@ namespace RingSoft.DbLookup
         /// Gets the lookup context.
         /// </summary>
         /// <value>The lookup context.</value>
-        /// <exception cref="System.Exception">Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.</exception>
+        /// <exception cref="System.Exception">Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.</exception>
         public static LookupContextBase LookupContext
         {
             get
             {
                 if (_lookupContext == null)
                 {
-                    throw new Exception($"Need to implement and instantiate {nameof(LookupContextBase)} and run Initialize.");
+                    throw new Exception($"Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.");
                 }
                 return _lookupContext;
             }

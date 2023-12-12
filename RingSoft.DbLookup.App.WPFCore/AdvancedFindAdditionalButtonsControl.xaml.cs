@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using RingSoft.DbLookup.Controls.WPF;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
     /// <summary>
     /// Interaction logic for AdvancedFindAdditionalButtonsControl.xaml
     /// </summary>
-    public partial class AdvancedFindAdditionalButtonsControl : UserControl
+    public partial class AdvancedFindAdditionalButtonsControl : UserControl, IAdvancedFindButtonsControl
     {
-        public AdvancedFindAdditionalButtonsControl()
+        public Control DbMaintenanceButtonsControl => _maintButtonsControl;
+        public Button ImportDefaultLookupButton => ImportDefaultLookupButton1;
+        public Button RefreshSettingsButton => RefreshSettingsButton1;
+        public Button PrintLookupOutputButton => PrintLookupOutputButton1;
+
+        private DbMaintenanceButtonsControl _maintButtonsControl;
+        public AdvancedFindAdditionalButtonsControl(DbMaintenanceButtonsControl maintButtonsControl)
         {
             InitializeComponent();
+            _maintButtonsControl = maintButtonsControl;
         }
     }
 }

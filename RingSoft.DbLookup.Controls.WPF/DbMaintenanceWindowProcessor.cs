@@ -180,58 +180,67 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         protected virtual void SetupControl()
         {
-            if (PreviousButton != null)
+            if (PreviousButton == null)
             {
-                PreviousButton.Command = ViewModel.PreviousCommand;
-                PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.PreviousButton cannot be null.");
             }
-           
-            if (NewButton != null)
-            {
-                NewButton.Command = ViewModel.NewCommand;
-                NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
-            }
+            PreviousButton.Command = ViewModel.PreviousCommand;
+            PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
 
-            if (SaveButton != null)
+            if (NewButton == null)
             {
-                SaveButton.Command = ViewModel.SaveCommand;
-                SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.NewButton cannot be null.");
             }
+            NewButton.Command = ViewModel.NewCommand;
+            NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
 
-            if (DeleteButton != null)
+            if (SaveButton == null)
             {
-                DeleteButton.Command = ViewModel.DeleteCommand;
-                DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.SaveButton cannot be null.");
             }
+            SaveButton.Command = ViewModel.SaveCommand;
+            SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
 
-            if (FindButton != null)
+            if (DeleteButton == null)
             {
-                FindButton.Command = ViewModel.FindCommand;
-                FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.DeleteButton cannot be null.");
             }
+            DeleteButton.Command = ViewModel.DeleteCommand;
+            DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
 
-            if (SelectButton != null)
+            if (FindButton == null)
             {
-                SelectButton.Command = ViewModel.SelectCommand;
-                SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.FindButton cannot be null.");
             }
+            FindButton.Command = ViewModel.FindCommand;
+            FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
 
-            if (NextButton != null)
+            if (SelectButton == null)
             {
-                NextButton.Command = ViewModel.NextCommand;
-                NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.SelectButton cannot be null.");
             }
+            SelectButton.Command = ViewModel.SelectCommand;
+            SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
 
-            if (PrintButton != null)
+            if (NextButton == null)
             {
-                PrintButton.Command = ViewModel.PrintCommand;
-                PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
+                throw new Exception("DbMaintenanceWindowProcessor.NextButton cannot be null.");
             }
+            NextButton.Command = ViewModel.NextCommand;
+            NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
 
-            if (CloseButton != null)
+            if (PrintButton == null)
             {
-                CloseButton.Click += (_, _) => CloseWindow();
+                throw new Exception("DbMaintenanceWindowProcessor.PrintButton cannot be null.");
             }
+            PrintButton.Command = ViewModel.PrintCommand;
+            PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
+
+            if (CloseButton == null)
+            {
+                throw new Exception("DbMaintenanceWindowProcessor.CloseButton cannot be null.");
+            }
+            CloseButton.Click += (_, _) => CloseWindow();
 
             MaintenanceWindow.ShowInTaskbar = false;
             MaintenanceWindow.EnterToTab = true;
@@ -287,13 +296,37 @@ namespace RingSoft.DbLookup.Controls.WPF
         public virtual void Initialize(BaseWindow window, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
             IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
+            if (window == null)
+            {
+                throw new ArgumentNullException(nameof(window));
+            }
             MaintenanceWindow = window;
 
+            if (buttonsControl == null)
+            {
+                throw new ArgumentNullException(nameof(buttonsControl));
+            }
             MaintenanceButtonsControl = buttonsControl;
+
+            if (viewModel == null)
+            {
+                throw new ArgumentException(nameof(viewModel));
+            }
             ViewModel = viewModel;
+
             ViewModel.Processor  = this;
+
+            if (view == null)
+            {
+                throw new ArgumentException(nameof(view));
+            }
             View = view;
             SetupControl();
+
+            if (statusBar == null)
+            {
+                throw new ArgumentException(nameof(statusBar));
+            }
             SetupStatusBar(viewModel, statusBar);
             MaintenanceButtonsUiControl =
                 new VmUiControl(MaintenanceButtonsControl, ViewModel.MaintenanceButtonsUiCommand);

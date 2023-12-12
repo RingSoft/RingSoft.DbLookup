@@ -20,8 +20,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitNorthwind);
             NorthwindLookupContext = new NorthwindLookupContextEfCore();
             RsDbLookupAppGlobals.EfProcessor = this;
-            var processor = new SystemDataRepositoryEfCore();
-            processor.Initialize();
+            var dataRepository = new SystemDataRepositoryEfCore();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
             if (!RsDbLookupAppGlobals.UnitTest)
             {

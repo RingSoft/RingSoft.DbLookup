@@ -45,7 +45,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             LookupControlsGlobals.InitUi(ProgramDataFolder);
 
-            LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
+            //LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
             LookupControlsGlobals.DbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
 
             LookupControlsGlobals.LookupControlContentTemplateFactory =

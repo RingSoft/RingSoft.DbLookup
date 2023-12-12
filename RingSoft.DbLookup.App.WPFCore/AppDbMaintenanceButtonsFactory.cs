@@ -6,21 +6,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 {
     public class AppDbMaintenanceButtonsFactory : DbMaintenanceButtonsFactory
     {
-        public override Control GetButtonsControl()
-        {
-            return new DbMaintenanceButtonsControl();
-        }
+        //public override Control GetButtonsControl()
+        //{
+        //    return new DbMaintenanceButtonsControl();
+        //}
 
-        public override Control GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel)
+        public override IAdvancedFindButtonsControl GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel)
         {
-            var result = new DbMaintenanceButtonsControl();
-            var additionalButtons = new AdvancedFindAdditionalButtonsControl();
-            result.AdditionalButtonsPanel.Children.Add(additionalButtons);
-            additionalButtons.ImportDefaultLookupButton.Command = viewModel.ImportDefaultLookupCommand;
-            additionalButtons.RefreshSettingsButton.Command = viewModel.RefreshSettingsCommand;
-            additionalButtons.PrintLookupOutputButton.Command = viewModel.PrintLookupOutputCommand;
-            result.UpdateLayout();
-            return result;
+            var maintButtons = new DbMaintenanceButtonsControl();
+            var additionalButtons = new AdvancedFindAdditionalButtonsControl(maintButtons);
+            maintButtons.AdditionalButtonsPanel.Children.Add(additionalButtons);
+            maintButtons.UpdateLayout();
+            return additionalButtons;
         }
 
         public override Control GetRecordLockingButtonsControl(RecordLockingViewModel viewModel)

@@ -16,23 +16,27 @@ using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    public interface IAdvancedFindButtonsControl
+    {
+        Control DbMaintenanceButtonsControl { get; }
+
+        Button ImportDefaultLookupButton { get; }
+
+        Button RefreshSettingsButton { get; }
+
+        Button PrintLookupOutputButton { get; }
+    }
     /// <summary>
     /// Class DbMaintenanceButtonsFactory.
     /// </summary>
     public abstract class DbMaintenanceButtonsFactory
     {
         /// <summary>
-        /// Gets the buttons control.
-        /// </summary>
-        /// <returns>Control.</returns>
-        public abstract Control GetButtonsControl();
-
-        /// <summary>
         /// Gets the advanced find buttons control.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         /// <returns>Control.</returns>
-        public abstract Control GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel);
+        public abstract IAdvancedFindButtonsControl GetAdvancedFindButtonsControl(AdvancedFindViewModel viewModel);
 
         /// <summary>
         /// Gets the record locking buttons control.

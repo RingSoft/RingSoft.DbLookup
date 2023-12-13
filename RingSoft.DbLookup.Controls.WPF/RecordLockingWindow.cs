@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 05-26-2023
+// Last Modified On : 12-12-2023
 // ***********************************************************************
 // <copyright file="RecordLockingWindow.cs" company="Peter Ringering">
 //     Copyright (c) . All rights reserved.
@@ -83,6 +83,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         public AutoFillReadOnlyControl UserAutoFillControl { get; set; }
 
         /// <summary>
+        /// Gets or sets the cancel save button.
+        /// </summary>
+        /// <value>The cancel save button.</value>
+        public Button CancelSaveButton { get; set; }
+
+        /// <summary>
+        /// Gets or sets the continue save button.
+        /// </summary>
+        /// <value>The continue save button.</value>
+        public Button ContinueSaveButton { get; set; }
+
+        /// <summary>
         /// The buttons control
         /// </summary>
         private Control _buttonsControl;
@@ -92,7 +104,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private LookupAddViewArgs _addViewArgs;
 
         /// <summary>
-        /// Initializes static members of the <see cref="RecordLockingWindow"/> class.
+        /// Initializes static members of the <see cref="RecordLockingWindow" /> class.
         /// </summary>
         static RecordLockingWindow()
         {
@@ -132,7 +144,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             UserReadOnlyControl = GetTemplateChild(nameof(UserReadOnlyControl)) as StringReadOnlyBox;
             UserAutoFillControl = GetTemplateChild(nameof(UserAutoFillControl)) as AutoFillReadOnlyControl;
             MessagePanel = GetTemplateChild(nameof(MessagePanel)) as StackPanel;
-
+            CancelSaveButton = GetTemplateChild(nameof(CancelSaveButton)) as Button;
+            ContinueSaveButton = GetTemplateChild(nameof(ContinueSaveButton)) as Button;
             Initialize();
 
             base.OnApplyTemplate();
@@ -209,6 +222,25 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void CloseWindow()
         {
             Close();
+        }
+
+        /// <summary>
+        /// Sets the control read only mode.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
+        public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (control == ContinueSaveButton)
+            {
+                return;
+            }
+
+            if (control == CancelSaveButton)
+            {
+                return;
+            }
+            base.SetControlReadOnlyMode(control, readOnlyValue);
         }
     }
 }

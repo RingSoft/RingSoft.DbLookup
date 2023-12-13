@@ -325,6 +325,8 @@ namespace RingSoft.DbMaintenance
             Message = RecordLockingParameter.RecordLockMessage;
             ReadOnlyMode = true;
             Processor.SetWindowReadOnlyMode();
+            PrintCommand.IsEnabled = PrintUiCommand.IsEnabled = false;
+            PrintUiCommand.Visibility = UiVisibilityTypes.Collapsed;
             base.Initialize();
         }
 

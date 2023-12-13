@@ -705,8 +705,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public virtual void SetWindowReadOnlyMode()
         {
-            SaveButton.IsEnabled = DeleteButton.IsEnabled = NewButton.IsEnabled = false;
             SelectButton.IsEnabled = false;
+            ViewModel.SaveButtonEnabled = false;
+            ViewModel.DeleteButtonEnabled = false;
+            ViewModel.NewButtonEnabled = false;
         }
 
         /// <summary>

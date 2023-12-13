@@ -324,6 +324,7 @@ namespace RingSoft.DbMaintenance
 
             Message = RecordLockingParameter.RecordLockMessage;
             ReadOnlyMode = true;
+            Processor.SetWindowReadOnlyMode();
             base.Initialize();
         }
 

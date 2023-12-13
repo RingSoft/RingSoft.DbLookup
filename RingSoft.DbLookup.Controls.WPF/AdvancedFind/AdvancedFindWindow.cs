@@ -459,30 +459,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 throw new Exception(
                     "You must implement and instantiate IAdvancedFindButtonsControl and inherit LookupControlsGlobals.DbMaintenanceButtonsFactory and override and return GetAdvancedFindButtonsControl.");
             }
-            _buttonsControl = advFindButtons.DbMaintenanceButtonsControl;
+            _buttonsControl = advFindButtons;
 
             if (_buttonsControl == null)
             {
                 throw new Exception("IAdvancedFindButtons DbMaintenanceButtonsControl property cannot be null.");
             }
-
-            if (advFindButtons.ImportDefaultLookupButton == null)
-            {
-                throw new Exception("IAdvancedFindButtons ImportDefaultLookupButton property cannot be null.");
-            }
-            advFindButtons.ImportDefaultLookupButton.Command = ViewModel.ImportDefaultLookupCommand;
-
-            if (advFindButtons.RefreshSettingsButton == null)
-            {
-                throw new Exception("IAdvancedFindButtons RefreshSettingsButton property cannot be null.");
-            }
-            advFindButtons.RefreshSettingsButton.Command = ViewModel.RefreshSettingsCommand;
-
-            if (advFindButtons.PrintLookupOutputButton == null)
-            {
-                throw new Exception("IAdvancedFindButtons PrintLookupOutputButton property cannot be null.");
-            }
-            advFindButtons.PrintLookupOutputButton.Command = ViewModel.PrintLookupOutputCommand;
 
             if (ButtonsPanel != null)
             {

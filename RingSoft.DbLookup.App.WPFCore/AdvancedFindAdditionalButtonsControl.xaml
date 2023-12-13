@@ -18,11 +18,11 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0" x:Name="ImportDefaultLookupButton1" Content="I_mport Default Lookup"/>
+        <Button Grid.Row="0" Grid.Column="0" x:Name="ImportDefaultLookupButton" Content="I_mport Default Lookup"/>
 
-        <Button Grid.Row="1" Grid.Column="0" x:Name="RefreshSettingsButton1" Content="_Refresh Settings"/>
+        <Button Grid.Row="1" Grid.Column="0" x:Name="RefreshSettingsButton" Content="_Refresh Settings"/>
 
-        <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" x:Name="PrintLookupOutputButton1" Content="Print _Lookup Output"/>
+        <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" x:Name="PrintLookupOutputButton" Content="Print _Lookup Output"/>
 
     </Grid>
 </UserControl>

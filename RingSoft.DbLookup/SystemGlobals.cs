@@ -144,21 +144,21 @@ namespace RingSoft.DbLookup
         /// </summary>
         private static LookupContextBase _lookupContext;
         /// <summary>
-        /// Gets the lookup context.
+        /// Gets or sets the lookup context.
         /// </summary>
         /// <value>The lookup context.</value>
-        /// <exception cref="System.Exception">Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.</exception>
+        /// <exception cref="System.Exception">Need to inherit and instantiate {nameof(LookupContextBase)}.</exception>
         public static LookupContextBase LookupContext
         {
             get
             {
                 if (_lookupContext == null)
                 {
-                    throw new Exception($"Need to inherit and instantiate {nameof(LookupContextBase)} and run Initialize.");
+                    throw new Exception($"Need to inherit and instantiate {nameof(LookupContextBase)}.");
                 }
                 return _lookupContext;
             }
-            internal set => _lookupContext = value;
+            set => _lookupContext = value;
         }
 
         /// <summary>

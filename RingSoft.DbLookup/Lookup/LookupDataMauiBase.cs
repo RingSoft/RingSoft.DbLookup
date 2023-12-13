@@ -203,6 +203,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="lookupDefinition">The lookup definition.</param>
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)
         {
+            SystemGlobals.LookupContext.Initialize();
             LookupDefinition = lookupDefinition;
             OrderByList = new List<LookupFieldColumnDefinition>();
         }

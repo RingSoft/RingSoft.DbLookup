@@ -9,6 +9,8 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
     {
         DataProcessorTypes DataProcessorType { get; set; }
 
+        LookupContextBase LookupContext { get; }
+
         event EventHandler<LookupAddViewArgs> LookupAddView;
 
         bool Initialized { get; }
@@ -18,7 +20,5 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
         DbDataProcessor DataProcessor { get; }
 
         bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings);
-
-        void Initialize();
     }
 }

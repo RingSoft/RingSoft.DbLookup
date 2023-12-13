@@ -11,6 +11,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 {
     public class NorthwindLookupContextEfCore : AppLookupContextEfCore, INorthwindLookupContext, IAdvancedFindLookupContext
     {
+        public LookupContextBase LookupContext => this;
         public override AppLookupContextConfiguration LookupContextConfiguration => NorthwindContextConfiguration;
         public NorthwindLookupContextConfiguration NorthwindContextConfiguration { get; }
         protected override DbContext DbContext => NorthwindDbContext;
@@ -32,7 +33,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         {
             NorthwindContextConfiguration = new NorthwindLookupContextConfiguration(this);
             NorthwindDbContext = new NorthwindDbContextEfCore(this);
-            Initialize();
         }
 
         public void LaunchAddOnTheFly(LookupAddViewArgs args)

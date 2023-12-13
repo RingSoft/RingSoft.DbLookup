@@ -19,6 +19,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
         {
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitNorthwind);
             NorthwindLookupContext = new NorthwindLookupContextEfCore();
+            NorthwindLookupContext.LookupContext.Initialize();
             RsDbLookupAppGlobals.EfProcessor = this;
             var dataRepository = new SystemDataRepositoryEfCore();
             NorthwindEfDataProcessor = new NorthwindEfDataProcessorCore();
@@ -37,6 +38,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore
 
             RsDbLookupAppGlobals.UpdateGlobalsProgressStatus(GlobalsProgressStatus.InitMegaDb);
             MegaDbLookupContext = new MegaDbLookupContextEfCore();
+            MegaDbLookupContext.LookupContext.Initialize();
             MegaDbEfDataProcessor = new MegaDbEfDataProcessorCore();
 
             var registrySettings = new RegistrySettings();

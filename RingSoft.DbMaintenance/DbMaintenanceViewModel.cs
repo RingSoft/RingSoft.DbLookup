@@ -290,6 +290,7 @@ namespace RingSoft.DbMaintenance
         /// <exception cref="System.ArgumentException">Table definition '{TableDefinition}' does not have a lookup definition setup.</exception>
         protected internal override void InternalInitialize()
         {
+            SystemGlobals.LookupContext.Initialize();
             if (TableDefinition.LookupDefinition == null)
                 throw new ArgumentException(
                     $"Table definition '{TableDefinition}' does not have a lookup definition setup.");

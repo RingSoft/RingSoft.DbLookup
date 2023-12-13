@@ -91,6 +91,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// <param name="control">The control.</param>
         public AutoFillDataMauiBase(AutoFillSetup setup, IAutoFillControl control)
         {
+            SystemGlobals.LookupContext.Initialize();
             Setup = setup;
             Control = control;
         }

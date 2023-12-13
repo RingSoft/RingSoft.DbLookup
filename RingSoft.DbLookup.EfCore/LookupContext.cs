@@ -64,12 +64,17 @@ namespace RingSoft.DbLookup.EfCore
             {
                 return;
             }
+
+            var initialized = Initialized;
             base.Initialize();
-            _advInitalizing = true;
-            var configuration = new AdvancedFindLookupConfiguration(this);
-            configuration.InitializeModel();
-            configuration.ConfigureLookups();
-            _advInitalizing = false;
+            if (!initialized)
+            {
+                _advInitalizing = true;
+                var configuration = new AdvancedFindLookupConfiguration(this);
+                configuration.InitializeModel();
+                configuration.ConfigureLookups();
+                _advInitalizing = false;
+            }
         }
 
         /// <summary>

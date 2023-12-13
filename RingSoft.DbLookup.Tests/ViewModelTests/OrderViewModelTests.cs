@@ -17,7 +17,7 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
         public static void Setup(TestContext testContext)
         {
             Globals = new TestGlobals<OrderViewModel, TestDbMaintenanceView>();
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Initialize();
+            SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
             Globals.Initialize();
         }
 

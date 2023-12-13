@@ -14,6 +14,8 @@ namespace RingSoft.DbLookup.App.Library.LibLookupContext
             set { LookupContextConfiguration.DataProcessorType = value; }
         }
 
+        public LookupContextBase LookupContext => this;
+
         public override DbDataProcessor DataProcessor => LookupContextConfiguration.DataProcessor;
 
         public bool ValidateRegistryDbConnectionSettings(RegistrySettings registrySettings)

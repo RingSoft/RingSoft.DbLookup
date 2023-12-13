@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Media;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.Controls.WPF;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
-namespace RingSoft.DbLookup.App.WPFCore
+namespace RingSoft.DbLookup.Controls.WPF
 {
     public abstract class DbMaintenanceWindow : BaseWindow, IDbMaintenanceView
     {
         public abstract DbMaintenanceViewModelBase ViewModel { get; }
 
-        public abstract DbMaintenanceButtonsControl MaintenanceButtonsControl { get; }
+        public abstract Control MaintenanceButtonsControl { get; }
 
         public abstract DbMaintenanceStatusBar DbStatusBar { get; }
 
         public AutoFillControl KeyAutoFillControl { get; private set; }
 
-        public IDbMaintenanceProcessor Processor { get; set; }
+        public IDbMaintenanceProcessor Processor { get; }
 
         public DbMaintenanceWindow()
         {
@@ -34,20 +25,6 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Closing += (sender, args) => ViewModel.OnWindowClosing(args);
                 ViewModel.OnViewLoaded(this);
             };
-        }
-        public void Initialize()
-        {
-        }
-
-        protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
-        {
-            Processor.RegisterFormKeyControl(keyAutoFillControl);
-        }
-
-
-        public virtual void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
-        {
-            Processor.OnValidationFail(fieldDefinition, text, caption);
         }
 
         public virtual void ResetViewForNewRecord()
@@ -64,6 +41,11 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             if (Processor.SetControlReadOnlyMode(control, readOnlyValue))
                 base.SetControlReadOnlyMode(control, readOnlyValue);
+        }
+
+        protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
+        {
+            Processor.RegisterFormKeyControl(keyAutoFillControl);
         }
     }
 }

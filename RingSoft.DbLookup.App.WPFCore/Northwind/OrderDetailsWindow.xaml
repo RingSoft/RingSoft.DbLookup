@@ -1,4 +1,4 @@
-﻿<app:DbMaintenanceWindow x:Class="RingSoft.DbLookup.App.WPFCore.Northwind.OrderDetailsWindow"
+﻿<app:AppDbMaintenanceWindow x:Class="RingSoft.DbLookup.App.WPFCore.Northwind.OrderDetailsWindow"
                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -54,4 +54,4 @@
             <dec:DecimalEditControl Grid.Row="5" Grid.Column="3" FormatType="Currency" Value="{Binding Path=Discount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" DesignText="$999,999.99"/>
         </Grid>
     </DockPanel>
-</app:DbMaintenanceWindow>
+</app:AppDbMaintenanceWindow>

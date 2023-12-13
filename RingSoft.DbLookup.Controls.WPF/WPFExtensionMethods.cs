@@ -18,6 +18,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using RingSoft.DataEntryControls.Engine;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace RingSoft.DbLookup.Controls.WPF

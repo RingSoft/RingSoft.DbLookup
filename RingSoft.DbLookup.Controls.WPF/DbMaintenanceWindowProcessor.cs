@@ -11,6 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbMaintenance;
 using System;
 using System.Collections.Generic;
 using System.Media;
@@ -18,12 +22,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid;
-using RingSoft.DataEntryControls.WPF;
-using RingSoft.DataEntryControls.WPF.DataEntryGrid;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -200,7 +198,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             SaveButton.Command = ViewModel.SaveCommand;
             SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
-
+            
             if (DeleteButton == null)
             {
                 throw new Exception("DbMaintenanceWindowProcessor.DeleteButton cannot be null.");
@@ -323,11 +321,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             View = view;
             SetupControl();
 
-            if (statusBar == null)
+            if (statusBar != null)
             {
-                throw new ArgumentException(nameof(statusBar));
+                SetupStatusBar(viewModel, statusBar);
             }
-            SetupStatusBar(viewModel, statusBar);
             MaintenanceButtonsUiControl =
                 new VmUiControl(MaintenanceButtonsControl, ViewModel.MaintenanceButtonsUiCommand);
             if (statusBar != null)
@@ -752,6 +749,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 default:
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }
+        }
+
+        private void PreSetButton(Button button)
+        {
+
         }
     }
 }

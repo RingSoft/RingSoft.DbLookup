@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
         }
 
-        public override Button SaveButton => _dbMaintenanceButtonsControl.SaveButton;
+        public override Button SaveButton  => _dbMaintenanceButtonsControl.SaveButton;
         public override Button SelectButton => _dbMaintenanceButtonsControl.SelectButton;
         public override Button DeleteButton => _dbMaintenanceButtonsControl.DeleteButton;
         public override Button FindButton => _dbMaintenanceButtonsControl.FindButton;

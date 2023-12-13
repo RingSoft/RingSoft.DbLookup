@@ -260,11 +260,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        static LookupControlsGlobals()
+        {
+            InitUi();
+        }
         /// <summary>
         /// Initializes the UI.
         /// </summary>
         /// <param name="programDataFolder">The program data folder.</param>
-        public static void InitUi(string programDataFolder = "")
+        private static void InitUi(string programDataFolder = "")
         {
             if (programDataFolder.IsNullOrEmpty())
             {
@@ -272,7 +276,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             SystemGlobals.ProgramDataFolder = programDataFolder;
             DbDataProcessor.UserInterface = _userInterface;
-            WPFControlsGlobals.InitUi();
+            //WPFControlsGlobals.InitUi();
             WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
         }
 

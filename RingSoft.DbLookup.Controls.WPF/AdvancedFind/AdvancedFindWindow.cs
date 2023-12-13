@@ -448,7 +448,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (Processor == null)
             {
                 throw new Exception(
-                    "LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor() cannot return null.");
+                    "You must inherit and override LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor() and not return null.");
             }
             ViewModel = Border.TryFindResource("AdvancedFindViewModel") as AdvancedFindViewModel;
             ViewModel.CreateCommands();
@@ -457,14 +457,9 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (advFindButtons == null)
             {
                 throw new Exception(
-                    "You must implement and instantiate IAdvancedFindButtonsControl and inherit LookupControlsGlobals.DbMaintenanceButtonsFactory and override and return GetAdvancedFindButtonsControl.");
+                    "You must inherit LookupControlsGlobals.DbMaintenanceButtonsFactory return valid control in GetAdvancedFindButtonsControl.");
             }
             _buttonsControl = advFindButtons;
-
-            if (_buttonsControl == null)
-            {
-                throw new Exception("IAdvancedFindButtons DbMaintenanceButtonsControl property cannot be null.");
-            }
 
             if (ButtonsPanel != null)
             {

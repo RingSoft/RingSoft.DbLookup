@@ -2,6 +2,7 @@
 using System.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
 
@@ -104,6 +105,10 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         private void PurchaseDateUiCommand_LostFocus(object sender, UiLostFocusArgs e)
         {
+            if (_parentStock == null)
+            {
+                return;
+            }
             var context = SystemGlobals.DataRepository.GetDataContext();
             var table = context.GetTable<StockCostQuantity>();
             var stockCq = table
@@ -124,6 +129,23 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 
         protected override void Initialize()
         {
+            if (LookupAddViewArgs != null 
+                && LookupAddViewArgs.ParentWindowPrimaryKeyValue == null
+                && LookupAddViewArgs.SelectedPrimaryKeyValue != null)
+            {
+                var costQty = TableDefinition.GetEntityFromPrimaryKeyValue(
+                    LookupAddViewArgs.SelectedPrimaryKeyValue);
+                if (costQty != null)
+                {
+                    _parentStock = RsDbLookupAppGlobals
+                        .EfProcessor
+                        .MegaDbLookupContext
+                        .StockMasters
+                        .GetEntity() as StockMaster;
+                    _parentStock.Id = costQty.StockMasterId;
+                    _parentStock = _parentStock.FillOutProperties(true);
+                }
+            }
             if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
             {
                 if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition == _lookupContext.StockMasters)
@@ -136,13 +158,12 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                     {
                         _parentStock = stockMaster.FillOutProperties(true);
                     }
-
-                    if (_parentStock != null)
-                    {
-                        StockNumber = _parentStock.Stock.Name;
-                        Location = _parentStock.MliLocation.Name;
-                    }
                 }
+            }
+            if (_parentStock != null)
+            {
+                StockNumber = _parentStock.Stock.Name;
+                Location = _parentStock.MliLocation.Name;
             }
             base.Initialize();
         }

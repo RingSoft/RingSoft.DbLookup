@@ -179,6 +179,8 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>The scroll position.</value>
         public LookupScrollPositions ScrollPosition { get; protected internal set; }
 
+        public bool DbMaintenanceMode { get; set; }
+
         /// <summary>
         /// Occurs when a user wishes to view a selected lookup row.  Used to show the appropriate editor for the selected lookup row.
         /// </summary>

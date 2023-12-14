@@ -19,7 +19,7 @@ namespace RingSoft.DbLookup
 
         public abstract void ShowAddOntheFlyWindow(
             TableDefinitionBase tableDefinition
-            , LookupAddViewArgs addViewArgs
-            , object inputParameter);
+            , LookupAddViewArgs addViewArgs = null
+            , object inputParameter = null);
     }
 }

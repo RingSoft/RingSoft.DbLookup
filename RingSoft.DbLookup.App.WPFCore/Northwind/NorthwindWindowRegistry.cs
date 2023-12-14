@@ -14,6 +14,12 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
             RegisterWindow<OrdersWindow>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
+            RegisterWindow<OrderDetailsWindow>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
+            RegisterWindow<EmployeesWindow>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
+            RegisterWindow<ProductsWindow>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
         }
 
         protected override DbMaintenanceWindow CreateMaintenanceWindow(TableDefinitionBase tableDefinition, LookupAddViewArgs addViewArgs,
@@ -42,10 +48,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                     {
                         return new OrdersWindow();
                     }
-                    else
-                    {
-                        return new OrderDetailsWindow();
-                    }
+                    return new OrderDetailsWindow();
                 }
             }
 

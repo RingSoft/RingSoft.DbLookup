@@ -94,6 +94,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
+                WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
                 var itemsWindow = new ItemsWindow();
                 itemsWindow.Owner = this;
                 itemsWindow.ShowDialog();
@@ -105,6 +106,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
+                WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
                 var stockMasterWindow = new StockMasterWindow();
                 stockMasterWindow.Owner = this;
                 stockMasterWindow.ShowDialog();

@@ -54,8 +54,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public sealed override void ShowAddOntheFlyWindow(
             TableDefinitionBase tableDefinition
-            , LookupAddViewArgs addViewArgs
-            , object inputParameter)
+            , LookupAddViewArgs addViewArgs = null
+            , object inputParameter = null)
         {
             var maintenanceWindow = CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
             if (maintenanceWindow == null)
@@ -64,6 +64,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (item != null)
                 {
                     maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
+                    if (maintenanceWindow.ViewModel.TableDefinitionBase != tableDefinition)
+                    {
+                        throw new Exception("Invalid Table Definition or DbMaintenance Window");
+                    }
                 }
             }
             ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
@@ -80,8 +84,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected virtual void ShowAddOnTheFlyWindow(
             DbMaintenanceWindow maintenanceWindow
             , TableDefinitionBase tableDefinition
-            , LookupAddViewArgs addViewArgs
-            , object addViewParameter)
+            , LookupAddViewArgs addViewArgs = null
+            , object addViewParameter = null)
         {
             if (addViewArgs.OwnerWindow is Window ownerWindow)
                 maintenanceWindow.Owner = ownerWindow;

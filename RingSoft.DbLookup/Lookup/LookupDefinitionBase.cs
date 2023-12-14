@@ -671,7 +671,7 @@ namespace RingSoft.DbLookup.Lookup
         {
             if (_joinsList.All(p => p.Alias != lookupFieldJoin.Alias))
             {
-                if (lookupFieldJoin.ForeignKeyDefinition.ForeignTable.TableName == "DevLogixChartsBars")
+                if (lookupFieldJoin.ForeignKeyDefinition.ForeignTable.TableName == "StockCostQuantity")
                 {
 
                 }

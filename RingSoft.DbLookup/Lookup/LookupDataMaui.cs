@@ -324,7 +324,15 @@ namespace RingSoft.DbLookup.Lookup
             {
                 {
                     var filter = new TableFilterDefinition<TEntity>(TableDefinition);
-                    var table = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
+                    IQueryable<TEntity> table = null;
+                    if (TableDefinition.PrimaryKeyFields.Count > 1 && DbMaintenanceMode)
+                    {
+                        table = TableDefinition.Context.GetQueryableTable(TableDefinition, true);
+                    }
+                    else
+                    {
+                        table = TableDefinition.Context.GetQueryable<TEntity>(LookupDefinition);
+                    }
                     foreach (var field in primaryKeyValue.KeyValueFields)
                     {
                         var fieldFilter = filter.AddFixedFilter(field.FieldDefinition, Conditions.Equals

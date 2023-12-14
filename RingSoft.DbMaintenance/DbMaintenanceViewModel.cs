@@ -299,6 +299,7 @@ namespace RingSoft.DbMaintenance
             Setup(tableLookupDefinition);
             SetupViewLookupDefinition(ViewLookupDefinition);
             _lookupData = TableDefinition.LookupDefinition.GetLookupDataMaui(ViewLookupDefinition, true);
+            _lookupData.DbMaintenanceMode = true;
             _lookupData.SetParentControls(this);
 
             //_lookupData.LookupDataChanged += _lookupData_LookupDataChanged;

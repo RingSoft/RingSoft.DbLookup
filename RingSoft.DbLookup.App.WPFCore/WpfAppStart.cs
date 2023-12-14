@@ -15,7 +15,7 @@ using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
-    public class WpfAppStart : AppStart, IDbLookupUserInterface, IControlsUserInterface
+    public class WpfAppStart : AppStart
     {
         public static string ProgramDataFolder
         {
@@ -70,18 +70,18 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         protected override void FinishStartup()
         {
-            //var lookupUserInterface = DbDataProcessor.UserInterface;
-            //DbDataProcessor.UserInterface = this;
-            //var controlsUserInterface = ControlsGlobals.UserInterface;
-            //ControlsGlobals.UserInterface = this;
-
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
 
-            //DbDataProcessor.UserInterface = lookupUserInterface;
-            //ControlsGlobals.UserInterface = controlsUserInterface;
-
-            RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
-            RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
+            MegaDbWindowRegistry.RegisterWindow<ItemsWindow>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
+            MegaDbWindowRegistry.RegisterWindow<LocationWindow>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations);
+            MegaDbWindowRegistry.RegisterWindow<ManufacturerWindow>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers);
+            MegaDbWindowRegistry.RegisterWindow<StockMasterWindow>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockMasters);
+            MegaDbWindowRegistry.RegisterWindow<StockCostQuantityWindow>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities);
 
             _application.MainWindow = _mainWindow;
             _mainWindow.Show();
@@ -99,146 +99,5 @@ namespace RingSoft.DbLookup.App.WPFCore
             }
         }
 
-        private void MegaDbLookupContextOnLookupView(object sender, LookupAddViewArgs e)
-        {
-            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items)
-            {
-                ShowAddOnTheFlyWindow(new ItemsWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations)
-            {
-                ShowAddOnTheFlyWindow(new LocationWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers)
-            {
-                ShowAddOnTheFlyWindow(new ManufacturerWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockMasters)
-            {
-                ShowAddOnTheFlyWindow(new StockMasterWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities)
-            {
-                ShowAddOnTheFlyWindow(new StockCostQuantityWindow(), e);
-            }
-        }
-
-        private void NorthwindLookupContext_LookupView(object sender, LookupAddViewArgs e)
-        {
-            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
-            //{
-            //    ShowAddOnTheFlyWindow(new CustomersWindow(), e);
-            //}
-            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
-            //{
-            //    if (e.InputParameter is NorthwindViewModelInput northwindViewModelInput)
-            //    {
-            //        if (northwindViewModelInput.OrderInput.GridMode)
-            //            ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
-            //        else 
-            //            ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-            //        return;
-            //    }
-                
-            //    ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-            //}
-            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
-            {
-                ShowAddOnTheFlyWindow(new EmployeesWindow(), e);
-            }
-            //else if (e.LookupData.LookupDefinition.TableDefinition ==
-            //         RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
-            //{
-            //    if (e.InputParameter is not NorthwindViewModelInput northwindViewModelInput) return;
-            //    if (northwindViewModelInput.OrderInput.GridMode)
-            //        ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
-            //    else
-            //    {
-            //        if (northwindViewModelInput.OrderInput.FromProductOrders)
-            //        {
-            //            ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-            //        }
-            //        else
-            //        {
-            //            ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
-            //        }
-            //    }
-            //}
-            else if (e.LookupData.LookupDefinition.TableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
-            {
-                ShowAddOnTheFlyWindow(new ProductsWindow(), e);
-            }
-        }
-
-        private void ShowAddOnTheFlyWindow(AppDbMaintenanceWindow maintenanceWindow, LookupAddViewArgs e)
-        {
-            if (e.OwnerWindow is Window ownerWindow)
-                maintenanceWindow.Owner = ownerWindow;
-
-            maintenanceWindow.ShowInTaskbar = false;
-            maintenanceWindow.Processor.InitializeFromLookupData(e);
-            maintenanceWindow.ShowDialog();
-        }
-
-        public void ShowDataProcessResult(DataProcessResult dataProcessResult)
-        {
-            _splashWindow.ShowErrorMessageBox(dataProcessResult.Message, "Database Connection Error!");
-        }
-
-        public void ShowAddOnTheFlyWindow(LookupAddViewArgs e)
-        {
-            
-        }
-
-        public void PlaySystemSound(RsMessageBoxIcons icon)
-        {
-            switch (icon)
-            {
-                case RsMessageBoxIcons.Error:
-                    SystemSounds.Hand.Play();
-                    break;
-                case RsMessageBoxIcons.Exclamation:
-                    SystemSounds.Exclamation.Play();
-                    break;
-                case RsMessageBoxIcons.Information:
-                    SystemSounds.Exclamation.Play();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(icon), icon, null);
-            }
-        }
-
-        public object GetOwnerWindow()
-        {
-            return LookupControlsGlobals.ActiveWindow;
-        }
-
-        public string FormatValue(string value, int hostId)
-        {
-            return value;
-        }
-
-        public void SetWindowCursor(WindowCursorTypes cursor)
-        {
-            
-        }
-
-        public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
-        {
-            _splashWindow.ShowErrorMessageBox(text, caption);
-        }
-
-        public async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
-        {
-            return MessageBoxButtonsResult.Yes;
-        }
-
-        public async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
-        {
-            return MessageBoxButtonsResult.Cancel;
-        }
     }
 }

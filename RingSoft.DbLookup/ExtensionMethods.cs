@@ -644,7 +644,8 @@ namespace RingSoft.DbLookup
                 result.Add(joinInfo);
             }
 
-            var children = joins.Where(p => p.ParentObject != null).OfType<TableFieldJoinDefinition>();
+            var children = joins
+                .Where(p => p.ParentObject != null).OfType<TableFieldJoinDefinition>();
 
             foreach (var child in children)
             {

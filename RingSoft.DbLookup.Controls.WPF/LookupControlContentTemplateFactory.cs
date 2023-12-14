@@ -24,6 +24,10 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public class LookupControlContentTemplateFactory
     {
+        public LookupControlContentTemplateFactory()
+        {
+            LookupControlsGlobals.LookupControlContentTemplateFactory = this;
+        }
         /// <summary>
         /// Gets the content template.
         /// </summary>

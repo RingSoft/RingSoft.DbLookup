@@ -25,6 +25,10 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public class DbMaintenanceProcessorFactory
     {
+        public DbMaintenanceProcessorFactory()
+        {
+            LookupControlsGlobals.DbMaintenanceProcessorFactory = this;
+        }
         /// <summary>
         /// Gets the processor.
         /// </summary>

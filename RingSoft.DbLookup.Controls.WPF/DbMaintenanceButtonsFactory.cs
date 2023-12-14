@@ -21,6 +21,10 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public abstract class DbMaintenanceButtonsFactory
     {
+        public DbMaintenanceButtonsFactory()
+        {
+            LookupControlsGlobals.DbMaintenanceButtonsFactory = this;
+        }
         /// <summary>
         /// Gets the advanced find buttons control.
         /// </summary>

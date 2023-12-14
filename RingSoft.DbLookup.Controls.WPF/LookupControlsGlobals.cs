@@ -210,7 +210,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Gets or sets the database maintenance processor factory.
         /// </summary>
         /// <value>The database maintenance processor factory.</value>
-        /// <exception cref="System.Exception">You must implement IDbMaintenanceProcessor and override DbMaintenanceProcessorFactory and set it to LookupControlsGlobals.DbMaintenanceProcessorFactory.</exception>
+        /// <exception cref="System.Exception">You must inherit and instantiate DbMaintenanceProcessorFactory.</exception>
         public static DbMaintenanceProcessorFactory DbMaintenanceProcessorFactory
         {
             get
@@ -218,7 +218,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_dbMaintProcessorFactory == null)
                 {
                     throw new Exception(
-                        $"You must implement IDbMaintenanceProcessor and override DbMaintenanceProcessorFactory and set it to LookupControlsGlobals.DbMaintenanceProcessorFactory.");
+                        $"You must inherit and instantiate DbMaintenanceProcessorFactory.");
                 }
                 return _dbMaintProcessorFactory;
             } 
@@ -241,7 +241,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Gets or sets the database maintenance buttons factory.
         /// </summary>
         /// <value>The database maintenance buttons factory.</value>
-        /// <exception cref="System.Exception">You must implement DbMaintenanceButtonsFactory and set it to LookupControlsGlobals.LookupControlsGlobals.DbMaintenanceButtonsFactory.</exception>
+        /// <exception cref="System.Exception">You must inherit and instantiate DbMaintenanceButtonsFactory.</exception>
         public static DbMaintenanceButtonsFactory DbMaintenanceButtonsFactory
         {
             get
@@ -249,7 +249,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_dbMaintenanceButtonsFactory == null)
                 {
                     throw new Exception(
-                        $"You must implement DbMaintenanceButtonsFactory and set it to LookupControlsGlobals.LookupControlsGlobals.DbMaintenanceButtonsFactory.");
+                        $"You must inherit and instantiate DbMaintenanceButtonsFactory.");
 
                 }
                 return _dbMaintenanceButtonsFactory;

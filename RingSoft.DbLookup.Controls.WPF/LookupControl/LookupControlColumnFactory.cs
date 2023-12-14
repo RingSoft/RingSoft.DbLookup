@@ -23,6 +23,10 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     public class LookupControlColumnFactory
     {
+        public LookupControlColumnFactory()
+        {
+            LookupControlsGlobals.LookupControlColumnFactory = this;
+        }
         /// <summary>
         /// Creates the lookup column.
         /// </summary>

@@ -43,13 +43,9 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override void StartApp(string appSection, string[] args)
         {
-            //LookupControlsGlobals.InitUi(ProgramDataFolder);
-
-            LookupControlsGlobals.DbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
-            LookupControlsGlobals.DbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
-
-            LookupControlsGlobals.LookupControlContentTemplateFactory =
-                new AppLookupContentTemplateFactory(_application);
+            var appDbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
+            var appDbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
+            var appLookupContentTemplateFactory = new AppLookupContentTemplateFactory(_application);
 
             _mainWindow = new MainWindow();
             base.StartApp(appSection, args);

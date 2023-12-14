@@ -32,7 +32,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
-        public static DbMaintenanceWindowRegistry NorthwindWindowRegistry { get; } = new DbMaintenanceWindowRegistry();
+        public static NorthwindWindowRegistry NorthwindWindowRegistry { get; } = new NorthwindWindowRegistry();
         public static DbMaintenanceWindowRegistry MegaDbWindowRegistry { get; } = new DbMaintenanceWindowRegistry();
 
         private Application _application;
@@ -79,10 +79,6 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             //DbDataProcessor.UserInterface = lookupUserInterface;
             //ControlsGlobals.UserInterface = controlsUserInterface;
-
-            NorthwindWindowRegistry.RegisterWindow<CustomersWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
-            ;
 
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
@@ -135,41 +131,41 @@ namespace RingSoft.DbLookup.App.WPFCore
             //{
             //    ShowAddOnTheFlyWindow(new CustomersWindow(), e);
             //}
-            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
-            {
-                if (e.InputParameter is NorthwindViewModelInput northwindViewModelInput)
-                {
-                    if (northwindViewModelInput.OrderInput.GridMode)
-                        ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
-                    else 
-                        ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-                    return;
-                }
+            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
+            //{
+            //    if (e.InputParameter is NorthwindViewModelInput northwindViewModelInput)
+            //    {
+            //        if (northwindViewModelInput.OrderInput.GridMode)
+            //            ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
+            //        else 
+            //            ShowAddOnTheFlyWindow(new OrdersWindow(), e);
+            //        return;
+            //    }
                 
-                ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
+            //    ShowAddOnTheFlyWindow(new OrdersWindow(), e);
+            //}
+            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees)
             {
                 ShowAddOnTheFlyWindow(new EmployeesWindow(), e);
             }
-            else if (e.LookupData.LookupDefinition.TableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
-            {
-                if (e.InputParameter is not NorthwindViewModelInput northwindViewModelInput) return;
-                if (northwindViewModelInput.OrderInput.GridMode)
-                    ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
-                else
-                {
-                    if (northwindViewModelInput.OrderInput.FromProductOrders)
-                    {
-                        ShowAddOnTheFlyWindow(new OrdersWindow(), e);
-                    }
-                    else
-                    {
-                        ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
-                    }
-                }
-            }
+            //else if (e.LookupData.LookupDefinition.TableDefinition ==
+            //         RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
+            //{
+            //    if (e.InputParameter is not NorthwindViewModelInput northwindViewModelInput) return;
+            //    if (northwindViewModelInput.OrderInput.GridMode)
+            //        ShowAddOnTheFlyWindow(new OrdersGridWindow(), e);
+            //    else
+            //    {
+            //        if (northwindViewModelInput.OrderInput.FromProductOrders)
+            //        {
+            //            ShowAddOnTheFlyWindow(new OrdersWindow(), e);
+            //        }
+            //        else
+            //        {
+            //            ShowAddOnTheFlyWindow(new OrderDetailsWindow(), e);
+            //        }
+            //    }
+            //}
             else if (e.LookupData.LookupDefinition.TableDefinition ==
                      RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products)
             {

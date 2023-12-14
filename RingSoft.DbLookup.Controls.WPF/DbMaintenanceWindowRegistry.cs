@@ -57,12 +57,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             , LookupAddViewArgs addViewArgs
             , object inputParameter)
         {
-            var item = GetDbMaintenanceWindow(tableDefinition);
-            if (item != null)
+            var maintenanceWindow = CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
+            if (maintenanceWindow == null)
             {
-                var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
-                ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
+                var item = GetDbMaintenanceWindow(tableDefinition);
+                if (item != null)
+                {
+                    maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
+                }
             }
+            ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
+        }
+
+        protected virtual DbMaintenanceWindow CreateMaintenanceWindow(
+            TableDefinitionBase tableDefinition
+            , LookupAddViewArgs addViewArgs
+            , object inputParameter)
+        {
+            return null;
         }
 
         protected virtual void ShowAddOnTheFlyWindow(

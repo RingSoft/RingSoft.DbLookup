@@ -67,6 +67,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                 }
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
+                WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
                 var ordersWindow = new OrdersWindow();
                 ordersWindow.Owner = this;
                 ordersWindow.ShowDialog();
@@ -81,6 +82,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                     return;
                 }
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
+                WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
                 var ordersWindow = new OrdersGridWindow();
                 ordersWindow.Owner = this;
                 ordersWindow.ShowDialog();

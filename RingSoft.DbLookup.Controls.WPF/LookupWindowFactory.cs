@@ -36,6 +36,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public LookupWindowFactory()
         {
+            LookupControlsGlobals.LookupWindowFactory = this;
             _taskbarIcon = new TaskbarIcon();
         }
         /// <summary>

@@ -41,6 +41,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public const int SearchForDateHostId = 3;
 
+        public LookupSearchForHostFactory()
+        {
+            LookupControlsGlobals.LookupControlSearchForFactory = this;
+        }
         /// <summary>
         /// Creates the search for host.
         /// </summary>

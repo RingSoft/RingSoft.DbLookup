@@ -4,7 +4,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 {
     public class AppDbMaintenanceProcessorFactory : RingSoft.DbLookup.Controls.WPF.DbMaintenanceProcessorFactory
     {
-        public override IDbMaintenanceProcessor GetProcessor()
+        public override DbMaintenanceWindowProcessor GetProcessor()
         {
             return new AppDbMaintenanceWindowProcessor();
         }

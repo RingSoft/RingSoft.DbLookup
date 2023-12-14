@@ -177,29 +177,29 @@ namespace RingSoft.DbLookup.Controls.WPF
         public static Window ActiveWindow => ControlsUserInterface.GetActiveWindow();
 
         /// <summary>
-        /// Gets or sets the lookup window factory.
+        /// Gets the lookup window factory.
         /// </summary>
         /// <value>The lookup window factory.</value>
-        public static LookupWindowFactory LookupWindowFactory { get; set; } = new LookupWindowFactory();
+        public static LookupWindowFactory LookupWindowFactory { get; internal set; } = new LookupWindowFactory();
 
         /// <summary>
-        /// Gets or sets the lookup control search for factory.
+        /// Gets the lookup control search for factory.
         /// </summary>
         /// <value>The lookup control search for factory.</value>
-        public static LookupSearchForHostFactory LookupControlSearchForFactory { get; set; } = new LookupSearchForHostFactory();
+        public static LookupSearchForHostFactory LookupControlSearchForFactory { get; internal set; } = new LookupSearchForHostFactory();
 
         /// <summary>
-        /// Gets or sets the lookup control column factory.
+        /// Gets the lookup control column factory.
         /// </summary>
         /// <value>The lookup control column factory.</value>
-        public static LookupControlColumnFactory LookupControlColumnFactory { get; set; } =
+        public static LookupControlColumnFactory LookupControlColumnFactory { get; internal set; } =
             new LookupControlColumnFactory();
 
         /// <summary>
-        /// Gets or sets the lookup control content template factory.
+        /// Gets the lookup control content template factory.
         /// </summary>
         /// <value>The lookup control content template factory.</value>
-        public static LookupControlContentTemplateFactory LookupControlContentTemplateFactory { get; set; } =
+        public static LookupControlContentTemplateFactory LookupControlContentTemplateFactory { get; internal set; } =
             new LookupControlContentTemplateFactory();
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         private static DbMaintenanceProcessorFactory _dbMaintProcessorFactory;
         /// <summary>
-        /// Gets or sets the database maintenance processor factory.
+        /// Gets the database maintenance processor factory.
         /// </summary>
         /// <value>The database maintenance processor factory.</value>
         /// <exception cref="System.Exception">You must inherit and instantiate DbMaintenanceProcessorFactory.</exception>
@@ -222,7 +222,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
                 return _dbMaintProcessorFactory;
             } 
-            set
+            internal set
             {
             _dbMaintProcessorFactory = value;
         }
@@ -238,7 +238,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         private static DbMaintenanceButtonsFactory _dbMaintenanceButtonsFactory;
         /// <summary>
-        /// Gets or sets the database maintenance buttons factory.
+        /// Gets the database maintenance buttons factory.
         /// </summary>
         /// <value>The database maintenance buttons factory.</value>
         /// <exception cref="System.Exception">You must inherit and instantiate DbMaintenanceButtonsFactory.</exception>
@@ -254,7 +254,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
                 return _dbMaintenanceButtonsFactory;
             }
-            set
+            internal set
             {
                 _dbMaintenanceButtonsFactory = value;
             }
@@ -276,8 +276,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             SystemGlobals.ProgramDataFolder = programDataFolder;
             DbDataProcessor.UserInterface = _userInterface;
-            //WPFControlsGlobals.InitUi();
-            WPFControlsGlobals.DataEntryGridHostFactory = new LookupGridEditHostFactory();
+            var lookupGridEditHostFactory = new LookupGridEditHostFactory();
         }
 
         /// <summary>

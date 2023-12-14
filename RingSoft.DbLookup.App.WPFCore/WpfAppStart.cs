@@ -32,6 +32,9 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public override IAppSplashWindow AppSplashWindow => _splashWindow;
 
+        public static DbMaintenanceWindowRegistry NorthwindWindowRegistry { get; } = new DbMaintenanceWindowRegistry();
+        public static DbMaintenanceWindowRegistry MegaDbWindowRegistry { get; } = new DbMaintenanceWindowRegistry();
+
         private Application _application;
         private MainWindow _mainWindow;
         private AppSplashWindow _splashWindow;
@@ -77,13 +80,16 @@ namespace RingSoft.DbLookup.App.WPFCore
             //DbDataProcessor.UserInterface = lookupUserInterface;
             //ControlsGlobals.UserInterface = controlsUserInterface;
 
+            NorthwindWindowRegistry.RegisterWindow<CustomersWindow>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
+            ;
+
             RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupAddView += NorthwindLookupContext_LookupView;
             RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupAddView += MegaDbLookupContextOnLookupView;
 
             _application.MainWindow = _mainWindow;
             _mainWindow.Show();
         }
-
 
         private void ChangeEntityFrameworkVersion(EntityFrameworkVersions newVersion)
         {
@@ -125,11 +131,11 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private void NorthwindLookupContext_LookupView(object sender, LookupAddViewArgs e)
         {
-            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
-            {
-                ShowAddOnTheFlyWindow(new CustomersWindow(), e);
-            }
-            else if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
+            //if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers)
+            //{
+            //    ShowAddOnTheFlyWindow(new CustomersWindow(), e);
+            //}
+            if (e.LookupData.LookupDefinition.TableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
             {
                 if (e.InputParameter is NorthwindViewModelInput northwindViewModelInput)
                 {

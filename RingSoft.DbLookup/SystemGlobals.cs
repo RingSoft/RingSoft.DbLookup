@@ -161,6 +161,8 @@ namespace RingSoft.DbLookup
             set => _lookupContext = value;
         }
 
+        public static DbLookupTableWindowRegistry TableRegistry { get; internal set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [unit test mode].
         /// </summary>

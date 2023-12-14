@@ -484,8 +484,21 @@ namespace RingSoft.DbLookup
                 e.OwnerWindow = DbDataProcessor.UserInterface.GetOwnerWindow();
             }
 
-            DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
-            LookupAddView?.Invoke(this, e);
+            var isTableRegistered = SystemGlobals
+                .TableRegistry
+                .IsTableRegistered(e.LookupData.LookupDefinition.TableDefinition);
+
+            if (isTableRegistered)
+            {
+                SystemGlobals.TableRegistry.ShowAddOntheFlyWindow(
+                    e.LookupData.LookupDefinition.TableDefinition
+                    , e, e.InputParameter);
+            }
+            else
+            {
+                DbDataProcessor.UserInterface.ShowAddOnTheFlyWindow(e);
+                LookupAddView?.Invoke(this, e);
+            }
         }
 
         /// <summary>

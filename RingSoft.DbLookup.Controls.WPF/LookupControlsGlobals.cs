@@ -260,6 +260,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public static DbMaintenanceWindowRegistry WindowRegistry { get; internal set; } = new DbMaintenanceWindowRegistry();
+
         static LookupControlsGlobals()
         {
             InitUi();

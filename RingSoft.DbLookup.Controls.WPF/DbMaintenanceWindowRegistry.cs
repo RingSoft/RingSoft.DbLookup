@@ -73,6 +73,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
         }
 
+        public override void ShowWindow(TableDefinitionBase tableDefinition)
+        {
+            ShowDbMaintenanceWindow(tableDefinition);
+        }
+
         protected virtual DbMaintenanceWindow CreateMaintenanceWindow(
             TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs

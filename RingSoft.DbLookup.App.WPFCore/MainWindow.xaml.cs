@@ -68,9 +68,10 @@ namespace RingSoft.DbLookup.App.WPFCore
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
                 WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
-                var ordersWindow = new OrdersWindow();
-                ordersWindow.Owner = this;
-                ordersWindow.ShowDialog();
+                SystemGlobals.TableRegistry.ShowWindow(RsDbLookupAppGlobals
+                    .EfProcessor
+                    .NorthwindLookupContext
+                    .Orders);
             };
 
             NorthwindGridButton.Click += (sender, args) =>
@@ -95,9 +96,11 @@ namespace RingSoft.DbLookup.App.WPFCore
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
                 WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
-                var itemsWindow = new ItemsWindow();
-                itemsWindow.Owner = this;
-                itemsWindow.ShowDialog();
+                SystemGlobals.TableRegistry.ShowWindow(
+                    RsDbLookupAppGlobals
+                        .EfProcessor
+                        .MegaDbLookupContext
+                        .Items);
             };
 
             StockTrackerButton.Click += (sender, args) =>
@@ -107,9 +110,11 @@ namespace RingSoft.DbLookup.App.WPFCore
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
                 WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
-                var stockMasterWindow = new StockMasterWindow();
-                stockMasterWindow.Owner = this;
-                stockMasterWindow.ShowDialog();
+                SystemGlobals.TableRegistry.ShowWindow(
+                    RsDbLookupAppGlobals
+                        .EfProcessor
+                        .MegaDbLookupContext
+                        .StockMasters);
             };
 
             CloseButton.Click += (sender, args) => Close();

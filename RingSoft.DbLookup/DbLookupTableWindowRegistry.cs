@@ -21,5 +21,7 @@ namespace RingSoft.DbLookup
             TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs = null
             , object inputParameter = null);
+
+        public abstract void ShowWindow(TableDefinitionBase tableDefinition);
     }
 }

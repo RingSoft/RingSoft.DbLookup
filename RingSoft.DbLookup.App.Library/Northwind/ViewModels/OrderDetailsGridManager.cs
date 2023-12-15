@@ -69,6 +69,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                     GotoCell(productRow, ProductColumnId);
                 }
             }
+            OrderViewModel.RefreshTotalControls();
         }
     }
 }

@@ -64,10 +64,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (item != null)
                 {
                     maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
-                    if (maintenanceWindow.ViewModel.TableDefinitionBase != tableDefinition)
-                    {
-                        throw new Exception("Invalid Table Definition or DbMaintenance Window");
-                    }
                 }
             }
             ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);

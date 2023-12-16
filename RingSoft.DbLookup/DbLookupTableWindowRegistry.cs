@@ -17,7 +17,7 @@ using RingSoft.DbLookup.ModelDefinition;
 namespace RingSoft.DbLookup
 {
     /// <summary>
-    /// Class DbLookupTableWindowRegistry.
+    /// Shows a window for a table definition.
     /// </summary>
     public abstract class DbLookupTableWindowRegistry
     {

@@ -7,7 +7,7 @@
 // Last Modified On : 09-09-2023
 // ***********************************************************************
 // <copyright file="GblMethods.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -89,7 +89,7 @@ namespace RingSoft.DbLookup
     }
 
     /// <summary>
-    /// Class GblMethods.
+    /// Global Library Methods.
     /// </summary>
     public static class GblMethods
     {

@@ -7,7 +7,7 @@
 // Last Modified On : 11-29-2023
 // ***********************************************************************
 // <copyright file="ExtensionMethods.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup
     {
 
         /// <summary>
-        /// Trims the right.
+        /// Trims the right of a string.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="trimChars">The trim chars.</param>
@@ -182,7 +182,7 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// Returns true if ... is valid.
+        /// Returns true if Primary Key Value is valid.
         /// </summary>
         /// <param name="pkValue">The pk value.</param>
         /// <returns><c>true</c> if the specified pk value is valid; otherwise, <c>false</c>.</returns>
@@ -196,7 +196,7 @@ namespace RingSoft.DbLookup
             return pkValue.IntIsValid;
         }
         /// <summary>
-        /// Returns true if ... is valid.
+        /// Returns true if Auto Fill Value is valid.
         /// </summary>
         /// <param name="autoFillValue">The automatic fill value.</param>
         /// <returns><c>true</c> if the specified automatic fill value is valid; otherwise, <c>false</c>.</returns>

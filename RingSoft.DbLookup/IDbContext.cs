@@ -7,7 +7,7 @@
 // Last Modified On : 07-30-2023
 // ***********************************************************************
 // <copyright file="IDbContext.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup
             where TEntity : class, new();
 
         /// <summary>
-        /// Saves the no commit entity.
+        /// Saves without committing the entity.
         /// </summary>
         /// <typeparam name="TEntity">The type of the t entity.</typeparam>
         /// <param name="entity">The entity.</param>

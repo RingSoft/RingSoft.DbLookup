@@ -7,7 +7,7 @@
 // Last Modified On : 11-23-2023
 // ***********************************************************************
 // <copyright file="LookupDataMauiBase.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -106,7 +106,7 @@ namespace RingSoft.DbLookup.Lookup
     }
 
     /// <summary>
-    /// Class LookupDataMauiPrintOutput.
+    /// The base class of LookupDataMaui
     /// </summary>
     public class LookupDataMauiPrintOutput
     {

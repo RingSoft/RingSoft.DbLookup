@@ -7,7 +7,7 @@
 // Last Modified On : 12-05-2023
 // ***********************************************************************
 // <copyright file="LookupDataMaui.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -71,7 +71,7 @@ namespace RingSoft.DbLookup.Lookup
         SearchForChange = 9,
     }
     /// <summary>
-    /// Class LookupDataMauiProcessInput.
+    /// Splits data into pages based on the lookup definition properties.
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     public class LookupDataMauiProcessInput<TEntity> where TEntity : class, new()

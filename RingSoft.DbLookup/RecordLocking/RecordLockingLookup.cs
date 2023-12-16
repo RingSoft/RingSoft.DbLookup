@@ -7,7 +7,7 @@
 // Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="RecordLockingLookup.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -16,7 +16,7 @@ using System;
 namespace RingSoft.DbLookup.RecordLocking
 {
     /// <summary>
-    /// Class RecordLockingLookup.
+    /// Record Locking Lookup Entity
     /// </summary>
     public class RecordLockingLookup
     {

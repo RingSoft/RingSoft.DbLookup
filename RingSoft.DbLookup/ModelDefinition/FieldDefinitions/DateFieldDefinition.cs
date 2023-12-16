@@ -7,7 +7,7 @@
 // Last Modified On : 06-29-2023
 // ***********************************************************************
 // <copyright file="DateFieldDefinition.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

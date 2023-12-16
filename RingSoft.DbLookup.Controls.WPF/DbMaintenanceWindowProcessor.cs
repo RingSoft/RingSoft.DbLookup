@@ -7,7 +7,7 @@
 // Last Modified On : 12-10-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceWindowProcessor.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -26,7 +26,7 @@ using System.Windows.Input;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class DbMaintenanceWindowProcessor.
+    /// DbMaintenanceWindowProcessor base class that defines the behavior of a database entity maintenance window.
     /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.IDbMaintenanceProcessor" />
     /// </summary>
     /// <seealso cref="RingSoft.DbLookup.Controls.WPF.IDbMaintenanceProcessor" />

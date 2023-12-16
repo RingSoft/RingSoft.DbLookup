@@ -7,7 +7,7 @@
 // Last Modified On : 02-28-2023
 // ***********************************************************************
 // <copyright file="GenericReportFilterWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

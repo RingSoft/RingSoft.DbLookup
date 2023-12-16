@@ -7,7 +7,7 @@
 // Last Modified On : 12-10-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceProcessorFactory.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -21,7 +21,7 @@ using RingSoft.DbLookup.Controls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class DbMaintenanceProcessorFactory.
+    /// Constructs a database maintenance processor to handle the behavior of a database maintenance window.
     /// </summary>
     public abstract class DbMaintenanceProcessorFactory
     {

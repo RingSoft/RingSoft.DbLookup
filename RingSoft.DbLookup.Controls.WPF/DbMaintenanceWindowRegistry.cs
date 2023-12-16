@@ -7,7 +7,7 @@
 // Last Modified On : 12-14-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceWindowRegistry.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -21,7 +21,7 @@ using System.Windows;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class DbMaintenanceWindowRegistry.
+    /// Maps a table definition to a database window.
     /// Implements the <see cref="RingSoft.DbLookup.DbLookupTableWindowRegistry" />
     /// </summary>
     /// <seealso cref="RingSoft.DbLookup.DbLookupTableWindowRegistry" />

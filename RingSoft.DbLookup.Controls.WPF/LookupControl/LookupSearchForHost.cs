@@ -7,7 +7,7 @@
 // Last Modified On : 03-04-2023
 // ***********************************************************************
 // <copyright file="LookupSearchForHost.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -20,7 +20,7 @@ using RingSoft.DbLookup.Lookup;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class LookupSearchForHost.
+    /// Hosts a control to display as the Search For control.
     /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost" />
     /// </summary>
     /// <typeparam name="TControl">The type of the t control.</typeparam>
@@ -79,7 +79,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected abstract void Initialize(TControl control);
     }
     /// <summary>
-    /// Class LookupSearchForHost.
+    /// Hosts a control to display as the Search For control base class.
     /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost" />
     /// </summary>
     /// <seealso cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost" />

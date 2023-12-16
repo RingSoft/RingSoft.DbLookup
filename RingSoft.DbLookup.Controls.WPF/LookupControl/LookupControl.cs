@@ -7,7 +7,7 @@
 // Last Modified On : 12-08-2023
 // ***********************************************************************
 // <copyright file="LookupControl.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -298,7 +298,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     }
 
     /// <summary>
-    /// Class LookupControl.
+    /// A control that displays paged data to the user.
     /// Implements the <see cref="Control" />
     /// Implements the <see cref="ILookupControl" />
     /// Implements the <see cref="IReadOnlyControl" />

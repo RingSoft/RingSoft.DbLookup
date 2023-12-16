@@ -7,7 +7,7 @@
 // Last Modified On : 07-11-2023
 // ***********************************************************************
 // <copyright file="TableFilterDefinitionBase.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

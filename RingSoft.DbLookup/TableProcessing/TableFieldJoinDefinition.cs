@@ -7,7 +7,7 @@
 // Last Modified On : 06-01-2023
 // ***********************************************************************
 // <copyright file="TableFieldJoinDefinition.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

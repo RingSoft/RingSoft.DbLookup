@@ -7,7 +7,7 @@
 // Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="AdvancedFindMemoCellProps.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

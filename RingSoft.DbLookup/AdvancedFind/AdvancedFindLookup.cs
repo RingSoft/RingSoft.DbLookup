@@ -7,7 +7,7 @@
 // Last Modified On : 07-15-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindLookup.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -18,7 +18,7 @@ using System.Text;
 namespace RingSoft.DbLookup.AdvancedFind
 {
     /// <summary>
-    /// Class AdvancedFindLookup.
+    /// AdvancedFindLookup Lookup Entity
     /// </summary>
     public class AdvancedFindLookup
     {

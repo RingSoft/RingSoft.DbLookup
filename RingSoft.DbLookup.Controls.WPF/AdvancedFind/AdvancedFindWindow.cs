@@ -7,7 +7,7 @@
 // Last Modified On : 11-07-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -32,7 +32,7 @@ using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 {
     /// <summary>
-    /// Class AdvancedFindWindow.
+    /// The Advanced Find Window.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="IAdvancedFindView" />
     /// </summary>

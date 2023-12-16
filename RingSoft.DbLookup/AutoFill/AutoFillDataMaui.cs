@@ -7,7 +7,7 @@
 // Last Modified On : 12-04-2023
 // ***********************************************************************
 // <copyright file="AutoFillDataMaui.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -38,9 +38,9 @@ namespace RingSoft.DbLookup.AutoFill
         public List<string> ContainsData { get; }
 
         /// <summary>
-        /// Gets the automatic fill value.
+        /// Gets the AutoFillValue.
         /// </summary>
-        /// <value>The automatic fill value.</value>
+        /// <value>The AutoFillValue.</value>
         public AutoFillValue AutoFillValue { get; }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// Initializes a new instance of the <see cref="AutoFillOutputData"/> class.
         /// </summary>
         /// <param name="containsData">The contains data.</param>
-        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="autoFillValue">The AutoFillValue.</param>
         /// <param name="beginText">The begin text.</param>
         public AutoFillOutputData(List<string> containsData, AutoFillValue autoFillValue, string beginText = "")
         {
@@ -484,7 +484,7 @@ namespace RingSoft.DbLookup.AutoFill
         /// Called when [output].
         /// </summary>
         /// <param name="newText">The new text.</param>
-        /// <param name="autoFillValue">The automatic fill value.</param>
+        /// <param name="autoFillValue">The AutoFillValue.</param>
         /// <param name="beginText">The begin text.</param>
         private void OnOutput(string newText, AutoFillValue autoFillValue = null, string beginText = "")
         {
@@ -510,7 +510,7 @@ namespace RingSoft.DbLookup.AutoFill
         }
 
         /// <summary>
-        /// Gets the automatic fill value.
+        /// Gets the AutoFillValue.
         /// </summary>
         /// <param name="editText">The edit text.</param>
         /// <returns>AutoFillValue.</returns>

@@ -7,7 +7,7 @@
 // Last Modified On : 10-29-2023
 // ***********************************************************************
 // <copyright file="DataEntryGridAutoFillHost.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -22,7 +22,7 @@ using System;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class DataEntryGridAutoFillHost.
+    /// A data grid edit host that hosts an AutoFillControl.
     /// Implements the <see cref="RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost.DataEntryGridEditingControlHost{RingSoft.DbLookup.Controls.WPF.AutoFillControl}" />
     /// </summary>
     /// <seealso cref="RingSoft.DataEntryControls.WPF.DataEntryGrid.EditingControlHost.DataEntryGridEditingControlHost{RingSoft.DbLookup.Controls.WPF.AutoFillControl}" />

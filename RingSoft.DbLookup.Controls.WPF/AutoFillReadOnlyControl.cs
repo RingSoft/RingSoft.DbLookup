@@ -7,7 +7,7 @@
 // Last Modified On : 09-23-2023
 // ***********************************************************************
 // <copyright file="AutoFillReadOnlyControl.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -25,7 +25,9 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class AutoFillReadOnlyControl.
+    /// <summary>
+    /// A textbox control that allows a user to see the related table. Displays a lookup window to
+    /// the user when the find button is clicked.  The user cannot change the value.
     /// Implements the <see cref="Control" />
     /// Implements the <see cref="IReadOnlyControl" />
     /// Implements the <see cref="IAutoFillControl" />

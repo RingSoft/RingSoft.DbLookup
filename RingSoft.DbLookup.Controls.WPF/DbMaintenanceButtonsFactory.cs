@@ -7,7 +7,7 @@
 // Last Modified On : 12-10-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceButtonsFactory.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -17,7 +17,7 @@ using RingSoft.DbMaintenance;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class DbMaintenanceButtonsFactory.
+    /// Creates a database window buttons control.
     /// </summary>
     public abstract class DbMaintenanceButtonsFactory
     {

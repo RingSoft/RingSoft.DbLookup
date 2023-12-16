@@ -7,7 +7,7 @@
 // Last Modified On : 10-29-2023
 // ***********************************************************************
 // <copyright file="AutoFillControl.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -59,7 +59,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         public LookupWindow LookupWindow { get; set; }
     }
     /// <summary>
-    /// Class AutoFillControl.
+    /// A textbox control that allows a user to link tables.  Displays a popup of related values to the user
+    /// when they type into it.  Displays a lookup window to the user when the find button is clicked.
     /// Implements the <see cref="Control" />
     /// Implements the <see cref="IAutoFillControl" />
     /// Implements the <see cref="IReadOnlyControl" />

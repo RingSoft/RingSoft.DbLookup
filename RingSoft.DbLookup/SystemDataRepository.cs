@@ -7,7 +7,7 @@
 // Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="SystemDataRepository.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -20,7 +20,7 @@ using System.Linq;
 namespace RingSoft.DbLookup
 {
     /// <summary>
-    /// Class SystemDataRepository.
+    /// Base portal class to the database.
     /// Implements the <see cref="IAdvancedFindDbProcessor" />
     /// </summary>
     /// <seealso cref="IAdvancedFindDbProcessor" />

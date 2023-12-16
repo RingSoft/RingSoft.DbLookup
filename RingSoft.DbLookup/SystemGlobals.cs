@@ -7,7 +7,7 @@
 // Last Modified On : 12-10-2023
 // ***********************************************************************
 // <copyright file="SystemGlobals.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -38,7 +38,7 @@ namespace RingSoft.DbLookup
     }
 
     /// <summary>
-    /// Class SystemGlobals.
+    /// Contains all the properties for this library.
     /// </summary>
     public static class SystemGlobals
     {

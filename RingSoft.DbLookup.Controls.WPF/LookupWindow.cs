@@ -7,7 +7,7 @@
 // Last Modified On : 11-29-2023
 // ***********************************************************************
 // <copyright file="LookupWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -24,7 +24,7 @@ using RingSoft.DbLookup.AutoFill;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class LookupWindow.
+    /// Displays a lookup control to the user and allows the user to select, add, or view an item.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="ILookupWindow" />
     /// Implements the <see cref="INotifyPropertyChanged" />

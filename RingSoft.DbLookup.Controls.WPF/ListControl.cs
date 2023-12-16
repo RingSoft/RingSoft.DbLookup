@@ -7,7 +7,7 @@
 // Last Modified On : 09-20-2023
 // ***********************************************************************
 // <copyright file="ListControl.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -21,7 +21,7 @@ using RingSoft.DataEntryControls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class ListControl.
+    /// Breaks a list into pages to display to the user.
     /// Implements the <see cref="Control" />
     /// Implements the <see cref="RingSoft.DbLookup.IListControlView" />
     /// </summary>

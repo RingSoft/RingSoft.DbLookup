@@ -7,7 +7,7 @@
 // Last Modified On : 07-07-2023
 // ***********************************************************************
 // <copyright file="LookupWindowFactory.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -22,7 +22,7 @@ using RingSoft.DbLookup.AutoFill;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class LookupWindowFactory.
+    /// Constructs a lookup window.
     /// </summary>
     public class LookupWindowFactory
     {

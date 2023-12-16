@@ -7,7 +7,7 @@
 // Last Modified On : 12-10-2023
 // ***********************************************************************
 // <copyright file="LookupControlsGlobals.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -166,7 +166,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
     }
     /// <summary>
-    /// Class LookupControlsGlobals.
+    /// Methods used by all classes in this library.
     /// </summary>
     public static class LookupControlsGlobals
     {

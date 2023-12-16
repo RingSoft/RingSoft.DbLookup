@@ -41,7 +41,7 @@ using RingSoft.DbLookup.QueryBuilder;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class ListWindow.
+    /// Contains a list control and allows the user to select a list item item.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="RingSoft.DbLookup.IListWindowView" />
     /// </summary>

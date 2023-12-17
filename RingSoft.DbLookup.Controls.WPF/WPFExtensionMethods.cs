@@ -7,7 +7,7 @@
 // Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="WPFExtensionMethods.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -25,7 +25,7 @@ using RingSoft.DataEntryControls.Engine;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class WpfExtensionMethods.
+    /// WPF lookup controls extension methods.
     /// </summary>
     internal static class WpfExtensionMethods
     {

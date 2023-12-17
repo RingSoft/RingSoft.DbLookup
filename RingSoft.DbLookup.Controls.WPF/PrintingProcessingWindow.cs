@@ -7,7 +7,7 @@
 // Last Modified On : 03-30-2023
 // ***********************************************************************
 // <copyright file="PrintingProcessingWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -32,13 +32,12 @@ using RingSoft.DataEntryControls.WPF;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class PrintingProcessingWindow.
+    /// Printing Processing Window.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="RingSoft.DbLookup.IPrintingProcessingView" />
     /// </summary>
     /// <seealso cref="BaseWindow" />
     /// <seealso cref="RingSoft.DbLookup.IPrintingProcessingView" />
-    /// <font color="red">Badly formed XML comment.</font>
     public class PrintingProcessingWindow : BaseWindow, IPrintingProcessingView
     {
         /// <summary>

@@ -7,7 +7,7 @@
 // Last Modified On : 12-12-2023
 // ***********************************************************************
 // <copyright file="RecordLockingWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -32,7 +32,7 @@ using RingSoft.DbMaintenance;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class RecordLockingWindow.
+    /// The Record Locking Window.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="IRecordLockingView" />
     /// </summary>

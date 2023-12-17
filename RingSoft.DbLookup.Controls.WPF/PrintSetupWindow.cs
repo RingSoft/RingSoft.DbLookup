@@ -7,7 +7,7 @@
 // Last Modified On : 02-07-2023
 // ***********************************************************************
 // <copyright file="PrintSetupWindow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -34,13 +34,12 @@ using RingSoft.Printing.Interop;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class PrintSetupWindow.
+    /// Print Setup Window.
     /// Implements the <see cref="BaseWindow" />
     /// Implements the <see cref="RingSoft.DbLookup.IPrinterSetupView" />
     /// </summary>
     /// <seealso cref="BaseWindow" />
     /// <seealso cref="RingSoft.DbLookup.IPrinterSetupView" />
-    /// <font color="red">Badly formed XML comment.</font>
     public class PrintSetupWindow : BaseWindow, IPrinterSetupView
     {
         /// <summary>

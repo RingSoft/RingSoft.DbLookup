@@ -7,7 +7,7 @@
 // Last Modified On : 12-08-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceDataEntryGridManager.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -83,7 +83,7 @@ namespace RingSoft.DbMaintenance
 
     }
     /// <summary>
-    /// Class DbMaintenanceDataEntryGridManager.
+    /// Class DbMaintenanceDataEntryGridManager.  Used to manage DbMaintenanceViewModel grids.
     /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManagerBase" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>

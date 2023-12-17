@@ -7,7 +7,7 @@
 // Last Modified On : 11-23-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceTestGlobals.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -23,7 +23,7 @@ using RingSoft.DbLookup.Testing;
 namespace RingSoft.DbMaintenance
 {
     /// <summary>
-    /// Class DbMaintenanceTestGlobals.
+    /// Class DbMaintenanceTestGlobals.  Used to unit test a DbMaintenanceViewModel.
     /// Implements the <see cref="IControlsUserInterface" />
     /// Implements the <see cref="RingSoft.DbMaintenance.IDbMaintenanceDataProcessor" />
     /// </summary>

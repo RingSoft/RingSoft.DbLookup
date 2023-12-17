@@ -7,7 +7,7 @@
 // Last Modified On : 05-24-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceStatusBarViewModel.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

@@ -7,7 +7,7 @@
 // Last Modified On : 11-20-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceDataEntryGridRow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -21,7 +21,7 @@ using RingSoft.DbLookup.ModelDefinition;
 namespace RingSoft.DbMaintenance
 {
     /// <summary>
-    /// Class DbMaintenanceDataEntryGridRow.
+    /// Class DbMaintenanceDataEntryGridRow.  Manages a DataEntryGridRow in a DbMaintenanceDataEntryGridManager
     /// Implements the <see cref="DataEntryGridRow" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>

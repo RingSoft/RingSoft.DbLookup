@@ -7,7 +7,7 @@
 // Last Modified On : 12-09-2023
 // ***********************************************************************
 // <copyright file="LookupContext.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -30,7 +30,8 @@ using RingSoft.DbLookup.TableProcessing;
 namespace RingSoft.DbLookup.EfCore
 {
     /// <summary>
-    /// A LookupContextBase derived object that is compatible with the Entity Framework Core.
+    /// A LookupContextBase derived object that is compatible with the Entity Framework Core.  All Table Definitions are
+    /// instantiated automatically by thi abstract class's Initialize method.
     /// </summary>
     /// <seealso cref="LookupContextBase" />
     public abstract class LookupContext : LookupContextBase, IAdvancedFindLookupContext
@@ -55,8 +56,9 @@ namespace RingSoft.DbLookup.EfCore
         //}
 
         /// <summary>
-        /// Has the Entity Framework platform set up this object's table and field properties based on DbContext's model setup.
-        /// Derived classes constructor must execute this method.
+        /// Has the Entity Framework platform set up this object's table and field definitions
+        /// based on DbContext's model setup.   The first time this class is used, this method
+        /// is run.
         /// </summary>
         public override void Initialize()
         {

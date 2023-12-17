@@ -7,7 +7,7 @@
 // Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="DbContextEfCore.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -58,7 +58,7 @@ namespace Microsoft.EntityFrameworkCore
 namespace RingSoft.DbLookup.EfCore
 {
     /// <summary>
-    /// Class DbContextEfCore.
+    /// The base class for all Entity Framework DbContext classes.
     /// Implements the <see cref="DbContext" />
     /// Implements the <see cref="RingSoft.DbLookup.IDbContext" />
     /// </summary>

@@ -7,7 +7,7 @@
 // Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="DbFieldConstants.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -21,7 +21,7 @@ namespace RingSoft.DbLookup.EfCore
     public abstract class DbFieldConstants
     {
         /// <summary>
-        /// Gets the type of the column type for field.
+        /// Gets the type of the column type for field. Used by builder.Property.HasColumnType().;
         /// </summary>
         /// <param name="fieldType">Type of the field.</param>
         /// <returns>System.String.</returns>

@@ -7,7 +7,7 @@
 // Last Modified On : 07-01-2023
 // ***********************************************************************
 // <copyright file="ExtensionMethods.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -18,7 +18,7 @@ using RingSoft.DbLookup.DataProcessor;
 namespace RingSoft.DbLookup.EfCore
 {
     /// <summary>
-    /// Class ExtensionMethods.
+    /// Entity Framework static extension methods.
     /// </summary>
     public static class ExtensionMethods
     {

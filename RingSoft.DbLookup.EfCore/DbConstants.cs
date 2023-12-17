@@ -7,7 +7,7 @@
 // Last Modified On : 11-23-2023
 // ***********************************************************************
 // <copyright file="DbConstants.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -17,7 +17,7 @@ using RingSoft.DbLookup.DataProcessor;
 namespace RingSoft.DbLookup.EfCore
 {
     /// <summary>
-    /// Class DbConstants.
+    /// Generates Entity Framework Property column string names HasColumnType.
     /// </summary>
     public class DbConstants
     {

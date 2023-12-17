@@ -7,7 +7,7 @@
 // Last Modified On : 02-24-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFormulaFilterRow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c)2023 . All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -20,7 +20,7 @@ using RingSoft.DbLookup.TableProcessing;
 namespace RingSoft.DbMaintenance
 {
     /// <summary>
-    /// Class AdvancedFindFormulaFilterRow.
+    /// Class AdvancedFindFormulaFilterRow (Deprecated).
     /// Implements the <see cref="RingSoft.DbMaintenance.AdvancedFindFilterRow" />
     /// </summary>
     /// <seealso cref="RingSoft.DbMaintenance.AdvancedFindFilterRow" />

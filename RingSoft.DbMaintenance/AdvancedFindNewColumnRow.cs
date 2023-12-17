@@ -7,7 +7,7 @@
 // Last Modified On : 02-24-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindNewColumnRow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************

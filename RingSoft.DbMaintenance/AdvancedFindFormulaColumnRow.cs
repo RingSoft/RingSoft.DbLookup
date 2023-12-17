@@ -7,7 +7,7 @@
 // Last Modified On : 07-23-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFormulaColumnRow.cs" company="Peter Ringering">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) 2023. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
@@ -19,7 +19,7 @@ using System;
 namespace RingSoft.DbMaintenance
 {
     /// <summary>
-    /// Class AdvancedFindFormulaColumnRow.
+    /// Class AdvancedFindFormulaColumnRow. (Deprecated)
     /// Implements the <see cref="RingSoft.DbMaintenance.AdvancedFindColumnRow" />
     /// </summary>
     /// <seealso cref="RingSoft.DbMaintenance.AdvancedFindColumnRow" />

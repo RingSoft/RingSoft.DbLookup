@@ -246,7 +246,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             var locationId = LocationAutoFillValue.GetEntity<MliLocationsTable>().Id;
             var context = SystemGlobals.DataRepository.GetDataContext();
 
-            if (stockId == 0 && !StockNumberAutoFillValue.Text.IsNullOrEmpty())
+            if (stockId == 0 
+                && StockNumberAutoFillValue != null 
+                && !StockNumberAutoFillValue.Text.IsNullOrEmpty())
             {
                 var stock = new StocksTable
                 {
@@ -257,7 +259,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
                 StockNumberAutoFillValue = stock.GetAutoFillValue();
             }
 
-            if (locationId == 0 && !LocationAutoFillValue.Text.IsNullOrEmpty())
+            if (locationId == 0 
+                && LocationAutoFillValue != null
+                && !LocationAutoFillValue.Text.IsNullOrEmpty())
             {
                 var location = new MliLocationsTable
                 {

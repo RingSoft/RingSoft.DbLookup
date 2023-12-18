@@ -12,7 +12,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
-            Employees1 = new HashSet<Employee>();
+            Underlings = new HashSet<Employee>();
             Orders = new HashSet<Order>();
             Territories = new HashSet<EmployeeTerritory>();
         }
@@ -63,15 +63,16 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
         [Column(TypeName = "ntext")]
         public string Notes { get; set; }
 
-        public int? ReportsTo { get; set; }
+        [Column("ReportsTo")]
+        public int? SupervisorId { get; set; }
 
         [StringLength(255)]
         public string PhotoPath { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Employee> Employees1 { get; set; }
+        public ICollection<Employee> Underlings { get; set; }
 
-        public Employee Employee1 { get; set; }
+        public Employee Supervisor { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<Order> Orders { get; set; }

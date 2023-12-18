@@ -350,7 +350,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             ViewModelInput.EmployeeViewModels.Add(this);
-            ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo))
+            ReportsToAutoFillSetup = new AutoFillSetup(_lookupContext.Employees.GetFieldDefinition(p => p.SupervisorId))
             {
                 AddViewParameter = ViewModelInput
             };
@@ -396,7 +396,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Extension = entity.Extension;
             Notes = entity.Notes;
             PhotoPath = entity.PhotoPath;
-            ReportsTo = entity.Employee1.GetAutoFillValue();
+            ReportsTo = entity.Supervisor.GetAutoFillValue();
 
             if (ReadOnlyMode)
                 ControlsGlobals.UserInterface.ShowMessageBox(
@@ -425,7 +425,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 PhotoPath = PhotoPath,
                 BirthDate = BirthDate,
                 HireDate = HireDate,
-                ReportsTo = ReportsTo.GetEntity<Employee>().EmployeeID
+                SupervisorId = ReportsTo.GetEntity<Employee>().EmployeeID
             };
 
             return employee;

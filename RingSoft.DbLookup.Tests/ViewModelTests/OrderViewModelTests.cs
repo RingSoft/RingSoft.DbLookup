@@ -99,7 +99,7 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
                 FirstName = "Second",
                 LastName = "Employee",
                 FullName = "Second Employee",
-                ReportsTo = employee.EmployeeID,
+                SupervisorId = employee.EmployeeID,
             };
 
             context.SaveEntity(secondEmployee, "Saving Employee");

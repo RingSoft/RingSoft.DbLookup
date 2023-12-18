@@ -95,9 +95,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                 .WithMany(p => p.Territories)
                 .HasForeignKey(p => p.RegionID);
 
-            modelBuilder.Entity<Employee>().HasOne(p => p.Employee1)
-                .WithMany(p => p.Employees1)
-                .HasForeignKey(p => p.ReportsTo);
+            modelBuilder.Entity<Employee>().HasOne(p => p.Supervisor)
+                .WithMany(p => p.Underlings)
+                .HasForeignKey(p => p.SupervisorId);
 
             ConfigureAdvancedFind(modelBuilder);
 

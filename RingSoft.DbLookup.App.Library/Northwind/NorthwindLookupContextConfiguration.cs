@@ -232,7 +232,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(_lookupContext.Employees);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", p => p.FullName, 40);
             EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
-            var employeeJoin = EmployeesLookup.Include(p => p.Employee1);
+            var employeeJoin = EmployeesLookup.Include(p => p.Supervisor);
             employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", p => p.FullName, 40);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
@@ -310,7 +310,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             _lookupContext.Orders.GetFieldDefinition(p => p.Freight)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency);
 
-            _lookupContext.Employees.GetFieldDefinition(p => p.ReportsTo).HasDescription("Supervisor");
+            _lookupContext.Employees.GetFieldDefinition(p => p.SupervisorId).HasDescription("Supervisor");
                 //.DoesAllowRecursion(false);
 
             _lookupContext.Employees.GetFieldDefinition(p => p.Notes).IsMemo();

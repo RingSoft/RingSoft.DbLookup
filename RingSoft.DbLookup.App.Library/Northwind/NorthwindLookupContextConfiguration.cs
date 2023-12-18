@@ -139,40 +139,21 @@ namespace RingSoft.DbLookup.App.Library.Northwind
 
         public void ConfigureLookups()
         {
-            var employeeNameFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
-            //var employeeSupervisorFormula = "[{Alias}].[FirstName] + ' ' + [{Alias}].[LastName]";
-            var employeeSupervisorFormula = employeeNameFormula;
-            var orderEmployeeNameFormula = GetOrdersEmployeeNameFormula();
-            var extendedPriceFormula = "([{Alias}].[Quantity] * 1.0) * [{Alias}].[UnitPrice]";
-
-            switch (DataProcessorType)
-            {
-                case DataProcessorTypes.Sqlite:
-                    employeeNameFormula = "[{Alias}].[FirstName] || ' ' || [{Alias}].[LastName]";
-                    employeeSupervisorFormula = "[{Alias}].[FirstName] || ' ' || [{Alias}].[LastName]";
-                    break;
-                case DataProcessorTypes.SqlServer:
-                    break;
-                case DataProcessorTypes.MySql:
-                    employeeNameFormula = "CONCAT(`{Alias}`.`FirstName`, ' ', `{Alias}`.`LastName`)";
-                    employeeSupervisorFormula = "CONCAT(`{Alias}`.`FirstName`, ' ', `{Alias}`.`LastName`)";
-                    extendedPriceFormula = "(`{Alias}`.`Quantity` * 1.0) * `{Alias}`.`UnitPrice`";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
             OrdersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            //OrdersLookup.AddVisibleColumnDefinition(p => p.OrderId, "Order ID", p => p.OrderID, 15);
-            OrdersLookup.AddVisibleColumnDefinition(p => p.Order, "Order", p => p.OrderName, 20);
-            var orderInclude = OrdersLookup.Include(p => p.Customer);
+            OrdersLookup.AddVisibleColumnDefinition(p => p.Order
+                , "Order", p => p.OrderName, 20);
 
-            orderInclude.AddVisibleColumnDefinition(p => p.Customer, "Customer", 
-                    p => p.CompanyName, 50);
+            var orderInclude = OrdersLookup
+                .Include(p => p.Customer);
+            orderInclude.AddVisibleColumnDefinition(p => p.Customer
+                , "Customer"
+                , p => p.CompanyName, 50);
 
-            var join = OrdersLookup.Include(p => p.Employee);
-            join.AddVisibleColumnDefinition(p => p.Employee, "Employee", 
-                p => p.FullName, 30);
+            var join = OrdersLookup
+                .Include(p => p.Employee);
+            join.AddVisibleColumnDefinition(p => p.Employee
+                , "Employee"
+                , p => p.FullName, 30);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
 
@@ -230,10 +211,19 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             CustomerNameLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
 
             EmployeesLookup = new LookupDefinition<EmployeeLookup, Employee>(_lookupContext.Employees);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Name, "Name", p => p.FullName, 40);
-            EmployeesLookup.AddVisibleColumnDefinition(p => p.Title, "Title", p => p.Title, 20);
-            var employeeJoin = EmployeesLookup.Include(p => p.Supervisor);
-            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor, "Supervisor", p => p.FullName, 40);
+            EmployeesLookup
+                .AddVisibleColumnDefinition(p => p.Name
+                    , "Name"
+                    , p => p.FullName, 40);
+            EmployeesLookup
+                .AddVisibleColumnDefinition(p => p.Title
+                    , "Title"
+                    , p => p.Title, 20);
+            var employeeJoin = EmployeesLookup
+                .Include(p => p.Supervisor);
+            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor
+                , "Supervisor"
+                , p => p.FullName, 40);
 
             _lookupContext.Employees.HasLookupDefinition(EmployeesLookup);
 

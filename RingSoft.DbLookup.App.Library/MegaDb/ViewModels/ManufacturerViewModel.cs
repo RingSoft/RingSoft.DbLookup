@@ -43,21 +43,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private LookupCommand _itemsLookupCommand;
-
-        public LookupCommand ItemsLookupCommand
-        {
-            get => _itemsLookupCommand;
-            set
-            {
-                if (_itemsLookupCommand == value)
-                    return;
-
-                _itemsLookupCommand = value;
-                OnPropertyChanged(nameof(ItemsLookupCommand), false);
-            }
-        }
-
         #endregion
 
         public RelayCommand AddModifyCommand { get; }
@@ -108,8 +93,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             _itemsLookup.FilterDefinition.ClearFixedFilters();
             _itemsLookup.FilterDefinition
                 .AddFixedFilter(p => p.ManufacturerId, Conditions.Equals, newEntity.Id);
-
-            ItemsLookupCommand = GetLookupCommand(LookupCommands.Refresh, null, _viewModelInput);
         }
 
         protected override void LoadFromEntity(Manufacturer entity)
@@ -132,7 +115,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         protected override void ClearData()
         {
             ManufacturerId = 0;
-            ItemsLookupCommand = GetLookupCommand(LookupCommands.Clear);
         }
 
         protected override bool SaveEntity(Manufacturer entity)
@@ -156,7 +138,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                ItemsLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+            {
+                ItemsLookupDefinition.SetCommand(GetLookupCommand(LookupCommands.AddModify));
+            }
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

@@ -53,7 +53,7 @@
 
             <Button Grid.Row="4" Grid.Column="0" Height="20" VerticalAlignment="Top" Content="_Add/Modify" Command="{Binding AddViewCommand}"/>
 
-            <lc:LookupControl Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" Command="{Binding Path=StockCostQuantityCommand}">
+            <lc:LookupControl Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=StockCostQuantityLookupDefinition}" >
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf PurchasedDate, Type={x:Type lm:StockCostQuantityLookup}}" Width="250" Header="Purchase Date" DesignText="01/01/1980"/>
                     <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:StockCostQuantityLookup}}" Width="100" Header="Quantity" TextAlignment="Right" DesignText="100,000"/>

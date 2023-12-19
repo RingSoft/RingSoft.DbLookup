@@ -41,7 +41,7 @@
 
             <Button Grid.Row="2" Grid.Column="0" Content="_Add/Modify" Height="20" VerticalAlignment="Top" Command="{Binding AddModifyCommand}"/>
 
-            <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}" Command="{Binding Path=ItemsLookupCommand}">
+            <lc:LookupControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" LookupDefinition="{Binding Path=ItemsLookupDefinition}">
                 <lc:LookupControl.LookupColumns>
                     <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="200" Header="Item" DesignText="000ITEM0000"/>
                     <lc:LookupColumn PropertyName="{lc:NameOf Location, Type={x:Type lm:ItemLookup}}" Width="140" Header="Location" DesignText="Produce"/>

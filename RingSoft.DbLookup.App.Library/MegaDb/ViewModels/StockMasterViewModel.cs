@@ -124,21 +124,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
             }
         }
 
-        private LookupCommand _stockCostQuantityLookupCommand;
-
-        public LookupCommand StockCostQuantityCommand
-        {
-            get => _stockCostQuantityLookupCommand;
-            set
-            {
-                if (_stockCostQuantityLookupCommand == value)
-                    return;
-
-                _stockCostQuantityLookupCommand = value;
-                OnPropertyChanged(nameof(StockCostQuantityCommand), false);
-            }
-        }
-
         #endregion
 
         public UiCommand StockUiCommand { get; } = new UiCommand();
@@ -344,7 +329,9 @@ namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
         private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                StockCostQuantityCommand = GetLookupCommand(LookupCommands.AddModify);
+            {
+                StockCostQuantityLookupDefinition.SetCommand(GetLookupCommand(LookupCommands.AddModify));
+            }
         }
 
         private void StockLocationLeave()

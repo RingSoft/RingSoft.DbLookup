@@ -16,9 +16,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
             Orders = new HashSet<Order>();
             Territories = new HashSet<EmployeeTerritory>();
         }
-
         public int EmployeeID { get; set; }
-
         public string FullName { get; set; }
 
         [Required]
@@ -71,7 +69,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<Employee> Underlings { get; set; }
-
         public Employee Supervisor { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

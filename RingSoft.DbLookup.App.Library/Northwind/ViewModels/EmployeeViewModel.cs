@@ -300,20 +300,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private LookupCommand _ordersLookupCommand;
-        public LookupCommand OrdersLookupCommand
-        {
-            get => _ordersLookupCommand;
-            set
-            {
-                if (_ordersLookupCommand == value)
-                    return;
-
-                _ordersLookupCommand = value;
-                OnPropertyChanged(nameof(OrdersLookupCommand), false);
-            }
-        }
-
         #endregion
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }
@@ -443,7 +429,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         private void OnAddModify()
         {
             if (ExecuteAddModifyCommand() == DbMaintenanceResults.Success)
-                OrdersLookupCommand = GetLookupCommand(LookupCommands.AddModify);
+            {
+                OrdersLookupDefinition.SetCommand(GetLookupCommand(LookupCommands.AddModify));
+            }
         }
 
         public override void OnWindowClosing(CancelEventArgs e)

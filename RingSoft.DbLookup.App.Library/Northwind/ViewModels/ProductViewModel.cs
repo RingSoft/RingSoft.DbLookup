@@ -194,21 +194,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
         }
 
-        private LookupCommand _orderDetailsLookupCommand;
-
-        public LookupCommand OrderDetailsLookupCommand
-        {
-            get => _orderDetailsLookupCommand;
-            set
-            {
-                if (_orderDetailsLookupCommand == value)
-                    return;
-
-                _orderDetailsLookupCommand = value;
-                OnPropertyChanged(nameof(OrderDetailsLookupCommand), false);
-            }
-        }
-
         #endregion
 
         internal NorthwindViewModelInput ViewModelInput { get; private set; }

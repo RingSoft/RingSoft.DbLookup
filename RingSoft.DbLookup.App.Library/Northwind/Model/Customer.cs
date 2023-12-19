@@ -12,14 +12,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.Model
             Orders = new HashSet<Order>();
             CustomerDemographics = new HashSet<CustomerCustomerDemo>();
         }
-
         [StringLength(5)]
         public string CustomerID { get; set; }
-
         [Required]
         [StringLength(40)]
         public string CompanyName { get; set; }
-
         [StringLength(30)]
         public string ContactName { get; set; }
 

@@ -85,6 +85,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new EmployeeConiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
@@ -94,10 +95,6 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
             modelBuilder.Entity<Territory>().HasOne(p => p.Region)
                 .WithMany(p => p.Territories)
                 .HasForeignKey(p => p.RegionID);
-
-            modelBuilder.Entity<Employee>().HasOne(p => p.Supervisor)
-                .WithMany(p => p.Underlings)
-                .HasForeignKey(p => p.SupervisorId);
 
             ConfigureAdvancedFind(modelBuilder);
 

@@ -104,10 +104,10 @@
                 <TabItem Header="Orders">
                     <DockPanel>
                         <Button Content="_Add/Modify" Command="{Binding AddModifyCommand}" VerticalAlignment="Top"/>
-                        <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" Command="{Binding Path=OrdersLookupCommand}">
+                        <lc:LookupControl LookupDefinition="{Binding Path=OrdersLookupDefinition}" >
                             <lc:LookupControl.LookupColumns>
-                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderLookup}}" Width="150" Header="Order" DesignText="01/01/1980"/>
-                                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderLookup}}" Width="350" Header="Customer" DesignText="Rattlesnake Canyon Grocery"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderLookup}}" Width="150" Header="Order" />
+                                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderLookup}}" Width="350" Header="Customer"/>
                             </lc:LookupControl.LookupColumns>
                         </lc:LookupControl>
                     </DockPanel>

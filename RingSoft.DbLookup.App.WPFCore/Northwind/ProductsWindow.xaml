@@ -89,15 +89,15 @@
                 </TabItem>
                 <TabItem Header="Orders">
                     <Grid>
-                        <lc:LookupControl LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" Command="{Binding Path=OrderDetailsLookupCommand}">
+                        <lc:LookupControl LookupDefinition="{Binding Path=OrderDetailsLookupDefinition}" DesignText="01/01/1980 WWWW">
                             <lc:LookupControl.LookupColumns>
-                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderDetailLookup}}" Width="150" Header="Order" DesignText="01/01/1980"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Order, Type={x:Type lm:OrderDetailLookup}}" Width="150" Header="Order" />
 
-                                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderDetailLookup}}" Width="180" Header="Customer" DesignText="Rattlesnake Canyon Grocery"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderDetailLookup}}" Width="180" Header="Customer" />
 
-                                <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" DesignText="100" TextAlignment="Right"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf Quantity, Type={x:Type lm:OrderDetailLookup}}" Width="60" Header="Quantity" TextAlignment="Right"/>
 
-                                <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="75" Header="Price" DesignText="$100.00" TextAlignment="Right"/>
+                                <lc:LookupColumn PropertyName="{lc:NameOf UnitPrice, Type={x:Type lm:OrderDetailLookup}}" Width="75" Header="Price" TextAlignment="Right"/>
                             </lc:LookupControl.LookupColumns>
                         </lc:LookupControl>
                     </Grid>

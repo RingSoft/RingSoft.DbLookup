@@ -130,6 +130,15 @@ namespace RingSoft.DbLookup.Lookup
             SetupColumn();
         }
 
+        internal override void SetupColumn()
+        {
+            base.SetupColumn();
+            if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
+            {
+                HorizontalAlignment = LookupColumnAlignmentTypes.Left;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition"/> class.
         /// </summary>

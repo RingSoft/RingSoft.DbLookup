@@ -163,7 +163,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the horizontal alignment type.
         /// </summary>
         /// <value>The horizontal alignment type.</value>
-        public LookupColumnAlignmentTypes HorizontalAlignment { get; private set; }
+        public LookupColumnAlignmentTypes HorizontalAlignment { get; internal set; }
 
         /// <summary>
         /// Gets the search for host identifier.
@@ -234,7 +234,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <summary>
         /// Setups the column.
         /// </summary>
-        internal void SetupColumn()
+        internal virtual void SetupColumn()
         {
             HorizontalAlignment = SetupDefaultHorizontalAlignment();
         }

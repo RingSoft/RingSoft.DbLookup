@@ -652,7 +652,9 @@ namespace RingSoft.DbLookup
                 var type = child.ParentObject.GetType();
                 if (child.ParentObject is LookupJoin lookupJoin)
                 {
-                    var parentLookupJoin = result.FirstOrDefault(p => p.ChildJoin == lookupJoin.JoinDefinition);
+                    var parentLookupJoin = result
+                        .FirstOrDefault(p => 
+                            p.ChildJoin.Alias == lookupJoin.JoinDefinition.Alias);
                     if (parentLookupJoin != null)
                     {
                         var joinInfo = new JoinInfo()

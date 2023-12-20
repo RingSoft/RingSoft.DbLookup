@@ -118,11 +118,13 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             _lookupContext.StockMasters.HasLookupDefinition(StockMasterLookup);
 
             StockCostQuantityLookup = new LookupDefinition<StockCostQuantityLookup, StockCostQuantity>(_lookupContext.StockCostQuantities);
-            StockCostQuantityLookup.Include(p => p.StockMaster)
+            StockCostQuantityLookup
+                .Include(p => p.StockMaster)
                 .Include(p => p.Stock)
                 .AddVisibleColumnDefinition(p => p.StockNumber
                     , "Stock Number", p => p.Name, 25);
-            locationCol = StockCostQuantityLookup.Include(p => p.StockMaster)
+            locationCol = StockCostQuantityLookup
+                .Include(p => p.StockMaster)
                 .Include(p => p.MliLocation)
                 .AddVisibleColumnDefinition(p => p.Location
                     , "Location", p => p.Name, 25);

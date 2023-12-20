@@ -779,7 +779,8 @@ namespace RingSoft.DbLookup.AdvancedFind
                 }
             }
 
-            throw new Exception($"Could not find path '{path}'");
+            //throw new Exception($"Could not find path '{path}'");
+            return null;
         }
 
         /// <summary>

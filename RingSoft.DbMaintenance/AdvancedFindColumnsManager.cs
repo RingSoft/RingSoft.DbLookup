@@ -98,6 +98,31 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        public override void LoadGrid(IEnumerable<AdvancedFindColumn> entityList)
+        {
+            var listToLoad = new List<AdvancedFindColumn>();
+            foreach (var advancedFindColumn in entityList)
+            {
+                if (!advancedFindColumn.Path.IsNullOrEmpty())
+                {
+                    var treeItem = ViewModel
+                        .AdvancedFindTree
+                        .ProcessFoundTreeViewItem(advancedFindColumn.Path);
+
+                    if (treeItem == null)
+                    {
+                        ControlsGlobals.UserInterface.ShowMessageBox($"Skipping Column {advancedFindColumn.Path}"
+                        , "Invalid Column", RsMessageBoxIcons.Exclamation);
+                    }
+                    else
+                    {
+                        listToLoad.Add(advancedFindColumn);
+                    }
+                }
+            }
+            base.LoadGrid(listToLoad);
+        }
+
         //if (entity.Formula.IsNullOrEmpty())
         //{
         //    var tableDefinition =

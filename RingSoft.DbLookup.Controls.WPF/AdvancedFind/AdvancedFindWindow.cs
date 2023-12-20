@@ -356,6 +356,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        public void SelectFiltersTab()
+        {
+            TabControl.SelectedItem = FiltersTabItem;
+        }
+
         //public void LockTable(bool lockValue)
         //{
         //    TableListControl.IsEnabled = !lockValue;

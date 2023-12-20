@@ -95,6 +95,8 @@ namespace RingSoft.DbMaintenance
         /// <value>The view model.</value>
         public AdvancedFindViewModel ViewModel { get; set; }
 
+        public bool HasData { get; private set; }
+
         /// <summary>
         /// The reset lookup
         /// </summary>
@@ -349,7 +351,35 @@ namespace RingSoft.DbMaintenance
         public override void LoadGrid(IEnumerable<AdvancedFindFilter> entityList)
         {
             ViewModel.LookupDefinition.FilterDefinition.ClearUserFilters();
-            base.LoadGrid(entityList);
+            var listToLoad = new List<AdvancedFindFilter>();
+            foreach (var advancedFindFilter in entityList)
+            {
+                if (advancedFindFilter.SearchForAdvancedFindId != null)
+                {
+                    listToLoad.Add(advancedFindFilter);
+                }
+                else
+                {
+                    if (!advancedFindFilter.Path.IsNullOrEmpty())
+                    {
+                        var treeItem = ViewModel
+                            .AdvancedFindTree
+                            .ProcessFoundTreeViewItem(advancedFindFilter.Path);
+
+                        if (treeItem == null)
+                        {
+                            ControlsGlobals.UserInterface.ShowMessageBox($"Skipping Filter {advancedFindFilter.Path}"
+                                , "Invalid Filter", RsMessageBoxIcons.Exclamation);
+                        }
+                        else
+                        {
+                            listToLoad.Add(advancedFindFilter);
+                        }
+                    }
+                }
+            }
+            base.LoadGrid(listToLoad);
+            HasData = listToLoad.Any();
             if (Rows.Any())
             {
                 if (Rows.Count >= 2)
@@ -543,7 +573,8 @@ namespace RingSoft.DbMaintenance
                 ViewModel.View.ShowFiltersEllipse(true);
             }
             //Grid?.RefreshGridView();
-            Grid?.GotoCell(row, (int)FilterColumns.Search);
+            ViewModel.View.SelectFiltersTab();
+            GotoCell(row, (int)FilterColumns.Search);
         }
 
         /// <summary>

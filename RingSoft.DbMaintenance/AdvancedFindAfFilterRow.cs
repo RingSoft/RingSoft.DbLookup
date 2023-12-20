@@ -185,8 +185,12 @@ namespace RingSoft.DbMaintenance
 
                 if (FilterItemDefinition == null)
                 {
-                    FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(advancedFindId,
-                        Manager.ViewModel.LookupDefinition, Path, true, GetNewFilterIndex());
+                    if (ValidateAfAdvancedFind(advancedFindId))
+                    {
+                        FilterItemDefinition = Manager.ViewModel.LookupDefinition.FilterDefinition.AddUserFilter(
+                            advancedFindId,
+                            Manager.ViewModel.LookupDefinition, Path, true, GetNewFilterIndex());
+                    }
                 }
                 else
                 {
@@ -198,6 +202,52 @@ namespace RingSoft.DbMaintenance
             {
                 Manager.ViewModel.LookupDefinition.FilterDefinition.RemoveUserFilter(filter);
             }
+        }
+
+        private bool ValidateAfAdvancedFind(int advancedFindId)
+        {
+            var context = SystemGlobals.DataRepository.GetDataContext();
+            var table = context.GetTable<AdvancedFind>();
+            var afAdvancedFind = table
+                .FirstOrDefault(p => p.Id == advancedFindId);
+            if (afAdvancedFind != null)
+            {
+                afAdvancedFind = afAdvancedFind.FillOutProperties(true);
+                foreach (var advancedFindFilter in afAdvancedFind.Filters)
+                {
+                    if (advancedFindFilter.SearchForAdvancedFindId == null)
+                    {
+                        if (!advancedFindFilter.Path.IsNullOrEmpty())
+                        {
+                            var foundItem = Manager
+                                .ViewModel
+                                .AdvancedFindTree
+                                .ProcessFoundTreeViewItem(
+                                    advancedFindFilter.Path);
+                            if (foundItem == null)
+                            {
+                                var message = $"Invalid Advanced Find '{afAdvancedFind.Name}' Path: '{advancedFindFilter.Path}'";
+                                var caption = "Invalid Advanced Find";
+                                ControlsGlobals
+                                    .UserInterface
+                                    .ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                                AutoFillValue = null;
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!ValidateAfAdvancedFind(advancedFindFilter
+                                .SearchForAdvancedFindId
+                                .GetValueOrDefault()))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -249,7 +299,7 @@ namespace RingSoft.DbMaintenance
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool ValidateRow()
         {
-            if (!AutoFillValue.IsValid())
+            if (AutoFillValue != null && !AutoFillValue.IsValid())
             {
                 var message = "Search For Advanced Find is invalid.";
                 var caption = "Validation Failure";

@@ -88,6 +88,8 @@ namespace RingSoft.DbMaintenance
         /// Checks the table is focused.
         /// </summary>
         void CheckTableIsFocused();
+
+        void SelectFiltersTab();
     }
 
     //public class TreeViewFormulaData
@@ -766,10 +768,7 @@ namespace RingSoft.DbMaintenance
             ColumnsManager.LoadGrid(entity.Columns);
             FiltersManager.LoadGrid(entity.Filters);
 
-            if (entity.Filters.Any())
-            {
-                View.ShowFiltersEllipse(true);
-            }
+            View.ShowFiltersEllipse(FiltersManager.HasData);
 
             if (tableDefinition.LookupDefinition != null)
             {

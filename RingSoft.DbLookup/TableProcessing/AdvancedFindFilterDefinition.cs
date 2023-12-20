@@ -143,7 +143,14 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 var afItem = lookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(entity.Path,
                     TreeViewType.AdvancedFind);
-                TableDescription = afItem.Name;
+                if (afItem == null)
+                {
+                    TableDescription = lookupDefinition.TableDefinition.Description;
+                }
+                else
+                {
+                    TableDescription = afItem.Name;
+                }
             }
 
             if (entity.SearchForAdvancedFindId != null) 

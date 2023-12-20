@@ -912,10 +912,13 @@ namespace RingSoft.DbLookup.TableProcessing
         {
             Expression result = null;
 
+            Expression fixedFilter = null;
+            Expression userFilter = null;
+
             try
             {
-                var fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
-                var userFilter = UserBundle.GetMauiFilter<TEntity>(param);
+                fixedFilter = FixedBundle.GetMauiFilter<TEntity>(param);
+                userFilter = UserBundle.GetMauiFilter<TEntity>(param);
 
                 if (fixedFilter != null && userFilter != null)
                 {

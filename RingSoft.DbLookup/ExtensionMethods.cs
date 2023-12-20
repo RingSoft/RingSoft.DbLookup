@@ -664,6 +664,10 @@ namespace RingSoft.DbLookup
                         };
                         result.Add(joinInfo);
                     }
+                    else
+                    {
+                        
+                    }
                 }
             }
 

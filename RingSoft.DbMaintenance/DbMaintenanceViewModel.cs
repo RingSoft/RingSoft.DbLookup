@@ -412,7 +412,19 @@ namespace RingSoft.DbMaintenance
         {
             if (LookupAddViewArgs != null)
             {
-                var primaryKeyValue = GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
+                PrimaryKeyValue primaryKeyValue = null;
+                if (LookupAddViewArgs.LookupData != null)
+                {
+                    primaryKeyValue = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
+                    if (LookupAddViewArgs
+                            .LookupData
+                            .SelectedPrimaryKeyValue != null)
+                    {
+                        primaryKeyValue =
+                            GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
+                    }
+                }
+
                 switch (LookupAddViewArgs.LookupFormMode)
                 {
                     case LookupFormModes.Add:

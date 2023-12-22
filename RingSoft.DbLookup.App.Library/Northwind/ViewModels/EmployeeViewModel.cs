@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
-using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
+using System;
+using System.ComponentModel;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {

@@ -34,7 +34,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             _lookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext;
             _manager = manager;
 
-            _productAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ProductID))
+            _productAutoFillSetup = new AutoFillSetup(
+                TableDefinition
+                    .GetFieldDefinition(p => p.ProductID))
             {
                 AddViewParameter = _manager.OrderViewModel.ViewModelInput
             };

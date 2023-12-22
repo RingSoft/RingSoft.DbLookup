@@ -143,15 +143,14 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             OrdersLookup.AddVisibleColumnDefinition(p => p.Order
                 , "Order", p => p.OrderName, 20);
 
-            var orderInclude = OrdersLookup
-                .Include(p => p.Customer);
-            orderInclude.AddVisibleColumnDefinition(p => p.Customer
+            OrdersLookup.Include(p => p.Customer)
+            .AddVisibleColumnDefinition(p => p.Customer
                 , "Customer"
                 , p => p.CompanyName, 50);
 
-            var join = OrdersLookup
-                .Include(p => p.Employee);
-            join.AddVisibleColumnDefinition(p => p.Employee
+            OrdersLookup
+                .Include(p => p.Employee)
+                .AddVisibleColumnDefinition(p => p.Employee
                 , "Employee"
                 , p => p.FullName, 30);
 
@@ -195,14 +194,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind
             _lookupContext.Products.HasLookupDefinition(ProductsLookup);
 
             CustomerIdLookup = new LookupDefinition<CustomerLookup, Customer>(_lookupContext.Customers);
-            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId, "Customer Id", p => p.CustomerID, 20);
-            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName, "Company Name", p => p.CompanyName, 40);
-            CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName, "Contact", p => p.ContactName, 40);
-
-            //var formula = "SELECT Customers.CustomerId, Customers.CompanyName, Customers.ContactName FROM Customers WHERE Customers.CustomerId = 'ALFKI'";
-            //CustomerIdLookup.HasFromFormula(formula);
-
-            //DbDataProcessor.ShowSqlStatementWindow();
+            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CustomerId
+                , "Customer Id", p => p.CustomerID, 20);
+            CustomerIdLookup.AddVisibleColumnDefinition(p => p.CompanyName
+                , "Company Name", p => p.CompanyName, 40);
+            CustomerIdLookup.AddVisibleColumnDefinition(p => p.ContactName
+                , "Contact", p => p.ContactName, 40);
 
             _lookupContext.Customers.HasLookupDefinition(CustomerIdLookup);
 
@@ -219,9 +216,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 .AddVisibleColumnDefinition(p => p.Title
                     , "Title"
                     , p => p.Title, 20);
-            var employeeJoin = EmployeesLookup
-                .Include(p => p.Supervisor);
-            employeeJoin.AddVisibleColumnDefinition(p => p.Supervisor
+            EmployeesLookup
+                .Include(p => p.Supervisor)
+                .AddVisibleColumnDefinition(p => p.Supervisor
                 , "Supervisor"
                 , p => p.FullName, 40);
 

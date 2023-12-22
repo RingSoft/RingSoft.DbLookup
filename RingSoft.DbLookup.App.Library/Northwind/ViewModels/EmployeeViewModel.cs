@@ -342,9 +342,11 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             };
 
             var ordersLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
-            ordersLookup.AddVisibleColumnDefinition(p => p.Order, p => p.OrderName);
+            ordersLookup.AddVisibleColumnDefinition(p => p.Order
+                , p => p.OrderName);
             ordersLookup.Include(p => p.Customer)
-                .AddVisibleColumnDefinition(p => p.Customer, p => p.CompanyName);
+                .AddVisibleColumnDefinition(p => p.Customer
+                    , p => p.CompanyName);
 
             OrdersLookupDefinition = ordersLookup;
             RegisterLookup(OrdersLookupDefinition, ViewModelInput);
@@ -421,7 +423,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             EmployeeId = 0;
             FirstName = LastName = string.Empty;
-            Title = TitleOfCourtesy = Address = City = Region = PostalCode = Country = HomePhone = Extension = Notes= PhotoPath = null;
+            Title = null;
+            TitleOfCourtesy = Address = City = Region = PostalCode = Country = HomePhone = Extension = Notes= PhotoPath = null;
             BirthDate = HireDate = null;
             ReportsTo = null;
         }

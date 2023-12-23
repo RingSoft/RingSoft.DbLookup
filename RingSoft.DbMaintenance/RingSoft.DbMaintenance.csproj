@@ -3,21 +3,24 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>8.4.3</Version>
+    <Version>8.5.2</Version>
     <Authors>Peter Ringering</Authors>
-    <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore or RingSoft.DbLookup.Ef6.</Description>
+    <Description>A view model base class that retrieves, saves, and deletes a record in a database table.  Use with RingSoft.DbLookup.EfCore.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://www.ringsoft.site</PackageProjectUrl>
+    <PackageProjectUrl>https://ringsoft.site/wpf-database-lookup-view-model-maintenance/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Entity Framework, Database Table Maintenance</PackageTags>
-    <PackageReleaseNotes>Split DbMaintenance.LoadFromEntity.  Added PopulatePrimaryKeyControls which runs in Save and Load operations.  LoadFromEntity only runs during Load operations.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIcon>database_3.png</PackageIcon>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <Copyright>2023</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="database_3.png">
+	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
+	  <None Include="database_3.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

@@ -4,18 +4,20 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>8.4.3</Version>
+    <Version>8.5.2</Version>
     <Authors>Peter Ringering</Authors>
     <Product>RingSoft.DbLookup.EntityFrameworkCore</Product>
-    <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core</Description>
+    <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core 8.0</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://www.ringsoft.site</PackageProjectUrl>
+    <PackageProjectUrl>https://ringsoft.site/wpf-database-lookup-view-model-maintenance/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Database Paging, Entity Framework Core</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Split DbMaintenance.LoadFromEntity.  Added PopulatePrimaryKeyControls which runs in Save and Load operations.  LoadFromEntity only runs during Load operations.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIcon>magnify.png</PackageIcon>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <Copyright>2023</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\magnify.png">
+	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
+	  <None Include="..\magnify.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

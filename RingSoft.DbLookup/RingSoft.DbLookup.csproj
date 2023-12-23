@@ -12,7 +12,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageProjectUrl>https://ringsoft.site/wpf-database-lookup-view-model-maintenance/</PackageProjectUrl>
-    <PackageReleaseNotes>Split DbMaintenance.LoadFromEntity.  Added PopulatePrimaryKeyControls which runs in Save and Load operations.  LoadFromEntity only runs during Load operations.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <RepositoryType></RepositoryType>
     <PackageTags>Database Paging, Entity Framework Core</PackageTags>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>

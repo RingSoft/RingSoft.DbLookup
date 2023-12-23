@@ -1,4 +1,4 @@
-# Database Lookup
+# Data Entry Controls Engine
 
 This package contains base classes that manage the RingSoft.DbLookup.EfCore project.  Do not install this package directly.  Instead, install the RingSoft.DbLookup.EfCore package which contains this package.
 

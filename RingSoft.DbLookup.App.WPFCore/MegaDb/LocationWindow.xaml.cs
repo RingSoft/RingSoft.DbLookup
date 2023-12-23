@@ -1,8 +1,6 @@
-﻿using RingSoft.DbLookup.App.Library;
+﻿using System.Windows.Controls;
 using RingSoft.DbLookup.Controls.WPF;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
-using System.Windows.Controls.Primitives;
 
 namespace RingSoft.DbLookup.App.WPFCore.MegaDb
 {
@@ -12,7 +10,7 @@ namespace RingSoft.DbLookup.App.WPFCore.MegaDb
     public partial class LocationWindow
     {
         public override DbMaintenanceViewModelBase ViewModel => LocationViewModel;
-        public override DbMaintenanceButtonsControl MaintenanceButtonsControl => ButtonsControl;
+        public override Control MaintenanceButtonsControl => ButtonsControl;
         public override DbMaintenanceStatusBar DbStatusBar => StatusBar;
 
         public LocationWindow()

@@ -410,9 +410,9 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
         public UiCommand CustomerUiCommand { get; } = new UiCommand();
 
-        public UiCommand EmployeeUiCommand { get; } = new UiCommand();
+        //public UiCommand EmployeeUiCommand { get; } = new UiCommand();
 
-        public UiCommand ShipViaUiCommand { get; } = new UiCommand();
+        //public UiCommand ShipViaUiCommand { get; } = new UiCommand();
 
         public RelayCommand AddModifyCommand { get; }
 

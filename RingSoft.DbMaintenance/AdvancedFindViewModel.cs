@@ -589,7 +589,10 @@ namespace RingSoft.DbMaintenance
             var dataColumn = TableSetup.AddColumn(1, "Table", FieldDataTypes.String, 95);
             var index = 1;
 
-            foreach (var contextTableDefinition in SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.Context.TableDefinitions)
+            foreach (var contextTableDefinition in SystemGlobals
+                         .AdvancedFindLookupContext
+                         .AdvancedFinds.Context
+                         .TableDefinitions)
             {
                 if (contextTableDefinition.LookupDefinition != null
                     && contextTableDefinition.CanViewTable

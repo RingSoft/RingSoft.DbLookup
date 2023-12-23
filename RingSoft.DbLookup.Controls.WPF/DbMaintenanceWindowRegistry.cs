@@ -79,6 +79,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
         }
 
+        public void RegisterWindow<TWindow, TEntity>()
+            where TWindow : DbMaintenanceWindow, new()
+            where TEntity: class, new()
+        {
+            var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
+            RegisterWindow<TWindow>(tableDefinition);
+        }
+
         /// <summary>
         /// Gets the database maintenance window.
         /// </summary>

@@ -2005,7 +2005,7 @@ namespace RingSoft.DbMaintenance
             if (TableDefinition.IsIdentity())
             {
                 var identityVal = TableDefinition.GetIdentityValue(entity);
-                if (identityVal > 0)
+                if (identityVal > 0 && MaintenanceMode == DbMaintenanceModes.EditMode)
                 {
                     var existEntity = entity.FillOutProperties(false);
                     if (existEntity == null)

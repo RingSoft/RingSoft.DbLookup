@@ -56,6 +56,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <value>The data repository.</value>
         public TestDataRepository DataRepository { get; }
+
+        public MessageBoxButtonsResult MessageBoxResult { get; set; } = MessageBoxButtonsResult.Yes;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DbMaintenanceTestGlobals{TViewModel, TView}"/> class.
         /// </summary>
@@ -125,7 +128,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>MessageBoxButtonsResult.</returns>
         public virtual async Task<MessageBoxButtonsResult> ShowYesNoMessageBox(string text, string caption, bool playSound = false)
         {
-            return MessageBoxButtonsResult.Yes;
+            return MessageBoxResult;
         }
 
         /// <summary>
@@ -137,7 +140,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>MessageBoxButtonsResult.</returns>
         public virtual async Task<MessageBoxButtonsResult> ShowYesNoCancelMessageBox(string text, string caption, bool playSound = false)
         {
-            return MessageBoxButtonsResult.Yes;
+            return MessageBoxResult;
         }
 
         /// <summary>
@@ -220,7 +223,7 @@ namespace RingSoft.DbMaintenance
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
-            return true;
+            return MessageBoxResult == MessageBoxButtonsResult.Yes;
         }
 
         /// <summary>

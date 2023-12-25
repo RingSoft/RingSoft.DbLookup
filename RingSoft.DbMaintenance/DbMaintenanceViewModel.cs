@@ -844,7 +844,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>The result.</returns>
         /// <exception cref="System.Exception">Processor is null</exception>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        public override DbMaintenanceResults DoSave(bool unitTestMode = false)
+        public override DbMaintenanceResults DoSave()
         {
             if (Processor == null)
             {
@@ -914,7 +914,7 @@ namespace RingSoft.DbMaintenance
             if (previewArgs.Handled)
                 return DbMaintenanceResults.NotAllowed;
 
-            if (!unitTestMode)
+            //if (!unitTestMode)
             {
                 var recordLockPrimaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
                 var keyString = recordLockPrimaryKey.KeyString;
@@ -956,7 +956,7 @@ namespace RingSoft.DbMaintenance
                 return DbMaintenanceResults.DatabaseError;
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
-            if (!unitTestMode)
+            //if (!unitTestMode)
             {
                 switch (MaintenanceMode)
                 {
@@ -977,12 +977,12 @@ namespace RingSoft.DbMaintenance
 
             _savingRecord = true;
 
-            if (unitTestMode)
-            {
-                PopulatePrimaryKeyControls(entity, primaryKey);
-                OnLookupDataChanged();
-            }
-            else
+            //if (unitTestMode)
+            //{
+            //    PopulatePrimaryKeyControls(entity, primaryKey);
+            //    OnLookupDataChanged();
+            //}
+            //else
             {
                 if (MaintenanceMode == DbMaintenanceModes.AddMode)
                 {
@@ -1318,7 +1318,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
-        public override DbMaintenanceResults DoDelete(bool unitTestMode = false)
+        internal override DbMaintenanceResults DoDelete(bool unitTestMode = false)
         {
             FireDeleteEvent();
             if (!DeleteCommand.IsEnabled)

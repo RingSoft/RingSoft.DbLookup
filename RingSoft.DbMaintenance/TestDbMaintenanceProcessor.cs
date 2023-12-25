@@ -40,6 +40,11 @@ namespace RingSoft.DbMaintenance
         /// Occurs when [lookup add view].
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
+
+        public TestDbMaintenanceProcessor()
+        {
+            
+        }
         /// <summary>
         /// Initializes from lookup data.
         /// </summary>

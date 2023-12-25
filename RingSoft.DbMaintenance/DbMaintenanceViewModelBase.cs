@@ -731,7 +731,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults DoSave(bool unitTestMode = false);
+        public abstract DbMaintenanceResults DoSave();
 
         /// <summary>
         /// Executed when the Save button is clicked.
@@ -743,7 +743,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
-        public abstract DbMaintenanceResults DoDelete(bool unitTestMode = false);
+        internal abstract DbMaintenanceResults DoDelete(bool unitTestMode = false);
 
         /// <summary>
         /// Executed when the Delete button is clicked.

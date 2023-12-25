@@ -4,7 +4,7 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>8.6.1</Version>
+    <Version>8.6.2</Version>
     <Authors>Peter Ringering</Authors>
     <Product>RingSoft.DbLookup.EntityFrameworkCore</Product>
     <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core 8.0</Description>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Database Paging, Entity Framework Core</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Code Complete Release</PackageReleaseNotes>
+    <PackageReleaseNotes>Bug Fix</PackageReleaseNotes>
     <PackageIcon>magnify.png</PackageIcon>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>

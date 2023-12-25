@@ -5,14 +5,14 @@
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>8.6.1</Version>
+    <Version>8.6.2</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://ringsoft.site/wpf-database-lookup-view-model-maintenance/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RingSoft/RingSoft.DbLookup</RepositoryUrl>
     <PackageTags>Database Paging, , Entity Framework Core, WPF</PackageTags>
-    <PackageReleaseNotes>Code Complete Release</PackageReleaseNotes>
+    <PackageReleaseNotes>Bug Fix</PackageReleaseNotes>
     <PackageIcon>magnify.png</PackageIcon>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
     <LangVersion>latest</LangVersion>

@@ -938,5 +938,11 @@ namespace RingSoft.DbLookup
 
             return param;
         }
+
+        public static HashSet<T> CreateList<T>(params T[] elements)
+        {
+            var list = new List<T>(elements);
+            return new HashSet<T>(list);
+        }
     }
 }

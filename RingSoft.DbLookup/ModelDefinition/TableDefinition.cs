@@ -673,11 +673,18 @@ namespace RingSoft.DbLookup.ModelDefinition
 
             foreach (var fieldDefinition in parentJoins)
             {
-                var childObject = GetParentObject(entity, fieldDefinition);
-                GblMethods.SetPropertyObject(
-                    entity
-                    , fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
-                    , childObject);
+                var existObj = GblMethods.GetPropertyObject(entity, fieldDefinition
+                    .ParentJoinForeignKeyDefinition
+                    .ForeignObjectPropertyName);
+
+                if (existObj == null)
+                {
+                    var childObject = GetParentObject(entity, fieldDefinition);
+                    GblMethods.SetPropertyObject(
+                        entity
+                        , fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName
+                        , childObject);
+                }
             }
         }
 
@@ -771,6 +778,26 @@ namespace RingSoft.DbLookup.ModelDefinition
             return tableFilter;
         }
 
+        private TableFilterDefinition<TEntity> GetCollectionTableFilter<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new()
+        {
+            var tableFilter = new TableFilterDefinition<TEntity>(this);
+            foreach (var fieldJoin in foreignKey.FieldJoins)
+            {
+                var value = GblMethods.GetPropertyValue(childEntity
+                    , fieldJoin.PrimaryField.PropertyName);
+                if (!value.IsNullOrEmpty())
+                {
+                    tableFilter.AddFixedFilter(
+                        fieldJoin.ForeignField
+                        , Conditions.Equals
+                        , value);
+                }
+            }
+
+            return tableFilter;
+        }
+
+
         /// <summary>
         /// Gets the join collection.
         /// </summary>
@@ -780,7 +807,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <returns>System.Object.</returns>
         public override object GetJoinCollection<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey)
         {
-            var tableFilter = GetTableFilter(childEntity, foreignKey);
+            var tableFilter = GetCollectionTableFilter(childEntity, foreignKey);
 
             if (!tableFilter.FixedFilters.Any())
             {

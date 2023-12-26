@@ -15,6 +15,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -830,6 +831,23 @@ namespace RingSoft.DbLookup
             var firstPk = tableDef.GetPrimaryKeyValueFromEntity(first);
             var lastPk = tableDef.GetPrimaryKeyValueFromEntity(last);
             return firstPk.IsEqualTo(lastPk);
+        }
+
+        public static void UtFillOutEntity<TEntity>(this TEntity entity) where TEntity : class, new()
+        {
+            if (!SystemGlobals.UnitTestMode)
+            {
+                return;
+            }
+
+            var tableDef = GblMethods.GetTableDefinition<TEntity>();
+            tableDef.FillOutEntity(entity);
+        }
+
+        public static TableDefinition<TEntity> GetTableDefinition<TEntity>(this TEntity entity)
+            where TEntity : class, new()
+        {
+            return GblMethods.GetTableDefinition<TEntity>();
         }
     }
 }

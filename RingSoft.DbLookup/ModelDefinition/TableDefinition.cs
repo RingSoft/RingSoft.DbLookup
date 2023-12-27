@@ -677,9 +677,9 @@ namespace RingSoft.DbLookup.ModelDefinition
                     .ParentJoinForeignKeyDefinition
                     .ForeignObjectPropertyName);
 
-                if (existObj == null)
+                var childObject = GetParentObject(entity, fieldDefinition);
+                if (!existObj.IsEqualTo(childObject))
                 {
-                    var childObject = GetParentObject(entity, fieldDefinition);
                     GblMethods.SetPropertyObject(
                         entity
                         , fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName

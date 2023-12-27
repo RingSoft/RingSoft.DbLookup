@@ -365,10 +365,7 @@ namespace RingSoft.DbMaintenance
                 }
                 if (!_savingRecord)
                 {
-                    if (SystemGlobals.UnitTestMode)
-                    {
-                        TableDefinition.FillOutEntity(Entity);
-                    }
+                    Entity.UtFillOutEntity();
 
                     if (KeyAutoFillSetup != null)
                     {
@@ -763,6 +760,12 @@ namespace RingSoft.DbMaintenance
                 return;
 
             _lookupData.SelectPrimaryKey(primaryKey);
+        }
+
+        public void OnRecordSelected(TEntity entity)
+        {
+            var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
+            OnRecordSelected(primaryKey);
         }
 
         /// <summary>

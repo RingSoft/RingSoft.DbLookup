@@ -324,9 +324,11 @@ namespace RingSoft.DbLookup.Testing
             var listToParse = listToRemove.ToList();
             foreach (var entity in listToParse)
             {
-                if (table.Contains(entity))
+                var existObj = table.FirstOrDefault(
+                    p => p.IsEqualTo(entity));
+                if (existObj != null)
                 {
-                    table.Remove(entity);
+                    table.Remove(existObj);
                 }
             }
         }

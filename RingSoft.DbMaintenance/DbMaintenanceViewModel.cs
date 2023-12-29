@@ -1321,18 +1321,18 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
-        internal override DbMaintenanceResults DoDelete(bool unitTestMode = false)
+        protected override DbMaintenanceResults DoDelete()
         {
             FireDeleteEvent();
             if (!DeleteCommand.IsEnabled)
                 return DbMaintenanceResults.NotAllowed;
 
-            if (unitTestMode)
-            {
-                if (!DeleteEntity())
-                    return DbMaintenanceResults.DatabaseError;
-                return DbMaintenanceResults.Success;
-            }
+            //if (unitTestMode)
+            //{
+            //    if (!DeleteEntity())
+            //        return DbMaintenanceResults.DatabaseError;
+            //    return DbMaintenanceResults.Success;
+            //}
             var description = TableDefinition.RecordDescription;
             if (description.IsNullOrEmpty())
                 description = TableDefinition.ToString();

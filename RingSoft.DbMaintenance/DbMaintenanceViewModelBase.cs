@@ -743,7 +743,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
-        internal abstract DbMaintenanceResults DoDelete(bool unitTestMode = false);
+        protected abstract DbMaintenanceResults DoDelete();
 
         /// <summary>
         /// Executed when the Delete button is clicked.

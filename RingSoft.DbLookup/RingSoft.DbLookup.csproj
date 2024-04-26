@@ -21,7 +21,7 @@
 
   <ItemGroup>
 	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
-	  <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="8.7.0" />
+	  <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="8.8.0" />
     <PackageReference Include="RingSoft.Printing.Interop" Version="7.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>

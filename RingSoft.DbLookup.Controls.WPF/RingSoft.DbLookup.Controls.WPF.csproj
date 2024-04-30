@@ -5,7 +5,7 @@
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>8.7.1</Version>
+    <Version>8.8</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,7 +17,7 @@
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
     <LangVersion>latest</LangVersion>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
-	  <Copyright>2023</Copyright>
+	  <Copyright>2024</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

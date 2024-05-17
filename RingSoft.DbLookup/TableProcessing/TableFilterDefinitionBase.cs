@@ -361,7 +361,13 @@ namespace RingSoft.DbLookup.TableProcessing
         public FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
             DateTime value)
         {
-            return CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
+            if (fieldDefinition.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+            {
+                value = value.ToUniversalTime();
+            }
+
+            var filter = CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
+            return filter;
         }
 
         /// <summary>

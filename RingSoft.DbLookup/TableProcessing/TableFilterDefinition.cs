@@ -14,6 +14,7 @@
 using System;
 using System.Linq.Expressions;
 using RingSoft.DbLookup.ModelDefinition;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbLookup.TableProcessing
@@ -234,7 +235,24 @@ namespace RingSoft.DbLookup.TableProcessing
             Conditions condition, DateTime value)
         {
             var fieldDefinition = _entityTableDefinition.GetFieldDefinition(entityProperty);
-            return AddFixedFilter(fieldDefinition, condition, value);
+            var origDate = value;
+            if (fieldDefinition is DateFieldDefinition dateFieldDefinition)
+            {
+                if (dateFieldDefinition.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+                {
+                    value = value.ToUniversalTime();
+                }
+            }
+            var result = AddFixedFilter(fieldDefinition, condition, value);
+            if (fieldDefinition is DateFieldDefinition dateFieldDefinition1)
+            {
+                if (dateFieldDefinition1.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+                {
+                    result.DisplayValue = origDate.ToString();
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

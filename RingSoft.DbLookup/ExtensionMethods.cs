@@ -849,5 +849,15 @@ namespace RingSoft.DbLookup
         {
             return GblMethods.GetTableDefinition<TEntity>();
         }
+
+        public static bool HasRight(this TableDefinitionBase tableDefinition, RightTypes rightType)
+        {
+            return SystemGlobals.Rights.HasRight(tableDefinition, rightType);
+        }
+
+        public static bool HasSpecialRight(this TableDefinitionBase tableDefinition, int rightType)
+        {
+            return SystemGlobals.Rights.HasSpecialRight(tableDefinition, rightType);
+        }
     }
 }

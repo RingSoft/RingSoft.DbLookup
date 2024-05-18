@@ -461,4 +461,30 @@ namespace RingSoft.DbLookup
             }
         }
     }
+
+    public class AppRights
+    {
+        public ItemRights UserRights { get; set; }
+
+        public List<ItemRights> GroupRights { get; private set; }
+
+        public AppRights(ItemRights userRights)
+        {
+            UserRights = userRights;
+
+            GroupRights = new List<ItemRights>();
+        }
+
+        public bool HasRight(TableDefinitionBase tableDefinition, RightTypes rightType)
+        {
+            return UserRights.HasRight(tableDefinition, rightType) ||
+                   GroupRights.Any(p => p.HasRight(tableDefinition, rightType));
+        }
+
+        public bool HasSpecialRight(TableDefinitionBase tableDefinition, int rightType)
+        {
+            return UserRights.HasSpecialRight(tableDefinition, rightType) ||
+                   GroupRights.Any(p => p.HasSpecialRight(tableDefinition, rightType));
+        }
+    }
 }

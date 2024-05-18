@@ -174,5 +174,7 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <value><c>true</c> if [validate deleted data]; otherwise, <c>false</c>.</value>
         public static bool ValidateDeletedData { get; set; } = true;
+
+        public static AppRights Rights { get; set; }
     }
 }

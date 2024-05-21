@@ -176,5 +176,12 @@ namespace RingSoft.DbLookup
         public static bool ValidateDeletedData { get; set; } = true;
 
         public static AppRights Rights { get; set; }
+
+        public static ItemRightsFactory ItemRightsFactory { get; set; }
+    }
+
+    public abstract class ItemRightsFactory
+    {
+        public abstract ItemRights GetNewItemRights();
     }
 }

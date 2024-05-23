@@ -21,6 +21,7 @@
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/GenericReportFilterWindowTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/ListControlTemplate.xaml"/>
         <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/DbMaintenanceStatusBarTemplate.xaml"/>
+        <ResourceDictionary Source="/RingSoft.DbLookup.Controls.WPF;component/Themes/RightsTreeTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 

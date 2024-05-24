@@ -852,6 +852,10 @@ namespace RingSoft.DbLookup
 
         public static bool HasRight(this TableDefinitionBase tableDefinition, RightTypes rightType)
         {
+            if (SystemGlobals.Rights == null)
+            {
+                return true;
+            }
             return SystemGlobals.Rights.HasRight(tableDefinition, rightType);
         }
 

@@ -68,6 +68,12 @@ namespace RingSoft.DbLookup.App.WPFCore
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
                 WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
+
+                var test = RsDbLookupAppGlobals
+                    .EfProcessor
+                    .NorthwindLookupContext
+                    .Orders
+                    .HasRight(RightTypes.AllowDelete);
                 SystemGlobals.TableRegistry.ShowWindow(RsDbLookupAppGlobals
                     .EfProcessor
                     .NorthwindLookupContext

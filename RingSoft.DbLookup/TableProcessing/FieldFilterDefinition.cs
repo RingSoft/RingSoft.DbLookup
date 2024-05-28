@@ -472,14 +472,14 @@ namespace RingSoft.DbLookup.TableProcessing
 
             var result = base.LoadFromFilterReturn(filterReturn, treeViewItem);
 
-            if (DateFilterType != DateFilterTypes.SpecificDate)
+            //if (DateFilterType != DateFilterTypes.SpecificDate)
             {
                 Value = ConvertDate(Value);
             }
-            else
-            {
-                Value = result;
-            }
+            //else
+            //{
+            //    Value = result;
+            //}
 
 
             return result;

@@ -133,7 +133,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <param name="filterItem">The filter item.</param>
         internal void AddUserFilter(FilterItemDefinition filterItem)
         {
-            UserBundle.AddFilter(filterItem);
+             UserBundle.AddFilter(filterItem);
         }
 
         /// <summary>
@@ -366,7 +366,20 @@ namespace RingSoft.DbLookup.TableProcessing
                 value = value.ToUniversalTime();
             }
 
-            var filter = CreateAddFixedFilter(fieldDefinition, condition, value.ToString(CultureInfo.CurrentCulture));
+            var dbDateType = fieldDefinition.DateType;
+            switch (dbDateType)
+            {
+                case DbDateTypes.DateOnly:
+                    break;
+                case DbDateTypes.DateTime:
+                    dbDateType = DbDateTypes.Millisecond;
+                    break;
+                case DbDateTypes.Millisecond:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            var filter = CreateAddFixedFilter(fieldDefinition, condition, value.FormatDateValue(dbDateType));
             return filter;
         }
 

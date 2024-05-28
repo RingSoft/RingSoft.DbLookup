@@ -437,7 +437,11 @@ namespace RingSoft.DbLookup.TableProcessing
             if (result)
             {
                 SetTableDescription();
-                if (DateFilterType != DateFilterTypes.SpecificDate)
+                if (DateFilterType == DateFilterTypes.SpecificDate)
+                {
+                    SetDateDisplayValue(Value);
+                }
+                else
                 {
                     Value = ConvertDate(Value);
                 }
@@ -607,6 +611,7 @@ namespace RingSoft.DbLookup.TableProcessing
                     if (date != null)
                     {
                         date = date.Value.ToUniversalTime();
+                        SetDateDisplayValue(date.Value.FormatDateValue(dateField.DateType));
                         return date.Value.FormatDateValue(dateField.DateType);
                     }
                 }
@@ -614,6 +619,24 @@ namespace RingSoft.DbLookup.TableProcessing
             }
 
             return value;
+        }
+
+        public void SetDateDisplayValue(string value)
+        {
+            if (FieldDefinition is DateFieldDefinition dateField)
+            {
+                if (dateField.ConvertToLocalTime || SystemGlobals.ConvertAllDatesToUniversalTime)
+                {
+                    var date = value.ToDate();
+                    if (date != null)
+                    {
+                        date = date.Value.ToLocalTime();
+                        DisplayValue = date.Value.FormatDateValue(dateField.DateType);
+                    }
+                }
+
+            }
+
         }
 
         /// <summary>

@@ -103,6 +103,28 @@ namespace RingSoft.DbLookup
         /// <value>The last error.</value>
         public static string LastError { get; set; }
 
+        public static DateTime NowDate()
+        {
+            var nowDate = DateTime.Now;
+            var result = DateTime.Today;
+            result = result.AddHours(nowDate.Hour);
+            result = result.AddMinutes(nowDate.Minute);
+            result = result.AddSeconds(nowDate.Second);
+            return result;
+        }
+
+        public static DateTime ScrubDateTime(DateTime input)
+        {
+            var result = DateTime.MinValue;
+            result = result.AddYears(input.Year - DateTime.MinValue.Year);
+            result = result.AddMonths(input.Month - DateTime.MinValue.Month);
+            result = result.AddDays(input.Day - DateTime.MinValue.Day);
+            result = result.AddHours(input.Hour);
+            result = result.AddMinutes(input.Minute);
+            result = result.AddSeconds(input.Second);
+            return result;
+        }
+
         /// <summary>
         /// Duplicates the passed-in string.
         /// </summary>

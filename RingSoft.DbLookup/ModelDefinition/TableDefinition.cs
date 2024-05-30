@@ -630,6 +630,19 @@ namespace RingSoft.DbLookup.ModelDefinition
             return null;
         }
 
+        public override IQueryable<object> GetQueryableForTable(IDbContext context)
+        {
+            return context.GetTable<TEntity>();
+        }
+
+        public override void SaveObject(object obj, IDbContext context)
+        {
+            if (obj is TEntity entity)
+            {
+                context.SaveEntity(entity);
+            }
+        }
+
         /// <summary>
         /// Fills the out entity.
         /// </summary>

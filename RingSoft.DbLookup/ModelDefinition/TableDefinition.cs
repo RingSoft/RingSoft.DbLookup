@@ -635,11 +635,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             return context.GetTable<TEntity>();
         }
 
-        public override void SaveObject(object obj, IDbContext context)
+        public override void SaveObject(object obj, IDbContext context, string message)
         {
             if (obj is TEntity entity)
             {
-                context.SaveEntity(entity);
+                context.SaveEntity(entity, message);
             }
         }
 

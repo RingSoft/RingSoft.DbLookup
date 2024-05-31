@@ -693,6 +693,7 @@ namespace RingSoft.DbLookup
             else
             {
                 recordLock.LockDateTime = DateTime.Now.ToUniversalTime();
+                recordLock.User = SystemGlobals.UserName;
                 context.SaveEntity(recordLock, "Saving Record Lock");
             }
 

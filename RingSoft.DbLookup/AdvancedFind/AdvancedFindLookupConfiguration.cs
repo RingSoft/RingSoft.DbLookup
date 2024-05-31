@@ -125,7 +125,7 @@ namespace RingSoft.DbLookup.AdvancedFind
 
             _lookupContext.AdvancedFindFilters.IsAdvancedFind = true;
 
-            _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.DateTime)
+            _lookupContext.RecordLocks.GetFieldDefinition(p => p.LockDateTime).HasDateType(DbDateTypes.Millisecond)
                 .DoConvertToLocalTime();
 
             _lookupContext.RecordLocks.IsAdvancedFind = true;

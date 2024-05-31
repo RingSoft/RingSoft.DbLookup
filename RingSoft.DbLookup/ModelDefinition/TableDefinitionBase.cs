@@ -795,6 +795,6 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public abstract IQueryable<object> GetQueryableForTable(IDbContext context);
 
-        public abstract void SaveObject(object obj, IDbContext context);
+        public abstract void SaveObject(object obj, IDbContext context, string message);
     }
 }

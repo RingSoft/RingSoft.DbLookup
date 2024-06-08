@@ -1234,6 +1234,14 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             if (enable)
             {
+                if (lookupColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
+                {
+                    enable = LookupControlsGlobals.LookupWindowFactory.CanDisplayField(fieldColumn.FieldDefinition);
+                }
+            }
+
+            if (enable)
+            {
                 columnHeader.Click += GridViewColumnHeaderClickedHandler;
             }
             else
@@ -1691,6 +1699,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
 
+            if (sortColumn1.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn1)
+            {
+                if (!LookupControlsGlobals.LookupWindowFactory.CanDisplayField(fieldColumn1.FieldDefinition))
+                {
+                    SystemSounds.Exclamation.Play();
+                    return;
+                }
+            }
+
 
             var headerClicked = LookupGridView.Columns[columnIndex].Header as GridViewColumnHeader;
             if (headerClicked == null)
@@ -1933,6 +1950,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         //        continue;
                         //    }
                         //}
+                        var displayVal = string.Empty;
                         if (lookupColumn.LookupColumnDefinition is LookupFieldColumnDefinition fieldColumn)
                         {
                             if (fieldColumn.FieldDefinition is IntegerFieldDefinition integerField)
@@ -1945,9 +1963,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                                     continue;
                                 }
                             }
+                            if (!LookupControlsGlobals.LookupWindowFactory.CanDisplayField(fieldColumn.FieldDefinition))
+                            {
+                                displayVal = "Can't Display Value";
+                            }
                         }
                         var value = lookupDataMaui.GetFormattedRowValue(row, lookupColumn.LookupColumnDefinition);
-                        dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, value);
+                        if (displayVal.IsNullOrEmpty())
+                        {
+                            displayVal = value;
+                        }
+                        dataItem.SetColumnValue(lookupColumn.LookupColumnDefinition.SelectSqlAlias, displayVal);
+                        displayVal = string.Empty;
                     }
                     _dataSource.Add(dataItem);
                 }

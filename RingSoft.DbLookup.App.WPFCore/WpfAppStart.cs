@@ -49,6 +49,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             var appDbMaintenanceProcessorFactory = new AppDbMaintenanceProcessorFactory();
             var appDbMaintenanceButtonsFactory = new AppDbMaintenanceButtonsFactory();
             var appLookupContentTemplateFactory = new AppLookupContentTemplateFactory(_application);
+            var appLookupWindowFactory = new AppLookupWindowFactory();
 
             _mainWindow = new MainWindow();
             base.StartApp(appSection, args);

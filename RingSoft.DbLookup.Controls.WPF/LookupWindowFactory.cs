@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using RingSoft.DbLookup.AutoFill;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -181,6 +182,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
                 return;
             }
+        }
+
+        public virtual bool CanDisplayField(FieldDefinition fieldDefinition)
+        {
+            return true;
         }
 
     }

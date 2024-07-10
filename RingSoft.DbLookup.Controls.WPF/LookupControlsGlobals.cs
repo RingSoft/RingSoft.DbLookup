@@ -29,6 +29,7 @@ using System.Windows.Media;
 using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbMaintenance;
+using System.IO;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -264,7 +265,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         static LookupControlsGlobals()
         {
-            InitUi();
+            InitUi(SystemGlobals.ProgramDataFolder);
         }
         /// <summary>
         /// Initializes the UI.
@@ -277,6 +278,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 programDataFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\\RingSoft\\";
             }
             SystemGlobals.ProgramDataFolder = programDataFolder;
+            if (!Directory.Exists(SystemGlobals.ProgramDataFolder))
+            {
+                Directory.CreateDirectory(SystemGlobals.ProgramDataFolder);
+            }
             DbDataProcessor.UserInterface = _userInterface;
             var lookupGridEditHostFactory = new LookupGridEditHostFactory();
         }

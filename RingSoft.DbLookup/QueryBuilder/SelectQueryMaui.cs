@@ -426,12 +426,14 @@ namespace RingSoft.DbLookup.QueryBuilder
             if (result)
             {
                 var records = Result.ToList();
+                var index = 0;
                 foreach (var entity in records)
                 {
                     //DeleteProperties(entity);
 
                     if (column != null)
                     {
+                        index++;
                         GblMethods.SetPropertyValue(entity, column.GetPropertyJoinName(true), null);
                         result = context.SaveEntity(entity, "Setting Null");
                         if (!result)
@@ -457,9 +459,11 @@ namespace RingSoft.DbLookup.QueryBuilder
             var result = GetData(context);
             if (result)
             {
+                var index = 0;
                 var records = Result.ToList();
                 foreach (var entity in records)
                 {
+                    index++;
                     DeleteProperties(entity);
 
                     result = context.DeleteEntity(entity, "Deleting Record");

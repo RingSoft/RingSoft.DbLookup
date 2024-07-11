@@ -191,6 +191,8 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if [validate all at once]; otherwise, <c>false</c>.</value>
         public bool ValidateAllAtOnce { get; set; }
 
+        protected bool ShowConfirmDeleteQ { get; set; } = true;
+
         /// <summary>
         /// The lookup data
         /// </summary>
@@ -1316,6 +1318,25 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        public bool ShowConfirmDeleteMessage()
+        {
+            var description = TableDefinition.RecordDescription;
+            if (description.IsNullOrEmpty())
+                description = TableDefinition.ToString();
+
+            var message = ConfirmDeleteMessage(description);
+            if (Processor.ShowYesNoMessage(message, ConfirmDeleteCaption))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        protected virtual DbMaintenanceResults OnPreDeleteChildren()
+        {
+            return DbMaintenanceResults.Success;
+        }
+
         /// <summary>
         /// Called when the Delete button is clicked.
         /// </summary>
@@ -1333,12 +1354,23 @@ namespace RingSoft.DbMaintenance
             //        return DbMaintenanceResults.DatabaseError;
             //    return DbMaintenanceResults.Success;
             //}
-            var description = TableDefinition.RecordDescription;
-            if (description.IsNullOrEmpty())
-                description = TableDefinition.ToString();
+            //var description = TableDefinition.RecordDescription;
+            //if (description.IsNullOrEmpty())
+            //    description = TableDefinition.ToString();
 
-            var message = ConfirmDeleteMessage(description);
-            if (Processor.ShowYesNoMessage(message, ConfirmDeleteCaption))
+            //var message = ConfirmDeleteMessage(description);
+            var goOn = true;
+            if (ShowConfirmDeleteQ)
+            {
+                goOn = ShowConfirmDeleteMessage();
+                if (!goOn)
+                {
+                    ShowConfirmDeleteQ = true;
+                    return DbMaintenanceResults.ValidationError;
+                }
+            }
+            ShowConfirmDeleteQ = true;
+            if (goOn)
             {
                 var fields = new List<FieldDefinition>();
                 var deleteTables = new DeleteTables();
@@ -1360,6 +1392,11 @@ namespace RingSoft.DbMaintenance
                     }
 
                     ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+                    var preResult = OnPreDeleteChildren();
+                    if (preResult != DbMaintenanceResults.Success)
+                    {
+                        return preResult;
+                    }
                     if (!DeleteChildren(deleteTables))
                     {
                         ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);

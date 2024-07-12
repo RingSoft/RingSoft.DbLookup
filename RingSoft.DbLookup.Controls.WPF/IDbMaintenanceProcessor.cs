@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System.Windows.Controls;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;

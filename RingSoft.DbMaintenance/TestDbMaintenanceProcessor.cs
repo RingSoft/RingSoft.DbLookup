@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
@@ -31,6 +32,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <value><c>true</c> if [message box result]; otherwise, <c>false</c>.</value>
         public bool MessageBoxResult { get; set; }
+
+        public bool DeleteChildrenResult { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
         /// </summary>
@@ -221,6 +225,11 @@ namespace RingSoft.DbMaintenance
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             
+        }
+
+        public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
+        {
+            return null;
         }
     }
 }

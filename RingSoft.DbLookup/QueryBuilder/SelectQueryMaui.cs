@@ -162,14 +162,14 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="column">The column.</param>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public abstract bool SetNull(LookupFieldColumnDefinition column, IDbContext context);
+        public abstract bool SetNull(LookupFieldColumnDefinition column, IDbContext context, ITwoTierProcessingProcedure procedure = null);
 
         /// <summary>
         /// Deletes all data.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public abstract bool DeleteAllData(IDbContext context);
+        public abstract bool DeleteAllData(IDbContext context, ITwoTierProcessingProcedure procedure = null);
 
         /// <summary>
         /// Gets the data result.
@@ -418,7 +418,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// <param name="column">The column.</param>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public override bool SetNull(LookupFieldColumnDefinition column, IDbContext context)
+        public override bool SetNull(LookupFieldColumnDefinition column, IDbContext context, ITwoTierProcessingProcedure procedure = null)
         {
             var maxRecords = MaxRecords;
             SetMaxRecords(0);
@@ -427,13 +427,18 @@ namespace RingSoft.DbLookup.QueryBuilder
             {
                 var records = Result.ToList();
                 var index = 0;
+                var totalProcedure = records.Count;
                 foreach (var entity in records)
                 {
                     //DeleteProperties(entity);
-
                     if (column != null)
                     {
                         index++;
+                        var bottomText = $"Setting NULL to Record {index} / {totalProcedure}";
+                        if (procedure != null)
+                        {
+                            procedure.SetProgress(0, 0, "", totalProcedure, index, bottomText);
+                        }
                         GblMethods.SetPropertyValue(entity, column.GetPropertyJoinName(true), null);
                         result = context.SaveEntity(entity, "Setting Null");
                         if (!result)
@@ -452,7 +457,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public override bool DeleteAllData(IDbContext context)
+        public override bool DeleteAllData(IDbContext context, ITwoTierProcessingProcedure procedure = null)
         {
             var maxRecords = MaxRecords;
             SetMaxRecords(0);
@@ -461,9 +466,16 @@ namespace RingSoft.DbLookup.QueryBuilder
             {
                 var index = 0;
                 var records = Result.ToList();
+                var totalProcedure = records.Count;
                 foreach (var entity in records)
                 {
                     index++;
+                    var bottomText = $"Deleting Record {index} / {totalProcedure}";
+                    if (procedure != null)
+                    {
+                        procedure.SetProgress(0, 0, "", totalProcedure, index, bottomText);
+                    }
+
                     DeleteProperties(entity);
 
                     result = context.DeleteEntity(entity, "Deleting Record");

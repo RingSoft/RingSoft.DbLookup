@@ -1234,6 +1234,8 @@ namespace RingSoft.DbMaintenance
             _grids.Add(grid);
         }
 
+        public abstract bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure);
+
         /// <summary>
         /// Executed when a property value has changed.
         /// </summary>

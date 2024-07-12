@@ -143,6 +143,8 @@ namespace RingSoft.DbMaintenance
             return MessageBoxResult;
         }
 
+        public bool DeleteChildrenResult { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
         /// </summary>
@@ -326,6 +328,11 @@ namespace RingSoft.DbMaintenance
         public virtual void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
             
+        }
+
+        public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
+        {
+            throw new NotImplementedException();
         }
     }
 }

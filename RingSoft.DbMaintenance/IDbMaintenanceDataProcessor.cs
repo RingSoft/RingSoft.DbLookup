@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
@@ -85,6 +86,8 @@ namespace RingSoft.DbMaintenance
     /// </summary>
     public interface IDbMaintenanceDataProcessor
     {
+        bool DeleteChildrenResult { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
         /// </summary>
@@ -216,5 +219,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="autoFillMap">The automatic fill map.</param>
         void HandleAutoFillValFail(DbAutoFillMap autoFillMap);
+
+        ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables);
     }
 }

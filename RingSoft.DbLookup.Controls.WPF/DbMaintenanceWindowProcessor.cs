@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using RingSoft.DataEntryControls.Engine;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -660,6 +661,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             
         }
+
+        public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
+        {
+            var delProcedure = new DeleteProcedure(MaintenanceWindow
+                , "Deleting Table Data"
+                , ViewModel
+                , deleteTables);
+            delProcedure.Start();
+            return delProcedure;
+        }
+
+        public bool DeleteChildrenResult { get; set; }
 
         /// <summary>
         /// Checks the delete tables.

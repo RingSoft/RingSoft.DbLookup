@@ -1397,7 +1397,9 @@ namespace RingSoft.DbMaintenance
                     {
                         return preResult;
                     }
-                    if (!DeleteChildren(deleteTables))
+
+                    var procedure = Processor.GetDeleteProcedure(deleteTables);
+                    if (!Processor.DeleteChildrenResult)
                     {
                         ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                         return DbMaintenanceResults.DatabaseError;
@@ -1738,14 +1740,19 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="deleteTables">The delete tables.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected bool DeleteChildren(DeleteTables deleteTables)
+        public override bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure)
         {
+            var total = deleteTables.Tables.Count;
+            var topIndex = 0;
             var childFieldsProcessed = new List<FieldDefinition>();
             var sqls = new List<string>();
             var allowNullsTables = deleteTables.Tables.Where(p => p.ChildField.AllowNulls);
             foreach (var table in allowNullsTables)
             {
-                if (!ProcessDeleteChildren(table, sqls, childFieldsProcessed))
+                topIndex++;
+                var topText = $"Processing Table {table.ChildField.TableDefinition.Description} {topIndex} / {total}";
+                procedure.SetProgress(total, topIndex, topText);
+                if (!ProcessDeleteChildren(table, sqls, childFieldsProcessed, procedure))
                 {
                     return false;
                 }
@@ -1755,7 +1762,10 @@ namespace RingSoft.DbMaintenance
 
             foreach (var deleteTable in tables)
             {
-                if (!ProcessDeleteChildren(deleteTable, sqls, childFieldsProcessed))
+                topIndex++;
+                var topText = $"Processing Table {deleteTable.ChildField.TableDefinition.Description} {topIndex} / {total}";
+                procedure.SetProgress(total, topIndex, topText);
+                if (!ProcessDeleteChildren(deleteTable, sqls, childFieldsProcessed, procedure))
                 {
                     return false;
                 }
@@ -1787,7 +1797,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="childFieldsProcessed">The child fields processed.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls
-            , List<FieldDefinition> childFieldsProcessed)
+            , List<FieldDefinition> childFieldsProcessed, ITwoTierProcessingProcedure procedure)
         {
             //if (deleteTable.ChildField.TableDefinition.ChildFields.Any())
             //{
@@ -1812,11 +1822,12 @@ namespace RingSoft.DbMaintenance
                 var sql = string.Empty;
                 if (deleteTable.ChildField.AllowNulls && deleteTable.ChildField.AllowUserNulls)
                 {
-                    result = deleteTable.Query.SetNull(deleteTable.Column, deleteTable.Parent.Context);
+                    result = deleteTable.Query.SetNull(deleteTable.Column, deleteTable.Parent.Context
+                    , procedure);
                 }
                 else
                 {
-                    result = deleteTable.Query.DeleteAllData(deleteTable.Parent.Context);
+                    result = deleteTable.Query.DeleteAllData(deleteTable.Parent.Context, procedure);
                 }
 
                 sqls.Add(sql);

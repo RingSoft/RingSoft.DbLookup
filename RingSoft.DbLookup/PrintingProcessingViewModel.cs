@@ -316,7 +316,11 @@ namespace RingSoft.DbLookup
             {
                 ProcessType = ProcessTypes.StartingReport;
                 View.UpdateStatus();
-                Thread.Sleep(new TimeSpan(0,0,0,5));
+                while (!PrintingInteropGlobals.PrintReadyFileExists())
+                {
+                    Thread.Sleep(new TimeSpan(0, 0, 0, 1));
+                }
+                PrintingInteropGlobals.DeleteReadyFile();
             }
             View.CloseWindow();
         }

@@ -22,6 +22,14 @@ using RingSoft.DbLookup.Testing;
 
 namespace RingSoft.DbMaintenance
 {
+    public class TestTwoTierProcedure : ITwoTierProcessingProcedure
+    {
+        public void SetProgress(int topMax = 0, int topValue = 0, string topText = "", int bottomMax = 0, int bottomValue = 0,
+            string bottomText = "")
+        {
+            
+        }
+    }
     /// <summary>
     /// Class DbMaintenanceTestGlobals.  Used to unit test a DbMaintenanceViewModel.
     /// Implements the <see cref="IControlsUserInterface" />
@@ -332,7 +340,9 @@ namespace RingSoft.DbMaintenance
 
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
-            throw new NotImplementedException();
+            var result = new TestTwoTierProcedure();
+            ViewModel.Processor.DeleteChildrenResult = ViewModel.DeleteChildren(deleteTables, result);
+            return result;
         }
     }
 }

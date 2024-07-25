@@ -17,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -172,8 +174,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             , LookupAddViewArgs addViewArgs = null
             , object addViewParameter = null)
         {
-            if (addViewArgs.OwnerWindow is Window ownerWindow)
+            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
                 maintenanceWindow.Owner = ownerWindow;
+            else
+            {
+                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+            }
 
             maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.Processor.InitializeFromLookupData(addViewArgs);

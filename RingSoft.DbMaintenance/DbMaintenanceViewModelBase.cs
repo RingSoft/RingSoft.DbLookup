@@ -344,7 +344,7 @@ namespace RingSoft.DbMaintenance
 
                 NewCommand.IsEnabled = _newButtonEnabled = value;
                 NewUiCommand.IsEnabled = value;
-                OnPropertyChanged(nameof(NewButtonEnabled));
+                OnPropertyChanged(nameof(NewButtonEnabled), false);
             }
         }
 

@@ -216,17 +216,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (item != null)
             {
                 var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
-                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
-                if (ownerWindow != null)
+                if (maintenanceWindow != null)
                 {
-                    maintenanceWindow.Closed += (sender, args) =>
-                    {
-                        maintenanceWindow.Owner.Activate();
-                    };
-                }
+                    maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+                    maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
 
-                maintenanceWindow.ShowInTaskbar = false;
-                maintenanceWindow.Show();
+                    maintenanceWindow.ShowInTaskbar = false;
+                    maintenanceWindow.Show();
+                }
             }
         }
     }

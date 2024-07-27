@@ -1286,7 +1286,7 @@ namespace RingSoft.DbMaintenance
             if (ReadOnlyMode)
                 return true;
 
-            if (!CheckDirtyFlag)
+            if (!RecordDirty)
             {
                 return true;
             }
@@ -1308,6 +1308,7 @@ namespace RingSoft.DbMaintenance
                         }
                         break;
                     case MessageButtons.No:
+                        RecordDirty = false;
                         break;
                     case MessageButtons.Cancel:
                         return false;

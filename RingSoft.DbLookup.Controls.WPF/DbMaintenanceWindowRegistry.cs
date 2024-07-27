@@ -181,9 +181,28 @@ namespace RingSoft.DbLookup.Controls.WPF
                 maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
             }
 
+            maintenanceWindow.Closed += (sender, args) =>
+            {
+                maintenanceWindow.Owner.Activate();
+            };
+
             maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.Processor.InitializeFromLookupData(addViewArgs);
-            maintenanceWindow.ShowDialog();
+            maintenanceWindow.Show();
+        }
+
+        public override void ShowDialog(TableDefinitionBase tableDefinition)
+        {
+            var item = GetDbMaintenanceWindow(tableDefinition);
+            if (item != null)
+            {
+                var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
+                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+                maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
+                maintenanceWindow.ShowInTaskbar = false;
+                maintenanceWindow.ShowDialog();
+
+            }
         }
 
         /// <summary>

@@ -60,5 +60,7 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public abstract void ShowWindow(TableDefinitionBase tableDefinition);
+
+        public abstract void ShowDialog(TableDefinitionBase tableDefinition);
     }
 }

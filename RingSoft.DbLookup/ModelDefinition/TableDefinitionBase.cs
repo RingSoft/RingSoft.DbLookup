@@ -758,7 +758,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <returns>TableDefinitionBase.</returns>
         public TableDefinitionBase SetHeaderEntity<THeaderEntity>() where THeaderEntity : class, new()
         {
-            HeaderTable = GblMethods.GetTableDefinition<THeaderEntity>(); 
+            HeaderTable = GblMethods.GetTableDefinition<THeaderEntity>();
             return this;
         }
 

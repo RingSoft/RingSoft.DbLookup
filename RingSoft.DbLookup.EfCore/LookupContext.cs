@@ -309,7 +309,7 @@ namespace RingSoft.DbLookup.EfCore
                 }
 
                 var gridKeys = tableDefinition.ChildKeys
-                    .Where(p => p.ForeignTable.HeaderTable == tableDefinition);
+                    .Where(p => p.PrimaryTable == tableDefinition);
 
                 foreach (var key in gridKeys)
                 {

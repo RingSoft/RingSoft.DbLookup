@@ -109,8 +109,6 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <returns>The formatted value.</returns>
         public override string FormatValue(string value)
         {
-            if (TableDefinition.PrimaryKeyFields.Contains(this))
-                return value;
             if (EnumTranslation != null)
             {
                 var numValue = value.ToInt();
@@ -122,6 +120,9 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
                     return trans.TextValue;
                 }
             }
+
+            if (TableDefinition.PrimaryKeyFields.Contains(this))
+                return value;
 
             var formatString = NumberFormatString;
             if (formatString.IsNullOrEmpty())

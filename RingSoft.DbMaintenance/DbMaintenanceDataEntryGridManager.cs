@@ -79,9 +79,12 @@ namespace RingSoft.DbMaintenance
         /// Gets the table definition.
         /// </summary>
         /// <value>The table definition.</value>
-        public abstract TableDefinitionBase TableDefinition { get; }
+        public abstract  TableDefinitionBase TableDefinition { get; }
+
+        public abstract void SelectGridRow(PrimaryKeyValue primaryKeyValue);
 
     }
+
     /// <summary>
     /// Class DbMaintenanceDataEntryGridManager.  Used to manage DbMaintenanceViewModel grids.
     /// Implements the <see cref="RingSoft.DbMaintenance.DbMaintenanceDataEntryGridManagerBase" />
@@ -91,11 +94,13 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
         where TEntity : class, new()
     {
+        public override TableDefinitionBase TableDefinition => TableDefinitionEntity;
+
         /// <summary>
         /// Gets the table definition.
         /// </summary>
         /// <value>The table definition.</value>
-        public override TableDefinitionBase TableDefinition => GblMethods.GetTableDefinition<TEntity>();
+        public TableDefinition<TEntity> TableDefinitionEntity { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridManager{TEntity}"/> class.
@@ -103,7 +108,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="viewModel">The view model.</param>
         public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel) : base(viewModel)
         {
-            
+            TableDefinitionEntity = GblMethods.GetTableDefinition<TEntity>();
         }
 
         /// <summary>
@@ -355,6 +360,20 @@ namespace RingSoft.DbMaintenance
                     LoadGrid(details);
                 }
             }
+        }
+
+        public override void SelectGridRow(PrimaryKeyValue primaryKeyValue)
+        {
+            var entity = TableDefinitionEntity.GetEntityFromPrimaryKeyValue(primaryKeyValue);
+            if (entity != null)
+            {
+                SelectRowForEntity(entity);
+            }
+        }
+
+        protected virtual void SelectRowForEntity(TEntity entity)
+        {
+
         }
     }
 }

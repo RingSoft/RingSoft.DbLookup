@@ -414,11 +414,22 @@ namespace RingSoft.DbMaintenance
                 PrimaryKeyValue primaryKeyValue = null;
                 if (LookupAddViewArgs.LookupData != null)
                 {
+                    
                     primaryKeyValue = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue;
                     if (LookupAddViewArgs
                             .LookupData
                             .SelectedPrimaryKeyValue != null)
                     {
+                        var gridTable = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue.TableDefinition;
+                        if (Grids != null)
+                        {
+                            var grid = Grids.FirstOrDefault(
+                                p => p.TableDefinition == gridTable);
+                            if (grid != null)
+                            {
+                                grid.SelectGridRow(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
+                            }
+                        }
                         primaryKeyValue =
                             GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
                     }

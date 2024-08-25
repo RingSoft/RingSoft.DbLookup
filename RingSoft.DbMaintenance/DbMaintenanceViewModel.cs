@@ -365,6 +365,10 @@ namespace RingSoft.DbMaintenance
                     ChangingEntity = false;
                     return;
                 }
+                foreach (var lookupMap in Lookups)
+                {
+                    lookupMap.LookupDefinition.FilterLookup(Entity, lookupMap.AddViewParameter);
+                }
                 if (!_savingRecord)
                 {
                     Entity.UtFillOutEntity();
@@ -1901,10 +1905,6 @@ namespace RingSoft.DbMaintenance
         {
             var entity = newEntity.FillOutProperties(true);
 
-            foreach (var lookupMap in Lookups)
-            {
-                lookupMap.LookupDefinition.FilterLookup(entity, lookupMap.AddViewParameter);
-            }
             return entity;
         }
 

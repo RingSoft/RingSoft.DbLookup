@@ -261,6 +261,44 @@ namespace RingSoft.DbMaintenance
         /// <value>The key automatic fill UI command.</value>
         public UiCommand KeyAutoFillUiCommand { get; }
 
+        private bool _allowDelete = true;
+
+        public bool AllowDelete
+        {
+            get { return _allowDelete; }
+            set
+            {
+                _allowDelete = value;
+                DeleteButtonEnabled = value;
+            }
+        }
+
+        private bool _allowNew = true;
+
+        public bool AllowNew
+        {
+            get { return _allowNew; }
+            set
+            {
+                _allowNew = value;
+                NewButtonEnabled = value;
+            }
+        }
+
+        private bool _allowSave = true;
+
+        public bool AllowSave
+        {
+            get { return _allowSave = true; }
+            set
+            {
+                _allowSave = value;
+                SaveButtonEnabled = value;
+            }
+        }
+
+
+
         /// <summary>
         /// The primary key controls enabled
         /// </summary>
@@ -319,6 +357,10 @@ namespace RingSoft.DbMaintenance
                 if (_deleteButtonEnabled == value)
                     return;
 
+                if (!AllowDelete)
+                {
+                    value = false;
+                }
                 DeleteCommand.IsEnabled = _deleteButtonEnabled = value;
                 DeleteUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(DeleteButtonEnabled), false);
@@ -342,6 +384,11 @@ namespace RingSoft.DbMaintenance
                 if (_newButtonEnabled == value)
                     return;
 
+                if (!AllowNew)
+                {
+                    value = false;
+                }
+
                 NewCommand.IsEnabled = _newButtonEnabled = value;
                 NewUiCommand.IsEnabled = value;
                 OnPropertyChanged(nameof(NewButtonEnabled), false);
@@ -364,6 +411,11 @@ namespace RingSoft.DbMaintenance
             {
                 if (_saveButtonEnabled == value)
                     return;
+
+                if (!AllowSave)
+                {
+                    value = false;
+                }
 
                 SaveCommand.IsEnabled = _saveButtonEnabled = value;
                 SaveUiCommand.IsEnabled = value;

@@ -231,5 +231,10 @@ namespace RingSoft.DbMaintenance
         {
             return null;
         }
+
+        public void SetWindowReadOnlyMode(bool readOnlyMode)
+        {
+            
+        }
     }
 }

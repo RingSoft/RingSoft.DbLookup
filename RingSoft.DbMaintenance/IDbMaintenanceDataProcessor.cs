@@ -221,5 +221,7 @@ namespace RingSoft.DbMaintenance
         void HandleAutoFillValFail(DbAutoFillMap autoFillMap);
 
         ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables);
+
+        void SetWindowReadOnlyMode(bool readOnlyMode);
     }
 }

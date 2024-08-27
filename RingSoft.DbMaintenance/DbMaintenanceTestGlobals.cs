@@ -344,5 +344,10 @@ namespace RingSoft.DbMaintenance
             ViewModel.Processor.DeleteChildrenResult = ViewModel.DeleteChildren(deleteTables, result);
             return result;
         }
+
+        public void SetWindowReadOnlyMode(bool readOnlyMode)
+        {
+            
+        }
     }
 }

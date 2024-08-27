@@ -333,6 +333,25 @@ namespace RingSoft.DbMaintenance
             }
 
             Initialize();
+            if (!TableDefinition.HasRight(RightTypes.AllowEdit))
+            {
+                AllowSave = false;
+                ReadOnlyMode = true;
+            }
+
+            if (!TableDefinition.HasRight(RightTypes.AllowAdd))
+            {
+                AllowNew = false;
+                if (MaintenanceMode == DbMaintenanceModes.AddMode)
+                {
+                    OnGotoNextButton();
+                }
+            }
+
+            if (!TableDefinition.HasRight(RightTypes.AllowDelete))
+            {
+                AllowDelete = false;
+            }
         }
 
         /// <summary>

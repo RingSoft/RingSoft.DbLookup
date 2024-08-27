@@ -672,6 +672,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return delProcedure;
         }
 
+        public void SetWindowReadOnlyMode(bool readOnlyMode)
+        {
+            MaintenanceWindow.SetReadOnlyMode(readOnlyMode);
+        }
+
         public bool DeleteChildrenResult { get; set; }
 
         /// <summary>

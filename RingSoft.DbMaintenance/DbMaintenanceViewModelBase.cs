@@ -313,9 +313,6 @@ namespace RingSoft.DbMaintenance
             get => _primaryKeyControlsEnabled;
             set
             {
-                if (_primaryKeyControlsEnabled == value)
-                    return;
-
                 _primaryKeyControlsEnabled = value;
                 OnPropertyChanged(nameof(PrimaryKeyControlsEnabled), false);
             }
@@ -334,8 +331,6 @@ namespace RingSoft.DbMaintenance
             get => _selectButtonEnabled;
             set
             {
-                if (_selectButtonEnabled == value)
-                    return;
                 SelectCommand.IsEnabled = _selectButtonEnabled = value;
                 OnPropertyChanged(nameof(SelectButtonEnabled), false);
             }
@@ -354,9 +349,6 @@ namespace RingSoft.DbMaintenance
             get => _deleteButtonEnabled;
             set
             {
-                if (_deleteButtonEnabled == value)
-                    return;
-
                 if (!AllowDelete)
                 {
                     value = false;
@@ -381,9 +373,6 @@ namespace RingSoft.DbMaintenance
             get => _newButtonEnabled;
             set
             {
-                if (_newButtonEnabled == value)
-                    return;
-
                 if (!AllowNew)
                 {
                     value = false;
@@ -409,9 +398,6 @@ namespace RingSoft.DbMaintenance
             get => _saveButtonEnabled;
             set
             {
-                if (_saveButtonEnabled == value)
-                    return;
-
                 if (!AllowSave)
                 {
                     value = false;

@@ -352,6 +352,8 @@ namespace RingSoft.DbMaintenance
             {
                 AllowDelete = false;
             }
+
+            FireInitializeEvent();
         }
 
         /// <summary>
@@ -489,8 +491,6 @@ namespace RingSoft.DbMaintenance
             }
 
             RecordDirty = false;
-
-            FireInitializeEvent();
         }
 
         /// <summary>

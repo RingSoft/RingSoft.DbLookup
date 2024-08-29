@@ -401,7 +401,7 @@ namespace RingSoft.DbMaintenance
                     LoadFromEntity(Entity);
                     foreach (var dataEntryGridManagerBase in Grids)
                     {
-                        dataEntryGridManagerBase.LoadGridFromHeaderEntity(Entity);
+                        dataEntryGridManagerBase.Grid.LoadGridFromHeaderEntity(Entity);
                     }
 
                     Processor?.OnRecordSelected();
@@ -449,10 +449,10 @@ namespace RingSoft.DbMaintenance
                         if (Grids != null)
                         {
                             var grid = Grids.FirstOrDefault(
-                                p => p.TableDefinition == gridTable);
+                                p => p.Grid.TableDefinition == gridTable);
                             if (grid != null)
                             {
-                                grid.SelectGridRow(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
+                                grid.Grid.SelectGridRow(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
                             }
                         }
                         primaryKeyValue =
@@ -855,7 +855,7 @@ namespace RingSoft.DbMaintenance
 
             foreach (var grid in Grids)
             {
-                grid.SetupForNewRecord();
+                grid.Grid.SetupForNewRecord();
             }
             Processor.SetSaveStatus("", AlertLevels.Green);
 
@@ -1235,7 +1235,7 @@ namespace RingSoft.DbMaintenance
 
             foreach (var grid in Grids)
             {
-                if (!grid.ValidateGrid())
+                if (!grid.Grid.ValidateGrid())
                 {
                     return false;
                 }
@@ -2117,8 +2117,11 @@ namespace RingSoft.DbMaintenance
             }
             foreach (var grid in Grids)
             {
-                grid.SaveNoCommitData(entity, context);
-                result = context.Commit("Saving Details");
+                if (!grid.ReadOnly)
+                {
+                    grid.Grid.SaveNoCommitData(entity, context);
+                    result = context.Commit("Saving Details");
+                }
             }
 
             return result;
@@ -2188,7 +2191,7 @@ namespace RingSoft.DbMaintenance
             {
                 foreach (var grid in Grids)
                 {
-                    grid.DeleteNoCommitData(entity, context);
+                    grid.Grid.DeleteNoCommitData(entity, context);
                 }
             }
 
@@ -2199,7 +2202,7 @@ namespace RingSoft.DbMaintenance
         /// Registers the grid.
         /// </summary>
         /// <param name="grid">The grid.</param>
-        public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly = false)
         {
             var gridTable = grid.TableDefinition;
             //if (gridTable.HeaderTable == null)
@@ -2211,7 +2214,7 @@ namespace RingSoft.DbMaintenance
             {
                 TablesToDelete.Add(gridTable);
             }
-            base.RegisterGrid(grid);
+            base.RegisterGrid(grid, readOnly);
         }
 
         /// <summary>

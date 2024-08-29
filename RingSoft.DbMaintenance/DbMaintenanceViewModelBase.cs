@@ -30,6 +30,18 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
+    public class GridMap
+    {
+        public DbMaintenanceDataEntryGridManagerBase Grid { get; }
+
+        public bool ReadOnly { get; }
+
+        public GridMap(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly)
+        {
+            Grid = grid;
+            ReadOnly = readOnly;
+        }
+    }
     /// <summary>
     /// Class LookupMap.
     /// </summary>
@@ -606,13 +618,13 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// The grids
         /// </summary>
-        private List<DbMaintenanceDataEntryGridManagerBase> _grids
-            = new List<DbMaintenanceDataEntryGridManagerBase>();
+        private List<GridMap> _grids
+            = new List<GridMap>();
         /// <summary>
         /// Gets the grids.
         /// </summary>
         /// <value>The grids.</value>
-        public IReadOnlyList<DbMaintenanceDataEntryGridManagerBase> Grids { get; }
+        public IReadOnlyList<GridMap> Grids { get; }
 
         /// <summary>
         /// The lookups
@@ -1267,9 +1279,10 @@ namespace RingSoft.DbMaintenance
         /// Registers the grid.
         /// </summary>
         /// <param name="grid">The grid.</param>
-        public virtual void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid)
+        public virtual void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly = false)
         {
-            _grids.Add(grid);
+            var gridMap = new GridMap(grid, readOnly);
+            _grids.Add(gridMap);
         }
 
         public abstract bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure);

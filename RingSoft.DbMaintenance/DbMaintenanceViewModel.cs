@@ -1922,7 +1922,12 @@ namespace RingSoft.DbMaintenance
         /// <returns>TEntity.</returns>
         protected virtual TEntity GetEntityFromDb(TEntity newEntity, PrimaryKeyValue primaryKeyValue)
         {
-            var entity = newEntity.FillOutProperties(true);
+            var gridTables = new List<TableDefinitionBase>();
+            foreach (var gridMap in Grids)
+            {
+                gridTables.Add(gridMap.Grid.TableDefinition);
+            }
+            var entity = newEntity.FillOutProperties(gridTables);
 
             return entity;
         }
@@ -2096,6 +2101,43 @@ namespace RingSoft.DbMaintenance
                         , TableDefinition
                             .GetIdentityField()
                             .PropertyName, "0");
+                    }
+                }
+            }
+        }
+
+        protected void GenerateKeyValue(string prefix, TEntity entity)
+        {
+            if (KeyAutoFillValue.IsValid() || !TableDefinition.IsIdentity())
+            {
+                return;
+            }
+            var sortColumn = TableDefinition.LookupDefinition.InitialSortColumnDefinition;
+            if (sortColumn is LookupFieldColumnDefinition sortFieldColumn)
+            {
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                GblMethods.SetPropertyValue(
+                    entity
+                    , sortFieldColumn.FieldDefinition.PropertyName
+                    , Guid.NewGuid().ToString());
+
+                var result = context.SaveEntity(entity, "Saving Key");
+
+                if (result)
+                {
+                    var identValue = GblMethods.GetPropertyValue(entity
+                        , TableDefinition.GetIdentityField().PropertyName);
+
+                    identValue = $"{prefix}-{identValue}";
+                    GblMethods.SetPropertyValue(
+                        entity
+                        , sortFieldColumn.FieldDefinition.PropertyName
+                        , identValue);
+
+                    result = context.SaveEntity(entity, "Updating Key Value");
+                    if (result)
+                    {
+                        KeyAutoFillValue = entity.GetAutoFillValue();
                     }
                 }
             }

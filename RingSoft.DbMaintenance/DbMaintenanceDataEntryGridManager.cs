@@ -257,7 +257,7 @@ namespace RingSoft.DbMaintenance
             }
 
             var detailsFields = detailTableDef
-                .PrimaryKeyFields
+                .FieldDefinitions
                 .Where(p => p.ParentJoinForeignKeyDefinition != null
                             && p.ParentJoinForeignKeyDefinition.PrimaryTable == headerTableDef);
 

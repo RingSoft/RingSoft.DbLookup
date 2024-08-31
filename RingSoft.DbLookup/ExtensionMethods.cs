@@ -421,6 +421,25 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
+        public static TEntity FillOutProperties<TEntity>(this TEntity entity, List<TableDefinitionBase> gridTables)
+            where TEntity : class, new()
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
+            if (tableDefinition is TableDefinition<TEntity> fullTable)
+            {
+                var filter = GetFullTableFilter(entity);
+                var table = fullTable.Context.GetQueryableForTableGrid(fullTable, gridTables);
+                if (ProcessTableFilterQuery(filter, table, out var fillOutProperties1))
+                    return fillOutProperties1;
+            }
+
+            return null;
+        }
         /// <summary>
         /// Fills the out properties.
         /// </summary>
@@ -438,6 +457,39 @@ namespace RingSoft.DbLookup
             var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
             if (tableDefinition is TableDefinition<TEntity> fullTable)
             {
+                var filter = GetFullTableFilter(entity);
+                var table = fullTable.Context.GetQueryableTable(fullTable, getRelatedEntities);
+                if (ProcessTableFilterQuery(filter, table, out var fillOutProperties1)) 
+                    return fillOutProperties1;
+            }
+
+            return null;
+        }
+
+        private static bool ProcessTableFilterQuery<TEntity>(TableFilterDefinition<TEntity> filter, IQueryable<TEntity> table,
+            out TEntity fillOutProperties1) where TEntity : class, new()
+        {
+            var param = GblMethods.GetParameterExpression<TEntity>();
+            var expr = filter.GetWhereExpresssion<TEntity>(param);
+            var query = FilterItemDefinition.FilterQuery(table, param, expr);
+            if (query.Any())
+            {
+                var result = query.FirstOrDefault();
+                {
+                    fillOutProperties1 = result;
+                    return true;
+                }
+            }
+
+            fillOutProperties1 = null;
+            return false;
+        }
+
+        public static TableFilterDefinition<TEntity> GetFullTableFilter<TEntity>(this TEntity entity) where TEntity : class, new()
+        {
+            var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
+            if (tableDefinition is TableDefinition<TEntity> fullTable)
+            {
                 var filter = new TableFilterDefinition<TEntity>(fullTable);
                 var primaryKey = fullTable.GetPrimaryKeyValueFromEntity(entity);
                 if (primaryKey.IsValid())
@@ -448,21 +500,13 @@ namespace RingSoft.DbLookup
                         filter.AddFixedFilter(primaryKeyField, Conditions.Equals, fieldValue);
                     }
 
-                    var table = fullTable.Context.GetQueryableTable(fullTable, getRelatedEntities);
-                    var param = GblMethods.GetParameterExpression<TEntity>();
-                    var expr = filter.GetWhereExpresssion<TEntity>(param);
-                    var query = FilterItemDefinition.FilterQuery(table, param, expr);
-                    if (query.Any())
-                    {
-                        var result = query.FirstOrDefault();
-                        return result;
-                    }
                 }
+
+                return filter;
             }
 
             return null;
         }
-
 
         /// <summary>
         /// Converts the enumerable to data table.

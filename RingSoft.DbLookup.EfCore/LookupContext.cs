@@ -313,6 +313,67 @@ namespace RingSoft.DbLookup.EfCore
 
                 foreach (var key in gridKeys)
                 {
+                    if (!key.CollectionName.IsNullOrEmpty())
+                    {
+                        includes.Add(key.CollectionName);
+                        parentObjects = key
+                            .ForeignTable
+                            .FieldDefinitions
+                            .Where(p => p.ParentJoinForeignKeyDefinition != null
+                                        && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
+                        foreach (var fieldDefinition in parentObjects)
+                        {
+                            includes.AddRange(GetIncludes(fieldDefinition
+                                    .ParentJoinForeignKeyDefinition
+                                , key.CollectionName));
+                        }
+                    }
+                }
+
+                foreach (var include in includes)
+                {
+                    if (!include.IsNullOrEmpty())
+                    {
+                        query = query.Include(include);
+                    }
+                }
+            }
+
+            return query;
+        }
+
+        public override IQueryable<TEntity> GetQueryableForTableGrid<TEntity>(TableDefinition<TEntity> tableDefinition
+            , List<TableDefinitionBase> gridTables, IDbContext context = null) where TEntity : class
+
+        {
+            if (context == null)
+            {
+                context = SystemGlobals.DataRepository.GetDataContext();
+            }
+
+            var query = context.GetTable<TEntity>();
+
+            var includes = new List<string>();
+            var parentObjects = tableDefinition
+                .FieldDefinitions
+                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+
+            foreach (var fieldDefinition in parentObjects)
+            {
+                includes.Add(fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName);
+            }
+
+            var gridKeys = new List<ForeignKeyDefinition>();
+            foreach (var gridTable in gridTables)
+            {
+                gridKeys.AddRange(tableDefinition.ChildKeys
+                    .Where(p => p.ForeignTable == gridTable));
+            }
+
+            foreach (var key in gridKeys)
+            {
+                if (!key.CollectionName.IsNullOrEmpty())
+                {
                     includes.Add(key.CollectionName);
                     parentObjects = key
                         .ForeignTable
@@ -321,13 +382,16 @@ namespace RingSoft.DbLookup.EfCore
                                     && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
                     foreach (var fieldDefinition in parentObjects)
                     {
-                        includes.AddRange(GetIncludes(fieldDefinition
-                                .ParentJoinForeignKeyDefinition
-                            , key.CollectionName));
+                        var include = key.CollectionName;
+                        include += $".{fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName}";
+                        includes.Add(include);
                     }
                 }
+            }
 
-                foreach (var include in includes)
+            foreach (var include in includes)
+            {
+                if (!include.IsNullOrEmpty())
                 {
                     query = query.Include(include);
                 }

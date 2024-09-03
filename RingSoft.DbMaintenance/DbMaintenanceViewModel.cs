@@ -1075,7 +1075,7 @@ namespace RingSoft.DbMaintenance
                              && p.PrimaryKey == primaryKey.KeyString);
                     if (recordLock == null)
                     {
-                        LastSavedDate = _startDate = DateTime.Now;
+                        LastSavedDate = null;
                     }
                     else
                     {
@@ -1235,9 +1235,12 @@ namespace RingSoft.DbMaintenance
 
             foreach (var grid in Grids)
             {
-                if (!grid.Grid.ValidateGrid())
+                if (!grid.ReadOnly)
                 {
-                    return false;
+                    if (!grid.Grid.ValidateGrid())
+                    {
+                        return false;
+                    }
                 }
             }
             return true;

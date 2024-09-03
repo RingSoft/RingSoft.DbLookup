@@ -88,6 +88,8 @@ namespace RingSoft.DbMaintenance
     {
         bool DeleteChildrenResult { get; set; }
 
+        bool PreDeleteResult { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
         /// </summary>
@@ -221,6 +223,10 @@ namespace RingSoft.DbMaintenance
         void HandleAutoFillValFail(DbAutoFillMap autoFillMap);
 
         ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables);
+
+        void GetPreDeleteProcedure(
+            List<FieldDefinition> fields
+            , DeleteTables deleteTables);
 
         void SetWindowReadOnlyMode(bool readOnlyMode);
     }

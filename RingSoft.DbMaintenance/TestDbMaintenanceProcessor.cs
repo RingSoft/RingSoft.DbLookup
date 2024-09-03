@@ -34,6 +34,7 @@ namespace RingSoft.DbMaintenance
         public bool MessageBoxResult { get; set; }
 
         public bool DeleteChildrenResult { get; set; }
+        public bool PreDeleteResult { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
@@ -230,6 +231,13 @@ namespace RingSoft.DbMaintenance
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
             return null;
+        }
+
+        public void GetPreDeleteProcedure(
+            List<FieldDefinition> fields
+            , DeleteTables deleteTables)
+        {
+            
         }
 
         public void SetWindowReadOnlyMode(bool readOnlyMode)

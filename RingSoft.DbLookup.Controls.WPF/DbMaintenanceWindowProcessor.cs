@@ -435,6 +435,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             KeyControlRegistered = true;
         }
 
+        public bool PreDeleteResult { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
         /// </summary>
@@ -670,6 +672,20 @@ namespace RingSoft.DbLookup.Controls.WPF
                 , deleteTables);
             delProcedure.Start();
             return delProcedure;
+        }
+
+        public void GetPreDeleteProcedure(
+            List<FieldDefinition> fields
+            , DeleteTables deleteTables)
+        {
+            var delProcedure = new PreDeleteProcedure(MaintenanceWindow
+                , "Gathering Tables To Delete"
+                , ViewModel
+                , deleteTables
+                , fields
+                , this);
+
+            delProcedure.Start();
         }
 
         public void SetWindowReadOnlyMode(bool readOnlyMode)

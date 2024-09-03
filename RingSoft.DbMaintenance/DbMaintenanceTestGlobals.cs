@@ -152,6 +152,7 @@ namespace RingSoft.DbMaintenance
         }
 
         public bool DeleteChildrenResult { get; set; }
+        public bool PreDeleteResult { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [key control registered].
@@ -343,6 +344,11 @@ namespace RingSoft.DbMaintenance
             var result = new TestTwoTierProcedure();
             ViewModel.Processor.DeleteChildrenResult = ViewModel.DeleteChildren(deleteTables, result);
             return result;
+        }
+
+        public void GetPreDeleteProcedure(List<FieldDefinition> fields, DeleteTables deleteTables)
+        {
+            
         }
 
         public void SetWindowReadOnlyMode(bool readOnlyMode)

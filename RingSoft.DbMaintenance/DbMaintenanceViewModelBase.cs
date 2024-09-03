@@ -1287,6 +1287,11 @@ namespace RingSoft.DbMaintenance
 
         public abstract bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure);
 
+        public abstract bool DoGetDeleteTables(
+            List<FieldDefinition> fields
+            , DeleteTables deleteTables
+            , ITwoTierProcessingProcedure procedure);
+
         /// <summary>
         /// Executed when a property value has changed.
         /// </summary>

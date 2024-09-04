@@ -1063,7 +1063,20 @@ namespace RingSoft.DbMaintenance
             if (result)
             {
                 ColumnsManager.SaveNoCommitData(entity, context);
-                FiltersManager.SaveNoCommitData(entity, context);
+                //FiltersManager.SaveNoCommitData(entity, context);
+                var table = context.GetTable<AdvancedFindFilter>();
+                var existingFilters = table
+                    .Where(p => p.AdvancedFindId == entity.Id);
+
+                var newFilters = FiltersManager.GetEntityList();
+                foreach (var filter in newFilters)
+                {
+                    filter.AdvancedFindId = entity.Id;
+                }
+
+                context.RemoveRange(existingFilters);
+                context.AddRange(newFilters);
+
                 result = context.Commit("Saving Advanced Find Details");
             }
             return result;

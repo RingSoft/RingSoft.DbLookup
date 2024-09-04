@@ -399,17 +399,22 @@ namespace RingSoft.DbMaintenance
                 }
             }
             Path = filter.Path;
+            if (filter.LookupColumn != null && Path.IsNullOrEmpty())
+            {
+                Path = filter.LookupColumn.Path;
+            }
             FilterItemDefinition = filter;
-            if (filter.Path.IsNullOrEmpty())
+            if (Path.IsNullOrEmpty())
             {
                 Table = Manager.ViewModel.LookupDefinition.TableDefinition.Description;
             }
             else
             {
                 var foundItem =
-                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(filter.Path,
+                    Manager.ViewModel.LookupDefinition.AdvancedFindTree.ProcessFoundTreeViewItem(Path,
                         filter.TreeViewType);
-                if (foundItem != null && Table.IsNullOrEmpty())
+                if ((foundItem != null && Table.IsNullOrEmpty())
+                    || filter.LookupColumn != null)
                 {
                     if (foundItem.Parent != null)
                     {

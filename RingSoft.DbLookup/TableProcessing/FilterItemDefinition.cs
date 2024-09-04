@@ -223,7 +223,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// Gets or sets the lookup column.
         /// </summary>
         /// <value>The lookup column.</value>
-        internal LookupColumnDefinitionBase LookupColumn { get; set; }
+        public LookupColumnDefinitionBase LookupColumn { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="FilterItemDefinition"/> is processed.

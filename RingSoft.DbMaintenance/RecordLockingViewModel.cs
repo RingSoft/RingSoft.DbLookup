@@ -71,13 +71,6 @@ namespace RingSoft.DbMaintenance
     public class RecordLockingViewModel : DbMaintenanceViewModel<RecordLock>
     {
         /// <summary>
-        /// Gets the table definition.
-        /// </summary>
-        /// <value>The table definition.</value>
-        public override TableDefinition<RecordLock> TableDefinition =>
-            SystemGlobals.AdvancedFindLookupContext.RecordLocks;
-
-        /// <summary>
         /// The message
         /// </summary>
         private string _message;

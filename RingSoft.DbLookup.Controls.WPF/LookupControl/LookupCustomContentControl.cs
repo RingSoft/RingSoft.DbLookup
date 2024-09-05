@@ -18,6 +18,7 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 // ReSharper disable once CheckNamespace
@@ -107,6 +108,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 factory.SetBinding(LookupCustomContentControl.DataTextProperty, new Binding(dataColumnName));
             }
+            factory.SetValue(Control.IsTabStopProperty, false);
             factory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
             factory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
         }

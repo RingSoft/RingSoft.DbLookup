@@ -141,9 +141,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Shows the window.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
-        public override void ShowWindow(TableDefinitionBase tableDefinition)
+        public override void ShowWindow(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
-            ShowDbMaintenanceWindow(tableDefinition);
+            ShowDbMaintenanceWindow(tableDefinition, inputParameter);
         }
 
         /// <summary>
@@ -188,10 +188,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.Processor.InitializeFromLookupData(addViewArgs);
+            maintenanceWindow.ViewModel.InputParameter = addViewParameter;
             maintenanceWindow.Show();
         }
 
-        public override void ShowDialog(TableDefinitionBase tableDefinition)
+        public override void ShowDialog(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
             var item = GetDbMaintenanceWindow(tableDefinition);
             if (item != null)
@@ -200,6 +201,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
                 maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
                 maintenanceWindow.ShowInTaskbar = false;
+                maintenanceWindow.ViewModel.InputParameter = inputParameter;
                 maintenanceWindow.ShowDialog();
 
             }
@@ -210,7 +212,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="ownerWindow">The owner window.</param>
-        public virtual void ShowDbMaintenanceWindow(TableDefinitionBase tableDefinition, Window ownerWindow = null)
+        public virtual void ShowDbMaintenanceWindow(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
             var item = GetDbMaintenanceWindow(tableDefinition);
             if (item != null)
@@ -220,7 +222,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
                     maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
-
+                    maintenanceWindow.ViewModel.InputParameter = inputParameter;
                     maintenanceWindow.ShowInTaskbar = false;
                     maintenanceWindow.Show();
                 }

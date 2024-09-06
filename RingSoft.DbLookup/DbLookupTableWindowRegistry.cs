@@ -59,8 +59,8 @@ namespace RingSoft.DbLookup
         /// Shows the window.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
-        public abstract void ShowWindow(TableDefinitionBase tableDefinition);
+        public abstract void ShowWindow(TableDefinitionBase tableDefinition, object inputParameter = null);
 
-        public abstract void ShowDialog(TableDefinitionBase tableDefinition);
+        public abstract void ShowDialog(TableDefinitionBase tableDefinition, object inputParameter = null);
     }
 }

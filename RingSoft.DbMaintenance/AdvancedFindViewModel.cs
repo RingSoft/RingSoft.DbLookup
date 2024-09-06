@@ -90,6 +90,8 @@ namespace RingSoft.DbMaintenance
         void CheckTableIsFocused();
 
         void SelectFiltersTab();
+
+        void ResetLookup();
     }
 
     //public class TreeViewFormulaData
@@ -399,28 +401,6 @@ namespace RingSoft.DbMaintenance
 
                 _lookupDefinition = value;
                 OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// The lookup command
-        /// </summary>
-        private LookupCommand _lookupCommand;
-
-        /// <summary>
-        /// Gets or sets the lookup command.
-        /// </summary>
-        /// <value>The lookup command.</value>
-        public LookupCommand LookupCommand
-        {
-            get => _lookupCommand;
-            set
-            {
-                if (value == _lookupCommand)
-                    return;
-
-                _lookupCommand = value;
-                OnPropertyChanged(null, false);
             }
         }
 
@@ -817,7 +797,7 @@ namespace RingSoft.DbMaintenance
             this.LookupDefinition.AdvancedFindTree = AdvancedFindTree;
             TreeRoot = AdvancedFindTree.TreeRoot;
 
-            LookupCommand = GetLookupCommand(LookupCommands.Clear);
+            LookupDefinition.SetCommand(GetLookupCommand(LookupCommands.Clear));
         }
 
         //private void AddTreeItem(TableDefinitionBase table,
@@ -977,10 +957,11 @@ namespace RingSoft.DbMaintenance
             //if (LookupDefinition != null)
             //{
             //ResetLookup();
-            var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
-            command.ClearColumns = true;
-            LookupCommand = command;
+            //var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+            //command.ClearColumns = true;
+            //LookupDefinition.SetCommand(command);
             //}
+            View.ResetLookup();
 
             ColumnsManager.SetupForNewRecord();
             FiltersManager.SetupForNewRecord();
@@ -1384,7 +1365,7 @@ namespace RingSoft.DbMaintenance
             if (valResult)
             {
                 var test = LookupDefinition;
-                LookupCommand = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
+                LookupDefinition.SetCommand(GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter));
                 ProcessRefresh();
                 PrintLookupOutputCommand.IsEnabled = RefreshNowCommand.IsEnabled = true;
             }
@@ -1398,7 +1379,7 @@ namespace RingSoft.DbMaintenance
         {
             if (ValidateLookup())
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh, null, AdvancedFindInput?.InputParameter);
+                LookupDefinition.SetCommand(GetLookupCommand(LookupCommands.Refresh, null, AdvancedFindInput?.InputParameter));
                 if (refreshCount)
                 {
                     ProcessRefresh();
@@ -1444,11 +1425,11 @@ namespace RingSoft.DbMaintenance
                 var command = GetLookupCommand(LookupCommands.Reset, null, AdvancedFindInput?.InputParameter);
                 command.ClearColumns = true;
                 command.ResetSearchFor = true;
-                LookupCommand = command;
+                LookupDefinition.SetCommand(command);
             }
             else
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Clear);
+                LookupDefinition.SetCommand(GetLookupCommand(LookupCommands.Clear));
             }
         }
 
@@ -1604,7 +1585,7 @@ namespace RingSoft.DbMaintenance
         {
             if (ValidateLookup())
             {
-                LookupCommand = GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition));
+                LookupDefinition.SetCommand(GetLookupCommand(LookupCommands.Refresh, new PrimaryKeyValue(LookupDefinition.TableDefinition)));
                 ProcessRefresh();
             }
         }

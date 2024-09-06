@@ -146,7 +146,7 @@
                                         </Grid.RowDefinitions>
                                         <Label Grid.Row="0" HorizontalAlignment="Left" Content="(Ctrl + L to set focus)"/>
 
-                                        <lc:LookupControl Grid.Row="1"  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" Command="{Binding LookupCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="800" ShowAdvancedFindButton="False"/>
+                                        <lc:LookupControl Grid.Row="1"  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" MinWidth="800" ShowAdvancedFindButton="False"/>
                                     </Grid>
 
                                     </Grid>

@@ -1975,7 +1975,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     if (LookupWindow == null && !HideUserDoubleClickRowMessage)
                     {
-                        if (LookupDefinition.TableDefinition.CanViewTable)
+                        if (LookupDefinition != null && LookupDefinition.TableDefinition.CanViewTable)
                         {
                             ListTextBox.Visibility = Visibility.Visible;
                         }

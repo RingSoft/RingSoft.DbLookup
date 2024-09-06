@@ -361,6 +361,13 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             TabControl.SelectedItem = FiltersTabItem;
         }
 
+        public void ResetLookup()
+        {
+            var command = new LookupCommand(LookupCommands.Reset, null, true);
+            command.ClearColumns = true;
+            LookupControl.Command = command;
+        }
+
         //public void LockTable(bool lockValue)
         //{
         //    TableListControl.IsEnabled = !lockValue;

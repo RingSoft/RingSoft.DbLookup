@@ -582,33 +582,25 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// The command property
-        /// </summary>
-        public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(LookupCommand), typeof(LookupControl),
-                new FrameworkPropertyMetadata(CommandChangedCallback));
-
-        /// <summary>
         /// Gets or sets the LookupCommand which is used by view models to tell this control to either refresh, clear etc.
         /// </summary>
         /// <value>The command.</value>
+        ///
+        private LookupCommand _command;
+
         public LookupCommand Command
         {
-            get { return (LookupCommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-        /// <summary>
-        /// Commands the changed callback.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void CommandChangedCallback(DependencyObject obj,
-            DependencyPropertyChangedEventArgs args)
-        {
-            var lookupControl = (LookupControl)obj;
-            lookupControl._commandToExecute = lookupControl.Command;
-            lookupControl.ExecuteCommand();
+            get { return _command; }
+            set
+            {
+                if (_command == value)
+                {
+                    return;
+                }
+                _command = value;
+                _commandToExecute = value;
+                ExecuteCommand();
+            }
         }
 
         /// <summary>

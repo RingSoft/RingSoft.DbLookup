@@ -1,13 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
+using System;
+using System.ComponentModel;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {
@@ -274,6 +273,12 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
                 _productDirty = false;
             }
+        }
+
+        protected override Order_Detail GetEntityFromDb(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)
+        {
+            var result = newEntity.FillOutProperties(true);
+            return result;
         }
 
         protected override void PopulatePrimaryKeyControls(Order_Detail newEntity, PrimaryKeyValue primaryKeyValue)

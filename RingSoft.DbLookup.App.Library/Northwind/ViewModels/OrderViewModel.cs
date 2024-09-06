@@ -3,14 +3,12 @@ using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbLookup.TableProcessing;
 using RingSoft.DbMaintenance;
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {

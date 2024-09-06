@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
-using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbMaintenance;
+using System;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {

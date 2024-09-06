@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+﻿using RingSoft.DataEntryControls.Engine.DataEntryGrid;
 using RingSoft.DbLookup.App.Library.Northwind.Model;
 using RingSoft.DbMaintenance;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System;
 
 namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 {

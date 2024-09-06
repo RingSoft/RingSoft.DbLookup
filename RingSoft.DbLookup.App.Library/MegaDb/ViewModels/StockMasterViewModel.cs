@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using RingSoft.DataEntryControls.Engine;
+﻿using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.App.Library.MegaDb.LookupModel;
 using RingSoft.DbLookup.App.Library.MegaDb.Model;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
-using RingSoft.DbLookup.ModelDefinition;
-using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.DbMaintenance;
+using System.Linq;
 
 namespace RingSoft.DbLookup.App.Library.MegaDb.ViewModels
 {

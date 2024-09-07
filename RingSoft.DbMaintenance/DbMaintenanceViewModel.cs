@@ -2325,17 +2325,14 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Registers the grid.
+        /// Registers the grid.  Will automatically save and load grid when database saves and loads view model.
+        /// Used for grids that have one header field.
         /// </summary>
         /// <param name="grid">The grid.</param>
         /// <param name="readOnly">if set to <c>true</c> [read only].</param>
         public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly = false)
         {
             var gridTable = grid.TableDefinition;
-            //if (gridTable.HeaderTable == null)
-            //{
-            //    gridTable.SetHeaderEntity<TEntity>();
-            //}
 
             if (!TablesToDelete.Contains(gridTable))
             {

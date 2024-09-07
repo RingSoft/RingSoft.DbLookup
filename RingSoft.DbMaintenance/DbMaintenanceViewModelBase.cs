@@ -1296,7 +1296,8 @@ namespace RingSoft.DbMaintenance
         }
 
         /// <summary>
-        /// Registers the lookup.
+        /// Registers the lookup.  Used for lookups that only connect to header table with no additional filters.
+        /// Automatically refreshes lookup when view model state changes.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="addViewParameter">The add view parameter.</param>

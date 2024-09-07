@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-07-2023
+// Last Modified On : 06-07-2024
 // ***********************************************************************
 // <copyright file="LookupWindowFactory.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private TaskbarIcon _taskbarIcon;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupWindowFactory"/> class.
+        /// Initializes a new instance of the <see cref="LookupWindowFactory" /> class.
         /// </summary>
         public LookupWindowFactory()
         {
@@ -184,6 +184,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance [can display field] the specified field definition.
+        /// </summary>
+        /// <param name="fieldDefinition">The field definition.</param>
+        /// <returns><c>true</c> if this instance [can display field] the specified field definition; otherwise, <c>false</c>.</returns>
         public virtual bool CanDisplayField(FieldDefinition fieldDefinition)
         {
             return true;

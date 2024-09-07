@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DataEntryGridAdvancedFindFormulaColumnHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private string _formula;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataEntryGridAdvancedFindFormulaColumnHost"/> class.
+        /// Initializes a new instance of the <see cref="DataEntryGridAdvancedFindFormulaColumnHost" /> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
         public DataEntryGridAdvancedFindFormulaColumnHost(DataEntryGrid grid) : base(grid)

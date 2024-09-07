@@ -4,7 +4,7 @@
 // Created          : 05-24-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-09-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceStatusBar.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -70,7 +70,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Dates the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void DateChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -84,7 +84,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _isActive = true;
 
         /// <summary>
-        /// Initializes static members of the <see cref="DbMaintenanceStatusBar"/> class.
+        /// Initializes static members of the <see cref="DbMaintenanceStatusBar" /> class.
         /// </summary>
         static DbMaintenanceStatusBar()
         {
@@ -94,7 +94,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceStatusBar"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceStatusBar" /> class.
         /// </summary>
         public DbMaintenanceStatusBar()
         {

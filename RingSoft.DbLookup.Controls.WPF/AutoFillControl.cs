@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 10-29-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AutoFillControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -126,7 +126,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Setups the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void SetupChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -156,7 +156,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Values the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void ValueChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -262,7 +262,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Designs the text changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void DesignTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -291,7 +291,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Characters the casing changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void CharacterCasingChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -322,7 +322,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Texts the alignment changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void TextAlignmentChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -335,7 +335,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Borders the thickness changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void BorderThicknessChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -350,7 +350,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Backgrounds the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void BackgroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -365,7 +365,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Heights the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -390,7 +390,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Foregrounds the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void ForegroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -422,7 +422,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Selections the brush changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void SelectionBrushChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -452,7 +452,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Rses the is tab stop changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void RsIsTabStopChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -484,7 +484,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// UIs the command changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void UiCommandChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -521,7 +521,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// UIs the label changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void UiLabelChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -744,7 +744,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private VmUiControl _vmUiControl;
 
         /// <summary>
-        /// Initializes static members of the <see cref="AutoFillControl"/> class.
+        /// Initializes static members of the <see cref="AutoFillControl" /> class.
         /// </summary>
         static AutoFillControl()
         {
@@ -775,7 +775,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillControl"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillControl" /> class.
         /// </summary>
         public AutoFillControl()
         {
@@ -813,7 +813,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the GotFocus event of the AutoFillControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void AutoFillControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (ReadOnlyMode)
@@ -919,7 +919,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the KeyDown event of the Button control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         private void Button_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F5)
@@ -999,7 +999,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewMouseLeftButtonDown event of the ListBox control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="MouseButtonEventArgs" /> instance containing the event data.</param>
         private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ListBoxItem listBoxItem = sender as ListBoxItem;
@@ -1114,7 +1114,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the TextChanged event of the TextBox control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs" /> instance containing the event data.</param>
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!_settingText)
@@ -1253,7 +1253,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewKeyDown event of the TextBox control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (_readOnlyMode && e.Key != Key.F5)
@@ -1305,7 +1305,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewTextInput event of the TextBox control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextCompositionEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextCompositionEventArgs" /> instance containing the event data.</param>
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (_readOnlyMode)
@@ -1487,7 +1487,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Handles the <see cref="E:KeyDown" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Tab)

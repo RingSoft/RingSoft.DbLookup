@@ -145,7 +145,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class StringFormatMethodAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringFormatMethodAttribute"/> class.
+        /// Initializes a new instance of the <see cref="StringFormatMethodAttribute" /> class.
         /// </summary>
         /// <param name="formatParameterName">Specifies which parameter of an annotated method should be treated as the format string</param>
         public StringFormatMethodAttribute([NotNull] string formatParameterName)
@@ -193,7 +193,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class ValueProviderAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValueProviderAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ValueProviderAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public ValueProviderAttribute([NotNull] string name)
@@ -250,11 +250,11 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotifyPropertyChangedInvocatorAttribute"/> class.
+        /// Initializes a new instance of the <see cref="NotifyPropertyChangedInvocatorAttribute" /> class.
         /// </summary>
         public NotifyPropertyChangedInvocatorAttribute() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotifyPropertyChangedInvocatorAttribute"/> class.
+        /// Initializes a new instance of the <see cref="NotifyPropertyChangedInvocatorAttribute" /> class.
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>
         public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName)
@@ -328,14 +328,14 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class ContractAnnotationAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContractAnnotationAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ContractAnnotationAttribute" /> class.
         /// </summary>
         /// <param name="contract">The contract.</param>
         public ContractAnnotationAttribute([NotNull] string contract)
       : this(contract, false) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContractAnnotationAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ContractAnnotationAttribute" /> class.
         /// </summary>
         /// <param name="contract">The contract.</param>
         /// <param name="forceFullStates">if set to <c>true</c> [force full states].</param>
@@ -373,12 +373,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class LocalizationRequiredAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute"/> class.
+        /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute" /> class.
         /// </summary>
         public LocalizationRequiredAttribute() : this(true) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute"/> class.
+        /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute" /> class.
         /// </summary>
         /// <param name="required">if set to <c>true</c> [required].</param>
         public LocalizationRequiredAttribute(bool required)
@@ -387,7 +387,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
     }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="LocalizationRequiredAttribute"/> is required.
+        /// Gets a value indicating whether this <see cref="LocalizationRequiredAttribute" /> is required.
         /// </summary>
         /// <value><c>true</c> if required; otherwise, <c>false</c>.</value>
         public bool Required { get; }
@@ -434,7 +434,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class BaseTypeRequiredAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseTypeRequiredAttribute"/> class.
+        /// Initializes a new instance of the <see cref="BaseTypeRequiredAttribute" /> class.
         /// </summary>
         /// <param name="baseType">Type of the base.</param>
         public BaseTypeRequiredAttribute([NotNull] Type baseType)
@@ -457,27 +457,27 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class UsedImplicitlyAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute" /> class.
         /// </summary>
         public UsedImplicitlyAttribute()
       : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute" /> class.
         /// </summary>
         /// <param name="useKindFlags">The use kind flags.</param>
         public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags)
       : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute" /> class.
         /// </summary>
         /// <param name="targetFlags">The target flags.</param>
         public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags)
       : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="UsedImplicitlyAttribute" /> class.
         /// </summary>
         /// <param name="useKindFlags">The use kind flags.</param>
         /// <param name="targetFlags">The target flags.</param>
@@ -510,27 +510,27 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class MeansImplicitUseAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute" /> class.
         /// </summary>
         public MeansImplicitUseAttribute()
       : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute" /> class.
         /// </summary>
         /// <param name="useKindFlags">The use kind flags.</param>
         public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
       : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute" /> class.
         /// </summary>
         /// <param name="targetFlags">The target flags.</param>
         public MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags)
       : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MeansImplicitUseAttribute" /> class.
         /// </summary>
         /// <param name="useKindFlags">The use kind flags.</param>
         /// <param name="targetFlags">The target flags.</param>
@@ -616,12 +616,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class PublicAPIAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicAPIAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PublicAPIAttribute" /> class.
         /// </summary>
         public PublicAPIAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublicAPIAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PublicAPIAttribute" /> class.
         /// </summary>
         /// <param name="comment">The comment.</param>
         public PublicAPIAttribute([NotNull] string comment)
@@ -672,12 +672,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class MustUseReturnValueAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MustUseReturnValueAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MustUseReturnValueAttribute" /> class.
         /// </summary>
         public MustUseReturnValueAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MustUseReturnValueAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MustUseReturnValueAttribute" /> class.
         /// </summary>
         /// <param name="justification">The justification.</param>
         public MustUseReturnValueAttribute([NotNull] string justification)
@@ -721,12 +721,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class PathReferenceAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PathReferenceAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PathReferenceAttribute" /> class.
         /// </summary>
         public PathReferenceAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PathReferenceAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PathReferenceAttribute" /> class.
         /// </summary>
         /// <param name="basePath">The base path.</param>
         public PathReferenceAttribute([NotNull, PathReference] string basePath)
@@ -825,7 +825,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcAreaMasterLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcAreaMasterLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcAreaMasterLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format)
@@ -849,7 +849,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcAreaPartialViewLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcAreaPartialViewLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcAreaPartialViewLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format)
@@ -873,7 +873,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcAreaViewLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcAreaViewLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcAreaViewLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcAreaViewLocationFormatAttribute([NotNull] string format)
@@ -897,7 +897,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcMasterLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcMasterLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcMasterLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcMasterLocationFormatAttribute([NotNull] string format)
@@ -921,7 +921,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcPartialViewLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcPartialViewLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcPartialViewLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcPartialViewLocationFormatAttribute([NotNull] string format)
@@ -945,7 +945,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcViewLocationFormatAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcViewLocationFormatAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcViewLocationFormatAttribute" /> class.
         /// </summary>
         /// <param name="format">The format.</param>
         public AspMvcViewLocationFormatAttribute([NotNull] string format)
@@ -970,12 +970,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcActionAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcActionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcActionAttribute" /> class.
         /// </summary>
         public AspMvcActionAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcActionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcActionAttribute" /> class.
         /// </summary>
         /// <param name="anonymousProperty">The anonymous property.</param>
         public AspMvcActionAttribute([NotNull] string anonymousProperty)
@@ -999,12 +999,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcAreaAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcAreaAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcAreaAttribute" /> class.
         /// </summary>
         public AspMvcAreaAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcAreaAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcAreaAttribute" /> class.
         /// </summary>
         /// <param name="anonymousProperty">The anonymous property.</param>
         public AspMvcAreaAttribute([NotNull] string anonymousProperty)
@@ -1029,12 +1029,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspMvcControllerAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcControllerAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcControllerAttribute" /> class.
         /// </summary>
         public AspMvcControllerAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspMvcControllerAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspMvcControllerAttribute" /> class.
         /// </summary>
         /// <param name="anonymousProperty">The anonymous property.</param>
         public AspMvcControllerAttribute([NotNull] string anonymousProperty)
@@ -1150,12 +1150,12 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class HtmlElementAttributesAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HtmlElementAttributesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="HtmlElementAttributesAttribute" /> class.
         /// </summary>
         public HtmlElementAttributesAttribute() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HtmlElementAttributesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="HtmlElementAttributesAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public HtmlElementAttributesAttribute([NotNull] string name)
@@ -1179,7 +1179,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class HtmlAttributeValueAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HtmlAttributeValueAttribute"/> class.
+        /// Initializes a new instance of the <see cref="HtmlAttributeValueAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public HtmlAttributeValueAttribute([NotNull] string name)
@@ -1233,7 +1233,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class CollectionAccessAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionAccessAttribute"/> class.
+        /// Initializes a new instance of the <see cref="CollectionAccessAttribute" /> class.
         /// </summary>
         /// <param name="collectionAccessType">Type of the collection access.</param>
         public CollectionAccessAttribute(CollectionAccessType collectionAccessType)
@@ -1290,7 +1290,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AssertionConditionAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssertionConditionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AssertionConditionAttribute" /> class.
         /// </summary>
         /// <param name="conditionType">Type of the condition.</param>
         public AssertionConditionAttribute(AssertionConditionType conditionType)
@@ -1405,7 +1405,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspChildControlTypeAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspChildControlTypeAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspChildControlTypeAttribute" /> class.
         /// </summary>
         /// <param name="tagName">Name of the tag.</param>
         /// <param name="controlType">Type of the control.</param>
@@ -1461,7 +1461,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class AspRequiredAttributeAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspRequiredAttributeAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspRequiredAttributeAttribute" /> class.
         /// </summary>
         /// <param name="attribute">The attribute.</param>
         public AspRequiredAttributeAttribute([NotNull] string attribute)
@@ -1491,7 +1491,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
         public bool CreateConstructorReferences { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspTypePropertyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AspTypePropertyAttribute" /> class.
         /// </summary>
         /// <param name="createConstructorReferences">if set to <c>true</c> [create constructor references].</param>
         public AspTypePropertyAttribute(bool createConstructorReferences)
@@ -1509,7 +1509,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class RazorImportNamespaceAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RazorImportNamespaceAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RazorImportNamespaceAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public RazorImportNamespaceAttribute([NotNull] string name)
@@ -1533,7 +1533,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class RazorInjectionAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RazorInjectionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RazorInjectionAttribute" /> class.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="fieldName">Name of the field.</param>
@@ -1565,7 +1565,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class RazorDirectiveAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RazorDirectiveAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RazorDirectiveAttribute" /> class.
         /// </summary>
         /// <param name="directive">The directive.</param>
         public RazorDirectiveAttribute([NotNull] string directive)
@@ -1589,7 +1589,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
   public sealed class RazorPageBaseTypeAttribute : Attribute
   {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RazorPageBaseTypeAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RazorPageBaseTypeAttribute" /> class.
         /// </summary>
         /// <param name="baseType">Type of the base.</param>
         public RazorPageBaseTypeAttribute([NotNull] string baseType)
@@ -1597,7 +1597,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties
         BaseType = baseType;
       }
         /// <summary>
-        /// Initializes a new instance of the <see cref="RazorPageBaseTypeAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RazorPageBaseTypeAttribute" /> class.
         /// </summary>
         /// <param name="baseType">Type of the base.</param>
         /// <param name="pageName">Name of the page.</param>

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-07-2023
+// Last Modified On : 09-06-2024
 // ***********************************************************************
 // <copyright file="AdvancedFindWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -356,11 +356,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
         }
 
+        /// <summary>
+        /// Selects the filters tab.
+        /// </summary>
         public void SelectFiltersTab()
         {
             TabControl.SelectedItem = FiltersTabItem;
         }
 
+        /// <summary>
+        /// Resets the lookup.
+        /// </summary>
         public void ResetLookup()
         {
             var command = new LookupCommand(LookupCommands.Reset, null, true);
@@ -374,7 +380,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         //}
 
         /// <summary>
-        /// Initializes static members of the <see cref="AdvancedFindWindow"/> class.
+        /// Initializes static members of the <see cref="AdvancedFindWindow" /> class.
         /// </summary>
         static AdvancedFindWindow()
         {
@@ -382,7 +388,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindWindow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindWindow" /> class.
         /// </summary>
         /// <param name="addViewArgs">The add view arguments.</param>
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
@@ -393,7 +399,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindWindow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindWindow" /> class.
         /// </summary>
         public AdvancedFindWindow()
         {
@@ -454,6 +460,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// <summary>
         /// Initializes this instance.
         /// </summary>
+        /// <exception cref="System.Exception">You must inherit and override LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor() and not return null.</exception>
+        /// <exception cref="System.Exception">You must inherit LookupControlsGlobals.DbMaintenanceButtonsFactory return valid control in GetAdvancedFindButtonsControl.</exception>
         public void Initialize()
         {
             Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
@@ -585,7 +593,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Handles the GotFocus event of the TreeView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void TreeView_GotFocus(object sender, RoutedEventArgs e)
         {
             var sendTab = true;
@@ -620,7 +628,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Handles the GotFocus event of the Border control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Border_GotFocus(object sender, RoutedEventArgs e)
         {
             if (_nameTabKeyPressed)

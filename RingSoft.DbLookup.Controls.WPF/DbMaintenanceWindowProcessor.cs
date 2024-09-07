@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-10-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceWindowProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -256,7 +256,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewKeyDown event of the DbMaintenanceWindow control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected virtual void DbMaintenanceWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
@@ -283,6 +283,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="viewModel">The view model.</param>
         /// <param name="view">The view.</param>
         /// <param name="statusBar">The status bar.</param>
+        /// <exception cref="System.ArgumentNullException">window</exception>
+        /// <exception cref="System.ArgumentNullException">buttonsControl</exception>
+        /// <exception cref="System.ArgumentException">viewModel</exception>
+        /// <exception cref="System.ArgumentException">view</exception>
         public virtual void Initialize(BaseWindow window, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
             IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
         {
@@ -435,6 +439,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             KeyControlRegistered = true;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [pre delete result].
+        /// </summary>
+        /// <value><c>true</c> if [pre delete result]; otherwise, <c>false</c>.</value>
         public bool PreDeleteResult { get; set; }
 
         /// <summary>
@@ -664,6 +672,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        /// <summary>
+        /// Gets the delete procedure.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns>ITwoTierProcessingProcedure.</returns>
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
             var delProcedure = new DeleteProcedure(MaintenanceWindow
@@ -674,6 +687,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             return delProcedure;
         }
 
+        /// <summary>
+        /// Gets the pre delete procedure.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
         public void GetPreDeleteProcedure(
             List<FieldDefinition> fields
             , DeleteTables deleteTables)
@@ -688,11 +706,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             delProcedure.Start();
         }
 
+        /// <summary>
+        /// Sets the window read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         public void SetWindowReadOnlyMode(bool readOnlyMode)
         {
             MaintenanceWindow.SetReadOnlyMode(readOnlyMode);
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [delete children result].
+        /// </summary>
+        /// <value><c>true</c> if [delete children result]; otherwise, <c>false</c>.</value>
         public bool DeleteChildrenResult { get; set; }
 
         /// <summary>
@@ -778,6 +804,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Pres the set button.
+        /// </summary>
+        /// <param name="button">The button.</param>
         private void PreSetButton(Button button)
         {
 

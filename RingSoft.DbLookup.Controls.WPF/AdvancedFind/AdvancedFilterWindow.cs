@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-08-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFilterWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -194,7 +194,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFilterReturn FilterReturn { get; set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="AdvancedFilterWindow"/> class.
+        /// Initializes static members of the <see cref="AdvancedFilterWindow" /> class.
         /// </summary>
         static AdvancedFilterWindow()
         {
@@ -202,7 +202,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFilterWindow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFilterWindow" /> class.
         /// </summary>
         public AdvancedFilterWindow()
         {

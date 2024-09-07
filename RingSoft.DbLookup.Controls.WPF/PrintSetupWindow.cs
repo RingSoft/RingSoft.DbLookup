@@ -4,7 +4,7 @@
 // Created          : 02-06-2023
 //
 // Last Modified By : petem
-// Last Modified On : 02-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="PrintSetupWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -73,7 +73,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public Grid FileTypeGrid { get; private set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="PrintSetupWindow"/> class.
+        /// Initializes static members of the <see cref="PrintSetupWindow" /> class.
         /// </summary>
         static PrintSetupWindow()
         {
@@ -81,7 +81,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrintSetupWindow"/> class.
+        /// Initializes a new instance of the <see cref="PrintSetupWindow" /> class.
         /// </summary>
         /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public PrintSetupWindow(PrinterSetupArgs printerSetupArgs)

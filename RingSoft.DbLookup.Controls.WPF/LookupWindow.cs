@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-29-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -264,7 +264,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _allowAdvancedFind = true;
 
         /// <summary>
-        /// Initializes static members of the <see cref="LookupWindow"/> class.
+        /// Initializes static members of the <see cref="LookupWindow" /> class.
         /// </summary>
         static LookupWindow()
         {
@@ -273,7 +273,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupWindow"/> class.
+        /// Initializes a new instance of the <see cref="LookupWindow" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="allowAdd">if set to <c>true</c> [allow add].</param>
@@ -355,7 +355,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Loaded event of the LookupControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void LookupControl_Loaded(object sender, RoutedEventArgs e)
         {
             Reload();
@@ -428,7 +428,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Click event of the CloseButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -438,7 +438,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Click event of the ViewButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
             if (LookupControl == null)
@@ -470,7 +470,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Click event of the AddButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             if (LookupControl == null)
@@ -503,7 +503,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Click event of the SelectButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void SelectButton_Click(object sender, RoutedEventArgs e)
         {
             OnSelectButtonClick();
@@ -526,7 +526,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the SelectedIndexChanged event of the LookupData control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectedIndexChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectedIndexChangedEventArgs" /> instance containing the event data.</param>
         private void LookupData_SelectedIndexChanged(object sender, SelectedIndexChangedEventArgs e)
         {
             if (e.NewIndex >= 0)

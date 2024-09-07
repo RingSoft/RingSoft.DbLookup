@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 10-29-2023
+// Last Modified On : 09-04-2024
 // ***********************************************************************
 // <copyright file="DataEntryGridAutoFillHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _gridReadOnlyMode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataEntryGridAutoFillHost"/> class.
+        /// Initializes a new instance of the <see cref="DataEntryGridAutoFillHost" /> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
         public DataEntryGridAutoFillHost(DataEntryGrid grid) : base(grid)

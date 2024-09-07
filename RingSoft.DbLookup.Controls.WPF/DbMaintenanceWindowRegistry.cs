@@ -4,7 +4,7 @@
 // Created          : 12-14-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-14-2023
+// Last Modified On : 09-05-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceWindowRegistry.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -81,6 +81,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
         }
 
+        /// <summary>
+        /// Registers the window.
+        /// </summary>
+        /// <typeparam name="TWindow">The type of the t window.</typeparam>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
         public void RegisterWindow<TWindow, TEntity>()
             where TWindow : DbMaintenanceWindow, new()
             where TEntity: class, new()
@@ -141,6 +146,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Shows the window.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public override void ShowWindow(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
             ShowDbMaintenanceWindow(tableDefinition, inputParameter);
@@ -192,6 +198,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             maintenanceWindow.Show();
         }
 
+        /// <summary>
+        /// Shows the dialog.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public override void ShowDialog(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
             var item = GetDbMaintenanceWindow(tableDefinition);
@@ -211,7 +222,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Shows the database maintenance window.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
-        /// <param name="ownerWindow">The owner window.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public virtual void ShowDbMaintenanceWindow(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
             var item = GetDbMaintenanceWindow(tableDefinition);

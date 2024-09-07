@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-10-2023
+// Last Modified On : 07-09-2024
 // ***********************************************************************
 // <copyright file="LookupControlsGlobals.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -261,8 +261,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        /// <summary>
+        /// Gets the window registry.
+        /// </summary>
+        /// <value>The window registry.</value>
         public static DbMaintenanceWindowRegistry WindowRegistry { get; internal set; } = new DbMaintenanceWindowRegistry();
 
+        /// <summary>
+        /// Initializes static members of the <see cref="LookupControlsGlobals"/> class.
+        /// </summary>
         static LookupControlsGlobals()
         {
             InitUi(SystemGlobals.ProgramDataFolder);

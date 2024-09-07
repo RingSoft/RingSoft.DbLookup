@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AutoFillMemoCellControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -42,7 +42,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Backgrounds the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void BackgroundChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Heights the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -81,7 +81,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Determines whether [is focused changed callback] [the specified object].
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void IsFocusedChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -122,7 +122,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// <value>The original text.</value>
         public string OriginalText { get; set; }
         /// <summary>
-        /// Initializes static members of the <see cref="AutoFillMemoCellControl"/> class.
+        /// Initializes static members of the <see cref="AutoFillMemoCellControl" /> class.
         /// </summary>
         static AutoFillMemoCellControl()
         {
@@ -144,7 +144,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillMemoCellControl"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillMemoCellControl" /> class.
         /// </summary>
         public AutoFillMemoCellControl()
         {

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-11-2023
 // ***********************************************************************
 // <copyright file="Resources.Designer.cs" company="Peter Ringering">
 //     Copyright (c) . All rights reserved.
@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.Controls.WPF.Properties {
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Resources"/> class.
+        /// Initializes a new instance of the <see cref="Resources" /> class.
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {

@@ -4,7 +4,7 @@
 // Created          : 03-04-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="ListWindow.cs" company="Peter Ringering">
 //     Copyright (c) . All rights reserved.
@@ -158,7 +158,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private double _preScrollThumbPosition;
 
         /// <summary>
-        /// Initializes static members of the <see cref="ListWindow"/> class.
+        /// Initializes static members of the <see cref="ListWindow" /> class.
         /// </summary>
         static ListWindow()
         {
@@ -166,7 +166,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListWindow"/> class.
+        /// Initializes a new instance of the <see cref="ListWindow" /> class.
         /// </summary>
         /// <param name="setup">The setup.</param>
         /// <param name="dataSource">The data source.</param>
@@ -238,7 +238,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewMouseWheel event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="MouseWheelEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="MouseWheelEventArgs" /> instance containing the event data.</param>
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
@@ -253,7 +253,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the SelectionChanged event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -285,7 +285,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewKeyDown event of the SearchForControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             OnListViewKeyDown(e);
@@ -295,7 +295,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the TextChanged event of the SearchForControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
             ViewModel.SearchText = SearchForHost.SearchText;
@@ -305,7 +305,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewLostKeyboardFocus event of the Control control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyboardFocusChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyboardFocusChangedEventArgs" /> instance containing the event data.</param>
         private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (ReferenceEquals(e.NewFocus, ListView))
@@ -315,7 +315,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Handles the <see cref="E:ListViewKeyDown" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         private void OnListViewKeyDown(KeyEventArgs e)
         {
             if (SearchForHost != null && SearchForHost.Control.IsKeyboardFocusWithin)
@@ -613,7 +613,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Scroll event of the ScrollBar control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="ScrollEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="ScrollEventArgs" /> instance containing the event data.</param>
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
             e.Handled = true;
@@ -691,7 +691,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Grids the view column header clicked handler.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;

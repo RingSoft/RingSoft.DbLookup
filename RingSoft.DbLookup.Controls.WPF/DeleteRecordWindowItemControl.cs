@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 01-16-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DeleteRecordWindowItemControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -63,7 +63,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DeleteTable DeleteTable { get; private set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="DeleteRecordWindowItemControl"/> class.
+        /// Initializes static members of the <see cref="DeleteRecordWindowItemControl" /> class.
         /// </summary>
         static DeleteRecordWindowItemControl()
         {
@@ -76,7 +76,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteRecordWindowItemControl"/> class.
+        /// Initializes a new instance of the <see cref="DeleteRecordWindowItemControl" /> class.
         /// </summary>
         /// <param name="deleteTable">The delete table.</param>
         public DeleteRecordWindowItemControl(DeleteTable deleteTable)

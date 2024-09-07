@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-22-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupColumn.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -221,7 +221,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Loadeds the specified sender.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is TControl control)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 03-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DeleteRecordWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -67,7 +67,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
 
         /// <summary>
-        /// Initializes static members of the <see cref="DeleteRecordWindow"/> class.
+        /// Initializes static members of the <see cref="DeleteRecordWindow" /> class.
         /// </summary>
         static DeleteRecordWindow()
         {
@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteRecordWindow"/> class.
+        /// Initializes a new instance of the <see cref="DeleteRecordWindow" /> class.
         /// </summary>
         /// <param name="deleteTables">The delete tables.</param>
         public DeleteRecordWindow(DeleteTables deleteTables)

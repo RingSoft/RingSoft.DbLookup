@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 03-04-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupSearchForHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -113,7 +113,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public event EventHandler TextChanged;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupSearchForHost"/> class.
+        /// Initializes a new instance of the <see cref="LookupSearchForHost" /> class.
         /// </summary>
         protected internal LookupSearchForHost()
         {
@@ -145,7 +145,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Handles the <see cref="E:PreviewKeyDown" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected void OnPreviewKeyDown(KeyEventArgs e)
         {
             PreviewKeyDown?.Invoke(Control, e);

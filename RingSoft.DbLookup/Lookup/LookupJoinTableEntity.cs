@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-19-2023
 // ***********************************************************************
 // <copyright file="LookupJoinTableEntity.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.Lookup
         private LookupDefinition<TLookupEntity, TEntity> _lookupEntityDefinition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}" /> class.
         /// </summary>
         /// <param name="lookupEntityDefinition">The lookup entity definition.</param>
         /// <param name="tableDefinition">The table definition.</param>
@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupJoinTableEntity{TLookupEntity, TEntity, TRelatedEntity}" /> class.
         /// </summary>
         /// <param name="lookupEntityDefinition">The lookup entity definition.</param>
         private LookupJoinTableEntity(LookupDefinition<TLookupEntity, TEntity> lookupEntityDefinition) : base(lookupEntityDefinition)

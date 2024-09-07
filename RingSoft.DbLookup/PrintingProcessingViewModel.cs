@@ -4,7 +4,7 @@
 // Created          : 01-29-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-10-2023
+// Last Modified On : 07-12-2024
 // ***********************************************************************
 // <copyright file="PrintingProcessingViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -128,7 +128,7 @@ namespace RingSoft.DbLookup
         public PrinterSetupArgs PrinterSetupArgs { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="PrintingProcessingViewModel"/> is abort.
+        /// Gets or sets a value indicating whether this <see cref="PrintingProcessingViewModel" /> is abort.
         /// </summary>
         /// <value><c>true</c> if abort; otherwise, <c>false</c>.</value>
         public bool Abort { get; set; }
@@ -145,7 +145,7 @@ namespace RingSoft.DbLookup
         private Timer _timer = new Timer(1000);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrintingProcessingViewModel"/> class.
+        /// Initializes a new instance of the <see cref="PrintingProcessingViewModel" /> class.
         /// </summary>
         public PrintingProcessingViewModel()
         {

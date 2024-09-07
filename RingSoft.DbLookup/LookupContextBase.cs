@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-29-2023
+// Last Modified On : 08-30-2024
 // ***********************************************************************
 // <copyright file="LookupContextBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -109,7 +109,7 @@ namespace RingSoft.DbLookup
         public LookupDefinitionBase LookupDefinition { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CanProcessTableArgs"/> class.
+        /// Initializes a new instance of the <see cref="CanProcessTableArgs" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public CanProcessTableArgs(TableDefinitionBase tableDefinition)
@@ -382,7 +382,7 @@ namespace RingSoft.DbLookup
         public readonly List<ILookupFormula> _formulas = new List<ILookupFormula>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupContextBase"/> class.
+        /// Initializes a new instance of the <see cref="LookupContextBase" /> class.
         /// </summary>
         public LookupContextBase()
         {
@@ -662,6 +662,14 @@ namespace RingSoft.DbLookup
         public abstract IQueryable<TEntity> GetQueryableTable<TEntity>(TableDefinition<TEntity> tableDefinition
             , bool getRelatedEntities, IDbContext context = null) where TEntity : class, new();
 
+        /// <summary>
+        /// Gets the queryable for table grid.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="gridTables">The grid tables.</param>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public abstract IQueryable<TEntity> GetQueryableForTableGrid<TEntity>(TableDefinition<TEntity> tableDefinition
             , List<TableDefinitionBase> gridTables, IDbContext context = null) where TEntity : class, new();
 

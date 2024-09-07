@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-06-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="FilterItemType.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -59,7 +59,7 @@ namespace RingSoft.DbLookup.TableProcessing
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FilterItemType{TFilterItem}"/> class.
+        /// Initializes a new instance of the <see cref="FilterItemType{TFilterItem}" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         protected FilterItemType(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 01-25-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="WhereItem.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -242,7 +242,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public bool CheckDescriptionForNull { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WhereItem"/> class.
+        /// Initializes a new instance of the <see cref="WhereItem" /> class.
         /// </summary>
         internal WhereItem()
         {

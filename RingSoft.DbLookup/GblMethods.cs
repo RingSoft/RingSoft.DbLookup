@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-09-2023
+// Last Modified On : 05-31-2024
 // ***********************************************************************
 // <copyright file="GblMethods.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -103,6 +103,10 @@ namespace RingSoft.DbLookup
         /// <value>The last error.</value>
         public static string LastError { get; set; }
 
+        /// <summary>
+        /// Nows the date.
+        /// </summary>
+        /// <returns>DateTime.</returns>
         public static DateTime NowDate()
         {
             var nowDate = DateTime.Now;
@@ -113,6 +117,11 @@ namespace RingSoft.DbLookup
             return result;
         }
 
+        /// <summary>
+        /// Scrubs the date time.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>DateTime.</returns>
         public static DateTime ScrubDateTime(DateTime input)
         {
             var result = DateTime.MinValue;
@@ -962,6 +971,12 @@ namespace RingSoft.DbLookup
             return param;
         }
 
+        /// <summary>
+        /// Creates the list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="elements">The elements.</param>
+        /// <returns>HashSet&lt;T&gt;.</returns>
         public static HashSet<T> CreateList<T>(params T[] elements)
         {
             var list = new List<T>(elements);

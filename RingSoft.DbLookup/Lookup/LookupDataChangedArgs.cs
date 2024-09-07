@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 01-28-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupDataChangedArgs.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -51,13 +51,13 @@ namespace RingSoft.DbLookup.Lookup
         public bool SearchForChanging { get; internal set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="LookupDataChangedArgs"/> is abort.
+        /// Gets or sets a value indicating whether this <see cref="LookupDataChangedArgs" /> is abort.
         /// </summary>
         /// <value><c>true</c> if abort; otherwise, <c>false</c>.</value>
         public bool Abort { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataChangedArgs"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataChangedArgs" /> class.
         /// </summary>
         /// <param name="outputTable">The output table.</param>
         /// <param name="selectedRowIndex">Index of the selected row.</param>

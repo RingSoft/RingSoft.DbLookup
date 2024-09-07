@@ -4,7 +4,7 @@
 // Created          : 06-09-2023
 //
 // Last Modified By : petem
-// Last Modified On : 11-23-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupDataMauiBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -96,7 +96,7 @@ namespace RingSoft.DbLookup.Lookup
         public LookupScrollPositions ScrollPosition { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataMauiOutput"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataMauiOutput" /> class.
         /// </summary>
         /// <param name="scrollPosition">The scroll position.</param>
         public LookupDataMauiOutput(LookupScrollPositions scrollPosition)
@@ -117,13 +117,13 @@ namespace RingSoft.DbLookup.Lookup
         public List<PrimaryKeyValue> Result { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="LookupDataMauiPrintOutput"/> is abort.
+        /// Gets or sets a value indicating whether this <see cref="LookupDataMauiPrintOutput" /> is abort.
         /// </summary>
         /// <value><c>true</c> if abort; otherwise, <c>false</c>.</value>
         public bool Abort { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataMauiPrintOutput"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataMauiPrintOutput" /> class.
         /// </summary>
         public LookupDataMauiPrintOutput()
         {
@@ -179,6 +179,10 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>The scroll position.</value>
         public LookupScrollPositions ScrollPosition { get; protected internal set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [database maintenance mode].
+        /// </summary>
+        /// <value><c>true</c> if [database maintenance mode]; otherwise, <c>false</c>.</value>
         public bool DbMaintenanceMode { get; set; }
 
         /// <summary>
@@ -200,7 +204,7 @@ namespace RingSoft.DbLookup.Lookup
         public event EventHandler DataSourceChanged;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataMauiBase"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataMauiBase" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public LookupDataMauiBase(LookupDefinitionBase lookupDefinition)

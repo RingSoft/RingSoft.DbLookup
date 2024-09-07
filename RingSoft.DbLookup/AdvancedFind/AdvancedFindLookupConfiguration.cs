@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-23-2023
+// Last Modified On : 05-31-2024
 // ***********************************************************************
 // <copyright file="AdvancedFindLookupConfiguration.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -30,7 +30,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         private IAdvancedFindLookupContext _lookupContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindLookupConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindLookupConfiguration" /> class.
         /// </summary>
         /// <param name="lookupContext">The lookup context.</param>
         public AdvancedFindLookupConfiguration(IAdvancedFindLookupContext lookupContext)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupRefresher.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -62,7 +62,7 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>The red alert.</value>
         public int RedAlert { get; set; }
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="LookupRefresher"/> is disabled.
+        /// Gets or sets a value indicating whether this <see cref="LookupRefresher" /> is disabled.
         /// </summary>
         /// <value><c>true</c> if disabled; otherwise, <c>false</c>.</value>
         public bool Disabled { get; set; }
@@ -86,7 +86,7 @@ namespace RingSoft.DbLookup.Lookup
         private int _interval = 0;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupRefresher"/> class.
+        /// Initializes a new instance of the <see cref="LookupRefresher" /> class.
         /// </summary>
         public LookupRefresher()
         {
@@ -133,7 +133,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Handles the Elapsed event of the _timer control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="ElapsedEventArgs" /> instance containing the event data.</param>
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _interval++;

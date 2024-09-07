@@ -4,7 +4,7 @@
 // Created          : 01-27-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="PrinterSetupArgs.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -58,7 +58,7 @@ namespace RingSoft.DbLookup
         /// <summary>
         /// Notifies the processing header.
         /// </summary>
-        /// <param name="args">The <see cref="PrinterDataProcessedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="PrinterDataProcessedEventArgs" /> instance containing the event data.</param>
         void NotifyProcessingHeader(PrinterDataProcessedEventArgs args);
     }
 
@@ -262,7 +262,7 @@ namespace RingSoft.DbLookup
         public int TotalRecords { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrinterSetupArgs"/> class.
+        /// Initializes a new instance of the <see cref="PrinterSetupArgs" /> class.
         /// </summary>
         public PrinterSetupArgs()
         {

@@ -4,7 +4,7 @@
 // Created          : 06-06-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-22-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="FilterBundle.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -44,7 +44,7 @@ namespace RingSoft.DbLookup.TableProcessing
         private readonly List<FilterItemDefinition> _filters = new List<FilterItemDefinition>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FilterBundle"/> class.
+        /// Initializes a new instance of the <see cref="FilterBundle" /> class.
         /// </summary>
         /// <param name="tableFilter">The table filter.</param>
         public FilterBundle(TableFilterDefinitionBase tableFilter)

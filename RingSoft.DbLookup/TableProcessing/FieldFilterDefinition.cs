@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-04-2023
+// Last Modified On : 05-28-2024
 // ***********************************************************************
 // <copyright file="FieldFilterDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -225,7 +225,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public List<JoinInfo> NavigationProperties { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldFilterDefinition"/> class.
+        /// Initializes a new instance of the <see cref="FieldFilterDefinition" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         internal FieldFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)
@@ -621,6 +621,10 @@ namespace RingSoft.DbLookup.TableProcessing
             return value;
         }
 
+        /// <summary>
+        /// Sets the date display value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public void SetDateDisplayValue(string value)
         {
             if (FieldDefinition is DateFieldDefinition dateField)

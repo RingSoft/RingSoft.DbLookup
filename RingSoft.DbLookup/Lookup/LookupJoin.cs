@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-06-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupJoin.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupJoin"/> class.
+        /// Initializes a new instance of the <see cref="LookupJoin" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         protected internal LookupJoin(LookupDefinitionBase lookupDefinition)

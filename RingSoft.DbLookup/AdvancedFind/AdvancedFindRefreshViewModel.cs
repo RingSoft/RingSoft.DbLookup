@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindRefreshViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -270,7 +270,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         private bool _disable;
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="AdvancedFindRefreshViewModel"/> is disable.
+        /// Gets or sets a value indicating whether this <see cref="AdvancedFindRefreshViewModel" /> is disable.
         /// </summary>
         /// <value><c>true</c> if disable; otherwise, <c>false</c>.</value>
         public bool Disable

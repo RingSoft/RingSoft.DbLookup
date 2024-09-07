@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-28-2023
+// Last Modified On : 05-26-2024
 // ***********************************************************************
 // <copyright file="TableFilterDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.TableProcessing
         private TableDefinition<TEntity> _entityTableDefinition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableFilterDefinition{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="TableFilterDefinition{TEntity}" /> class.
         /// </summary>
         /// <param name="entityTableDefinition">The entity table definition.</param>
         public TableFilterDefinition(TableDefinition<TEntity> entityTableDefinition) : base(entityTableDefinition)

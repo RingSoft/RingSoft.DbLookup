@@ -4,7 +4,7 @@
 // Created          : 06-17-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-10-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="SelectQueryMaui.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -77,7 +77,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public TableFilterDefinitionBase Filter { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelectQueryMauiBase"/> class.
+        /// Initializes a new instance of the <see cref="SelectQueryMauiBase" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public SelectQueryMauiBase(LookupDefinitionBase lookupDefinition)
@@ -161,6 +161,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// </summary>
         /// <param name="column">The column.</param>
         /// <param name="context">The context.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool SetNull(LookupFieldColumnDefinition column, IDbContext context, ITwoTierProcessingProcedure procedure = null);
 
@@ -168,6 +169,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// Deletes all data.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool DeleteAllData(IDbContext context, ITwoTierProcessingProcedure procedure = null);
 
@@ -216,7 +218,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public List<TEntity> ListResult { get; private set; } = new List<TEntity>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelectQueryMaui{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="SelectQueryMaui{TEntity}" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public SelectQueryMaui(LookupDefinitionBase lookupDefinition)
@@ -417,6 +419,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// </summary>
         /// <param name="column">The column.</param>
         /// <param name="context">The context.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool SetNull(LookupFieldColumnDefinition column, IDbContext context, ITwoTierProcessingProcedure procedure = null)
         {
@@ -456,6 +459,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         /// Deletes all data.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool DeleteAllData(IDbContext context, ITwoTierProcessingProcedure procedure = null)
         {

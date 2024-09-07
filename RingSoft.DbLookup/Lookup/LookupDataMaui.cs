@@ -4,7 +4,7 @@
 // Created          : 06-01-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-05-2023
+// Last Modified On : 12-19-2023
 // ***********************************************************************
 // <copyright file="LookupDataMaui.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -166,7 +166,7 @@ namespace RingSoft.DbLookup.Lookup
         private bool _addInitialField = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDataMaui{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="LookupDataMaui{TEntity}" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public LookupDataMaui(LookupDefinitionBase lookupDefinition)
@@ -1867,7 +1867,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Handles the RefreshData event of the LookupCallBack control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void LookupCallBack_RefreshData(object sender, EventArgs e)
         {
             RefreshData(LookupControl.SearchText);

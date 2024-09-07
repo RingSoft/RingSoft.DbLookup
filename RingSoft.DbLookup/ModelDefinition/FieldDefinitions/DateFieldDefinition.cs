@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-29-2023
+// Last Modified On : 05-08-2024
 // ***********************************************************************
 // <copyright file="DateFieldDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public bool ConvertToLocalTime { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateFieldDefinition"/> class.
+        /// Initializes a new instance of the <see cref="DateFieldDefinition" /> class.
         /// </summary>
         internal DateFieldDefinition()
         {

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="SelectColumn.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -70,7 +70,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public bool IsDistinct { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelectColumn"/> class.
+        /// Initializes a new instance of the <see cref="SelectColumn" /> class.
         /// </summary>
         internal SelectColumn()
         {

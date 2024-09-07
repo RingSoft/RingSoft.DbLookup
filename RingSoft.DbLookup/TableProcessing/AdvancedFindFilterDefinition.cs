@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-05-2023
+// Last Modified On : 12-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFilterDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -59,7 +59,7 @@ namespace RingSoft.DbLookup.TableProcessing
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFilterDefinition"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFilterDefinition" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         internal AdvancedFindFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)

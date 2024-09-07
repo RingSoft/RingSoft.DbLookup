@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="SelectFormulaColumn.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -33,7 +33,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public string Formula { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelectFormulaColumn"/> class.
+        /// Initializes a new instance of the <see cref="SelectFormulaColumn" /> class.
         /// </summary>
         internal SelectFormulaColumn()
         {

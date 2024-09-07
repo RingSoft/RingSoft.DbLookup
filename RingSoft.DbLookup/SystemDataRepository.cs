@@ -4,7 +4,7 @@
 // Created          : 11-23-2023
 //
 // Last Modified By : petem
-// Last Modified On : 11-26-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="SystemDataRepository.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -27,7 +27,7 @@ namespace RingSoft.DbLookup
     public abstract class SystemDataRepository : IAdvancedFindDbProcessor
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemDataRepository"/> class.
+        /// Initializes a new instance of the <see cref="SystemDataRepository" /> class.
         /// </summary>
         public SystemDataRepository()
         {

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-18-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DeleteTables.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -126,7 +126,7 @@ namespace RingSoft.DbLookup
         public bool NullAllData { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="DeleteTable"/> is processed.
+        /// Gets or sets a value indicating whether this <see cref="DeleteTable" /> is processed.
         /// </summary>
         /// <value><c>true</c> if processed; otherwise, <c>false</c>.</value>
         public bool Processed { get; set; }

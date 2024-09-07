@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : RingSoft.DbLookup
+// Author           : petem
+// Created          : 05-21-2024
+//
+// Last Modified By : petem
+// Last Modified On : 05-21-2024
+// ***********************************************************************
+// <copyright file="RightsTreeViewModel.cs" company="Peter Ringering">
+//     2024
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,31 +22,77 @@ using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup
 {
+    /// <summary>
+    /// Interface IRightsTreeControl
+    /// </summary>
     public interface IRightsTreeControl
     {
+        /// <summary>
+        /// Sets the data changed.
+        /// </summary>
         void SetDataChanged();
     }
+    /// <summary>
+    /// Class RightTreeViewItem.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class RightTreeViewItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        /// <value>The parent.</value>
         public RightTreeViewItem Parent { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        /// <value>The text.</value>
         public string Text { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [setting check].
+        /// </summary>
+        /// <value><c>true</c> if [setting check]; otherwise, <c>false</c>.</value>
         public bool SettingCheck { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the type of the right.
+        /// </summary>
+        /// <value>The type of the right.</value>
         public RightTypes RightType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public TableDefinitionBase TableDefinition { get; set; }
 
+        /// <summary>
+        /// Gets or sets the special right.
+        /// </summary>
+        /// <value>The special right.</value>
         public SpecialRight SpecialRight { get; set; }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             return Text;
         }
 
+        /// <summary>
+        /// The is checked
+        /// </summary>
         private bool? _isChecked;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is checked.
+        /// </summary>
+        /// <value><c>null</c> if [is checked] contains no value, <c>true</c> if [is checked]; otherwise, <c>false</c>.</value>
         public bool? IsChecked
         {
             get => _isChecked;
@@ -75,8 +134,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The three state
+        /// </summary>
         private bool _threeState;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [three state].
+        /// </summary>
+        /// <value><c>true</c> if [three state]; otherwise, <c>false</c>.</value>
         public bool ThreeState
         {
             get => _threeState;
@@ -91,8 +157,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The allows edit
+        /// </summary>
         private bool _allowsEdit;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allows edit].
+        /// </summary>
+        /// <value><c>true</c> if [allows edit]; otherwise, <c>false</c>.</value>
         public bool AllowsEdit
         {
             get => _allowsEdit;
@@ -107,10 +180,24 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets the rights TreeView model.
+        /// </summary>
+        /// <value>The rights TreeView model.</value>
         public RightsTreeViewModel RightsTreeViewModel { get; }
 
+        /// <summary>
+        /// Occurs when [check changed].
+        /// </summary>
         public event EventHandler CheckChanged;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RightTreeViewItem"/> class.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="isChecked">if set to <c>true</c> [is checked].</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="rightsTreeViewModel">The rights TreeView model.</param>
         public RightTreeViewItem(string text, bool? isChecked, RightTreeViewItem parent, RightsTreeViewModel rightsTreeViewModel)
         {
             Parent = parent;
@@ -119,6 +206,9 @@ namespace RingSoft.DbLookup
             RightsTreeViewModel = rightsTreeViewModel;
         }
 
+        /// <summary>
+        /// Checks the parent.
+        /// </summary>
         public void CheckParent()
         {
             var checkedItems = Parent.Items.Where(p => p.IsChecked == true
@@ -151,11 +241,18 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RightTreeViewItem"/> class.
+        /// </summary>
         public RightTreeViewItem()
         {
             AllowsEdit = true;
         }
 
+        /// <summary>
+        /// Sets the read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         public void SetReadOnlyMode(bool readOnlyMode)
         {
             AllowsEdit = !readOnlyMode;
@@ -165,19 +262,42 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        /// <value>The items.</value>
         public ObservableCollection<RightTreeViewItem> Items { get; set; } = new ObservableCollection<RightTreeViewItem>();
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+    /// <summary>
+    /// Class RightsTreeViewModel.
+    /// Implements the <see cref="INotifyPropertyChanged" />
+    /// </summary>
+    /// <seealso cref="INotifyPropertyChanged" />
     public class RightsTreeViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The tree root
+        /// </summary>
         private ObservableCollection<RightTreeViewItem> _treeRoot;
 
+        /// <summary>
+        /// Gets or sets the tree root.
+        /// </summary>
+        /// <value>The tree root.</value>
         public ObservableCollection<RightTreeViewItem> TreeRoot
         {
             get => _treeRoot;
@@ -193,16 +313,43 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// The rights items
+        /// </summary>
         private List<RightTreeViewItem> _rightsItems = new List<RightTreeViewItem>();
+        /// <summary>
+        /// The read only mode
+        /// </summary>
         private bool? _readOnlyMode;
+        /// <summary>
+        /// The initialized
+        /// </summary>
         private bool _initialized;
+        /// <summary>
+        /// The loaded rights
+        /// </summary>
         private string _loadedRights;
+        /// <summary>
+        /// The rights loaded
+        /// </summary>
         private bool _rightsLoaded;
 
+        /// <summary>
+        /// Gets the rights.
+        /// </summary>
+        /// <value>The rights.</value>
         public ItemRights Rights { get; }
 
+        /// <summary>
+        /// Gets the control.
+        /// </summary>
+        /// <value>The control.</value>
         public IRightsTreeControl Control { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RightsTreeViewModel"/> class.
+        /// </summary>
+        /// <exception cref="System.Exception">SystemGlobals.ItemRightsFactory not set.</exception>
         public RightsTreeViewModel()
         {
             if (SystemGlobals.ItemRightsFactory == null)
@@ -212,6 +359,10 @@ namespace RingSoft.DbLookup
             Rights= SystemGlobals.ItemRightsFactory.GetNewItemRights();
         }
 
+        /// <summary>
+        /// Initializes the specified control.
+        /// </summary>
+        /// <param name="control">The control.</param>
         public void Initialize(IRightsTreeControl control)
         {
             _rightsLoaded = false;
@@ -298,6 +449,10 @@ namespace RingSoft.DbLookup
             _rightsLoaded = true;
         }
 
+        /// <summary>
+        /// Sets the read only mode.
+        /// </summary>
+        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public void SetReadOnlyMode(bool readOnlyValue = true)
         {
             if (TreeRoot == null)
@@ -311,6 +466,9 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
         public void Reset()
         {
             Rights.Reset();
@@ -325,6 +483,11 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Loads the rights.
+        /// </summary>
+        /// <param name="rightsString">The rights string.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void LoadRights(string rightsString)
         {
             if (!_initialized)
@@ -368,6 +531,9 @@ namespace RingSoft.DbLookup
             _rightsLoaded = true;
         }
 
+        /// <summary>
+        /// Sets the data changed.
+        /// </summary>
         public void SetDataChanged()
         {
             if (_rightsLoaded)
@@ -376,8 +542,15 @@ namespace RingSoft.DbLookup
             }
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

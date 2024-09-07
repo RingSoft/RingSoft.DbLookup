@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindMemoCellProps.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -63,7 +63,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public const int AdvancedFindMemoHostId = 52;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindMemoCellProps"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindMemoCellProps" /> class.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="columnId">The column identifier.</param>

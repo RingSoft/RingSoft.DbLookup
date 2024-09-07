@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-04-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="StringFieldDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public int MaxLength { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringFieldDefinition"/> class.
+        /// Initializes a new instance of the <see cref="StringFieldDefinition" /> class.
         /// </summary>
         internal StringFieldDefinition()
         {

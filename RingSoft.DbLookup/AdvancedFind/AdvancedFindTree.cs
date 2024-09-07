@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-11-2023
+// Last Modified On : 12-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindTree.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -341,7 +341,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         private List<LookupJoin> _includes = new List<LookupJoin>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindTree"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindTree" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public AdvancedFindTree(LookupDefinitionBase lookupDefinition)

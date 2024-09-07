@@ -4,7 +4,7 @@
 // Created          : 12-14-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-14-2023
+// Last Modified On : 09-05-2024
 // ***********************************************************************
 // <copyright file="DbLookupTableWindowRegistry.cs" company="Peter Ringering">
 //     2023
@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup
     public abstract class DbLookupTableWindowRegistry
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbLookupTableWindowRegistry"/> class.
+        /// Initializes a new instance of the <see cref="DbLookupTableWindowRegistry" /> class.
         /// </summary>
         public DbLookupTableWindowRegistry()
         {
@@ -59,8 +59,14 @@ namespace RingSoft.DbLookup
         /// Shows the window.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public abstract void ShowWindow(TableDefinitionBase tableDefinition, object inputParameter = null);
 
+        /// <summary>
+        /// Shows the dialog.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="inputParameter">The input parameter.</param>
         public abstract void ShowDialog(TableDefinitionBase tableDefinition, object inputParameter = null);
     }
 }

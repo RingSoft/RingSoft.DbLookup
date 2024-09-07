@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-30-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DataProcessResult.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -108,7 +108,7 @@ namespace RingSoft.DbLookup.DataProcessor
         private readonly List<QueryResultSql> _queryResultSqls = new List<QueryResultSql>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataProcessResult"/> class.
+        /// Initializes a new instance of the <see cref="DataProcessResult" /> class.
         /// </summary>
         /// <param name="debugMessage">The debug message.</param>
         public DataProcessResult(string debugMessage)

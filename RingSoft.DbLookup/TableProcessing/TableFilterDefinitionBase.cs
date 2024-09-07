@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-11-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="TableFilterDefinitionBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -101,7 +101,7 @@ namespace RingSoft.DbLookup.TableProcessing
         private readonly List<TableFieldJoinDefinition> _joinDefinitions = new List<TableFieldJoinDefinition>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableFilterDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="TableFilterDefinitionBase" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         internal TableFilterDefinitionBase(TableDefinitionBase tableDefinition)
@@ -358,6 +358,7 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <param name="condition">The condition.</param>
         /// <param name="value">The value.</param>
         /// <returns>FieldFilterDefinition.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public FieldFilterDefinition AddFixedFilter(DateFieldDefinition fieldDefinition, Conditions condition,
             DateTime value)
         {

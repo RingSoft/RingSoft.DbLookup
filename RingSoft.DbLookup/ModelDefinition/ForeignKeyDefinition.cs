@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-11-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="ForeignKeyDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -94,7 +94,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         public List<ForeignKeyFieldJoin> ForeignKeyFieldJoins { get; internal set; } = new List<ForeignKeyFieldJoin>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ForeignKeyDefinition"/> class.
+        /// Initializes a new instance of the <see cref="ForeignKeyDefinition" /> class.
         /// </summary>
         internal ForeignKeyDefinition()
         {
@@ -182,7 +182,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         public FieldDefinition ForeignField { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ForeignKeyFieldJoin"/> class.
+        /// Initializes a new instance of the <see cref="ForeignKeyFieldJoin" /> class.
         /// </summary>
         internal ForeignKeyFieldJoin()
         {

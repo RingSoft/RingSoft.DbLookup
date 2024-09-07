@@ -4,7 +4,7 @@
 // Created          : 06-08-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-04-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AutoFillDataMaui.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -50,7 +50,7 @@ namespace RingSoft.DbLookup.AutoFill
         public string BeginText { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillOutputData"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillOutputData" /> class.
         /// </summary>
         /// <param name="containsData">The contains data.</param>
         /// <param name="autoFillValue">The AutoFillValue.</param>
@@ -85,7 +85,7 @@ namespace RingSoft.DbLookup.AutoFill
         public event EventHandler<AutoFillOutputData> OutputDataChanged;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillDataMauiBase"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillDataMauiBase" /> class.
         /// </summary>
         /// <param name="setup">The setup.</param>
         /// <param name="control">The control.</param>
@@ -173,7 +173,7 @@ namespace RingSoft.DbLookup.AutoFill
         public TableDefinition<TEntity> TableDefinition { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFillDataMaui{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="AutoFillDataMaui{TEntity}" /> class.
         /// </summary>
         /// <param name="setup">The setup.</param>
         /// <param name="control">The control.</param>

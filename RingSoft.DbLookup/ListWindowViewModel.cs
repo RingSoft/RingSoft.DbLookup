@@ -4,7 +4,7 @@
 // Created          : 03-04-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-24-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="ListWindowViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -220,7 +220,7 @@ namespace RingSoft.DbLookup
         private string _initSearchText;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListWindowViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ListWindowViewModel" /> class.
         /// </summary>
         public ListWindowViewModel()
         {

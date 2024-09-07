@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DeleteRecordViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -56,7 +56,7 @@ namespace RingSoft.DbLookup
         public ListControlDataSourceRow ItemRow { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="DeleteTableWindowData"/> is processed.
+        /// Gets or sets a value indicating whether this <see cref="DeleteTableWindowData" /> is processed.
         /// </summary>
         /// <value><c>true</c> if processed; otherwise, <c>false</c>.</value>
         public bool Processed { get; set; }
@@ -288,7 +288,7 @@ namespace RingSoft.DbLookup
         public DeleteTables DeleteTables { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteRecordViewModel"/> class.
+        /// Initializes a new instance of the <see cref="DeleteRecordViewModel" /> class.
         /// </summary>
         public DeleteRecordViewModel()
         {

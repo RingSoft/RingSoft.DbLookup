@@ -4,7 +4,7 @@
 // Created          : 03-04-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-24-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="ListControlViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -371,7 +371,7 @@ namespace RingSoft.DbLookup
         public RelayCommand ShowLookupCommand { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ListControlViewModel" /> class.
         /// </summary>
         public ListControlViewModel()
         {

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-29-2023
+// Last Modified On : 08-30-2024
 // ***********************************************************************
 // <copyright file="ExtensionMethods.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -421,6 +421,13 @@ namespace RingSoft.DbLookup
             return new AutoFillValue(primaryKey, string.Empty);
         }
 
+        /// <summary>
+        /// Fills the out properties.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <param name="gridTables">The grid tables.</param>
+        /// <returns>TEntity.</returns>
         public static TEntity FillOutProperties<TEntity>(this TEntity entity, List<TableDefinitionBase> gridTables)
             where TEntity : class, new()
         {
@@ -466,6 +473,14 @@ namespace RingSoft.DbLookup
             return null;
         }
 
+        /// <summary>
+        /// Processes the table filter query.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="filter">The filter.</param>
+        /// <param name="table">The table.</param>
+        /// <param name="fillOutProperties1">The fill out properties1.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private static bool ProcessTableFilterQuery<TEntity>(TableFilterDefinition<TEntity> filter, IQueryable<TEntity> table,
             out TEntity fillOutProperties1) where TEntity : class, new()
         {
@@ -485,6 +500,12 @@ namespace RingSoft.DbLookup
             return false;
         }
 
+        /// <summary>
+        /// Gets the full table filter.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>TableFilterDefinition&lt;TEntity&gt;.</returns>
         public static TableFilterDefinition<TEntity> GetFullTableFilter<TEntity>(this TEntity entity) where TEntity : class, new()
         {
             var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
@@ -877,6 +898,11 @@ namespace RingSoft.DbLookup
             return firstPk.IsEqualTo(lastPk);
         }
 
+        /// <summary>
+        /// Uts the fill out entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
         public static void UtFillOutEntity<TEntity>(this TEntity entity) where TEntity : class, new()
         {
             if (!SystemGlobals.UnitTestMode)
@@ -888,12 +914,24 @@ namespace RingSoft.DbLookup
             tableDef.FillOutEntity(entity);
         }
 
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="entity">The entity.</param>
+        /// <returns>TableDefinition&lt;TEntity&gt;.</returns>
         public static TableDefinition<TEntity> GetTableDefinition<TEntity>(this TEntity entity)
             where TEntity : class, new()
         {
             return GblMethods.GetTableDefinition<TEntity>();
         }
 
+        /// <summary>
+        /// Determines whether the specified right type has right.
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="rightType">Type of the right.</param>
+        /// <returns><c>true</c> if the specified right type has right; otherwise, <c>false</c>.</returns>
         public static bool HasRight(this TableDefinitionBase tableDefinition, RightTypes rightType)
         {
             if (SystemGlobals.Rights == null)
@@ -903,6 +941,12 @@ namespace RingSoft.DbLookup
             return SystemGlobals.Rights.HasRight(tableDefinition, rightType);
         }
 
+        /// <summary>
+        /// Determines whether [has special right] [the specified right type].
+        /// </summary>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="rightType">Type of the right.</param>
+        /// <returns><c>true</c> if [has special right] [the specified right type]; otherwise, <c>false</c>.</returns>
         public static bool HasSpecialRight(this TableDefinitionBase tableDefinition, int rightType)
         {
             return SystemGlobals.Rights.HasSpecialRight(tableDefinition, rightType);

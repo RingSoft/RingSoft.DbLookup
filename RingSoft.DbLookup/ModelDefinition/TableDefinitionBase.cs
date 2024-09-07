@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-22-2023
+// Last Modified On : 07-27-2024
 // ***********************************************************************
 // <copyright file="TableDefinitionBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -226,7 +226,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         private readonly List<FieldDefinition> _primaryKeyFields = new List<FieldDefinition>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="TableDefinitionBase" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="tableName">Name of the table.</param>
@@ -239,7 +239,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="TableDefinitionBase" /> class.
         /// </summary>
         internal protected TableDefinitionBase()
         {
@@ -793,8 +793,19 @@ namespace RingSoft.DbLookup.ModelDefinition
             return result;
         }
 
+        /// <summary>
+        /// Gets the queryable for table.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;System.Object&gt;.</returns>
         public abstract IQueryable<object> GetQueryableForTable(IDbContext context);
 
+        /// <summary>
+        /// Saves the object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="message">The message.</param>
         public abstract void SaveObject(object obj, IDbContext context, string message);
     }
 }

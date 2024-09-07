@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-04-2023
+// Last Modified On : 07-27-2024
 // ***********************************************************************
 // <copyright file="TableDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -57,7 +57,7 @@ namespace RingSoft.DbLookup.ModelDefinition
         where TEntity : class, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableDefinition{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="TableDefinition{TEntity}" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="tablePropertyName">Name of the table property.</param>
@@ -630,11 +630,22 @@ namespace RingSoft.DbLookup.ModelDefinition
             return null;
         }
 
+        /// <summary>
+        /// Gets the queryable for table.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;System.Object&gt;.</returns>
         public override IQueryable<object> GetQueryableForTable(IDbContext context)
         {
             return context.GetTable<TEntity>();
         }
 
+        /// <summary>
+        /// Saves the object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="message">The message.</param>
         public override void SaveObject(object obj, IDbContext context, string message)
         {
             if (obj is TEntity entity)
@@ -791,6 +802,13 @@ namespace RingSoft.DbLookup.ModelDefinition
             return tableFilter;
         }
 
+        /// <summary>
+        /// Gets the collection table filter.
+        /// </summary>
+        /// <typeparam name="TChildEntity">The type of the t child entity.</typeparam>
+        /// <param name="childEntity">The child entity.</param>
+        /// <param name="foreignKey">The foreign key.</param>
+        /// <returns>TableFilterDefinition&lt;TEntity&gt;.</returns>
         private TableFilterDefinition<TEntity> GetCollectionTableFilter<TChildEntity>(TChildEntity childEntity, ForeignKeyDefinition foreignKey) where TChildEntity : class, new()
         {
             var tableFilter = new TableFilterDefinition<TEntity>(this);

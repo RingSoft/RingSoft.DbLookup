@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 06-28-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupDefaults.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -49,7 +49,7 @@ namespace RingSoft.DbLookup
         public static int DefaultDecimalCount { get; private set; } = 2;
 
         /// <summary>
-        /// Initializes static members of the <see cref="LookupDefaults"/> class.
+        /// Initializes static members of the <see cref="LookupDefaults" /> class.
         /// </summary>
         static LookupDefaults()
         {

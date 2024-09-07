@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="FormulaFilterDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -69,7 +69,7 @@ namespace RingSoft.DbLookup.TableProcessing
         public string Description { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormulaFilterDefinition"/> class.
+        /// Initializes a new instance of the <see cref="FormulaFilterDefinition" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         internal FormulaFilterDefinition(TableFilterDefinitionBase tableFilterDefinition) : base(tableFilterDefinition)

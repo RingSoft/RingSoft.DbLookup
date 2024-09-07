@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="WhereEnumItem.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public EnumFieldTranslation EnumTranslation { get; internal set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WhereEnumItem"/> class.
+        /// Initializes a new instance of the <see cref="WhereEnumItem" /> class.
         /// </summary>
         internal WhereEnumItem()
         {

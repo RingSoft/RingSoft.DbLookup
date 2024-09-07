@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFilterParenthesesCellProps.cs" company="Peter Ringering">
 //     Copyright (c)2023 . All rights reserved.
@@ -34,7 +34,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public char LimitChar { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesCellProps"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesCellProps" /> class.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="columnId">The column identifier.</param>
@@ -46,7 +46,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesCellProps"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesCellProps" /> class.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="columnId">The column identifier.</param>

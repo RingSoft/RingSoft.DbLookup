@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 09-04-2024
 // ***********************************************************************
 // <copyright file="DataEntryGridAutoFillCellProps.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -68,7 +68,7 @@ namespace RingSoft.DbLookup
         public bool TabOnSelect { get; set; } = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataEntryGridAutoFillCellProps"/> class.
+        /// Initializes a new instance of the <see cref="DataEntryGridAutoFillCellProps" /> class.
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="columnId">The column identifier.</param>

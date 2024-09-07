@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-19-2022
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFind.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -22,7 +22,7 @@ namespace RingSoft.DbLookup.AdvancedFind
     public class AdvancedFind
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFind"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFind" /> class.
         /// </summary>
         public AdvancedFind()
         {
@@ -92,7 +92,7 @@ namespace RingSoft.DbLookup.AdvancedFind
         public int? RedAlert { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="AdvancedFind"/> is disabled.
+        /// Gets or sets a value indicating whether this <see cref="AdvancedFind" /> is disabled.
         /// </summary>
         /// <value><c>null</c> if [disabled] contains no value, <c>true</c> if [disabled]; otherwise, <c>false</c>.</value>
         public bool? Disabled { get; set; }

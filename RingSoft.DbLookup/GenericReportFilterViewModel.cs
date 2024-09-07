@@ -4,7 +4,7 @@
 // Created          : 01-30-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-04-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="GenericReportFilterViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -458,7 +458,7 @@ namespace RingSoft.DbLookup
         private bool _loading = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericReportFilterViewModel"/> class.
+        /// Initializes a new instance of the <see cref="GenericReportFilterViewModel" /> class.
         /// </summary>
         public GenericReportFilterViewModel()
         {

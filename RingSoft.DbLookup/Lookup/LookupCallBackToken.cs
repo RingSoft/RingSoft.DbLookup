@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-23-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupCallBackToken.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -71,7 +71,7 @@ namespace RingSoft.DbLookup.Lookup
         public event EventHandler RefreshData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupCallBackToken"/> class.
+        /// Initializes a new instance of the <see cref="LookupCallBackToken" /> class.
         /// </summary>
         public LookupCallBackToken()
         {

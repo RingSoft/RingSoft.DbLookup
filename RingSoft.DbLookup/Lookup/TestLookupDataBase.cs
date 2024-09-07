@@ -4,7 +4,7 @@
 // Created          : 05-22-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="TestLookupDataBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -44,7 +44,7 @@ namespace RingSoft.DbLookup.Lookup
         public event EventHandler<LookupDataMauiPrintOutput> PrintOutput;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestLookupDataBase{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="TestLookupDataBase{TEntity}" /> class.
         /// </summary>
         /// <param name="listToQuery">The list to query.</param>
         /// <param name="tableDefinition">The table definition.</param>

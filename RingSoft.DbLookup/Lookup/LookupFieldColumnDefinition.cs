@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-16-2023
+// Last Modified On : 08-02-2024
 // ***********************************************************************
 // <copyright file="LookupFieldColumnDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -121,7 +121,7 @@ namespace RingSoft.DbLookup.Lookup
         private string _selectSqlAlias = string.Empty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition"/> class.
+        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition" /> class.
         /// </summary>
         /// <param name="fieldDefinition">The field definition.</param>
         internal LookupFieldColumnDefinition(FieldDefinition fieldDefinition)
@@ -130,6 +130,9 @@ namespace RingSoft.DbLookup.Lookup
             SetupColumn();
         }
 
+        /// <summary>
+        /// Setups the column.
+        /// </summary>
         internal override void SetupColumn()
         {
             base.SetupColumn();
@@ -140,7 +143,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition"/> class.
+        /// Initializes a new instance of the <see cref="LookupFieldColumnDefinition" /> class.
         /// </summary>
         internal LookupFieldColumnDefinition()
         {

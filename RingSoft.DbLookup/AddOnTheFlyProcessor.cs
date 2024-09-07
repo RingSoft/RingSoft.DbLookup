@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AddOnTheFlyProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -27,7 +27,7 @@ namespace RingSoft.DbLookup
         public PrimaryKeyValue NewPrimaryKeyValue { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NewAddOnTheFlyResult"/> class.
+        /// Initializes a new instance of the <see cref="NewAddOnTheFlyResult" /> class.
         /// </summary>
         /// <param name="newPrimaryKeyValue">The new primary key value.</param>
         internal NewAddOnTheFlyResult(PrimaryKeyValue newPrimaryKeyValue)
@@ -103,7 +103,7 @@ namespace RingSoft.DbLookup
         public LookupDefinitionBase LookupDefinition { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddOnTheFlyProcessor"/> class.
+        /// Initializes a new instance of the <see cref="AddOnTheFlyProcessor" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         public AddOnTheFlyProcessor(LookupDefinitionBase lookupDefinition)
@@ -185,7 +185,7 @@ namespace RingSoft.DbLookup
         /// </summary>
         private LookupDefinition<TLookupEntity, TEntity> _lookupDefinition;
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddOnTheFlyProcessor{TLookupEntity, TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="AddOnTheFlyProcessor{TLookupEntity, TEntity}" /> class.
         /// </summary>
         /// <param name="lookupDefinition">The lookup definition.</param>
         /// <param name="newText">The new text.</param>

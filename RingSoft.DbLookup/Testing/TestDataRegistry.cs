@@ -4,7 +4,7 @@
 // Created          : 07-13-2023
 //
 // Last Modified By : petem
-// Last Modified On : 11-26-2023
+// Last Modified On : 12-26-2023
 // ***********************************************************************
 // <copyright file="TestDataRegistry.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -54,7 +54,7 @@ namespace RingSoft.DbLookup.Testing
         public List<TEntity> Table { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataRepositoryRegistryItem{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="DataRepositoryRegistryItem{TEntity}" /> class.
         /// </summary>
         public DataRepositoryRegistryItem()
         {
@@ -97,7 +97,7 @@ namespace RingSoft.DbLookup.Testing
         public DataRepositoryRegistry DbContext { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataRepositoryRegistry"/> class.
+        /// Initializes a new instance of the <see cref="DataRepositoryRegistry" /> class.
         /// </summary>
         public DataRepositoryRegistry()
         {
@@ -449,7 +449,7 @@ namespace RingSoft.DbLookup.Testing
         /// <value>The data context.</value>
         public DataRepositoryRegistry DataContext { get; }
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestDataRepository"/> class.
+        /// Initializes a new instance of the <see cref="TestDataRepository" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
         public TestDataRepository(DataRepositoryRegistry context)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-10-2023
+// Last Modified On : 05-21-2024
 // ***********************************************************************
 // <copyright file="SystemGlobals.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -105,7 +105,7 @@ namespace RingSoft.DbLookup
         /// Gets the data repository.
         /// </summary>
         /// <value>The data repository.</value>
-        /// <exception cref="System.ApplicationException">Need To inherit and instantiate {nameof(SystemDataRepository)}.</exception>
+        /// <exception cref="System.ApplicationException"></exception>
         public static SystemDataRepository DataRepository
         {
             get
@@ -161,6 +161,10 @@ namespace RingSoft.DbLookup
             set => _lookupContext = value;
         }
 
+        /// <summary>
+        /// Gets the table registry.
+        /// </summary>
+        /// <value>The table registry.</value>
         public static DbLookupTableWindowRegistry TableRegistry { get; internal set; }
 
         /// <summary>
@@ -175,13 +179,28 @@ namespace RingSoft.DbLookup
         /// <value><c>true</c> if [validate deleted data]; otherwise, <c>false</c>.</value>
         public static bool ValidateDeletedData { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets the rights.
+        /// </summary>
+        /// <value>The rights.</value>
         public static AppRights Rights { get; set; }
 
+        /// <summary>
+        /// Gets or sets the item rights factory.
+        /// </summary>
+        /// <value>The item rights factory.</value>
         public static ItemRightsFactory ItemRightsFactory { get; set; }
     }
 
+    /// <summary>
+    /// Class ItemRightsFactory.
+    /// </summary>
     public abstract class ItemRightsFactory
     {
+        /// <summary>
+        /// Gets the new item rights.
+        /// </summary>
+        /// <returns>ItemRights.</returns>
         public abstract ItemRights GetNewItemRights();
     }
 }

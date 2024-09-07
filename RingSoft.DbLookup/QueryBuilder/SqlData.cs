@@ -4,7 +4,7 @@
 // Created          : 02-16-2023
 //
 // Last Modified By : petem
-// Last Modified On : 02-16-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="SqlData.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -46,7 +46,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         public DbDateTypes DateType { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SqlData"/> class.
+        /// Initializes a new instance of the <see cref="SqlData" /> class.
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
         /// <param name="fieldValue">The field value.</param>
@@ -84,7 +84,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         private List<SqlData> _sqlDatas = new List<SqlData>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateDataStatement"/> class.
+        /// Initializes a new instance of the <see cref="UpdateDataStatement" /> class.
         /// </summary>
         /// <param name="primaryKeyValue">The primary key value.</param>
         public UpdateDataStatement(PrimaryKeyValue primaryKeyValue)
@@ -125,7 +125,7 @@ namespace RingSoft.DbLookup.QueryBuilder
         private List<SqlData> _sqlDatas = new List<SqlData>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InsertDataStatement"/> class.
+        /// Initializes a new instance of the <see cref="InsertDataStatement" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public InsertDataStatement(TableDefinitionBase tableDefinition)

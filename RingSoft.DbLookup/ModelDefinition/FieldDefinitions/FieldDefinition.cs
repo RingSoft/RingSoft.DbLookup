@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-10-2023
+// Last Modified On : 05-14-2024
 // ***********************************************************************
 // <copyright file="FieldDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -203,7 +203,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public bool CanFormatValue { get; private set; } = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldDefinition"/> class.
+        /// Initializes a new instance of the <see cref="FieldDefinition" /> class.
         /// </summary>
         internal FieldDefinition()
         {

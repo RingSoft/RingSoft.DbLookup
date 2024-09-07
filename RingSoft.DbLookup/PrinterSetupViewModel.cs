@@ -4,7 +4,7 @@
 // Created          : 02-06-2023
 //
 // Last Modified By : petem
-// Last Modified On : 02-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="PrinterSetupViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -210,7 +210,7 @@ namespace RingSoft.DbLookup
         public PrinterSetupArgs PrinterSetupArgs { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrinterSetupViewModel"/> class.
+        /// Initializes a new instance of the <see cref="PrinterSetupViewModel" /> class.
         /// </summary>
         public PrinterSetupViewModel()
         {

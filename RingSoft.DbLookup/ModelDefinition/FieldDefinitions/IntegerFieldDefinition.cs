@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-14-2023
+// Last Modified On : 08-02-2024
 // ***********************************************************************
 // <copyright file="IntegerFieldDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -60,7 +60,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         public int ContentTemplateId { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IntegerFieldDefinition"/> class.
+        /// Initializes a new instance of the <see cref="IntegerFieldDefinition" /> class.
         /// </summary>
         internal IntegerFieldDefinition()
         {

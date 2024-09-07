@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-01-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DbDataProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -130,7 +130,7 @@ namespace RingSoft.DbLookup.DataProcessor
         /// </summary>
         private static bool _showSqlWindow;
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbDataProcessor"/> class.
+        /// Initializes a new instance of the <see cref="DbDataProcessor" /> class.
         /// </summary>
         public DbDataProcessor()
         {

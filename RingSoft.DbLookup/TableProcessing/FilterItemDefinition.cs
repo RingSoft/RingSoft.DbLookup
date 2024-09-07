@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-05-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="FilterItemDefinition.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -226,13 +226,13 @@ namespace RingSoft.DbLookup.TableProcessing
         public LookupColumnDefinitionBase LookupColumn { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="FilterItemDefinition"/> is processed.
+        /// Gets a value indicating whether this <see cref="FilterItemDefinition" /> is processed.
         /// </summary>
         /// <value><c>true</c> if processed; otherwise, <c>false</c>.</value>
         public bool Processed { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FilterItemDefinition"/> class.
+        /// Initializes a new instance of the <see cref="FilterItemDefinition" /> class.
         /// </summary>
         /// <param name="tableFilterDefinition">The table filter definition.</param>
         public FilterItemDefinition(TableFilterDefinitionBase tableFilterDefinition)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-07-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="LookupDefinitionBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -249,7 +249,7 @@ namespace RingSoft.DbLookup.Lookup
         private LookupColumnDefinitionBase _keyColumn;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase" /> class.
         /// </summary>
         /// <param name="tableDefinition">The table definition.</param>
         public LookupDefinitionBase(TableDefinitionBase tableDefinition)
@@ -260,7 +260,7 @@ namespace RingSoft.DbLookup.Lookup
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase" /> class.
         /// </summary>
         /// <param name="advancedFindId">The advanced find identifier.</param>
         public LookupDefinitionBase(int advancedFindId)
@@ -315,7 +315,7 @@ namespace RingSoft.DbLookup.Lookup
             }
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupDefinitionBase"/> class.
+        /// Initializes a new instance of the <see cref="LookupDefinitionBase" /> class.
         /// </summary>
         /// <param name="advancedFindId">The advanced find identifier.</param>
         /// <param name="lookupRefresher">The lookup refresher.</param>

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-20-2023
+// Last Modified On : 12-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindColumnsManager.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -42,7 +42,7 @@ namespace RingSoft.DbMaintenance
         private bool _addingNewRow;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindColumnsManager"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindColumnsManager" /> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public AdvancedFindColumnsManager(AdvancedFindViewModel viewModel) : base(viewModel)
@@ -98,6 +98,10 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Loads the grid.
+        /// </summary>
+        /// <param name="entityList">The entity list.</param>
         public override void LoadGrid(IEnumerable<AdvancedFindColumn> entityList)
         {
             var listToLoad = new List<AdvancedFindColumn>();

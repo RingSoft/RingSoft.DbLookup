@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 07-24-2023
+// Last Modified On : 05-26-2024
 // ***********************************************************************
 // <copyright file="AdvancedFilterViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-09-2023
+// Last Modified On : 08-30-2024
 // ***********************************************************************
 // <copyright file="LookupContext.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -342,6 +342,14 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
+        /// <summary>
+        /// Gets the queryable for table grid.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="gridTables">The grid tables.</param>
+        /// <param name="context">The context.</param>
+        /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public override IQueryable<TEntity> GetQueryableForTableGrid<TEntity>(TableDefinition<TEntity> tableDefinition
             , List<TableDefinitionBase> gridTables, IDbContext context = null) where TEntity : class
 

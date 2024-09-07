@@ -4,7 +4,7 @@
 // Created          : 07-13-2023
 //
 // Last Modified By : petem
-// Last Modified On : 11-23-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="TestLookupContextBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.EfCore
         private DbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestLookupContextBase"/> class.
+        /// Initializes a new instance of the <see cref="TestLookupContextBase" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
         public TestLookupContextBase(DbContext context)

@@ -4,7 +4,7 @@
 // Created          : 05-22-2023
 //
 // Last Modified By : petem
-// Last Modified On : 11-23-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceTestGlobals.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -22,8 +22,22 @@ using RingSoft.DbLookup.Testing;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class TestTwoTierProcedure.
+    /// Implements the <see cref="ITwoTierProcessingProcedure" />
+    /// </summary>
+    /// <seealso cref="ITwoTierProcessingProcedure" />
     public class TestTwoTierProcedure : ITwoTierProcessingProcedure
     {
+        /// <summary>
+        /// Sets the progress.
+        /// </summary>
+        /// <param name="topMax">The top maximum.</param>
+        /// <param name="topValue">The top value.</param>
+        /// <param name="topText">The top text.</param>
+        /// <param name="bottomMax">The bottom maximum.</param>
+        /// <param name="bottomValue">The bottom value.</param>
+        /// <param name="bottomText">The bottom text.</param>
         public void SetProgress(int topMax = 0, int topValue = 0, string topText = "", int bottomMax = 0, int bottomValue = 0,
             string bottomText = "")
         {
@@ -65,10 +79,14 @@ namespace RingSoft.DbMaintenance
         /// <value>The data repository.</value>
         public TestDataRepository DataRepository { get; }
 
+        /// <summary>
+        /// Gets or sets the message box result.
+        /// </summary>
+        /// <value>The message box result.</value>
         public MessageBoxButtonsResult MessageBoxResult { get; set; } = MessageBoxButtonsResult.Yes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceTestGlobals{TViewModel, TView}"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceTestGlobals{TViewModel, TView}" /> class.
         /// </summary>
         /// <param name="dataDepository">The data depository.</param>
         public DbMaintenanceTestGlobals(TestDataRepository dataDepository)
@@ -122,6 +140,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="text">The text.</param>
         /// <param name="caption">The caption.</param>
         /// <param name="icon">The icon.</param>
+        /// <returns>Task.</returns>
         public virtual async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
 
@@ -151,7 +170,15 @@ namespace RingSoft.DbMaintenance
             return MessageBoxResult;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [delete children result].
+        /// </summary>
+        /// <value><c>true</c> if [delete children result]; otherwise, <c>false</c>.</value>
         public bool DeleteChildrenResult { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [pre delete result].
+        /// </summary>
+        /// <value><c>true</c> if [pre delete result]; otherwise, <c>false</c>.</value>
         public bool PreDeleteResult { get; set; }
 
         /// <summary>
@@ -339,6 +366,11 @@ namespace RingSoft.DbMaintenance
             
         }
 
+        /// <summary>
+        /// Gets the delete procedure.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns>ITwoTierProcessingProcedure.</returns>
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
             var result = new TestTwoTierProcedure();
@@ -346,11 +378,20 @@ namespace RingSoft.DbMaintenance
             return result;
         }
 
+        /// <summary>
+        /// Gets the pre delete procedure.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
         public void GetPreDeleteProcedure(List<FieldDefinition> fields, DeleteTables deleteTables)
         {
             
         }
 
+        /// <summary>
+        /// Sets the window read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         public void SetWindowReadOnlyMode(bool readOnlyMode)
         {
             

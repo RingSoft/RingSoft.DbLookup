@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-20-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="AdvancedFindFilterRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -147,7 +147,7 @@ namespace RingSoft.DbMaintenance
         public FieldDefinition AutoFillField { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="AdvancedFindFilterRow"/> is clearing.
+        /// Gets or sets a value indicating whether this <see cref="AdvancedFindFilterRow" /> is clearing.
         /// </summary>
         /// <value><c>true</c> if clearing; otherwise, <c>false</c>.</value>
         public bool Clearing { get; set; }
@@ -175,7 +175,7 @@ namespace RingSoft.DbMaintenance
         private FieldDefinition _searchAutoFillField;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFilterRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFilterRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         public AdvancedFindFilterRow(AdvancedFindFiltersManager manager) : base(manager)

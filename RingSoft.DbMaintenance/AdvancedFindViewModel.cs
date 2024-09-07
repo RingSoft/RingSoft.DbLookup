@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-08-2023
+// Last Modified On : 09-06-2024
 // ***********************************************************************
 // <copyright file="AdvancedFindViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -89,8 +89,14 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         void CheckTableIsFocused();
 
+        /// <summary>
+        /// Selects the filters tab.
+        /// </summary>
         void SelectFiltersTab();
 
+        /// <summary>
+        /// Resets the lookup.
+        /// </summary>
         void ResetLookup();
     }
 
@@ -527,7 +533,7 @@ namespace RingSoft.DbMaintenance
         public LookupRefresher LookupRefresher { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="AdvancedFindViewModel"/> is clearing.
+        /// Gets a value indicating whether this <see cref="AdvancedFindViewModel" /> is clearing.
         /// </summary>
         /// <value><c>true</c> if clearing; otherwise, <c>false</c>.</value>
         public bool Clearing { get; private set; }
@@ -538,7 +544,7 @@ namespace RingSoft.DbMaintenance
         private int _recordCount;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindViewModel"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindViewModel" /> class.
         /// </summary>
         public AdvancedFindViewModel()
         {
@@ -640,7 +646,7 @@ namespace RingSoft.DbMaintenance
         /// Handles the RefreshRecordCountEvent event of the LookupRefresher control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void LookupRefresher_RefreshRecordCountEvent(object sender, EventArgs e)
         {
             ProcessRefresh();

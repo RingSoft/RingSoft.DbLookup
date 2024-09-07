@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 05-29-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="TestDbMaintenanceProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -33,7 +33,15 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if [message box result]; otherwise, <c>false</c>.</value>
         public bool MessageBoxResult { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [delete children result].
+        /// </summary>
+        /// <value><c>true</c> if [delete children result]; otherwise, <c>false</c>.</value>
         public bool DeleteChildrenResult { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [pre delete result].
+        /// </summary>
+        /// <value><c>true</c> if [pre delete result]; otherwise, <c>false</c>.</value>
         public bool PreDeleteResult { get; set; }
 
         /// <summary>
@@ -46,6 +54,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestDbMaintenanceProcessor"/> class.
+        /// </summary>
         public TestDbMaintenanceProcessor()
         {
             
@@ -228,11 +239,21 @@ namespace RingSoft.DbMaintenance
             
         }
 
+        /// <summary>
+        /// Gets the delete procedure.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns>ITwoTierProcessingProcedure.</returns>
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
             return null;
         }
 
+        /// <summary>
+        /// Gets the pre delete procedure.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
         public void GetPreDeleteProcedure(
             List<FieldDefinition> fields
             , DeleteTables deleteTables)
@@ -240,6 +261,10 @@ namespace RingSoft.DbMaintenance
             
         }
 
+        /// <summary>
+        /// Sets the window read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         public void SetWindowReadOnlyMode(bool readOnlyMode)
         {
             

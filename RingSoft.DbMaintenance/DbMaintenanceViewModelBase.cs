@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-08-2023
+// Last Modified On : 09-02-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceViewModelBase.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -30,12 +30,28 @@ using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
+    /// <summary>
+    /// Class GridMap.
+    /// </summary>
     public class GridMap
     {
+        /// <summary>
+        /// Gets the grid.
+        /// </summary>
+        /// <value>The grid.</value>
         public DbMaintenanceDataEntryGridManagerBase Grid { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
         public bool ReadOnly { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridMap"/> class.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
         public GridMap(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly)
         {
             Grid = grid;
@@ -77,7 +93,7 @@ namespace RingSoft.DbMaintenance
         public FieldDefinition FieldDefinition { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UiControlMap"/> class.
+        /// Initializes a new instance of the <see cref="UiControlMap" /> class.
         /// </summary>
         /// <param name="uiCommand">The UI command.</param>
         /// <param name="fieldDefinition">The field definition.</param>
@@ -93,7 +109,7 @@ namespace RingSoft.DbMaintenance
     public class SelectArgs
     {
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="SelectArgs"/> is cancel.
+        /// Gets or sets a value indicating whether this <see cref="SelectArgs" /> is cancel.
         /// </summary>
         /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
         public bool Cancel { get; set; }
@@ -149,7 +165,7 @@ namespace RingSoft.DbMaintenance
         public MessageButtons Result { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckDirtyResultArgs"/> class.
+        /// Initializes a new instance of the <see cref="CheckDirtyResultArgs" /> class.
         /// </summary>
         /// <param name="result">The result.</param>
         internal CheckDirtyResultArgs(MessageButtons result)
@@ -273,8 +289,15 @@ namespace RingSoft.DbMaintenance
         /// <value>The key automatic fill UI command.</value>
         public UiCommand KeyAutoFillUiCommand { get; }
 
+        /// <summary>
+        /// The allow delete
+        /// </summary>
         private bool _allowDelete = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow delete].
+        /// </summary>
+        /// <value><c>true</c> if [allow delete]; otherwise, <c>false</c>.</value>
         public bool AllowDelete
         {
             get { return _allowDelete; }
@@ -285,8 +308,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The allow new
+        /// </summary>
         private bool _allowNew = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow new].
+        /// </summary>
+        /// <value><c>true</c> if [allow new]; otherwise, <c>false</c>.</value>
         public bool AllowNew
         {
             get { return _allowNew; }
@@ -297,8 +327,15 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// The allow save
+        /// </summary>
         private bool _allowSave = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow save].
+        /// </summary>
+        /// <value><c>true</c> if [allow save]; otherwise, <c>false</c>.</value>
         public bool AllowSave
         {
             get { return _allowSave = true; }
@@ -680,7 +717,7 @@ namespace RingSoft.DbMaintenance
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceViewModelBase"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceViewModelBase" /> class.
         /// </summary>
         public DbMaintenanceViewModelBase()
         {
@@ -779,7 +816,6 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the Save button is clicked.
         /// </summary>
-        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         public abstract DbMaintenanceResults DoSave();
 
@@ -791,7 +827,6 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Executed when the Delete button is clicked.
         /// </summary>
-        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         protected abstract DbMaintenanceResults DoDelete();
 
@@ -1279,14 +1314,28 @@ namespace RingSoft.DbMaintenance
         /// Registers the grid.
         /// </summary>
         /// <param name="grid">The grid.</param>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
         public virtual void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly = false)
         {
             var gridMap = new GridMap(grid, readOnly);
             _grids.Add(gridMap);
         }
 
+        /// <summary>
+        /// Deletes the children.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <param name="procedure">The procedure.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure);
 
+        /// <summary>
+        /// Does the get delete tables.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <param name="procedure">The procedure.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public abstract bool DoGetDeleteTables(
             List<FieldDefinition> fields
             , DeleteTables deleteTables

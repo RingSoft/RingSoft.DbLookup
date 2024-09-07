@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-20-2023
+// Last Modified On : 12-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFiltersManager.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -95,6 +95,10 @@ namespace RingSoft.DbMaintenance
         /// <value>The view model.</value>
         public AdvancedFindViewModel ViewModel { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance has data.
+        /// </summary>
+        /// <value><c>true</c> if this instance has data; otherwise, <c>false</c>.</value>
         public bool HasData { get; private set; }
 
         /// <summary>
@@ -107,7 +111,7 @@ namespace RingSoft.DbMaintenance
         private bool _addingNewRow;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFiltersManager"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFiltersManager" /> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public AdvancedFindFiltersManager(AdvancedFindViewModel viewModel) : base(viewModel)
@@ -420,7 +424,7 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Handles the <see cref="E:RowsChanged" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected override void OnRowsChanged(NotifyCollectionChangedEventArgs e)
         {

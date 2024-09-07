@@ -4,7 +4,7 @@
 // Created          : 02-03-2023
 //
 // Last Modified By : petem
-// Last Modified On : 02-03-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFieldColumnRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -21,7 +21,7 @@ namespace RingSoft.DbMaintenance
     public class AdvancedFindFieldColumnRow : AdvancedFindColumnRow
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFieldColumnRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFieldColumnRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         public AdvancedFindFieldColumnRow(AdvancedFindColumnsManager manager) : base(manager)

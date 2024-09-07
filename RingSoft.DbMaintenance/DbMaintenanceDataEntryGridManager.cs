@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-08-2023
+// Last Modified On : 09-04-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceDataEntryGridManager.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -36,7 +36,7 @@ namespace RingSoft.DbMaintenance
         public DbMaintenanceViewModelBase ViewModel { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridManagerBase"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridManagerBase" /> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public DbMaintenanceDataEntryGridManagerBase(DbMaintenanceViewModelBase viewModel)
@@ -81,6 +81,10 @@ namespace RingSoft.DbMaintenance
         /// <value>The table definition.</value>
         public abstract  TableDefinitionBase TableDefinition { get; }
 
+        /// <summary>
+        /// Selects the grid row.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
         public abstract void SelectGridRow(PrimaryKeyValue primaryKeyValue);
 
     }
@@ -94,6 +98,10 @@ namespace RingSoft.DbMaintenance
     public abstract class DbMaintenanceDataEntryGridManager<TEntity> : DbMaintenanceDataEntryGridManagerBase
         where TEntity : class, new()
     {
+        /// <summary>
+        /// Gets the table definition.
+        /// </summary>
+        /// <value>The table definition.</value>
         public override TableDefinitionBase TableDefinition => TableDefinitionEntity;
 
         /// <summary>
@@ -103,7 +111,7 @@ namespace RingSoft.DbMaintenance
         public TableDefinition<TEntity> TableDefinitionEntity { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridManager{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridManager{TEntity}" /> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public DbMaintenanceDataEntryGridManager(DbMaintenanceViewModelBase viewModel) : base(viewModel)
@@ -362,6 +370,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Selects the grid row.
+        /// </summary>
+        /// <param name="primaryKeyValue">The primary key value.</param>
         public override void SelectGridRow(PrimaryKeyValue primaryKeyValue)
         {
             var entity = TableDefinitionEntity.GetEntityFromPrimaryKeyValue(primaryKeyValue);
@@ -371,6 +383,10 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Selects the row for entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         protected virtual void SelectRowForEntity(TEntity entity)
         {
 

@@ -4,7 +4,7 @@
 // Created          : 02-23-2023
 //
 // Last Modified By : petem
-// Last Modified On : 02-24-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindNewFilterRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -29,7 +29,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         private bool _allowDelete;
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindNewFilterRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindNewFilterRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         public AdvancedFindNewFilterRow(AdvancedFindFiltersManager manager) : base(manager)

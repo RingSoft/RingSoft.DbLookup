@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 11-20-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceDataEntryGridRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -56,7 +56,7 @@ namespace RingSoft.DbMaintenance
         //private DbMaintenanceDataEntryGridManager<TEntity> _dbMaintenanceDataEntryGridManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridRow{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceDataEntryGridRow{TEntity}" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         protected DbMaintenanceDataEntryGridRow(DbMaintenanceDataEntryGridManager<TEntity> manager) : base(manager)

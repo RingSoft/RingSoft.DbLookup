@@ -4,7 +4,7 @@
 // Created          : 01-30-2023
 //
 // Last Modified By : petem
-// Last Modified On : 09-20-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindPrinterProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -39,7 +39,7 @@ namespace RingSoft.DbMaintenance
         public PrinterSetupArgs PrinterSetup { get; private set; } = new PrinterSetupArgs();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindPrinterProcessor"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindPrinterProcessor" /> class.
         /// </summary>
         /// <param name="advancedFindViewModel">The advanced find view model.</param>
         public AdvancedFindPrinterProcessor(AdvancedFindViewModel advancedFindViewModel)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 03-19-2023
+// Last Modified On : 12-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindAfFilterRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -53,7 +53,7 @@ namespace RingSoft.DbMaintenance
         public int AdvancedFindId { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindAfFilterRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindAfFilterRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="path">The path.</param>
@@ -204,6 +204,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Validates the af advanced find.
+        /// </summary>
+        /// <param name="advancedFindId">The advanced find identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ValidateAfAdvancedFind(int advancedFindId)
         {
             var context = SystemGlobals.DataRepository.GetDataContext();

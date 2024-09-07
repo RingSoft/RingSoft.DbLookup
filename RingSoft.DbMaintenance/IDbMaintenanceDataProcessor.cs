@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 05-29-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="IDbMaintenanceDataProcessor.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -55,7 +55,7 @@ namespace RingSoft.DbMaintenance
         public AutoFillValue AutoFillValue { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbAutoFillMap"/> class.
+        /// Initializes a new instance of the <see cref="DbAutoFillMap" /> class.
         /// </summary>
         /// <param name="autoFillSetup">The automatic fill setup.</param>
         /// <param name="autoFillValue">The automatic fill value.</param>
@@ -86,8 +86,16 @@ namespace RingSoft.DbMaintenance
     /// </summary>
     public interface IDbMaintenanceDataProcessor
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether [delete children result].
+        /// </summary>
+        /// <value><c>true</c> if [delete children result]; otherwise, <c>false</c>.</value>
         bool DeleteChildrenResult { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [pre delete result].
+        /// </summary>
+        /// <value><c>true</c> if [pre delete result]; otherwise, <c>false</c>.</value>
         bool PreDeleteResult { get; set; }
 
         /// <summary>
@@ -222,12 +230,26 @@ namespace RingSoft.DbMaintenance
         /// <param name="autoFillMap">The automatic fill map.</param>
         void HandleAutoFillValFail(DbAutoFillMap autoFillMap);
 
+        /// <summary>
+        /// Gets the delete procedure.
+        /// </summary>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <returns>ITwoTierProcessingProcedure.</returns>
         ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables);
 
+        /// <summary>
+        /// Gets the pre delete procedure.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
         void GetPreDeleteProcedure(
             List<FieldDefinition> fields
             , DeleteTables deleteTables);
 
+        /// <summary>
+        /// Sets the window read only mode.
+        /// </summary>
+        /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         void SetWindowReadOnlyMode(bool readOnlyMode);
     }
 }

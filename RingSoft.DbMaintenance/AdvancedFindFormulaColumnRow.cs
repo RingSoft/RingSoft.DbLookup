@@ -4,7 +4,7 @@
 // Created          : 02-04-2023
 //
 // Last Modified By : petem
-// Last Modified On : 07-23-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFormulaColumnRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -32,7 +32,7 @@ namespace RingSoft.DbMaintenance
         public LookupFormulaColumnDefinition FormulaColumn { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFormulaColumnRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFormulaColumnRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         public AdvancedFindFormulaColumnRow(AdvancedFindColumnsManager manager) : base(manager)

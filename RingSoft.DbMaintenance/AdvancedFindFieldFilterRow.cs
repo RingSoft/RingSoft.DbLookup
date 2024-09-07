@@ -4,7 +4,7 @@
 // Created          : 02-01-2023
 //
 // Last Modified By : petem
-// Last Modified On : 03-19-2023
+// Last Modified On : 12-16-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFieldFilterRow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -27,7 +27,7 @@ namespace RingSoft.DbMaintenance
     public class AdvancedFindFieldFilterRow : AdvancedFindFilterRow
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFieldFilterRow"/> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFieldFilterRow" /> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         public AdvancedFindFieldFilterRow(AdvancedFindFiltersManager manager) : base(manager)

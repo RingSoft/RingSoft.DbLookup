@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-08-2023
+// Last Modified On : 09-03-2024
 // ***********************************************************************
 // <copyright file="DbMaintenanceViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -59,7 +59,7 @@ namespace RingSoft.DbMaintenance
         public TEntity Entity { get; internal set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ViewModelOperationPreviewEventArgs{TEntity}"/> is handled.
+        /// Gets or sets a value indicating whether this <see cref="ViewModelOperationPreviewEventArgs{TEntity}" /> is handled.
         /// </summary>
         /// <value><c>true</c> if handled; otherwise, <c>false</c>.</value>
         public bool Handled { get; set; }
@@ -191,6 +191,10 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if [validate all at once]; otherwise, <c>false</c>.</value>
         public bool ValidateAllAtOnce { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show confirm delete q].
+        /// </summary>
+        /// <value><c>true</c> if [show confirm delete q]; otherwise, <c>false</c>.</value>
         protected bool ShowConfirmDeleteQ { get; set; } = true;
 
         /// <summary>
@@ -235,7 +239,7 @@ namespace RingSoft.DbMaintenance
         private bool _isActive = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceViewModel{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceViewModel{TEntity}" /> class.
         /// </summary>
         public DbMaintenanceViewModel()
         {
@@ -798,6 +802,10 @@ namespace RingSoft.DbMaintenance
             _lookupData.SelectPrimaryKey(primaryKey);
         }
 
+        /// <summary>
+        /// Called when [record selected].
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         public void OnRecordSelected(TEntity entity)
         {
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
@@ -879,7 +887,6 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Called when the Save button is clicked.
         /// </summary>
-        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         /// <exception cref="System.Exception">Processor is null</exception>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
@@ -1356,6 +1363,10 @@ namespace RingSoft.DbMaintenance
             return true;
         }
 
+        /// <summary>
+        /// Shows the confirm delete message.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ShowConfirmDeleteMessage()
         {
             var description = TableDefinition.RecordDescription;
@@ -1370,6 +1381,10 @@ namespace RingSoft.DbMaintenance
             return false;
         }
 
+        /// <summary>
+        /// Called when [pre delete children].
+        /// </summary>
+        /// <returns>DbMaintenanceResults.</returns>
         protected virtual DbMaintenanceResults OnPreDeleteChildren()
         {
             return DbMaintenanceResults.Success;
@@ -1378,7 +1393,6 @@ namespace RingSoft.DbMaintenance
         /// <summary>
         /// Called when the Delete button is clicked.
         /// </summary>
-        /// <param name="unitTestMode">if set to <c>true</c> [unit test mode].</param>
         /// <returns>The result.</returns>
         protected override DbMaintenanceResults DoDelete()
         {
@@ -1481,6 +1495,13 @@ namespace RingSoft.DbMaintenance
             return DbMaintenanceResults.Success;
         }
 
+        /// <summary>
+        /// Does the get delete tables.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="deleteTables">The delete tables.</param>
+        /// <param name="procedure">The procedure.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool DoGetDeleteTables(
             List<FieldDefinition> fields
             , DeleteTables deleteTables
@@ -1525,6 +1546,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="rootChild">The root child.</param>
         /// <param name="parentDeleteTable">The parent delete table.</param>
         /// <param name="prevField">The previous field.</param>
+        /// <param name="parentQueryHasData">if set to <c>true</c> [parent query has data].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ProcessDeleteChildField(List<FieldDefinition> fields
             , FieldDefinition childField
@@ -1809,6 +1831,7 @@ namespace RingSoft.DbMaintenance
         /// Deletes the children.
         /// </summary>
         /// <param name="deleteTables">The delete tables.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public override bool DeleteChildren(DeleteTables deleteTables, ITwoTierProcessingProcedure procedure)
         {
@@ -1865,6 +1888,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="deleteTable">The delete table.</param>
         /// <param name="sqls">The SQLS.</param>
         /// <param name="childFieldsProcessed">The child fields processed.</param>
+        /// <param name="procedure">The procedure.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ProcessDeleteChildren(DeleteTable deleteTable, List<string> sqls
             , List<FieldDefinition> childFieldsProcessed, ITwoTierProcessingProcedure procedure)
@@ -1996,7 +2020,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="addViewParameter">The add-on-the-fly input parameter.</param>
         /// <returns>LookupCommand.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">command - null</exception>
-        /// <exception cref="ArgumentException">You must pass in a primary key value if KeyAutoFillValue is null.</exception>
+        /// <exception cref="ArgumentException">command - null</exception>
         protected LookupCommand GetLookupCommand(LookupCommands command, PrimaryKeyValue primaryKeyValue = null, object addViewParameter = null)
         {
             if (primaryKeyValue == null && KeyAutoFillValue != null)
@@ -2141,6 +2165,11 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        /// <summary>
+        /// Generates the key value.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="entity">The entity.</param>
         protected void GenerateKeyValue(string prefix, TEntity entity)
         {
             var cont = true;
@@ -2299,6 +2328,7 @@ namespace RingSoft.DbMaintenance
         /// Registers the grid.
         /// </summary>
         /// <param name="grid">The grid.</param>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
         public override void RegisterGrid(DbMaintenanceDataEntryGridManagerBase grid, bool readOnly = false)
         {
             var gridTable = grid.TableDefinition;

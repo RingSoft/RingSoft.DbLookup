@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-08-2023
+// Last Modified On : 09-05-2024
 // ***********************************************************************
 // <copyright file="RecordLockingViewModel.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -283,7 +283,7 @@ namespace RingSoft.DbMaintenance
         public RecordLockingInputParameter RecordLockingParameter { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecordLockingViewModel"/> class.
+        /// Initializes a new instance of the <see cref="RecordLockingViewModel" /> class.
         /// </summary>
         public RecordLockingViewModel()
         {

@@ -682,6 +682,7 @@ namespace RingSoft.DbMaintenance
         /// Occurs when [initialize event].
         /// </summary>
         public event EventHandler InitializeEvent;
+        public event EventHandler PreInitializeEvent;
         /// <summary>
         /// Occurs when [save event].
         /// </summary>
@@ -777,6 +778,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="view">The View interface.</param>
         public void OnViewLoaded(IDbMaintenanceView view)
         {
+            FirePreInitializeEvent();
             View = view;
             InternalInitialize();
         }
@@ -870,6 +872,11 @@ namespace RingSoft.DbMaintenance
         /// <param name="newValue">if set to <c>true</c> [new value].</param>
         protected virtual void OnRecordDirtyChanged(bool newValue)
         {
+        }
+
+        protected void FirePreInitializeEvent()
+        {
+            PreInitializeEvent?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

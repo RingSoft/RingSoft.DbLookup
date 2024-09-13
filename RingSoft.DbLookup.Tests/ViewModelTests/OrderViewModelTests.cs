@@ -18,6 +18,10 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
         {
             Globals = new TestGlobals<OrderViewModel, TestDbMaintenanceView>();
             SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
+            Globals.PreInitializeEvent += (sender, args) =>
+            {
+                Globals.ViewModel.GridMode = true;
+            };
             Globals.Initialize();
         }
 
@@ -51,8 +55,6 @@ namespace RingSoft.DbLookup.Tests.ViewModelTests
             Globals.ViewModel.ShipVia = shipVia.GetAutoFillValue();
             Globals.ViewModel.GridMode = true;
             
-
-
             Globals.ViewModel.SaveCommand.Execute(null);
             Globals.ViewModel.SaveCommand.Execute(null);
         }

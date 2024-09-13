@@ -85,6 +85,8 @@ namespace RingSoft.DbMaintenance
         /// <value>The message box result.</value>
         public MessageBoxButtonsResult MessageBoxResult { get; set; } = MessageBoxButtonsResult.Yes;
 
+        public event EventHandler PreInitializeEvent;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DbMaintenanceTestGlobals{TViewModel, TView}" /> class.
         /// </summary>
@@ -112,6 +114,10 @@ namespace RingSoft.DbMaintenance
 
             ViewModel.CheckDirtyFlag = false;
 
+            ViewModel.PreInitializeEvent += (sender, args) =>
+            {
+                PreInitializeEvent?.Invoke(this, EventArgs.Empty);
+            };
             ViewModel.OnViewLoaded(View);
         }
 
@@ -385,7 +391,8 @@ namespace RingSoft.DbMaintenance
         /// <param name="deleteTables">The delete tables.</param>
         public void GetPreDeleteProcedure(List<FieldDefinition> fields, DeleteTables deleteTables)
         {
-            
+            var procedure = new TestTwoTierProcedure();
+            ViewModel.Processor.PreDeleteResult = ViewModel.DoGetDeleteTables(fields, deleteTables, procedure);
         }
 
         /// <summary>

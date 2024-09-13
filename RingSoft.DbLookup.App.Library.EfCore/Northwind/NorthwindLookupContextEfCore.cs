@@ -14,8 +14,8 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public LookupContextBase LookupContext => this;
         public override AppLookupContextConfiguration LookupContextConfiguration => NorthwindContextConfiguration;
         public NorthwindLookupContextConfiguration NorthwindContextConfiguration { get; }
-        protected override DbContext DbContext => NorthwindDbContext;
-        internal NorthwindDbContextEfCore NorthwindDbContext { get; }
+        //protected override DbContext DbContext => NorthwindDbContext;
+        //internal NorthwindDbContextEfCore NorthwindDbContext { get; }
 
         public TableDefinition<Category> Categories { get; set; }
         public TableDefinition<Customer> Customers { get; set; }
@@ -32,7 +32,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
         public NorthwindLookupContextEfCore()
         {
             NorthwindContextConfiguration = new NorthwindLookupContextConfiguration(this);
-            NorthwindDbContext = new NorthwindDbContextEfCore(this);
+            SetDbContext(new NorthwindDbContextEfCore(this));
         }
 
         public void LaunchAddOnTheFly(LookupAddViewArgs args)

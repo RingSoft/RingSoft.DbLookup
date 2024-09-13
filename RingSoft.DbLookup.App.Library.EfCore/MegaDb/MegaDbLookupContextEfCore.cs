@@ -14,9 +14,9 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
     {
         public LookupContextBase LookupContext => this;
         public override AppLookupContextConfiguration LookupContextConfiguration => MegaDbContextConfiguration;
-        protected override DbContext DbContext => MegaDbDbContext;
+        //protected override DbContext DbContext => MegaDbDbContext;
         public MegaDbLookupContextConfiguration MegaDbContextConfiguration { get; }
-        internal MegaDbDbContextEfCore MegaDbDbContext { get; }
+        //internal MegaDbDbContextEfCore MegaDbDbContext { get; }
         public TableDefinition<Item> Items { get; set; }
         public TableDefinition<Location> Locations { get; set; }
         public TableDefinition<Manufacturer> Manufacturers { get; set; }
@@ -28,7 +28,7 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
         public MegaDbLookupContextEfCore()
         {
             MegaDbContextConfiguration = new MegaDbLookupContextConfiguration(this);
-            MegaDbDbContext = new MegaDbDbContextEfCore(this);
+            SetDbContext(new MegaDbDbContextEfCore(this));
         }
 
         protected override void SetupModel()

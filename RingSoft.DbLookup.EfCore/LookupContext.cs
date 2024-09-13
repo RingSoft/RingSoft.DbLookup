@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.EfCore
         /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
         /// </summary>
         /// <value>The database context.</value>
-        protected abstract DbContext DbContext { get; }
+        protected DbContext DbContext { get; private set; }
 
         /// <summary>
         /// The adv initalizing
@@ -54,6 +54,11 @@ namespace RingSoft.DbLookup.EfCore
 
         //    base.InitializeAdvFind();
         //}
+
+        public void SetDbContext(DbContext context)
+        {
+            DbContext = context;
+        }
 
         /// <summary>
         /// Has the Entity Framework platform set up this object's table and field definitions
@@ -87,7 +92,7 @@ namespace RingSoft.DbLookup.EfCore
         protected override void EfInitializeTableDefinitions()
         {
             if (DbContext == null)
-                throw new Exception("DbContext must be instantiated before initialization.");
+                throw new Exception("SetDbContext must be run before initialization.");
 
             var dbSetName = $"{nameof(DbSet<object>)}`1";
             var properties = DbContext.GetType().GetProperties().Where(w => w.PropertyType.Name == dbSetName).ToList();

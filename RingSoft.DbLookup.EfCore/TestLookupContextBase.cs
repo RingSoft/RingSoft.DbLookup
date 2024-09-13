@@ -33,12 +33,12 @@ namespace RingSoft.DbLookup.EfCore
         /// Gets the Entity Framework Core database context used to set up the table and field definition properties of inheriting classes.
         /// </summary>
         /// <value>The database context.</value>
-        protected override DbContext DbContext => _context;
+        //protected override DbContext DbContext => _context;
 
         /// <summary>
         /// The context
         /// </summary>
-        private DbContext _context;
+        //private DbContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestLookupContextBase" /> class.
@@ -48,7 +48,7 @@ namespace RingSoft.DbLookup.EfCore
         {
             DataRepository = new TestDataRepository(new DataRepositoryRegistry());
             DataRepository.Initialize();
-            _context = context;
+            SetDbContext(context);
             Initialize();
         }
 

@@ -66,6 +66,11 @@ namespace RingSoft.DbLookup.EfCore
     /// <seealso cref="RingSoft.DbLookup.IDbContext" />
     public abstract class DbContextEfCore : DbContext, IDbContext
     {
+        ~DbContextEfCore()
+        {
+            Dispose();
+            GC.Collect();
+        }
         /// <summary>
         /// Configures the advanced find.
         /// </summary>

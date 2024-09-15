@@ -11,6 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RingSoft.DbLookup.DataProcessor;
@@ -22,7 +24,7 @@ namespace RingSoft.DbLookup
     /// <summary>
     /// Interface IDbContext
     /// </summary>
-    public interface IDbContext
+    public interface IDbContext : IDisposable
     {
         /// <summary>
         /// Gets the lookup data base.

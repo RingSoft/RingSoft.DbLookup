@@ -434,6 +434,11 @@ namespace RingSoft.DbLookup.Testing
         {
             return null;
         }
+
+        public void Dispose()
+        {
+            DbContext?.Dispose();
+        }
     }
 
     /// <summary>

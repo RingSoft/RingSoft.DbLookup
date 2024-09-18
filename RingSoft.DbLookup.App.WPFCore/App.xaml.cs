@@ -13,10 +13,16 @@ namespace RingSoft.DbLookup.App.WPFCore
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            FrameworkElement.StyleProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata
+            {
+                DefaultValue = FindResource(typeof(Window))
+            });
+
             var wpfAppStart = new WpfAppStart(this);
             wpfAppStart.StartApp("WPF", e.Args);
 
             base.OnStartup(e);
+
         }
     }
 }

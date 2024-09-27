@@ -61,7 +61,12 @@ namespace RingSoft.DbLookup.App.Library.EfCore.MegaDb
                     DbConstants.ConstantGenerator = new SqlServerDbConstants();
                     if (_connectionString == null)
                     {
-                        optionsBuilder.UseSqlServer(LookupContext.MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                        optionsBuilder
+                            .UseSqlServer(LookupContext
+                                .MegaDbContextConfiguration.SqlServerDataProcessor.ConnectionString, builder =>
+                            {
+                                //builder.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
+                            });
                     }
                     else
                     {

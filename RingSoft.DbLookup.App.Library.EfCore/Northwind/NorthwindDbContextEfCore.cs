@@ -58,7 +58,14 @@ namespace RingSoft.DbLookup.App.Library.EfCore.Northwind
                     DbConstants.ConstantGenerator = new SqlServerDbConstants();
                     if (_connectionString == null)
                     {
-                        optionsBuilder.UseSqlServer(_lookupContext.NorthwindContextConfiguration.SqlServerDataProcessor.ConnectionString);
+                        optionsBuilder
+                            .UseSqlServer(_lookupContext
+                                .NorthwindContextConfiguration
+                                .SqlServerDataProcessor
+                                .ConnectionString, builder =>
+                            {
+                                //builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                            });
                     }
                     else
                     {

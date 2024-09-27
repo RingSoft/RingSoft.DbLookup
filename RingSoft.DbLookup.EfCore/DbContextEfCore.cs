@@ -343,7 +343,12 @@ namespace RingSoft.DbLookup.EfCore
                 }
                 else
                 {
-                    ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error", RsMessageBoxIcons.Error);
+                    var msg = e.Message;
+                    if (e.InnerException != null)
+                    {
+                        msg = e.InnerException.Message;
+                    }
+                    ControlsGlobals.UserInterface.ShowMessageBox(msg, "Error", RsMessageBoxIcons.Error);
                 }
 
                 return false;

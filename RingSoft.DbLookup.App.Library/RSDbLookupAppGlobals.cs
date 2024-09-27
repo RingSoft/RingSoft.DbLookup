@@ -218,7 +218,14 @@ namespace RingSoft.DbLookup.App.Library
 
         public static void ConnectToMegaDb(IMegaDbEfDataProcessor processor, IMegaDbLookupContext lookupContext)
         {
-            processor.GetItem(1);
+            try
+            {
+                processor.GetItem(1);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

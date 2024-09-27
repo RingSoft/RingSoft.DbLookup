@@ -162,7 +162,7 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
             {
                 DataProcessor.IsValid = false;
                 Console.WriteLine(e);
-                ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
+                //ControlsGlobals.UserInterface.ShowMessageBox(e.Message, "Error!", RsMessageBoxIcons.Error);
                 return false;
             }
             return true;

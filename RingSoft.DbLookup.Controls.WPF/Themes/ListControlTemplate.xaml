@@ -6,6 +6,11 @@
 
     <BitmapImage x:Key="ListButtonImage" UriSource="/RingSoft.DbLookup.Controls.WPF;component/Resources/Search16.png"/>
 
+    <LinearGradientBrush x:Key="ListViewItemBrush">
+        <GradientStop Color="SkyBlue" Offset="0"/>
+        <GradientStop Color="Aqua" Offset="1"/>
+    </LinearGradientBrush>
+
     <Style TargetType="{x:Type local:ListControl}">
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
@@ -87,7 +92,7 @@
                                                 <Setter Property="IsTabStop" Value="False" />
                                                 <Style.Triggers>
                                                     <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                                        <Setter Property="Background" Value="SkyBlue" />
+                                                        <Setter Property="Background" Value="{StaticResource ListViewItemBrush}" />
                                                     </Trigger>
                                                     <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                                         <Setter Property="Background" Value="Transparent" />

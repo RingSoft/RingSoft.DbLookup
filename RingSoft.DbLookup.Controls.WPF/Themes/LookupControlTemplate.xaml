@@ -3,6 +3,11 @@
                         xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                         xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF">
 
+    <LinearGradientBrush x:Key="ListViewItemBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="SkyBlue" Offset="0"/>
+            <GradientStop Color="Aqua" Offset="1"/>
+        </LinearGradientBrush>
+
     <Style TargetType="{x:Type local:LookupControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -42,7 +47,7 @@
                                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                             <Style.Triggers>
                                                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                                    <Setter Property="Background" Value="SkyBlue" />
+                                                    <Setter Property="Background" Value="{StaticResource ListViewItemBrush}" />
                                                 </Trigger>
                                                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                                     <Setter Property="Background" Value="Transparent" />

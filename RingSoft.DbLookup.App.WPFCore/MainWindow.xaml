@@ -13,6 +13,7 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -36,7 +37,9 @@
         </Button>
         <Button x:Name="MegaDbButton" Grid.Row="1" Grid.Column="0" Content="_Mega Database Demo" Margin="0,0,5,0"/>
         <Button x:Name="StockTrackerButton" Grid.Row="1" Grid.Column="1" Content="_Stock Tracker Demo"/>
-        <Button x:Name="DatabaseSetupButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="_Database Setup" Margin="0,5,0,0"/>
-        <Button x:Name="CloseButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
+        <Button x:Name="NewMainWindowButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Ne_w Main Window" Margin="0,5,0,0"/>
+        <Button x:Name="DatabaseSetupButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="_Database Setup" Margin="0,5,0,0"/>
+
+        <Button x:Name="CloseButton" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
     </Grid>
 </dec:BaseWindow>

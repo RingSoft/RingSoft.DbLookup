@@ -55,6 +55,13 @@ namespace RingSoft.DbLookup.App.WPFCore
             //    }
             //};
 
+            NewMainWindowButton.Click += (sender, args) =>
+            {
+                var win = new NewMainWindow();
+                win.ShowInTaskbar = false;
+                win.Owner = this;
+                win.Show();
+            };
             DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();
 
             NorthwindLookupButton.Click += (sender, args) =>

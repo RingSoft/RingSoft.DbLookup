@@ -12,5 +12,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         bool EnterToTab { get; set; }
 
         void Close();
+
+        void SetReadOnlyMode(bool readOnlyMode);
     }
 }

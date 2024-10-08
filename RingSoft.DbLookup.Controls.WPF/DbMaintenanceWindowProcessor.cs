@@ -134,7 +134,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Gets the maintenance window.
         /// </summary>
         /// <value>The maintenance window.</value>
-        public BaseWindow MaintenanceWindow { get; private set; }
+        public ContentControl MaintenanceWindow { get; private set; }
         /// <summary>
         /// Gets the maintenance buttons control.
         /// </summary>
@@ -527,7 +527,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ViewModel.OnRecordSelected(args);
             };
-            lookupWindow.Owner = MaintenanceWindow;
+            lookupWindow.Owner = Window.GetWindow(MaintenanceWindow);
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ApplyNewLookup += (sender, args) =>
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
@@ -536,7 +536,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             bool isAltDown = IsMaintenanceKeyDown(MaintenanceKey.Alt);
             lookupWindow.Closed += (sender, args) =>
             {
-                MaintenanceWindow.Activate();
+                MaintenanceWindow.Focus();
                 if (!isAltDown)
                 {
                     LibView.ResetViewForNewRecord();
@@ -642,7 +642,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (MaintenanceWindow != null)
             {
-                MaintenanceWindow.Activate();
+                var window = Window.GetWindow(MaintenanceWindow);
+                window.Activate();
                 MaintenanceWindow.Focus();
                 WPFControlsGlobals.SendKey(Key.Tab);
             }
@@ -682,7 +683,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <returns>ITwoTierProcessingProcedure.</returns>
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
-            var delProcedure = new DeleteProcedure(MaintenanceWindow
+            var delProcedure = new DeleteProcedure(Window.GetWindow(MaintenanceWindow)
                 , "Deleting Table Data"
                 , ViewModel
                 , deleteTables);
@@ -699,7 +700,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             List<FieldDefinition> fields
             , DeleteTables deleteTables)
         {
-            var delProcedure = new PreDeleteProcedure(MaintenanceWindow
+            var delProcedure = new PreDeleteProcedure(Window.GetWindow(MaintenanceWindow)
                 , "Gathering Tables To Delete"
                 , ViewModel
                 , deleteTables
@@ -715,7 +716,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="readOnlyMode">if set to <c>true</c> [read only mode].</param>
         public void SetWindowReadOnlyMode(bool readOnlyMode)
         {
-            MaintenanceWindow.SetReadOnlyMode(readOnlyMode);
+            VisualView.SetReadOnlyMode(readOnlyMode);
         }
 
         /// <summary>
@@ -732,7 +733,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public bool CheckDeleteTables(DeleteTables deleteTables)
         {
             var deleteWindow = new DeleteRecordWindow(deleteTables);
-            deleteWindow.Owner = MaintenanceWindow;
+            deleteWindow.Owner = Window.GetWindow(MaintenanceWindow);
             deleteWindow.ShowInTaskbar = false;
             deleteWindow.ShowDialog();
             if (deleteWindow.DialogResult.HasValue)
@@ -749,7 +750,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
             var filterWindow = new GenericReportFilterWindow(printerSetupArgs);
-            filterWindow.Owner = MaintenanceWindow;
+            filterWindow.Owner = Window.GetWindow(MaintenanceWindow);
             filterWindow.ShowInTaskbar = false;
             filterWindow.ShowDialog();
         }

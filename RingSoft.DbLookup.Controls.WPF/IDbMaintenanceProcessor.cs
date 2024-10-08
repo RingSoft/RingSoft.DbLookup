@@ -36,7 +36,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="viewModel">The view model.</param>
         /// <param name="view">The view.</param>
         /// <param name="statusBar">The status bar.</param>
-        void Initialize(BaseWindow window, Control buttonsControl,
+        void Initialize(IDbMaintenanceVisualView visualView, Control buttonsControl,
             DbMaintenanceViewModelBase viewModel, IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null);
 
         /// <summary>

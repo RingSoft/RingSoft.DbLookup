@@ -39,7 +39,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// <seealso cref="BaseWindow" />
     /// <seealso cref="IRecordLockingView" />
     /// <font color="red">Badly formed XML comment.</font>
-    public class RecordLockingWindow : BaseWindow, IRecordLockingView
+    public class RecordLockingWindow : BaseWindow, IRecordLockingView, IDbMaintenanceVisualView
     {
         /// <summary>
         /// Gets or sets the buttons panel.
@@ -93,6 +93,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The continue save button.</value>
         public Button ContinueSaveButton { get; set; }
+
+        public BaseWindow MaintenanceWindow => this;
 
         /// <summary>
         /// The buttons control

@@ -40,7 +40,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     /// <seealso cref="IAdvancedFindView" />
     /// <font color="red">Badly formed XML comment.</font>
     [TemplatePart(Name = "ButtonsPanel", Type = typeof(StackPanel))]
-    public class AdvancedFindWindow : BaseWindow, IAdvancedFindView
+    public class AdvancedFindWindow : BaseWindow, IAdvancedFindView, IDbMaintenanceVisualView
     {
         /// <summary>
         /// Gets or sets the buttons panel.
@@ -136,6 +136,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// </summary>
         /// <value>The processor.</value>
         public IDbMaintenanceProcessor Processor { get; set; }
+
+        public BaseWindow MaintenanceWindow => this;
 
         /// <summary>
         /// The notify from formula exists

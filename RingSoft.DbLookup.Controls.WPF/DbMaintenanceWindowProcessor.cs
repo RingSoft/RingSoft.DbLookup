@@ -149,7 +149,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Gets the view.
         /// </summary>
         /// <value>The view.</value>
-        public IDbMaintenanceView View { get; private set; }
+        public IDbMaintenanceView LibView { get; private set; }
         /// <summary>
         /// Gets the status bar.
         /// </summary>
@@ -160,6 +160,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The status bar UI control.</value>
         public VmUiControl StatusBarUiControl { get; private set; }
+
+        public IDbMaintenanceVisualView VisualView { get; private set; }
 
         /// <summary>
         /// The key automatic fill control UI control
@@ -232,13 +234,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                 CloseButton.Click += (_, _) => CloseWindow();
             }
 
-            MaintenanceWindow.ShowInTaskbar = false;
-            MaintenanceWindow.EnterToTab = true;
+            VisualView.ShowInTaskbar = false;
+            VisualView.EnterToTab = true;
             MaintenanceButtonsControl.Margin = new Thickness(0, 0, 0, 2.5);
 
             MaintenanceWindow.Loaded += (sender, args) =>
             {
-                ViewModel.OnViewLoaded(View);
+                ViewModel.OnViewLoaded(LibView);
             };
             MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
             //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
@@ -281,20 +283,21 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="window">The window.</param>
         /// <param name="buttonsControl">The buttons control.</param>
         /// <param name="viewModel">The view model.</param>
-        /// <param name="view">The view.</param>
+        /// <param name="libView">The view.</param>
         /// <param name="statusBar">The status bar.</param>
         /// <exception cref="System.ArgumentNullException">window</exception>
         /// <exception cref="System.ArgumentNullException">buttonsControl</exception>
         /// <exception cref="System.ArgumentException">viewModel</exception>
         /// <exception cref="System.ArgumentException">view</exception>
-        public virtual void Initialize(BaseWindow window, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
-            IDbMaintenanceView view, DbMaintenanceStatusBar statusBar = null)
+        public virtual void Initialize(IDbMaintenanceVisualView visualView, Control buttonsControl, DbMaintenanceViewModelBase viewModel,
+            IDbMaintenanceView libView, DbMaintenanceStatusBar statusBar = null)
         {
-            if (window == null)
+            if (visualView == null)
             {
-                throw new ArgumentNullException(nameof(window));
+                throw new ArgumentNullException(nameof(visualView));
             }
-            MaintenanceWindow = window;
+            VisualView = visualView;
+            MaintenanceWindow = visualView.MaintenanceWindow;
 
             if (buttonsControl == null)
             {
@@ -310,11 +313,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             ViewModel.Processor  = this;
 
-            if (view == null)
+            if (libView == null)
             {
-                throw new ArgumentException(nameof(view));
+                throw new ArgumentException(nameof(libView));
             }
-            View = view;
+            LibView = libView;
             SetupControl();
 
             if (statusBar != null)
@@ -380,7 +383,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <returns>List&lt;DbAutoFillMap&gt;.</returns>
         public List<DbAutoFillMap> GetAutoFills()
         {
-            if (View is Window window)
+            if (LibView is Window window)
             {
                 return LookupControlsGlobals.GetAutoFills(window);
             }
@@ -393,7 +396,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="autoFillMap">The automatic fill map.</param>
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
-            if (View is Window window)
+            if (LibView is Window window)
             {
                 LookupControlsGlobals.HandleValFail(window, autoFillMap);
             }
@@ -536,7 +539,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 MaintenanceWindow.Activate();
                 if (!isAltDown)
                 {
-                    View.ResetViewForNewRecord();
+                    LibView.ResetViewForNewRecord();
                 }
             };
             lookupWindow.Show();

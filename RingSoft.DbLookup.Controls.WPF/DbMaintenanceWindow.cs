@@ -11,6 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbMaintenance;
@@ -24,7 +26,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// </summary>
     /// <seealso cref="BaseWindow" />
     /// <seealso cref="IDbMaintenanceView" />
-    public abstract class DbMaintenanceWindow : BaseWindow, IDbMaintenanceView
+    public abstract class DbMaintenanceWindow : BaseWindow, IDbMaintenanceView, IDbMaintenanceVisualView
     {
         /// <summary>
         /// Gets the view model.
@@ -55,6 +57,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The processor.</value>
         public IDbMaintenanceProcessor Processor { get; }
+
+        public BaseWindow MaintenanceWindow => this;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbMaintenanceWindow" /> class.

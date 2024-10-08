@@ -10,5 +10,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         bool ShowInTaskbar { get; set; }
 
         bool EnterToTab { get; set; }
+
+        void Close();
     }
 }

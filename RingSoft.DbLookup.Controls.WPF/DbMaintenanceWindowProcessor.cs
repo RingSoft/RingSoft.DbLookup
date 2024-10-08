@@ -251,7 +251,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public virtual void CloseWindow()
         {
-            MaintenanceWindow.Close();
+            VisualView.Close();
         }
 
         /// <summary>

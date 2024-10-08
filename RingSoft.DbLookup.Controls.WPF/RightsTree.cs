@@ -1,17 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : RingSoft.DbLookup.Controls.WPF
-// Author           : petem
-// Created          : 05-21-2024
-//
-// Last Modified By : petem
-// Last Modified On : 05-21-2024
-// ***********************************************************************
-// <copyright file="RightsTree.cs" company="Peter Ringering">
-//     2024
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,98 +7,66 @@ using RingSoft.DbLookup;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    /// <summary>
-    /// Enum RightsModes
-    /// </summary>
     public enum RightsModes
     {
-        /// <summary>
-        /// The none
-        /// </summary>
         None = 0,
-        /// <summary>
-        /// The reset
-        /// </summary>
         Reset = 1,
-        /// <summary>
-        /// The load
-        /// </summary>
         Load = 2,
     }
 
     /// <summary>
-    /// Class RightsTree.
-    /// Implements the <see cref="Control" />
-    /// Implements the <see cref="IReadOnlyControl" />
-    /// Implements the <see cref="IRightsTreeControl" />
+    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
+    ///
+    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DevLogix"
+    ///
+    ///
+    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:RingSoft.DevLogix;assembly=RingSoft.DevLogix"
+    ///
+    /// You will also need to add a project reference from the project where the XAML file lives
+    /// to this project and Rebuild to avoid compilation errors:
+    ///
+    ///     Right click on the target project in the Solution Explorer and
+    ///     "Add Reference"->"Projects"->[Browse to and select this project]
+    ///
+    ///
+    /// Step 2)
+    /// Go ahead and use your control in the XAML file.
+    ///
+    ///     <MyNamespace:RightsTree/>
+    ///
     /// </summary>
-    /// <seealso cref="Control" />
-    /// <seealso cref="IReadOnlyControl" />
-    /// <seealso cref="IRightsTreeControl" />
     public class RightsTree : Control, IReadOnlyControl, IRightsTreeControl
     {
-        /// <summary>
-        /// The data changed property
-        /// </summary>
         public static readonly DependencyProperty DataChangedProperty =
             DependencyProperty.Register(nameof(DataChanged), typeof(bool), typeof(RightsTree));
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [data changed].
-        /// </summary>
-        /// <value><c>true</c> if [data changed]; otherwise, <c>false</c>.</value>
         public bool DataChanged
         {
             get { return (bool)GetValue(DataChangedProperty); }
             set { SetValue(DataChangedProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the border.
-        /// </summary>
-        /// <value>The border.</value>
         public Border Border { get; set; }
 
-        /// <summary>
-        /// Gets or sets the view model.
-        /// </summary>
-        /// <value>The view model.</value>
         public RightsTreeViewModel ViewModel { get; set; }
 
-        /// <summary>
-        /// Gets or sets the TreeView.
-        /// </summary>
-        /// <value>The TreeView.</value>
         public TreeView TreeView { get; set; }
 
-        /// <summary>
-        /// The control loaded
-        /// </summary>
         private bool _controlLoaded;
-        /// <summary>
-        /// The rights mode
-        /// </summary>
         private RightsModes _rightsMode;
-        /// <summary>
-        /// The rights string
-        /// </summary>
         private string _rightsString;
-        /// <summary>
-        /// The set focus
-        /// </summary>
         private bool _setFocus;
-        /// <summary>
-        /// The got focus ran
-        /// </summary>
         private bool _gotFocusRan;
-        /// <summary>
-        /// The read only mode
-        /// </summary>
         private bool _readOnlyMode;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="RightsTree"/> class.
-        /// </summary>
         static RightsTree()
         {
             IsTabStopProperty.OverrideMetadata(typeof(RightsTree), new FrameworkPropertyMetadata(false));
@@ -119,9 +74,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             DefaultStyleKeyProperty.OverrideMetadata(typeof(RightsTree), new FrameworkPropertyMetadata(typeof(RightsTree)));
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RightsTree"/> class.
-        /// </summary>
         public RightsTree()
         {
             Loaded += (sender, args) =>
@@ -191,10 +143,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             };
         }
 
-        /// <summary>
-        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
-        /// </summary>
-        /// <exception cref="System.ApplicationException">Need to set Border</exception>
         public override void OnApplyTemplate()
         {
             Border = GetTemplateChild(nameof(Border)) as Border;
@@ -218,9 +166,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnApplyTemplate();
         }
 
-        /// <summary>
-        /// Resets this instance.
-        /// </summary>
         public void Reset()
         {
             if (_controlLoaded)
@@ -233,10 +178,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        /// <summary>
-        /// Gets the rights.
-        /// </summary>
-        /// <returns>System.String.</returns>
         public string GetRights()
         {
             var result = string.Empty;
@@ -252,10 +193,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             return result;
         }
 
-        /// <summary>
-        /// Loads the rights.
-        /// </summary>
-        /// <param name="rightsString">The rights string.</param>
         public void LoadRights(string rightsString)
         {
             if (_controlLoaded)
@@ -269,19 +206,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        /// <summary>
-        /// Sets the read only mode.
-        /// </summary>
-        /// <param name="readOnlyValue">if set to <c>true</c> [read only value].</param>
         public void SetReadOnlyMode(bool readOnlyValue)
         {
             ViewModel.SetReadOnlyMode(readOnlyValue);
             _readOnlyMode = readOnlyValue;
         }
 
-        /// <summary>
-        /// Sets the focus to first node.
-        /// </summary>
         public void SetFocusToFirstNode()
         {
             TreeView.Focus();
@@ -300,9 +230,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        /// <summary>
-        /// Sets the data changed.
-        /// </summary>
         public void SetDataChanged()
         {
             DataChanged = true;

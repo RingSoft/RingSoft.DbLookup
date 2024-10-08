@@ -4,7 +4,7 @@
 // Created          : 01-29-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 03-30-2023
 // ***********************************************************************
 // <copyright file="PrintingProcessingWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -83,7 +83,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public Button CancelButton { get; private set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="PrintingProcessingWindow" /> class.
+        /// Initializes static members of the <see cref="PrintingProcessingWindow"/> class.
         /// </summary>
         static PrintingProcessingWindow()
         {
@@ -91,7 +91,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrintingProcessingWindow" /> class.
+        /// Initializes a new instance of the <see cref="PrintingProcessingWindow"/> class.
         /// </summary>
         /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public PrintingProcessingWindow(PrinterSetupArgs printerSetupArgs)
@@ -200,7 +200,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Handles the <see cref="E:Closing" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
         protected override void OnClosing(CancelEventArgs e)
         {
             ViewModel.OnWindowClosing();

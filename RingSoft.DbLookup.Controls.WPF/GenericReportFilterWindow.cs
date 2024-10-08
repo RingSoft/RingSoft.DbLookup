@@ -4,7 +4,7 @@
 // Created          : 01-30-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 02-28-2023
 // ***********************************************************************
 // <copyright file="GenericReportFilterWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -77,7 +77,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public TextComboBoxControl ReportTypeControl { get; private set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="GenericReportFilterWindow" /> class.
+        /// Initializes static members of the <see cref="GenericReportFilterWindow"/> class.
         /// </summary>
         static GenericReportFilterWindow()
         {
@@ -85,7 +85,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericReportFilterWindow" /> class.
+        /// Initializes a new instance of the <see cref="GenericReportFilterWindow"/> class.
         /// </summary>
         /// <param name="printerSetup">The printer setup.</param>
         public GenericReportFilterWindow(PrinterSetupArgs printerSetup)
@@ -98,7 +98,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericReportFilterWindow" /> class.
+        /// Initializes a new instance of the <see cref="GenericReportFilterWindow"/> class.
         /// </summary>
         /// <param name="input">The input.</param>
         public GenericReportFilterWindow(GenericReportLookupFilterInput input)

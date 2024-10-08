@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-05-2024
+// Last Modified On : 07-22-2023
 // ***********************************************************************
 // <copyright file="LookupCustomContentControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -169,7 +169,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Datas the text changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DataTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -198,7 +198,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Designers the value changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DesignerValueChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -207,7 +207,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes static members of the <see cref="LookupCustomContentControl" /> class.
+        /// Initializes static members of the <see cref="LookupCustomContentControl"/> class.
         /// </summary>
         static LookupCustomContentControl()
         {

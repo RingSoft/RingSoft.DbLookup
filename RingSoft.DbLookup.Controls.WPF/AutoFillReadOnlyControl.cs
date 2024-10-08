@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 09-23-2023
 // ***********************************************************************
 // <copyright file="AutoFillReadOnlyControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -25,7 +25,9 @@ using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 namespace RingSoft.DbLookup.Controls.WPF
 {
     /// <summary>
-    /// Class AutoFillReadOnlyControl.
+    /// <summary>
+    /// A textbox control that allows a user to see the related table. Displays a lookup window to
+    /// the user when the find button is clicked.  The user cannot change the value.
     /// Implements the <see cref="Control" />
     /// Implements the <see cref="IReadOnlyControl" />
     /// Implements the <see cref="IAutoFillControl" />
@@ -33,6 +35,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     /// <seealso cref="Control" />
     /// <seealso cref="IReadOnlyControl" />
     /// <seealso cref="IAutoFillControl" />
+    /// <font color="red">Badly formed XML comment.</font>
     public class AutoFillReadOnlyControl : Control, IReadOnlyControl, IAutoFillControl
     {
         /// <summary>
@@ -68,7 +71,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Setups the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void SetupChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -97,7 +100,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Values the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void ValueChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -127,7 +130,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Designs the text changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DesignTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -140,7 +143,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Heights the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void HeightChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -211,7 +214,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private AutoFillValue _pendingAutoFillValue;
 
         /// <summary>
-        /// Initializes static members of the <see cref="AutoFillReadOnlyControl" /> class.
+        /// Initializes static members of the <see cref="AutoFillReadOnlyControl"/> class.
         /// </summary>
         static AutoFillReadOnlyControl()
         {

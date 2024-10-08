@@ -4,7 +4,7 @@
 // Created          : 03-04-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 09-20-2023
 // ***********************************************************************
 // <copyright file="ListControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -51,7 +51,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Setups the changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void SetupChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -81,7 +81,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Datas the source changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DataSourceChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -113,7 +113,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Datas the row changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DataRowChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -154,7 +154,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// UIs the command changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void UiCommandChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -191,7 +191,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// UIs the label changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void UiLabelChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -235,7 +235,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private VmUiControl _vmUiControl;
 
         /// <summary>
-        /// Initializes static members of the <see cref="ListControl" /> class.
+        /// Initializes static members of the <see cref="ListControl"/> class.
         /// </summary>
         static ListControl()
         {
@@ -243,7 +243,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListControl" /> class.
+        /// Initializes a new instance of the <see cref="ListControl"/> class.
         /// </summary>
         public ListControl()
         {

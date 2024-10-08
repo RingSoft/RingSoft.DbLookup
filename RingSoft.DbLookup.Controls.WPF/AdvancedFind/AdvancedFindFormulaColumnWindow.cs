@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="AdvancedFindFormulaColumnWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -78,7 +78,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindFormulaColumnViewModel ViewModel { get; set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="AdvancedFindFormulaColumnWindow" /> class.
+        /// Initializes static members of the <see cref="AdvancedFindFormulaColumnWindow"/> class.
         /// </summary>
         static AdvancedFindFormulaColumnWindow()
         {
@@ -86,7 +86,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFormulaColumnWindow" /> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFormulaColumnWindow"/> class.
         /// </summary>
         /// <param name="gridMemoValue">The grid memo value.</param>
         public AdvancedFindFormulaColumnWindow(DataEntryGridMemoValue gridMemoValue) : base(gridMemoValue)
@@ -177,7 +177,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// Handles the SelectionChanged event of the FieldDataTypeComboBox control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void FieldDataTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ViewModel.DataType == FieldDataTypes.Decimal)

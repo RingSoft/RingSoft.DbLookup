@@ -4,7 +4,7 @@
 // Created          : 12-13-2023
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 12-13-2023
 // ***********************************************************************
 // <copyright file="DbMaintenanceWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -61,7 +61,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public BaseWindow MaintenanceWindow => this;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMaintenanceWindow" /> class.
+        /// Initializes a new instance of the <see cref="DbMaintenanceWindow"/> class.
         /// </summary>
         public DbMaintenanceWindow()
         {

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 02-20-2023
 // ***********************************************************************
 // <copyright file="AdvancedFindFilterHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -46,7 +46,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private bool _dirty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindFilterHost" /> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindFilterHost"/> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
         public AdvancedFindFilterHost(DataEntryGrid grid) : base(grid)

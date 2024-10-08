@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="AdvancedFilterParenthesesHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -35,7 +35,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFilterParenthesesCellProps CellProps { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesHost" /> class.
+        /// Initializes a new instance of the <see cref="AdvancedFilterParenthesesHost"/> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
         public AdvancedFilterParenthesesHost(DataEntryGrid grid) : base(grid)

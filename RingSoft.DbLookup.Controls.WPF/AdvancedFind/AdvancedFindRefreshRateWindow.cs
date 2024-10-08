@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 12-19-2022
 // ***********************************************************************
 // <copyright file="AdvancedFindRefreshRateWindow.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -74,7 +74,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public AdvancedFindRefreshViewModel ViewModel { get; set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="AdvancedFindRefreshRateWindow" /> class.
+        /// Initializes static members of the <see cref="AdvancedFindRefreshRateWindow"/> class.
         /// </summary>
         static AdvancedFindRefreshRateWindow()
         {
@@ -82,7 +82,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdvancedFindRefreshRateWindow" /> class.
+        /// Initializes a new instance of the <see cref="AdvancedFindRefreshRateWindow"/> class.
         /// </summary>
         /// <param name="advancedFind">The advanced find.</param>
         public AdvancedFindRefreshRateWindow(DbLookup.AdvancedFind.AdvancedFind advancedFind)

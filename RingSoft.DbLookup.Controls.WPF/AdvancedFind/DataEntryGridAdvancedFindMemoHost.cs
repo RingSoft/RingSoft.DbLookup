@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 12-16-2023
+// Last Modified On : 02-20-2023
 // ***********************************************************************
 // <copyright file="DataEntryGridAdvancedFindMemoHost.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -53,7 +53,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private bool _memoMode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataEntryGridAdvancedFindMemoHost" /> class.
+        /// Initializes a new instance of the <see cref="DataEntryGridAdvancedFindMemoHost"/> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
         public DataEntryGridAdvancedFindMemoHost(DataEntryGrid grid) : base(grid)

@@ -4,7 +4,7 @@
 // Created          : 12-19-2022
 //
 // Last Modified By : petem
-// Last Modified On : 09-06-2024
+// Last Modified On : 12-08-2023
 // ***********************************************************************
 // <copyright file="LookupControl.cs" company="Peter Ringering">
 //     Copyright (c) 2023. All rights reserved.
@@ -89,7 +89,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public string ColumnName { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataColumn" /> class.
+        /// Initializes a new instance of the <see cref="DataColumn"/> class.
         /// </summary>
         /// <param name="columnIndex">Index of the column.</param>
         /// <param name="columnName">Name of the column.</param>
@@ -205,7 +205,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DataColumnMaps ColumnMaps { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataItem" /> class.
+        /// Initializes a new instance of the <see cref="DataItem"/> class.
         /// </summary>
         /// <param name="columnMaps">The column maps.</param>
         public DataItem(DataColumnMaps columnMaps)
@@ -338,7 +338,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             public PrimaryKeyValue ParentWindowPrimaryKeyValue { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="RefreshPendingData" /> class.
+            /// Initializes a new instance of the <see cref="RefreshPendingData"/> class.
             /// </summary>
             /// <param name="initialSearchFor">The initial search for.</param>
             /// <param name="parentWindowPrimaryKeyValue">The parent window primary key value.</param>
@@ -563,7 +563,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Lookups the definition changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void LookupDefinitionChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -585,12 +585,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Gets or sets the LookupCommand which is used by view models to tell this control to either refresh, clear etc.
         /// </summary>
         /// <value>The command.</value>
+        ///
         private LookupCommand _command;
 
-        /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        /// <value>The command.</value>
         public LookupCommand Command
         {
             get { return _command; }
@@ -643,7 +640,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Designs the text changed callback.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void DesignTextChangedCallback(DependencyObject obj,
             DependencyPropertyChangedEventArgs args)
         {
@@ -816,7 +813,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private LookupCommand _commandToExecute;
 
         /// <summary>
-        /// Initializes static members of the <see cref="LookupControl" /> class.
+        /// Initializes static members of the <see cref="LookupControl"/> class.
         /// </summary>
         static LookupControl()
         {
@@ -829,7 +826,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupControl" /> class.
+        /// Initializes a new instance of the <see cref="LookupControl"/> class.
         /// </summary>
         public LookupControl()
         {
@@ -847,7 +844,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the <see cref="E:IsVisiblePropertyChanged" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnIsVisiblePropertyChanged(object sender, EventArgs e)
         {
             LoadOnIsVisible();
@@ -907,7 +904,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the SelectionChanged1 event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         /// <exception cref="System.NotImplementedException"></exception>
         private void ListView_SelectionChanged1(object sender, SelectionChangedEventArgs e)
         {
@@ -1079,7 +1076,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewKeyDown event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void ListView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             OnListViewKeyDown(e);
@@ -1089,7 +1086,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the TextChanged event of the SearchForControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SearchForControl_TextChanged(object sender, EventArgs e)
         {
             if (!_resettingSearchFor)
@@ -1100,7 +1097,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewKeyDown event of the SearchForControl control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void SearchForControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             OnListViewKeyDown(e);
@@ -1110,7 +1107,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewLostKeyboardFocus event of the Control control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="KeyboardFocusChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyboardFocusChangedEventArgs"/> instance containing the event data.</param>
         private void Control_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (ReferenceEquals(e.NewFocus, ListView))
@@ -1554,7 +1551,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PropertyChanged event of the Column control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void Column_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (LookupGridView == null)
@@ -1597,7 +1594,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the PreviewMouseWheel event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="MouseWheelEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="MouseWheelEventArgs"/> instance containing the event data.</param>
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
@@ -1611,7 +1608,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Scroll event of the ScrollBar control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="ScrollEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="ScrollEventArgs"/> instance containing the event data.</param>
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
             e.Handled = true;
@@ -1647,7 +1644,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the DataSourceChanged event of the LookupData control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void LookupData_DataSourceChanged(object sender, EventArgs e)
         {
             DataSourceChanged = new LookupDataSourceChanged();
@@ -1658,7 +1655,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Grids the view column header clicked handler.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
@@ -2344,7 +2341,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the SelectionChanged event of the ListView control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -2359,7 +2356,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <summary>
         /// Handles the <see cref="E:ListViewKeyDown" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void OnListViewKeyDown(KeyEventArgs e)
         {
             if (SearchForHost != null && SearchForHost.Control.IsKeyboardFocusWithin)
@@ -2770,7 +2767,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Handles the Activated event of the OwnerWindow control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OwnerWindow_Activated(object sender, EventArgs e)
         {
             var ownerWindow = Window.GetWindow(this);

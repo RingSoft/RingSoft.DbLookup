@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -43,6 +44,53 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The previous button UI control.</value>
         public VmUiControl PreviousButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the save button.
+        /// </summary>
+        /// <value>The save button.</value>
+        public abstract Button SaveButton { get; }
+        /// <summary>
+        /// Gets the save button UI control.
+        /// </summary>
+        /// <value>The save button UI control.</value>
+        public VmUiControl SaveButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the select button.
+        /// </summary>
+        /// <value>The select button.</value>
+        public abstract Button SelectButton { get; }
+        /// <summary>
+        /// Gets the select button UI control.
+        /// </summary>
+        /// <value>The select button UI control.</value>
+        public VmUiControl SelectButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the delete button.
+        /// </summary>
+        /// <value>The delete button.</value>
+        public abstract Button DeleteButton { get; }
+        /// <summary>
+        /// Gets the delete button UI control.
+        /// </summary>
+        /// <value>The delete button UI control.</value>
+        public VmUiControl DeleteButtonUiControl { get; private set; }
+
+        /// <summary>
+        /// Creates new button.
+        /// </summary>
+        /// <value>The new button.</value>
+        public abstract Button NewButton { get; }
+        /// <summary>
+        /// Creates new buttonuicontrol.
+        /// </summary>
+        /// <value>The new button UI control.</value>
+        public VmUiControl NewButtonUiControl { get; private set; }
+
+        /// <summary>
+        /// Gets the close button.
+        /// </summary>
+        /// <value>The close button.</value>
+        public abstract Button CloseButton { get; }
 
 
         public DbMaintenanceViewModelBase ViewModel { get; }
@@ -52,18 +100,23 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DbMaintenanceUserControl UserControl { get; }
 
         public DbMaintenanceStatusBar StatusBar { get; }
+        public IUserControlHost Host { get; }
 
         public bool DeleteChildrenResult { get; set; }
         public bool PreDeleteResult { get; set; }
         public bool KeyControlRegistered { get; set; }
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
+        private LookupAddViewArgs _lookupAddViewArgs;
+
         public DbMaintenanceUserControlProcessor(
             DbMaintenanceViewModelBase viewModel
             , Control buttonsControl
             , DbMaintenanceUserControl userControl
-            , DbMaintenanceStatusBar statusBar)
+            , DbMaintenanceStatusBar statusBar
+            , IUserControlHost host)
         {
+            Host = host;
             ViewModel = viewModel;
             ButtonsControl = buttonsControl;
             UserControl = userControl;
@@ -74,6 +127,12 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             SetupControl();
             UserControl.PreviewKeyDown += UserControl_PreviewKeyDown;
+
+            if (_lookupAddViewArgs != null)
+            {
+                InitializeFromLookupData(_lookupAddViewArgs);
+                _lookupAddViewArgs = null;
+            }
         }
 
         private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -113,21 +172,67 @@ namespace RingSoft.DbLookup.Controls.WPF
                 NextButton.Command = ViewModel.NextCommand;
                 NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
             }
+
+            if (NewButton != null)
+            {
+                NewButton.Command = ViewModel.NewCommand;
+                NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
+            }
+
+            if (SaveButton != null)
+            {
+                SaveButton.Command = ViewModel.SaveCommand;
+                SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
+            }
+
+            if (DeleteButton != null)
+            {
+                DeleteButton.Command = ViewModel.DeleteCommand;
+                DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
+            }
+
+            if (SelectButton != null)
+            {
+                SelectButton.Command = ViewModel.SelectCommand;
+                SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+            }
+
+            if (CloseButton != null)
+            {
+                CloseButton.Click += (_, _) => CloseWindow();
+            }
+
         }
 
         public void InitializeFromLookupData(LookupAddViewArgs e)
         {
-            
+            if (ViewModel == null)
+            {
+                _lookupAddViewArgs = e;
+                return;
+            }
+            ViewModel.InitializeFromLookupData(e);
+            LookupAddView?.Invoke(this, e);
+            if (e.LookupReadOnlyMode)
+            {
+                SelectButton.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         public void OnValidationFail(FieldDefinition fieldDefinition, string text, string caption)
         {
-            
+            MessageBox.Show(text, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public void OnRecordSelected()
         {
-            
+            if (FocusManager.GetFocusedElement(UserControl) is TextBox textBox)
+            {
+                var lookupControl = textBox.GetParentOfType<LookupControl>();
+                if (lookupControl == null)
+                    textBox.SelectAll();
+            }
         }
 
         public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor,
@@ -163,22 +268,41 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void CloseWindow()
         {
-            
+            Host.CloseHost();
         }
 
         public MessageButtons ShowYesNoCancelMessage(string text, string caption, bool playSound = false)
         {
-            throw new NotImplementedException();
+            if (playSound)
+                SystemSounds.Exclamation.Play();
+
+            var result = MessageBox.Show(text, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    return MessageButtons.Yes;
+                case MessageBoxResult.No:
+                    return MessageButtons.No;
+            }
+
+            return MessageButtons.Cancel;
         }
 
         public bool ShowYesNoMessage(string text, string caption, bool playSound = false)
         {
-            throw new NotImplementedException();
+            if (playSound)
+                SystemSounds.Exclamation.Play();
+
+            if (MessageBox.Show(text, caption, MessageBoxButton.YesNo, MessageBoxImage.Question) ==
+                MessageBoxResult.Yes)
+                return true;
+
+            return false;
         }
 
-        public void ShowRecordSavedMessage()
+        public virtual void ShowRecordSavedMessage()
         {
-            
+            MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void OnReadOnlyModeSet(bool readOnlyValue)
@@ -193,7 +317,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void Activate()
         {
-            
+            if (UserControl != null)
+            {
+                UserControl.Focus();
+                WPFControlsGlobals.SendKey(Key.Tab);
+            }
+
         }
 
         public void SetWindowReadOnlyMode()
@@ -218,12 +347,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SetSaveStatus(string message, AlertLevels alertLevel)
         {
-            
         }
 
         public List<DbAutoFillMap> GetAutoFills()
         {
-            throw new NotImplementedException();
+            return LookupControlsGlobals.GetAutoFills(UserControl);
         }
 
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
@@ -233,12 +361,24 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)
         {
-            throw new NotImplementedException();
+            var delProcedure = new DeleteProcedure (Window.GetWindow(UserControl)
+                , "Deleting Table Data"
+                , ViewModel
+                , deleteTables);
+            delProcedure.Start();
+            return delProcedure;
         }
 
         public void GetPreDeleteProcedure(List<FieldDefinition> fields, DeleteTables deleteTables)
         {
-            
+            var delProcedure = new PreDeleteProcedure(Window.GetWindow(UserControl)
+                , "Gathering Tables To Delete"
+                , ViewModel
+                , deleteTables
+                , fields
+                , this);
+
+            delProcedure.Start();
         }
 
         public void SetWindowReadOnlyMode(bool readOnlyMode)

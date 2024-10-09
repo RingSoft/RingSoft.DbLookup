@@ -14,6 +14,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControlProcessor Processor { get; private set; }
 
+        public IUserControlHost Host { get; internal set; }
+
         private bool _loaded;
 
         public DbMaintenanceUserControl()
@@ -31,7 +33,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ViewModel
                     , MaintenanceButtons
                     , this
-                    , StatusBar);
+                    , StatusBar
+                    , Host);
                 ViewModel.Processor = Processor;
                 Processor.Initialize();
                 ViewModel.OnViewLoaded(this);

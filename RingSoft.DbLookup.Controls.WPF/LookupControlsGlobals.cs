@@ -350,7 +350,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <param name="window">The window.</param>
         /// <returns>List&lt;DbAutoFillMap&gt;.</returns>
-        public static List<DbAutoFillMap> GetAutoFills(Window window)
+        public static List<DbAutoFillMap> GetAutoFills(ContentControl window)
         {
             var result = new List<DbAutoFillMap>();
             var autoFills = window.GetLogicalChildren<AutoFillControl>();

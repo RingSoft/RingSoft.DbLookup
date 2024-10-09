@@ -12,9 +12,9 @@ namespace RingSoft.DbLookup.App.WPFCore
         }
 
         public override DbMaintenanceUserControlProcessor GetUserControlProcessor(DbMaintenanceViewModelBase viewModel, Control buttonsControl,
-            DbMaintenanceUserControl userControl, DbMaintenanceStatusBar statusBar)
+            DbMaintenanceUserControl userControl, DbMaintenanceStatusBar statusBar, IUserControlHost host)
         {
-            return new AppDbMaintenanceUserControlProcessor(viewModel, buttonsControl, userControl, statusBar);
+            return new AppDbMaintenanceUserControlProcessor(viewModel, buttonsControl, userControl, statusBar, host);
         }
     }
 }

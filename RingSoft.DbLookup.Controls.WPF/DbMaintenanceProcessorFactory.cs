@@ -42,6 +42,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             DbMaintenanceViewModelBase viewModel
             , Control buttonsControl
             , DbMaintenanceUserControl userControl
-            , DbMaintenanceStatusBar statusBar);
+            , DbMaintenanceStatusBar statusBar
+            , IUserControlHost host);
     }
 }

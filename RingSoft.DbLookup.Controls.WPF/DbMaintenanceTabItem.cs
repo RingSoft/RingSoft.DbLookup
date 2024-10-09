@@ -6,7 +6,7 @@ using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class DbMaintenanceTabItem : TabItem
+    public class DbMaintenanceTabItem : TabItem, IUserControlHost
     {
         public DbMaintenanceUserControl UserControl { get; }
 
@@ -16,6 +16,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var dockPanel = new DockPanel();
             Content = dockPanel;
             UserControl = userControl;
+            UserControl.Host = this;
             dockPanel.Children.Add(UserControl);
 
             CloseCommand = new RelayCommand((() =>
@@ -34,6 +35,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             };
 
+        }
+
+        public void CloseHost()
+        {
+            CloseCommand.Execute(null);
         }
     }
 }

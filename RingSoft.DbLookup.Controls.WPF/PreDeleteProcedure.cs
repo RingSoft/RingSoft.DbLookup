@@ -14,13 +14,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public List<FieldDefinition> Fields { get; }
 
-        public IDbMaintenanceProcessor Processor { get; }
+        public IDbMaintenanceDataProcessor Processor { get; }
         public PreDeleteProcedure(Window ownerWindow
             , string windowText
             , DbMaintenanceViewModelBase viewModel
             , DeleteTables deleteTables
             , List<FieldDefinition> fields
-            , IDbMaintenanceProcessor processor
+            , IDbMaintenanceDataProcessor processor
             ) : base(ownerWindow, windowText)
         {
             ViewModel = viewModel;

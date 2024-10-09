@@ -13,6 +13,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override Button SelectButton => _buttonsControl.SelectButton;
         public override Button DeleteButton => _buttonsControl.DeleteButton;
         public override Button NewButton => _buttonsControl.NewButton;
+        public override Button PrintButton => _buttonsControl.PrintButton;
         public override Button CloseButton => _buttonsControl.CloseButton;
 
         private DbMaintenanceButtonsControl _buttonsControl;

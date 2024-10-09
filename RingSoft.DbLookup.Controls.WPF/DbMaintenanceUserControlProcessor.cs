@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
@@ -87,6 +89,17 @@ namespace RingSoft.DbLookup.Controls.WPF
         public VmUiControl NewButtonUiControl { get; private set; }
 
         /// <summary>
+        /// Gets the print button.
+        /// </summary>
+        /// <value>The print button.</value>
+        public abstract Button PrintButton { get; }
+        /// <summary>
+        /// Gets the print button UI control.
+        /// </summary>
+        /// <value>The print button UI control.</value>
+        public VmUiControl PrintButtonUiControl { get; private set; }
+
+        /// <summary>
         /// Gets the close button.
         /// </summary>
         /// <value>The close button.</value>
@@ -128,11 +141,31 @@ namespace RingSoft.DbLookup.Controls.WPF
             SetupControl();
             UserControl.PreviewKeyDown += UserControl_PreviewKeyDown;
 
+            if (StatusBar != null)
+            {
+                SetupStatusBar(ViewModel, StatusBar);
+            }
+
             if (_lookupAddViewArgs != null)
             {
                 InitializeFromLookupData(_lookupAddViewArgs);
                 _lookupAddViewArgs = null;
             }
+        }
+
+        public void SetupStatusBar(DbMaintenanceViewModelBase viewModel, DbMaintenanceStatusBar statusBar)
+        {
+            if (statusBar == null)
+            {
+                return;
+            }
+            BindingOperations.SetBinding(statusBar, DbMaintenanceStatusBar.LastSavedDateProperty, new Binding
+            {
+                Source = viewModel,
+                Path = new PropertyPath(nameof(ViewModel.LastSavedDate)),
+                Mode = BindingMode.TwoWay
+            });
+
         }
 
         private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -195,6 +228,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 SelectButton.Command = ViewModel.SelectCommand;
                 SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+            }
+
+            if (PrintButton != null)
+            {
+                PrintButton.Command = ViewModel.PrintCommand;
+                PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
             }
 
             if (CloseButton != null)
@@ -332,21 +371,55 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
         {
-            return true;
+            var recordLockInputParameter = new RecordLockingInputParameter
+            {
+                InputParameter = inputParameter,
+                RecordLockMessage = message
+            };
+
+            var lookupDefinition = SystemGlobals.AdvancedFindLookupContext.RecordLockingLookup.Clone();
+
+            lookupDefinition.ShowAddOnTheFlyWindow(string.Empty, Window.GetWindow(UserControl), null, recordLockInputParameter,
+                lockKey);
+
+            return recordLockInputParameter.ContinueSave;
         }
 
         public bool CheckDeleteTables(DeleteTables deleteTables)
         {
-            return true;
+            var deleteWindow = new DeleteRecordWindow(deleteTables);
+            deleteWindow.Owner = Window.GetWindow(UserControl);
+            deleteWindow.ShowInTaskbar = false;
+            deleteWindow.ShowDialog();
+            if (deleteWindow.DialogResult.HasValue)
+            {
+                return deleteWindow.DialogResult.Value;
+            }
+            return false;
         }
 
         public void PrintOutput(PrinterSetupArgs printerSetupArgs)
         {
-            
+            var filterWindow = new GenericReportFilterWindow(printerSetupArgs);
+            filterWindow.Owner = Window.GetWindow(UserControl);
+            filterWindow.ShowInTaskbar = false;
+            filterWindow.ShowDialog();
         }
 
         public void SetSaveStatus(string message, AlertLevels alertLevel)
         {
+            if (StatusBar != null)
+            {
+                if (StatusBar.StatusTextBox == null)
+                {
+                    StatusBar.Loaded += (sender, args) =>
+                    {
+                        StatusBar.SetSaveStatus(message, alertLevel);
+                    };
+                    return;
+                }
+                StatusBar.SetSaveStatus(message, alertLevel);
+            }
         }
 
         public List<DbAutoFillMap> GetAutoFills()
@@ -356,7 +429,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void HandleAutoFillValFail(DbAutoFillMap autoFillMap)
         {
-            
+            LookupControlsGlobals.HandleValFail(UserControl, autoFillMap);
         }
 
         public ITwoTierProcessingProcedure GetDeleteProcedure(DeleteTables deleteTables)

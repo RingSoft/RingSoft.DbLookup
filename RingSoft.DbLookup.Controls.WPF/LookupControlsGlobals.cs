@@ -324,7 +324,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <param name="window">The window.</param>
         /// <param name="autoFillMap">The automatic fill map.</param>
-        public static void HandleValFail(Window window, DbAutoFillMap autoFillMap)
+        public static void HandleValFail(ContentControl window, DbAutoFillMap autoFillMap)
         {
             var caption = "Validation Fail";
             var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.";

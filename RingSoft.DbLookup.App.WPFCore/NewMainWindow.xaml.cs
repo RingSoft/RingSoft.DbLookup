@@ -28,15 +28,15 @@ namespace RingSoft.DbLookup.App.WPFCore
             Loaded += (sender, args) =>
             {
                 var tabItem = new DbMaintenanceTabItem(
+                    new OrderDetailsUserControl(), TabControl);
+                tabItem.Header = "Test";
+                TabControl.Items.Add(tabItem);
+
+                tabItem = new DbMaintenanceTabItem(
                     new OrdersGridUserControl(),  TabControl);
                 tabItem.Header = "Order";
                 TabControl.Items.Add(tabItem);
                 tabItem.IsSelected = true;
-
-                tabItem = new DbMaintenanceTabItem(
-                    new OrderDetailsUserControl(), TabControl);
-                tabItem.Header = "Test";
-                TabControl.Items.Add(tabItem);
             };
         }
     }

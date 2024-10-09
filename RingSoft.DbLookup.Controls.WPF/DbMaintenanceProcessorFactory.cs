@@ -40,6 +40,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public abstract DbMaintenanceUserControlProcessor GetUserControlProcessor(
             DbMaintenanceViewModelBase viewModel
-            , Control buttonsControl);
+            , Control buttonsControl
+            , DbMaintenanceUserControl userControl
+            , DbMaintenanceStatusBar statusBar);
     }
 }

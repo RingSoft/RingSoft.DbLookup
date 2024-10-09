@@ -14,19 +14,28 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControlProcessor Processor { get; private set; }
 
+        private bool _loaded;
+
         public DbMaintenanceUserControl()
         {
             Loaded += (sender, args) =>
             {
+                if (_loaded)
+                {
+                    return;
+                }
                 ViewModel = OnGetViewModel();
                 MaintenanceButtons = OnGetMaintenanceButtons();
                 StatusBar = OnGetStatusBar();
                 Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetUserControlProcessor(
                     ViewModel
-                    , MaintenanceButtons);
+                    , MaintenanceButtons
+                    , this
+                    , StatusBar);
                 ViewModel.Processor = Processor;
+                Processor.Initialize();
                 ViewModel.OnViewLoaded(this);
-
+                _loaded = true;
             };
         }
 

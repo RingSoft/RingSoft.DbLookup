@@ -1,30 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class DbMaintenanceUserControlProcessor : IDbMaintenanceDataProcessor
+    public abstract class DbMaintenanceUserControlProcessor : IDbMaintenanceDataProcessor
     {
+        /// <summary>
+        /// Gets the find button.
+        /// </summary>
+        /// <value>The find button.</value>
+        public abstract Button FindButton { get; }
+        /// <summary>
+        /// Gets the find button UI control.
+        /// </summary>
+        /// <value>The find button UI control.</value>
+        public VmUiControl FindButtonUiControl { get; private set; }
+
         public DbMaintenanceViewModelBase ViewModel { get; }
 
         public Control ButtonsControl { get; }
-        public DbMaintenanceUserControlProcessor(
-            DbMaintenanceViewModelBase viewModel
-            , Control buttonsControl)
-        {
-            ViewModel = viewModel;
-            ButtonsControl = buttonsControl;
-        }
+
+        public DbMaintenanceUserControl UserControl { get; }
+
+        public DbMaintenanceStatusBar StatusBar { get; }
 
         public bool DeleteChildrenResult { get; set; }
         public bool PreDeleteResult { get; set; }
         public bool KeyControlRegistered { get; set; }
         public event EventHandler<LookupAddViewArgs> LookupAddView;
+
+        public DbMaintenanceUserControlProcessor(
+            DbMaintenanceViewModelBase viewModel
+            , Control buttonsControl
+            , DbMaintenanceUserControl userControl
+            , DbMaintenanceStatusBar statusBar)
+        {
+            ViewModel = viewModel;
+            ButtonsControl = buttonsControl;
+            UserControl = userControl;
+            StatusBar = statusBar;
+        }
+
+        public virtual void Initialize()
+        {
+            SetupControl();
+        }
+
+        protected virtual void SetupControl()
+        {
+            if (FindButton != null)
+            {
+                FindButton.Command = ViewModel.FindCommand;
+                FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+            }
+        }
+
         public void InitializeFromLookupData(LookupAddViewArgs e)
         {
             
@@ -43,7 +80,32 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void ShowFindLookupWindow(LookupDefinitionBase lookupDefinition, bool allowAdd, bool allowView, string initialSearchFor,
             PrimaryKeyValue initialSearchForPrimaryKey)
         {
-            
+            var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(lookupDefinition,
+                allowAdd, allowView, initialSearchFor, initialSearchForPrimaryKey);
+
+            //lookupWindow.InitialSearchForPrimaryKeyValue = initialSearchForPrimaryKey;
+
+            lookupWindow.LookupSelect += (sender, args) =>
+            {
+                ViewModel.OnRecordSelected(args);
+            };
+            var baseWindow = Window.GetWindow(UserControl);
+            lookupWindow.Owner = baseWindow;
+            lookupWindow.AddViewParameter = ViewModel?.InputParameter;
+            lookupWindow.ApplyNewLookup += (sender, args) =>
+                ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
+
+            bool isAltDown = IsMaintenanceKeyDown(MaintenanceKey.Alt);
+            lookupWindow.Closed += (sender, args) =>
+            {
+                baseWindow.Focus();
+                UserControl.Focus();
+                if (!isAltDown)
+                {
+                    UserControl.ResetViewForNewRecord();
+                }
+            };
+            lookupWindow.Show();
         }
 
         public void CloseWindow()

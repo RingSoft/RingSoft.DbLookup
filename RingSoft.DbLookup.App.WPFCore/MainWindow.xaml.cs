@@ -70,6 +70,10 @@ namespace RingSoft.DbLookup.App.WPFCore
                 var win = new NewMainWindow();
                 win.ShowInTaskbar = false;
                 win.Owner = this;
+                win.Closed += (sender, args) =>
+                {
+                    Activate();
+                };
                 win.Show();
             };
             DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();

@@ -25,6 +25,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public OrdersGridUserControl()
         {
             InitializeComponent();
+            OrdersViewModel.GridMode = true;
         }
 
         protected override DbMaintenanceViewModelBase OnGetViewModel()

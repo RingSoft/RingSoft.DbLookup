@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RingSoft.DbLookup.App.WPFCore.Northwind;
+using RingSoft.DbLookup.Controls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -22,6 +24,20 @@ namespace RingSoft.DbLookup.App.WPFCore
         public NewMainWindow()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                var tabItem = new DbMaintenanceTabItem(
+                    new OrdersGridUserControl(),  TabControl);
+                tabItem.Header = "Order";
+                TabControl.Items.Add(tabItem);
+                tabItem.IsSelected = true;
+
+                tabItem = new DbMaintenanceTabItem(
+                    new OrderDetailsUserControl(), TabControl);
+                tabItem.Header = "Test";
+                TabControl.Items.Add(tabItem);
+            };
         }
     }
 }

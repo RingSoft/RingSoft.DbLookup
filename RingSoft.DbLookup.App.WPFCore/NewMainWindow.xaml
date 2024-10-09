@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore"
+        xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore.Northwind"
         mc:Ignorable="d"
         Title="NewMainWindow" WindowState="Maximized">
     <DockPanel>
-        <TabControl x:Name="TabControl"/>
+        <TabControl x:Name="TabControl" VerticalAlignment="Stretch">
+            <!--<TabItem Header="Abcd">
+                <local:OrderDetailsUserControl/>
+            </TabItem>-->
+        </TabControl>
     </DockPanel>
 </Window>

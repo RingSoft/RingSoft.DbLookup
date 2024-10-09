@@ -14,4 +14,63 @@
 
     <Style TargetType="{x:Type local:LookupCustomContentControl}" BasedOn="{StaticResource {x:Type dec:CustomContentControl}}"/>
 
+    <Style TargetType="local:DbMaintenanceTabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DbMaintenanceTabItem">
+                    <Border
+                        Name="Border"
+                        Margin="1,0"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4,4,0,0">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="2,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Name="TextBlock"  Text="{TemplateBinding Header}" VerticalAlignment="Center" />
+
+                            <Button Name="Button"  Content="x" Margin="2,0" Background="Red" Foreground="White" Command="{Binding Path=CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DbMaintenanceTabItem}}" >
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border
+                                            Name="Border"
+                                            Margin="1,0"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="0">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="2,0"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+
+                                                <TextBlock Name="TextBlock"  Text="{TemplateBinding Content}" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="TextBlock" Property="FontWeight" Value="Bold"/>
+                            <Setter  TargetName="Button" Property="Background" Value="Red"/>
+                            <Setter  TargetName="Button" Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="TextBlock" Property="FontWeight" Value="Normal"/>
+                            <Setter TargetName="Button" Property="Background" Value="Transparent"/>
+                            <Setter TargetName="Button" Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 </ResourceDictionary>

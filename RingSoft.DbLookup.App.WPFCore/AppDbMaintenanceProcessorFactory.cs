@@ -1,4 +1,6 @@
-﻿using RingSoft.DbLookup.Controls.WPF;
+﻿using System.Windows.Controls;
+using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -7,6 +9,11 @@ namespace RingSoft.DbLookup.App.WPFCore
         public override DbMaintenanceWindowProcessor GetProcessor()
         {
             return new AppDbMaintenanceWindowProcessor();
+        }
+
+        public override DbMaintenanceUserControlProcessor GetUserControlProcessor(DbMaintenanceViewModelBase viewModel, Control buttonsControl)
+        {
+            return new DbMaintenanceUserControlProcessor(viewModel, buttonsControl);
         }
     }
 }

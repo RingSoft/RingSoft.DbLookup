@@ -10,14 +10,24 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public Control MaintenanceButtons { get; }
 
+        public DbMaintenanceStatusBar StatusBar { get; }
+
+        public DbMaintenanceUserControlProcessor Processor { get; }
+
         public DbMaintenanceUserControl()
         {
             ViewModel = OnGetViewModel();
             MaintenanceButtons = OnGetMaintenanceButtons();
+            StatusBar = OnGetStatusBar();
+            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetUserControlProcessor(
+                ViewModel
+                , MaintenanceButtons);
         }
 
         protected abstract DbMaintenanceViewModelBase OnGetViewModel();
 
         protected abstract Control OnGetMaintenanceButtons();
+
+        protected abstract DbMaintenanceStatusBar OnGetStatusBar();
     }
 }

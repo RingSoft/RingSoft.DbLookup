@@ -16,7 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -35,5 +37,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <returns>IDbMaintenanceProcessor.</returns>
         public abstract DbMaintenanceWindowProcessor GetProcessor();
+
+        public abstract DbMaintenanceUserControlProcessor GetUserControlProcessor(
+            DbMaintenanceViewModelBase viewModel
+            , Control buttonsControl);
     }
 }

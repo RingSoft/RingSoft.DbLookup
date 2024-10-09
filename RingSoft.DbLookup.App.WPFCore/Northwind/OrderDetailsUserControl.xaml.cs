@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
 
         protected override DbMaintenanceViewModelBase OnGetViewModel()
         {
-            return ViewModel;
+            return OrderDetailsViewModel;
         }
 
         protected override Control OnGetMaintenanceButtons()

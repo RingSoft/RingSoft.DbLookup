@@ -57,6 +57,16 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             NewMainWindowButton.Click += (sender, args) =>
             {
+                if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
+                        .TestConnection())
+                {
+                    DatabaseSetupClick();
+                    return;
+                }
+
+                SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
+                WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
+
                 var win = new NewMainWindow();
                 win.ShowInTaskbar = false;
                 win.Owner = this;

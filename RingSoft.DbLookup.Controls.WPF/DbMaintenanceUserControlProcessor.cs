@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
@@ -22,6 +23,27 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The find button UI control.</value>
         public VmUiControl FindButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the next button.
+        /// </summary>
+        /// <value>The next button.</value>
+        public abstract Button NextButton { get; }
+        /// <summary>
+        /// Gets the next button UI control.
+        /// </summary>
+        /// <value>The next button UI control.</value>
+        public VmUiControl NextButtonUiControl { get; private set; }
+        /// <summary>
+        /// Gets the previous button.
+        /// </summary>
+        /// <value>The previous button.</value>
+        public abstract Button PreviousButton { get; }
+        /// <summary>
+        /// Gets the previous button UI control.
+        /// </summary>
+        /// <value>The previous button UI control.</value>
+        public VmUiControl PreviousButtonUiControl { get; private set; }
+
 
         public DbMaintenanceViewModelBase ViewModel { get; }
 
@@ -51,6 +73,25 @@ namespace RingSoft.DbLookup.Controls.WPF
         public virtual void Initialize()
         {
             SetupControl();
+            UserControl.PreviewKeyDown += UserControl_PreviewKeyDown;
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                switch (e.Key)
+                {
+                    case Key.Left:
+                        ViewModel.OnGotoPreviousButton();
+                        e.Handled = true;
+                        break;
+                    case Key.Right:
+                        ViewModel.OnGotoNextButton();
+                        e.Handled = true;
+                        break;
+                }
+            }
         }
 
         protected virtual void SetupControl()
@@ -59,6 +100,18 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 FindButton.Command = ViewModel.FindCommand;
                 FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+            }
+
+            if (PreviousButton != null)
+            {
+                PreviousButton.Command = ViewModel.PreviousCommand;
+                PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
+            }
+
+            if (NextButton != null)
+            {
+                NextButton.Command = ViewModel.NextCommand;
+                NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
             }
         }
 

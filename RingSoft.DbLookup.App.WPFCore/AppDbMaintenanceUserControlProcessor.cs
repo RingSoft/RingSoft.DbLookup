@@ -7,6 +7,8 @@ namespace RingSoft.DbLookup.App.WPFCore
     public class AppDbMaintenanceUserControlProcessor : DbMaintenanceUserControlProcessor
     {
         public override Button FindButton => _buttonsControl.FindButton;
+        public override Button NextButton => _buttonsControl.NextButton;
+        public override Button PreviousButton => _buttonsControl.PreviousButton;
 
         private DbMaintenanceButtonsControl _buttonsControl;
 

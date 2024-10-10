@@ -13,6 +13,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public CustomersUserControl()
         {
             InitializeComponent();
+            RegisterFormKeyControl(CustomerControl);
         }
 
         protected override DbMaintenanceViewModelBase OnGetViewModel()

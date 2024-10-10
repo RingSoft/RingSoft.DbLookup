@@ -47,11 +47,27 @@ namespace RingSoft.DbLookup.Controls.WPF
             public Type MaintenanceWindow { get; set; }
         }
 
+        public class UserControlRegistryItem
+        {
+            /// <summary>
+            /// Gets or sets the table definition.
+            /// </summary>
+            /// <value>The table definition.</value>
+            public TableDefinitionBase TableDefinition { get; set; }
+
+            /// <summary>
+            /// Gets or sets the maintenance window.
+            /// </summary>
+            /// <value>The maintenance window.</value>
+            public Type MaintenanceUserControl { get; set; }
+        }
+
         /// <summary>
         /// Gets the items.
         /// </summary>
         /// <value>The items.</value>
         public static List<WindowRegistryItem> Items { get; private set; } = new List<WindowRegistryItem>();
+        public static List<UserControlRegistryItem> UcItems { get; private set; } = new List<UserControlRegistryItem>();
 
         /// <summary>
         /// Activates the registry.
@@ -81,12 +97,34 @@ namespace RingSoft.DbLookup.Controls.WPF
             });
         }
 
+        public void RegisterUserControl<TUserControl>(TableDefinitionBase tableDefinition) where TUserControl : DbMaintenanceUserControl, new()
+        {
+            if (tableDefinition == null)
+            {
+                throw new ArgumentException(nameof(tableDefinition));
+            }
+            UcItems.Add(new UserControlRegistryItem()
+            {
+                MaintenanceUserControl = typeof(TUserControl),
+                TableDefinition = tableDefinition
+            });
+        }
+
+
         public void RegisterWindow<TWindow, TEntity>()
             where TWindow : DbMaintenanceWindow, new()
             where TEntity: class, new()
         {
             var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
             RegisterWindow<TWindow>(tableDefinition);
+        }
+
+        public void RegisterUserControl<TUserControl, TEntity>()
+            where TUserControl : DbMaintenanceUserControl, new()
+            where TEntity : class, new()
+        {
+            var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
+            RegisterUserControl<TUserControl>(tableDefinition);
         }
 
         /// <summary>
@@ -100,6 +138,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             return item;
         }
 
+        private UserControlRegistryItem GetDbUserControl(TableDefinitionBase tableDefinition)
+        {
+            var item = UcItems.FirstOrDefault(p => p.TableDefinition == tableDefinition);
+            return item;
+        }
+
         /// <summary>
         /// Determines whether [is table registered] [the specified table definition].
         /// </summary>
@@ -107,6 +151,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <returns><c>true</c> if [is table registered] [the specified table definition]; otherwise, <c>false</c>.</returns>
         public override bool IsTableRegistered(TableDefinitionBase tableDefinition)
         {
+            if (GetDbUserControl(tableDefinition) != null)
+            {
+                return true;
+            }
             if (GetDbMaintenanceWindow(tableDefinition) == null)
             {
                 return false;
@@ -128,6 +176,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             var maintenanceWindow = CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
             if (maintenanceWindow == null)
             {
+                var Ucitem = GetDbUserControl(tableDefinition);
+                if (Ucitem != null)
+                {
+                    var userControl = Activator.CreateInstance(Ucitem.MaintenanceUserControl) as DbMaintenanceUserControl;
+                    ShowAddOnTheFlyWindow(userControl, tableDefinition, addViewArgs, inputParameter);
+                    return;
+                }
+
                 var item = GetDbMaintenanceWindow(tableDefinition);
                 if (item != null)
                 {
@@ -192,8 +248,67 @@ namespace RingSoft.DbLookup.Controls.WPF
             maintenanceWindow.Show();
         }
 
+        /// <summary>
+        /// Shows the add on the fly window.
+        /// </summary>
+        /// <param name="maintenanceUserControl">The maintenance window.</param>
+        /// <param name="tableDefinition">The table definition.</param>
+        /// <param name="addViewArgs">The add view arguments.</param>
+        /// <param name="addViewParameter">The add view parameter.</param>
+        protected virtual void ShowAddOnTheFlyWindow(
+            DbMaintenanceUserControl maintenanceUserControl
+            , TableDefinitionBase tableDefinition
+            , LookupAddViewArgs addViewArgs = null
+            , object addViewParameter = null)
+        {
+            var win = GetMaintenanceWindow(maintenanceUserControl);
+            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
+                win.Owner = ownerWindow;
+            else
+            {
+                win.Owner = WPFControlsGlobals.ActiveWindow;
+            }
+
+            win.Closed += (sender, args) =>
+            {
+                win.Owner.Activate();
+            };
+
+            win.ShowInTaskbar = false;
+            maintenanceUserControl.LookupAddViewArgs = addViewArgs;
+            maintenanceUserControl.AddViewParameter = addViewParameter;
+            win.Show();
+        }
+
+        public DbMaintenanceUcWindow GetMaintenanceWindow(DbMaintenanceUserControl userControl)
+        {
+            var result = new DbMaintenanceUcWindow();
+            userControl.Host = result;
+            result.DockPanel.Children.Add(userControl);
+            return result;
+        }
+
         public override void ShowDialog(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
+            var ucItem = GetDbUserControl(tableDefinition);
+            if (ucItem != null)
+            {
+                var userControl = Activator.CreateInstance(ucItem.MaintenanceUserControl) as DbMaintenanceUserControl;
+                if (userControl != null)
+                {
+                    var win = GetMaintenanceWindow(userControl);
+                    if (win != null)
+                    {
+                        win.Owner = WPFControlsGlobals.ActiveWindow;
+                        win.Closed += (sender, args) => { win.Owner.Activate(); };
+                        userControl.ViewModel.InputParameter = inputParameter;
+                        win.ShowInTaskbar = false;
+                        win.ShowDialog();
+                        return;
+                    }
+                }
+            }
+
             var item = GetDbMaintenanceWindow(tableDefinition);
             if (item != null)
             {
@@ -214,6 +329,24 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="ownerWindow">The owner window.</param>
         public virtual void ShowDbMaintenanceWindow(TableDefinitionBase tableDefinition, object inputParameter = null)
         {
+            var ucItem = GetDbUserControl(tableDefinition);
+            if (ucItem != null)
+            {
+                var userControl = Activator.CreateInstance(ucItem.MaintenanceUserControl) as DbMaintenanceUserControl;
+                if (userControl != null)
+                {
+                    var win = GetMaintenanceWindow(userControl);
+                    if (win != null)
+                    {
+                        win.Owner = WPFControlsGlobals.ActiveWindow;
+                        win.Closed += (sender, args) => { win.Owner.Activate(); };
+                        userControl.AddViewParameter = inputParameter;
+                        win.ShowInTaskbar = false;
+                        win.Show();
+                        return;
+                    }
+                }
+            }
             var item = GetDbMaintenanceWindow(tableDefinition);
             if (item != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
@@ -14,7 +15,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControlProcessor Processor { get; private set; }
 
+        public LookupAddViewArgs LookupAddViewArgs { get; set; }
+
+        public object AddViewParameter { get; set; }
+
         public IUserControlHost Host { get; internal set; }
+
+        public AutoFillControl _keyControl;
 
         private bool _loaded;
 
@@ -35,7 +42,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                     , this
                     , StatusBar
                     , Host);
+                if (_keyControl != null)
+                {
+                    RegisterFormKeyControl(_keyControl);
+                    _keyControl = null;
+                }
                 ViewModel.Processor = Processor;
+                if (LookupAddViewArgs != null) Processor.InitializeFromLookupData(LookupAddViewArgs);
+                ViewModel.InputParameter = AddViewParameter;
                 Processor.Initialize();
                 ViewModel.OnViewLoaded(this);
                 _loaded = true;
@@ -50,6 +64,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         public virtual void ResetViewForNewRecord()
         {
             
+        }
+
+        protected void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
+        {
+            if (Processor == null)
+            {
+                _keyControl = keyAutoFillControl;
+                return;
+            }
+            Processor.RegisterFormKeyControl(keyAutoFillControl);
         }
 
         protected override void OnReadOnlyModeSet(bool readOnlyValue)

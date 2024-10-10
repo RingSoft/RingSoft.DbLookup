@@ -282,7 +282,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUcWindow GetMaintenanceWindow(DbMaintenanceUserControl userControl)
         {
-            var result = new DbMaintenanceUcWindow();
+            var result = new DbMaintenanceUcWindow(userControl);
             userControl.Host = result;
             result.DockPanel.Children.Add(userControl);
             return result;

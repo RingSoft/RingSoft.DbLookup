@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using RingSoft.DataEntryControls.Engine;
@@ -13,6 +14,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public RelayCommand CloseCommand { get; }
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
         {
+            Header = userControl.Title;
             var dockPanel = new DockPanel();
             Content = dockPanel;
             UserControl = userControl;
@@ -21,6 +23,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             CloseCommand = new RelayCommand((() =>
             {
+                if (!CheckClose()) return;
                 tabControl.Items.Remove(this);
             }));
 
@@ -28,13 +31,22 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
-                    if (args.Key == Key.F4)
-                    {
-                        tabControl.Items.Remove(this);
-                    }
+                    CloseCommand.Execute(null);
                 }
             };
 
+        }
+
+        private bool CheckClose()
+        {
+            var closingArgs = new CancelEventArgs();
+            UserControl.ViewModel.OnWindowClosing(closingArgs);
+            if (closingArgs.Cancel)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void CloseHost()

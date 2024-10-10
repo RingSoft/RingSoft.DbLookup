@@ -15,6 +15,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControlProcessor Processor { get; private set; }
 
+        public string Title { get; private set; }
+
         public LookupAddViewArgs LookupAddViewArgs { get; set; }
 
         public object AddViewParameter { get; set; }
@@ -27,6 +29,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControl()
         {
+            Title = GetTitle();
             Loaded += (sender, args) =>
             {
                 if (_loaded)
@@ -45,7 +48,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_keyControl != null)
                 {
                     RegisterFormKeyControl(_keyControl);
-                    _keyControl = null;
                 }
                 ViewModel.Processor = Processor;
                 if (LookupAddViewArgs != null) Processor.InitializeFromLookupData(LookupAddViewArgs);
@@ -61,6 +63,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected abstract Control OnGetMaintenanceButtons();
 
         protected abstract DbMaintenanceStatusBar OnGetStatusBar();
+
+        protected abstract string GetTitle();
         public virtual void ResetViewForNewRecord()
         {
             
@@ -74,6 +78,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
             }
             Processor.RegisterFormKeyControl(keyAutoFillControl);
+            _keyControl = null;
         }
 
         protected override void OnReadOnlyModeSet(bool readOnlyValue)

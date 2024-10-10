@@ -41,5 +41,10 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             return StatusBar;
         }
+
+        protected override string GetTitle()
+        {
+            return "Order Detail";
+        }
     }
 }

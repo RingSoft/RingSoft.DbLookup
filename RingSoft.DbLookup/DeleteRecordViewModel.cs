@@ -190,28 +190,6 @@ namespace RingSoft.DbLookup
         }
 
         /// <summary>
-        /// The lookup command
-        /// </summary>
-        private LookupCommand _lookupCommand;
-
-        /// <summary>
-        /// Gets or sets the lookup command.
-        /// </summary>
-        /// <value>The lookup command.</value>
-        public LookupCommand LookupCommand
-        {
-            get => _lookupCommand;
-            set
-            {
-                if (value == _lookupCommand)
-                    return;
-
-                _lookupCommand = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
         /// The item processed
         /// </summary>
         private bool _itemProcessed;
@@ -365,7 +343,7 @@ namespace RingSoft.DbLookup
                     ProcessCaption = $"Delete All the {description} Related Data";
                 }
                 LookupDefinition = item.DeleteRecordItem.LookupDefinition;
-                LookupCommand = new LookupCommand(LookupCommands.Reset);
+                LookupDefinition.SetCommand(new LookupCommand(LookupCommands.Reset));
             }
         }
 

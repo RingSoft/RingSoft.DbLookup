@@ -287,6 +287,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind
         
         public void InitializeModel()
         {
+            _lookupContext.Categories.PriorityLevel = 100;
+            _lookupContext.Territories.PriorityLevel = 100;
+            _lookupContext.Shippers.PriorityLevel = 100;
+            _lookupContext.Products.PriorityLevel = 200;
+            _lookupContext.Customers.PriorityLevel = 200;
+            _lookupContext.Orders.PriorityLevel = 300;
+            _lookupContext.OrderDetails.PriorityLevel = 400;
             _lookupContext.OrderDetails.GetFieldDefinition(p => p.UnitPrice)
                 .HasDecimalFieldType(DecimalFieldTypes.Currency)
                 .DoShowNegativeValuesInRed();

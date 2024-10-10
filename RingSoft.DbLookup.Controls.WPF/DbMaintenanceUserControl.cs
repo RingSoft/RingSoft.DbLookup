@@ -47,14 +47,21 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected abstract Control OnGetMaintenanceButtons();
 
         protected abstract DbMaintenanceStatusBar OnGetStatusBar();
-        public void ResetViewForNewRecord()
+        public virtual void ResetViewForNewRecord()
         {
             
         }
 
-        public void SetReadOnlyMode(bool readOnlyValue)
+        protected override void OnReadOnlyModeSet(bool readOnlyValue)
         {
+            Processor.OnReadOnlyModeSet(readOnlyValue);
+            base.OnReadOnlyModeSet(readOnlyValue);
+        }
 
+        public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (Processor.SetControlReadOnlyMode(control, readOnlyValue))
+                base.SetControlReadOnlyMode(control, readOnlyValue);
         }
     }
 }

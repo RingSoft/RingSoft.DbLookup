@@ -105,6 +105,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <value>The close button.</value>
         public abstract Button CloseButton { get; }
 
+        public AutoFillControl KeyAutoFillControl { get; private set; }
+
 
         public DbMaintenanceViewModelBase ViewModel { get; }
 
@@ -118,9 +120,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         public bool DeleteChildrenResult { get; set; }
         public bool PreDeleteResult { get; set; }
         public bool KeyControlRegistered { get; set; }
+        private VmUiControl _keyAutoFillControlUiControl;
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
         private LookupAddViewArgs _lookupAddViewArgs;
+        private bool _registerKeyControl;
 
         public DbMaintenanceUserControlProcessor(
             DbMaintenanceViewModelBase viewModel
@@ -144,6 +148,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (StatusBar != null)
             {
                 SetupStatusBar(ViewModel, StatusBar);
+            }
+
+            if (_registerKeyControl && KeyAutoFillControl != null)
+            {
+                RegisterFormKeyControl(KeyAutoFillControl);
             }
 
             if (_lookupAddViewArgs != null)
@@ -346,7 +355,32 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void OnReadOnlyModeSet(bool readOnlyValue)
         {
-            
+            if (UserControl != null && ButtonsControl != null)
+            {
+                if (readOnlyValue)
+                {
+                    var focusedElement = FocusManager.GetFocusedElement(UserControl);
+                    if (focusedElement == null || !focusedElement.IsEnabled)
+                        NextButton.Focus();
+                }
+                else if (ButtonsControl.IsKeyboardFocusWithin)
+                {
+                    WPFControlsGlobals.SendKey(Key.Tab);
+                }
+            }
+        }
+
+        public virtual bool SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (control == KeyAutoFillControl)
+            {
+                return false;
+            }
+            else if (control == StatusBar)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool IsMaintenanceKeyDown(MaintenanceKey key)
@@ -364,9 +398,49 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
-        public void SetWindowReadOnlyMode()
+        public virtual void SetWindowReadOnlyMode()
         {
-            
+            SelectButton.IsEnabled = false;
+            ViewModel.SaveButtonEnabled = false;
+            ViewModel.DeleteButtonEnabled = false;
+            ViewModel.NewButtonEnabled = false;
+        }
+
+
+        public virtual void RegisterFormKeyControl(AutoFillControl keyAutoFillControl)
+        {
+            KeyAutoFillControl = keyAutoFillControl;
+            if (ViewModel == null)
+            {
+                _registerKeyControl = true;
+                return;
+            }
+            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.IsDirtyProperty, new Binding
+            {
+                Source = ViewModel,
+                Path = new PropertyPath(nameof(ViewModel.KeyValueDirty)),
+                Mode = BindingMode.TwoWay
+            });
+
+            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.SetupProperty, new Binding
+            {
+                Source = ViewModel,
+                Path = new PropertyPath(nameof(ViewModel.KeyAutoFillSetup))
+            });
+
+            BindingOperations.SetBinding(keyAutoFillControl, AutoFillControl.ValueProperty, new Binding
+            {
+                Source = ViewModel,
+                Path = new PropertyPath(nameof(ViewModel.KeyAutoFillValue)),
+                Mode = BindingMode.TwoWay
+            });
+
+            _keyAutoFillControlUiControl = new VmUiControl(keyAutoFillControl, ViewModel.KeyAutoFillUiCommand);
+            keyAutoFillControl.UiCommand = _keyAutoFillControlUiControl.Command;
+
+            keyAutoFillControl.AutoFillLostFocus += (sender, args) => ViewModel.OnKeyControlLeave();
+            KeyAutoFillControl.SetReadOnlyMode(false);
+            KeyControlRegistered = true;
         }
 
         public bool ShowRecordLockWindow(PrimaryKeyValue lockKey, string message, object inputParameter)
@@ -456,7 +530,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void SetWindowReadOnlyMode(bool readOnlyMode)
         {
-            
+            UserControl.SetReadOnlyMode(readOnlyMode);
         }
     }
 }

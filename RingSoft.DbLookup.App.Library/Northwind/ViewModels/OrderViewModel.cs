@@ -560,7 +560,6 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             }
 
             base.Initialize();
-            ReadOnlyMode = true;
         }
 
         public override void OnNewButton()

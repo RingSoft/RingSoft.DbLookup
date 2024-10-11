@@ -11,25 +11,21 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Diagnostics;
-using System.Media;
-using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.DataProcessor;
-using System.Windows;
 using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
-using RingSoft.DbLookup.Lookup;
-using System.Linq;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Media;
-using RingSoft.DataEntryControls.Engine.DataEntryGrid;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DataEntryControls.WPF.DataEntryGrid;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbLookup.DataProcessor;
+using RingSoft.DbLookup.Lookup;
 using RingSoft.DbMaintenance;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Media;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -238,6 +234,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// The database maintenance buttons factory
         /// </summary>
         private static DbMaintenanceButtonsFactory _dbMaintenanceButtonsFactory;
+
         /// <summary>
         /// Gets the database maintenance buttons factory.
         /// </summary>
@@ -262,6 +259,49 @@ namespace RingSoft.DbLookup.Controls.WPF
         }
 
         public static DbMaintenanceWindowRegistry WindowRegistry { get; internal set; } = new DbMaintenanceWindowRegistry();
+
+        private static Window _tabSwitcherWindow;
+        private static DbMaintenanceTabControl _tabControl;
+
+        public static void SetTabSwitcherWindow(Window tabSwitcherWindow, DbMaintenanceTabControl tabControl)
+        {
+            if (_tabSwitcherWindow != null)
+            {
+                _tabSwitcherWindow.PreviewKeyDown -= _tabSwitcherWindow_PreviewKeyDown;
+            }
+            _tabSwitcherWindow = tabSwitcherWindow;
+            _tabControl = tabControl;
+            _tabSwitcherWindow.PreviewKeyDown += _tabSwitcherWindow_PreviewKeyDown;
+
+        }
+
+        private static void _tabSwitcherWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (_tabControl.Items.Count == 0)
+            {
+                return;
+            }
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.Tab)
+                {
+                    if (_tabControl.SelectedItem is DbMaintenanceTabItem origTabItem)
+                    {
+                        origTabItem.UserControl.IgnoreTab = true;
+                    }
+                    var taskSwitcherWindow = new TabIControlSwitcherWindow(_tabControl);
+                    taskSwitcherWindow.ShowDialog();
+                    taskSwitcherWindow.LocalViewModel.SelectedItem.TabItem.IsSelected = true;
+                    if (taskSwitcherWindow.LocalViewModel.SelectedItem.TabItem is DbMaintenanceTabItem dbMaintenanceTabItem)
+                    {
+                        _tabControl.UpdateLayout();
+                        dbMaintenanceTabItem.UpdateLayout();
+                        dbMaintenanceTabItem.UserControl.SetInitialFocus();
+                    }
+
+                }
+            }
+        }
 
         static LookupControlsGlobals()
         {

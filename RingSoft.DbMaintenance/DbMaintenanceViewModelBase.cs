@@ -683,6 +683,7 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public event EventHandler InitializeEvent;
         public event EventHandler PreInitializeEvent;
+        public event EventHandler RecordSelectedEvent;
         /// <summary>
         /// Occurs when [save event].
         /// </summary>
@@ -877,6 +878,11 @@ namespace RingSoft.DbMaintenance
         protected void FirePreInitializeEvent()
         {
             PreInitializeEvent?.Invoke(this, new EventArgs());
+        }
+
+        protected void FireRecordSelectedEvent()
+        {
+            RecordSelectedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

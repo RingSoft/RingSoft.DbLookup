@@ -22,6 +22,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             Close();
         }
 
+        public void ChangeTitle(string title)
+        {
+            Title = title;
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             UserControl.ViewModel.OnWindowClosing(e);

@@ -30,6 +30,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DbMaintenanceUserControl()
         {
             Title = GetTitle();
+            IsTabStop = false;
             Loaded += (sender, args) =>
             {
                 if (_loaded)

@@ -1,6 +1,8 @@
 ﻿using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using System.Windows.Controls;
+using System.Windows.Input;
+using RingSoft.DbLookup.Controls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -13,7 +15,7 @@ namespace RingSoft.DbLookup.App.WPFCore
         public NewMainWindow()
         {
             InitializeComponent();
-
+            LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {
                 LocalViewModel.Initialize();

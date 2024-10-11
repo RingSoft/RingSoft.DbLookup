@@ -409,6 +409,7 @@ namespace RingSoft.DbMaintenance
                     }
 
                     Processor?.OnRecordSelected();
+                    FireRecordSelectedEvent();
                 }
                 ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 ChangingEntity = false;

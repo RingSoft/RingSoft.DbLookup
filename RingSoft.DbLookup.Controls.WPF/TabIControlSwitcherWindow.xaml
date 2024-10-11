@@ -1,0 +1,30 @@
+﻿<dec:BaseWindow x:Class="RingSoft.DbLookup.Controls.WPF.TabIControlSwitcherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+        xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
+        mc:Ignorable="d"
+        Title="Tab Switcher" SizeToContent="WidthAndHeight" HideControlBox="True" HideCloseButton="True" WindowStyle="None"  ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <local:TabSwitcherViewModel x:Name="LocalViewModel"/>
+    </Window.DataContext>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="ListBox" Grid.Row="1" Grid.Column="0" Height="150" ItemsSource="{Binding Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Background="Transparent"  BorderThickness="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Text}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</dec:BaseWindow>

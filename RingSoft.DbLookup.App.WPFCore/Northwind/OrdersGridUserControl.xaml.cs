@@ -25,6 +25,10 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public OrdersGridUserControl()
         {
             InitializeComponent();
+            OrdersViewModel.RecordSelectedEvent += (sender, args) =>
+            {
+                Host.ChangeTitle($"{Title} - {OrdersViewModel.Customer.Text}");
+            };
             OrdersViewModel.GridMode = true;
         }
 

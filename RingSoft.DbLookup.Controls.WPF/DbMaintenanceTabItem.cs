@@ -14,6 +14,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public RelayCommand CloseCommand { get; }
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
         {
+            userControl.EnterToTab = true;
             Header = userControl.Title;
             var dockPanel = new DockPanel();
             Content = dockPanel;
@@ -40,6 +41,19 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Key == Key.Tab)
+            {
+                var focusedElement = FocusManager.GetFocusedElement(this);
+                if (focusedElement == null)
+                {
+                    UserControl.SetInitialFocus();
+                }
+            }
+        }
+
         private bool CheckClose()
         {
             var closingArgs = new CancelEventArgs();
@@ -55,6 +69,11 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void CloseHost()
         {
             CloseCommand.Execute(null);
+        }
+
+        public void ChangeTitle(string title)
+        {
+            Header = title;
         }
     }
 }

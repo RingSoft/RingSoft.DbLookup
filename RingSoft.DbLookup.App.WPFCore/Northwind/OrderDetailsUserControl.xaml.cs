@@ -46,5 +46,10 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             return "Order Detail";
         }
+
+        public override void SetInitialFocus()
+        {
+            
+        }
     }
 }

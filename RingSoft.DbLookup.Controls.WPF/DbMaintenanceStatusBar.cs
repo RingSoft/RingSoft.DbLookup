@@ -144,21 +144,25 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             Dispatcher.Invoke(() =>
             {
-                StatusTextBox.Visibility = Visibility.Collapsed;
-                switch (alertLevel)
+                if (StatusTextBox != null)
                 {
-                    case AlertLevels.Yellow:
-                        StatusTextBox.Visibility = Visibility.Visible;
-                        StatusTextBox.Background = new SolidColorBrush(Colors.Yellow);
-                        StatusTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                        break;
-                    case AlertLevels.Red:
-                        StatusTextBox.Visibility = Visibility.Visible;
-                        StatusTextBox.Background = new SolidColorBrush(Colors.Red);
-                        StatusTextBox.Foreground = new SolidColorBrush(Colors.White);
-                        break;
+                    StatusTextBox.Visibility = Visibility.Collapsed;
+                    switch (alertLevel)
+                    {
+                        case AlertLevels.Yellow:
+                            StatusTextBox.Visibility = Visibility.Visible;
+                            StatusTextBox.Background = new SolidColorBrush(Colors.Yellow);
+                            StatusTextBox.Foreground = new SolidColorBrush(Colors.Black);
+                            break;
+                        case AlertLevels.Red:
+                            StatusTextBox.Visibility = Visibility.Visible;
+                            StatusTextBox.Background = new SolidColorBrush(Colors.Red);
+                            StatusTextBox.Foreground = new SolidColorBrush(Colors.White);
+                            break;
+                    }
+
+                    StatusTextBox.Text = message;
                 }
-                StatusTextBox.Text = message;
             });
         }
     }

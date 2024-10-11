@@ -479,6 +479,11 @@ namespace RingSoft.DbLookup
                 return;
             }
 
+            if (e.LookupData.LookupDefinition.Destination != null)
+            {
+                e.LookupData.LookupDefinition.Destination.ShowAddView(e, e.InputParameter);
+                return;
+            }
             if (e.OwnerWindow == null)
             {
                 e.OwnerWindow = DbDataProcessor.UserInterface.GetOwnerWindow();

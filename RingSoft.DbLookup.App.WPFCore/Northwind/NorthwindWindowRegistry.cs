@@ -12,6 +12,8 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             RegisterUserControl<CustomersUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
+            RegisterUserControl<OrdersGridUserControl>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
             RegisterWindow<CustomersWindow>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
             RegisterWindow<OrdersWindow>(

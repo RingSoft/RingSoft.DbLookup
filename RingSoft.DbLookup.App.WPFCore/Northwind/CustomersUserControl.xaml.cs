@@ -35,5 +35,15 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             return "Customers";
         }
+
+        public override void SetInitialFocus()
+        {
+            if (CustomersViewModel.KeyAutoFillUiCommand.IsEnabled)
+            {
+                CustomersViewModel.KeyAutoFillUiCommand.SetFocus();
+                return;
+            }
+            CustomersViewModel.CompanyNameUiCommand.SetFocus();
+        }
     }
 }

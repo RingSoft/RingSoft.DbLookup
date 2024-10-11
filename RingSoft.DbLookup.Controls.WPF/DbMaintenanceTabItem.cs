@@ -31,7 +31,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
-                    CloseCommand.Execute(null);
+                    if (Keyboard.IsKeyDown(Key.F4))
+                    {
+                        CloseCommand.Execute(null);
+                    }
                 }
             };
 

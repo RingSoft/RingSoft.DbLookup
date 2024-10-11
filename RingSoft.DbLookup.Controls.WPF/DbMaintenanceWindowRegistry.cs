@@ -144,6 +144,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             return item;
         }
 
+        public DbMaintenanceUserControl GetUserControl(TableDefinitionBase tableDefinition)
+        {
+            var item = GetDbUserControl(tableDefinition);
+            if (item != null)
+            {
+                var userControl = Activator.CreateInstance(item.MaintenanceUserControl) as DbMaintenanceUserControl;
+                return userControl;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Determines whether [is table registered] [the specified table definition].
         /// </summary>
@@ -173,17 +184,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             , LookupAddViewArgs addViewArgs = null
             , object inputParameter = null)
         {
+            var Ucitem = GetDbUserControl(tableDefinition);
+            if (Ucitem != null)
+            {
+                var userControl = Activator.CreateInstance(Ucitem.MaintenanceUserControl) as DbMaintenanceUserControl;
+                ShowAddOnTheFlyWindow(userControl, tableDefinition, addViewArgs, inputParameter);
+                return;
+            }
+
             var maintenanceWindow = CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
             if (maintenanceWindow == null)
             {
-                var Ucitem = GetDbUserControl(tableDefinition);
-                if (Ucitem != null)
-                {
-                    var userControl = Activator.CreateInstance(Ucitem.MaintenanceUserControl) as DbMaintenanceUserControl;
-                    ShowAddOnTheFlyWindow(userControl, tableDefinition, addViewArgs, inputParameter);
-                    return;
-                }
-
                 var item = GetDbMaintenanceWindow(tableDefinition);
                 if (item != null)
                 {

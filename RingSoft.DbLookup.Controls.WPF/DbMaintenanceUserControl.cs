@@ -65,6 +65,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected abstract DbMaintenanceStatusBar OnGetStatusBar();
 
         protected abstract string GetTitle();
+
+        public abstract void SetInitialFocus();
+
         public virtual void ResetViewForNewRecord()
         {
             

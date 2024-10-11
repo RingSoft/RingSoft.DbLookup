@@ -28,6 +28,11 @@ using System.Data.Common;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public interface ILookupAddViewDestination
+    {
+        void ShowAddView(LookupAddViewArgs addViewArgs = null
+            , object inputParameter = null);
+    }
     /// <summary>
     /// Class LookupCommandChangedArgs.
     /// </summary>
@@ -208,6 +213,8 @@ namespace RingSoft.DbLookup.Lookup
             }
             internal set => _keyColumn = value;
         }
+
+        public ILookupAddViewDestination Destination { get; set; }
 
         /// <summary>
         /// Occurs when [window closed].

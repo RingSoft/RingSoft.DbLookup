@@ -25,10 +25,10 @@
 
             </lc:LookupControl.LookupColumns>
         </lc:LookupControl>
-        <TabControl x:Name="TabControl" VerticalAlignment="Stretch">
+        <lc:DbMaintenanceTabControl x:Name="TabControl" VerticalAlignment="Stretch">
             <!--<TabItem Header="Abcd">
                 <local:OrderDetailsUserControl/>
             </TabItem>-->
-        </TabControl>
+        </lc:DbMaintenanceTabControl>
     </DockPanel>
 </Window>

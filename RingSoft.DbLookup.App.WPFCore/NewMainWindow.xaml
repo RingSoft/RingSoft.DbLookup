@@ -3,10 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
+        xmlns:vmlib="clr-namespace:RingSoft.DbLookup.App.Library.ViewModels;assembly=RingSoft.DbLookup.App.Library"
+        xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
+        xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore.Northwind"
         mc:Ignorable="d"
         Title="NewMainWindow" WindowState="Maximized">
+
+    <Window.DataContext>
+        <vmlib:NewWindowViewModel x:Name="LocalViewModel"/>
+    </Window.DataContext>
     <DockPanel>
+        <lc:LookupControl x:Name="OrderLookup" LookupDefinition="{Binding OrderLookupDefinition}" DockPanel.Dock="Left" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <lc:LookupControl.LookupColumns>
+
+                <lc:LookupColumn PropertyName="{lc:NameOf OrderDate, Type={x:Type lm:OrderLookup}}" Width="75" Header="Date" />
+
+                <lc:LookupColumn PropertyName="{lc:NameOf Customer, Type={x:Type lm:OrderLookup}}" Width="200" Header="Customer"/>
+
+
+            </lc:LookupControl.LookupColumns>
+        </lc:LookupControl>
         <TabControl x:Name="TabControl" VerticalAlignment="Stretch">
             <!--<TabItem Header="Abcd">
                 <local:OrderDetailsUserControl/>

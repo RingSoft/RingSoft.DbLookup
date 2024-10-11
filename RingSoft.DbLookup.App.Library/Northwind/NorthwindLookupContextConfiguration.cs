@@ -33,6 +33,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind
     {
         public LookupDefinition<OrderLookup, Order> OrdersLookup { get; private set; }
 
+        public LookupDefinition<OrderLookup, Order> OrderDateLookup { get; private set; }
+
         public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsLookup { get; private set; }
 
         public LookupDefinition<OrderDetailLookup, Order_Detail> OrderDetailsFormLookup { get; private set; }
@@ -155,6 +157,17 @@ namespace RingSoft.DbLookup.App.Library.Northwind
                 , p => p.FullName, 30);
 
             _lookupContext.Orders.HasLookupDefinition(OrdersLookup);
+
+            OrderDateLookup = new LookupDefinition<OrderLookup, Order>(_lookupContext.Orders);
+            OrderDateLookup.AddVisibleColumnDefinition(
+                p => p.OrderDate
+                , "Date"
+                , p => p.OrderDate, 50);
+
+            OrderDateLookup.Include(p => p.Customer)
+                .AddVisibleColumnDefinition(p => p.Customer
+                    , "Customer"
+                    , p => p.CompanyName, 50);
 
             OrderDetailsLookup = new LookupDefinition<OrderDetailLookup, Order_Detail>(_lookupContext.OrderDetails);
             OrderDetailsLookup.Include(p => p.Order)

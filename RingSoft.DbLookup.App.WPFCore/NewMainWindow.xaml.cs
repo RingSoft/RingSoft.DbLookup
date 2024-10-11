@@ -12,6 +12,7 @@ namespace RingSoft.DbLookup.App.WPFCore
     public partial class NewMainWindow
     {
         private VmUiControl _lookupUiControl;
+        private bool _loaded;
         public NewMainWindow()
         {
             InitializeComponent();
@@ -27,7 +28,12 @@ namespace RingSoft.DbLookup.App.WPFCore
                 _lookupUiControl.Command.SetFocus();
                 uControl.Loaded += (sender, args) =>
                 {
+                    if (_loaded)
+                    {
+                        return;
+                    }
                     _lookupUiControl.Command.SetFocus();
+                    _loaded = true;
                 };
             };
         }

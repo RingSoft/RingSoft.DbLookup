@@ -65,6 +65,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.InputParameter = AddViewParameter;
                 Processor.Initialize();
                 ViewModel.OnViewLoaded(this);
+                SetInitialFocus();
                 _loaded = true;
             };
         }
@@ -85,7 +86,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         protected abstract string GetTitle();
 
-        public abstract void SetInitialFocus();
+        public virtual void SetInitialFocus()
+        {
+            if (ViewModel.KeyAutoFillValue.IsValid())
+            {
+                ViewModel.KeyAutoFillUiCommand.SetFocus();
+            }
+        }
 
         public virtual void ResetViewForNewRecord()
         {

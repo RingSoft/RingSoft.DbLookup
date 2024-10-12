@@ -22,44 +22,18 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
             RegisterWindow<EmployeesWindow>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
+
             RegisterUserControl<EmployeesUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
 
+            RegisterUserControl<OrdersGridUserControl>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
+
             RegisterWindow<ProductsWindow>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
+            RegisterUserControl<ProductsUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
         }
 
-        protected override DbMaintenanceWindow CreateMaintenanceWindow(TableDefinitionBase tableDefinition, LookupAddViewArgs addViewArgs,
-            object inputParameter)
-        {
-            if (tableDefinition == RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders)
-            {
-                if (inputParameter is NorthwindViewModelInput northwindViewModelInput)
-                {
-                    if (northwindViewModelInput.OrderInput.GridMode)
-                        return new OrdersGridWindow();
-                    
-                    return new OrdersWindow();
-                }
-            }
-            else if (tableDefinition ==
-                     RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails)
-            {
-                if (inputParameter is not NorthwindViewModelInput northwindViewModelInput)
-                    return null;
-                if (northwindViewModelInput.OrderInput.GridMode)
-                    return new OrdersGridWindow();
-                else
-                {
-                    if (northwindViewModelInput.OrderInput.FromProductOrders)
-                    {
-                        return new OrdersWindow();
-                    }
-                    return new OrderDetailsWindow();
-                }
-            }
-
-            return base.CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
-        }
     }
 }

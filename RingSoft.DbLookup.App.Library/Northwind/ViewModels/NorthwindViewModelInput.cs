@@ -13,7 +13,5 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         public List<OrderViewModel> OrderViewModels { get; } = new List<OrderViewModel>();
 
         public List<ProductViewModel> ProductViewModels { get; } = new List<ProductViewModel>();
-
-        public OrderInput OrderInput { get; set; }
     }
 }

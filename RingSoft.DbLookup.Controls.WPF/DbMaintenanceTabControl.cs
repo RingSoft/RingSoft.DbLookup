@@ -41,7 +41,6 @@ namespace RingSoft.DbLookup.Controls.WPF
                     Items.Insert(0, tabItem);
                     tabItem.IsSelected = true;
                     ucControl.Focus();
-                    ucControl.SetInitialFocus();
                 }
             }
 

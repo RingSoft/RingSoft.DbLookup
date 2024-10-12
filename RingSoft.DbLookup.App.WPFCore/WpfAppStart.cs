@@ -75,6 +75,10 @@ namespace RingSoft.DbLookup.App.WPFCore
 
             MegaDbWindowRegistry.RegisterWindow<ItemsWindow>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
+
+            MegaDbWindowRegistry.RegisterUserControl<ItemsUserControl>(
+                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
+
             MegaDbWindowRegistry.RegisterWindow<LocationWindow>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations);
             MegaDbWindowRegistry.RegisterWindow<ManufacturerWindow>(

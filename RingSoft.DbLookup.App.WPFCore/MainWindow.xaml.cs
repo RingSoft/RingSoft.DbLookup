@@ -4,6 +4,7 @@ using RingSoft.DbLookup.App.WPFCore.Northwind;
 using System;
 using System.Windows;
 using System.Windows.Threading;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Controls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore

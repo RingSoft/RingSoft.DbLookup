@@ -88,6 +88,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual void SetInitialFocus()
         {
+            if (ViewModel == null)
+            {
+                return;
+            }
             if (ViewModel.KeyAutoFillValue.IsValid())
             {
                 ViewModel.KeyAutoFillUiCommand.SetFocus();

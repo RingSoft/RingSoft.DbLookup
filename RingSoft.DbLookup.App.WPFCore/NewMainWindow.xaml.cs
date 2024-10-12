@@ -1,4 +1,6 @@
-﻿using RingSoft.DataEntryControls.WPF;
+﻿using System.Windows.Controls;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.Controls.WPF;
 
@@ -9,11 +11,21 @@ namespace RingSoft.DbLookup.App.WPFCore
     /// </summary>
     public partial class NewMainWindow
     {
+        public RelayCommand OrdersCommand { get; }
         private VmUiControl _lookupUiControl;
         private bool _loaded;
         public NewMainWindow()
         {
+            OrdersCommand = new RelayCommand((() =>
+            {
+                TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
+            }));
             InitializeComponent();
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_Order Grid",
+                Command = OrdersCommand,
+            });
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {

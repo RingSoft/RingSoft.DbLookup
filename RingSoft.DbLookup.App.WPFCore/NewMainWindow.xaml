@@ -15,6 +15,7 @@
         <vmlib:NewWindowViewModel x:Name="LocalViewModel"/>
     </Window.DataContext>
     <DockPanel>
+        <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top"/>
         <lc:LookupControl x:Name="OrderLookup" LookupDefinition="{Binding OrderLookupDefinition}" DockPanel.Dock="Left" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top">
             <lc:LookupControl.LookupColumns>
 

@@ -22,6 +22,9 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
             RegisterWindow<EmployeesWindow>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
+            RegisterUserControl<EmployeesUserControl>(
+                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
+
             RegisterWindow<ProductsWindow>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
         }

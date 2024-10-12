@@ -17,6 +17,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public RelayCommand CustomersCommand { get; }
 
+        public RelayCommand EmployeesCommand { get; }
+
         public RelayCommand CloseAllTabsCommand { get; }
 
         public RelayCommand AdvFindCommand { get; }
@@ -35,6 +37,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             CustomersCommand = new RelayCommand((() =>
             {
                 TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
+            }));
+
+            EmployeesCommand = new RelayCommand((() =>
+            {
+                TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
             }));
 
             CloseAllTabsCommand = new RelayCommand((() =>
@@ -59,13 +66,18 @@ namespace RingSoft.DbLookup.App.WPFCore
             InitializeComponent();
             MainMenu.Items.Add(new MenuItem()
             {
-                Header = "_Order Grid...",
+                Header = "_Orders Grid...",
                 Command = OrdersCommand,
             });
             MainMenu.Items.Add(new MenuItem()
             {
                 Header = "_Customers...",
                 Command = CustomersCommand,
+            });
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_Employees...",
+                Command = EmployeesCommand,
             });
             MainMenu.Items.Add(new MenuItem()
             {

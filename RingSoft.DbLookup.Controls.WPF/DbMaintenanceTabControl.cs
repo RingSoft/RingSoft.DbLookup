@@ -47,5 +47,32 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return result;
         }
+
+        public bool CloseAllTabs()
+        {
+            var result = true;
+            if (Items.Count == 0)
+            {
+                return result;
+            }
+
+            var tabIndex = 0;
+            DbMaintenanceTabItem dbMaintenanceTabItem = Items[tabIndex] as DbMaintenanceTabItem;
+            while (dbMaintenanceTabItem != null)
+            {
+                dbMaintenanceTabItem.IsSelected = true;
+                if (!dbMaintenanceTabItem.CloseTab(this))
+                {
+                    tabIndex ++;
+                    result = false;
+                }
+                if (Items.Count == tabIndex)
+                {
+                    break;
+                }
+                dbMaintenanceTabItem = Items[tabIndex] as DbMaintenanceTabItem;
+            }
+            return result;
+        }
     }
 }

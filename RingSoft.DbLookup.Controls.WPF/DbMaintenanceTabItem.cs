@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using RingSoft.DataEntryControls.Engine;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -23,8 +21,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             CloseCommand = new RelayCommand((() =>
             {
-                if (!CheckClose()) return;
-                tabControl.Items.Remove(this);
+                CloseTab(tabControl);
             }));
 
             PreviewKeyDown += (sender, args) =>
@@ -38,6 +35,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             };
 
+        }
+
+        public bool CloseTab(TabControl tabControl)
+        {
+            var result = true;
+            if (!CheckClose()) 
+                return false;
+            tabControl.Items.Remove(this);
+            return result;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

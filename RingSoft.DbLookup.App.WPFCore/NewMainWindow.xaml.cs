@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
@@ -16,7 +17,11 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public RelayCommand CustomersCommand { get; }
 
+        public RelayCommand CloseAllTabsCommand { get; }
+
         public RelayCommand AdvFindCommand { get; }
+
+        public RelayCommand ExitCommand { get; }
 
         private VmUiControl _lookupUiControl;
         private bool _loaded;
@@ -32,10 +37,23 @@ namespace RingSoft.DbLookup.App.WPFCore
                 TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
             }));
 
+            CloseAllTabsCommand = new RelayCommand((() =>
+            {
+                if (TabControl.CloseAllTabs())
+                {
+                    _lookupUiControl.Command.SetFocus();
+                }
+            }));
+
             AdvFindCommand = new RelayCommand((() =>
             {
                 var advancedFindWindow = new AdvancedFindWindow();
                 LookupControlsGlobals.WindowRegistry.ShowWindow(advancedFindWindow);
+            }));
+
+            ExitCommand = new RelayCommand((() =>
+            {
+                Close();
             }));
 
             InitializeComponent();
@@ -51,8 +69,19 @@ namespace RingSoft.DbLookup.App.WPFCore
             });
             MainMenu.Items.Add(new MenuItem()
             {
+                Header = "_Close All Tabs",
+                Command = CloseAllTabsCommand,
+            });
+            MainMenu.Items.Add(new MenuItem()
+            {
                 Header = "_Advanced Find...",
                 Command = AdvFindCommand,
+            });
+
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "E_xit",
+                Command = ExitCommand,
             });
 
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
@@ -75,6 +104,16 @@ namespace RingSoft.DbLookup.App.WPFCore
                     _loaded = true;
                 };
             };
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!TabControl.CloseAllTabs())
+            {
+                e.Cancel = true;
+            }
+
+            base.OnClosing(e);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public DbMaintenanceUserControl()
         {
+            EnterToTab = true;
             Title = GetTitle();
             IsTabStop = false;
             Loaded += (sender, args) =>
@@ -38,6 +39,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     return;
                 }
                 ViewModel = OnGetViewModel();
+                ViewModel.RecordSelectedEvent += (sender, args) =>
+                {
+                    ShowRecordTitle();
+                };
+                ViewModel.NewEvent += (sender, args) =>
+                {
+                    Host.ChangeTitle(Title);
+                };
+
                 MaintenanceButtons = OnGetMaintenanceButtons();
                 StatusBar = OnGetStatusBar();
                 Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetUserControlProcessor(
@@ -57,6 +67,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.OnViewLoaded(this);
                 _loaded = true;
             };
+        }
+
+        protected virtual void ShowRecordTitle()
+        {
+            if (ViewModel.KeyAutoFillValue.IsValid())
+            {
+                Host.ChangeTitle($"{Title} - {ViewModel.KeyAutoFillValue.Text}");
+            }
         }
 
         protected abstract DbMaintenanceViewModelBase OnGetViewModel();

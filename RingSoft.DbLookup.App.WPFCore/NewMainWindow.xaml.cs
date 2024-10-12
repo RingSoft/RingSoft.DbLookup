@@ -3,6 +3,7 @@ using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.Controls.WPF;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -14,6 +15,8 @@ namespace RingSoft.DbLookup.App.WPFCore
         public RelayCommand OrdersCommand { get; }
 
         public RelayCommand CustomersCommand { get; }
+
+        public RelayCommand AdvFindCommand { get; }
 
         private VmUiControl _lookupUiControl;
         private bool _loaded;
@@ -29,16 +32,27 @@ namespace RingSoft.DbLookup.App.WPFCore
                 TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
             }));
 
+            AdvFindCommand = new RelayCommand((() =>
+            {
+                var advancedFindWindow = new AdvancedFindWindow();
+                LookupControlsGlobals.WindowRegistry.ShowWindow(advancedFindWindow);
+            }));
+
             InitializeComponent();
             MainMenu.Items.Add(new MenuItem()
             {
-                Header = "_Order Grid",
+                Header = "_Order Grid...",
                 Command = OrdersCommand,
             });
             MainMenu.Items.Add(new MenuItem()
             {
-                Header = "_Customers",
+                Header = "_Customers...",
                 Command = CustomersCommand,
+            });
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_Advanced Find...",
+                Command = AdvFindCommand,
             });
 
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);

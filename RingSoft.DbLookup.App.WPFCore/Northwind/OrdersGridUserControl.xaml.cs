@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RingSoft.DbLookup.App.Library.Northwind.ViewModels;
 using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbMaintenance;
 
@@ -25,10 +26,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public OrdersGridUserControl()
         {
             InitializeComponent();
-            OrdersViewModel.RecordSelectedEvent += (sender, args) =>
-            {
-                Host.ChangeTitle($"{Title} - {OrdersViewModel.Customer.Text}");
-            };
             OrdersViewModel.GridMode = true;
         }
 
@@ -55,6 +52,11 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         public override void SetInitialFocus()
         {
             OrdersViewModel.CustomerUiCommand.SetFocus();
+        }
+
+        protected override void ShowRecordTitle()
+        {
+            Host.ChangeTitle($"{Title} - {OrdersViewModel.Customer.Text}");
         }
     }
 }

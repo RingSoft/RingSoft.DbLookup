@@ -14,7 +14,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         public RelayCommand CloseCommand { get; }
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
         {
-            userControl.EnterToTab = true;
             Header = userControl.Title;
             var dockPanel = new DockPanel();
             Content = dockPanel;

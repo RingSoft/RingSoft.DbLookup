@@ -213,6 +213,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowDbMaintenanceWindow(tableDefinition, inputParameter);
         }
 
+        public void ShowWindow(Window window)
+        {
+            window.Owner = WPFControlsGlobals.ActiveWindow;
+            window.Closed += (sender, args) => { window.Owner.Activate(); };
+            window.ShowInTaskbar = false;
+            window.Show();
+        }
+
         /// <summary>
         /// Creates the maintenance window.
         /// </summary>
@@ -364,11 +372,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
                 if (maintenanceWindow != null)
                 {
-                    maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
-                    maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
                     maintenanceWindow.ViewModel.InputParameter = inputParameter;
-                    maintenanceWindow.ShowInTaskbar = false;
-                    maintenanceWindow.Show();
+                    ShowWindow(maintenanceWindow);
                 }
             }
         }

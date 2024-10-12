@@ -17,13 +17,25 @@
 
     <DockPanel>
         <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top"/>
-        <lc:LookupControl x:Name="ItemLookup" LookupDefinition="{Binding ItemLookupDefinition}" DockPanel.Dock="Left" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <lc:LookupControl.LookupColumns>
+        <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+            <lc:LookupControl x:Name="ItemLookup" LookupDefinition="{Binding ItemLookupDefinition}" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <lc:LookupControl.LookupColumns>
 
-                <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="300" Header="Item" />
+                    <lc:LookupColumn PropertyName="{lc:NameOf Name, Type={x:Type lm:ItemLookup}}" Width="400" Header="Item" />
 
-            </lc:LookupControl.LookupColumns>
-        </lc:LookupControl>
+                </lc:LookupControl.LookupColumns>
+            </lc:LookupControl>
+            <lc:LookupControl x:Name="StockLookup" LookupDefinition="{Binding StockLookupDefinition}" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <lc:LookupControl.LookupColumns>
+
+                    <lc:LookupColumn PropertyName="{lc:NameOf StockNumber, Type={x:Type lm:StockMasterLookup}}" Width="200" Header="Stock Number" />
+
+                    <lc:LookupColumn PropertyName="{lc:NameOf Location, Type={x:Type lm:StockMasterLookup}}" Width="200" Header="Location" />
+
+                </lc:LookupControl.LookupColumns>
+            </lc:LookupControl>
+
+        </StackPanel>
 
         <lc:DbMaintenanceTabControl x:Name="TabControl" VerticalAlignment="Stretch"/>
 

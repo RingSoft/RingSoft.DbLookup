@@ -26,9 +26,9 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Style="{StaticResource ControlLabel}" Content="Item ID"/>
 
@@ -36,15 +36,15 @@
 
             <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Name"/>
 
-            <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3"/>
+            <lc:AutoFillControl x:Name="NameControl" Grid.Row="0" Grid.Column="3" Width="200"/>
 
             <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Location"/>
 
-            <lc:AutoFillControl Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding LocationUiCommand}"/>
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="1" Setup="{Binding Path=LocationAutoFillSetup}" Value="{Binding Path=LocationAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding LocationUiCommand}" Width="200"/>
 
             <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource ControlLabel}" Content="Manufacturer"/>
 
-            <lc:AutoFillControl Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding ManufacturerUiCommand}"/>
+            <lc:AutoFillControl Grid.Row="1" Grid.Column="3" Setup="{Binding Path=ManufacturerAutoFillSetup}" Value="{Binding Path=ManufacturerAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding ManufacturerUiCommand}" Width="200"/>
 
             <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Icon"/>
 

@@ -37,6 +37,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                 //var uControl = TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
 
                 LocalViewModel.ItemLookupDefinition.Destination = TabControl;
+                LocalViewModel.StockLookupDefinition.Destination = TabControl;
                 _lookupUiControl = new VmUiControl(ItemLookup, LocalViewModel.LookupUiCommand);
 
                 _lookupUiControl.Command.SetFocus();

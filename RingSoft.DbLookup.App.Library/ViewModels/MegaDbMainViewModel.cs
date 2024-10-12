@@ -28,6 +28,23 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             }
         }
 
+        private LookupDefinition<StockMasterLookup, StockMaster> _stockLookupDefinition;
+
+        public LookupDefinition<StockMasterLookup, StockMaster> StockLookupDefinition
+        {
+            get { return _stockLookupDefinition; }
+            set
+            {
+                if (_stockLookupDefinition == value)
+                {
+                    return;
+                }
+                _stockLookupDefinition = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public UiCommand LookupUiCommand { get; }
 
         public MegaDbMainViewModel()
@@ -35,12 +52,16 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
             ItemLookupDefinition = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext
                 .MegaDbContextConfiguration.ItemsLookup.Clone();
 
+            StockLookupDefinition = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext
+                .MegaDbContextConfiguration.StockMasterLookup.Clone();
+
             LookupUiCommand = new UiCommand();
         }
 
         public void Initialize()
         {
             ItemLookupDefinition.SetCommand(new LookupCommand(LookupCommands.Refresh));
+            StockLookupDefinition.SetCommand(new LookupCommand(LookupCommands.Refresh));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -73,18 +73,18 @@ namespace RingSoft.DbLookup.App.WPFCore
         {
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
 
-            MegaDbWindowRegistry.RegisterWindow<ItemsWindow>(
-                RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
-
             MegaDbWindowRegistry.RegisterUserControl<ItemsUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);
 
             MegaDbWindowRegistry.RegisterWindow<LocationWindow>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Locations);
+
             MegaDbWindowRegistry.RegisterWindow<ManufacturerWindow>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Manufacturers);
-            MegaDbWindowRegistry.RegisterWindow<StockMasterWindow>(
+
+            MegaDbWindowRegistry.RegisterUserControl<StockMasterUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockMasters);
+
             MegaDbWindowRegistry.RegisterWindow<StockCostQuantityWindow>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.StockCostQuantities);
 

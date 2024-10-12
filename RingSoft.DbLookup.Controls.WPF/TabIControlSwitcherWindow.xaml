@@ -18,7 +18,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListBox x:Name="ListBox" Grid.Row="1" Grid.Column="0" Height="150" ItemsSource="{Binding Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Background="Transparent"  BorderThickness="0">
+        <ListBox x:Name="ListBox" Grid.Row="1" Grid.Column="0" MinHeight="150" ItemsSource="{Binding Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Background="Transparent"  BorderThickness="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Text}"/>

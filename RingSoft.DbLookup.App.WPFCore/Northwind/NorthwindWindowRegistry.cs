@@ -12,16 +12,9 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         {
             RegisterUserControl<CustomersUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
+
             RegisterUserControl<OrdersGridUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
-            RegisterWindow<CustomersWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
-            RegisterWindow<OrdersWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
-            RegisterWindow<OrderDetailsWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
-            RegisterWindow<EmployeesWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
 
             RegisterUserControl<EmployeesUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Employees);
@@ -29,8 +22,6 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
             RegisterUserControl<OrdersGridUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.OrderDetails);
 
-            RegisterWindow<ProductsWindow>(
-                RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
             RegisterUserControl<ProductsUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Products);
         }

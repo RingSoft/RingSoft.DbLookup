@@ -5,41 +5,28 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
                      mc:Ignorable="d"
-        Title="RingSoft Database Lookup Demo" Height="300" Width="330" HideControlBox="True" CloseOnEscape="False">
+        Title="RingSoft Database Lookup Demo" HideControlBox="True" CloseOnEscape="False" SizeToContent="WidthAndHeight">
     <!--d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"-->
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="NorthwindLookupButton" Margin="0,0,5,5">
-            <Button.Content>
-                <StackPanel>
-                    <AccessText Text="_Northwind Demo"/>
-                    <TextBlock Text="(Lookup Control)" FontSize="10" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Button.Content>
-        </Button>
-        <Button x:Name="NorthwindGridButton" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5">
+        <Button x:Name="NorthwindGridButton" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" Width="150" Height="150">
             <Button.Content>
                 <StackPanel>
                     <AccessText Text="N_orthwind Demo"/>
-                    <TextBlock Text="(Grid Control)" FontSize="10" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button.Content>
         </Button>
-        <Button x:Name="MegaDbButton" Grid.Row="1" Grid.Column="0" Content="_Mega Database Demo" Margin="0,0,5,0"/>
-        <Button x:Name="StockTrackerButton" Grid.Row="1" Grid.Column="1" Content="_Stock Tracker Demo"/>
-        <Button x:Name="NewMainWindowButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Ne_w Main Window" Margin="0,5,0,0"/>
-        <Button x:Name="DatabaseSetupButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="_Database Setup" Margin="0,5,0,0"/>
+        <Button x:Name="MegaDbButton" Grid.Row="0" Grid.Column="1" Content="_Mega Database Demo" Margin="5,0,0,0" Width="150" Height="150"/>
+        <Button x:Name="DatabaseSetupButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="_Database Setup" Margin="0,5,0,0"/>
 
-        <Button x:Name="CloseButton" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
+        <Button x:Name="CloseButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="_Close" Margin="0,5,0,0"/>
     </Grid>
 </dec:BaseWindow>

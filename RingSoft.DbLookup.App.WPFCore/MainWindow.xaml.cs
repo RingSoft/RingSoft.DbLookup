@@ -4,6 +4,7 @@ using RingSoft.DbLookup.App.WPFCore.Northwind;
 using System;
 using System.Windows;
 using System.Windows.Threading;
+using RingSoft.DbLookup.Controls.WPF;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -55,7 +56,9 @@ namespace RingSoft.DbLookup.App.WPFCore
             //    }
             //};
 
-            NewMainWindowButton.Click += (sender, args) =>
+            DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();
+
+            NorthwindGridButton.Click += (sender, args) =>
             {
                 if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
                         .TestConnection())
@@ -67,53 +70,8 @@ namespace RingSoft.DbLookup.App.WPFCore
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
                 WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
 
-                var win = new NewMainWindow();
-                win.ShowInTaskbar = false;
-                win.Owner = this;
-                win.Closed += (sender, args) =>
-                {
-                    Activate();
-                };
-                win.Show();
-            };
-            DatabaseSetupButton.Click += (sender, args) => DatabaseSetupClick();
-
-            NorthwindLookupButton.Click += (sender, args) =>
-            {
-                if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
-                    .TestConnection())
-                {
-                    DatabaseSetupClick();
-                    return;
-                }
-
-                SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
-                WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
-
-                var test = RsDbLookupAppGlobals
-                    .EfProcessor
-                    .NorthwindLookupContext
-                    .Orders
-                    .HasRight(RightTypes.AllowDelete);
-                SystemGlobals.TableRegistry.ShowWindow(RsDbLookupAppGlobals
-                    .EfProcessor
-                    .NorthwindLookupContext
-                    .Orders);
-            };
-
-            NorthwindGridButton.Click += (sender, args) =>
-            {
-                if (!RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.NorthwindContextConfiguration
-                    .TestConnection())
-                {
-                    DatabaseSetupClick();
-                    return;
-                }
-                SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.LookupContext;
-                WpfAppStart.NorthwindWindowRegistry.ActivateRegistry();
-                var ordersWindow = new OrdersGridWindow();
-                ordersWindow.Owner = this;
-                ordersWindow.ShowDialog();
+                var win = new NorthwindMainWindow();
+                LookupControlsGlobals.WindowRegistry.ShowWindow(win);
             };
 
             MegaDbButton.Click += (sender, args) =>
@@ -123,26 +81,10 @@ namespace RingSoft.DbLookup.App.WPFCore
 
                 SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
                 WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
-                SystemGlobals.TableRegistry.ShowWindow(
-                    RsDbLookupAppGlobals
-                        .EfProcessor
-                        .MegaDbLookupContext
-                        .Items);
+                var win = new MegaDbMainWindow();
+                LookupControlsGlobals.WindowRegistry.ShowWindow(win);
             };
 
-            StockTrackerButton.Click += (sender, args) =>
-            {
-                if (!ValidateMegaDbWindow())
-                    return;
-
-                SystemGlobals.LookupContext = RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.LookupContext;
-                WpfAppStart.MegaDbWindowRegistry.ActivateRegistry();
-                SystemGlobals.TableRegistry.ShowWindow(
-                    RsDbLookupAppGlobals
-                        .EfProcessor
-                        .MegaDbLookupContext
-                        .StockMasters);
-            };
 
             CloseButton.Click += (sender, args) => Close();
         }

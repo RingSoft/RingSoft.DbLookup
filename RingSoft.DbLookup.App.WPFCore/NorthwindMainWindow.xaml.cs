@@ -11,7 +11,7 @@ namespace RingSoft.DbLookup.App.WPFCore
     /// <summary>
     /// Interaction logic for NewMainWindow.xaml
     /// </summary>
-    public partial class NewMainWindow
+    public partial class NorthwindMainWindow
     {
         public RelayCommand OrdersCommand { get; }
 
@@ -29,7 +29,7 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         private VmUiControl _lookupUiControl;
         private bool _loaded;
-        public NewMainWindow()
+        public NorthwindMainWindow()
         {
             OrdersCommand = new RelayCommand((() =>
             {

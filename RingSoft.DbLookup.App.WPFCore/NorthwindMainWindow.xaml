@@ -1,4 +1,4 @@
-﻿<Window x:Class="RingSoft.DbLookup.App.WPFCore.NewMainWindow"
+﻿<Window x:Class="RingSoft.DbLookup.App.WPFCore.NorthwindMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,10 +9,10 @@
         xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
         xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore.Northwind"
         mc:Ignorable="d"
-        Title="NewMainWindow" WindowState="Maximized">
+        Title="Northwind Main Window" WindowState="Maximized">
 
     <Window.DataContext>
-        <vmlib:NewWindowViewModel x:Name="LocalViewModel"/>
+        <vmlib:NorthwindWindowViewModel x:Name="LocalViewModel"/>
     </Window.DataContext>
     <DockPanel>
         <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top"/>
@@ -26,10 +26,6 @@
 
             </lc:LookupControl.LookupColumns>
         </lc:LookupControl>
-        <lc:DbMaintenanceTabControl x:Name="TabControl" VerticalAlignment="Stretch">
-            <!--<TabItem Header="Abcd">
-                <local:OrderDetailsUserControl/>
-            </TabItem>-->
-        </lc:DbMaintenanceTabControl>
+        <lc:DbMaintenanceTabControl x:Name="TabControl" VerticalAlignment="Stretch"/>
     </DockPanel>
 </Window>

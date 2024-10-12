@@ -8,7 +8,7 @@ using RingSoft.DbLookup.Lookup;
 
 namespace RingSoft.DbLookup.App.Library.ViewModels
 {
-    public class NewWindowViewModel : INotifyPropertyChanged
+    public class NorthwindWindowViewModel : INotifyPropertyChanged
     {
         private LookupDefinition<OrderLookup, Order> _orderLookupDefinition;
 
@@ -28,7 +28,7 @@ namespace RingSoft.DbLookup.App.Library.ViewModels
 
         public UiCommand LookupUiCommand { get; }
 
-        public NewWindowViewModel()
+        public NorthwindWindowViewModel()
         {
             OrderLookupDefinition = RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext
                 .NorthwindContextConfiguration.OrderDateLookup.Clone();

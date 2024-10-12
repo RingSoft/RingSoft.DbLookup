@@ -12,6 +12,9 @@ namespace RingSoft.DbLookup.App.WPFCore
     public partial class NewMainWindow
     {
         public RelayCommand OrdersCommand { get; }
+
+        public RelayCommand CustomersCommand { get; }
+
         private VmUiControl _lookupUiControl;
         private bool _loaded;
         public NewMainWindow()
@@ -20,12 +23,24 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
             }));
+
+            CustomersCommand = new RelayCommand((() =>
+            {
+                TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Customers);
+            }));
+
             InitializeComponent();
             MainMenu.Items.Add(new MenuItem()
             {
                 Header = "_Order Grid",
                 Command = OrdersCommand,
             });
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_Customers",
+                Command = CustomersCommand,
+            });
+
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {

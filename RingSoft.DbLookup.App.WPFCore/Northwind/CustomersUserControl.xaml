@@ -36,15 +36,19 @@
 
             <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper" UiLabel="{Binding ElementName=CustomerIdLabel}"/>
 
-            <Label Grid.Row="0" Grid.Column="2" x:Name="CompanyNameLabel" Content="Company Name" Style="{StaticResource ControlLabel}" />
+            <Label Grid.Row="0" Grid.Column="2" x:Name="CompanyNameLabel" Content="Company Name" Style="{StaticResource ControlLabel}"/>
 
-            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}"  Width="200" DesignText="Ana Trujillo Emparedados y helados" UiCommand="{Binding CompanyNameUiCommand}" UiLabel="{Binding ElementName=CompanyNameLabel}"/>
+            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}"  Width="200" DesignText="Ana Trujillo Emparedados y helados" UiCommand="{Binding CompanyNameUiCommand}" UiLabel="{Binding ElementName=CompanyNameLabel}" HorizontalAlignment="Left"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Contact Title" Style="{StaticResource ControlLabel}" />
+
             <dec:StringEditControl Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}" Width="200"/>
+
             <Label Grid.Row="1" Grid.Column="2" Content="Contact Name" Style="{StaticResource ControlLabel}" />
-            <dec:StringEditControl Grid.Row="1" Grid.Column="3" Width="200" Text="{Binding Path=ContactName, Mode=TwoWay}"/>
-            <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="TabControl" Width="600" Height="400" HorizontalAlignment="Left">
+
+            <dec:StringEditControl Grid.Row="1" Grid.Column="3" Width="200" Text="{Binding Path=ContactName, Mode=TwoWay}" HorizontalAlignment="Left"/>
+
+            <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="TabControl" Width="600" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TabItem Header="Contact Info">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>

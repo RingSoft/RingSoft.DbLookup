@@ -32,13 +32,13 @@ namespace RingSoft.DbLookup
         /// </summary>
         AllowView = 0,
         /// <summary>
-        /// The allow add
-        /// </summary>
-        AllowAdd = 1,
-        /// <summary>
         /// The allow edit
         /// </summary>
-        AllowEdit = 2,
+        AllowEdit = 1,
+        /// <summary>
+        /// The allow add
+        /// </summary>
+        AllowAdd = 2,
         /// <summary>
         /// The allow delete
         /// </summary>

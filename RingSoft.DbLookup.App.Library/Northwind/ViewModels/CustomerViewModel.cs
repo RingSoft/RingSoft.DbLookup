@@ -228,7 +228,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             KeyAutoFillUiCommand.IsEnabled = false;
             CustomerId = newEntity.CustomerID;
 
-            ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
+            //ReadOnlyMode = ViewModelInput.CustomerViewModels.Any(a => a != this && a.CustomerId == CustomerId);
         }
 
         protected override void LoadFromEntity(Customer entity)
@@ -244,10 +244,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             Phone = entity.Phone;
             Fax = entity.Fax;
 
-            if (ReadOnlyMode)
-                ControlsGlobals.UserInterface.ShowMessageBox(
-                    "This Customer is being modified in another window.  Editing not allowed.", "Editing not allowed",
-                    RsMessageBoxIcons.Exclamation);
+            //if (ReadOnlyMode)
+            //    ControlsGlobals.UserInterface.ShowMessageBox(
+            //        "This Customer is being modified in another window.  Editing not allowed.", "Editing not allowed",
+            //        RsMessageBoxIcons.Exclamation);
         }
 
         protected override Customer GetEntityData()

@@ -924,5 +924,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
             return result;
         }
+
+        public new TableDefinition<TEntity> HasTableRight(RightTypes rightType)
+        {
+            base.HasTableRight(rightType);
+            return this;
+        }
     }
 }

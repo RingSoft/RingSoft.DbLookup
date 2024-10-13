@@ -6,7 +6,7 @@
         xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
         mc:Ignorable="d"
-        Title="Tab Switcher" SizeToContent="WidthAndHeight" HideControlBox="True" HideCloseButton="True" WindowStyle="None"  ResizeMode="NoResize">
+        Title="Tab Switcher" SizeToContent="WidthAndHeight" HideControlBox="True" HideCloseButton="True" WindowStyle="None"  ResizeMode="NoResize" BorderThickness="1" BorderBrush="Black">
 
     <Window.DataContext>
         <local:TabSwitcherViewModel x:Name="LocalViewModel"/>
@@ -16,9 +16,17 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListBox x:Name="ListBox" Grid.Row="1" Grid.Column="0" MinHeight="150" ItemsSource="{Binding Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Background="Transparent"  BorderThickness="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Use this window to switch between tabs."/>
+        <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="ListBox" Grid.Row="2" Grid.Column="0" MinHeight="150" ItemsSource="{Binding Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Background="Transparent"  BorderThickness="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Text}"/>

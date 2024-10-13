@@ -934,6 +934,12 @@ namespace RingSoft.DbLookup
         /// <returns><c>true</c> if the specified right type has right; otherwise, <c>false</c>.</returns>
         public static bool HasRight(this TableDefinitionBase tableDefinition, RightTypes rightType)
         {
+            if (tableDefinition.TableRight != null)
+            {
+                var tableRightVal = (int)tableDefinition.TableRight;
+                var checkRightVal = (int)rightType;
+                return tableRightVal >= checkRightVal;
+            }
             if (SystemGlobals.Rights == null)
             {
                 return true;

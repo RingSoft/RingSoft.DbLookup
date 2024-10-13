@@ -216,6 +216,8 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <value><c>true</c> if [temporary table]; otherwise, <c>false</c>.</value>
         public bool TempTable { get; private set; }
 
+        public RightTypes? TableRight { get; private set; }
+
         /// <summary>
         /// The fields
         /// </summary>
@@ -357,6 +359,12 @@ namespace RingSoft.DbLookup.ModelDefinition
         public TableDefinitionBase HasTableName(string name)
         {
             TableName = name;
+            return this;
+        }
+
+        public TableDefinitionBase HasTableRight(RightTypes rightType)
+        {
+            TableRight = rightType;
             return this;
         }
 

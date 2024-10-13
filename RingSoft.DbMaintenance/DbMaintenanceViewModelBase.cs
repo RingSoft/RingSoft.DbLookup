@@ -338,7 +338,7 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if [allow save]; otherwise, <c>false</c>.</value>
         public bool AllowSave
         {
-            get { return _allowSave = true; }
+            get { return _allowSave; }
             set
             {
                 _allowSave = value;

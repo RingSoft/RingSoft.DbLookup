@@ -353,7 +353,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             MessageBox.Show("Record Saved!", "Record Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        public void OnReadOnlyModeSet(bool readOnlyValue)
+        public virtual void OnReadOnlyModeSet(bool readOnlyValue)
         {
             if (UserControl != null && ButtonsControl != null)
             {

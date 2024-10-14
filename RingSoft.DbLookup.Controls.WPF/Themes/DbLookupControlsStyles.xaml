@@ -14,10 +14,10 @@
 
     <Style TargetType="{x:Type local:LookupCustomContentControl}" BasedOn="{StaticResource {x:Type dec:CustomContentControl}}"/>
 
-    <Style TargetType="local:DbMaintenanceTabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+    <Style TargetType="local:UserControlTabItem" BasedOn="{StaticResource {x:Type TabItem}}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:DbMaintenanceTabItem">
+                <ControlTemplate TargetType="local:UserControlTabItem">
                     <Border
                         Name="Border"
                         Margin="1,0"
@@ -32,7 +32,7 @@
 
                             <TextBlock Name="TextBlock"  Text="{TemplateBinding Header}" VerticalAlignment="Center" />
 
-                            <Button Name="Button"  Content="x" Margin="2,0" Background="Red" Foreground="White" Command="{Binding Path=CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DbMaintenanceTabItem}}" IsTabStop="False" >
+                            <Button Name="Button"  Content="x" Margin="2,0" Background="Red" Foreground="White" Command="{Binding Path=CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UserControlTabItem}}" IsTabStop="False" >
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border
@@ -71,6 +71,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:DbMaintenanceTabItem" BasedOn="{StaticResource {x:Type local:UserControlTabItem}}"/>
 
 
 </ResourceDictionary>

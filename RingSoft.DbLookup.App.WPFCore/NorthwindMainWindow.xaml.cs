@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
+using RingSoft.DbLookup.App.WPFCore.Northwind;
 using RingSoft.DbLookup.Controls.WPF;
 using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 
@@ -111,6 +112,9 @@ namespace RingSoft.DbLookup.App.WPFCore
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {
+                var dummyUserControl = new DummyUserControl();
+                TabControl.ShowUserControl(dummyUserControl, "Dummy");
+
                 LocalViewModel.Initialize();
                 var uControl = TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
 

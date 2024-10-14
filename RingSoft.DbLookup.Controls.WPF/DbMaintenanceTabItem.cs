@@ -5,24 +5,15 @@ using System.Windows.Input;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
-    public class DbMaintenanceTabItem : TabItem, IUserControlHost
+    public class DbMaintenanceTabItem : UserControlTabItem, IUserControlHost
     {
         public DbMaintenanceUserControl UserControl { get; }
 
-        public RelayCommand CloseCommand { get; }
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
+            : base(userControl, userControl.Title, tabControl)
         {
-            Header = userControl.Title;
-            var dockPanel = new DockPanel();
-            Content = dockPanel;
             UserControl = userControl;
             UserControl.Host = this;
-            dockPanel.Children.Add(UserControl);
-
-            CloseCommand = new RelayCommand((() =>
-            {
-                CloseTab(tabControl);
-            }));
 
             PreviewKeyDown += (sender, args) =>
             {
@@ -37,13 +28,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
-        public bool CloseTab(TabControl tabControl)
+        public override bool CloseTab(TabControl tabControl)
         {
-            var result = true;
             if (!CheckClose()) 
                 return false;
-            tabControl.Items.Remove(this);
-            return result;
+            return base.CloseTab(tabControl);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 
@@ -47,6 +48,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             return result;
         }
 
+        public void ShowUserControl(BaseUserControl userControl, string header)
+        {
+            var tabItem = new UserControlTabItem(userControl, header, this);
+            Items.Insert(0, tabItem);
+            tabItem.IsSelected = true;
+            userControl.Focus();
+        }
+
         public bool CloseAllTabs()
         {
             var result = true;
@@ -56,11 +65,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             var tabIndex = 0;
-            DbMaintenanceTabItem dbMaintenanceTabItem = Items[tabIndex] as DbMaintenanceTabItem;
-            while (dbMaintenanceTabItem != null)
+            UserControlTabItem ucTabItem = Items[tabIndex] as UserControlTabItem;
+            while (ucTabItem != null)
             {
-                dbMaintenanceTabItem.IsSelected = true;
-                if (!dbMaintenanceTabItem.CloseTab(this))
+                ucTabItem.IsSelected = true;
+                if (!ucTabItem.CloseTab(this))
                 {
                     tabIndex ++;
                     result = false;
@@ -69,7 +78,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     break;
                 }
-                dbMaintenanceTabItem = Items[tabIndex] as DbMaintenanceTabItem;
+                ucTabItem = Items[tabIndex] as UserControlTabItem;
             }
             return result;
         }

@@ -26,6 +26,8 @@ namespace RingSoft.DbLookup.App.WPFCore
 
         public RelayCommand AdvFindCommand { get; }
 
+        public RelayCommand DummyCommand { get; }
+
         public RelayCommand ExitCommand { get; }
 
         private VmUiControl _lookupUiControl;
@@ -66,6 +68,12 @@ namespace RingSoft.DbLookup.App.WPFCore
                 LookupControlsGlobals.WindowRegistry.ShowWindow(advancedFindWindow);
             }));
 
+            DummyCommand = new RelayCommand((() =>
+            {
+                var dummyUserControl = new DummyUserControl();
+                TabControl.ShowUserControl(dummyUserControl, "Dummy", true, false);
+            }));
+
             ExitCommand = new RelayCommand((() =>
             {
                 Close();
@@ -102,7 +110,11 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Header = "_Advanced Find...",
                 Command = AdvFindCommand,
             });
-
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_Dummy",
+                Command = DummyCommand,
+            });
             MainMenu.Items.Add(new MenuItem()
             {
                 Header = "E_xit",
@@ -112,9 +124,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {
-                var dummyUserControl = new DummyUserControl();
-                TabControl.ShowUserControl(dummyUserControl, "Dummy");
-
                 LocalViewModel.Initialize();
                 var uControl = TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
 

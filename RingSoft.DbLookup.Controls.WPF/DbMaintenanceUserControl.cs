@@ -21,11 +21,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public object AddViewParameter { get; set; }
 
+        public bool SetStartupFocus { get; set; } = true;
+
         public IUserControlHost Host { get; internal set; }
 
-        public AutoFillControl _keyControl;
-
+        private AutoFillControl _keyControl;
         private bool _loaded;
+        private PrimaryKeyValue _initPrimaryKey;
 
         public DbMaintenanceUserControl()
         {
@@ -65,9 +67,31 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.InputParameter = AddViewParameter;
                 Processor.Initialize();
                 ViewModel.OnViewLoaded(this);
-                SetInitialFocus();
+                if (_initPrimaryKey != null)
+                {
+                    ViewModel.OnRecordSelected(_initPrimaryKey);
+                    _initPrimaryKey = null;
+                }
+
+                if (SetStartupFocus)
+                {
+                    SetInitialFocus();
+                }
+
                 _loaded = true;
             };
+        }
+
+        public void SelectRecord(PrimaryKeyValue primaryKey)
+        {
+            if (_loaded)
+            {
+                ViewModel.OnRecordSelected(primaryKey);
+            }
+            else
+            {
+                _initPrimaryKey = primaryKey;
+            }
         }
 
         protected virtual void ShowRecordTitle()

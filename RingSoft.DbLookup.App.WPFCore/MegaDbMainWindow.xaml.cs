@@ -1,23 +1,13 @@
-﻿using RingSoft.DataEntryControls.WPF;
-using RingSoft.DbLookup.App.Library.Northwind.LookupModel;
+﻿using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.App.Library;
 using RingSoft.DbLookup.Controls.WPF;
-using System;
-using System.Collections.Generic;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using RingSoft.DataEntryControls.Engine;
-using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
+using RingSoft.DbLookup.App.Library.MegaDb.Model;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -27,6 +17,8 @@ namespace RingSoft.DbLookup.App.WPFCore
     public partial class MegaDbMainWindow : Window
     {
         public RelayCommand ItemsCommand { get; }
+
+        public RelayCommand Items2Command { get; }
 
         public RelayCommand StocksCommand { get; }
 
@@ -48,6 +40,25 @@ namespace RingSoft.DbLookup.App.WPFCore
                         .EfProcessor
                         .MegaDbLookupContext
                         .Items);
+            }));
+
+            Items2Command = new RelayCommand((() =>
+            {
+                var context = SystemGlobals.DataRepository.GetDataContext();
+                var table = context.GetTable<Item>();
+                var record = table.FirstOrDefault();
+
+                var ucControl = TabControl.ShowTableControl(
+                    RsDbLookupAppGlobals
+                        .EfProcessor
+                        .MegaDbLookupContext
+                        .Items, false);
+                ucControl.SelectRecord(RsDbLookupAppGlobals
+                    .EfProcessor
+                    .MegaDbLookupContext
+                    .Items
+                    .GetPrimaryKeyValueFromEntity(record));
+
             }));
             StocksCommand = new RelayCommand((() =>
             {
@@ -104,6 +115,11 @@ namespace RingSoft.DbLookup.App.WPFCore
             {
                 Header = "I_tems",
                 Command = ItemsCommand,
+            });
+            MainMenu.Items.Add(new MenuItem()
+            {
+                Header = "_First Item",
+                Command = Items2Command,
             });
             MainMenu.Items.Add(new MenuItem()
             {

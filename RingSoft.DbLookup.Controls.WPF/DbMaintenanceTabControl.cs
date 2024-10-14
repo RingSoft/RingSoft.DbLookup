@@ -27,7 +27,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        public DbMaintenanceUserControl ShowTableControl(TableDefinitionBase tableDefinition)
+        public DbMaintenanceUserControl ShowTableControl(
+            TableDefinitionBase tableDefinition
+            , bool setAsFirstTab = true)
         {
             DbMaintenanceUserControl result = null;
             if (LookupControlsGlobals.WindowRegistry.IsTableRegistered(tableDefinition))
@@ -39,7 +41,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                     result = ucControl;
                     var tabItem = new DbMaintenanceTabItem(
                         ucControl, this);
-                    Items.Insert(0, tabItem);
+                    if (setAsFirstTab)
+                    {
+                        Items.Insert(0, tabItem);
+                    }
+                    else
+                    {
+                        Items.Add(tabItem);
+                    }
+
                     tabItem.IsSelected = true;
                     ucControl.Focus();
                 }
@@ -48,12 +58,27 @@ namespace RingSoft.DbLookup.Controls.WPF
             return result;
         }
 
-        public void ShowUserControl(BaseUserControl userControl, string header)
+        public void ShowUserControl(
+            BaseUserControl userControl
+            , string header
+            , bool setAsFirstTab = true
+            , bool selectTab = true)
         {
             var tabItem = new UserControlTabItem(userControl, header, this);
-            Items.Insert(0, tabItem);
-            tabItem.IsSelected = true;
-            userControl.Focus();
+            if (setAsFirstTab)
+            {
+                Items.Insert(0, tabItem);
+            }
+            else
+            {
+                Items.Add(tabItem);
+            }
+
+            if (selectTab)
+            {
+                tabItem.IsSelected = true;
+                userControl.Focus();
+            }
         }
 
         public bool CloseAllTabs()

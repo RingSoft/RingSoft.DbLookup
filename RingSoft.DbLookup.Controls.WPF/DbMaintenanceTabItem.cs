@@ -7,7 +7,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public class DbMaintenanceTabItem : UserControlTabItem, IUserControlHost
     {
-        public DbMaintenanceUserControl UserControl { get; }
+        public new DbMaintenanceUserControl UserControl { get; }
 
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
             : base(userControl, userControl.Title, tabControl)

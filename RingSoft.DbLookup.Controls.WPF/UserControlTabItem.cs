@@ -6,10 +6,13 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public class UserControlTabItem : TabItem
     {
+        public BaseUserControl UserControl { get; }
+
         public RelayCommand CloseCommand { get; }
 
         public UserControlTabItem(BaseUserControl userControl, string header, TabControl tabControl)
         {
+            UserControl = userControl;
 
             CloseCommand = new RelayCommand((() =>
             {

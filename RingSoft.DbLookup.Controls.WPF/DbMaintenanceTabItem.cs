@@ -14,18 +14,6 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             UserControl = userControl;
             UserControl.Host = this;
-
-            PreviewKeyDown += (sender, args) =>
-            {
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                {
-                    if (Keyboard.IsKeyDown(Key.F4))
-                    {
-                        CloseCommand.Execute(null);
-                    }
-                }
-            };
-
         }
 
         public override bool CloseTab(TabControl tabControl)

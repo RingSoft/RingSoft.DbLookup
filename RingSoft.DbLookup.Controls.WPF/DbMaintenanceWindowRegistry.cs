@@ -341,6 +341,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public void ShowDialog(Window window)
+        {
+            window.Owner = WPFControlsGlobals.ActiveWindow;
+            window.Closed += (sender, args) => { window.Owner.Activate(); };
+            window.ShowInTaskbar = false;
+            window.ShowDialog();
+        }
+
+
         /// <summary>
         /// Shows the database maintenance window.
         /// </summary>

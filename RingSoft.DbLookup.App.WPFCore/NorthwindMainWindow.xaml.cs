@@ -124,6 +124,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             LookupControlsGlobals.SetTabSwitcherWindow(this, TabControl);
             Loaded += (sender, args) =>
             {
+                TabControl.SetDestionationAsFirstTab = false;
                 LocalViewModel.Initialize();
                 var uControl = TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.NorthwindLookupContext.Orders);
 

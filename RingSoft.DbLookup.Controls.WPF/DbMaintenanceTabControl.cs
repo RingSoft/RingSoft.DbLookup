@@ -7,6 +7,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public class DbMaintenanceTabControl : TabControl, ILookupAddViewDestination
     {
+        public bool SetDestionationAsFirstTab { get; set; } = true;
         public void ShowAddView(LookupAddViewArgs addViewArgs = null, object inputParameter = null)
         {
             if (LookupControlsGlobals.WindowRegistry.IsTableRegistered(addViewArgs.LookupData.LookupDefinition.TableDefinition))
@@ -19,7 +20,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ucControl.AddViewParameter = inputParameter;
                     var tabItem = new DbMaintenanceTabItem(
                         ucControl, this);
-                    Items.Insert(0, tabItem);
+                    if (SetDestionationAsFirstTab)
+                    {
+                        Items.Insert(0, tabItem);
+                    }
+                    else
+                    {
+                        Items.Add(tabItem);
+                    }
                     tabItem.IsSelected = true;
                     ucControl.Focus();
                     ucControl.SetInitialFocus();

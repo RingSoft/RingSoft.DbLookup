@@ -10,7 +10,7 @@
              xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
              xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore.Northwind"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" WindowWidth="575" WindowHeight="550">
 
     <UserControl.DataContext>
         <vmlib:CustomerViewModel x:Name="CustomersViewModel"/>
@@ -24,6 +24,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -36,24 +37,20 @@
 
             <lc:AutoFillControl Grid.Row="0" Grid.Column="1" x:Name="CustomerControl" IsEnabled="{Binding PrimaryKeyControlsEnabled}" Width="100" HorizontalAlignment="Left" DesignText="ALFKI" CharacterCasing="Upper" UiLabel="{Binding ElementName=CustomerIdLabel}"/>
 
-            <Label Grid.Row="0" Grid.Column="2" x:Name="CompanyNameLabel" Content="Company Name" Style="{StaticResource ControlLabel}"/>
+            <Label Grid.Row="0" Grid.Column="2" x:Name="CompanyNameLabel" Content="Company Name" Style="{StaticResource ControlLabel}" />
 
-            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}"  Width="200" DesignText="Ana Trujillo Emparedados y helados" UiCommand="{Binding CompanyNameUiCommand}" UiLabel="{Binding ElementName=CompanyNameLabel}" HorizontalAlignment="Left"/>
+            <dec:StringEditControl Grid.Row="0" Grid.Column="3" Text="{Binding Path=CompanyName, Mode=TwoWay}" DesignText="Ana Trujillo Emparedados y helados" UiCommand="{Binding CompanyNameUiCommand}" UiLabel="{Binding ElementName=CompanyNameLabel}"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Contact Title" Style="{StaticResource ControlLabel}" />
-
-            <dec:StringEditControl Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}" Width="200"/>
-
+            <dec:StringEditControl Grid.Row="1" Grid.Column="1" Text="{Binding Path=ContactTitle, Mode=TwoWay}"/>
             <Label Grid.Row="1" Grid.Column="2" Content="Contact Name" Style="{StaticResource ControlLabel}" />
-
-            <dec:StringEditControl Grid.Row="1" Grid.Column="3" Width="200" Text="{Binding Path=ContactName, Mode=TwoWay}" HorizontalAlignment="Left"/>
-
-            <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="TabControl" Width="600" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <dec:StringEditControl Grid.Row="1" Grid.Column="3" Text="{Binding Path=ContactName, Mode=TwoWay}"/>
+            <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" x:Name="TabControl">
                 <TabItem Header="Contact Info">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -64,19 +61,19 @@
                         <Label Grid.Column="0" Grid.Row="0" Content="Address" Style="{StaticResource ControlLabel}"/>
                         <dec:StringEditControl Grid.Column="1" Grid.Row="0"  Text="{Binding Path=Address, Mode=TwoWay}"/>
                         <Label Grid.Column="0" Grid.Row="1" Content="City" Style="{StaticResource ControlLabel}"/>
-                        <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
+                        <DockPanel Grid.Column="1" Grid.Row="1" Width="300">
                             <dec:StringEditControl  Text="{Binding Path=City, Mode=TwoWay}" Width="125"/>
                             <Label Content="Region" Style="{StaticResource ControlLabel}"/>
                             <dec:StringEditControl  Text="{Binding Path=Region, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="2" Content="Postal Code" Style="{StaticResource ControlLabel}"/>
-                        <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch">
+                        <DockPanel Grid.Column="1" Grid.Row="2" >
                             <dec:StringEditControl  Text="{Binding Path=PostalCode, Mode=TwoWay}" Width="100"/>
                             <Label Content="Country" Style="{StaticResource ControlLabel}"/>
                             <dec:StringEditControl  Text="{Binding Path=Country, Mode=TwoWay}"/>
                         </DockPanel>
                         <Label Grid.Column="0" Grid.Row="3" Content="Telephone Number" Style="{StaticResource ControlLabel}"/>
-                        <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
+                        <DockPanel Grid.Column="1" Grid.Row="3">
                             <dec:StringEditControl  Text="{Binding Path=Phone, Mode=TwoWay}" Width="130"/>
                             <Label Content="Fax Number" Style="{StaticResource ControlLabel}"/>
                             <dec:StringEditControl  Text="{Binding Path=Fax, Mode=TwoWay}"/>

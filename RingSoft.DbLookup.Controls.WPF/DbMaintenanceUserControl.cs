@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbMaintenance;
@@ -24,6 +25,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         public bool SetStartupFocus { get; set; } = true;
 
         public IUserControlHost Host { get; internal set; }
+
+        public double WindowWidth { get; set; } = double.NaN;
+
+        public double WindowHeight { get; set; } = Double.NaN;
 
         private AutoFillControl _keyControl;
         private bool _loaded;

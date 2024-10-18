@@ -13,6 +13,16 @@ namespace RingSoft.DbLookup.Controls.WPF
         public DbMaintenanceUcWindow(DbMaintenanceUserControl userControl)
         {
             UserControl = userControl;
+            if (!double.IsNaN(userControl.WindowWidth) && !double.IsNaN(userControl.WindowHeight))
+            {
+                Width = userControl.WindowWidth;
+                Height = userControl.WindowHeight;
+            }
+            else
+            {
+                SizeToContent = SizeToContent.WidthAndHeight;
+            }
+
             InitializeComponent();
             Title = userControl.Title;
         }

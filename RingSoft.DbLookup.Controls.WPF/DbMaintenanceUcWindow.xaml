@@ -6,7 +6,7 @@
         xmlns:dec="clr-namespace:RingSoft.DataEntryControls.WPF;assembly=RingSoft.DataEntryControls.WPF"
         xmlns:local="clr-namespace:RingSoft.DbLookup.Controls.WPF"
         mc:Ignorable="d"
-        Title="DbMaintenanceUcWindow" SizeToContent="WidthAndHeight">
+        Title="DbMaintenanceUcWindow">
     <DockPanel x:Name="DockPanel">
         
     </DockPanel>

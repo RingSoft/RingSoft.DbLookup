@@ -10,7 +10,7 @@
              xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
              xmlns:local="clr-namespace:RingSoft.DbLookup.App.WPFCore.Northwind"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" WindowHeight="650" WindowWidth="800">
 
     <UserControl.DataContext>
         <vmlib:OrderViewModel x:Name="OrdersViewModel"/>
@@ -41,8 +41,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="2.4*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Content="Order ID" Style="{StaticResource ControlLabel}"/>
@@ -78,7 +78,7 @@
                 <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>
                 <dec:DateEditControl Value="{Binding Path=ShippedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" MinWidth="800" MinHeight="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
                 <TabItem Header="Details">
                     <deg:DataEntryGrid x:Name="DetailsGrid" Manager="{Binding DetailsGridManager}">
                         <deg:DataEntryGrid.Columns>
@@ -130,7 +130,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <Grid Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="90"/>

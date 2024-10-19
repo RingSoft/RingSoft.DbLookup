@@ -9,7 +9,7 @@
              xmlns:lc="clr-namespace:RingSoft.DbLookup.Controls.WPF;assembly=RingSoft.DbLookup.Controls.WPF"
              xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" WindowWidth="550" WindowHeight="550">
 
     <UserControl.DataContext>
         <vmlib:ProductViewModel x:Name="ProductViewModel"/>
@@ -34,13 +34,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Product ID" Style="{StaticResource ControlLabel}"/>
             <dec:StringReadOnlyBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ProductId}" DesignText="123456" Width="60" HorizontalAlignment="Left"/>
@@ -48,12 +49,14 @@
             <lc:AutoFillControl x:Name="ProductNameControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" DesignText="Chef Anton's Cajun Seasoning" Width="250" HorizontalAlignment="Left"/>
             <Label Grid.Row="2" Grid.Column="0" Content="Supplier" Style="{StaticResource ControlLabel}"/>
             <lc:AutoFillControl Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" x:Name="SupplierControl" DesignText="New England Seafood Cannery" Setup="{Binding SupplierAutoFillSetup}" Value="{Binding Path=SupplierAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalAlignment="Left"/>
+            
             <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ControlLabel}" Content="Category"/>
+
             <lc:AutoFillControl Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="CategoryControl" DesignText="Grains/Cereals" Width="125" HorizontalAlignment="Left" Setup="{Binding CategoryAutoFillSetup}" Value="{Binding Path=CategoryAutoFillValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TabControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" MinWidth="300" MinHeight="300">
+            <TabControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5">
                 <TabItem Header="Qty/Price">
-                    <Grid>
+                    <Grid HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -104,6 +107,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+
         </Grid>
     </DockPanel>
 </lc:DbMaintenanceUserControl>

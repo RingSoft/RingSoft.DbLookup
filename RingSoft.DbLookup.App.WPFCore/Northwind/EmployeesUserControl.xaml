@@ -9,7 +9,7 @@
              xmlns:lm="clr-namespace:RingSoft.DbLookup.App.Library.Northwind.LookupModel;assembly=RingSoft.DbLookup.App.Library"
              xmlns:app="clr-namespace:RingSoft.DbLookup.App.WPFCore"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" WindowHeight="600" WindowWidth="650">
 
     <UserControl.DataContext>
         <vmlib:EmployeeViewModel x:Name="EmployeeViewModel"/>
@@ -32,13 +32,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Label Style="{StaticResource ControlLabel}" Content="Employee ID"/>
@@ -47,7 +48,7 @@
 
             <Label Grid.Row="1" Grid.Column="0" x:Name="FirstNameLabel" Style="{StaticResource ControlLabel}" Content="First Name"/>
 
-            <dec:StringEditControl x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}" UiCommand="{Binding FirstNameUiCommand}" UiLabel="{Binding ElementName=FirstNameLabel}" Width="200" HorizontalAlignment="Left"/>
+            <dec:StringEditControl x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource StandardTextBox}" Text="{Binding Path=FirstName, Mode=TwoWay}" UiCommand="{Binding FirstNameUiCommand}" UiLabel="{Binding ElementName=FirstNameLabel}" Width="200"/>
 
             <Label Grid.Row="1" Grid.Column="2" x:Name="LastNameLabel" Style="{StaticResource ControlLabel}" Content="Last Name"/>
 
@@ -66,9 +67,9 @@
 
             <Label Grid.Row="3" Grid.Column="2" x:Name="ReportsToLabel" Style="{StaticResource ControlLabel}" Content="Supervisor"/>
 
-            <lc:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}" UiCommand="{Binding SupervisorUiCommand}" UiLabel="{Binding ElementName=ReportsToLabel}"/>
+            <lc:AutoFillControl x:Name="SupervisorControl" Grid.Row="3" Grid.Column="3" Setup="{Binding Path=ReportsToAutoFillSetup}" Value="{Binding Path=ReportsTo, Mode=TwoWay}" UiCommand="{Binding SupervisorUiCommand}" UiLabel="{Binding ElementName=ReportsToLabel}" Width="200" HorizontalAlignment="Left"/>
 
-            <TabControl x:Name="TabControl" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" MinWidth="400" MinHeight="400">
+            <TabControl x:Name="TabControl" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5">
                 <TabItem Header="Contact Info">
                     <Grid Width="500" HorizontalAlignment="Left">
                         <Grid.ColumnDefinitions>

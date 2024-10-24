@@ -320,8 +320,6 @@ namespace RingSoft.DbMaintenance
                 {
                     AllowNew = false;
                     NewButtonEnabled = false;
-                    AllowDelete = false;
-                    DeleteButtonEnabled = false;
                 }
                 if (InputParameter == null)
                 {

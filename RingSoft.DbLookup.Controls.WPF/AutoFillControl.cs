@@ -1372,7 +1372,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             var lookupWindow = LookupControlsGlobals.LookupWindowFactory.CreateLookupWindow(
                 Setup.LookupDefinition
-                , Setup.AllowLookupAdd
+                , Setup.AllowLookupAdd && !ReadOnlyMode
                 , Setup.AllowLookupView
                 , initialText
                 , Value?.PrimaryKeyValue

@@ -571,7 +571,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
         {
             OrderId = newEntity.OrderID;
 
-            ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
+            //ReadOnlyMode = ViewModelInput.OrderViewModels.Any(a => a != this && a.OrderId == newEntity.OrderID);
         }
 
         protected override void LoadFromEntity(Order entity)
@@ -600,13 +600,13 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             RefreshTotalControls();
             _customerDirty = false;
 
-            if (ReadOnlyMode)
-            {
-                ControlsGlobals.UserInterface.ShowMessageBox(
-                    "This Order is being modified in another window.  Editing not allowed.", "Editing not allowed",
-                    RsMessageBoxIcons.Exclamation);
-                Processor?.Activate();
-            }
+            //if (ReadOnlyMode)
+            //{
+            //    ControlsGlobals.UserInterface.ShowMessageBox(
+            //        "This Order is being modified in another window.  Editing not allowed.", "Editing not allowed",
+            //        RsMessageBoxIcons.Exclamation);
+            //    Processor?.Activate();
+            //}
         }
 
         public void RefreshTotalControls()

@@ -316,6 +316,13 @@ namespace RingSoft.DbMaintenance
 
             if (LookupAddViewArgs != null)
             {
+                if (LookupAddViewArgs.LookupReadOnlyMode)
+                {
+                    AllowNew = false;
+                    NewButtonEnabled = false;
+                    AllowDelete = false;
+                    DeleteButtonEnabled = false;
+                }
                 if (InputParameter == null)
                 {
                     InputParameter = LookupAddViewArgs.InputParameter;

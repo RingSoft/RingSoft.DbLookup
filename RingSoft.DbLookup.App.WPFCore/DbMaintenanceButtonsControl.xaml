@@ -25,13 +25,13 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Button x:Name="NewButton" Content="_New" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="SaveButton" Content="_Save" Grid.Column="1" Grid.Row="0" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="DeleteButton" Content="_Delete" Grid.Column="2" Grid.Row="0" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="FindButton" Content="_Find" Grid.Column="0" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="SelectButton" Content="Se_lect" Grid.Column="1" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="CloseButton" Content="_Close" Grid.Column="2" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
-            <Button x:Name="PrintButton" Content="_Print" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Margin="2.5" IsTabStop="False" />
+            <Button x:Name="NewButton" Content="New" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="SaveButton" Content="Save" Grid.Column="1" Grid.Row="0" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="DeleteButton" Content="Delete" Grid.Column="2" Grid.Row="0" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="FindButton" Content="Find" Grid.Column="0" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="SelectButton" Content="Select" Grid.Column="1" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="CloseButton" Content="Close" Grid.Column="2" Grid.Row="1" Margin="2.5" IsTabStop="False"/>
+            <Button x:Name="PrintButton" Content="Print" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Margin="2.5" IsTabStop="False" />
 
             <DockPanel Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" x:Name="AdditionalButtonsPanel" HorizontalAlignment="Left"/>
 

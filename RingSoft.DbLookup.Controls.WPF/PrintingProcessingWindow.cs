@@ -96,6 +96,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="printerSetupArgs">The printer setup arguments.</param>
         public PrintingProcessingWindow(PrinterSetupArgs printerSetupArgs)
         {
+            HideCloseButton = true;
             Loaded += (s, e) =>
             {
                 DataEntryControls.WPF.ControlsUserInterface.SetActiveWindow(this);

@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
+using RingSoft.DataEntryControls.Engine;
 using TreeView = System.Windows.Controls.TreeView;
 using TreeViewItem = RingSoft.DbLookup.AdvancedFind.TreeViewItem;
 
@@ -115,6 +116,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// </summary>
         /// <value><c>true</c> if [apply to lookup definition]; otherwise, <c>false</c>.</value>
         public bool ApplyToLookupDefinition { get; set; }
+
+        public RelayCommand SetFocusToLookupCommand { get; }
 
         /// <summary>
         /// Gets or sets the view model.

@@ -120,6 +120,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         public bool DeleteChildrenResult { get; set; }
         public bool PreDeleteResult { get; set; }
         public bool KeyControlRegistered { get; set; }
+        public HotKeyProcessor HotKeyProcessor { get; }
+        public RelayCommand CloseCommand { get; }
+
         private VmUiControl _keyAutoFillControlUiControl;
         public event EventHandler<LookupAddViewArgs> LookupAddView;
 
@@ -133,17 +136,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             , DbMaintenanceStatusBar statusBar
             , IUserControlHost host)
         {
+            HotKeyProcessor = new HotKeyProcessor();
             Host = host;
             ViewModel = viewModel;
             ButtonsControl = buttonsControl;
             UserControl = userControl;
             StatusBar = statusBar;
+            CloseCommand = new RelayCommand((() =>
+            {
+                CloseWindow();
+            }));
         }
 
         public virtual void Initialize()
         {
             SetupControl();
             UserControl.PreviewKeyDown += UserControl_PreviewKeyDown;
+            UserControl.PreviewKeyUp += UserControl_PreviewKeyUp;
 
             if (StatusBar != null)
             {
@@ -160,6 +169,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 InitializeFromLookupData(_lookupAddViewArgs);
                 _lookupAddViewArgs = null;
             }
+        }
+
+        private void UserControl_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            HotKeyProcessor.OnKeyUp(e);
         }
 
         public void SetupStatusBar(DbMaintenanceViewModelBase viewModel, DbMaintenanceStatusBar statusBar)
@@ -179,20 +193,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                switch (e.Key)
-                {
-                    case Key.Left:
-                        ViewModel.OnGotoPreviousButton();
-                        e.Handled = true;
-                        break;
-                    case Key.Right:
-                        ViewModel.OnGotoNextButton();
-                        e.Handled = true;
-                        break;
-                }
-            }
+            HotKeyProcessor.OnKeyPressed(e);
         }
 
         protected virtual void SetupControl()
@@ -201,53 +202,62 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 FindButton.Command = ViewModel.FindCommand;
                 FindButtonUiControl = new VmUiControl(FindButton, ViewModel.FindUiCommand);
+                LookupControlsGlobals.SetupFindHotKey(HotKeyProcessor, ViewModel.FindCommand);
             }
 
             if (PreviousButton != null)
             {
                 PreviousButton.Command = ViewModel.PreviousCommand;
                 PreviousButtonUiControl = new VmUiControl(PreviousButton, ViewModel.PreviousUiCommand);
+                LookupControlsGlobals.SetupPreviousHotKey(HotKeyProcessor, ViewModel.PreviousCommand);
             }
 
             if (NextButton != null)
             {
                 NextButton.Command = ViewModel.NextCommand;
                 NextButtonUiControl = new VmUiControl(NextButton, ViewModel.NextUiCommand);
+                LookupControlsGlobals.SetupNextHotKey(HotKeyProcessor, ViewModel.NextCommand);
             }
 
             if (NewButton != null)
             {
                 NewButton.Command = ViewModel.NewCommand;
                 NewButtonUiControl = new VmUiControl(NewButton, ViewModel.NewUiCommand);
+                LookupControlsGlobals.SetupNewHotKey(HotKeyProcessor, ViewModel.NewCommand);
             }
 
             if (SaveButton != null)
             {
                 SaveButton.Command = ViewModel.SaveCommand;
                 SaveButtonUiControl = new VmUiControl(SaveButton, ViewModel.SaveUiCommand);
+                LookupControlsGlobals.SetupSaveHotKey(HotKeyProcessor, ViewModel.SaveCommand);
             }
 
             if (DeleteButton != null)
             {
                 DeleteButton.Command = ViewModel.DeleteCommand;
                 DeleteButtonUiControl = new VmUiControl(DeleteButton, ViewModel.DeleteUiCommand);
+                LookupControlsGlobals.SetupDeleteHotKey(HotKeyProcessor, ViewModel.DeleteCommand);
             }
 
             if (SelectButton != null)
             {
                 SelectButton.Command = ViewModel.SelectCommand;
                 SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
+                LookupControlsGlobals.SetupSelectHotKey(HotKeyProcessor, ViewModel.SelectCommand);
             }
 
             if (PrintButton != null)
             {
                 PrintButton.Command = ViewModel.PrintCommand;
                 PrintButtonUiControl = new VmUiControl(PrintButton, ViewModel.PrintUiCommand);
+                LookupControlsGlobals.SetupPrintHotKey(HotKeyProcessor, ViewModel.PrintCommand);
             }
 
             if (CloseButton != null)
             {
-                CloseButton.Click += (_, _) => CloseWindow();
+                CloseButton.Command = CloseCommand;
+                LookupControlsGlobals.SetupCloseHotKey(HotKeyProcessor, CloseCommand);
             }
 
         }

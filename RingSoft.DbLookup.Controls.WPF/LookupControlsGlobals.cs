@@ -416,5 +416,77 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             }
         }
+
+        public static void SetupFindHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.F);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupPreviousHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.Left);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupNextHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.Right);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupNewHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.N);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupSaveHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.S);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupDeleteHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.D);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupSelectHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.L);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupPrintHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.P);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
+
+        public static void SetupCloseHotKey(HotKeyProcessor hotKeyProcessor, RelayCommand command)
+        {
+            var hotKey = new HotKey(command);
+            hotKey.AddKey(Key.R);
+            hotKey.AddKey(Key.C);
+            hotKeyProcessor.AddHotKey(hotKey);
+        }
     }
 }

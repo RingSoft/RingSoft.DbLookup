@@ -78,7 +78,7 @@
                 <Label Content="Shipped Date" Style="{StaticResource ControlLabel}"/>
                 <dec:DateEditControl Value="{Binding Path=ShippedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <TabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
+            <dec:DataEntryTabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
                 <TabItem Header="Details">
                     <deg:DataEntryGrid x:Name="DetailsGrid" Manager="{Binding DetailsGridManager}">
                         <deg:DataEntryGrid.Columns>
@@ -129,7 +129,7 @@
                         </DockPanel>
                     </Grid>
                 </TabItem>
-            </TabControl>
+            </dec:DataEntryTabControl>
             <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

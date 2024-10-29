@@ -72,6 +72,8 @@
 
     <Style TargetType="lc:DbMaintenanceTabControl" BasedOn="{StaticResource {x:Type TabControl}}"/>
 
+    <Style TargetType="dec:DataEntryTabControl" BasedOn="{StaticResource {x:Type TabControl}}"/>
+
     <Style TargetType="TabItem" x:Key="{x:Type TabItem}">
         <Setter Property="Template">
             <Setter.Value>

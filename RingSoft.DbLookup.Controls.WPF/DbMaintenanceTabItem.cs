@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -28,6 +29,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             base.OnKeyDown(e);
             if (e.Key == Key.Tab)
             {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    return;
+                }
                 var focusedElement = FocusManager.GetFocusedElement(this);
                 if (focusedElement == null)
                 {

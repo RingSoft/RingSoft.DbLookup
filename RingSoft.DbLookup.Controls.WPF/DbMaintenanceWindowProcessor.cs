@@ -241,7 +241,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.OnViewLoaded(LibView);
             };
             MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
+            MaintenanceWindow.PreviewKeyUp += MaintenanceWindow_PreviewKeyUp;
             //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
+        }
+
+        private void MaintenanceWindow_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.RightCtrl && !Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+            }
+            if (e.Key == Key.LeftCtrl && !Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+            }
         }
 
         /// <summary>

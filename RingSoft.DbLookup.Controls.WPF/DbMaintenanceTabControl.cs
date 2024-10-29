@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
+using System.Windows.Input;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
@@ -8,6 +10,7 @@ namespace RingSoft.DbLookup.Controls.WPF
     public class DbMaintenanceTabControl : TabControl, ILookupAddViewDestination
     {
         public bool SetDestionationAsFirstTab { get; set; } = true;
+
         public void ShowAddView(LookupAddViewArgs addViewArgs = null, object inputParameter = null)
         {
             if (LookupControlsGlobals.WindowRegistry.IsTableRegistered(addViewArgs.LookupData.LookupDefinition.TableDefinition))
@@ -114,6 +117,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ucTabItem = Items[tabIndex] as UserControlTabItem;
             }
             return result;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    return;
+                }
+            }
+            base.OnKeyDown(e);
         }
     }
 }

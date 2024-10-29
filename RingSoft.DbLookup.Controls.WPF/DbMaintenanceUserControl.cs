@@ -33,6 +33,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private AutoFillControl _keyControl;
         private bool _loaded;
         private PrimaryKeyValue _initPrimaryKey;
+        private HotKeyProcessor _hotKeyProcessor;
 
         public DbMaintenanceUserControl()
         {
@@ -66,6 +67,15 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (_keyControl != null)
                 {
                     RegisterFormKeyControl(_keyControl);
+                }
+
+                if (_hotKeyProcessor != null)
+                {
+                    foreach (var hotKey in _hotKeyProcessor.HotKeys)
+                    {
+                        Processor.HotKeyProcessor.AddHotKey(hotKey);
+                    }
+                    _hotKeyProcessor = null;
                 }
                 ViewModel.Processor = Processor;
                 if (LookupAddViewArgs != null) Processor.InitializeFromLookupData(LookupAddViewArgs);
@@ -141,6 +151,21 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             Processor.RegisterFormKeyControl(keyAutoFillControl);
             _keyControl = null;
+        }
+
+        protected void AddHotKey(HotKey hotKey)
+        {
+            if (Processor == null)
+            {
+                if (_hotKeyProcessor == null)
+                {
+                    _hotKeyProcessor = new HotKeyProcessor();
+                }
+                _hotKeyProcessor.AddHotKey(hotKey);
+                return;
+            }
+            Processor.HotKeyProcessor.AddHotKey(hotKey);
+            _hotKeyProcessor = null;
         }
 
         protected override void OnReadOnlyModeSet(bool readOnlyValue)

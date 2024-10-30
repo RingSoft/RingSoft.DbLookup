@@ -117,8 +117,6 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// <value><c>true</c> if [apply to lookup definition]; otherwise, <c>false</c>.</value>
         public bool ApplyToLookupDefinition { get; set; }
 
-        public RelayCommand SetFocusToLookupCommand { get; }
-
         /// <summary>
         /// Gets or sets the view model.
         /// </summary>
@@ -392,15 +390,19 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// <param name="addViewArgs">The add view arguments.</param>
         public AdvancedFindWindow(LookupAddViewArgs addViewArgs)
         {
+            InitWindow();
             _addViewArgs = addViewArgs;
-            
-            Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedFindWindow"/> class.
         /// </summary>
         public AdvancedFindWindow()
+        {
+            InitWindow();
+        }
+
+        private void InitWindow()
         {
             Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
@@ -415,26 +417,26 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             {
                 switch (e.Key)
                 {
-                    case Key.O:
-                        if (!ColumnsGrid.IsKeyboardFocusWithin)
-                        {
-                            TabControl.SelectedItem = ColumnsTabItem;
-                            ColumnsTabItem.UpdateLayout();
-                            ColumnsGrid.Focus();
-                        }
-                        break;
-                    case Key.I:
-                        if (!FiltersGrid.IsKeyboardFocusWithin)
-                        {
-                            FocusFiltersTab();
-                        }
-                        break;
-                    case Key.L:
-                        LookupControl.Focus();
-                        break;
-                    case Key.F:
-                        TreeView.Focus();
-                        break;
+                    //case Key.O:
+                    //    if (!ColumnsGrid.IsKeyboardFocusWithin)
+                    //    {
+                    //        TabControl.SelectedItem = ColumnsTabItem;
+                    //        ColumnsTabItem.UpdateLayout();
+                    //        ColumnsGrid.Focus();
+                    //    }
+                    //    break;
+                    //case Key.I:
+                    //    if (!FiltersGrid.IsKeyboardFocusWithin)
+                    //    {
+                    //        FocusFiltersTab();
+                    //    }
+                    //    break;
+                    //case Key.L:
+                    //    LookupControl.Focus();
+                    //    break;
+                    //case Key.F:
+                    //    TreeView.Focus();
+                    //    break;
                 }
             }
 
@@ -461,7 +463,8 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// </summary>
         public void Initialize()
         {
-            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            var winProcessor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            Processor = winProcessor;
             if (Processor == null)
             {
                 throw new Exception(
@@ -486,6 +489,47 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             ViewModel.View = this;
             Processor.Initialize(this, _buttonsControl, ViewModel, this, StatusBar);
+
+            var gotoLookupCommand = new RelayCommand((() =>
+            {
+                LookupControl.Focus();
+            }));
+            var gotoLookupHotKey = new HotKey(gotoLookupCommand);
+            gotoLookupHotKey.AddKey(Key.L);
+            winProcessor.HotKeyProcessor.AddHotKey(gotoLookupHotKey);
+
+            var gotoTreeViewCommand = new RelayCommand((() =>
+            {
+                TreeView.Focus();
+            }));
+            var gotoTreeViewHotKey = new HotKey(gotoTreeViewCommand);
+            gotoTreeViewHotKey.AddKey(Key.F);
+            winProcessor.HotKeyProcessor.AddHotKey(gotoTreeViewHotKey);
+
+            var gotoColumnsCommand = new RelayCommand((() =>
+            {
+                if (!ColumnsGrid.IsKeyboardFocusWithin)
+                {
+                    TabControl.SelectedItem = ColumnsTabItem;
+                    ColumnsTabItem.UpdateLayout();
+                    ColumnsGrid.Focus();
+                }
+            }));
+            var gotoColumnsHotKey = new HotKey(gotoColumnsCommand);
+            gotoColumnsHotKey.AddKey(Key.O);
+            winProcessor.HotKeyProcessor.AddHotKey(gotoColumnsHotKey);
+
+            var gotoFiltersCommand = new RelayCommand((() =>
+            {
+                if (!FiltersGrid.IsKeyboardFocusWithin)
+                {
+                    FocusFiltersTab();
+                }
+            }));
+            var gotoFiltersHotKey = new HotKey(gotoFiltersCommand);
+            gotoFiltersHotKey.AddKey(Key.I);
+            winProcessor.HotKeyProcessor.AddHotKey(gotoFiltersHotKey);
+
             Processor.LookupAddView += (sender, args) =>
             {
                 if (args.InputParameter is AdvancedFindInput advancedFindInput)

@@ -58,7 +58,7 @@
 
                                     <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding TableRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding TableUiCommand}" UiLabel="{Binding ElementName=TableLabel}"/>
 
-                                    <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="Refresh Now" IsTabStop="False"/>
+                                    <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="_Refresh Now" IsTabStop="False"/>
 
                                     <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
                                         <Label Content="(Ctrl + F to set focus)" DockPanel.Dock="Top"/>
@@ -91,7 +91,7 @@
                                     </StackPanel>
 
                                     <DockPanel Grid.Row="2" Grid.Column="4">
-                                        <TabControl x:Name="TabControl">
+                                        <dec:DataEntryTabControl x:Name="TabControl">
                                             <TabItem x:Name="ColumnsTabItem" Header="Columns (Ctrl + O)">
                                                 <deg:DataEntryGrid Grid.Row="1" x:Name="ColumnsGrid"  Manager="{Binding ColumnsManager}">
                                                     <deg:DataEntryGrid.Columns>
@@ -134,7 +134,7 @@
                                                 </deg:DataEntryGrid>
 
                                             </TabItem>
-                                        </TabControl>
+                                        </dec:DataEntryTabControl>
 
                                     </DockPanel>
 

@@ -530,6 +530,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             gotoFiltersHotKey.AddKey(Key.I);
             winProcessor.HotKeyProcessor.AddHotKey(gotoFiltersHotKey);
 
+            var importDefaultHotKey = new HotKey(ViewModel.ImportDefaultLookupCommand);
+            importDefaultHotKey.AddKey(Key.A);
+            importDefaultHotKey.AddKey(Key.I);
+            winProcessor.HotKeyProcessor.AddHotKey(importDefaultHotKey);
+
+            var printLookupOutputHotKey = new HotKey(ViewModel.PrintLookupOutputCommand);
+            printLookupOutputHotKey.AddKey(Key.A);
+            printLookupOutputHotKey.AddKey(Key.P);
+            winProcessor.HotKeyProcessor.AddHotKey(printLookupOutputHotKey);
+
+            var refreshSettingsHotKey = new HotKey(ViewModel.RefreshSettingsCommand);
+            refreshSettingsHotKey.AddKey(Key.A);
+            refreshSettingsHotKey.AddKey(Key.R);
+            winProcessor.HotKeyProcessor.AddHotKey(refreshSettingsHotKey);
+
             Processor.LookupAddView += (sender, args) =>
             {
                 if (args.InputParameter is AdvancedFindInput advancedFindInput)

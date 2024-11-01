@@ -260,8 +260,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ViewModel.OnViewLoaded(LibView);
             };
-            MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
-            MaintenanceWindow.PreviewKeyUp += MaintenanceWindow_PreviewKeyUp;
             //MaintenanceWindow.Closing += (sender, args) => ViewModel.OnWindowClosing(args);
         }
 
@@ -305,6 +303,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             MaintenanceWindow = window;
+            MaintenanceWindow.PreviewKeyDown += DbMaintenanceWindow_PreviewKeyDown;
+            MaintenanceWindow.PreviewKeyUp += MaintenanceWindow_PreviewKeyUp;
 
             if (buttonsControl == null)
             {

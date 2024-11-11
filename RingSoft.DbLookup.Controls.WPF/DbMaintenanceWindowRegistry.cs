@@ -320,7 +320,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         win.Owner = WPFControlsGlobals.ActiveWindow;
                         win.Closed += (sender, args) => { win.Owner.Activate(); };
-                        userControl.ViewModel.InputParameter = inputParameter;
+                        userControl.AddViewParameter = inputParameter;
                         win.ShowInTaskbar = false;
                         win.ShowDialog();
                         return;

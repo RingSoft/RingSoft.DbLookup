@@ -75,6 +75,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         Processor.HotKeyProcessor.AddHotKey(hotKey);
                     }
+
+                    foreach (var ignoreKey in _hotKeyProcessor.IgnoreKeys)
+                    {
+                        Processor.HotKeyProcessor.AddIgnoreKey(ignoreKey);
+                    }
                     _hotKeyProcessor = null;
                 }
                 ViewModel.Processor = Processor;

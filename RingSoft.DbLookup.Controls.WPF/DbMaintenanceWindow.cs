@@ -60,12 +60,15 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public BaseWindow MaintenanceWindow => this;
 
+        public DbMaintenanceWindowProcessor WinProcessor { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DbMaintenanceWindow"/> class.
         /// </summary>
         public DbMaintenanceWindow()
         {
-            Processor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            WinProcessor = LookupControlsGlobals.DbMaintenanceProcessorFactory.GetProcessor();
+            Processor = WinProcessor;
             Loaded += (sender, args) =>
             {
                 Processor.Initialize(this, MaintenanceButtonsControl, ViewModel, this, DbStatusBar);

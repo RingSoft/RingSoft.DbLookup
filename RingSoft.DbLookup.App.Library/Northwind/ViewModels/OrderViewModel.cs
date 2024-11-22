@@ -545,6 +545,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
 
             ShipViaAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ShipVia));
 
+            //Peter Ringering - 11/22/2024 12:26:28 PM - E-59
+            ShipViaAutoFillSetup.AllowLookupAdd = false;
+            ShipViaAutoFillSetup.AllowLookupView = false;
+
             OrderDetailsLookupDefinition =
                 _lookupContext.NorthwindContextConfiguration.OrderDetailsFormLookup.Clone();
 

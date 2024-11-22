@@ -387,6 +387,23 @@ namespace RingSoft.DbMaintenance
             }
         }
 
+        //Peter Ringering - 11/22/2024 12:58:14 PM - E-62
+        private DecimalEditControlSetup _decimalValueSetup;
+
+        public DecimalEditControlSetup DecimalValueSetup
+        {
+            get { return _decimalValueSetup; }
+            set
+            {
+                if (_decimalValueSetup == value)
+                    return;
+
+                _decimalValueSetup = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         /// <summary>
         /// The integer search value
         /// </summary>
@@ -1039,7 +1056,29 @@ namespace RingSoft.DbMaintenance
                                 }
                             }
                             break;
+                        //Peter Ringering - 11/22/2024 01:11:55 PM - E-62
                         case FieldDataTypes.Decimal:
+                            ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            if (FieldDefinition is DecimalFieldDefinition decimalField)
+                            {
+                                var decimalValueSetup = new DecimalEditControlSetup();
+                                switch (decimalField.DecimalFieldType)
+                                {
+                                    case DecimalFieldTypes.Decimal:
+                                        decimalValueSetup.FormatType = DecimalEditFormatTypes.Number;
+                                        break;
+                                    case DecimalFieldTypes.Currency:
+                                        decimalValueSetup.FormatType = DecimalEditFormatTypes.Currency;
+                                        break;
+                                    case DecimalFieldTypes.Percent:
+                                        decimalValueSetup.FormatType = DecimalEditFormatTypes.Percent;
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+                                DecimalValueSetup = decimalValueSetup;
+                            }
+                            break;
                         case FieldDataTypes.DateTime:
                             ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
                             break;

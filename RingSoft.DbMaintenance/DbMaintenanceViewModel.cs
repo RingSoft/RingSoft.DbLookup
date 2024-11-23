@@ -1007,6 +1007,14 @@ namespace RingSoft.DbMaintenance
             CheckSaveDeleted(entity);
             if (!SaveEntity(entity))
                 return DbMaintenanceResults.DatabaseError;
+
+            //Peter Ringering - 11/23/2024 12:17:07 PM - E-76
+            if (KeyAutoFillSetup != null)
+            {
+                KeyAutoFillValue = entity.GetAutoFillValue();
+            }
+            FireSavedEvent();
+
             var primaryKey = TableDefinition.GetPrimaryKeyValueFromEntity(entity);
 
             //if (!unitTestMode)
@@ -1069,8 +1077,6 @@ namespace RingSoft.DbMaintenance
             //    View.ResetViewForNewRecord();
             //}
 
-            //Peter Ringering - 11/23/2024 12:17:07 PM - E-76
-            FireSavedEvent();
             return DbMaintenanceResults.Success;
         }
 

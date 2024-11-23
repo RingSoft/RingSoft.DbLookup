@@ -5,7 +5,7 @@
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>8.21</Version>
+    <Version>8.21.1</Version>
     <Authors>Peter Ringering</Authors>
     <Description>Library to break up large volumes of database data into manageable chunks.  DO NOT install this seperately.  Install this as a part of RingSoft.DbLookup.EfCore.</Description>
     <Copyright>2024</Copyright>

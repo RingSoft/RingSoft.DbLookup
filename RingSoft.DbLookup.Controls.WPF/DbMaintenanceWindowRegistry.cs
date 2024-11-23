@@ -249,22 +249,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             , LookupAddViewArgs addViewArgs = null
             , object addViewParameter = null)
         {
-            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
-                maintenanceWindow.Owner = ownerWindow;
-            else
-            {
-                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
-            }
+            //Peter Ringering - 11/23/2024 10:51:37 AM - E-71
+            //if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
+            //    maintenanceWindow.Owner = ownerWindow;
+            //else
+            //{
+            //    maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+            //}
 
-            maintenanceWindow.Closed += (sender, args) =>
-            {
-                maintenanceWindow.Owner.Activate();
-            };
+            //maintenanceWindow.Closed += (sender, args) =>
+            //{
+            //    maintenanceWindow.Owner.Activate();
+            //};
 
             maintenanceWindow.ShowInTaskbar = false;
             maintenanceWindow.Processor.InitializeFromLookupData(addViewArgs);
             maintenanceWindow.ViewModel.InputParameter = addViewParameter;
-            maintenanceWindow.Show();
+            maintenanceWindow.ShowDialog();
         }
 
         /// <summary>
@@ -281,22 +282,24 @@ namespace RingSoft.DbLookup.Controls.WPF
             , object addViewParameter = null)
         {
             var win = GetMaintenanceWindow(maintenanceUserControl);
-            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
-                win.Owner = ownerWindow;
-            else
-            {
-                win.Owner = WPFControlsGlobals.ActiveWindow;
-            }
 
-            win.Closed += (sender, args) =>
-            {
-                win.Owner.Activate();
-            };
+            //Peter Ringering - 11/23/2024 10:59:03 AM - E-71
+            //if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
+            //    win.Owner = ownerWindow;
+            //else
+            //{
+            //    win.Owner = WPFControlsGlobals.ActiveWindow;
+            //}
+
+            //win.Closed += (sender, args) =>
+            //{
+            //    win.Owner.Activate();
+            //};
 
             win.ShowInTaskbar = false;
             maintenanceUserControl.LookupAddViewArgs = addViewArgs;
             maintenanceUserControl.AddViewParameter = addViewParameter;
-            win.Show();
+            win.ShowDialog();
         }
 
         public DbMaintenanceUcWindow GetMaintenanceWindow(DbMaintenanceUserControl userControl)

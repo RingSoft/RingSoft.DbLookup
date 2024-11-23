@@ -28,6 +28,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using Microsoft.VisualBasic;
+using System.Diagnostics.Metrics;
 
 namespace RingSoft.DbMaintenance
 {
@@ -1068,6 +1069,8 @@ namespace RingSoft.DbMaintenance
             //    View.ResetViewForNewRecord();
             //}
 
+            //Peter Ringering - 11/23/2024 12:17:07 PM - E-76
+            FireSavedEvent();
             return DbMaintenanceResults.Success;
         }
 

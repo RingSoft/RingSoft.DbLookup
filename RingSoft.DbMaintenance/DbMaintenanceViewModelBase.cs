@@ -688,6 +688,8 @@ namespace RingSoft.DbMaintenance
         /// Occurs when [save event].
         /// </summary>
         public event EventHandler SaveEvent;
+
+        public event EventHandler SavedEvent;
         /// <summary>
         /// Occurs when [select event].
         /// </summary>
@@ -942,6 +944,12 @@ namespace RingSoft.DbMaintenance
         protected void FireSaveEvent()
         {
             SaveEvent?.Invoke(this, new EventArgs());
+        }
+
+        //Peter Ringering - 11/23/2024 12:14:57 PM - E-76
+        protected void FireSavedEvent()
+        {
+            SavedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

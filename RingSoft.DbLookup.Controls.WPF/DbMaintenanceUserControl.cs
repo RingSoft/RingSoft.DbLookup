@@ -51,6 +51,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     ShowRecordTitle();
                 };
+
+                //Peter Ringering - 11/23/2024 12:17:07 PM - E-76
+                ViewModel.SavedEvent += (sender, args) =>
+                {
+                    ShowRecordTitle();
+                };
+
                 ViewModel.NewEvent += (sender, args) =>
                 {
                     Host.ChangeTitle(Title);

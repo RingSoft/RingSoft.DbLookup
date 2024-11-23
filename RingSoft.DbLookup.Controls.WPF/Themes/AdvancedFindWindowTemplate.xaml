@@ -93,7 +93,7 @@
                                     <DockPanel Grid.Row="2" Grid.Column="4">
                                         <dec:DataEntryTabControl x:Name="TabControl">
                                             <TabItem x:Name="ColumnsTabItem" Header="Columns (Ctrl + O)">
-                                                <deg:DataEntryGrid Grid.Row="1" x:Name="ColumnsGrid"  Manager="{Binding ColumnsManager}">
+                                                <deg:DataEntryGrid Grid.Row="1" x:Name="ColumnsGrid"  Manager="{Binding ColumnsManager}" CloseWindowOnEscape="True">
                                                     <deg:DataEntryGrid.Columns>
 
                                                         <deg:DataEntryGridTextColumn Header="Table" ColumnId="{x:Static dbm:AdvancedFindColumnRow.TableColumnId}" Width="150"/>
@@ -115,7 +115,7 @@
                                                         <Ellipse x:Name="FilterEllipse" Width="8" Height="8" Fill="Red"/>
                                                     </StackPanel>
                                                 </TabItem.Header>
-                                                <deg:DataEntryGrid Grid.Row="3" x:Name="FiltersGrid" Manager="{Binding FiltersManager}" >
+                                                <deg:DataEntryGrid Grid.Row="3" x:Name="FiltersGrid" Manager="{Binding FiltersManager}"  CloseWindowOnEscape="True">
                                                     <deg:DataEntryGrid.Columns>
 
                                                         <deg:DataEntryGridTextColumn Header="(" ColumnId="{x:Static dbm:AdvancedFindFiltersManager.LeftParenthesesColumnId}" Width="50" Alignment="Center"/>

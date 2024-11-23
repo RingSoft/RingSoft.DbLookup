@@ -306,12 +306,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.OnRecordSelected(args);
             };
             var baseWindow = Window.GetWindow(UserControl);
-            lookupWindow.Owner = baseWindow;
+            //lookupWindow.Owner = baseWindow;
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ApplyNewLookup += (sender, args) =>
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
 
             bool isAltDown = IsMaintenanceKeyDown(MaintenanceKey.Alt);
+
+            //Peter Ringering - 11/23/2024 10:30:59 AM - E-71
             lookupWindow.Closed += (sender, args) =>
             {
                 baseWindow.Focus();
@@ -321,7 +323,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     UserControl.ResetViewForNewRecord();
                 }
             };
-            lookupWindow.Show();
+            //lookupWindow.Show();
+            lookupWindow.ShowDialog();
         }
 
         public void CloseWindow()

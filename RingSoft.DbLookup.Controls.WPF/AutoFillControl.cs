@@ -1384,7 +1384,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Popup != null)
                 Popup.IsOpen = false;
 
-            lookupWindow.Owner = Window.GetWindow(this);
+            //Peter Ringering - 11/23/2024 10:16:20 AM - E-71
+            //lookupWindow.Owner = Window.GetWindow(this);
+
             lookupWindow.RefreshData += (o, args) =>
             {
                 if (Value != null)
@@ -1406,11 +1408,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.SetReadOnlyMode(_readOnlyMode);
             lookupWindow.ApplyNewLookup += (sender, args) => Setup.LookupDefinition = lookupWindow.LookupDefinition;
             LookupShown?.Invoke(this, new LookupShownArgs(){LookupWindow = lookupWindow});
-            lookupWindow.Closed += (sender, args) =>
-            {
-                Window.GetWindow(this).Activate();
-            };
-            lookupWindow.Show();
+
+            //Peter Ringering - 11/23/2024 10:16:20 AM - E-71
+            //lookupWindow.Closed += (sender, args) =>
+            //{
+            //    Window.GetWindow(this).Activate();
+            //};
+            //lookupWindow.Show();
+            lookupWindow.ShowDialog();
         }
 
         /// <summary>

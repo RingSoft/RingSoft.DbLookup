@@ -530,7 +530,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 ViewModel.OnRecordSelected(args);
             };
-            lookupWindow.Owner = MaintenanceWindow;
+            //lookupWindow.Owner = MaintenanceWindow;
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ApplyNewLookup += (sender, args) =>
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;
@@ -545,7 +545,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     LibView.ResetViewForNewRecord();
                 }
             };
-            lookupWindow.Show();
+            //lookupWindow.Show();
+            //Peter Ringering - 11/23/2024 10:30:59 AM - E-71
+            lookupWindow.ShowDialog();
         }
 
         /// <summary>

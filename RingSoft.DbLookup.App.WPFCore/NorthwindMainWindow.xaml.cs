@@ -65,7 +65,8 @@ namespace RingSoft.DbLookup.App.WPFCore
             AdvFindCommand = new RelayCommand((() =>
             {
                 var advancedFindWindow = new AdvancedFindWindow();
-                LookupControlsGlobals.WindowRegistry.ShowWindow(advancedFindWindow);
+                //Peter Ringering - 11/23/2024 11:15:19 AM - E-71
+                LookupControlsGlobals.WindowRegistry.ShowDialog(advancedFindWindow);
             }));
 
             DummyCommand = new RelayCommand((() =>

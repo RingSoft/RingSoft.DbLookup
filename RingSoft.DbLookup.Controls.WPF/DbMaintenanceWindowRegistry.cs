@@ -321,8 +321,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var win = GetMaintenanceWindow(userControl);
                     if (win != null)
                     {
-                        win.Owner = WPFControlsGlobals.ActiveWindow;
-                        win.Closed += (sender, args) => { win.Owner.Activate(); };
+                        //Peter Ringering - 11/23/2024 11:24:34 AM - E-71
+                        //win.Owner = WPFControlsGlobals.ActiveWindow;
+                        //win.Closed += (sender, args) => { win.Owner.Activate(); };
                         userControl.AddViewParameter = inputParameter;
                         win.ShowInTaskbar = false;
                         win.ShowDialog();
@@ -335,8 +336,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (item != null)
             {
                 var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
-                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
-                maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
+
+                //Peter Ringering - 11/23/2024 11:24:34 AM - E-71
+                //maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+                //maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
                 maintenanceWindow.ShowInTaskbar = false;
                 maintenanceWindow.ViewModel.InputParameter = inputParameter;
                 maintenanceWindow.ShowDialog();
@@ -346,8 +349,10 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public void ShowDialog(Window window)
         {
-            window.Owner = WPFControlsGlobals.ActiveWindow;
-            window.Closed += (sender, args) => { window.Owner.Activate(); };
+            //Peter Ringering - 11/23/2024 11:15:19 AM - E-71
+            //window.Owner = WPFControlsGlobals.ActiveWindow;
+            //window.Closed += (sender, args) => { window.Owner.Activate(); };
+
             window.ShowInTaskbar = false;
             window.ShowDialog();
         }

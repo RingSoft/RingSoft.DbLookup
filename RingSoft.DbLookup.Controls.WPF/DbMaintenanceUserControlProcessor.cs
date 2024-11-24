@@ -128,6 +128,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         private LookupAddViewArgs _lookupAddViewArgs;
         private bool _registerKeyControl;
+        private bool _selectButtonExists;
+        private bool _readOnlyMode;
 
         public DbMaintenanceUserControlProcessor(
             DbMaintenanceViewModelBase viewModel
@@ -245,6 +247,11 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SelectButton.Command = ViewModel.SelectCommand;
                 SelectButtonUiControl = new VmUiControl(SelectButton, ViewModel.SelectUiCommand);
                 LookupControlsGlobals.SetupSelectHotKey(HotKeyProcessor, ViewModel.SelectCommand);
+                _selectButtonExists = true;
+                if (_readOnlyMode)
+                {
+                    SelectButton.Visibility = Visibility.Collapsed;
+                }
             }
 
             if (PrintButton != null)
@@ -273,7 +280,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             LookupAddView?.Invoke(this, e);
             if (e.LookupReadOnlyMode)
             {
-                SelectButton.Visibility = Visibility.Collapsed;
+                _readOnlyMode = true;
+                if (_selectButtonExists)
+                {
+                    SelectButton.Visibility = Visibility.Collapsed;
+                }
             }
 
         }

@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-
   <PropertyGroup>
-    <TargetFrameworks>net8.0-windows</TargetFrameworks>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TargetFrameworks>net9.0-windows</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>8.21.2</Version>
+    <Version>9.0</Version>
     <Authors>Peter Ringering</Authors>
     <Description>WPF Controls to display data outputted by RingSoft.DbLookup.  Use with RingSoft.DbLookup.EfCore.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -16,41 +15,35 @@
     <PackageIcon>magnify.png</PackageIcon>
     <BaseOutputPath>C:\Users\petem\source\repos\RingSoft\Nuget</BaseOutputPath>
     <LangVersion>latest</LangVersion>
-	  <PackageReadmeFile>README.md</PackageReadmeFile>
-	  <Copyright>2024</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Copyright>2024</Copyright>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;NU1701</NoWarn>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;NU1701</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
-	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
-	  <None Remove="Resources\Search16.png" />
+    <None Include="docs\README.md" Pack="true" PackagePath="\" />
+    <None Remove="Resources\Search16.png" />
     <None Include="..\magnify.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="8.21.0" />
+    <PackageReference Include="RingSoft.DataEntryControls.WPF" Version="9.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Resources\Search16.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -58,12 +51,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

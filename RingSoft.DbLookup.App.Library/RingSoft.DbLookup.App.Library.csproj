@@ -1,25 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="MegaDb\MegaDb_SqlServerScript.sql" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="MegaDb\MegaDb_SqlServerScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="MegaDb\MegaDb_MySqlScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -34,5 +29,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

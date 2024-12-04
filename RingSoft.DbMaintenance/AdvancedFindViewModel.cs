@@ -551,6 +551,7 @@ namespace RingSoft.DbMaintenance
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindColumns);
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindFilters);
 
+            CreateCommands();
             TableUiCommand = new UiCommand();
             MapFieldToUiCommand(TableUiCommand, TableDefinition.GetFieldDefinition(p => p.Table));
         }
@@ -566,6 +567,11 @@ namespace RingSoft.DbMaintenance
                 {
                     AdvancedFindInput = advancedFindInput;
                 }
+            }
+
+            if (base.View is IAdvancedFindView view)
+            {
+                View = view;
             }
 
             //TableComboBoxSetup = new TextComboBoxControlSetup();

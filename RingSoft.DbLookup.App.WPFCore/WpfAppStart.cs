@@ -12,6 +12,7 @@ using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DbLookup.Controls.WPF.AdvancedFind;
 
 namespace RingSoft.DbLookup.App.WPFCore
 {
@@ -72,6 +73,9 @@ namespace RingSoft.DbLookup.App.WPFCore
         protected override void FinishStartup()
         {
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
+
+            MegaDbWindowRegistry.RegisterUserControl
+                <AdvancedFindUserControl>(SystemGlobals.LookupContext.AdvancedFinds);
 
             MegaDbWindowRegistry.RegisterUserControl<ItemsUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);

@@ -222,7 +222,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             internal set
             {
             _dbMaintProcessorFactory = value;
-        }
+            }
         }
 
         /// <summary>
@@ -258,10 +258,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public static DbMaintenanceTabControl TabControl { get; private set; }
+
         public static DbMaintenanceWindowRegistry WindowRegistry { get; internal set; } = new DbMaintenanceWindowRegistry();
 
         private static Window _tabSwitcherWindow;
-        private static DbMaintenanceTabControl _tabControl;
 
         public static void SetTabSwitcherWindow(Window tabSwitcherWindow, DbMaintenanceTabControl tabControl)
         {
@@ -270,14 +271,14 @@ namespace RingSoft.DbLookup.Controls.WPF
                 _tabSwitcherWindow.PreviewKeyDown -= _tabSwitcherWindow_PreviewKeyDown;
             }
             _tabSwitcherWindow = tabSwitcherWindow;
-            _tabControl = tabControl;
+            TabControl = tabControl;
             _tabSwitcherWindow.PreviewKeyDown += _tabSwitcherWindow_PreviewKeyDown;
 
         }
 
         private static void _tabSwitcherWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (_tabControl.Items.Count == 0)
+            if (TabControl.Items.Count == 0)
             {
                 return;
             }
@@ -285,16 +286,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (e.Key == Key.Tab)
                 {
-                    if (_tabControl.SelectedItem is DbMaintenanceTabItem origTabItem)
+                    if (TabControl.SelectedItem is DbMaintenanceTabItem origTabItem)
                     {
                         origTabItem.UserControl.IgnoreTab = true;
                     }
-                    var taskSwitcherWindow = new TabIControlSwitcherWindow(_tabControl);
+                    var taskSwitcherWindow = new TabIControlSwitcherWindow(TabControl);
                     taskSwitcherWindow.ShowDialog();
                     taskSwitcherWindow.LocalViewModel.SelectedItem.TabItem.IsSelected = true;
                     if (taskSwitcherWindow.LocalViewModel.SelectedItem.TabItem is DbMaintenanceTabItem dbMaintenanceTabItem)
                     {
-                        _tabControl.UpdateLayout();
+                        TabControl.UpdateLayout();
                         dbMaintenanceTabItem.UpdateLayout();
                         dbMaintenanceTabItem.UserControl.SetInitialFocus();
                     }

@@ -74,6 +74,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             if (TableName.IsNullOrEmpty())
                 TableName = tablePropertyName;
 
+            if (TableName == "AdvancedFinds")
+            {
+                
+            }
+
             foreach (var propertyInfo in typeof(TEntity).GetProperties())
             {
                 FieldDefinition field = null;

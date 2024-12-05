@@ -20,6 +20,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     {
         private Control _buttonsControl;
         private bool _refreshAfterLoad;
+        private bool _treeHasFocus;
 
         public AdvancedFindUserControl()
         {
@@ -98,7 +99,40 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 refreshSettingsHotKey.AddKey(Key.R);
                 AddHotKey(refreshSettingsHotKey);
             };
+
+            TreeView.GotFocus += TreeView_GotFocus;
         }
+
+        private void TreeView_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var sendTab = true;
+            if (TreeView.SelectedItem == null)
+            {
+                if (LocalViewModel.AdvancedFindTree != null)
+                {
+                    if (LocalViewModel.AdvancedFindTree.TreeRoot != null)
+                    {
+                        if (LocalViewModel.AdvancedFindTree.TreeRoot.Count > 0)
+                        {
+                            _treeHasFocus = true;
+                            LocalViewModel.AdvancedFindTree.TreeRoot[0].IsSelected = true;
+                            _treeHasFocus = false;
+                            sendTab = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                sendTab = false;
+            }
+
+            if (sendTab && !_treeHasFocus)
+            {
+                WPFControlsGlobals.SendKey(Key.Tab);
+            }
+        }
+
 
         protected override DbMaintenanceViewModelBase OnGetViewModel()
         {

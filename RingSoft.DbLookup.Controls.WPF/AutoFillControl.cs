@@ -1384,8 +1384,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (Popup != null)
                 Popup.IsOpen = false;
 
-            //Peter Ringering - 11/23/2024 10:16:20 AM - E-71
-            //lookupWindow.Owner = Window.GetWindow(this);
+            lookupWindow.Owner = Window.GetWindow(this);
+            lookupWindow.ShowInTaskbar = false;
 
             lookupWindow.RefreshData += (o, args) =>
             {

@@ -263,7 +263,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 , Value?.PrimaryKeyValue);
             lookupWindow.AddViewParameter = Setup.AddViewParameter;
 
-            //lookupWindow.Owner = Window.GetWindow(this);
+            lookupWindow.Owner = Window.GetWindow(this);
             lookupWindow.RefreshData += (o, args) =>
             {
                 if (Value != null)

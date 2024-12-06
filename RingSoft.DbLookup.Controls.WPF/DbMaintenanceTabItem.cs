@@ -10,6 +10,8 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public new DbMaintenanceUserControl UserControl { get; }
 
+        public HostTypes HostType => HostTypes.Tab;
+
         public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
             : base(userControl, userControl.Title, tabControl)
         {
@@ -52,7 +54,6 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             return true;
         }
-
         public void CloseHost()
         {
             CloseCommand.Execute(null);

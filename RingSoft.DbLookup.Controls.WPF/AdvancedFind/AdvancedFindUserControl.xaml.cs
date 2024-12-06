@@ -21,6 +21,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private Control _buttonsControl;
         private bool _refreshAfterLoad;
         private bool _treeHasFocus;
+        private bool _buttonsPanelSet;
 
         public AdvancedFindUserControl()
         {
@@ -38,66 +39,74 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             Loaded += (sender, args) =>
             {
-                if (ButtonsPanel != null)
+                if (ButtonsPanel != null && !_buttonsPanelSet)
                 {
                     ButtonsPanel.Children.Add(_buttonsControl);
                     ButtonsPanel.UpdateLayout();
+                    _buttonsPanelSet = true;
                 }
+            };
 
-                var gotoLookupCommand = new RelayCommand((() =>
+            var gotoLookupCommand = new RelayCommand((() =>
+            {
+                LookupControl.Focus();
+            }));
+            var gotoLookupHotKey = new HotKey(gotoLookupCommand);
+            gotoLookupHotKey.AddKey(Key.L);
+            AddHotKey(gotoLookupHotKey);
+
+            var gotoTreeViewCommand = new RelayCommand((() =>
+            {
+                TreeView.Focus();
+            }));
+            var gotoTreeViewHotKey = new HotKey(gotoTreeViewCommand);
+            gotoTreeViewHotKey.AddKey(Key.F);
+            AddHotKey(gotoTreeViewHotKey);
+
+            var gotoColumnsCommand = new RelayCommand((() =>
+            {
+                if (!ColumnsGrid.IsKeyboardFocusWithin)
                 {
-                    LookupControl.Focus();
-                }));
-                var gotoLookupHotKey = new HotKey(gotoLookupCommand);
-                gotoLookupHotKey.AddKey(Key.L);
-                AddHotKey(gotoLookupHotKey);
+                    TabControl.SelectedItem = ColumnsTabItem;
+                    ColumnsTabItem.UpdateLayout();
+                    ColumnsGrid.Focus();
+                }
+            }));
+            var gotoColumnsHotKey = new HotKey(gotoColumnsCommand);
+            gotoColumnsHotKey.AddKey(Key.O);
+            AddHotKey(gotoColumnsHotKey);
 
-                var gotoTreeViewCommand = new RelayCommand((() =>
+            var gotoFiltersCommand = new RelayCommand((() =>
+            {
+                if (!FiltersGrid.IsKeyboardFocusWithin)
                 {
-                    TreeView.Focus();
-                }));
-                var gotoTreeViewHotKey = new HotKey(gotoTreeViewCommand);
-                gotoTreeViewHotKey.AddKey(Key.F);
-                AddHotKey(gotoTreeViewHotKey);
+                    FocusFiltersTab();
+                }
+            }));
+            var gotoFiltersHotKey = new HotKey(gotoFiltersCommand);
+            gotoFiltersHotKey.AddKey(Key.I);
+            AddHotKey(gotoFiltersHotKey);
 
-                var gotoColumnsCommand = new RelayCommand((() =>
+            var importDefaultHotKey = new HotKey(LocalViewModel.ImportDefaultLookupCommand);
+            importDefaultHotKey.AddKey(Key.A);
+            importDefaultHotKey.AddKey(Key.I);
+            AddHotKey(importDefaultHotKey);
+
+            var printLookupOutputHotKey = new HotKey(LocalViewModel.PrintLookupOutputCommand);
+            printLookupOutputHotKey.AddKey(Key.A);
+            printLookupOutputHotKey.AddKey(Key.P);
+            AddHotKey(printLookupOutputHotKey);
+
+            var refreshSettingsHotKey = new HotKey(LocalViewModel.RefreshSettingsCommand);
+            refreshSettingsHotKey.AddKey(Key.A);
+            refreshSettingsHotKey.AddKey(Key.R);
+            AddHotKey(refreshSettingsHotKey);
+            LocalViewModel.LookupCreated += (sender, args) =>
+            {
+                if (Host.HostType == HostTypes.Tab && LookupControlsGlobals.TabControl != null)
                 {
-                    if (!ColumnsGrid.IsKeyboardFocusWithin)
-                    {
-                        TabControl.SelectedItem = ColumnsTabItem;
-                        ColumnsTabItem.UpdateLayout();
-                        ColumnsGrid.Focus();
-                    }
-                }));
-                var gotoColumnsHotKey = new HotKey(gotoColumnsCommand);
-                gotoColumnsHotKey.AddKey(Key.O);
-                AddHotKey(gotoColumnsHotKey);
-
-                var gotoFiltersCommand = new RelayCommand((() =>
-                {
-                    if (!FiltersGrid.IsKeyboardFocusWithin)
-                    {
-                        FocusFiltersTab();
-                    }
-                }));
-                var gotoFiltersHotKey = new HotKey(gotoFiltersCommand);
-                gotoFiltersHotKey.AddKey(Key.I);
-                AddHotKey(gotoFiltersHotKey);
-
-                var importDefaultHotKey = new HotKey(LocalViewModel.ImportDefaultLookupCommand);
-                importDefaultHotKey.AddKey(Key.A);
-                importDefaultHotKey.AddKey(Key.I);
-                AddHotKey(importDefaultHotKey);
-
-                var printLookupOutputHotKey = new HotKey(LocalViewModel.PrintLookupOutputCommand);
-                printLookupOutputHotKey.AddKey(Key.A);
-                printLookupOutputHotKey.AddKey(Key.P);
-                AddHotKey(printLookupOutputHotKey);
-
-                var refreshSettingsHotKey = new HotKey(LocalViewModel.RefreshSettingsCommand);
-                refreshSettingsHotKey.AddKey(Key.A);
-                refreshSettingsHotKey.AddKey(Key.R);
-                AddHotKey(refreshSettingsHotKey);
+                    LocalViewModel.LookupDefinition.Destination = LookupControlsGlobals.TabControl;
+                }
             };
 
             TreeView.GotFocus += TreeView_GotFocus;

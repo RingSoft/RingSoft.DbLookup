@@ -10,6 +10,9 @@ namespace RingSoft.DbLookup.Controls.WPF
     public partial class DbMaintenanceUcWindow : IUserControlHost
     {
         private DbMaintenanceUserControl UserControl { get; }
+
+        public HostTypes HostType => HostTypes.Window;
+
         public DbMaintenanceUcWindow(DbMaintenanceUserControl userControl)
         {
             UserControl = userControl;

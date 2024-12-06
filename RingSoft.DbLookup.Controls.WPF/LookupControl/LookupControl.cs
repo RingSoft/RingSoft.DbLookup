@@ -2646,25 +2646,29 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupWidth = ActualWidth,
             };
 
-            var advancedFindWindow = new AdvancedFindWindow(addViewArgs);
-            advancedFindWindow.Owner = Window.GetWindow(this);
-            advancedFindWindow.ShowInTaskbar = false;
+            LookupControlsGlobals.WindowRegistry.ShowDialog(
+                SystemGlobals.AdvancedFindLookupContext.AdvancedFinds
+                , addViewArgs.InputParameter);
+
+            //var advancedFindWindow = new AdvancedFindWindow(addViewArgs);
+            //advancedFindWindow.Owner = Window.GetWindow(this);
+            //advancedFindWindow.ShowInTaskbar = false;
             
-            advancedFindWindow.ShowDialog();
-            if (advancedFindWindow.ApplyToLookupDefinition)
-            {
-                var lookupWindow = this.GetParentOfType<LookupWindow>();
-                if (lookupWindow != null)
-                {
-                    lookupWindow.ApplyNewLookupDefinition(advancedFindWindow.ViewModel.LookupDefinition);
-                }
-                LookupDefinition = advancedFindWindow.ViewModel.LookupDefinition;
-                _commandToExecute = new LookupCommand(LookupCommands.Reset);
-                if (lookupWindow != null)
-                {
-                    lookupWindow.Reload();
-                }
-            }
+            //advancedFindWindow.ShowDialog();
+            //if (advancedFindWindow.ApplyToLookupDefinition)
+            //{
+            //    var lookupWindow = this.GetParentOfType<LookupWindow>();
+            //    if (lookupWindow != null)
+            //    {
+            //        lookupWindow.ApplyNewLookupDefinition(advancedFindWindow.ViewModel.LookupDefinition);
+            //    }
+            //    LookupDefinition = advancedFindWindow.ViewModel.LookupDefinition;
+            //    _commandToExecute = new LookupCommand(LookupCommands.Reset);
+            //    if (lookupWindow != null)
+            //    {
+            //        lookupWindow.Reload();
+            //    }
+            //}
         }
 
         /// <summary>

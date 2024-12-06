@@ -250,12 +250,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             , object addViewParameter = null)
         {
             //Peter Ringering - 11/23/2024 10:51:37 AM - E-71
-            //if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
-            //    maintenanceWindow.Owner = ownerWindow;
-            //else
-            //{
-            //    maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
-            //}
+            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
+                maintenanceWindow.Owner = ownerWindow;
+            else
+            {
+                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+            }
 
             //maintenanceWindow.Closed += (sender, args) =>
             //{
@@ -284,12 +284,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             var win = GetMaintenanceWindow(maintenanceUserControl);
 
             //Peter Ringering - 11/23/2024 10:59:03 AM - E-71
-            //if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
-            //    win.Owner = ownerWindow;
-            //else
-            //{
-            //    win.Owner = WPFControlsGlobals.ActiveWindow;
-            //}
+            if (addViewArgs != null && addViewArgs.OwnerWindow is Window ownerWindow)
+                win.Owner = ownerWindow;
+            else
+            {
+                win.Owner = WPFControlsGlobals.ActiveWindow;
+            }
 
             //win.Closed += (sender, args) =>
             //{
@@ -322,7 +322,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     if (win != null)
                     {
                         //Peter Ringering - 11/23/2024 11:24:34 AM - E-71
-                        //win.Owner = WPFControlsGlobals.ActiveWindow;
+                        win.Owner = WPFControlsGlobals.ActiveWindow;
                         //win.Closed += (sender, args) => { win.Owner.Activate(); };
                         userControl.AddViewParameter = inputParameter;
                         win.ShowInTaskbar = false;
@@ -338,7 +338,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 var maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
 
                 //Peter Ringering - 11/23/2024 11:24:34 AM - E-71
-                //maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
+                maintenanceWindow.Owner = WPFControlsGlobals.ActiveWindow;
                 //maintenanceWindow.Closed += (sender, args) => { maintenanceWindow.Owner.Activate(); };
                 maintenanceWindow.ShowInTaskbar = false;
                 maintenanceWindow.ViewModel.InputParameter = inputParameter;
@@ -350,7 +350,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void ShowDialog(Window window)
         {
             //Peter Ringering - 11/23/2024 11:15:19 AM - E-71
-            //window.Owner = WPFControlsGlobals.ActiveWindow;
+            window.Owner = WPFControlsGlobals.ActiveWindow;
             //window.Closed += (sender, args) => { window.Owner.Activate(); };
 
             window.ShowInTaskbar = false;

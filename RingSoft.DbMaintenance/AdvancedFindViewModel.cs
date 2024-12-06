@@ -538,6 +538,8 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if clearing; otherwise, <c>false</c>.</value>
         public bool Clearing { get; private set; }
 
+        public event EventHandler LookupCreated;
+
         /// <summary>
         /// The record count
         /// </summary>
@@ -561,9 +563,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         protected override void Initialize()
         {
-            if (LookupAddViewArgs != null)
+            if (InputParameter != null)
             {
-                if (LookupAddViewArgs.InputParameter is AdvancedFindInput advancedFindInput)
+                if (InputParameter is AdvancedFindInput advancedFindInput)
                 {
                     AdvancedFindInput = advancedFindInput;
                 }
@@ -609,6 +611,13 @@ namespace RingSoft.DbMaintenance
             ColumnsManager = new AdvancedFindColumnsManager(this);
             FiltersManager = new AdvancedFindFiltersManager(this);
 
+            //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
+            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
+            {
+                View.SetAddOnFlyFocus();
+            }
+            base.Initialize();
+
             if (AdvancedFindInput != null)
             {
                 //TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == AdvancedFindInput.LockTable.Description);
@@ -628,12 +637,7 @@ namespace RingSoft.DbMaintenance
                     LockTableRow();
                 }
             }
-            //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
-            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
-            {
-                View.SetAddOnFlyFocus();
-            }
-            base.Initialize();
+
         }
 
         /// <summary>
@@ -1029,6 +1033,7 @@ namespace RingSoft.DbMaintenance
 
                 var oldLookup = LookupDefinition;
                 LookupDefinition = new LookupDefinitionBase(tableDefinition);
+                LookupCreated?.Invoke(this, EventArgs.Empty);
                 LookupDefinition.AdvancedFindTree = AdvancedFindTree;
                 //FiltersManager?.LoadFromLookupDefinition(oldLookup, true);
                 if (oldLookup != null)

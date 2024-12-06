@@ -10,7 +10,7 @@
              xmlns:deg="clr-namespace:RingSoft.DataEntryControls.WPF.DataEntryGrid;assembly=RingSoft.DataEntryControls.WPF"
              xmlns:advancedFind="clr-namespace:RingSoft.DbLookup.AdvancedFind;assembly=RingSoft.DbLookup"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" WindowHeight="800" WindowWidth="1400">
+             d:DesignHeight="450" d:DesignWidth="800" WindowHeight="900" WindowWidth="1400">
 
     <UserControl.DataContext>
         <dbm:AdvancedFindViewModel x:Name="LocalViewModel"/>

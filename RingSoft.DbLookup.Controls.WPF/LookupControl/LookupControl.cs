@@ -2644,6 +2644,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LockTable = LookupDefinition.TableDefinition,
                 LookupDefinition = LookupDefinition,
                 LookupWidth = ActualWidth,
+                LookupData = LookupDataMaui,
             };
 
             LookupControlsGlobals.WindowRegistry.ShowDialog(

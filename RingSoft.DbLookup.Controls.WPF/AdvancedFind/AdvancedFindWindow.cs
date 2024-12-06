@@ -777,5 +777,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
             return false;
         }
+
+        public PrimaryKeyValue GetSelectedPrimaryKeyValue()
+        {
+            return LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue();
+        }
     }
 }

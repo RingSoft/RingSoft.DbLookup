@@ -134,10 +134,13 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" HorizontalAlignment="Left" Content="(Ctrl + L to set focus)"/>
 
                     <lc:LookupControl Grid.Row="1"  x:Name="LookupControl" LookupDefinition="{Binding LookupDefinition}" MinWidth="800" ShowAdvancedFindButton="False"/>
+
+                    <dec:EnhancedButton Grid.Row="2" x:Name="SelectLookupButton" Content="Select Lookup Row" Command="{Binding SelectLookupRowCommand}"/>
                 </Grid>
 
             </Grid>

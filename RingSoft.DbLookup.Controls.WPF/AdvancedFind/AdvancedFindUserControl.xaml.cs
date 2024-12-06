@@ -22,10 +22,28 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         private bool _refreshAfterLoad;
         private bool _treeHasFocus;
         private bool _buttonsPanelSet;
+        private VmUiControl _selectLookupRowButtonUiControl;
 
         public AdvancedFindUserControl()
         {
             InitializeComponent();
+            _selectLookupRowButtonUiControl =
+                new VmUiControl(SelectLookupButton, LocalViewModel.SelectLookupRowUiCommand);
+
+            LookupControl.SelectedIndexChanged += (sender, args) =>
+            {
+                if (LookupControl.SelectedIndex >= 0)
+                {
+                    if (SelectLookupButton.Visibility == Visibility.Visible)
+                    {
+                        LocalViewModel.SelectLookupRowCommand.IsEnabled = true;
+                    }
+                }
+                else
+                {
+                    LocalViewModel.SelectLookupRowCommand.IsEnabled = false;
+                }
+            };
             RegisterFormKeyControl(NameAutoFillControl);
 
             LookupControl.Loaded += (sender, args) =>
@@ -101,6 +119,12 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             refreshSettingsHotKey.AddKey(Key.A);
             refreshSettingsHotKey.AddKey(Key.R);
             AddHotKey(refreshSettingsHotKey);
+
+            var selectLookupRowsHotKey = new HotKey(LocalViewModel.SelectLookupRowCommand);
+            selectLookupRowsHotKey.AddKey(Key.A);
+            selectLookupRowsHotKey.AddKey(Key.L);
+            AddHotKey(selectLookupRowsHotKey);
+
             LocalViewModel.LookupCreated += (sender, args) =>
             {
                 if (Host.HostType == HostTypes.Tab && LookupControlsGlobals.TabControl != null)
@@ -293,6 +317,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             var command = new LookupCommand(LookupCommands.Reset, null, true);
             command.ClearColumns = true;
             LookupControl.Command = command;
+        }
+
+        public PrimaryKeyValue GetSelectedPrimaryKeyValue()
+        {
+            return LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue();
         }
     }
 }

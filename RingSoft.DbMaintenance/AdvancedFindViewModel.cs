@@ -98,6 +98,8 @@ namespace RingSoft.DbMaintenance
         /// Resets the lookup.
         /// </summary>
         void ResetLookup();
+
+        PrimaryKeyValue GetSelectedPrimaryKeyValue();
     }
 
     //public class TreeViewFormulaData
@@ -140,6 +142,8 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <value>The width of the lookup.</value>
         public double LookupWidth { get; set; }
+
+        public LookupDataMauiBase LookupData { get; set; }
     }
 
 
@@ -496,6 +500,8 @@ namespace RingSoft.DbMaintenance
         /// <value>The print lookup output command.</value>
         public RelayCommand PrintLookupOutputCommand { get; set; }
 
+        public RelayCommand SelectLookupRowCommand { get; }
+
         /// <summary>
         /// Gets or sets the table UI command.
         /// </summary>
@@ -532,6 +538,8 @@ namespace RingSoft.DbMaintenance
         /// <value>The lookup refresher.</value>
         public LookupRefresher LookupRefresher { get; private set; }
 
+        public UiCommand SelectLookupRowUiCommand { get; }
+
         /// <summary>
         /// Gets a value indicating whether this <see cref="AdvancedFindViewModel" /> is clearing.
         /// </summary>
@@ -550,6 +558,8 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         public AdvancedFindViewModel()
         {
+            SelectLookupRowUiCommand = new UiCommand();
+            SelectLookupRowCommand = new RelayCommand(SelectLookupRow);
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindColumns);
             TablesToDelete.Add(SystemGlobals.AdvancedFindLookupContext.AdvancedFindFilters);
 
@@ -618,8 +628,18 @@ namespace RingSoft.DbMaintenance
             }
             base.Initialize();
 
+            SelectLookupRowUiCommand.Visibility = UiVisibilityTypes.Collapsed;
+            SelectLookupRowCommand.IsEnabled = false;
             if (AdvancedFindInput != null)
             {
+                if (AdvancedFindInput.LookupData != null)
+                {
+                    if (AdvancedFindInput.LookupData.LookupWindow != null
+                        && !AdvancedFindInput.LookupData.LookupWindow.ReadOnlyMode)
+                    {
+                        SelectLookupRowUiCommand.Visibility = UiVisibilityTypes.Visible;
+                    }
+                }
                 //TableIndex = TableComboBoxSetup.Items.FindIndex(p => p.TextValue == AdvancedFindInput.LockTable.Description);
                 ViewLookupDefinition.FilterDefinition.AddFixedFilter(
                     SystemGlobals.AdvancedFindLookupContext.AdvancedFinds.GetFieldDefinition(p =>
@@ -631,6 +651,8 @@ namespace RingSoft.DbMaintenance
                         p.DataCells[0].TextValue == AdvancedFindInput.LookupDefinition.TableDefinition.Description);
                     CreateLookupDefinition();
                     LoadFromLookupDefinition(AdvancedFindInput.LookupDefinition);
+                    View.SetAddOnFlyFocus();
+                    RecordDirty = false;
                 }
                 else
                 {
@@ -1647,6 +1669,20 @@ namespace RingSoft.DbMaintenance
             LookupRefresher.Dispose();
             
             base.OnWindowClosing(e);
+        }
+
+        private void SelectLookupRow()
+        {
+            if (!CheckDirty())
+            {
+                return;
+            }
+            var primaryKey = View.GetSelectedPrimaryKeyValue();
+
+            Processor.CloseWindow();
+
+            AdvancedFindInput.LookupData.SelectPrimaryKey(primaryKey);
+            AdvancedFindInput.LookupData.LookupWindow.OnSelectButtonClick();
         }
     }
 }

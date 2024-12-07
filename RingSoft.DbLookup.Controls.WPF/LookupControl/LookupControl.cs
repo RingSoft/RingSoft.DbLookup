@@ -485,13 +485,23 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             get
             {
+                var result = LookupSearchTypes.Equals;
+
                 if (EqualsRadioButton == null)
+                {
                     return LookupSearchTypes.Equals;
+                }
+                else
+                {
+                    if (EqualsRadioButton.IsChecked != null && (bool)EqualsRadioButton.IsChecked)
+                        result = LookupSearchTypes.Equals;
+                    else
+                    {
+                        result = LookupSearchTypes.Contains;
+                    }
+                }
 
-                if (EqualsRadioButton.IsChecked != null && (bool)EqualsRadioButton.IsChecked)
-                    return LookupSearchTypes.Equals;
-
-                return LookupSearchTypes.Contains;
+                return result;
             }
         }
 
@@ -573,7 +583,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 lookupControl.LookupDefinition.CommandChanged += (sender, args) =>
                 {
                     lookupControl._commandToExecute = args.NewCommand;
-                    lookupControl.ExecuteCommand();
+                    lookupControl.Dispatcher.Invoke(() =>
+                    {
+                        lookupControl.ExecuteCommand();
+                    });
                 };
             }
 
@@ -2284,7 +2297,8 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             var pageSize = (int)(Math.Floor(items)) - 1;
 
-            var scrollViewer = FindVisualChild<ScrollViewer>(ListView);
+            ScrollViewer scrollViewer = null;
+            scrollViewer = FindVisualChild<ScrollViewer>(ListView);
 
             if (scrollViewer != null && scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
                 pageSize -= 1;

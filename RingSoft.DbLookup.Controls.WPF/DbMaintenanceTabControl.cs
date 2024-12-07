@@ -44,13 +44,13 @@ namespace RingSoft.DbLookup.Controls.WPF
             var lookupData = primaryKey.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
 
-            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
+            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.View,
                 string.Empty, Window.GetWindow(this))
             {
                 SelectedPrimaryKeyValue = primaryKey,
-                InputParameter = inputParameter
+                InputParameter = inputParameter,
+                
             };
-            //args.LookupData.SetNewPrimaryKeyValue(SelectedPrimaryKeyValue);
             args.LookupData.SelectedPrimaryKeyValue = primaryKey;
             ShowAddView(args, inputParameter);
 

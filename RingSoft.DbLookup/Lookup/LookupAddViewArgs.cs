@@ -55,7 +55,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the lookup form mode.
         /// </summary>
         /// <value>The lookup form mode.</value>
-        public LookupFormModes LookupFormMode { get; private set; }
+        public LookupFormModes LookupFormMode { get; set; }
 
         /// <summary>
         /// Gets the initial add mode text.

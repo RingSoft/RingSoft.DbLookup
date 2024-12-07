@@ -622,10 +622,6 @@ namespace RingSoft.DbMaintenance
             FiltersManager = new AdvancedFindFiltersManager(this);
 
             //View.SetAlertLevel(AlertLevels.Green, "", true, 0);
-            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
-            {
-                View.SetAddOnFlyFocus();
-            }
             base.Initialize();
 
             SelectLookupRowUiCommand.Visibility = UiVisibilityTypes.Collapsed;

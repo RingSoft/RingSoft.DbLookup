@@ -136,6 +136,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             TreeView.GotFocus += TreeView_GotFocus;
         }
 
+        public override void SetInitialFocus()
+        {
+            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupFormMode == LookupFormModes.View)
+            {
+                SetAddOnFlyFocus();
+                return;
+            }
+
+            base.SetInitialFocus();
+        }
+
         private void TreeView_GotFocus(object sender, RoutedEventArgs e)
         {
             var sendTab = true;

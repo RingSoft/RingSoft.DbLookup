@@ -96,7 +96,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     MaintenanceButtons.Loaded += (o, eventArgs) =>
                     {
-                        FinishInit();
+                        if (!_loaded)
+                        {
+                            FinishInit();
+                        }
                     };
                     return;
                 }

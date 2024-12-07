@@ -23,6 +23,6 @@ namespace RingSoft.DbLookup.App.Library.MegaDb
 
         TableDefinition<StockCostQuantity> StockCostQuantities { get; set; }
 
-        event EventHandler<TableDefinitionValue> GetAutoFillText;
+        TableDefinition<AdvancedFind.AdvancedFind> AdvancedFinds { get; set; }
     }
 }

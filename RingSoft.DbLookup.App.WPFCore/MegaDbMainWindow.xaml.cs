@@ -80,8 +80,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             AdvFindCommand = new RelayCommand((() =>
             {
                 var advancedFindWindow = new AdvancedFindWindow();
-                //Peter Ringering - 11/23/2024 11:24:34 AM - E-71
-                LookupControlsGlobals.WindowRegistry.ShowDialog(advancedFindWindow);
+                TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.AdvancedFinds);
             }));
 
             ExitCommand = new RelayCommand((() =>

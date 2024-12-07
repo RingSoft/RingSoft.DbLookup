@@ -20,7 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docs\README.md" Pack="true" PackagePath="\" />
-    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="9.0.0" />
+    <PackageReference Include="RingSoft.DataEntryControls.Engine" Version="9.1.0" />
     <PackageReference Include="RingSoft.Printing.Interop" Version="8.0.0" />
   </ItemGroup>
 </Project>

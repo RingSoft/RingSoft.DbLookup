@@ -75,7 +75,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             ChangeEntityFrameworkVersion(RegistrySettings.GetEntityFrameworkVersion());
 
             MegaDbWindowRegistry.RegisterUserControl
-                <AdvancedFindUserControl>(SystemGlobals.LookupContext.AdvancedFinds);
+                <AdvancedFindUserControl>(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.AdvancedFinds);
 
             MegaDbWindowRegistry.RegisterUserControl<ItemsUserControl>(
                 RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.Items);

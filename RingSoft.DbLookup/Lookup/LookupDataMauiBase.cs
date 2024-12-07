@@ -275,7 +275,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the selected primary key value.
         /// </summary>
         /// <value>The selected primary key value.</value>
-        public PrimaryKeyValue SelectedPrimaryKeyValue { get; internal set; }
+        public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }
 
         /// <summary>
         /// Gets the primary key value for search text.

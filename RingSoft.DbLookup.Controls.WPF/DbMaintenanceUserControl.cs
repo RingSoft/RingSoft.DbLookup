@@ -92,21 +92,34 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.Processor = Processor;
                 if (LookupAddViewArgs != null) Processor.InitializeFromLookupData(LookupAddViewArgs);
                 ViewModel.InputParameter = AddViewParameter;
-                Processor.Initialize();
-                ViewModel.OnViewLoaded(this);
-                if (_initPrimaryKey != null)
+                if (!MaintenanceButtons.IsLoaded)
                 {
-                    ViewModel.OnRecordSelected(_initPrimaryKey);
-                    _initPrimaryKey = null;
+                    MaintenanceButtons.Loaded += (o, eventArgs) =>
+                    {
+                        FinishInit();
+                    };
+                    return;
                 }
-
-                if (SetStartupFocus)
-                {
-                    SetInitialFocus();
-                }
-
-                _loaded = true;
+                FinishInit();
             };
+        }
+
+        private void FinishInit()
+        {
+            Processor.Initialize();
+            ViewModel.OnViewLoaded(this);
+            if (_initPrimaryKey != null)
+            {
+                ViewModel.OnRecordSelected(_initPrimaryKey);
+                _initPrimaryKey = null;
+            }
+
+            if (SetStartupFocus)
+            {
+                SetInitialFocus();
+            }
+
+            _loaded = true;
         }
 
         public void SelectRecord(PrimaryKeyValue primaryKey)

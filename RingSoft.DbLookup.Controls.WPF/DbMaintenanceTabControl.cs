@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using RingSoft.DataEntryControls.WPF;
@@ -36,6 +37,23 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ucControl.SetInitialFocus();
                 }
             }
+        }
+
+        public void ShowAddView(PrimaryKeyValue primaryKey, object inputParameter = null)
+        {
+            var lookupData = primaryKey.TableDefinition.LookupDefinition
+                .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
+
+            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
+                string.Empty, Window.GetWindow(this))
+            {
+                SelectedPrimaryKeyValue = primaryKey,
+                InputParameter = inputParameter
+            };
+            //args.LookupData.SetNewPrimaryKeyValue(SelectedPrimaryKeyValue);
+            args.LookupData.SelectedPrimaryKeyValue = primaryKey;
+            ShowAddView(args, inputParameter);
+
         }
 
         public DbMaintenanceUserControl ShowTableControl(

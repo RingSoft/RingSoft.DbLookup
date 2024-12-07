@@ -80,7 +80,7 @@ namespace RingSoft.DbLookup.App.WPFCore
             AdvFindCommand = new RelayCommand((() =>
             {
                 var advancedFindWindow = new AdvancedFindWindow();
-                TabControl.ShowTableControl(RsDbLookupAppGlobals.EfProcessor.MegaDbLookupContext.AdvancedFinds);
+                TabControl.ShowTableControl(SystemGlobals.AdvancedFindLookupContext.AdvancedFinds);
             }));
 
             ExitCommand = new RelayCommand((() =>

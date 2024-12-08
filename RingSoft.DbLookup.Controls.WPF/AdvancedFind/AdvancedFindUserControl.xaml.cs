@@ -65,6 +65,22 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 }
             };
 
+            LookupControl.ColumnWidthChanged += (sender, args) =>
+            {
+                if (LocalViewModel.LookupDefinition.VisibleColumns.Contains(args.ColumnDefinition))
+                {
+                    LocalViewModel.ColumnsManager.UpdateColumnWidth(args.ColumnDefinition);
+                }
+            };
+
+            LookupControl.Loaded += (sender, args) =>
+            {
+                if (_refreshAfterLoad)
+                {
+                    GetRecordCount(true);
+                }
+            };
+
             var gotoLookupCommand = new RelayCommand((() =>
             {
                 LookupControl.Focus();

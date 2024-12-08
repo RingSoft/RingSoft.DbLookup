@@ -80,7 +80,8 @@ namespace RingSoft.DbLookup.App.WPFCore
             AdvFindCommand = new RelayCommand((() =>
             {
                 var advancedFindWindow = new AdvancedFindWindow();
-                TabControl.ShowTableControl(SystemGlobals.AdvancedFindLookupContext.AdvancedFinds);
+                LookupControlsGlobals.WindowRegistry.ShowDialog
+                    (SystemGlobals.AdvancedFindLookupContext.AdvancedFinds);
             }));
 
             ExitCommand = new RelayCommand((() =>
@@ -131,11 +132,11 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Header = "_Close All Tabs",
                 Command = CloseAllTabsCommand,
             });
-            MainMenu.Items.Add(new MenuItem()
-            {
-                Header = "_Advanced Find...",
-                Command = AdvFindCommand,
-            });
+            //MainMenu.Items.Add(new MenuItem()
+            //{
+            //    Header = "_Advanced Find...",
+            //    Command = AdvFindCommand,
+            //});
 
             MainMenu.Items.Add(new MenuItem()
             {

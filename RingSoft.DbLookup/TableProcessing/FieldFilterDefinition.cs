@@ -368,7 +368,15 @@ namespace RingSoft.DbLookup.TableProcessing
                     }
                     else
                     {
-                        result += Value;
+                        //Peter Ringering - 12/10/2024 12:44:06 PM - E-62
+                        if (FieldDefinition != null)
+                        {
+                            result += FieldDefinition.GetUserValue(Value);
+                        }
+                        else
+                        {
+                            result += Value;
+                        }
                     }
 
                     break;

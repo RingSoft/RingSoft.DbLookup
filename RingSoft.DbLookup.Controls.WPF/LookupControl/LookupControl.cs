@@ -582,9 +582,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 lookupControl.LookupDefinition.CommandChanged += (sender, args) =>
                 {
-                    lookupControl._commandToExecute = args.NewCommand;
                     lookupControl.Dispatcher.Invoke(() =>
                     {
+                        lookupControl._commandToExecute = args.NewCommand; //Peter Ringering - 12/09/2024 06:03:15 PM - E-82
                         lookupControl.ExecuteCommand();
                     });
                 };

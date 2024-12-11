@@ -297,7 +297,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         TabControl.UpdateLayout();
                         dbMaintenanceTabItem.UpdateLayout();
-                        dbMaintenanceTabItem.UserControl.SetInitialFocus();
+                        //Peter Ringering - 12/11/2024 11:20:23 AM - E-77
+                        e.Handled = true;
+                        //dbMaintenanceTabItem.UserControl.SetInitialFocus();
                     }
 
                 }

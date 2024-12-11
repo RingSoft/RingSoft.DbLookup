@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
@@ -34,6 +35,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         private bool _loaded;
         private PrimaryKeyValue _initPrimaryKey;
         private HotKeyProcessor _hotKeyProcessor;
+        private FrameworkElement _lostFocusElement;
 
         public DbMaintenanceUserControl()
         {
@@ -179,6 +181,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
             Processor.RegisterFormKeyControl(keyAutoFillControl);
             _keyControl = null;
+        }
+
+        public void ResetFocus()
+        {
+
         }
 
         protected void AddHotKey(HotKey hotKey)

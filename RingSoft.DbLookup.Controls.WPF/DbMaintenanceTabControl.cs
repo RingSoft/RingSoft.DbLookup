@@ -12,6 +12,13 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public bool SetDestionationAsFirstTab { get; set; } = true;
 
+        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+        {
+            var item = SelectedItem;
+            base.OnSelectionChanged(e);
+            item = SelectedItem;
+        }
+
         public void ShowAddView(LookupAddViewArgs addViewArgs = null, object inputParameter = null)
         {
             if (LookupControlsGlobals.WindowRegistry.IsTableRegistered(addViewArgs.LookupData.LookupDefinition.TableDefinition))

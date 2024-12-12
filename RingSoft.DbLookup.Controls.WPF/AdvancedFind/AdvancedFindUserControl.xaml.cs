@@ -141,6 +141,30 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             selectLookupRowsHotKey.AddKey(Key.L);
             AddHotKey(selectLookupRowsHotKey);
 
+            var hotKey = new HotKey(LocalViewModel.RefreshNowCommand);
+            hotKey.AddKey(Key.B);
+            hotKey.AddKey(Key.R);
+            AddHotKey(hotKey);
+
+            hotKey = new HotKey(LocalViewModel.AddColumnCommand);
+            hotKey.AddKey(Key.B);
+            hotKey.AddKey(Key.O);
+            AddHotKey(hotKey);
+
+            hotKey = new HotKey(LocalViewModel.AddFilterCommand);
+            hotKey.AddKey(Key.B);
+            hotKey.AddKey(Key.I);
+            AddHotKey(hotKey);
+
+            AddFilterButton.ToolTip.HeaderText = "Add Filter (Ctrl + B, Ctrl + I)";
+            AddFilterButton.ToolTip.DescriptionText = "Add filter to lookup.";
+
+            AddColumnButton.ToolTip.HeaderText = "Add Column (Ctrl + B, Ctrl + O)";
+            AddColumnButton.ToolTip.DescriptionText = "Add column to lookup.";
+
+            RefreshNowButton.ToolTip.HeaderText = "Refresh Now (Ctrl + B, Ctrl + R)";
+            RefreshNowButton.ToolTip.DescriptionText = "Refresh Lookup now.";
+
             LocalViewModel.LookupCreated += (sender, args) =>
             {
                 if (Host.HostType == HostTypes.Tab && LookupControlsGlobals.TabControl != null)

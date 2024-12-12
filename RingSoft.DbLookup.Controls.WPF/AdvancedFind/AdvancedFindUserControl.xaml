@@ -49,7 +49,7 @@
 
                 <lc:ListControl Grid.Row="1" Grid.Column="1" x:Name="TableListControl" HorizontalAlignment="Left" MinWidth="100" Setup="{Binding TableSetup}" DataSource="{Binding TableDataSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataRow="{Binding TableRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UiCommand="{Binding TableUiCommand}" UiLabel="{Binding ElementName=TableLabel}"/>
 
-                <Button Grid.Row="1" Grid.Column="2" Command="{Binding RefreshNowCommand}" Content="_Refresh Now" IsTabStop="False"/>
+                <dec:EnhancedButton Grid.Row="1" Grid.Column="2" x:Name="RefreshNowButton" Command="{Binding RefreshNowCommand}" Content="Refresh Now" IsTabStop="False"/>
 
                 <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
                     <Label Content="(Ctrl + F to set focus)" DockPanel.Dock="Top"/>
@@ -75,9 +75,9 @@
 
                 <StackPanel Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Orientation="Vertical">
 
-                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add C_olumn" Command="{Binding AddColumnCommand}"/>
+                    <dec:EnhancedButton x:Name="AddColumnButton" HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Content="Add Column" Command="{Binding AddColumnCommand}"/>
 
-                    <Button HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add F_ilter" Command="{Binding AddFilterCommand}"/>
+                    <dec:EnhancedButton x:Name="AddFilterButton" HorizontalAlignment="Left" Width="100" Height="50" VerticalAlignment="Center" Margin="0,50,0,0" Content="Add Filter" Command="{Binding AddFilterCommand}"/>
 
                 </StackPanel>
 

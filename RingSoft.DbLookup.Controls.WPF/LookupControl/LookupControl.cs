@@ -1990,7 +1990,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         if (LookupDefinition != null && LookupDefinition.TableDefinition.CanViewTable)
                         {
-                            ListTextBox.Visibility = Visibility.Visible;
+                            //Peter Ringering - 12/13/2024 12:07:33 PM - E-68
+                            if (LookupControlsGlobals.WindowRegistry.IsTableRegistered(LookupDefinition
+                                    .TableDefinition))
+                            {
+                                ListTextBox.Visibility = Visibility.Visible;
+                            }
                         }
                     }
                     var showRecordCountButton = _dataSource.Count == PageSize;

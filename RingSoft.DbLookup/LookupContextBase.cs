@@ -481,8 +481,12 @@ namespace RingSoft.DbLookup
 
             if (e.LookupData.LookupDefinition.Destination != null)
             {
-                e.LookupData.LookupDefinition.Destination.ShowAddView(e, e.InputParameter);
-                return;
+                //Peter Ringering - 12/13/2024 01:19:55 PM - E-68
+                if (SystemGlobals.TableRegistry.IsControlRegistered(e.LookupData.LookupDefinition.TableDefinition))
+                {
+                    e.LookupData.LookupDefinition.Destination.ShowAddView(e, e.InputParameter);
+                    return;
+                }
             }
             if (e.OwnerWindow == null)
             {

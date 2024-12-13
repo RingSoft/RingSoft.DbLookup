@@ -173,6 +173,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             return true;
         }
 
+        //Peter Ringering - 12/13/2024 01:19:55 PM - E-68
+        public override bool IsControlRegistered(TableDefinitionBase tableDefinition)
+        {
+            if (GetDbUserControl(tableDefinition) != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Shows the add onthe fly window.
         /// </summary>

@@ -44,6 +44,8 @@ namespace RingSoft.DbLookup
         /// <returns><c>true</c> if [is table registered] [the specified table definition]; otherwise, <c>false</c>.</returns>
         public abstract bool IsTableRegistered(TableDefinitionBase tableDefinition);
 
+        public abstract bool IsControlRegistered(TableDefinitionBase tableDefinition);
+
         /// <summary>
         /// Shows the add onthe fly window.
         /// </summary>

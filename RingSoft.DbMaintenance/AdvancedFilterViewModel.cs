@@ -1305,7 +1305,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="result">The result.</param>
         private void GetAutoFillValueResult(AdvancedFilterReturn result)
         {
-            if (SearchValueAutoFillValue != null)
+            if (SearchValueAutoFillValue.IsValid())
             {
                 switch (Condition)
                 {

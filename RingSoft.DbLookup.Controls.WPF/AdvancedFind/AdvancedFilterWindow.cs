@@ -431,25 +431,30 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// </summary>
         private void SearchValueFailFocus()
         {
-            if (SearchForStringControl.Visibility == Visibility.Visible)
-            {
-                SearchForStringControl.Focus();
-            }
+            //if (SearchForStringControl.Visibility == Visibility.Visible)
+            //{
+            //    SearchForStringControl.Focus();
+            //}
 
             if (SearchForAutoFillControl.Visibility == Visibility.Visible)
             {
                 SearchForAutoFillControl.Focus();
             }
 
-            if (SearchForDecimalControl.Visibility == Visibility.Visible)
+            if (SearchValueHost != null && SearchValueHost.Control.Visibility == Visibility.Visible)
             {
-                SearchForDecimalControl.Focus();
+                SearchValueHost.Control.Focus();
             }
 
-            if (SearchForIntegerControl.Visibility == Visibility.Visible)
-            {
-                SearchForIntegerControl.Focus();
-            }
+            //if (SearchForDecimalControl.Visibility == Visibility.Visible)
+            //{
+            //    SearchForDecimalControl.Focus();
+            //}
+
+            //if (SearchForIntegerControl.Visibility == Visibility.Visible)
+            //{
+            //    SearchForIntegerControl.Focus();
+            //}
 
             if (DatePanel.Visibility == Visibility.Visible)
             {
@@ -520,17 +525,17 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             }
             else
             {
-                if (ViewModel.FieldDefinition is IntegerFieldDefinition integerField)
-                {
-                    if (integerField.EnumTranslation != null)
-                    {
-                        if (CheckCondition())
-                        {
-                            SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
-                            return;
-                        }
-                    }
-                }
+                //if (ViewModel.FieldDefinition is IntegerFieldDefinition integerField)
+                //{
+                //    if (integerField.EnumTranslation != null)
+                //    {
+                //        if (CheckCondition())
+                //        {
+                //            SearchForBoolComboBoxControl.Visibility = Visibility.Visible;
+                //            return;
+                //        }
+                //    }
+                //}
                 ShowSearchValue(ViewModel.FieldDefinition.FieldDataType);
             }
         }
@@ -555,7 +560,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             switch (dataType)
             {
-                case FieldDataTypes.Bool:
+                //case FieldDataTypes.Bool:
                 case FieldDataTypes.DateTime:
                     break;
                 default:
@@ -568,31 +573,31 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                         SearchForValuePanel.Children.Add(SearchValueHost.Control);
                         SearchForValuePanel.UpdateLayout();
                     }
-                    break;
+                    return;
             }
 
             switch (dataType)
             {
-                case FieldDataTypes.String:
-                    if (CheckCondition())
-                    {
-                        SearchForStringControl.Visibility = Visibility.Visible;
-                    }
+                //case FieldDataTypes.String:
+                //    if (CheckCondition())
+                //    {
+                //        SearchForStringControl.Visibility = Visibility.Visible;
+                //    }
 
-                    break;
-                case FieldDataTypes.Integer:
-                    if (CheckCondition())
-                    {
-                        SearchForIntegerControl.Visibility = Visibility.Visible;
-                    }
-                    break;
-                case FieldDataTypes.Decimal:
-                    if (CheckCondition())
-                    {
-                        SearchForDecimalControl.Visibility = Visibility.Visible;
-                    }
+                //    break;
+                //case FieldDataTypes.Integer:
+                //    if (CheckCondition())
+                //    {
+                //        SearchForIntegerControl.Visibility = Visibility.Visible;
+                //    }
+                //    break;
+                //case FieldDataTypes.Decimal:
+                //    if (CheckCondition())
+                //    {
+                //        SearchForDecimalControl.Visibility = Visibility.Visible;
+                //    }
 
-                    break;
+                //    break;
                 case FieldDataTypes.DateTime:
                     var dateField = ViewModel.FieldDefinition as DateFieldDefinition;
                     if (CheckCondition())
@@ -646,6 +651,14 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         public bool SearchForHostExists()
         {
             return SearchForValuePanel.Visibility == Visibility.Visible && SearchValueHost != null;
+        }
+
+        public void SetSearchForValue(string value)
+        {
+            if (SearchValueHost != null)
+            {
+                SearchValueHost.SetValue(value);
+            }
         }
     }
 }

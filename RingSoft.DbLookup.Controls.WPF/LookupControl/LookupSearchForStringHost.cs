@@ -71,5 +71,10 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             Control.SelectAll();
         }
+
+        public override void SetValue(string value)
+        {
+            Control.Text = value;
+        }
     }
 }

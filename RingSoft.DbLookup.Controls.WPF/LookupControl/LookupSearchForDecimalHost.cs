@@ -105,6 +105,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public override void SetValue(string value)
+        {
+            Control.Value = value.ToDecimal();
+        }
+
         /// <summary>
         /// Initializes the specified control.
         /// </summary>

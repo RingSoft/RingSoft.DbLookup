@@ -52,6 +52,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
+        public override void SetValue(string value)
+        {
+            Control.Value = value.ToInt();
+        }
+
         /// <summary>
         /// Gets or sets the default width.
         /// </summary>

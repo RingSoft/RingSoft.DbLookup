@@ -67,6 +67,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        public override void SetValue(string value)
+        {
+            var valueInt = value.ToInt();
+            var item = Setup.Items.FirstOrDefault(
+                p => p.NumericValue == valueInt);
+
+            Control.SelectedItem = item;
+        }
+
         /// <summary>
         /// Constructs the control.
         /// </summary>
@@ -101,7 +110,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 OnTextChanged();
             };
-            control.Setup = Setup;
+            //control.Setup = Setup;
             control.HorizontalAlignment = HorizontalAlignment.Left;
             control.Width = DefaultWidth;
         }
@@ -121,6 +130,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 Setup.LoadFromEnum(boolFieldDefinition.EnumField);
             }
+            Control.Setup = Setup;
         }
 
         /// <summary>

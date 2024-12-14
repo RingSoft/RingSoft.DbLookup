@@ -371,7 +371,7 @@ namespace RingSoft.DbLookup.TableProcessing
                         //Peter Ringering - 12/10/2024 12:44:06 PM - E-62
                         if (FieldDefinition != null)
                         {
-                            result += FieldDefinition.GetUserValue(Value);
+                            result += FieldDefinition.GetUserValue(Value, true);
                         }
                         else
                         {

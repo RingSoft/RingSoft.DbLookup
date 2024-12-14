@@ -14,6 +14,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.QueryBuilder;
@@ -387,7 +388,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </summary>
         /// <param name="dbIdValue">The database identifier value.</param>
         /// <returns>System.String.</returns>
-        public virtual string GetUserValue(string dbIdValue)
+        public virtual string GetUserValue(string dbIdValue, bool dbIdValueIsText = false)
         {
             var result = string.Empty;
 
@@ -406,7 +407,10 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
             else if (ParentJoinForeignKeyDefinition != null)
             {
-
+                if (dbIdValueIsText)
+                {
+                    return dbIdValue;
+                }
 
                 var requestResult = TableDefinition.Context
                     .OnAutoFillTextRequest(ParentJoinForeignKeyDefinition.PrimaryTable, dbIdValue);
@@ -428,7 +432,26 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             }
             else
             {
-                result = FormatValue(dbIdValue);
+                if (SearchForHostId != null)
+                {
+                    var formattedVaue =
+                        TableDefinition.Context.FormatValueForSearchHost(
+                            SearchForHostId.GetValueOrDefault(), dbIdValue, this);
+
+                    if (formattedVaue.IsNullOrEmpty())
+                    {
+                        result = FormatValue(dbIdValue);
+                    }
+                    else
+                    {
+                        result = formattedVaue;
+                    }
+                }
+
+                if (result.IsNullOrEmpty())
+                {
+                    result = FormatValue(dbIdValue);
+                }
             }
 
             return result;

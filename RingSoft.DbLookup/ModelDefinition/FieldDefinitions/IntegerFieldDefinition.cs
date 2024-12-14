@@ -188,7 +188,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </summary>
         /// <param name="dbIdValue">The database identifier value.</param>
         /// <returns>System.String.</returns>
-        public override string GetUserValue(string dbIdValue)
+        public override string GetUserValue(string dbIdValue, bool dbIdValueIsText = false)
         {
             if (ParentJoinForeignKeyDefinition == null && EnumTranslation != null)
             {
@@ -201,7 +201,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             {
                 return dbIdValue;
             }
-            return base.GetUserValue(dbIdValue);
+            return base.GetUserValue(dbIdValue, dbIdValueIsText);
         }
 
         /// <summary>

@@ -80,7 +80,7 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// </summary>
         /// <param name="dbIdValue">The database identifier value.</param>
         /// <returns>System.String.</returns>
-        public override string GetUserValue(string dbIdValue)
+        public override string GetUserValue(string dbIdValue, bool dbIdValueIsText = false)
         {
             var boolValue = dbIdValue.ToBool();
             if (boolValue)

@@ -82,6 +82,8 @@ namespace RingSoft.DbMaintenance
         string GetSearchForValue();
 
         bool SearchForHostExists();
+
+        void SetSearchForValue(string value);
     }
     /// <summary>
     /// Class AdvancedFilterViewModel.
@@ -778,47 +780,54 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-
-            switch (fieldDataType)
+            if (View.SearchForHostExists())
             {
-                case FieldDataTypes.String:
-                case FieldDataTypes.Memo:
-                    StringSearchValue = FilterReturn.SearchValue;
-                    break;
-                case FieldDataTypes.Integer:
-                    var integerField = FieldDefinition as IntegerFieldDefinition;
-                    if (integerField != null)
-                    {
-                        if (integerField.EnumTranslation != null)
+                View.SetSearchForValue(FilterReturn.SearchValue);
+            }
+            else
+            {
+                switch (fieldDataType)
+                {
+                    case FieldDataTypes.String:
+                    case FieldDataTypes.Memo:
+                        StringSearchValue = FilterReturn.SearchValue;
+                        break;
+                    case FieldDataTypes.Integer:
+                        var integerField = FieldDefinition as IntegerFieldDefinition;
+                        if (integerField != null)
                         {
-                            var setup = new TextComboBoxControlSetup();
-                            setup.LoadFromEnum(integerField.EnumTranslation);
-                            ValueComboBoxItem = null;
-                            ValueComboBoxSetup = setup;
-                            ValueComboBoxItem = ValueComboBoxSetup.GetItem(FilterReturn.SearchValue.ToInt());
+                            if (integerField.EnumTranslation != null)
+                            {
+                                var setup = new TextComboBoxControlSetup();
+                                setup.LoadFromEnum(integerField.EnumTranslation);
+                                ValueComboBoxItem = null;
+                                ValueComboBoxSetup = setup;
+                                ValueComboBoxItem = ValueComboBoxSetup.GetItem(FilterReturn.SearchValue.ToInt());
+                            }
+                            else
+                            {
+                                IntegerSearchValue = FilterReturn.SearchValue.ToInt();
+                            }
                         }
                         else
                         {
                             IntegerSearchValue = FilterReturn.SearchValue.ToInt();
                         }
-                    }
-                    else
-                    {
-                            IntegerSearchValue = FilterReturn.SearchValue.ToInt();
-                    }
-                    break;
-                case FieldDataTypes.Decimal:
-                    DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
-                    break;
-                case FieldDataTypes.DateTime:
-                    ProcessDateReturn();
 
-                    break;
-                case FieldDataTypes.Bool:
-                    TrueFalseValue = FilterReturn.SearchValue.ToBool();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                        break;
+                    case FieldDataTypes.Decimal:
+                        DecimalSearchValueDecimal = FilterReturn.SearchValue.ToDecimal();
+                        break;
+                    case FieldDataTypes.DateTime:
+                        ProcessDateReturn();
+
+                        break;
+                    case FieldDataTypes.Bool:
+                        TrueFalseValue = FilterReturn.SearchValue.ToBool();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -962,7 +971,6 @@ namespace RingSoft.DbMaintenance
                 _enumFieldComboBoxControlSetup.Items.FirstOrDefault(p =>
                     p.NumericValue == (int)Conditions.EndsWith));
 
-
             _numericFieldComboBoxControlSetup.LoadFromEnum<Conditions>();
 
             _numericFieldComboBoxControlSetup.Items.Remove(
@@ -1023,7 +1031,7 @@ namespace RingSoft.DbMaintenance
                             .ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition);
                         ParentFieldDefinition =
                             FieldDefinition.ParentJoinForeignKeyDefinition.FieldJoins[0].PrimaryField;
-
+                        ConditionComboBoxSetup = _enumFieldComboBoxControlSetup;
                     }
                     switch (FieldDefinition.FieldDataType)
                     {
@@ -1043,7 +1051,7 @@ namespace RingSoft.DbMaintenance
                         case FieldDataTypes.Integer:
                             if (FieldDefinition.ParentJoinForeignKeyDefinition != null)
                             {
-                                ConditionComboBoxSetup = _stringFieldComboBoxControlSetup;
+                                ConditionComboBoxSetup = _enumFieldComboBoxControlSetup;
                             }
                             else
                             {
@@ -1063,7 +1071,6 @@ namespace RingSoft.DbMaintenance
                                     setup.LoadFromEnum(integerField.EnumTranslation);
                                     ValueComboBoxItem = null;
                                     ValueComboBoxSetup = setup;
-                                    ConditionComboBoxSetup = _enumFieldComboBoxControlSetup;
                                 }
                             }
                             break;
@@ -1094,7 +1101,7 @@ namespace RingSoft.DbMaintenance
                             ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
                             break;
                         case FieldDataTypes.Bool:
-                            ConditionComboBoxSetup = _numericFieldComboBoxControlSetup;
+                            ConditionComboBoxSetup = _enumFieldComboBoxControlSetup;
                             if (FieldDefinition is BoolFieldDefinition boolField)
                             {
                                 var setup = new TextComboBoxControlSetup();
@@ -1307,35 +1314,26 @@ namespace RingSoft.DbMaintenance
                         if (!SearchValueAutoFillValue.IsValid())
                         {
                             var tableDefinition = SearchValueAutoFillValue.PrimaryKeyValue.TableDefinition;
-                            var query = new SelectQuery(tableDefinition.TableName);
+                            var query = LookupDefinition.GetSelectQueryMaui();
                             foreach (var primaryKeyField in tableDefinition.PrimaryKeyFields)
                             {
-                                query.AddSelectColumn(primaryKeyField.FieldName);
+                                query.AddColumn(primaryKeyField);
                             }
 
                             if (tableDefinition.LookupDefinition.InitialSortColumnDefinition is
                                 LookupFieldColumnDefinition lookupFieldColumn)
                             {
-                                query.AddWhereItem(lookupFieldColumn.FieldDefinition.FieldName, Conditions.Equals,
-                                    SearchValueAutoFillValue.Text);
-                            }
-                            else  if (tableDefinition.LookupDefinition.InitialSortColumnDefinition is
-                                LookupFormulaColumnDefinition lookupFormulaColumn)
-                            {
-                                var formula =
-                                    lookupFormulaColumn.OriginalFormula.Replace("{Alias}", tableDefinition.TableName);
-                                query.AddWhereItemFormula(formula, Conditions.Equals,
-                                    SearchValueAutoFillValue.Text);
+                                query.AddFilter(lookupFieldColumn, Conditions.Equals, SearchValueAutoFillValue.Text);
+
                             }
 
-                            var queryResult = tableDefinition.Context.DataProcessor.GetData(query);
-                            if (queryResult.ResultCode == GetDataResultCodes.Success)
+                            var queryResult = query.GetData();
+                            if (queryResult)
                             {
-                                if (queryResult.DataSet.Tables[0].Rows.Count > 0)
-                                {
-                                    SearchValueAutoFillValue.PrimaryKeyValue.PopulateFromDataRow(queryResult.DataSet
-                                        .Tables[0].Rows[0]);
-                                }
+                                SearchValueAutoFillValue
+                                    .PrimaryKeyValue
+                                    .LoadFromIdValue(query.GetPropertyValue
+                                        (0, tableDefinition.PrimaryKeyFields[0].PropertyName));
                             }
                         }
                         result.SearchValue = SearchValueAutoFillValue.PrimaryKeyValue.KeyValueFields[0].Value;

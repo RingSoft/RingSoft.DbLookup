@@ -32,7 +32,6 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -118,9 +117,9 @@
                                                          Setup="{Binding ValueComboBoxSetup}"
                                                          SelectedItem="{Binding ValueComboBoxItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                                <StackPanel Grid.Row="7" Grid.Column="1" x:Name="SearchForValuePanel"/>
+                                <StackPanel Grid.Row="6" Grid.Column="1" x:Name="SearchForValuePanel"/>
 
-                                <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal"
+                                <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal"
                                             HorizontalAlignment="Right">
 
                                     <Button x:Name="OKButton" Content="_OK" Width="100" IsDefault="True" />

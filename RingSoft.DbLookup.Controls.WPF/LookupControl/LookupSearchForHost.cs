@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.CodeDom;
 using System.Windows.Controls;
 using System.Windows.Input;
 using RingSoft.DbLookup.Lookup;
@@ -187,5 +188,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             return true;
         }
+
+        public abstract void SetValue(string value);
     }
 }

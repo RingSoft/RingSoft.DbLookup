@@ -299,6 +299,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");
 
             LookupDefinition = lookupDefinition;
+            var tableRegistered = LookupControlsGlobals.WindowRegistry
+                .IsTableRegistered(LookupDefinition.TableDefinition);
+            if (allowAdd)
+            {
+                allowAdd = tableRegistered;
+            }
+
+            if (allowView)
+            {
+                allowView = tableRegistered;
+            }
+
             _allowView = allowView;
             _initialSearchFor = initialSearchFor;
 

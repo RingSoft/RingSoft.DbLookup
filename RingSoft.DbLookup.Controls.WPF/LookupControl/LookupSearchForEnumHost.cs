@@ -21,6 +21,7 @@ using System.Windows;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using System.Windows.Controls;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -83,13 +84,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         protected override void Initialize(TextComboBoxControl control, LookupColumnDefinitionBase columnDefinition)
         {
             Setup = new TextComboBoxControlSetup();
-            if (columnDefinition is LookupFieldColumnDefinition fieldColumn)
-            {
-                if (fieldColumn.FieldDefinition is IntegerFieldDefinition integerField)
-                {
-                    Setup.LoadFromEnum(integerField.EnumTranslation);
-                }
-            }
+            //    if (columnDefinition is LookupFieldColumnDefinition fieldColumn)
+            //    {
+            //        if (fieldColumn.FieldDefinition is IntegerFieldDefinition integerField)
+            //        {
+            //            Setup.LoadFromEnum(integerField.EnumTranslation);
+            //        }
+
+            //        if (fieldColumn.FieldDefinition is BoolFieldDefinition boolFieldDefinition)
+            //        {
+            //            Setup.LoadFromEnum(boolFieldDefinition.EnumField);
+            //        }
+            //    }
 
             control.SelectionChanged += (sender, args) =>
             {
@@ -98,6 +104,23 @@ namespace RingSoft.DbLookup.Controls.WPF
             control.Setup = Setup;
             control.HorizontalAlignment = HorizontalAlignment.Left;
             control.Width = DefaultWidth;
+        }
+
+        internal override void Initialize(FieldDefinition fieldDefinition)
+        {
+            if (Setup == null)
+            {
+                Setup = new TextComboBoxControlSetup();
+            }
+            if (fieldDefinition is IntegerFieldDefinition integerField)
+            {
+                Setup.LoadFromEnum(integerField.EnumTranslation);
+            }
+
+            if (fieldDefinition is BoolFieldDefinition boolFieldDefinition)
+            {
+                Setup.LoadFromEnum(boolFieldDefinition.EnumField);
+            }
         }
 
         /// <summary>

@@ -76,6 +76,13 @@ namespace RingSoft.DbMaintenance
         /// <value>The control.</value>
         public ValidationFailControls Control { get; set; }
     }
+
+    public interface IAdvFilterView
+    {
+        string GetSearchForValue();
+
+        bool SearchForHostExists();
+    }
     /// <summary>
     /// Class AdvancedFilterViewModel.
     /// Implements the <see cref="INotifyPropertyChanged" />
@@ -638,6 +645,8 @@ namespace RingSoft.DbMaintenance
         /// <value>The path.</value>
         public string Path { get; set; }
 
+        public IAdvFilterView View { get; private set; }
+
         /// <summary>
         /// Occurs when [on validation fail].
         /// </summary>
@@ -670,8 +679,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="filterReturn">The filter return.</param>
         /// <param name="lookupDefinition">The lookup definition.</param>
-        public void Initialize(AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
+        public void Initialize(IAdvFilterView view, AdvancedFilterReturn filterReturn, LookupDefinitionBase lookupDefinition)
         {
+            View = view;
             Path = filterReturn.Path;
             FilterReturn = filterReturn;
             FieldDefinition = filterReturn.FieldDefinition;
@@ -863,8 +873,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         /// <param name="treeViewItem">The tree view item.</param>
         /// <param name="lookupDefinition">The lookup definition.</param>
-        public void Initialize(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
+        public void Initialize(IAdvFilterView view, TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)
         {
+            View = view;
             Path = treeViewItem.MakePath();
             Type = treeViewItem.Type;
             FieldDefinition = treeViewItem.FieldDefinition;
@@ -1222,6 +1233,11 @@ namespace RingSoft.DbMaintenance
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private void GetSearchValue(FieldDataTypes fieldDataType, AdvancedFilterReturn result)
         {
+            if (View.SearchForHostExists())
+            {
+                result.SearchValue = View.GetSearchForValue();
+                return;
+            }
             switch (fieldDataType)
             {
                 case FieldDataTypes.String:

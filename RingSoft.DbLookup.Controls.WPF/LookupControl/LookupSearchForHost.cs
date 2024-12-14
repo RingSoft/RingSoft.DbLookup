@@ -15,6 +15,7 @@ using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -49,8 +50,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             Control = ConstructControl();
             base.Control = Control;
 
-            base.InternalInitialize(columnDefinition);
             Initialize(Control, columnDefinition);
+            base.InternalInitialize(columnDefinition);
             Initialize(Control);
         }
 
@@ -78,6 +79,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="control">The control.</param>
         protected abstract void Initialize(TControl control);
     }
+
     /// <summary>
     /// Hosts a control to display as the Search For control base class.
     /// Implements the <see cref="RingSoft.DbLookup.Controls.WPF.LookupSearchForHost" />
@@ -107,6 +109,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// Occurs when [preview key down].
         /// </summary>
         public event EventHandler<KeyEventArgs> PreviewKeyDown;
+
         /// <summary>
         /// Occurs when [text changed].
         /// </summary>
@@ -127,9 +130,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             Control.PreviewKeyDown += (sender, args) => OnPreviewKeyDown(args);
             LookupColumn = columnDefinition;
+            if (columnDefinition is LookupFieldColumnDefinition fieldColumn)
+            {
+                Initialize(fieldColumn.FieldDefinition);
+            }
         }
 
-        /// <summary>
+        internal virtual void Initialize(FieldDefinition fieldDefinition)
+        {
+
+        }
+
+    /// <summary>
         /// Internals the initialize.
         /// </summary>
         internal virtual void InternalInitialize()

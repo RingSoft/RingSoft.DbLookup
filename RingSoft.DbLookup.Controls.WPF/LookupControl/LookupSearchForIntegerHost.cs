@@ -39,6 +39,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             set => Control.Value = value.ToInt(Control.Culture);
         }
 
+        internal override void Initialize(FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition is IntegerFieldDefinition integerFieldDefinition)
+            {
+                Control.CultureId = integerFieldDefinition.Culture.Name;
+                Control.NumberFormatString = integerFieldDefinition.NumberFormatString;
+                if (integerFieldDefinition.TableDefinition.PrimaryKeyFields.Contains(integerFieldDefinition)
+                )
+                    Control.DataEntryMode = DataEntryModes.ValidateOnly;
+            }
+
+        }
+
         /// <summary>
         /// Gets or sets the default width.
         /// </summary>
@@ -65,17 +78,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
-                    if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
-                    {
-                        if (fieldColumnDefinition.FieldDefinition is IntegerFieldDefinition integerFieldDefinition)
-                        {
-                            control.CultureId = integerFieldDefinition.Culture.Name;
-                            control.NumberFormatString = integerFieldDefinition.NumberFormatString;
-                            if (integerFieldDefinition.TableDefinition.PrimaryKeyFields.Contains(integerFieldDefinition)
-                            )
-                                control.DataEntryMode = DataEntryModes.ValidateOnly;
-                        }
-                    }
+                    //if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
+                    //{
+                    //    if (fieldColumnDefinition.FieldDefinition is IntegerFieldDefinition integerFieldDefinition)
+                    //    {
+                    //        control.CultureId = integerFieldDefinition.Culture.Name;
+                    //        control.NumberFormatString = integerFieldDefinition.NumberFormatString;
+                    //        if (integerFieldDefinition.TableDefinition.PrimaryKeyFields.Contains(integerFieldDefinition)
+                    //        )
+                    //            control.DataEntryMode = DataEntryModes.ValidateOnly;
+                    //    }
+                    //}
                     break;
                 case LookupColumnTypes.Formula:
                     if (columnDefinition is LookupFormulaColumnDefinition formulaColumnDefinition)

@@ -41,7 +41,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
     /// </summary>
     /// <seealso cref="BaseWindow" />
     /// <font color="red">Badly formed XML comment.</font>
-    public class AdvancedFilterWindow : BaseWindow
+    public class AdvancedFilterWindow : BaseWindow, IAdvFilterView
     {
         /// <summary>
         /// Gets or sets the TreeView item.
@@ -167,6 +167,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         /// </summary>
         /// <value>The search for bool ComboBox control.</value>
         public TextComboBoxControl SearchForBoolComboBoxControl { get; set; }
+
+        public StackPanel SearchForValuePanel { get; set; }
+
+        public LookupSearchForHost SearchValueHost { get; set; }
+
         /// <summary>
         /// Gets or sets the ok button.
         /// </summary>
@@ -260,6 +265,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             DatePanel = GetTemplateChild(nameof(DatePanel)) as StackPanel;
             DateFilterTypeComboBoxControl = GetTemplateChild(nameof(DateFilterTypeComboBoxControl)) as TextComboBoxControl;
             DateValueControl = GetTemplateChild(nameof(DateValueControl)) as IntegerEditControl;
+            SearchForValuePanel = GetTemplateChild(nameof(SearchForValuePanel)) as StackPanel;
 
             OKButton = GetTemplateChild(nameof(OKButton)) as Button;
 
@@ -271,11 +277,11 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
 
             if (_formAdd)
             {
-                ViewModel.Initialize(TreeViewItem, LookupDefinition);
+                ViewModel.Initialize(this, TreeViewItem, LookupDefinition);
             }
             else
             {
-                ViewModel.Initialize(InputFilterReturn, LookupDefinition);
+                ViewModel.Initialize(this, InputFilterReturn, LookupDefinition);
             }
 
             HideSearchValues();
@@ -539,11 +545,32 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             if (CheckCondition())
             {
                 SearchForLabel.Visibility = Visibility.Visible;
+                SearchForValuePanel.Visibility = Visibility.Visible;
             }
             else
             {
                 SearchForLabel.Visibility = Visibility.Collapsed;
+                SearchForValuePanel.Visibility = Visibility.Collapsed;
             }
+
+            switch (dataType)
+            {
+                case FieldDataTypes.Bool:
+                case FieldDataTypes.DateTime:
+                    break;
+                default:
+                    if (SearchValueHost == null && CheckCondition())
+                    {
+                        SearchValueHost = LookupControlsGlobals
+                            .LookupControlSearchForFactory
+                            .CreateSearchForHost(ViewModel.FieldDefinition);
+
+                        SearchForValuePanel.Children.Add(SearchValueHost.Control);
+                        SearchForValuePanel.UpdateLayout();
+                    }
+                    break;
+            }
+
             switch (dataType)
             {
                 case FieldDataTypes.String:
@@ -604,6 +631,21 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public string GetSearchForValue()
+        {
+            if (SearchValueHost != null && SearchForValuePanel.Visibility == Visibility.Visible)
+            {
+                return SearchValueHost.SearchText;
+            }
+
+            return string.Empty;
+        }
+
+        public bool SearchForHostExists()
+        {
+            return SearchForValuePanel.Visibility == Visibility.Visible && SearchValueHost != null;
         }
     }
 }

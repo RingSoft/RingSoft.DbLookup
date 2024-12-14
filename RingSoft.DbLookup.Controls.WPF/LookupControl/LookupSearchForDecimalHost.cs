@@ -65,17 +65,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
-                    if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
-                    {
-                        if (fieldColumnDefinition.FieldDefinition is DecimalFieldDefinition decimalFieldDefinition)
-                        {
-                            control.CultureId = decimalFieldDefinition.Culture.Name;
-                            control.FormatType = decimalFieldDefinition.DecimalFieldType
-                                .ConvertDecimalFieldTypeToDecimalEditFormatType();
-                            control.Precision = decimalFieldDefinition.DecimalCount;
-                            control.NumberFormatString = decimalFieldDefinition.NumberFormatString;
-                        }
-                    }
+                    //if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
+                    //{
+                    //    if (fieldColumnDefinition.FieldDefinition is DecimalFieldDefinition decimalFieldDefinition)
+                    //    {
+                    //        control.CultureId = decimalFieldDefinition.Culture.Name;
+                    //        control.FormatType = decimalFieldDefinition.DecimalFieldType
+                    //            .ConvertDecimalFieldTypeToDecimalEditFormatType();
+                    //        control.Precision = decimalFieldDefinition.DecimalCount;
+                    //        control.NumberFormatString = decimalFieldDefinition.NumberFormatString;
+                    //    }
+                    //}
                     break;
                 case LookupColumnTypes.Formula:
                     if (columnDefinition is LookupFormulaColumnDefinition formulaColumnDefinition)
@@ -91,6 +91,18 @@ namespace RingSoft.DbLookup.Controls.WPF
                     throw new ArgumentOutOfRangeException();
             }
 
+        }
+
+        internal override void Initialize(FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition is DecimalFieldDefinition decimalFieldDefinition)
+            {
+                Control.CultureId = decimalFieldDefinition.Culture.Name;
+                Control.FormatType = decimalFieldDefinition.DecimalFieldType
+                    .ConvertDecimalFieldTypeToDecimalEditFormatType();
+                Control.Precision = decimalFieldDefinition.DecimalCount;
+                Control.NumberFormatString = decimalFieldDefinition.NumberFormatString;
+            }
         }
 
         /// <summary>

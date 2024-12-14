@@ -13,6 +13,7 @@
 // ***********************************************************************
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.Lookup;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF

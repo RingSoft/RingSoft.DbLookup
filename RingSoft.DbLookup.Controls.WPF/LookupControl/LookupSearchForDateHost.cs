@@ -103,16 +103,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (columnDefinition.ColumnType)
             {
                 case LookupColumnTypes.Field:
-                    if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
-                    {
-                        if (fieldColumnDefinition.FieldDefinition is DateFieldDefinition dateFieldDefinition)
-                        {
-                            Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
-                            Control.CultureId = dateFieldDefinition.Culture.Name;
-                            Control.DisplayFormat = dateFieldDefinition.DateFormatString;
-                            ConvertToLocalTime = dateFieldDefinition.ConvertToLocalTime;
-                        }
-                    }
+                    //if (columnDefinition is LookupFieldColumnDefinition fieldColumnDefinition)
+                    //{
+                    //    if (fieldColumnDefinition.FieldDefinition is DateFieldDefinition dateFieldDefinition)
+                    //    {
+                    //        Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
+                    //        Control.CultureId = dateFieldDefinition.Culture.Name;
+                    //        Control.DisplayFormat = dateFieldDefinition.DateFormatString;
+                    //        ConvertToLocalTime = dateFieldDefinition.ConvertToLocalTime;
+                    //    }
+                    //}
                     break;
                 case LookupColumnTypes.Formula:
                     if (columnDefinition is LookupFormulaColumnDefinition formulaColumnDefinition)
@@ -129,6 +129,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
         }
+
+        internal override void Initialize(FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition is DateFieldDefinition dateFieldDefinition)
+            {
+                Control.DateFormatType = dateFieldDefinition.DateType.ConvertDbDateTypeToDateFormatType();
+                Control.CultureId = dateFieldDefinition.Culture.Name;
+                Control.DisplayFormat = dateFieldDefinition.DateFormatString;
+                ConvertToLocalTime = dateFieldDefinition.ConvertToLocalTime;
+            }
+
+        }
+
+
 
         /// <summary>
         /// Initializes the specified control.

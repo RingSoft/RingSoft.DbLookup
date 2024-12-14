@@ -768,6 +768,11 @@ namespace RingSoft.DbLookup.Lookup
                 var ascending = false;
                 lastFilter.Condition = Conditions.LessThan;
 
+                if (lastFilter.FieldDefinition.FieldDataType == FieldDataTypes.Bool)
+                {
+                    lastFilter.Condition = Conditions.Equals;
+                }
+
                 var doQuery = true;
                 IQueryable<TEntity> query = null;
                 if (recordCount == 1 && lastFilter.IsNullFilter())
@@ -922,7 +927,14 @@ namespace RingSoft.DbLookup.Lookup
                 {
                     lastFilter.Condition = Conditions.NotEqualsNull;
                 }
-
+                else
+                {
+                    if (lastFilter.FieldDefinition.FieldDataType == FieldDataTypes.Bool)
+                    {
+                        lastFilter.Condition = Conditions.Equals;
+                    }
+                }
+                
                 var doQuery = true;
                 IQueryable<TEntity> query = null;
 
@@ -1256,6 +1268,15 @@ namespace RingSoft.DbLookup.Lookup
                 if (_orderByType == OrderByTypes.Descending)
                 {
                     condition = Conditions.LessThanEquals;
+                }
+
+                if (type == typeof(bool))
+                {
+                    condition = Conditions.Equals;
+                    if (value is int intValue)
+                    {
+                        value = intValue.ToString().ToBool();
+                    }
                 }
                 if (type == typeof(string))
                 {

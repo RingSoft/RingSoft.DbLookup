@@ -12,9 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Reflection.Metadata;
 using System.Windows.Controls;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using FieldDefinition = RingSoft.DbLookup.ModelDefinition.FieldDefinitions.FieldDefinition;
 
 // ReSharper disable once CheckNamespace
 namespace RingSoft.DbLookup.Controls.WPF
@@ -56,16 +58,48 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (hostId == null)
             {
                 hostId = ConvertFieldDataTypeToSearchForHostId(columnDefinition.DataType);
-                if (columnDefinition is LookupFieldColumnDefinition lookupFieldColumn
-                    && lookupFieldColumn.FieldDefinition is IntegerFieldDefinition integerFieldDefinition
-                    && integerFieldDefinition.EnumTranslation != null)
-                    hostId = GblMethods.SearchForEnumHostId;
+                if (columnDefinition is LookupFieldColumnDefinition lookupFieldColumn)
+                {
+                    hostId = GetStandardHost(lookupFieldColumn.FieldDefinition, hostId);
+                }
             }
 
             var searchForHost = CreateSearchForHost(hostId);
             searchForHost.InternalInitialize(columnDefinition);
 
             return searchForHost;
+        }
+
+        internal LookupSearchForHost CreateSearchForHost(FieldDefinition fieldDefinition)
+        {
+            var hostId = fieldDefinition.SearchForHostId;
+            
+            if (hostId == null)
+            {
+                hostId = ConvertFieldDataTypeToSearchForHostId(fieldDefinition.FieldDataType);
+                hostId = GetStandardHost(fieldDefinition, hostId);
+            }
+            var searchForHost = CreateSearchForHost(hostId);
+            searchForHost.InternalInitialize();
+            searchForHost.Initialize(fieldDefinition);
+
+            return searchForHost;
+        }
+
+        private static int? GetStandardHost(FieldDefinition fieldDefinition, int? hostId)
+        {
+            if (fieldDefinition is IntegerFieldDefinition integerFieldDefinition
+                && integerFieldDefinition.EnumTranslation != null)
+            {
+                hostId = GblMethods.SearchForEnumHostId;
+            }
+
+            if (fieldDefinition is BoolFieldDefinition boolFieldDefinition)
+            {
+                hostId = GblMethods.SearchForEnumHostId;
+            }
+
+            return hostId;
         }
 
         /// <summary>
@@ -94,8 +128,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             switch (dataType)
             {
                 case FieldDataTypes.String:
-                case FieldDataTypes.Bool:
                     return SearchForStringHostId;
+                case FieldDataTypes.Bool:
                 case FieldDataTypes.Integer:
                     return SearchForIntegerHostId;
                 case FieldDataTypes.Decimal:

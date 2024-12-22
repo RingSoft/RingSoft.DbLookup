@@ -38,7 +38,13 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <value>The search text.</value>
         public override string SearchText
         {
-            get => Control.SelectedItem.NumericValue.ToString();
+            get
+            {
+                if (Control.SelectedItem != null) 
+                    return Control.SelectedItem.NumericValue.ToString();
+
+                return string.Empty;
+            }
             set
             {
                 var numVal = value.ToInt();

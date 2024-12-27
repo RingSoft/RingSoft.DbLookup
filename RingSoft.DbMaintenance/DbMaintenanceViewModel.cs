@@ -430,7 +430,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>TableFilterDefinitionBase.</returns>
         protected virtual TableFilterDefinitionBase GetAddViewFilter()
         {
-            if (LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
+            if (LookupAddViewArgs != null && LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition == TableDefinition)
             {
                 var result = LookupAddViewArgs.LookupData.LookupDefinition.FilterDefinition;
                 return result;
@@ -1234,6 +1234,52 @@ namespace RingSoft.DbMaintenance
                         {
                             ProcessAutoFillValidationResponse(dbAutoFillMap);
                             return false;
+                        }
+                    }
+                }
+            }
+
+            if (!KeyAutoFillValue.IsValid() && KeyAutoFillSetup != null)
+            {
+                var descColumn = KeyAutoFillSetup
+                    .LookupDefinition
+                    .TableDefinition
+                    .LookupDefinition
+                    .InitialSortColumnDefinition;
+
+                var filter = GetAddViewFilter();
+                if (filter == null)
+                {
+                    filter = new TableFilterDefinition<TEntity>(TableDefinition);
+                }
+                if (descColumn != null)
+                {
+                    if (descColumn is LookupFieldColumnDefinition descFieldColumn)
+                    {
+                        var context = SystemGlobals.DataRepository.GetDataContext();
+                        var table = context.GetTable<TEntity>();
+
+                        filter.AddFixedFieldFilter(descFieldColumn.FieldDefinition
+                            , Conditions.Equals
+                            , KeyAutoFillValue.Text);
+
+                        var param = GblMethods.GetParameterExpression<TEntity>();
+                        var expr = filter.GetWhereExpresssion<TEntity>(param);
+
+                        if (expr != null)
+                        {
+                            var query = FilterItemDefinition.FilterQuery(table, param, expr);
+
+                            if (query.Any())
+                            {
+                                var message =
+                                    $"The Key Value '{KeyAutoFillValue.Text}' already exists in the database.  Please enter a different value";
+                                var caption = "Invalid Key Value";
+                                KeyAutoFillUiCommand.SetFocus();
+                                ControlsGlobals.UserInterface.ShowMessageBox(message, caption,
+                                    RsMessageBoxIcons.Exclamation);
+                                return false;
+                            }
                         }
                     }
                 }

@@ -1247,10 +1247,12 @@ namespace RingSoft.DbMaintenance
                     .LookupDefinition
                     .InitialSortColumnDefinition;
 
-                var filter = GetAddViewFilter();
-                if (filter == null)
+                var avFilter = GetAddViewFilter();
+                var filter = new TableFilterDefinition<TEntity>(TableDefinition);
+
+                if (avFilter != null)
                 {
-                    filter = new TableFilterDefinition<TEntity>(TableDefinition);
+                    filter.CopyFrom(avFilter);
                 }
                 if (descColumn != null)
                 {

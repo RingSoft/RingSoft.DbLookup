@@ -17,16 +17,13 @@ using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbLookup.TableProcessing;
+using RingSoft.Printing.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using RingSoft.DbLookup.DataProcessor;
-using RingSoft.DbLookup.QueryBuilder;
-using RingSoft.DbLookup.TableProcessing;
-using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbMaintenance
 {
@@ -1046,8 +1043,12 @@ namespace RingSoft.DbMaintenance
 
             foreach (var hiddenColumn in printerSetupArgs.LookupDefinition.HiddenColumns)
             {
-                var columnMap = MapLookupColumns(ref stringFieldIndex, ref numericFieldIndex, ref memoFieldIndex, hiddenColumn);
-                printerSetupArgs.ColumnMaps.Add(columnMap);
+                var columnMap = MapLookupColumns(ref stringFieldIndex, ref numericFieldIndex, ref memoFieldIndex, hiddenColumn, printerSetupArgs);
+
+                if (columnMap != null && columnMap.ColumnDefinition != null)
+                {
+                    printerSetupArgs.ColumnMaps.Add(columnMap);
+                }
             }
         }
 
@@ -1061,7 +1062,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>PrintingColumnMap.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static PrintingColumnMap MapLookupColumns(ref int stringFieldIndex, ref int numericFieldIndex,
-            ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn)
+            ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn, PrinterSetupArgs printerSetupArgs = null)
         {
             var columnMap = new PrintingColumnMap();
             switch (hiddenColumn.DataType)
@@ -1073,8 +1074,28 @@ namespace RingSoft.DbMaintenance
                         {
                             if (stringField.MemoField)
                             {
-                                MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
-                                memoFieldIndex++;
+                                var mapMemo = true;
+                                if (printerSetupArgs != null)
+                                {
+                                    switch (printerSetupArgs.PrintingProperties.ReportType)
+                                    {
+                                        case ReportTypes.Summary:
+                                        case ReportTypes.Condensed:
+                                            mapMemo = false;
+                                            break;
+                                        case ReportTypes.Details:
+                                            break;
+                                        case ReportTypes.Custom:
+                                            break;
+                                        default:
+                                            throw new ArgumentOutOfRangeException();
+                                    }
+                                }
+                                if (mapMemo)
+                                {
+                                    MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                                    memoFieldIndex++;
+                                }
                             }
                             else
                             {

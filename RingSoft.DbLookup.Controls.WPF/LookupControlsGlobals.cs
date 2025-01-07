@@ -287,10 +287,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 if (e.Key == Key.Tab)
                 {
                     //Peter Ringering - 12/31/2024 03:31:38 PM - E-86
-                    if (TabControl.SelectedItem is DbMaintenanceTabItem origTabItem)
-                    {
-                        //origTabItem.UserControl.IgnoreTab = true;
-                    }
+                    //if (TabControl.SelectedItem is DbMaintenanceTabItem origTabItem)
+                    //{
+                    //    origTabItem.UserControl.IgnoreTab = true;
+                    //}
                     var taskSwitcherWindow = new TabIControlSwitcherWindow(TabControl);
                     taskSwitcherWindow.ShowDialog();
                     taskSwitcherWindow.LocalViewModel.SelectedItem.TabItem.IsSelected = true;

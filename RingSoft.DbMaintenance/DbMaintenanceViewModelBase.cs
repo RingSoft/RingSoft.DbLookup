@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup.QueryBuilder;
 
 namespace RingSoft.DbMaintenance
 {
@@ -168,6 +169,36 @@ namespace RingSoft.DbMaintenance
         internal CheckDirtyResultArgs(MessageButtons result)
         {
             Result = result;
+        }
+    }
+
+    public class KeyFilterData
+    {
+        public List<KeyFilterItem> KeyFilters { get; } = new List<KeyFilterItem>();
+
+        public bool KeyFilterChanged { get; set; }
+
+        public void AddFilterItem(FieldDefinition fieldDefinition, Conditions condition, string value)
+        {
+            var filterItem = new KeyFilterItem(
+                fieldDefinition, condition, value);
+            KeyFilters.Add(filterItem);
+        }
+    }
+
+    public class KeyFilterItem
+    {
+        public FieldDefinition FieldDefinition { get; }
+
+        public Conditions Condition { get; }
+
+        public string Value { get; }
+
+        public KeyFilterItem(FieldDefinition fieldDefinition, Conditions condition, string value)
+        {
+            FieldDefinition = fieldDefinition;
+            Condition = condition;
+            Value = value;
         }
     }
 
@@ -748,6 +779,11 @@ namespace RingSoft.DbMaintenance
             Lookups = _lookups.AsReadOnly();
         }
 
+        protected virtual KeyFilterData GetKeyFilterData()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Maps the field to UI command.
         /// </summary>
@@ -1039,11 +1075,11 @@ namespace RingSoft.DbMaintenance
         protected virtual void SetupPrinterArgs(PrinterSetupArgs printerSetupArgs, int stringFieldIndex = 1
             , int numericFieldIndex = 1, int memoFieldIndex = 1)
         {
-            printerSetupArgs.LookupDefinition.AddAllFieldsAsHiddenColumns();
+            printerSetupArgs.LookupDefinition.AddAllFieldsAsHiddenColumns(false);
 
             foreach (var hiddenColumn in printerSetupArgs.LookupDefinition.HiddenColumns)
             {
-                var columnMap = MapLookupColumns(ref stringFieldIndex, ref numericFieldIndex, ref memoFieldIndex, hiddenColumn, printerSetupArgs);
+                var columnMap = MapLookupColumns(ref stringFieldIndex, ref numericFieldIndex, ref memoFieldIndex, hiddenColumn);
 
                 if (columnMap != null && columnMap.ColumnDefinition != null)
                 {
@@ -1062,7 +1098,7 @@ namespace RingSoft.DbMaintenance
         /// <returns>PrintingColumnMap.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static PrintingColumnMap MapLookupColumns(ref int stringFieldIndex, ref int numericFieldIndex,
-            ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn, PrinterSetupArgs printerSetupArgs = null)
+            ref int memoFieldIndex, LookupColumnDefinitionBase hiddenColumn)
         {
             var columnMap = new PrintingColumnMap();
             switch (hiddenColumn.DataType)
@@ -1074,28 +1110,8 @@ namespace RingSoft.DbMaintenance
                         {
                             if (stringField.MemoField)
                             {
-                                var mapMemo = true;
-                                if (printerSetupArgs != null)
-                                {
-                                    switch (printerSetupArgs.PrintingProperties.ReportType)
-                                    {
-                                        case ReportTypes.Summary:
-                                        case ReportTypes.Condensed:
-                                            mapMemo = false;
-                                            break;
-                                        case ReportTypes.Details:
-                                            break;
-                                        case ReportTypes.Custom:
-                                            break;
-                                        default:
-                                            throw new ArgumentOutOfRangeException();
-                                    }
-                                }
-                                if (mapMemo)
-                                {
-                                    MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
-                                    memoFieldIndex++;
-                                }
+                                MapMemoField(memoFieldIndex, columnMap, hiddenColumn);
+                                memoFieldIndex++;
                             }
                             else
                             {
@@ -1189,6 +1205,24 @@ namespace RingSoft.DbMaintenance
             ProcessLookupPrintOutput(printerSetupArgs, this);
         }
 
+        //Peter Ringering - 01/06/2025 03:08:18 PM - E-90
+        private static void ScrubPrinterSetup(PrinterSetupArgs printerSetupArgs)
+        {
+            switch (printerSetupArgs.PrintingProperties.ReportType)
+            {
+                case ReportTypes.Summary:
+                case ReportTypes.Condensed:
+                    printerSetupArgs
+                        .ColumnMaps
+                        .RemoveAll(p => p.ColumnType == PrintColumnTypes.Memo);
+                    printerSetupArgs.PrintingProperties.MemoFieldCaption1 = string.Empty;
+                    printerSetupArgs.PrintingProperties.MemoFieldCaption2 = string.Empty;
+                    printerSetupArgs.PrintingProperties.MemoFieldCaption3 = string.Empty;
+                    printerSetupArgs.PrintingProperties.MemoFieldCaption4 = string.Empty;
+                    break;
+            }
+        }
+
         /// <summary>
         /// Processes the lookup print output.
         /// </summary>
@@ -1196,6 +1230,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="printProcessor">The print processor.</param>
         public static void ProcessLookupPrintOutput(PrinterSetupArgs printerSetupArgs, IPrintProcessor printProcessor)
         { 
+            ScrubPrinterSetup(printerSetupArgs);
             var lookupData = printerSetupArgs.LookupDefinition.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(printerSetupArgs.LookupDefinition, false);
 

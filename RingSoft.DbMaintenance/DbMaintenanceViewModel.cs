@@ -1239,27 +1239,40 @@ namespace RingSoft.DbMaintenance
                 }
             }
 
-            if (!KeyAutoFillValue.IsValid() && KeyAutoFillSetup != null)
-            {
-                var descColumn = KeyAutoFillSetup
-                    .LookupDefinition
-                    .TableDefinition
-                    .LookupDefinition
-                    .InitialSortColumnDefinition;
+            //Peter Ringering - 01/06/2025 05:59:59 PM - E-96
+            var descColumn = KeyAutoFillSetup
+                .LookupDefinition
+                .TableDefinition
+                .LookupDefinition
+                .InitialSortColumnDefinition;
 
-                var avFilter = GetAddViewFilter();
+            var keyFilterData = GetKeyFilterData();
+            var keyChanged = false;
+            if (keyFilterData != null)
+            {
+                keyChanged = keyFilterData.KeyFilterChanged;
+            }
+
+            if ((!KeyAutoFillValue.IsValid() || keyChanged) && KeyAutoFillSetup != null)
+            {
                 var filter = new TableFilterDefinition<TEntity>(TableDefinition);
 
-                if (avFilter != null)
-                {
-                    filter.CopyFrom(avFilter);
-                }
                 if (descColumn != null)
                 {
                     if (descColumn is LookupFieldColumnDefinition descFieldColumn)
                     {
                         var context = SystemGlobals.DataRepository.GetDataContext();
                         var table = context.GetTable<TEntity>();
+
+                        if (keyFilterData != null)
+                        {
+                            foreach (var keyFilterItem in keyFilterData.KeyFilters)
+                            {
+                                filter.AddFixedFieldFilter(keyFilterItem.FieldDefinition
+                                    , keyFilterItem.Condition
+                                    , keyFilterItem.Value);
+                            }
+                        }
 
                         filter.AddFixedFieldFilter(descFieldColumn.FieldDefinition
                             , Conditions.Equals

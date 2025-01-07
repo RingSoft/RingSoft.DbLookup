@@ -162,6 +162,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void PrintOutput()
         {
             LookupControlsGlobals.PrintDocument(ViewModel.PrinterSetup);
+            CloseWindow();  //Peter Ringering - 01/06/2025 04:28:48 PM - E-90
         }
 
         /// <summary>

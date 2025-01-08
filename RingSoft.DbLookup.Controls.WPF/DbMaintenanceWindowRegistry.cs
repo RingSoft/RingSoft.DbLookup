@@ -234,7 +234,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var lookupData = primaryKey.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
 
-            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.View,
+            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
                 string.Empty, null)
             {
                 SelectedPrimaryKeyValue = primaryKey,

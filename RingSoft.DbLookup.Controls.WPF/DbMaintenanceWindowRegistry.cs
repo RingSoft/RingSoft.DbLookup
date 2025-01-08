@@ -215,6 +215,36 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
         }
 
+        public override void ShowNewAddOnTheFly(TableDefinitionBase tableDefinition, PrimaryKeyValue parentPrimaryKeyValue = null, string initialText = "", object inputParameter = null)
+        {
+            var lookupData = tableDefinition.LookupDefinition
+                .GetLookupDataMaui(tableDefinition.LookupDefinition, true);
+
+            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
+                initialText, null)
+            {
+                ParentWindowPrimaryKeyValue = parentPrimaryKeyValue,
+                InputParameter = inputParameter,
+            };
+            ShowAddOntheFlyWindow(tableDefinition, args, inputParameter);
+        }
+
+        public override void ShowEditAddOnTheFly(PrimaryKeyValue primaryKey, object inputParameter = null)
+        {
+            var lookupData = primaryKey.TableDefinition.LookupDefinition
+                .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
+
+            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.View,
+                string.Empty, null)
+            {
+                SelectedPrimaryKeyValue = primaryKey,
+                InputParameter = inputParameter,
+            };
+            args.LookupData.SelectedPrimaryKeyValue = primaryKey;
+            ShowAddOntheFlyWindow(primaryKey.TableDefinition, args, inputParameter);
+
+        }
+
         /// <summary>
         /// Shows the window.
         /// </summary>

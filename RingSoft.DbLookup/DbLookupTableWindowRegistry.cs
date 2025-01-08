@@ -57,6 +57,17 @@ namespace RingSoft.DbLookup
             , LookupAddViewArgs addViewArgs = null
             , object inputParameter = null);
 
+        public abstract void ShowNewAddOnTheFly(
+            TableDefinitionBase tableDefinition
+            , PrimaryKeyValue parentPrimaryKeyValue = null
+            , string initialText = ""
+            , object inputParameter = null);
+
+        public abstract void ShowEditAddOnTheFly(
+            PrimaryKeyValue primaryKey
+            , object inputParameter = null);
+
+
         /// <summary>
         /// Shows the window.
         /// </summary>

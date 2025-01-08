@@ -815,5 +815,15 @@ namespace RingSoft.DbLookup.ModelDefinition
         /// <param name="context">The context.</param>
         /// <param name="message">The message.</param>
         public abstract void SaveObject(object obj, IDbContext context, string message);
+
+        public void AddNewRecord(PrimaryKeyValue parentPrimaryKey = null, string initialText = "", object inputParameter = null)
+        {
+            SystemGlobals.TableRegistry.ShowNewAddOnTheFly(
+                this
+                , parentPrimaryKey
+                , initialText
+                , inputParameter);
+
+        }
     }
 }

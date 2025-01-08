@@ -239,5 +239,10 @@ namespace RingSoft.DbLookup
         {
             return GblMethods.DoRecordLock(this);
         }
+
+        public void EditValue(object inputParameter = null)
+        {
+            SystemGlobals.TableRegistry.ShowEditAddOnTheFly(this, inputParameter);
+        }
     }
 }

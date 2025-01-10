@@ -456,16 +456,6 @@ namespace RingSoft.DbMaintenance
                             .LookupData
                             .SelectedPrimaryKeyValue != null)
                     {
-                        var gridTable = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue.TableDefinition;
-                        if (Grids != null)
-                        {
-                            var grid = Grids.FirstOrDefault(
-                                p => p.Grid.TableDefinition == gridTable);
-                            if (grid != null)
-                            {
-                                grid.Grid.SelectGridRow(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
-                            }
-                        }
                         primaryKeyValue =
                             GetAddViewPrimaryKeyValue(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
                     }
@@ -488,6 +478,23 @@ namespace RingSoft.DbMaintenance
 
                 if (primaryKeyValue != null && primaryKeyValue.IsValid())
                     _lookupData.SelectPrimaryKey(primaryKeyValue);
+
+                if (LookupAddViewArgs.LookupData != null)
+                {
+                    if (LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue != null)
+                    {
+                        var gridTable = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue.TableDefinition;
+                        if (Grids != null)
+                        {
+                            var grid = Grids.FirstOrDefault(
+                                p => p.Grid.TableDefinition == gridTable);
+                            if (grid != null)
+                            {
+                                grid.Grid.SelectGridRow(LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue);
+                            }
+                        }
+                    }
+                }
 
                 if (LookupAddViewArgs.LookupReadOnlyMode)
                 {

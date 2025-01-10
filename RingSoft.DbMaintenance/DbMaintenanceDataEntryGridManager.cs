@@ -365,6 +365,7 @@ namespace RingSoft.DbMaintenance
                 var detailsPropertyObject = GblMethods.GetPropertyObject(headerEntity, childKey.CollectionName);
                 if (detailsPropertyObject is IEnumerable<TEntity> details)
                 {
+                    
                     LoadGrid(details);
                 }
             }

@@ -2418,5 +2418,26 @@ namespace RingSoft.DbMaintenance
             return TableDefinition.GetPrimaryKeyValueFromEntity(GetEntityData());
         }
 
+        protected TParentEntity GetParentEntity<TParentEntity>() where TParentEntity : class, new()
+        {
+            if (LookupAddViewArgs != null && LookupAddViewArgs.ParentWindowPrimaryKeyValue != null)
+            {
+                var parentTableDefinition = GblMethods.GetTableDefinition<TParentEntity>();
+                if (parentTableDefinition != null)
+                {
+                    if (LookupAddViewArgs.ParentWindowPrimaryKeyValue.TableDefinition ==
+                        parentTableDefinition && LookupAddViewArgs.ParentWindowPrimaryKeyValue.IsValid())
+                    {
+                        var entity =
+                            parentTableDefinition.GetEntityFromPrimaryKeyValue(LookupAddViewArgs
+                                .ParentWindowPrimaryKeyValue);
+                        entity = entity.FillOutProperties(false);
+                        return entity;
+                    }
+
+                }
+            }
+            return null;
+        }
     }
 }

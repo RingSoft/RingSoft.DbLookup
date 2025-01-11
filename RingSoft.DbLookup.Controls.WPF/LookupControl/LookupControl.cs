@@ -2243,7 +2243,17 @@ namespace RingSoft.DbLookup.Controls.WPF
                         {
                             SearchForHost.SelectAll();
                         }
-                        LookupDataMaui.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+
+                        //Peter Ringering - 01/11/2025 01:13:14 PM - E-104
+                        if (LookupDefinition.InitialOrderByField == null)
+                        {
+                            LookupDataMaui.SelectPrimaryKey(initialSearchForPrimaryKeyValue);
+                        }
+                        else
+                        {
+                            LookupDataMaui.OnSearchForChange(initialSearchFor);
+                        }
+
                         if (!initialSearchFor.IsNullOrEmpty() && initialSearchForPrimaryKeyValue == null)
                         {
                             LookupDataMaui.OnSearchForChange(initialSearchFor);

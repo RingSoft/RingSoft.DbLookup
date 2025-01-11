@@ -220,7 +220,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var lookupData = tableDefinition.LookupDefinition
                 .GetLookupDataMaui(tableDefinition.LookupDefinition, true);
 
-            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.Add,
+            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.Add,
                 initialText, null)
             {
                 ParentWindowPrimaryKeyValue = parentPrimaryKeyValue,
@@ -234,7 +234,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             var lookupData = primaryKey.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
 
-            var args = new LookupAddViewArgs(lookupData, false, LookupFormModes.View,
+            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.View,
                 string.Empty, null)
             {
                 SelectedPrimaryKeyValue = primaryKey,

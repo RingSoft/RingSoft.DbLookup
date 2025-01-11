@@ -18,6 +18,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             UserControl = userControl;
             UserControl.Host = this;
+            IsTabStop = false;
         }
 
         public override bool CloseTab(TabControl tabControl)

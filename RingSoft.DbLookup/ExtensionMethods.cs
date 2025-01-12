@@ -957,5 +957,15 @@ namespace RingSoft.DbLookup
         {
             return SystemGlobals.Rights.HasSpecialRight(tableDefinition, rightType);
         }
+
+        public static string GetText(this AutoFillValue autoFillValue)
+        {
+            if (autoFillValue != null)
+            {
+                return autoFillValue.Text;
+            }
+
+            return string.Empty;
+        }
     }
 }

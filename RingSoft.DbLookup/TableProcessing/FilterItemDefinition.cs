@@ -1043,6 +1043,10 @@ namespace RingSoft.DbLookup.TableProcessing
         /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public static IQueryable<TEntity> FilterQuery<TEntity>(IQueryable<TEntity> source, ParameterExpression param, Expression expression)
         {
+            if (expression == null)
+            {
+                return source;
+            }
             var whereLambda = Expression.Lambda<Func<TEntity, bool>>(expression, param);
 
             var whereMethod = GetWhereMethod<TEntity>();

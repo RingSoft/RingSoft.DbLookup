@@ -140,6 +140,11 @@ namespace RingSoft.DbMaintenance
 
         }
 
+        public WindowCursorTypes GetWindowCursor()
+        {
+            return WindowCursorTypes.Default;
+        }
+
         /// <summary>
         /// Shows the message box.
         /// </summary>

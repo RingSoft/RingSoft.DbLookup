@@ -20,6 +20,11 @@ namespace RingSoft.DbLookup.Tests
             Cursor = cursor;
         }
 
+        public WindowCursorTypes GetWindowCursor()
+        {
+            return WindowCursorTypes.Default;
+        }
+
         public async Task ShowMessageBox(string text, string caption, RsMessageBoxIcons icon)
         {
             throw new System.NotImplementedException();

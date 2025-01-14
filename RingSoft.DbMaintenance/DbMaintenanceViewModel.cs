@@ -909,7 +909,10 @@ namespace RingSoft.DbMaintenance
             if (!CheckKeyValueTextChanged())
                 return DbMaintenanceResults.ValidationError;
 
+            //Peter Ringering - 01/14/2025 01:23:57 PM - E-109
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             var entity = GetEntityData();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
             var children = TableDefinition
                 .FieldDefinitions
@@ -996,8 +999,15 @@ namespace RingSoft.DbMaintenance
             }
 
             CheckSaveDeleted(entity);
+
+            //Peter Ringering - 01/14/2025 01:27:00 PM - E-109
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             if (!SaveEntity(entity))
+            {
+                ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
                 return DbMaintenanceResults.DatabaseError;
+            }
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
             //Peter Ringering - 11/23/2024 12:17:07 PM - E-76
             if (KeyAutoFillSetup != null)
@@ -1029,32 +1039,22 @@ namespace RingSoft.DbMaintenance
 
             _savingRecord = true;
 
-            //if (unitTestMode)
-            //{
-            //    PopulatePrimaryKeyControls(entity, primaryKey);
-            //    OnLookupDataChanged();
-            //}
-            //else
+            //Peter Ringering - 01/14/2025 01:42:10 PM - E-109
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+            _lookupData.SelectPrimaryKey(primaryKey);
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
+
+            if (LookupAddViewArgs != null)
             {
-                if (MaintenanceMode == DbMaintenanceModes.AddMode)
+                if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())
                 {
-                    var context = SystemGlobals.DataRepository.GetDataContext();
+                    LookupAddViewArgs.CallBackToken.NewAutoFillValue =
+                        TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
                 }
 
-                _lookupData.SelectPrimaryKey(primaryKey);
-                if (LookupAddViewArgs != null)
-                {
-                    if (_lookupData.SelectedPrimaryKeyValue != null && _lookupData.SelectedPrimaryKeyValue.IsValid())
-                    {
-                        LookupAddViewArgs.CallBackToken.NewAutoFillValue =
-                            TableDefinition.LookupDefinition.GetAutoFillValue(_lookupData.SelectedPrimaryKeyValue);
-                    }
-
-                    LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.PkRefresh;
-                    LookupAddViewArgs.CallBackToken.OnRefreshData(); //Important so launched from lookup gets refreshed.
-                    LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
-                }
-
+                LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.PkRefresh;
+                LookupAddViewArgs.CallBackToken.OnRefreshData(); //Important so launched from lookup gets refreshed.
+                LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
             }
 
             _savingRecord = false;

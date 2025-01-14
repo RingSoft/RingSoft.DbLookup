@@ -19,6 +19,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 {
                     if (Keyboard.IsKeyDown(Key.F4))
                     {
+                        args.Handled = true;  //Peter Ringering - 01/14/2025 03:19:23 PM - E-111
                         CloseCommand.Execute(null);
                     }
                 }

@@ -1286,8 +1286,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                                 var lookupColumnDefinition = LookupColumns[index]
                                     .LookupColumnDefinition;
 
+                                //Peter Ringering - 01/14/2025 12:43:50 PM - E-106
+                                var lookupWidth = LookupColumns.Sum(p => p.Width);
+
                                 lookupColumnDefinition?.UpdatePercentWidth(
-                                    Math.Ceiling((args.NewSize.Width / ListView.ActualWidth) * 100));
+                                    Math.Floor((args.NewSize.Width / lookupWidth) * 100));
+
                                 ColumnWidthChanged?.Invoke(this, new LookupColumnWidthChangedArgs
                                 {
                                     ColumnDefinition = lookupColumnDefinition,

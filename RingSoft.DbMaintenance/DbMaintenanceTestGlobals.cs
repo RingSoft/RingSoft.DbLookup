@@ -359,6 +359,11 @@ namespace RingSoft.DbMaintenance
             
         }
 
+        public void SetPendingSaveStatus(string messaage)
+        {
+            
+        }
+
         /// <summary>
         /// Gets the automatic fills.
         /// </summary>

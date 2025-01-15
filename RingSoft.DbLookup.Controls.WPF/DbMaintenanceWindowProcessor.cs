@@ -384,6 +384,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public void SetPendingSaveStatus(string messaage)
+        {
+            StatusBar.SetPendingSaveStatus(messaage);
+        }
+
         /// <summary>
         /// Gets the automatic fills.
         /// </summary>

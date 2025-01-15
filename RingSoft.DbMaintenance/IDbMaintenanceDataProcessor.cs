@@ -218,6 +218,8 @@ namespace RingSoft.DbMaintenance
         /// <param name="alertLevel">The alert level.</param>
         void SetSaveStatus(string message, AlertLevels alertLevel);
 
+        void SetPendingSaveStatus(string messaage);
+
         /// <summary>
         /// Gets the automatic fills.
         /// </summary>

@@ -1047,6 +1047,10 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 return source;
             }
+
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             var whereLambda = Expression.Lambda<Func<TEntity, bool>>(expression, param);
 
             var whereMethod = GetWhereMethod<TEntity>();
@@ -1055,6 +1059,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 .Invoke(null, new object[] { source, whereLambda });
             var whereQueryable = (IQueryable<TEntity>)whereResult;
 
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
             return whereQueryable;
         }
 

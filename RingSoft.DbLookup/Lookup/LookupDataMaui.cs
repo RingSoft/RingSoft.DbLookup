@@ -645,6 +645,9 @@ namespace RingSoft.DbLookup.Lookup
         /// <returns>LookupScrollPositions.</returns>
         private LookupScrollPositions GetScrollPosition(TEntity entity)
         {
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             var result = LookupScrollPositions.Middle;
 
             var previousRecordSet = GetPreviousRecordSet(entity, 1);
@@ -660,6 +663,7 @@ namespace RingSoft.DbLookup.Lookup
                 result = LookupScrollPositions.Bottom;
             }
 
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
             return result;
         }
 
@@ -1920,6 +1924,9 @@ namespace RingSoft.DbLookup.Lookup
 
             }
 
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             var previousPageCount = 0;
             if (topCount > 0)
             {
@@ -1944,6 +1951,7 @@ namespace RingSoft.DbLookup.Lookup
                         IntGotoTop();
                     }
 
+                    ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
                     return;
                 }
             }
@@ -2009,6 +2017,8 @@ namespace RingSoft.DbLookup.Lookup
             {
                 LookupControl.SetLookupIndex(0);
             }
+
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
         }
 
         /// <summary>

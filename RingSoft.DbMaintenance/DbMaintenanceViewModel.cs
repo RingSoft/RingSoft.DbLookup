@@ -265,7 +265,12 @@ namespace RingSoft.DbMaintenance
                 var duration = DateTime.Now.Subtract(_startDate.Value.ToLocalTime());
                 var minutes = duration.TotalMinutes;
 
-                if (minutes > 10 && minutes < 20 && RecordDirty)
+                //Peter Ringering - 01/14/2025 07:39:16 PM - E-118
+                if (minutes < 10 && RecordDirty)
+                {
+                    Processor.SetPendingSaveStatus("Pending Save");
+                }
+                else if (minutes > 10 && minutes < 20 && RecordDirty)
                 {
                     Processor.SetSaveStatus("Don't forget to save this record.", AlertLevels.Yellow);
                 }

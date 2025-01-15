@@ -520,6 +520,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public void SetPendingSaveStatus(string messaage)
+        {
+            StatusBar.SetPendingSaveStatus(messaage);
+        }
+
         public List<DbAutoFillMap> GetAutoFills()
         {
             return LookupControlsGlobals.GetAutoFills(UserControl);

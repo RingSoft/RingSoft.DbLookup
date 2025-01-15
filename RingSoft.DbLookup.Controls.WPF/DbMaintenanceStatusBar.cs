@@ -165,5 +165,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 }
             });
         }
+
+        public void SetPendingSaveStatus(string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                StatusTextBox.Visibility = Visibility.Visible;
+                StatusTextBox.Background = new SolidColorBrush(Colors.LightYellow);
+                StatusTextBox.Foreground = new SolidColorBrush(Colors.Black);
+                StatusTextBox.Text = message;
+            });
+        }
     }
 }

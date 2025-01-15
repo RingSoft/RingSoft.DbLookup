@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.Printing.Interop;
 
 namespace RingSoft.DbLookup.Lookup
@@ -220,8 +221,13 @@ namespace RingSoft.DbLookup.Lookup
         /// <param name="lookupOutput">The lookup output.</param>
         protected void FireLookupDataChangedEvent(LookupDataMauiOutput lookupOutput)
         {
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             ScrollPosition = lookupOutput.ScrollPosition;
             LookupDataChanged?.Invoke(this, lookupOutput);
+
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
         }
 
         /// <summary>

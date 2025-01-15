@@ -450,6 +450,9 @@ namespace RingSoft.DbMaintenance
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected virtual void Initialize()
         {
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             if (LookupAddViewArgs != null)
             {
                 PrimaryKeyValue primaryKeyValue = null;
@@ -514,6 +517,8 @@ namespace RingSoft.DbMaintenance
             }
 
             RecordDirty = false;
+
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
         }
 
         /// <summary>

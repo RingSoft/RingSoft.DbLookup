@@ -573,6 +573,9 @@ namespace RingSoft.DbMaintenance
         /// </summary>
         protected override void Initialize()
         {
+            var origCursor = ControlsGlobals.UserInterface.GetWindowCursor();
+            ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
+
             if (InputParameter != null)
             {
                 if (InputParameter is AdvancedFindInput advancedFindInput)
@@ -655,7 +658,7 @@ namespace RingSoft.DbMaintenance
                     LockTableRow();
                 }
             }
-
+            ControlsGlobals.UserInterface.SetWindowCursor(origCursor);
         }
 
         /// <summary>

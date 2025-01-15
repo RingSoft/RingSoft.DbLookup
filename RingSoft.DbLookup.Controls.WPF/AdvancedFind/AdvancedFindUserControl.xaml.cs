@@ -251,8 +251,10 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
             FiltersGrid.RefreshDataSource();
             if (LocalViewModel.FiltersManager.Rows.Any())
             {
-                FiltersGrid.GotoCell(LocalViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
-                FiltersGrid.GotoCell(LocalViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
+                //Peter Ringering - 01/14/2025 08:35:49 PM - E-121
+                FiltersGrid.Manager.GotoCell(LocalViewModel.FiltersManager.Rows[0]
+                    , AdvancedFindFiltersManager.SearchColumnId);
+                //FiltersGrid.GotoCell(LocalViewModel.FiltersManager.Rows[0], (AdvancedFindFiltersManager.SearchColumnId));
             }
         }
         public AdvancedFilterReturn ShowAdvancedFilterWindow(TreeViewItem treeViewItem, LookupDefinitionBase lookupDefinition)

@@ -792,6 +792,12 @@ namespace RingSoft.DbMaintenance
         public void MapFieldToUiCommand(UiCommand uiCommand, FieldDefinition fieldDefinition)
         {
             UiControls.Add(new UiControlMap(uiCommand, fieldDefinition));
+
+            //Peter Ringering - 01/16/2025 02:12:31 PM - E-112
+            if (fieldDefinition is StringFieldDefinition stringField)
+            {
+                uiCommand.MaxLength = stringField.MaxLength;
+            }
         }
 
         /// <summary>

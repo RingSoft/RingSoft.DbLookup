@@ -99,6 +99,8 @@ namespace RingSoft.DbLookup.Lookup
         /// <value><c>true</c> if [allow edit]; otherwise, <c>false</c>.</value>
         public bool AllowEdit { get; set; } = true;
 
+        public bool AllowAdd { get; set; } = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether [lookup read only mode].
         /// </summary>

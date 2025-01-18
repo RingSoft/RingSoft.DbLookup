@@ -482,7 +482,9 @@ namespace RingSoft.DbMaintenance
                         break;
                 }
 
-                NewButtonEnabled = SaveButtonEnabled = LookupAddViewArgs.AllowEdit && !ReadOnlyMode;
+                AllowSave = LookupAddViewArgs.AllowEdit && !ReadOnlyMode;
+                AllowNew = LookupAddViewArgs.AllowAdd && !ReadOnlyMode;
+                AllowDelete = NewButtonEnabled;
 
                 if (primaryKeyValue != null && primaryKeyValue.IsValid())
                     _lookupData.SelectPrimaryKey(primaryKeyValue);

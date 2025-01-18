@@ -541,6 +541,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
             EmployeeAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.EmployeeID))
                 {AddViewParameter = ViewModelInput};
 
+            //EmployeeAutoFillSetup.AllowLookupAdd = false;
+
             ShipViaAutoFillSetup = new AutoFillSetup(TableDefinition.GetFieldDefinition(p => p.ShipVia));
 
             //Peter Ringering - 11/22/2024 12:26:28 PM - E-59

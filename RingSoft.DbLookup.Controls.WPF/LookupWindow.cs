@@ -459,7 +459,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             var args = new LookupAddViewArgs(LookupControl.LookupDataMaui, false, LookupFormModes.View, string.Empty, this)
             {
                 InputParameter = AddViewParameter,
-                AllowEdit = AddButton.IsEnabled,
+                AllowEdit = ViewButton.IsEnabled,
+                AllowAdd = AddButton.IsEnabled,
                 LookupReadOnlyMode = _readOnlyMode,
                 ReadOnlyPrimaryKeyValue = _readOnlyPrimaryKeyValue,
                 SelectedPrimaryKeyValue = LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue(),

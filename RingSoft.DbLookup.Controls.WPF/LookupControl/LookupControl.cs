@@ -2021,7 +2021,10 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
 
             if (ListView != null && ListView.ItemsSource == null)
+            {
+                ListView.Items.Clear();
                 ListView.ItemsSource = _dataSource;
+            }
 
             AdvancedFindButton.IsEnabled = _dataSource.Any();
 
@@ -2297,7 +2300,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     _itemHeight = listViewItem.ActualHeight;
                 }
 
-                if (addBlankRow)
+                if (addBlankRow && ListView.ItemsSource == null)
                     ListView.Items.Clear();
             }
 

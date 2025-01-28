@@ -341,6 +341,7 @@ namespace RingSoft.DbLookup.TableProcessing
                 result += GetReportBeginTextPrintMode(lookupDefinition) + " ";
             }
             result += GetConditionText(Condition) + " ";
+
             var setUserValue = ValueType != ValueTypes.DateTime;
 
             switch (Condition)

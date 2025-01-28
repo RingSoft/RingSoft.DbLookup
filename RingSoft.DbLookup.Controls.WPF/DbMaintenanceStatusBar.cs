@@ -121,13 +121,20 @@ namespace RingSoft.DbLookup.Controls.WPF
             StatusTextBox.Visibility = Visibility.Collapsed;
 
             var window = Window.GetWindow(this);
-            if ((window.Width < 550 && window.Width > 0)
-                || (window.ActualWidth < 550 && window.ActualWidth > 0))
+            if (window != LookupControlsGlobals.MainWindow)
             {
-                Grid.SetRow(StatusTextBox, 1);
-                Grid.SetColumn(StatusTextBox, 0);
-                Grid.SetColumnSpan(StatusTextBox, 2);
+                window.Loaded += (sender, args) =>
+                {
+                    if ((window.Width < 550 && window.Width > 0)
+                        || (window.ActualWidth < 550 && window.ActualWidth > 0))
+                    {
+                        Grid.SetRow(StatusTextBox, 1);
+                        Grid.SetColumn(StatusTextBox, 0);
+                        Grid.SetColumnSpan(StatusTextBox, 2);
+                    }
+                };
             }
+
             base.OnApplyTemplate();
         }
 

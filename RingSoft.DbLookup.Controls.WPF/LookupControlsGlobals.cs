@@ -262,17 +262,17 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public static DbMaintenanceWindowRegistry WindowRegistry { get; internal set; } = new DbMaintenanceWindowRegistry();
 
-        private static Window _tabSwitcherWindow;
+        public static Window MainWindow { get; private set; }
 
         public static void SetTabSwitcherWindow(Window tabSwitcherWindow, DbMaintenanceTabControl tabControl)
         {
-            if (_tabSwitcherWindow != null)
+            if (MainWindow != null)
             {
-                _tabSwitcherWindow.PreviewKeyDown -= _tabSwitcherWindow_PreviewKeyDown;
+                MainWindow.PreviewKeyDown -= _tabSwitcherWindow_PreviewKeyDown;
             }
-            _tabSwitcherWindow = tabSwitcherWindow;
+            MainWindow = tabSwitcherWindow;
             TabControl = tabControl;
-            _tabSwitcherWindow.PreviewKeyDown += _tabSwitcherWindow_PreviewKeyDown;
+            MainWindow.PreviewKeyDown += _tabSwitcherWindow_PreviewKeyDown;
 
         }
 

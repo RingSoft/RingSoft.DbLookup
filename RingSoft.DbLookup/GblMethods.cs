@@ -220,10 +220,10 @@ namespace RingSoft.DbLookup
                 switch (dateType)
                 {
                     case DbDateTypes.DateOnly:
-                    case DbDateTypes.Millisecond:
                         formatString = "MM/dd/yyyy";
                         break;
                     case DbDateTypes.DateTime:
+                    case DbDateTypes.Millisecond:
                         formatString = "MM/dd/yyyy hh:mm:ss tt";
                         break;
                     default:
@@ -235,10 +235,10 @@ namespace RingSoft.DbLookup
                 switch (dateType)
                 {
                     case DbDateTypes.DateOnly:
-                    case DbDateTypes.Millisecond:
                         formatString = "M/d/yyyy";
                         break;
                     case DbDateTypes.DateTime:
+                    case DbDateTypes.Millisecond:
                         formatString = "M/d/yyyy hh:mm:ss tt";
                         break;
                     default:
@@ -248,10 +248,10 @@ namespace RingSoft.DbLookup
             }
 
             var result = value.ToString(formatString);
-            if (dateType == DbDateTypes.Millisecond)
-            {
-                result = $"{result} {value.TimeOfDay}";
-            }
+            //if (dateType == DbDateTypes.Millisecond)
+            //{
+            //    result = $"{result} {value.TimeOfDay}";
+            //}
             return result;
         }
 

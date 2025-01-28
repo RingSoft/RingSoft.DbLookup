@@ -617,6 +617,7 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
                             dateType = DateFormatTypes.DateOnly;
                             break;
                         case DbDateTypes.DateTime:
+                        case DbDateTypes.Millisecond:
                             dateType = DateFormatTypes.DateTime;
                             break;
                         default:

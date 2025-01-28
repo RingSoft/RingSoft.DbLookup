@@ -31,14 +31,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                     ucControl.AddViewParameter = inputParameter;
                     var tabItem = new DbMaintenanceTabItem(
                         ucControl, this);
-                    if (SetDestionationAsFirstTab)
-                    {
-                        Items.Insert(0, tabItem);
-                    }
-                    else
-                    {
-                        Items.Add(tabItem);
-                    }
+                    var setAsFirstTab = SetDestionationAsFirstTab;
+
+                    ShowTabItem(tabItem, setAsFirstTab);
+
                     tabItem.IsSelected = true;
                     ucControl.Focus();
                     ucControl.SetInitialFocus();
@@ -77,14 +73,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     result = ucControl;
                     var tabItem = new DbMaintenanceTabItem(
                         ucControl, this);
-                    if (setAsFirstTab)
-                    {
-                        Items.Insert(0, tabItem);
-                    }
-                    else
-                    {
-                        Items.Add(tabItem);
-                    }
+            
+                    ShowTabItem(tabItem, setAsFirstTab);
 
                     tabItem.IsSelected = true;
                     ucControl.Focus();
@@ -101,6 +91,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             , bool selectTab = true)
         {
             var tabItem = new UserControlTabItem(userControl, header, this);
+
+            ShowTabItem(tabItem, setAsFirstTab);
+
+            if (selectTab)
+            {
+                tabItem.IsSelected = true;
+                userControl.Focus();
+            }
+
+        }
+
+        private void ShowTabItem(TabItem tabItem, bool setAsFirstTab)
+        {
             if (setAsFirstTab)
             {
                 Items.Insert(0, tabItem);
@@ -108,12 +111,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             else
             {
                 Items.Add(tabItem);
-            }
-
-            if (selectTab)
-            {
-                tabItem.IsSelected = true;
-                userControl.Focus();
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +10,56 @@ using RingSoft.DbLookup.ModelDefinition;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
+    public class DbMaintenanceTabPriority
+    {
+        public TabItem TabItem { get; }
+
+        public int PriorityId { get; internal set; }
+
+        public DbMaintenanceTabPriority(TabItem tabItem)
+        {
+            TabItem = tabItem;
+            PriorityId = 1;
+        }
+    }
+    public class DbMaintenanceTabOrder
+    {
+        public IReadOnlyList<DbMaintenanceTabPriority> TabPriorities { get; }
+
+        private List<DbMaintenanceTabPriority> _tabPriorities = new List<DbMaintenanceTabPriority>();
+
+        public DbMaintenanceTabOrder()
+        {
+            TabPriorities = _tabPriorities.AsReadOnly();
+        }
+
+        public void AddTabItem(TabItem tabItem)
+        {
+            var tabPriority = new DbMaintenanceTabPriority(tabItem);
+            ReorderPriorities(tabPriority);
+            _tabPriorities.Add(tabPriority);
+        }
+
+        private void ReorderPriorities(DbMaintenanceTabPriority firsTabPriority)
+        {
+            var priorities = _tabPriorities
+                .Where(p => p.PriorityId < firsTabPriority.PriorityId)
+                .OrderBy(p => p.PriorityId)
+                .ToList();
+
+            foreach (var tabPriority in priorities)
+            {
+                if (tabPriority == firsTabPriority)
+                {
+                    tabPriority.PriorityId = 1;
+                }
+                else
+                {
+                    tabPriority.PriorityId++;
+                }
+            }
+        }
+    }
     public class DbMaintenanceTabControl : TabControl, ILookupAddViewDestination
     {
         public bool SetDestionationAsFirstTab { get; set; } = true;
@@ -127,7 +179,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             while (ucTabItem != null)
             {
                 ucTabItem.IsSelected = true;
-                if (!ucTabItem.CloseTab(this))
+                if (!ucTabItem.CloseTab())
                 {
                     tabIndex ++;
                     result = false;

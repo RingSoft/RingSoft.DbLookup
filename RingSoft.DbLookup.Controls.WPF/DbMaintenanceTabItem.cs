@@ -13,7 +13,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public HostTypes HostType => HostTypes.Tab;
 
-        public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, TabControl tabControl)
+        public DbMaintenanceTabItem(DbMaintenanceUserControl userControl, DbMaintenanceTabControl tabControl)
             : base(userControl, userControl.Title, tabControl)
         {
             UserControl = userControl;
@@ -21,11 +21,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             IsTabStop = false;
         }
 
-        public override bool CloseTab(TabControl tabControl)
+        public override bool CloseTab()
         {
             if (!CheckClose()) 
                 return false;
-            return base.CloseTab(tabControl);
+            return base.CloseTab();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

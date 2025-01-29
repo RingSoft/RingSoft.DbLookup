@@ -11,8 +11,11 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public RelayCommand CloseCommand { get; }
 
-        public UserControlTabItem(BaseUserControl userControl, string header, TabControl tabControl)
+        private DbMaintenanceTabControl _tabControl;
+
+        public UserControlTabItem(BaseUserControl userControl, string header, DbMaintenanceTabControl tabControl)
         {
+            _tabControl = tabControl;
             PreviewKeyDown += (sender, args) =>
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
@@ -29,7 +32,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             CloseCommand = new RelayCommand((() =>
             {
-                CloseTab(tabControl);
+                CloseTab();
             }));
 
             Header = header;
@@ -38,9 +41,9 @@ namespace RingSoft.DbLookup.Controls.WPF
             dockPanel.Children.Add(userControl);
         }
 
-        public virtual bool CloseTab(TabControl tabControl)
+        public virtual bool CloseTab()
         {
-            tabControl.Items.Remove(this);
+            _tabControl.Items.Remove(this);
             return true;
         }
 

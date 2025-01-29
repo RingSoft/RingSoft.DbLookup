@@ -43,6 +43,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         public virtual bool CloseTab()
         {
+            _tabControl.TabOrder.DeleteTabItem(this);
             _tabControl.Items.Remove(this);
             return true;
         }

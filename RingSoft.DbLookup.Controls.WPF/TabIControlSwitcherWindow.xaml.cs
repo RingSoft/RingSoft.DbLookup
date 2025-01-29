@@ -53,52 +53,21 @@ namespace RingSoft.DbLookup.Controls.WPF
         public void Initialize(DbMaintenanceTabControl tabControl)
         {
             Items = new ObservableCollection<ListBoxTabItem>();
-            if (tabControl.SelectedItem is TabItem selectedTabItem)
-            {
-                var selectedIndex = tabControl.Items.IndexOf(selectedTabItem);
-                if (selectedIndex > 0)
-                {
-                    for (int i = selectedIndex; i < tabControl.Items.Count; i++)
-                    {
-                        if (tabControl.Items[i] is TabItem tabControlItem)
-                        {
-                            Items.Add(new ListBoxTabItem()
-                            {
-                                Text = tabControlItem.Header.ToString(),
-                                TabItem = tabControlItem,
-                            });
-                        }
-                    }
 
-                    for (int i = 0; i < selectedIndex; i++)
-                    {
-                        if (tabControl.Items[i] is TabItem tabControlItem)
-                        {
-                            Items.Add(new ListBoxTabItem()
-                            {
-                                Text = tabControlItem.Header.ToString(),
-                                TabItem = tabControlItem,
-                            });
-                        }
-                    }
-                }
-                else
+            foreach (var tabPriority in tabControl.TabOrder.TabPriorities)
+            {
+                Items.Add(new ListBoxTabItem()
                 {
-                    foreach (var tabControlItem in tabControl.Items)
-                    {
-                        if (tabControlItem is TabItem tabItem)
-                        {
-                            Items.Add(new ListBoxTabItem()
-                            {
-                                Text = tabItem.Header.ToString(),
-                                TabItem = tabItem,
-                            });
-                        }
-                    }
-                }
+                    TabItem = tabPriority.TabItem,
+                    Text = tabPriority.TabItem.Header.ToString(),
+                });
             }
 
-            if (Items.Count > 0)
+            if (Items.Count > 1)
+            {
+                SelectedItem = Items[1];
+            }
+            else if (Items.Count > 0)
             {
                 SelectedItem = Items[0];
             }

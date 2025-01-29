@@ -14,12 +14,14 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public TabItem TabItem { get; }
 
-        public int PriorityId { get; internal set; }
-
         public DbMaintenanceTabPriority(TabItem tabItem)
         {
             TabItem = tabItem;
-            PriorityId = 1;
+        }
+
+        public override string ToString()
+        {
+            return $"{TabItem.Header}";
         }
     }
     public class DbMaintenanceTabOrder
@@ -33,30 +35,35 @@ namespace RingSoft.DbLookup.Controls.WPF
             TabPriorities = _tabPriorities.AsReadOnly();
         }
 
-        public void AddTabItem(TabItem tabItem)
+        public void AddTabItem(TabItem tabItem, bool selectTab)
         {
             var tabPriority = new DbMaintenanceTabPriority(tabItem);
-            ReorderPriorities(tabPriority);
-            _tabPriorities.Add(tabPriority);
+            if (selectTab)
+            {
+                _tabPriorities.Insert(0, tabPriority);
+            }
+            else
+            {
+                _tabPriorities.Add(tabPriority);
+            }
         }
 
-        private void ReorderPriorities(DbMaintenanceTabPriority firsTabPriority)
+        public void SelectTabItem(TabItem tabItem)
         {
-            var priorities = _tabPriorities
-                .Where(p => p.PriorityId < firsTabPriority.PriorityId)
-                .OrderBy(p => p.PriorityId)
-                .ToList();
-
-            foreach (var tabPriority in priorities)
+            var tabPriority = _tabPriorities.FirstOrDefault(p => p.TabItem == tabItem);
+            if (tabPriority != null)
             {
-                if (tabPriority == firsTabPriority)
-                {
-                    tabPriority.PriorityId = 1;
-                }
-                else
-                {
-                    tabPriority.PriorityId++;
-                }
+                _tabPriorities.Remove(tabPriority);
+                _tabPriorities.Insert(0, tabPriority);
+            }
+        }
+
+        public void DeleteTabItem(TabItem tabItem)
+        {
+            var tabPriority = _tabPriorities.FirstOrDefault(p => p.TabItem == tabItem);
+            if (tabPriority != null)
+            {
+                _tabPriorities.Remove(tabPriority);
             }
         }
     }
@@ -64,9 +71,12 @@ namespace RingSoft.DbLookup.Controls.WPF
     {
         public bool SetDestionationAsFirstTab { get; set; } = true;
 
+        public DbMaintenanceTabOrder TabOrder { get; } = new DbMaintenanceTabOrder();
+
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             var item = SelectedItem;
+            TabOrder.SelectTabItem(item as TabItem);
             base.OnSelectionChanged(e);
             item = SelectedItem;
         }
@@ -85,7 +95,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                         ucControl, this);
                     var setAsFirstTab = SetDestionationAsFirstTab;
 
-                    ShowTabItem(tabItem, setAsFirstTab);
+                    ShowTabItem(tabItem, setAsFirstTab, true);
 
                     tabItem.IsSelected = true;
                     ucControl.Focus();
@@ -126,7 +136,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     var tabItem = new DbMaintenanceTabItem(
                         ucControl, this);
             
-                    ShowTabItem(tabItem, setAsFirstTab);
+                    ShowTabItem(tabItem, setAsFirstTab, true);
 
                     tabItem.IsSelected = true;
                     ucControl.Focus();
@@ -144,7 +154,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             var tabItem = new UserControlTabItem(userControl, header, this);
 
-            ShowTabItem(tabItem, setAsFirstTab);
+            ShowTabItem(tabItem, setAsFirstTab, selectTab);
 
             if (selectTab)
             {
@@ -154,7 +164,7 @@ namespace RingSoft.DbLookup.Controls.WPF
 
         }
 
-        private void ShowTabItem(TabItem tabItem, bool setAsFirstTab)
+        private void ShowTabItem(TabItem tabItem, bool setAsFirstTab, bool selectTab)
         {
             if (setAsFirstTab)
             {
@@ -164,6 +174,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 Items.Add(tabItem);
             }
+            TabOrder.AddTabItem(tabItem, selectTab);
         }
 
         public bool CloseAllTabs()

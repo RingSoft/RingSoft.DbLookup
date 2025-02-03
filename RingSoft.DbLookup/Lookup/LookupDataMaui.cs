@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup.Lookup
 {
@@ -524,6 +525,11 @@ namespace RingSoft.DbLookup.Lookup
             _addInitialField = false;
             if (resetSortOrder)
             {
+                FieldDefinition sortField = null;
+                if (column is LookupFieldColumnDefinition columnField)
+                {
+                    sortField = columnField.FieldDefinition;
+                }
                 var index = 0;
                 if (LookupDefinition.InitialOrderByField != null)
                 {

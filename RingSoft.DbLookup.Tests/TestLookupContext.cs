@@ -213,7 +213,7 @@ namespace RingSoft.DbLookup.Tests
             var piDateIndex = 1;
             var errorIndex = 1;
             //            var startDate = DateTime.Parse("01/01/1980 12:00:00 AM");
-            var startDate = DateTime.Now;
+            var startDate = GblMethods.NowDate();
 
             for (int i = 1; i < 101; i++)
             {

@@ -525,11 +525,6 @@ namespace RingSoft.DbLookup.Lookup
             _addInitialField = false;
             if (resetSortOrder)
             {
-                FieldDefinition sortField = null;
-                if (column is LookupFieldColumnDefinition columnField)
-                {
-                    sortField = columnField.FieldDefinition;
-                }
                 var index = 0;
                 if (LookupDefinition.InitialOrderByField != null)
                 {

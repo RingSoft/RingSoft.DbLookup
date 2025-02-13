@@ -329,10 +329,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 baseWindow.Focus();
                 UserControl.Focus();
-                if (!isAltDown)
-                {
-                    UserControl.ResetViewForNewRecord();
-                }
+                UserControl.SetInitialFocus();
             };
             //lookupWindow.Show();
             lookupWindow.ShowDialog();

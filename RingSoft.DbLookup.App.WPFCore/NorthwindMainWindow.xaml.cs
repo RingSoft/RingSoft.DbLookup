@@ -117,6 +117,9 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Header = "_Dummy",
                 Command = DummyCommand,
             });
+
+            MainMenu.Items.Add(new WindowMenu());
+
             MainMenu.Items.Add(new MenuItem()
             {
                 Header = "E_xit",

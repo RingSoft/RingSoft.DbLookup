@@ -317,7 +317,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                 ViewModel.OnRecordSelected(args);
             };
             var baseWindow = Window.GetWindow(UserControl);
-            //lookupWindow.Owner = baseWindow;
+            lookupWindow.Owner = baseWindow;
+            lookupWindow.ShowInTaskbar = false;
             lookupWindow.AddViewParameter = ViewModel?.InputParameter;
             lookupWindow.ApplyNewLookup += (sender, args) =>
                 ViewModel.FindButtonLookupDefinition = lookupWindow.LookupDefinition;

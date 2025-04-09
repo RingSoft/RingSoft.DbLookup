@@ -12,8 +12,9 @@ namespace RingSoft.DbLookup.Controls.WPF
 {
     public class WindowMenu : MenuItem
     {
-        private int _index = 0;
+        private RelayCommand<TabItem> _tabCommand;
 
+        private RelayCommand _closeAllTabs;
         public WindowMenu()
         {
             Header = "_Window";
@@ -21,27 +22,42 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 Header = "Test",
             });
+
+            _tabCommand = new RelayCommand<TabItem>(ShowTab);
+
+            _closeAllTabs = new RelayCommand((() =>
+            {
+                LookupControlsGlobals.TabControl.CloseAllTabs();
+            }));
         }
 
         protected override void OnSubmenuOpened(RoutedEventArgs e)
         {
             Items.Clear();
-            Items.Add(new MenuItem()
-            {
-                Header = "Test1",
-            });
 
-            if (_index > 0)
+            foreach (var priority in LookupControlsGlobals.TabControl.TabOrder.TabPriorities)
             {
                 Items.Add(new MenuItem()
                 {
-                    Header = "Test2",
+                    Header = priority.TabItem.Header,
+                    Command = _tabCommand,
+                    CommandParameter = priority.TabItem,
                 });
             }
 
-            _index++;
+            Items.Add(new Separator());
 
+            Items.Add(new MenuItem()
+            {
+                Header = "_Close All Tabs",
+                Command = _closeAllTabs,
+            });
             base.OnSubmenuOpened(e);
+        }
+
+        private void ShowTab(TabItem item)
+        {
+            LookupControlsGlobals.TabControl.SelectedItem = item;
         }
     }
 }

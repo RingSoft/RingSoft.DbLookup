@@ -118,7 +118,8 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Command = DummyCommand,
             });
 
-            MainMenu.Items.Add(new WindowMenu());
+            var windowMenu = new WindowMenu();
+            MainMenu.Items.Add(windowMenu);
 
             MainMenu.Items.Add(new MenuItem()
             {

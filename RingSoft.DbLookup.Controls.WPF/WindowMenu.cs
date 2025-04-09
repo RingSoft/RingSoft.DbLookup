@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using RingSoft.DataEntryControls.Engine;
+using RingSoft.DataEntryControls.WPF;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -14,26 +17,31 @@ namespace RingSoft.DbLookup.Controls.WPF
         public WindowMenu()
         {
             Header = "_Window";
+            Items.Add(new MenuItem()
+            {
+                Header = "Test",
+            });
         }
 
-        protected override void OnClick()
+        protected override void OnSubmenuOpened(RoutedEventArgs e)
         {
             Items.Clear();
             Items.Add(new MenuItem()
             {
-                Header = "Test",
+                Header = "Test1",
             });
 
             if (_index > 0)
             {
                 Items.Add(new MenuItem()
                 {
-                    Header = "Test1",
+                    Header = "Test2",
                 });
             }
 
             _index++;
-            base.OnClick();
+
+            base.OnSubmenuOpened(e);
         }
     }
 }

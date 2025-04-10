@@ -127,16 +127,15 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Header = "_Stock Master",
                 Command = StocksCommand,
             });
-            MainMenu.Items.Add(new MenuItem()
-            {
-                Header = "_Close All Tabs",
-                Command = CloseAllTabsCommand,
-            });
+
+            //04/09/2025 - Otherwise app hangs on exit.
             //MainMenu.Items.Add(new MenuItem()
             //{
             //    Header = "_Advanced Find...",
             //    Command = AdvFindCommand,
             //});
+
+            MainMenu.Items.Add(new WindowMenu());
 
             MainMenu.Items.Add(new MenuItem()
             {

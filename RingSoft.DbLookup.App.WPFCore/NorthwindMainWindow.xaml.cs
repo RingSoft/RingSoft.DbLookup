@@ -104,11 +104,6 @@ namespace RingSoft.DbLookup.App.WPFCore
             });
             MainMenu.Items.Add(new MenuItem()
             {
-                Header = "_Close All Tabs",
-                Command = CloseAllTabsCommand,
-            });
-            MainMenu.Items.Add(new MenuItem()
-            {
                 Header = "_Advanced Find...",
                 Command = AdvFindCommand,
             });
@@ -118,8 +113,7 @@ namespace RingSoft.DbLookup.App.WPFCore
                 Command = DummyCommand,
             });
 
-            var windowMenu = new WindowMenu();
-            MainMenu.Items.Add(windowMenu);
+            MainMenu.Items.Add(new WindowMenu());
 
             MainMenu.Items.Add(new MenuItem()
             {

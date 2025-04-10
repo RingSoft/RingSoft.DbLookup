@@ -40,12 +40,6 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MegaDb\ItemsWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Northwind\OrdersWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -66,12 +60,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MegaDb\ItemsWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Northwind\OrdersWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

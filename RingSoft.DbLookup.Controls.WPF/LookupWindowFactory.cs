@@ -17,6 +17,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -78,22 +79,27 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="message">The message.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">level - null</exception>
         /// <exception cref="System.ApplicationException"></exception>
-        public void SetAlertLevel(AlertLevels level, bool disabled, Window window, string message = "")
+        public void SetAlertLevel(AlertLevels level, bool disabled, Window window, string message = "", string title = "")
         {
             //var advancedFindWindows = Dispatcher.Invoke(() => Application.Current.Windows.OfType<AdvancedFindWindow>().ToList());
             var image = LookupControlsGlobals.LookupControlContentTemplateFactory
                 .GetImageForAlertLevel(level);
-            var title = string.Empty;
             var baloonIcon = BalloonIcon.Info;
             switch (level)
             {
                 case AlertLevels.Green:
                     break;
                 case AlertLevels.Yellow:
-                    title = "Warning!";
+                    if (title.IsNullOrEmpty())
+                    {
+                        title = "Warning!";
+                    }
                     break;
                 case AlertLevels.Red:
-                    title = "Red Alert!";
+                    if (title.IsNullOrEmpty())
+                    {
+                        title = "Red Alert!";
+                    }
                     baloonIcon = BalloonIcon.Error;
                     break;
                 default:

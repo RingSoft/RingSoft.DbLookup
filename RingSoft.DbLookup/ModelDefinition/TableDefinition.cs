@@ -618,6 +618,21 @@ namespace RingSoft.DbLookup.ModelDefinition
         {
             var identity = PrimaryKeyFields.Count == 1
                               && PrimaryKeyFields[0].FieldDataType == FieldDataTypes.Integer;
+
+            if (identity)
+            {
+                var fieldDef = PrimaryKeyFields[0];
+                if (fieldDef is IntegerFieldDefinition intField)
+                {
+                    if (intField != null)
+                    {
+                        if (intField.OverrideIdentity)
+                        {
+                            identity = false;
+                        }
+                    }
+                }
+            }
             return identity;
 
         }

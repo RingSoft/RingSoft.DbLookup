@@ -59,6 +59,8 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>The content template identifier.</value>
         public int ContentTemplateId { get; private set; }
 
+        public bool OverrideIdentity { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegerFieldDefinition" /> class.
         /// </summary>
@@ -180,6 +182,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             if (LookupControlColumnId == LookupDefaults.TextColumnId)
                 LookupControlColumnId = LookupDefaults.CustomContentColumnId;
 
+            return this;
+        }
+
+        public IntegerFieldDefinition DoOverrideIdentity()
+        {
+            OverrideIdentity = true;
             return this;
         }
 

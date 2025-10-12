@@ -85,7 +85,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the new record's primary key value object.  Used to add a new record in a Db maintenance window with multiple primary key fields.
         /// </summary>
         /// <value>The new record primary key value.</value>
-        public PrimaryKeyValue NewRecordPrimaryKeyValue { get; internal set; }
+        public PrimaryKeyValue NewRecordPrimaryKeyValue { get; set; }
 
         /// <summary>
         /// Gets or sets the input parameter.
@@ -118,6 +118,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         /// <value>The selected primary key value.</value>
         public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }
+
+        public bool CloseLookupWindow { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.

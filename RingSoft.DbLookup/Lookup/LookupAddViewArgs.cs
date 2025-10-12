@@ -119,8 +119,6 @@ namespace RingSoft.DbLookup.Lookup
         /// <value>The selected primary key value.</value>
         public PrimaryKeyValue SelectedPrimaryKeyValue { get; set; }
 
-        public bool CloseLookupWindow { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupAddViewArgs" /> class.
         /// </summary>

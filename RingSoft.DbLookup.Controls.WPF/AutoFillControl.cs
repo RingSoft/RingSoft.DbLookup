@@ -1419,19 +1419,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             lookupWindow.LookupAdd += (sender, args) =>
             {
                 Setup.OnLookupAdd(args);
-                if (args.CloseLookupWindow)
+                args.CallBackToken.CloseLookupWindow += (o, eventArgs) =>
                 {
                     lookupWindow.Close();
-                }
+                };
             };
 
             lookupWindow.LookupView += (sender, args) =>
             {
                 Setup.OnLookupView(args);
-                if (args.CloseLookupWindow)
+                args.CallBackToken.CloseLookupWindow += (o, eventArgs) =>
                 {
                     lookupWindow.Close();
-                }
+                };
             };
             lookupWindow.ShowDialog();
         }

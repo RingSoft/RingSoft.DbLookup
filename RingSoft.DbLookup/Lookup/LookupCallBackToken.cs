@@ -70,6 +70,8 @@ namespace RingSoft.DbLookup.Lookup
         /// </summary>
         public event EventHandler RefreshData;
 
+        public event EventHandler CloseLookupWindow;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupCallBackToken" /> class.
         /// </summary>
@@ -84,6 +86,11 @@ namespace RingSoft.DbLookup.Lookup
         {
             RefreshOperation = operation;
             RefreshData?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnCloseLookupWindow()
+        {
+            CloseLookupWindow?.Invoke(this, EventArgs.Empty);
         }
     }
 }

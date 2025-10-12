@@ -227,6 +227,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         public event EventHandler<LookupAddViewArgs> LookupView;
 
+        public event EventHandler<LookupAddViewArgs> LookupAdd;
+
         /// <summary>
         /// Occurs when [refresh data].
         /// </summary>
@@ -509,7 +511,9 @@ namespace RingSoft.DbLookup.Controls.WPF
                 LookupCallBackRefreshData(args.CallBackToken);
             };
 
-            _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
+            LookupAdd?.Invoke(this, args);
+            if (!args.Handled)
+                _lookupDefinition.TableDefinition.Context.OnAddViewLookup(args);
         }
 
         /// <summary>

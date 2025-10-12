@@ -1415,6 +1415,16 @@ namespace RingSoft.DbLookup.Controls.WPF
             //    Window.GetWindow(this).Activate();
             //};
             //lookupWindow.Show();
+
+            lookupWindow.LookupAdd += (sender, args) =>
+            {
+                Setup.OnLookupAdd(args);
+            };
+
+            lookupWindow.LookupView += (sender, args) =>
+            {
+                Setup.OnLookupView(args);
+            };
             lookupWindow.ShowDialog();
         }
 

@@ -64,6 +64,11 @@ namespace RingSoft.DbLookup.AutoFill
         /// <value>The foreign field.</value>
         public FieldDefinition ForeignField { get; }
 
+        public event EventHandler<LookupAddViewArgs> LookupView;
+
+        public event EventHandler<LookupAddViewArgs> LookupAdd;
+
+
         /// <summary>
         /// Initializes a new instance of the class with a lookup definition that is attached to the primary table of the parent join definition of the foreign field definition parameter.
         /// </summary>
@@ -121,5 +126,14 @@ namespace RingSoft.DbLookup.AutoFill
             return GetAutoFillValueForIdValue(idValue?.ToString());
         }
 
+        public void OnLookupAdd(LookupAddViewArgs args)
+        {
+            LookupAdd?.Invoke(this, args);
+        }
+
+        public void OnLookupView(LookupAddViewArgs args)
+        {
+            LookupView?.Invoke(this, args);
+        }
     }
 }

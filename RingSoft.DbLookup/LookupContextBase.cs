@@ -502,6 +502,13 @@ namespace RingSoft.DbLookup
                 SystemGlobals.TableRegistry.ShowAddOntheFlyWindow(
                     e.LookupData.LookupDefinition.TableDefinition
                     , e, e.InputParameter);
+                if (e.CallBackToken != null)
+                {
+                    if (e.FromLookupControl)
+                    {
+                        e.CallBackToken.OnRefreshData();
+                    }
+                }
             }
             else
             {

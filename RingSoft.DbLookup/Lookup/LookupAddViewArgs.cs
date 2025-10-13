@@ -49,7 +49,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets a value indicating whether this event came from a lookup control.
         /// </summary>
         /// <value><c>true</c> if from a lookup control; otherwise, <c>false</c>.</value>
-        public bool FromLookupControl { get; private set; }
+        public bool FromLookupControl { get; set; }
 
         /// <summary>
         /// Gets the lookup form mode.

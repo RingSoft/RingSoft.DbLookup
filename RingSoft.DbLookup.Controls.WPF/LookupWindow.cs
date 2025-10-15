@@ -535,6 +535,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return;
 
             Close();
+            LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue();
             var args = new LookupSelectArgs(LookupControl.LookupDataMaui);
             LookupSelect?.Invoke(this, args);
         }

@@ -150,8 +150,10 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                         }
                         if (!validProduct)
                         {
-                            autoFillCellProps.OverrideCellMovement = true;
-                            return; //So IsNew isn't set.
+                            //Validation on the fly.  Next 2 lines.
+                            //autoFillCellProps.OverrideCellMovement = true;
+                            //return; //So IsNew isn't set.
+                            ProductAutoFillValue = autoFillCellProps.AutoFillValue;  //Comment out if val on the fly.
                         }
                     }
                     break;

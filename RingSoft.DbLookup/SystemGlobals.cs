@@ -190,6 +190,20 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <value>The item rights factory.</value>
         public static ItemRightsFactory ItemRightsFactory { get; set; }
+
+        public static string GetValFailMessage(string description, bool allowAdd)
+        {
+            var result = $"{description} has an invalid value.  Please select a valid {description}";
+            if (allowAdd)
+            {
+                result += $" or add a new {description}.";
+            }
+            else
+            {
+                result += ".";
+            }
+            return result ;
+        }
     }
 
     /// <summary>

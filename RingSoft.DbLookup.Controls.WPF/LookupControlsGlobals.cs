@@ -362,7 +362,6 @@ namespace RingSoft.DbLookup.Controls.WPF
             return Keyboard.IsKeyDown(Key.RightShift);
         }
 
-
         /// <summary>
         /// Handles the value fail.
         /// </summary>
@@ -370,8 +369,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="autoFillMap">The automatic fill map.</param>
         public static void HandleValFail(ContentControl window, DbAutoFillMap autoFillMap)
         {
+            var description = autoFillMap.AutoFillSetup.ForeignField.Description;
             var caption = "Validation Fail";
-            var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.  Please select a valid {autoFillMap.AutoFillSetup.ForeignField.Description} or add a new {autoFillMap.AutoFillSetup.ForeignField.Description}.";
+            var message = SystemGlobals.GetValFailMessage(description, autoFillMap.AutoFillSetup.AllowLookupAdd);
 
             var controls = window.GetLogicalChildren<AutoFillControl>();
             if (controls != null)

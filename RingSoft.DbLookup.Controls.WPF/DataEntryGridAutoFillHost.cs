@@ -57,6 +57,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         private bool _gridReadOnlyMode;
 
+        private bool _handleValFail;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataEntryGridAutoFillHost"/> class.
         /// </summary>
@@ -185,6 +187,13 @@ namespace RingSoft.DbLookup.Controls.WPF
                 Control.SetReadOnlyMode(true);
                 //Control.Button.Focus();
             }
+
+            if (_handleValFail)
+            {
+                _handleValFail = false;
+
+                Control.ShowLookupWindow();
+            }
         }
 
         /// <summary>
@@ -249,6 +258,12 @@ namespace RingSoft.DbLookup.Controls.WPF
                 return true;
 
             return base.SetReadOnlyMode(readOnlyMode);
+        }
+
+        public override void HandleValFail()
+        {
+            _handleValFail = true;
+            base.HandleValFail();
         }
     }
 }

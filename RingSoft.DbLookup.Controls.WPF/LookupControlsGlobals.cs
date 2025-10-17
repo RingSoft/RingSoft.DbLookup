@@ -371,7 +371,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         public static void HandleValFail(ContentControl window, DbAutoFillMap autoFillMap)
         {
             var caption = "Validation Fail";
-            var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.";
+            var message = $"{autoFillMap.AutoFillSetup.ForeignField.Description} has an invalid value.  Please select a valid {autoFillMap.AutoFillSetup.ForeignField.Description} or add a new {autoFillMap.AutoFillSetup.ForeignField.Description}.";
 
             var controls = window.GetLogicalChildren<AutoFillControl>();
             if (controls != null)
@@ -384,6 +384,7 @@ namespace RingSoft.DbLookup.Controls.WPF
                     {
                         foundControl.Focus();
                         ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                        foundControl.ShowLookupWindow();
                     }
                 }
             }

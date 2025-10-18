@@ -201,13 +201,23 @@ namespace RingSoft.DbLookup
         /// </summary>
         /// <param name="autoFillValue">The automatic fill value.</param>
         /// <returns><c>true</c> if the specified automatic fill value is valid; otherwise, <c>false</c>.</returns>
-        public static bool IsValid(this AutoFillValue autoFillValue)
+        public static bool IsValid(this AutoFillValue autoFillValue, bool checkDb = false)
         {
             if (autoFillValue == null)
             {
                 return false;
             }
-            return autoFillValue.PrimaryKeyValue.IsValid();
+            if (autoFillValue.PrimaryKeyValue.IsValid())
+            {
+                if (checkDb)
+                {
+                    return autoFillValue.PrimaryKeyValue.IsValidDb();
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

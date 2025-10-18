@@ -2207,6 +2207,14 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 LookupDataMaui.GetInitData();
             }
+            else
+            {
+                if (!LookupDefinition.TableDefinition.IsPrimaryKeyValueDbValid(initialSearchForPrimaryKeyValue))
+                {
+                    initialSearchForPrimaryKeyValue = null;
+                    LookupDataMaui.GetInitData();
+                }
+            }
 
             LookupDataMaui.ParentWindowPrimaryKeyValue = parentWindowPrimaryKeyValue;
 

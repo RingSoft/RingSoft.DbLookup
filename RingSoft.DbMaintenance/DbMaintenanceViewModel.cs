@@ -924,6 +924,19 @@ namespace RingSoft.DbMaintenance
             //Peter Ringering - 01/14/2025 01:23:57 PM - E-109
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             var entity = GetEntityData();
+
+            if (TableDefinition.IsIdentity())
+            {
+                if (TableDefinition.GetIdentityValue(entity) > 0)
+                {
+                    if (!TableDefinition.DoesEntityExist(entity))
+                    {
+                        GblMethods.SetPropertyValue(entity
+                        , TableDefinition.GetIdentityField().PropertyName
+                        , "0");
+                    }
+                }
+            }
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Default);
 
             var children = TableDefinition

@@ -674,6 +674,19 @@ namespace RingSoft.DbLookup.ModelDefinition
             }
         }
 
+        public override bool IsPrimaryKeyValueDbValid(PrimaryKeyValue primaryKey)
+        {
+            var result = false;
+            if (primaryKey != null
+                && primaryKey.IsValid())
+            {
+                var entity = GetEntityFromPrimaryKeyValue(primaryKey);
+                result = DoesEntityExist(entity);
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Fills the out entity.
         /// </summary>

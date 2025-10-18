@@ -825,5 +825,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 , inputParameter);
 
         }
+
+        public abstract bool IsPrimaryKeyValueDbValid(PrimaryKeyValue primaryKey);
     }
 }

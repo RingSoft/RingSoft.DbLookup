@@ -244,5 +244,10 @@ namespace RingSoft.DbLookup
         {
             SystemGlobals.TableRegistry.ShowEditAddOnTheFly(this, inputParameter);
         }
+
+        public bool IsValidDb()
+        {
+            return TableDefinition.IsPrimaryKeyValueDbValid(this);
+        }
     }
 }

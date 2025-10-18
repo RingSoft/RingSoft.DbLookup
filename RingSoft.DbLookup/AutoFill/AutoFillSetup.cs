@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using RingSoft.DataEntryControls.Engine;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
@@ -57,6 +58,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// </summary>
         /// <value><c>true</c> if [set dirty]; otherwise, <c>false</c>.</value>
         public bool SetDirty { get; set; } = true;
+
+        public IAutoFillControl Control { get; set; }
 
         /// <summary>
         /// Gets the foreign field.
@@ -134,6 +137,23 @@ namespace RingSoft.DbLookup.AutoFill
         public void OnLookupView(LookupAddViewArgs args)
         {
             LookupView?.Invoke(this, args);
+        }
+
+        public void HandleValFail(string description = "")
+        {
+            if (Control != null)
+            {
+                if (description.IsNullOrEmpty())
+                {
+                    if (ForeignField == null)
+                    {
+                        throw new ArgumentException("You must provide a description if Foreign Field is null");
+                    }
+
+                    description = ForeignField.Description;
+                }
+                Control.HandleValFail(description);
+            }
         }
     }
 }

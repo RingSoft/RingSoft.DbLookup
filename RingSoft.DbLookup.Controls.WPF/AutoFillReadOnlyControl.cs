@@ -208,6 +208,11 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
+        public void HandleValFail(string description)
+        {
+            
+        }
+
         /// <summary>
         /// The pending automatic fill value
         /// </summary>

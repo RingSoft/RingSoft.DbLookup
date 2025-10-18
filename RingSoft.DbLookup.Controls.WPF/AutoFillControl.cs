@@ -25,9 +25,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using RingSoft.DataEntryControls.Engine;
 using RingSoft.DataEntryControls.WPF;
+using RingSoft.DataEntryControls.WPF.DataEntryGrid;
 using RingSoft.DbLookup.AutoFill;
 using RingSoft.DbLookup.Lookup;
 using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
+using RingSoft.DbMaintenance;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {
@@ -639,6 +641,19 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
+        public void HandleValFail(string description)
+        {
+            if (this.GetLogicalParent<DataEntryGrid>() == null)
+            {
+                var caption = "Validation Fail";
+                var message = SystemGlobals.GetValFailMessage(description, Setup.AllowLookupAdd);
+                this.SetTabFocusToControl();
+                Focus();
+                ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+                ShowLookupWindow();
+            }
+        }
+
         /// <summary>
         /// Gets a value indicating whether [contains box is open].
         /// </summary>
@@ -1012,6 +1027,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <exception cref="System.ArgumentException">Lookup definition does not have any visible columns defined or its initial sort column is null.</exception>
         private void SetupControl()
         {
+            Setup.Control = this;
             if (Setup.LookupDefinition == null || Setup.LookupDefinition.InitialSortColumnDefinition == null)
                 throw new ArgumentException(
                     "Lookup definition does not have any visible columns defined or its initial sort column is null.");

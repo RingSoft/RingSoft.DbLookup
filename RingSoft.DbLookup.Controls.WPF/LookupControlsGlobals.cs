@@ -369,25 +369,26 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="autoFillMap">The automatic fill map.</param>
         public static void HandleValFail(ContentControl window, DbAutoFillMap autoFillMap)
         {
-            var description = autoFillMap.AutoFillSetup.ForeignField.Description;
-            var caption = "Validation Fail";
-            var message = SystemGlobals.GetValFailMessage(description, autoFillMap.AutoFillSetup.AllowLookupAdd);
+            autoFillMap.AutoFillSetup.HandleValFail();
+            //var description = autoFillMap.AutoFillSetup.ForeignField.Description;
+            //var caption = "Validation Fail";
+            //var message = SystemGlobals.GetValFailMessage(description, autoFillMap.AutoFillSetup.AllowLookupAdd);
 
-            var controls = window.GetLogicalChildren<AutoFillControl>();
-            if (controls != null)
-            {
-                var foundControl = controls.FirstOrDefault(p => p.Setup == autoFillMap.AutoFillSetup);
-                if (foundControl != null)
-                {
-                    foundControl.SetTabFocusToControl();
-                    if (foundControl.GetLogicalParent<DataEntryGrid>() == null)
-                    {
-                        foundControl.Focus();
-                        ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
-                        foundControl.ShowLookupWindow();
-                    }
-                }
-            }
+            //var controls = window.GetLogicalChildren<AutoFillControl>();
+            //if (controls != null)
+            //{
+            //    var foundControl = controls.FirstOrDefault(p => p.Setup == autoFillMap.AutoFillSetup);
+            //    if (foundControl != null)
+            //    {
+            //        //foundControl.SetTabFocusToControl();
+            //        //if (foundControl.GetLogicalParent<DataEntryGrid>() == null)
+            //        //{
+            //        //    foundControl.Focus();
+            //        //    ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
+            //        //    foundControl.ShowLookupWindow();
+            //        //}
+            //    }
+            //}
         }
 
         /// <summary>

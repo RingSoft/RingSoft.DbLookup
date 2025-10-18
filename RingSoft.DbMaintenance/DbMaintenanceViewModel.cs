@@ -1490,6 +1490,13 @@ namespace RingSoft.DbMaintenance
             //    description = TableDefinition.ToString();
 
             //var message = ConfirmDeleteMessage(description);
+
+            if (!TableDefinition.DoesEntityExist(Entity))
+            {
+                RecordDirty = false;
+                OnNewButton();
+                return DbMaintenanceResults.Success;
+            }
             var goOn = true;
             if (ShowConfirmDeleteQ)
             {

@@ -950,5 +950,11 @@ namespace RingSoft.DbLookup.ModelDefinition
             base.HasTableRight(rightType);
             return this;
         }
+
+        public bool DoesEntityExist(TEntity entity)
+        {
+            return entity.FillOutProperties(false) != null;
+        }
+
     }
 }

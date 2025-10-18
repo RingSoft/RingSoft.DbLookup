@@ -1752,7 +1752,8 @@ namespace RingSoft.DbMaintenance
                                     }
 
                                     FieldDefinition fieldFilter = null;
-                                    if (parentDeleteTable != null
+                                    if (parentDeleteTable.Column != null
+                                        && parentDeleteTable != null
                                         && parentDeleteTable.Column.FieldDefinition != null)
                                     {
                                         fieldFilter = parentDeleteTable.Column.FieldDefinition;

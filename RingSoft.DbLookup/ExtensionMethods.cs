@@ -590,7 +590,7 @@ namespace RingSoft.DbLookup
             {
                 return autoFillSetup.ForeignField.AllowNulls;
             }
-            if (!autoFillValue.IsValid())
+            if (!autoFillValue.IsValid(true))
             {
                 if (!autoFillValue.Text.IsNullOrEmpty())
                 {

@@ -1079,7 +1079,12 @@ namespace RingSoft.DbMaintenance
 
                 LookupAddViewArgs.CallBackToken.RefreshMode = AutoFillRefreshModes.PkRefresh;
                 LookupAddViewArgs.CallBackToken.OnRefreshData(); //Important so launched from lookup gets refreshed.
-                LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
+
+                if (_lookupData.SelectedPrimaryKeyValue != null && LookupAddViewArgs.LookupData.LookupDefinition.TableDefinition ==
+                    _lookupData.SelectedPrimaryKeyValue.TableDefinition)
+                {
+                    LookupAddViewArgs.LookupData.SelectPrimaryKey(_lookupData.SelectedPrimaryKeyValue);
+                }
             }
 
             _savingRecord = false;

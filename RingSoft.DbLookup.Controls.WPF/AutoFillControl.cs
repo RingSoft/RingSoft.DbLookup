@@ -618,7 +618,15 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 if (token.RefreshMode == AutoFillRefreshModes.PkRefresh)
                 {
-                    process = Value != null && Value.PrimaryKeyValue.IsEqualTo(token.NewAutoFillValue.PrimaryKeyValue);
+                    if (Value != null && token.NewAutoFillValue.PrimaryKeyValue.TableDefinition == Value.PrimaryKeyValue.TableDefinition)
+                    {
+                        process = Value != null &&
+                                  Value.PrimaryKeyValue.IsEqualTo(token.NewAutoFillValue.PrimaryKeyValue);
+                    }
+                    else
+                    {
+                        process = false;
+                    }
                 }
             }
             if (process)

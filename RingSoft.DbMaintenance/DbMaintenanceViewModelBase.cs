@@ -306,7 +306,15 @@ namespace RingSoft.DbMaintenance
                 if (_keyAutoFillValue == value)
                     return;
 
-                _keyAutoFillValue = value;
+                if (value == null)
+                {
+                    _keyAutoFillValue = new AutoFillValue(null, "");
+                }
+                else
+                {
+                    _keyAutoFillValue = value;
+                }
+
                 OnPropertyChanged();
             }
         }

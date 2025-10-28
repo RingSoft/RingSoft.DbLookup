@@ -1196,6 +1196,11 @@ namespace RingSoft.DbMaintenance
             if (MaintenanceMode == DbMaintenanceModes.EditMode && _savedKeyAutoFillValue != null &&
                 KeyAutoFillValue != null && _savedKeyAutoFillValue.Text != KeyAutoFillValue.Text)
             {
+                if (KeyAutoFillValue.Text.IsNullOrEmpty())
+                {
+                    //Validation will fail in this scenario.
+                    return true;
+                }
                 var recordDescription = TableDefinition.RecordDescription;
                 if (recordDescription.IsNullOrEmpty())
                     recordDescription = TableDefinition.ToString();

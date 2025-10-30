@@ -1385,9 +1385,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 initialText = TextBox.Text;
 
             if (Setup.LookupDefinition.InitialOrderByColumn != Setup.LookupDefinition.InitialSortColumnDefinition &&
-                !initialText.IsNullOrEmpty() && Value.PrimaryKeyValue.IsValid())
+                !initialText.IsNullOrEmpty())
             {
-                initialText = Setup.LookupDefinition.InitialOrderByColumn.GetTextForColumn(Value.PrimaryKeyValue);
+                if (Value.PrimaryKeyValue.IsValid())
+                {
+                    initialText = Setup.LookupDefinition.InitialOrderByColumn.GetTextForColumn(Value.PrimaryKeyValue);
+                }
+                else
+                {
+                    initialText = string.Empty;
+                }
             }
             PrimaryKeyValue readOnlyPrimaryKeyValue = null;
             if (_readOnlyMode && Value != null)

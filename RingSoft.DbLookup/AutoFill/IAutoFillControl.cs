@@ -68,6 +68,6 @@ namespace RingSoft.DbLookup.AutoFill
         /// </summary>
         void OnSelect();
 
-        void HandleValFail(string description);
+        void HandleValFail(string description, bool allowNulls);
     }
 }

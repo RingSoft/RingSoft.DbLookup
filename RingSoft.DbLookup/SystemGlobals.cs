@@ -15,6 +15,7 @@ using RingSoft.DbLookup.AdvancedFind;
 using RingSoft.DbLookup.QueryBuilder;
 using RingSoft.Printing.Interop;
 using System;
+using RingSoft.DbLookup.ModelDefinition.FieldDefinitions;
 
 namespace RingSoft.DbLookup
 {
@@ -191,7 +192,7 @@ namespace RingSoft.DbLookup
         /// <value>The item rights factory.</value>
         public static ItemRightsFactory ItemRightsFactory { get; set; }
 
-        public static string GetValFailMessage(string description, bool allowAdd)
+        public static string GetValFailMessage(string description, bool allowAdd, bool allowNulls = false)
         {
             var result = $"{description} has an invalid value.  Please select a valid {description}";
             if (allowAdd)
@@ -201,6 +202,11 @@ namespace RingSoft.DbLookup
             else
             {
                 result += ".";
+            }
+
+            if (allowNulls)
+            {
+                result += $"  If you want, you can set the text in {description} to be empty.";
             }
             return result ;
         }

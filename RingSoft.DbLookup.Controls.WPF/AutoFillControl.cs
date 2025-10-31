@@ -649,12 +649,12 @@ namespace RingSoft.DbLookup.Controls.WPF
             }
         }
 
-        public void HandleValFail(string description)
+        public void HandleValFail(string description, bool allowNulls)
         {
             if (this.GetLogicalParent<DataEntryGrid>() == null)
             {
                 var caption = "Validation Fail";
-                var message = SystemGlobals.GetValFailMessage(description, Setup.AllowLookupAdd);
+                var message = SystemGlobals.GetValFailMessage(description, Setup.AllowLookupAdd, allowNulls);
                 this.SetTabFocusToControl();
                 Focus();
                 ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);

@@ -208,7 +208,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             
         }
 
-        public void HandleValFail(string description)
+        public void HandleValFail(string description, bool allowNulls)
         {
             
         }

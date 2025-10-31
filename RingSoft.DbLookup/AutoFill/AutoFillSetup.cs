@@ -139,7 +139,7 @@ namespace RingSoft.DbLookup.AutoFill
             LookupView?.Invoke(this, args);
         }
 
-        public void HandleValFail(string description = "")
+        public void HandleValFail(string description = "", bool? allowNulls = null)
         {
             if (Control != null)
             {
@@ -150,9 +150,13 @@ namespace RingSoft.DbLookup.AutoFill
                         throw new ArgumentException("You must provide a description if Foreign Field is null");
                     }
 
+                    if (allowNulls == null)
+                    {
+                        allowNulls = ForeignField.AllowNulls;
+                    }
                     description = ForeignField.Description;
                 }
-                Control.HandleValFail(description);
+                Control.HandleValFail(description, allowNulls.GetValueOrDefault());
             }
         }
     }

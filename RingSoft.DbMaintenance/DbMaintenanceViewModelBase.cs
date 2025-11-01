@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using RingSoft.DbLookup.QueryBuilder;
+using LookupSelectArgs = RingSoft.DbLookup.Lookup.LookupSelectArgs;
 
 namespace RingSoft.DbMaintenance
 {

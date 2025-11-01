@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RingSoft.DataEntryControls.WPF;
 using RingSoft.DbLookup.AutoFill;
+using LookupSelectArgs = RingSoft.DbLookup.Lookup.LookupSelectArgs;
 
 namespace RingSoft.DbLookup.Controls.WPF
 {

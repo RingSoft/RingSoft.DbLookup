@@ -107,7 +107,8 @@ namespace RingSoft.DbLookup.AutoFill
 
             ForeignField = foreignKeyFieldDefinition;
 
-            LookupDefinition = foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable.LookupDefinition.Clone();
+            LookupDefinition = foreignKeyFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable
+                .LookupDefinition.Clone();
         }
 
         /// <summary>

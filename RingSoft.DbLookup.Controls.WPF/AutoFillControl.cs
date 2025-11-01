@@ -954,8 +954,8 @@ namespace RingSoft.DbLookup.Controls.WPF
         {
             if (e.Key == Key.F5)
             {
-                ShowLookupWindow();
                 e.Handled = true;
+                ShowLookupWindow();
             }
         }
 
@@ -1323,10 +1323,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                         ListBox.SelectedIndex--;
                     break;
                 case Key.F5:
+                    e.Handled = true;
                     ShowLookupWindow();
                     break;case Key.Space:
                     AutoFillDataMaui.OnKeyCharPressed(' ');
-                    e.Handled = true;
                     break;
             }
 

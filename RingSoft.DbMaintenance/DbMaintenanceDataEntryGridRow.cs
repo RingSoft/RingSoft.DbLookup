@@ -99,7 +99,7 @@ namespace RingSoft.DbMaintenance
                             if (!autoFillCellProps.AutoFillValue.ValidateAutoFill(autoFillCellProps.AutoFillSetup))
                             {
                                 var message = SystemGlobals.GetValFailMessage(description
-                                , autoFillCellProps.AutoFillSetup.AllowLookupAdd);
+                                , autoFillCellProps.AutoFillSetup.CanLookupAdd);
                                 var caption = "Validation Failure";
                                 Manager?.Grid.GotoCell(this, columnMap.ColumnId);
                                 ControlsGlobals.UserInterface.ShowMessageBox(message, caption,

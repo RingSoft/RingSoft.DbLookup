@@ -654,12 +654,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             if (this.GetLogicalParent<DataEntryGrid>() == null)
             {
                 var caption = "Validation Fail";
-                var allowAdd = Setup.AllowLookupAdd;
-                if (allowAdd && Setup.ForeignField.ParentJoinForeignKeyDefinition != null)
-                {
-                    allowAdd = Setup.ForeignField.ParentJoinForeignKeyDefinition.PrimaryTable.CanAddToTable;
-                }
-                var message = SystemGlobals.GetValFailMessage(description, allowAdd, allowNulls);
+                var message = SystemGlobals.GetValFailMessage(description, Setup.CanLookupAdd, allowNulls);
                 this.SetTabFocusToControl();
                 Focus();
                 ControlsGlobals.UserInterface.ShowMessageBox(message, caption, RsMessageBoxIcons.Exclamation);
@@ -924,21 +919,28 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         private void CheckButton()
         {
-            if (Setup != null && _readOnlyMode && Button != null)
+            if (Setup != null && Button != null)
             {
-                if (Setup.LookupDefinition.TableDefinition.CanViewTable)
+                if (_readOnlyMode)
                 {
-                    if (Button != null)
+                    if (Setup.LookupDefinition.TableDefinition.CanViewTable)
                     {
-                        Button.Visibility = Visibility.Visible;
+                        if (Button != null)
+                        {
+                            Button.Visibility = Visibility.Visible;
+                        }
+                    }
+                    else
+                    {
+                        if (Button != null)
+                        {
+                            Button.Visibility = Visibility.Collapsed;
+                        }
                     }
                 }
                 else
                 {
-                    if (Button != null)
-                    {
-                        Button.Visibility = Visibility.Collapsed;
-                    }
+                    Button.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -1536,6 +1538,8 @@ namespace RingSoft.DbLookup.Controls.WPF
                     TextBox.Focus();
                 }
             }
+
+            CheckButton();
 
             //if (IsFocused)
             //{

@@ -67,6 +67,25 @@ namespace RingSoft.DbLookup.AutoFill
         /// <value>The foreign field.</value>
         public FieldDefinition ForeignField { get; }
 
+        public bool CanLookupAdd
+        {
+            get
+            {
+                if (AllowLookupAdd)
+                {
+                    if (ForeignField != null && ForeignField.ParentJoinForeignKeyDefinition != null)
+                    {
+                        return ForeignField.ParentJoinForeignKeyDefinition.PrimaryTable.CanAddToTable;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         public event EventHandler<LookupAddViewArgs> LookupView;
 
         public event EventHandler<LookupAddViewArgs> LookupAdd;

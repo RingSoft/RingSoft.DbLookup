@@ -229,7 +229,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             ShowAddOntheFlyWindow(tableDefinition, args, inputParameter);
         }
 
-        public override void ShowEditAddOnTheFly(PrimaryKeyValue primaryKey, object inputParameter = null)
+        public override void ShowEditAddOnTheFly(PrimaryKeyValue primaryKey, object inputParameter = null, LookupAddViewArgs lookupAvArgs = null)
         {
             var lookupData = primaryKey.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
@@ -241,6 +241,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 InputParameter = inputParameter,
             };
             args.LookupData.SelectedPrimaryKeyValue = primaryKey;
+            if (lookupAvArgs != null)
+            {
+                args.CallBackToken = lookupAvArgs.CallBackToken;
+            }
             ShowAddOntheFlyWindow(primaryKey.TableDefinition, args, inputParameter);
 
         }

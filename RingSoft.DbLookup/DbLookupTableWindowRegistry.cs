@@ -65,7 +65,8 @@ namespace RingSoft.DbLookup
 
         public abstract void ShowEditAddOnTheFly(
             PrimaryKeyValue primaryKey
-            , object inputParameter = null);
+            , object inputParameter = null
+            , LookupAddViewArgs lookupAvArgs = null);
 
 
         /// <summary>

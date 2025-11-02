@@ -73,7 +73,7 @@ namespace RingSoft.DbLookup.Lookup
         /// Gets the call back token.
         /// </summary>
         /// <value>The call back token.</value>
-        public LookupCallBackToken CallBackToken { get; }
+        public LookupCallBackToken CallBackToken { get; set; }
 
         /// <summary>
         /// Gets the owner window that is firing this event.  For use in setting owner property of the WPF window associated with the Table Definition.

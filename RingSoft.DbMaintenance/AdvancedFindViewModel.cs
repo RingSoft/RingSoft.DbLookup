@@ -566,6 +566,7 @@ namespace RingSoft.DbMaintenance
             CreateCommands();
             TableUiCommand = new UiCommand();
             MapFieldToUiCommand(TableUiCommand, TableDefinition.GetFieldDefinition(p => p.Table));
+            NoAddGotoNextRecord = false;
         }
 
         /// <summary>

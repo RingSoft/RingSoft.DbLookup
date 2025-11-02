@@ -885,7 +885,20 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             ListTextBox.Visibility = Visibility.Collapsed;
 
-            if (LookupDefinition != null && !LookupDefinition.TableDefinition.CanViewTable)
+            if (LookupDefinition != null)
+            {
+                var allowAdvFind = LookupDefinition.TableDefinition.CanViewTable;
+                if (allowAdvFind)
+                {
+                    allowAdvFind = SystemGlobals.LookupContext.AdvancedFinds.CanViewTable;
+                }
+
+                if (!allowAdvFind)
+                {
+                    ShowAdvancedFindButton = false;
+                }
+            }
+            else
             {
                 ShowAdvancedFindButton = false;
             }

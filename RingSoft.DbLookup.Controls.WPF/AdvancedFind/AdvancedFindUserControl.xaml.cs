@@ -376,5 +376,24 @@ namespace RingSoft.DbLookup.Controls.WPF.AdvancedFind
         {
             return LookupControl.LookupDataMaui.GetSelectedPrimaryKeyValue();
         }
+
+        public override void SetControlReadOnlyMode(Control control, bool readOnlyValue)
+        {
+            if (readOnlyValue 
+                && LocalViewModel.MaintenanceMode == DbMaintenanceModes.AddMode
+                && !LocalViewModel.TableDefinition.CanEditTabe)
+            {
+                if (control == TreeView
+                    || control == AddColumnButton
+                    || control == AddFilterButton
+                    || control == TableListControl
+                    || control == ColumnsGrid
+                    || control == FiltersGrid)
+                {
+                    return;
+                }
+            }
+            base.SetControlReadOnlyMode(control, readOnlyValue);
+        }
     }
 }

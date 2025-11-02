@@ -52,7 +52,7 @@
                 <dec:EnhancedButton Grid.Row="1" Grid.Column="2" x:Name="RefreshNowButton" Command="{Binding RefreshNowCommand}" Content="Refresh Now" IsTabStop="False"/>
 
                 <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
-                    <Label Content="(Ctrl + F to set focus)" DockPanel.Dock="Top"/>
+                    <Label Content="Fields (Ctrl + F to set focus)" DockPanel.Dock="Top"/>
                     <TreeView x:Name="TreeView" ItemsSource="{Binding TreeRoot}" >
                         <TreeView.ItemTemplate>
 

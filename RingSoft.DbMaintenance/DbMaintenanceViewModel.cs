@@ -199,6 +199,8 @@ namespace RingSoft.DbMaintenance
         /// <value><c>true</c> if [show confirm delete q]; otherwise, <c>false</c>.</value>
         protected bool ShowConfirmDeleteQ { get; set; } = true;
 
+        public bool NoAddGotoNextRecord { get; protected set; } = true;
+
         /// <summary>
         /// The lookup data
         /// </summary>
@@ -358,7 +360,7 @@ namespace RingSoft.DbMaintenance
             if (!TableDefinition.HasRight(RightTypes.AllowAdd))
             {
                 AllowNew = false;
-                if (MaintenanceMode == DbMaintenanceModes.AddMode)
+                if (MaintenanceMode == DbMaintenanceModes.AddMode && NoAddGotoNextRecord)
                 {
                     OnGotoNextButton();
                 }

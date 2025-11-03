@@ -230,6 +230,11 @@ namespace RingSoft.DbLookup
                 return false;
             }
 
+            if (autoFillValue.Text.IsNullOrEmpty())
+            {
+                return false;
+            }
+
             if (autoFillValue.PrimaryKeyValue.IsValid())
             {
                 if (checkDb)

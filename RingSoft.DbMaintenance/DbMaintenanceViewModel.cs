@@ -1432,7 +1432,7 @@ namespace RingSoft.DbMaintenance
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         protected bool CheckDirty()
         {
-            if (ReadOnlyMode)
+            if (ReadOnlyMode || SystemGlobals.UnitTestMode)
                 return true;
 
             if (!RecordDirty)

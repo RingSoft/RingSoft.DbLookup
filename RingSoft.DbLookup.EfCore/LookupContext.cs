@@ -347,6 +347,30 @@ namespace RingSoft.DbLookup.EfCore
             return query;
         }
 
+        private void GetParentIncludes(TableDefinitionBase tableDefinition, List<string> includes, List<TableDefinitionBase> parentJoins = null, string parentInclude = "")
+        {
+            var parentObjects = tableDefinition
+                .FieldDefinitions
+                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+
+            foreach (var fieldDefinition in parentObjects)
+            {
+                var newInclude = fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName;
+                if (!parentInclude.IsNullOrEmpty())
+                {
+                    newInclude = $"{parentInclude}.{newInclude}";
+                }
+                includes.Add(newInclude);
+                var tableToCheck = fieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable;
+                if (parentJoins != null && parentJoins.Contains(tableToCheck) && fieldDefinition.AllowRecursion)
+                {
+                    GetParentIncludes(fieldDefinition
+                        .ParentJoinForeignKeyDefinition
+                        .PrimaryTable, includes, parentJoins, newInclude);
+                }
+            }
+        }
+
         /// <summary>
         /// Gets the queryable for table grid.
         /// </summary>
@@ -356,7 +380,7 @@ namespace RingSoft.DbLookup.EfCore
         /// <param name="context">The context.</param>
         /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public override IQueryable<TEntity> GetQueryableForTableGrid<TEntity>(TableDefinition<TEntity> tableDefinition
-            , List<TableDefinitionBase> gridTables, IDbContext context = null) where TEntity : class
+            , List<TableDefinitionBase> gridTables, IDbContext context = null, List<TableDefinitionBase> parentJoins = null) where TEntity : class
 
         {
             if (context == null)
@@ -367,14 +391,15 @@ namespace RingSoft.DbLookup.EfCore
             var query = context.GetTable<TEntity>();
 
             var includes = new List<string>();
-            var parentObjects = tableDefinition
-                .FieldDefinitions
-                .Where(p => p.ParentJoinForeignKeyDefinition != null);
+            GetParentIncludes(tableDefinition, includes, parentJoins);
+            //var parentObjects = tableDefinition
+            //    .FieldDefinitions
+            //    .Where(p => p.ParentJoinForeignKeyDefinition != null);
 
-            foreach (var fieldDefinition in parentObjects)
-            {
-                includes.Add(fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName);
-            }
+            //foreach (var fieldDefinition in parentObjects)
+            //{
+            //    includes.Add(fieldDefinition.ParentJoinForeignKeyDefinition.ForeignObjectPropertyName);
+            //}
 
             var gridKeys = new List<ForeignKeyDefinition>();
             foreach (var gridTable in gridTables)
@@ -388,7 +413,7 @@ namespace RingSoft.DbLookup.EfCore
                 if (!key.CollectionName.IsNullOrEmpty())
                 {
                     includes.Add(key.CollectionName);
-                    parentObjects = key
+                    var parentObjects = key
                         .ForeignTable
                         .FieldDefinitions
                         .Where(p => p.ParentJoinForeignKeyDefinition != null

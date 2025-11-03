@@ -466,7 +466,7 @@ namespace RingSoft.DbLookup
         /// <param name="entity">The entity.</param>
         /// <param name="gridTables">The grid tables.</param>
         /// <returns>TEntity.</returns>
-        public static TEntity FillOutProperties<TEntity>(this TEntity entity, List<TableDefinitionBase> gridTables)
+        public static TEntity FillOutProperties<TEntity>(this TEntity entity, List<TableDefinitionBase> gridTables, List<TableDefinitionBase> parentJoins = null)
             where TEntity : class, new()
         {
             if (entity == null)
@@ -475,15 +475,16 @@ namespace RingSoft.DbLookup
             }
 
             var tableDefinition = GblMethods.GetTableDefinition<TEntity>();
+            
             if (tableDefinition is TableDefinition<TEntity> fullTable)
             {
                 var filter = GetFullTableFilter(entity);
-                var table = fullTable.Context.GetQueryableForTableGrid(fullTable, gridTables);
+                var table = fullTable.Context.GetQueryableForTableGrid(fullTable, gridTables, parentJoins: parentJoins);
                 if (ProcessTableFilterQuery(filter, table, out var fillOutProperties1))
                     return fillOutProperties1;
             }
 
-            return null;
+            return entity;
         }
         /// <summary>
         /// Fills the out properties.

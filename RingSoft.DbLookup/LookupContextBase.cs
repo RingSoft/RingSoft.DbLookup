@@ -687,7 +687,7 @@ namespace RingSoft.DbLookup
         /// <param name="context">The context.</param>
         /// <returns>IQueryable&lt;TEntity&gt;.</returns>
         public abstract IQueryable<TEntity> GetQueryableForTableGrid<TEntity>(TableDefinition<TEntity> tableDefinition
-            , List<TableDefinitionBase> gridTables, IDbContext context = null) where TEntity : class, new();
+            , List<TableDefinitionBase> gridTables, IDbContext context = null, List<TableDefinitionBase> parentJoins = null) where TEntity : class, new();
 
         /// <summary>
         /// Gets the automatic fill data maui.

@@ -923,8 +923,8 @@ namespace RingSoft.DbLookup.ModelDefinition
                 var entity = GetEntityFromPrimaryKeyValue(autoFillValue.PrimaryKeyValue);
                 if (entity != null)
                 {
-                    entity = entity.FillOutProperties(false);
-                    if (entity == null)
+                    var entity1 = entity.FillOutProperties(false);
+                    if (entity == entity1)
                     {
                         return false;
                     }
@@ -966,7 +966,8 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public bool DoesEntityExist(TEntity entity)
         {
-            return entity.FillOutProperties(false) != null;
+            var entity1 = entity.FillOutProperties(false);
+            return entity1 != entity;
         }
 
     }

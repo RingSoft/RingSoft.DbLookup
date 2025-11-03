@@ -503,7 +503,7 @@ namespace RingSoft.DbLookup
                     return fillOutProperties1;
             }
 
-            return null;
+            return entity;
         }
 
         /// <summary>

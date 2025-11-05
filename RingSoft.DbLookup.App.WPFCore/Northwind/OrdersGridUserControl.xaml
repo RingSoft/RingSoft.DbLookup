@@ -79,7 +79,10 @@
                 <dec:DateEditControl Value="{Binding Path=ShippedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <dec:DataEntryTabControl Grid.Row="3" Grid.Column="1" x:Name="TabControl" Margin="0,5,0,0" VerticalAlignment="Stretch">
-                <TabItem Header="Details">
+                <TabItem Header="Dummy">
+
+                </TabItem>
+                <TabItem Header="Details" x:Name="DetailsTab">
                     <deg:DataEntryGrid x:Name="DetailsGrid" Manager="{Binding DetailsGridManager}">
                         <deg:DataEntryGrid.Columns>
 

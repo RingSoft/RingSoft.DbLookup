@@ -461,6 +461,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value><c>true</c> if [key control registered]; otherwise, <c>false</c>.</value>
         public bool KeyControlRegistered { get; set; }
+
+        public bool SetStartupFocus { get; set; } = true;
+
         /// <summary>
         /// Occurs when [lookup add view].
         /// </summary>

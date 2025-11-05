@@ -15,6 +15,8 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
     public interface IOrderView : IDbMaintenanceView
     {
         void ShowAdvancedFind();
+
+        void ActivateGridTabItem();
     }
     public class OrderInput
     {

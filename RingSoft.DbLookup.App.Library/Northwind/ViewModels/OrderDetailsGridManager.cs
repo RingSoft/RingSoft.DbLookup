@@ -65,6 +65,7 @@ namespace RingSoft.DbLookup.App.Library.Northwind.ViewModels
                 var productRow = orderDetails.FirstOrDefault(f => f.ProductId == OrderViewModel.GotoProductId);
                 if (productRow != null)
                 {                   
+                    OrderViewModel.View.ActivateGridTabItem();
                     GotoCell(productRow, ProductColumnId);
                 }
             }

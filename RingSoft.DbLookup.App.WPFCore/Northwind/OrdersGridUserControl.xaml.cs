@@ -21,7 +21,7 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
     /// <summary>
     /// Interaction logic for OrdersGridUserControl.xaml
     /// </summary>
-    public partial class OrdersGridUserControl
+    public partial class OrdersGridUserControl : IOrderView
     {
         public OrdersGridUserControl()
         {
@@ -57,6 +57,16 @@ namespace RingSoft.DbLookup.App.WPFCore.Northwind
         protected override void ShowRecordTitle()
         {
             Host.ChangeTitle($"{Title} - {OrdersViewModel.Customer.Text}");
+        }
+
+        public void ShowAdvancedFind()
+        {
+            
+        }
+
+        public void ActivateGridTabItem()
+        {
+            TabControl.SelectedItem = DetailsTab;
         }
     }
 }

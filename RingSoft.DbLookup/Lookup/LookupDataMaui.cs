@@ -312,6 +312,10 @@ namespace RingSoft.DbLookup.Lookup
                 SetNewPrimaryKeyValue(primaryKeyValue);
                 SetScrollPosition(GetOutputArgs().ScrollPosition);
             }
+            else if (LookupControl == null && primaryKeyValue != null)
+            {
+                SelectedPrimaryKeyValue = primaryKeyValue;
+            }
         }
 
         /// <summary>

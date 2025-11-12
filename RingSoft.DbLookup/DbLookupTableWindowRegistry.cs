@@ -52,18 +52,19 @@ namespace RingSoft.DbLookup
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="addViewArgs">The add view arguments.</param>
         /// <param name="inputParameter">The input parameter.</param>
-        public abstract void ShowAddOntheFlyWindow(
+        public abstract PrimaryKeyValue? ShowAddOntheFlyWindow(
             TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs = null
             , object inputParameter = null);
 
-        public abstract void ShowNewAddOnTheFly(
+        public abstract PrimaryKeyValue? ShowNewAddOnTheFly(
             TableDefinitionBase tableDefinition
             , PrimaryKeyValue parentPrimaryKeyValue = null
             , string initialText = ""
-            , object inputParameter = null);
+            , object inputParameter = null
+            , bool showFromLookupControl = true);
 
-        public abstract void ShowEditAddOnTheFly(
+        public abstract PrimaryKeyValue? ShowEditAddOnTheFly(
             PrimaryKeyValue primaryKey
             , object inputParameter = null
             , LookupAddViewArgs lookupAvArgs = null);

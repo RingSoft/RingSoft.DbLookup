@@ -190,17 +190,18 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="addViewArgs">The add view arguments.</param>
         /// <param name="inputParameter">The input parameter.</param>
-        public sealed override void ShowAddOntheFlyWindow(
+        public sealed override PrimaryKeyValue? ShowAddOntheFlyWindow(
             TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs = null
             , object inputParameter = null)
         {
+            PrimaryKeyValue? result = null;
             var Ucitem = GetDbUserControl(tableDefinition);
             if (Ucitem != null)
             {
                 var userControl = Activator.CreateInstance(Ucitem.MaintenanceUserControl) as DbMaintenanceUserControl;
-                ShowAddOnTheFlyWindow(userControl, tableDefinition, addViewArgs, inputParameter);
-                return;
+                result = ShowAddOnTheFlyWindow(userControl, tableDefinition, addViewArgs, inputParameter);
+                return result;
             }
 
             var maintenanceWindow = CreateMaintenanceWindow(tableDefinition, addViewArgs, inputParameter);
@@ -212,24 +213,29 @@ namespace RingSoft.DbLookup.Controls.WPF
                     maintenanceWindow = Activator.CreateInstance(item.MaintenanceWindow) as DbMaintenanceWindow;
                 }
             }
-            ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
+            result = ShowAddOnTheFlyWindow(maintenanceWindow, tableDefinition, addViewArgs, inputParameter);
+            return result;
         }
 
-        public override void ShowNewAddOnTheFly(TableDefinitionBase tableDefinition, PrimaryKeyValue parentPrimaryKeyValue = null, string initialText = "", object inputParameter = null)
+        public override PrimaryKeyValue? ShowNewAddOnTheFly(TableDefinitionBase tableDefinition
+            , PrimaryKeyValue parentPrimaryKeyValue = null
+            , string initialText = ""
+            , object inputParameter = null
+            , bool fromLookupControl = true)
         {
             var lookupData = tableDefinition.LookupDefinition
                 .GetLookupDataMaui(tableDefinition.LookupDefinition, true);
 
-            var args = new LookupAddViewArgs(lookupData, true, LookupFormModes.Add,
+            var args = new LookupAddViewArgs(lookupData, fromLookupControl, LookupFormModes.Add,
                 initialText, null)
             {
                 ParentWindowPrimaryKeyValue = parentPrimaryKeyValue,
                 InputParameter = inputParameter,
             };
-            ShowAddOntheFlyWindow(tableDefinition, args, inputParameter);
+            return ShowAddOntheFlyWindow(tableDefinition, args, inputParameter);
         }
 
-        public override void ShowEditAddOnTheFly(PrimaryKeyValue primaryKey, object inputParameter = null, LookupAddViewArgs lookupAvArgs = null)
+        public override PrimaryKeyValue? ShowEditAddOnTheFly(PrimaryKeyValue primaryKey, object inputParameter = null, LookupAddViewArgs lookupAvArgs = null)
         {
             var lookupData = primaryKey.TableDefinition.LookupDefinition
                 .GetLookupDataMaui(primaryKey.TableDefinition.LookupDefinition, true);
@@ -245,8 +251,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             {
                 args.CallBackToken = lookupAvArgs.CallBackToken;
             }
-            ShowAddOntheFlyWindow(primaryKey.TableDefinition, args, inputParameter);
-
+            return ShowAddOntheFlyWindow(primaryKey.TableDefinition, args, inputParameter);
         }
 
         /// <summary>
@@ -288,7 +293,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="addViewArgs">The add view arguments.</param>
         /// <param name="addViewParameter">The add view parameter.</param>
-        protected virtual void ShowAddOnTheFlyWindow(
+        protected virtual PrimaryKeyValue? ShowAddOnTheFlyWindow(
             DbMaintenanceWindow maintenanceWindow
             , TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs = null
@@ -311,6 +316,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             maintenanceWindow.Processor.InitializeFromLookupData(addViewArgs);
             maintenanceWindow.ViewModel.InputParameter = addViewParameter;
             maintenanceWindow.ShowDialog();
+            return addViewArgs?.LookupData.SelectedPrimaryKeyValue;
         }
 
         /// <summary>
@@ -320,7 +326,7 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// <param name="tableDefinition">The table definition.</param>
         /// <param name="addViewArgs">The add view arguments.</param>
         /// <param name="addViewParameter">The add view parameter.</param>
-        protected virtual void ShowAddOnTheFlyWindow(
+        protected virtual PrimaryKeyValue? ShowAddOnTheFlyWindow(
             DbMaintenanceUserControl maintenanceUserControl
             , TableDefinitionBase tableDefinition
             , LookupAddViewArgs addViewArgs = null
@@ -345,6 +351,8 @@ namespace RingSoft.DbLookup.Controls.WPF
             maintenanceUserControl.LookupAddViewArgs = addViewArgs;
             maintenanceUserControl.AddViewParameter = addViewParameter;
             win.ShowDialog();
+            if (addViewArgs != null) return addViewArgs.LookupData.SelectedPrimaryKeyValue;
+            return null;
         }
 
         public DbMaintenanceUcWindow GetMaintenanceWindow(DbMaintenanceUserControl userControl)

@@ -266,13 +266,13 @@ namespace RingSoft.DbLookup.TableProcessing
             {
                 if (SetPropertyName.IsNullOrEmpty())
                 {
-                    var field = FieldDefinition;
+                    var fieldDef = FieldDefinition;
                     if (FieldToSearch != null)
                     {
-                        field = FieldToSearch;
+                        fieldDef = FieldToSearch;
                     }
 
-                    var result = JoinDefinition.GetPropertyJoinName(field.PropertyName);
+                    var result = JoinDefinition.GetPropertyJoinName(fieldDef.PropertyName);
                     return result;
                 }
 

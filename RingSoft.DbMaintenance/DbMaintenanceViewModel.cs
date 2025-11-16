@@ -928,7 +928,7 @@ namespace RingSoft.DbMaintenance
             ControlsGlobals.UserInterface.SetWindowCursor(WindowCursorTypes.Wait);
             var entity = GetEntityData();
 
-            if (TableDefinition.IsIdentity())
+            if (!SystemGlobals.UnitTestMode && TableDefinition.IsIdentity())
             {
                 if (TableDefinition.GetIdentityValue(entity) > 0)
                 {

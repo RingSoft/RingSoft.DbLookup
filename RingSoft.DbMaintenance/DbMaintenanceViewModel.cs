@@ -490,11 +490,23 @@ namespace RingSoft.DbMaintenance
                 AllowDelete = NewButtonEnabled;
 
                 if (primaryKeyValue != null && primaryKeyValue.IsValid())
-                    _lookupData.SelectPrimaryKey(primaryKeyValue);
+                {
+                    if (primaryKeyValue.IsValidDb())
+                    {
+                        _lookupData.SelectPrimaryKey(primaryKeyValue);
+                    }
+                    else
+                    {
+                        ControlsGlobals.UserInterface.ShowMessageBox(
+                            $"{TableDefinition.RecordDescription} does not exist."
+                            , "Invalid Record"
+                            , RsMessageBoxIcons.Exclamation);
+                    }
+                }
 
                 if (LookupAddViewArgs.LookupData != null)
                 {
-                    if (LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue != null)
+                    if (LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue != null && LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue.IsValidDb())
                     {
                         var gridTable = LookupAddViewArgs.LookupData.SelectedPrimaryKeyValue.TableDefinition;
                         if (Grids != null)
@@ -882,7 +894,7 @@ namespace RingSoft.DbMaintenance
 
             LastSavedDate = null;
             _startDate = DateTime.Now;
-            KeyAutoFillValue = new AutoFillValue(new PrimaryKeyValue(TableDefinition), string.Empty);
+            KeyAutoFillValue = null;
             ChangingEntity = false;
 
             SelectButtonEnabled = false;
@@ -1517,7 +1529,7 @@ namespace RingSoft.DbMaintenance
 
             //var message = ConfirmDeleteMessage(description);
 
-            if (!TableDefinition.DoesEntityExist(Entity))
+            if (!SystemGlobals.UnitTestMode && !TableDefinition.DoesEntityExist(Entity))
             {
                 RecordDirty = false;
                 OnNewButton();

@@ -304,15 +304,15 @@ namespace RingSoft.DbMaintenance
             get => _keyAutoFillValue;
             set
             {
-                if (_keyAutoFillValue == value)
-                    return;
-
                 if (value == null)
                 {
                     _keyAutoFillValue = new AutoFillValue(null, "");
                 }
                 else
                 {
+                    if (_keyAutoFillValue == value)
+                        return;
+
                     _keyAutoFillValue = value;
                 }
 

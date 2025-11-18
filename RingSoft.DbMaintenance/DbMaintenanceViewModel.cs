@@ -501,6 +501,8 @@ namespace RingSoft.DbMaintenance
                             $"{TableDefinition.RecordDescription} does not exist."
                             , "Invalid Record"
                             , RsMessageBoxIcons.Exclamation);
+                        RecordDirty = false;
+                        OnNewButton();
                     }
                 }
 

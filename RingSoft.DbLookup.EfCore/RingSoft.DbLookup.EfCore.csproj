@@ -3,7 +3,7 @@
     <TargetFrameworks>net10.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>10.0.2</Version>
+    <Version>10.0.3</Version>
     <Authors>Peter Ringering</Authors>
     <Product>RingSoft.DbLookup.EntityFrameworkCore</Product>
     <Description>Uses RingSoft.DbLookup to break up large volumes of database data into manageable chunks.  Compatible with the Entity Framework Core 8.0</Description>

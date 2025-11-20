@@ -381,7 +381,7 @@ namespace RingSoft.DbMaintenance
         /// <param name="e">The e.</param>
         private void _lookupData_LookupDataChanged1(object sender, LookupDataMauiOutput e)
         {
-            if (_lookupData.SelectedPrimaryKeyValue == null)
+            if (!_lookupData.SelectedPrimaryKeyValue.IsValidDb())
             {
                 return;
             }

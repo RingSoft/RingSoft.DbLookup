@@ -438,10 +438,13 @@ namespace RingSoft.DbLookup
         /// <param name="value">The value.</param>
         public static void SetPropertyObject<T>(T model, string propertyName, object value) where T : new()
         {
-            var property = model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
-            if (property != null)
+            if (model != null)
             {
-                property.SetValue(model, value);
+                var property = model.GetType().GetProperties().FirstOrDefault(f => f.Name == propertyName);
+                if (property != null)
+                {
+                    property.SetValue(model, value);
+                }
             }
         }
 
@@ -455,6 +458,9 @@ namespace RingSoft.DbLookup
         /// <returns>System.String.</returns>
         public static string GetPropertyValue<T>(T model, string propertyName, DbDateTypes? dateType = null) where T : new()
         {
+            if (model == null)
+                return string.Empty;
+
             var properties = model.GetType().GetProperties();
             var property =
                 properties.FirstOrDefault(f => f.Name == propertyName);

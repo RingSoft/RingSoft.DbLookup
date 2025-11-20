@@ -375,6 +375,17 @@ namespace RingSoft.DbLookup.Lookup
             if (selectedIndex >= 0 && selectedIndex < RowCount)
             {
                 SelectedPrimaryKeyValue = GetSelectedPrimaryKeyValue();
+
+                if (!SelectedPrimaryKeyValue.IsValidDb())
+                {
+                    ControlsGlobals.UserInterface.ShowMessageBox
+                    ($"{SelectedPrimaryKeyValue.TableDefinition.RecordDescription} was not found."
+                        , "Invalid Row"
+                        , RsMessageBoxIcons.Exclamation);
+                    RefreshData(LookupControl.SearchText);
+                    return;
+                }
+
                 if (LookupWindow == null || LookupWindow.ReadOnlyMode)
                 {
                     var args = new LookupAddViewArgs(this

@@ -1300,7 +1300,7 @@ namespace RingSoft.DbMaintenance
 
             //Peter Ringering - 01/06/2025 05:59:59 PM - E-96
             var descColumn = KeyAutoFillSetup
-                .LookupDefinition
+                ?.LookupDefinition
                 .TableDefinition
                 .LookupDefinition
                 .InitialSortColumnDefinition;

@@ -4,25 +4,23 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="MegaDb\MegaDb_SqlServerScript.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\RingSoft.DbLookup\RingSoft.DbLookup.csproj" />
     <ProjectReference Include="..\RingSoft.DbMaintenance\RingSoft.DbMaintenance.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MegaDb\MegaDb_SqlServerScript.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <None Update="MegaDb\MegaDb_MySqlScript.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MegaDb\MegaDb_SqlServerScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Northwind\Northwind.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Northwind\Northwind_MySqlScript.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Northwind\Northwind_SqliteScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Northwind\Northwind_SqlServerScript.sql">

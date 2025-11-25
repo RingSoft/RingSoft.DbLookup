@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RingSoft WPF Database Lookup Demo"
-#define MyAppVersion "3.00.00"
+#define MyAppVersion "4.00.0"
 #define MyAppPublisher "RingSoft"
 #define MyAppURL "http://www.ringsoft.site/"
 #define MyAppExeName "RingSoft.DbLookup.App.WPFCore.exe"
@@ -37,8 +37,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net8.0-windows7.0\*"; Excludes: "*.xml, *.sqlite"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net8.0-windows7.0\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\DbLookupDemoApp\WPF\Northwind\"; Flags: ignoreversion
+Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net10.0-windows\*"; Excludes: "*.xml, *.sqlite"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\petem\source\repos\RingSoft\RingSoft.DbLookup\RingSoft.DbLookup.App.WPFCore\bin\Release\net10.0-windows\Northwind\Northwind.sqlite"; DestDir: "{commonappdata}\RingSoft\DbLookupDemoApp\WPF\Northwind\"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

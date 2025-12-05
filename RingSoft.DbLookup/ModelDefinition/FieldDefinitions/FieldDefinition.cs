@@ -126,14 +126,25 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         /// <value>The lookup control column identifier.</value>
         public int LookupControlColumnId { get; internal set; }
 
+        private bool _allowRecursion = true;
+
         /// <summary>
         /// Gets a value indicating whether [allow recursion].
         /// </summary>
         /// <value><c>true</c> if [allow recursion]; otherwise, <c>false</c>.</value>
         public bool AllowRecursion
         {
+            private set
+            {
+                _allowRecursion = value;
+            }
             get
             {
+                if (!_allowRecursion)
+                {
+                    return false;
+                }
+
                 var result = true;
                 if (ParentJoinForeignKeyDefinition != null)
                 {
@@ -496,6 +507,12 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
         internal FieldDefinition IsGeneratedKey(bool value = true)
         {
             GeneratedKey = value;
+            return this;
+        }
+
+        internal FieldDefinition DoAllowRecursion (bool value = true)
+        {
+            AllowRecursion = value;
             return this;
         }
     }

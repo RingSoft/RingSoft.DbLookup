@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using RingSoft.DbLookup.TableProcessing;
 
 namespace RingSoft.DbLookup.AdvancedFind
 {
@@ -440,8 +441,11 @@ namespace RingSoft.DbLookup.AdvancedFind
                     //    .FieldJoins[0].PrimaryField;
 
                     if (tableFieldDefinition.AllowRecursion && tableFieldDefinition.TableDefinition.CanViewTable)
+                    {
                         AddTreeItem(tableFieldDefinition.ParentJoinForeignKeyDefinition.PrimaryTable,
                             treeChildItem.Items, join, treeChildItem);
+
+                    }
                 }
             }
 

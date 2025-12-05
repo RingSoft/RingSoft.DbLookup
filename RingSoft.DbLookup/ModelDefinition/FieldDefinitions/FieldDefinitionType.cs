@@ -140,5 +140,11 @@ namespace RingSoft.DbLookup.ModelDefinition.FieldDefinitions
             base.IsGeneratedKey(value);
             return (TFieldDefinition)this;
         }
+
+        public new TFieldDefinition DoAllowRecursion(bool value = true)
+        {
+            base.DoAllowRecursion(value);
+            return (TFieldDefinition)this;
+        }
     }
 }

@@ -779,7 +779,7 @@ namespace RingSoft.DbLookup.Controls.WPF
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(AutoFillControl),
                 new FrameworkPropertyMetadata(KeyboardNavigationMode.Local));
 
-            ShowContainsBoxProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
+            ShowContainsBoxProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(false));
             TabOutAfterLookupSelectProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(true));
             ContainsBoxMaxRowsProperty.OverrideMetadata(typeof(AutoFillControl), new PropertyMetadata(5));
 
@@ -1325,8 +1325,10 @@ namespace RingSoft.DbLookup.Controls.WPF
                 case Key.F5:
                     e.Handled = true;
                     ShowLookupWindow();
-                    break;case Key.Space:
+                    break;
+                case Key.Space:
                     AutoFillDataMaui.OnKeyCharPressed(' ');
+                    e.Handled = true;
                     break;
             }
 

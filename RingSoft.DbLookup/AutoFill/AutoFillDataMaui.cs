@@ -210,7 +210,6 @@ namespace RingSoft.DbLookup.AutoFill
 
             if (newText.IsNullOrEmpty())
             {
-                //GetContainsBoxDataTable(beginText);
                 Control.EditText = beginText;
                 Control.SelectionStart = selectionStart + 1;
                 Control.SelectionLength = 0;
@@ -493,7 +492,7 @@ namespace RingSoft.DbLookup.AutoFill
             if (containsText.IsNullOrEmpty())
             {
                 containsText = newText;
-            }if (!containsText.IsNullOrEmpty())
+            }if (!containsText.IsNullOrEmpty() && Control.ShowContainsBox)
             {
                 containsList = GetContainsList(containsText);
             }

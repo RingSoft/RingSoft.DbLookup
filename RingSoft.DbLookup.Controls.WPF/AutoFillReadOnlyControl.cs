@@ -188,6 +188,9 @@ namespace RingSoft.DbLookup.Controls.WPF
         /// </summary>
         /// <value>The length of the selection.</value>
         public int SelectionLength { get; set; }
+
+        public bool ShowContainsBox { get; set; }
+
         /// <summary>
         /// Refreshes the value.
         /// </summary>

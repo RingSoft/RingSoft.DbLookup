@@ -57,6 +57,8 @@ namespace RingSoft.DbLookup.AutoFill
         /// <value>The length of the selection.</value>
         int SelectionLength { get; set; }
 
+        bool ShowContainsBox { get; set; }
+
         /// <summary>
         /// Refreshes the value.
         /// </summary>

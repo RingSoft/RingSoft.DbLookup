@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using RingSoft.DataEntryControls.WPF;
 
@@ -28,6 +29,12 @@ namespace RingSoft.DbLookup.Controls.WPF
 
             InitializeComponent();
             Title = userControl.Title;
+        }
+
+        protected override void OnContentRendered(EventArgs e)
+        {
+            UserControl.ViewModel.OnContentRendered();
+            base.OnContentRendered(e);
         }
 
         public void CloseHost()

@@ -966,6 +966,10 @@ namespace RingSoft.DbLookup.ModelDefinition
 
         public bool DoesEntityExist(TEntity entity)
         {
+            if (SystemGlobals.UnitTestMode)
+            {
+                return entity != null;
+            }
             var entity1 = entity.FillOutProperties(false);
             return entity1 != entity;
         }

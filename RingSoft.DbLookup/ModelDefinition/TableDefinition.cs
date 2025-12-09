@@ -757,7 +757,7 @@ namespace RingSoft.DbLookup.ModelDefinition
                 .ParentJoinForeignKeyDefinition
                 .PrimaryTable
                 .GetJoinParentObject(entity, parentField.ParentJoinForeignKeyDefinition);
-            if (result != null)
+            if (result != null && parentField.AllowRecursion)
             {
                 parentField
                     .ParentJoinForeignKeyDefinition

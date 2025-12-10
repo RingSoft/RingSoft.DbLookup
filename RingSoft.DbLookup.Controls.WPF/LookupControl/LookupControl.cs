@@ -972,7 +972,16 @@ namespace RingSoft.DbLookup.Controls.WPF
                 SizeChanged += (sender, args) => LookupControlSizeChanged();
 
                 if (LookupDefinition != null)
-                    SetupControl();
+                {
+                    var refreshCommand = new RelayCommand(SetupControl);
+                    var refreshArgs = new LookupRefreshArgs(refreshCommand, LookupDefinition);
+                    LookupDefinition.ShowRefreshProcedure(refreshArgs);
+                    if (!refreshArgs.Handled)
+                    {
+                        refreshCommand.Execute(null);
+                    }
+                }
+
                 _controlLoaded = true;
             }
         }

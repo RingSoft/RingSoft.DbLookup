@@ -28,6 +28,21 @@ using System.Data.Common;
 
 namespace RingSoft.DbLookup.Lookup
 {
+    public class LookupRefreshArgs
+    {
+        public bool Handled { get; set; }
+
+        public RelayCommand RefreshCommand { get; }
+
+        public LookupDefinitionBase LookupDefinition { get; }
+
+        public LookupRefreshArgs(RelayCommand command, LookupDefinitionBase lookupDefinition)
+        {
+            RefreshCommand = command;
+            LookupDefinition = lookupDefinition;
+        }
+    }
+
     public interface ILookupAddViewDestination
     {
         void ShowAddView(LookupAddViewArgs addViewArgs = null
@@ -224,6 +239,13 @@ namespace RingSoft.DbLookup.Lookup
         /// Occurs when [command changed].
         /// </summary>
         public event EventHandler<LookupCommandChangedArgs> CommandChanged;
+
+        public event EventHandler<LookupRefreshArgs> RefreshChanged;
+
+        public void ShowRefreshProcedure(LookupRefreshArgs args)
+        {
+            RefreshChanged?.Invoke(this, args);
+        }
 
         /// <summary>
         /// Clears the visible columns.

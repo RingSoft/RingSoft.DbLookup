@@ -310,7 +310,10 @@ namespace RingSoft.DbLookup.EfCore
 
                 foreach (var fieldDefinition in parentObjects)
                 {
-                    includes.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition));
+                    if (fieldDefinition.AllowRecursion)
+                    {
+                        includes.AddRange(GetIncludes(fieldDefinition.ParentJoinForeignKeyDefinition));
+                    }
                 }
 
                 var gridKeys = tableDefinition.ChildKeys
@@ -328,9 +331,12 @@ namespace RingSoft.DbLookup.EfCore
                                         && p.ParentJoinForeignKeyDefinition.PrimaryTable != tableDefinition);
                         foreach (var fieldDefinition in parentObjects)
                         {
-                            includes.AddRange(GetIncludes(fieldDefinition
-                                    .ParentJoinForeignKeyDefinition
-                                , key.CollectionName));
+                            if (fieldDefinition.AllowRecursion)
+                            {
+                                includes.AddRange(GetIncludes(fieldDefinition
+                                        .ParentJoinForeignKeyDefinition
+                                    , key.CollectionName));
+                            }
                         }
                     }
                 }

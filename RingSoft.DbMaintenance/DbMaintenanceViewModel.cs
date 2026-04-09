@@ -883,11 +883,6 @@ namespace RingSoft.DbMaintenance
 
             ChangingEntity = true;
             ClearData();
-            foreach (var lookupMap in Lookups)
-            {
-                lookupMap.LookupDefinition.SetCommand(new LookupCommand(LookupCommands.Clear));
-            }
-
             foreach (var grid in Grids)
             {
                 grid.Grid.SetupForNewRecord();
@@ -908,6 +903,13 @@ namespace RingSoft.DbMaintenance
             KeyAutoFillUiCommand.SetFocus();
             View.ResetViewForNewRecord();
             RecordDirty = false;
+
+            //04/03/2026 - Moved reset lookups here so that if there are any lookups that default based on the key auto fill value they will be reset after the key auto fill value is cleared.
+            foreach (var lookupMap in Lookups)
+            {
+                lookupMap.LookupDefinition.SetCommand(new LookupCommand(LookupCommands.Clear));
+            }
+
             FireNewEvent();
         }
 

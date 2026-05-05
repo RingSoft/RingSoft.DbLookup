@@ -19,8 +19,17 @@ namespace RingSoft.DbLookup.Controls.WPF
             UserControl = userControl;
             if (!double.IsNaN(userControl.WindowWidth) && !double.IsNaN(userControl.WindowHeight))
             {
-                Width = userControl.WindowWidth;
-                Height = userControl.WindowHeight;
+                if (SystemParameters.PrimaryScreenWidth <= userControl.WindowWidth ||
+                    SystemParameters.PrimaryScreenHeight <= userControl.WindowHeight)
+                {
+                    Width = SystemParameters.PrimaryScreenWidth * .9;
+                    Height = SystemParameters.PrimaryScreenHeight * .9;
+                }
+                else
+                {
+                    Width = userControl.WindowWidth;
+                    Height = userControl.WindowHeight;
+                }
             }
             else
             {
